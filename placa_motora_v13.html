@@ -1,0 +1,374 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador Interativo da Placa Motora</title>
+  <style>
+    :root{--bg:#fff;--panel:#fbfbfd;--line:#d9dce3;--text:#1f2937;--muted:#6b7280;--blue:#dc2626;--red:#dc2626;--green:#059669;--amber:#d97706;--violet:#7c3aed;--teal:#0f766e}
+    *{box-sizing:border-box} body{margin:0;padding:22px;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+    h1{margin:0 0 8px;font-size:30px;text-align:center}.subtitle{text-align:center;color:var(--muted);margin:0 0 12px;font-size:16px}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 auto 8px;max-width:1220px}
+    .mode-line{max-width:1220px;margin:0 auto 14px;text-align:right;min-height:22px}.mode-badge{display:inline-block;font-size:12px;color:var(--muted);background:#fff;border:1px solid #e1e5ec;border-radius:999px;padding:4px 10px}
+    button{border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer}.primary{border-color:#96b7ff}
+    label{display:flex;gap:8px;align-items:center;font-size:14px;background:#fff;border:1px solid #e1e5ec;border-radius:10px;padding:9px 12px} input[type="range"]{width:140px}
+    .status-grid{display:grid;grid-template-columns:1.05fr .9fr .9fr;gap:12px;max-width:1220px;margin:0 auto 14px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:92px;position:relative;overflow:hidden}.card::before{content:"";position:absolute;inset:0 auto 0 0;width:8px;background:var(--phase,var(--blue))}
+    .card-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}.phase{font-size:26px;font-weight:700;line-height:1.12;padding-left:4px}.phase small{display:block;margin-top:6px;font-size:14px;color:var(--muted);font-weight:400}
+    .layout{display:grid;grid-template-columns:minmax(460px,1fr) minmax(460px,1fr);gap:16px;max-width:1220px;margin:0 auto}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+    canvas{width:100%;height:auto;display:block;background:#fff;border:1px solid #e5e7eb;border-radius:12px}
+    .legend{max-width:1220px;margin:14px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px 28px;line-height:1.55;font-size:15px}.signature{text-align:right;color:#4b5563;font-size:14px;margin-top:18px;border-top:1px solid #e5e7eb;padding-top:10px}.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);margin-left:6px;color:var(--muted);background:#fff}
+    @media (max-width:980px){.layout{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <h1>Simulador Interativo da Placa Motora</h1>
+  <p class="subtitle">Impulso nervoso, acetilcolina, despolarização, túbulos T, retículo sarcoplasmático e início da contração.</p>
+
+  <div class="controls">
+    <button id="btnStart" class="primary">Iniciar</button>
+    <button id="btnPause">Pausar</button>
+    <button id="btnStep">Próxima etapa</button>
+    <button id="btnReset">Resetar</button>
+    <label>Velocidade <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2"><span id="speedLabel">1.2x</span></label>
+    <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
+    <label><input id="stepModeToggle" type="checkbox"> Executar por etapas</label>
+    <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+    <label><input id="calciumToggle" type="checkbox" checked> Mostrar Ca²⁺</label>
+  </div>
+
+  <div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+
+  <div class="status-grid">
+    <div class="card" id="phaseCard"><div class="card-title">Fase atual</div><div class="phase" id="phaseText">Repouso<small id="phaseDesc">Ainda não há liberação de neurotransmissor na placa motora.</small></div></div>
+    <div class="card" id="signalCard"><div class="card-title">Sinal / neurotransmissor</div><div class="phase" id="signalText">ACh ausente<small id="signalDesc">O terminal axonal está em repouso.</small></div></div>
+    <div class="card" id="eventCard"><div class="card-title">Evento predominante</div><div class="phase" id="eventText">Preparação do sistema<small id="eventDesc">Neurônio motor, placa motora e fibra muscular ainda em estado basal.</small></div></div>
+  </div>
+
+  <div class="layout">
+    <div class="panel"><canvas id="sceneCanvas" width="880" height="580"></canvas></div>
+    <div class="panel"><canvas id="graphCanvas" width="980" height="700"></canvas></div>
+  </div>
+
+  <div class="legend">
+    <b>Repouso:</b> terminal axonal sem liberação de ACh.
+    <b>Impulso nervoso:</b> potencial de ação chega ao terminal do neurônio motor.
+    <b>Entrada de Ca²⁺:</b> abre canais de cálcio no terminal pré-sináptico.
+    <b>Liberação de ACh:</b> vesículas exocitam acetilcolina na fenda sináptica.
+    <b>Despolarização da placa motora:</b> ativação dos receptores nicotínicos e entrada de Na⁺.
+    <b>Túbulos T e retículo sarcoplasmático:</b> o sinal elétrico alcança a fibra muscular profunda e libera Ca²⁺.
+    <b>Ativação contrátil:</b> cálcio expõe a actina e prepara actina e miosina para o ciclo de pontes cruzadas.
+    <span class="pill">v7</span>
+    <div class="signature">Professor Doutor Mário César Nascimento · Fisiologia Humana</div>
+  </div>
+
+<script>
+(() => {
+  const sceneCanvas=document.getElementById("sceneCanvas"), graphCanvas=document.getElementById("graphCanvas");
+  const sctx=sceneCanvas.getContext("2d"), gctx=graphCanvas.getContext("2d");
+  const btnStart=document.getElementById("btnStart"), btnPause=document.getElementById("btnPause"), btnStep=document.getElementById("btnStep"), btnReset=document.getElementById("btnReset");
+  const speedRange=document.getElementById("speedRange"), speedLabel=document.getElementById("speedLabel");
+  const loopToggle=document.getElementById("loopToggle"), stepModeToggle=document.getElementById("stepModeToggle"), labelsToggle=document.getElementById("labelsToggle"), calciumToggle=document.getElementById("calciumToggle"), modeBadge=document.getElementById("modeBadge");
+  const phaseText=document.getElementById("phaseText"), phaseDesc=document.getElementById("phaseDesc"), signalText=document.getElementById("signalText"), signalDesc=document.getElementById("signalDesc"), eventText=document.getElementById("eventText"), eventDesc=document.getElementById("eventDesc");
+  const phaseCard=document.getElementById("phaseCard"), signalCard=document.getElementById("signalCard"), eventCard=document.getElementById("eventCard");
+
+  const TOTAL=620, pauseFrames=[90,170,255,345,445,530,620];
+  const stages=[
+    {name:"Repouso",start:0,end:90,color:"#6b7280",desc:"Ainda não há liberação de neurotransmissor na placa motora.",signal:"ACh ausente",signalDesc:"O terminal axonal está em repouso.",event:"Preparação do sistema",eventDesc:"Neurônio motor, placa motora e fibra muscular ainda em estado basal."},
+    {name:"Impulso nervoso",start:91,end:170,color:"#dc2626",desc:"O potencial de ação percorre o neurônio motor até o terminal axonal.",signal:"Sinal elétrico em propagação",signalDesc:"A membrana do axônio está despolarizando.",event:"Chegada ao terminal",eventDesc:"O impulso nervoso aproxima-se da placa motora."},
+    {name:"Entrada de Ca²⁺ no terminal",start:171,end:255,color:"#d97706",desc:"Canais dependentes de voltagem permitem entrada de cálcio no terminal pré-sináptico.",signal:"Ca²⁺ pré-sináptico em ascensão",signalDesc:"O terminal nervoso torna-se apto a liberar ACh.",event:"Ativação vesicular",eventDesc:"O cálcio aproxima e prepara as vesículas sinápticas."},
+    {name:"Liberação de ACh",start:256,end:345,color:"#0f766e",desc:"As vesículas liberam acetilcolina na fenda sináptica.",signal:"ACh alta na fenda",signalDesc:"Neurotransmissor difundindo-se até os receptores.",event:"Exocitose sináptica",eventDesc:"A placa motora recebe acetilcolina."},
+    {name:"Despolarização da placa motora",start:346,end:445,color:"#dc2626",desc:"Receptores nicotínicos são ativados e a membrana muscular despolariza.",signal:"Entrada de Na⁺ e potencial local",signalDesc:"A placa motora gera despolarização efetiva.",event:"Potencial de ação muscular",eventDesc:"O sarcolema inicia a propagação do sinal."},
+    {name:"Túbulos T e retículo sarcoplasmático",start:446,end:530,color:"#7c3aed",desc:"O sinal desce pelos túbulos T e estimula liberação de cálcio pelo retículo sarcoplasmático.",signal:"Ca²⁺ intracelular em ascensão",signalDesc:"A fibra muscular profunda é ativada.",event:"Acoplamento excitação-contração",eventDesc:"O retículo sarcoplasmático libera cálcio para o sarcoplasma."},
+    {name:"Ativação actina-miosina",start:531,end:620,color:"#059669",desc:"O cálcio expõe a actina e prepara a interação com a miosina.",signal:"Ca²⁺ alto e aparato contrátil pronto",signalDesc:"A fibra já pode iniciar a contração.",event:"Preparação contrátil",eventDesc:"Pontes cruzadas podem começar a formar-se."}
+  ];
+
+  let frame=0, running=false, lastTs=0, raf=null, pulse=0, stepAwaitPlay=false;
+  const getSpeed=()=>parseFloat(speedRange.value), lerp=(a,b,t)=>a+(b-a)*t, clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), getStage=f=>stages.find(s=>f>=s.start&&f<=s.end)||stages[0];
+  function getNerveSignal(f){ if(f<=90)return 0; if(f<=170)return lerp(0,100,(f-90)/80); return 100; }
+  function getSynapticACh(f){ if(f<=255)return 0; if(f<=345)return lerp(0,100,(f-255)/90); if(f<=445)return lerp(100,60,(f-345)/100); return lerp(60,5,clamp((f-445)/175,0,1)); }
+  function getTerminalCa(f){ if(f<=170)return 5; if(f<=255)return lerp(5,100,(f-170)/85); return lerp(100,20,clamp((f-255)/365,0,1)); }
+  function getMuscleDepol(f){ if(f<=345)return 0; if(f<=445)return lerp(0,100,(f-345)/100); return 100; }
+  function getFiberCa(f){ if(f<=445)return 0; if(f<=530)return lerp(0,100,(f-445)/85); return 100; }
+  function getContractReady(f){ if(f<=530)return 0; return lerp(0,100,(f-530)/90); }
+
+  function setCardsColor(color){ phaseCard.style.setProperty("--phase",color); signalCard.style.setProperty("--phase",color); eventCard.style.setProperty("--phase",color); }
+  function updateStatus(){
+    const st=getStage(frame); phaseText.firstChild.textContent=st.name; phaseDesc.textContent=st.desc; signalText.firstChild.textContent=st.signal; signalDesc.textContent=st.signalDesc; eventText.firstChild.textContent=st.event; eventDesc.textContent=st.eventDesc; setCardsColor(st.color);
+    modeBadge.textContent=stepModeToggle.checked?(stepAwaitPlay?"Modo: etapas (pausado)":"Modo: etapas"):"Modo: contínuo";
+  }
+
+  function drawRoundedRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  function drawGradientStrokeLine(ctx,x1,y1,x2,y2,stops){ const grad=ctx.createLinearGradient(x1,y1,x2,y2); stops.forEach(s=>grad.addColorStop(s[0],s[1])); ctx.strokeStyle=grad; ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); }
+  function drawParticle(ctx,x,y,label,fill,r=10,font="bold 10px Arial"){ ctx.fillStyle=fill; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); ctx.strokeStyle="rgba(255,255,255,0.9)"; ctx.lineWidth=2; ctx.stroke(); ctx.fillStyle="#fff"; ctx.font=font; ctx.fillText(label,x-(label.length*2.7),y+3); }
+
+  function drawScene(){
+    sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);
+    const st=getStage(frame), nerve=getNerveSignal(frame), ach=getSynapticACh(frame), termCa=getTerminalCa(frame), depol=getMuscleDepol(frame), fiberCa=getFiberCa(frame), ready=getContractReady(frame);
+    sctx.fillStyle="#111827"; sctx.font="bold 20px Arial"; sctx.fillText("Neurônio motor, placa motora e fibra muscular",18,28);
+
+    sctx.fillStyle="#fff"; sctx.strokeStyle="#d1d5db"; sctx.lineWidth=2; drawRoundedRect(sctx,24,48,832,300,16); sctx.fill(); sctx.stroke();
+
+    // Neurônio idêntico ao simulador de potencial de ação
+    sctx.lineWidth = 13;
+    drawGradientStrokeLine(sctx, 170, 175, 90, 110, [[0,"#22c55e"], [1,"#0f766e"]]);
+    drawGradientStrokeLine(sctx, 170, 175, 72, 170, [[0,"#22c55e"], [1,"#0f766e"]]);
+    drawGradientStrokeLine(sctx, 170, 175, 96, 236, [[0,"#22c55e"], [1,"#0f766e"]]);
+
+    sctx.lineWidth = 7;
+    drawGradientStrokeLine(sctx, 118, 127, 78, 88, [[0,"#4ade80"], [1,"#115e59"]]);
+    drawGradientStrokeLine(sctx, 111, 214, 69, 252, [[0,"#4ade80"], [1,"#115e59"]]);
+
+    const somaGrad = sctx.createRadialGradient(198, 148, 10, 220, 170, 78);
+    somaGrad.addColorStop(0, "#dcfce7");
+    somaGrad.addColorStop(0.55, "#4ade80");
+    somaGrad.addColorStop(1, "#0f766e");
+    sctx.fillStyle = somaGrad;
+    sctx.beginPath(); sctx.arc(220, 175, 62, 0, Math.PI*2); sctx.fill();
+    sctx.strokeStyle = "#0f766e";
+    sctx.lineWidth = 4;
+    sctx.stroke();
+
+    const nucleusGrad = sctx.createRadialGradient(212, 160, 3, 220, 175, 24);
+    nucleusGrad.addColorStop(0, "#ecfeff");
+    nucleusGrad.addColorStop(1, "#06b6d4");
+    sctx.fillStyle = nucleusGrad;
+    sctx.beginPath(); sctx.arc(220,175,21,0,Math.PI*2); sctx.fill();
+    sctx.strokeStyle = "#0e7490";
+    sctx.lineWidth = 2;
+    sctx.stroke();
+
+    const axonGrad = sctx.createLinearGradient(280, 145, 280, 205);
+    axonGrad.addColorStop(0, "#e0f2fe");
+    axonGrad.addColorStop(0.3, "#f87171");
+    axonGrad.addColorStop(0.7, "#dc2626");
+    axonGrad.addColorStop(1, "#b91c1c");
+    sctx.lineCap = "round";
+    sctx.lineWidth = 18;
+    sctx.strokeStyle = axonGrad;
+    sctx.beginPath(); sctx.moveTo(282,175); sctx.lineTo(540,175); sctx.stroke();
+
+    sctx.strokeStyle = "rgba(255,255,255,0.65)";
+    sctx.lineWidth = 4;
+    sctx.beginPath(); sctx.moveTo(286,168); sctx.lineTo(536,168); sctx.stroke();
+
+    [320, 390, 460].forEach(sx => {
+      const segGrad = sctx.createLinearGradient(sx, 149, sx, 201);
+      segGrad.addColorStop(0, "#f8fafc");
+      segGrad.addColorStop(0.45, "#cbd5e1");
+      segGrad.addColorStop(1, "#94a3b8");
+      sctx.fillStyle = segGrad;
+      sctx.strokeStyle = "#64748b";
+      sctx.lineWidth = 2;
+      drawRoundedRect(sctx, sx, 149, 42, 52, 12);
+      sctx.fill();
+      sctx.stroke();
+      sctx.strokeStyle = "rgba(255,255,255,0.65)";
+      sctx.lineWidth = 2;
+      sctx.beginPath();
+      sctx.moveTo(sx + 8, 157);
+      sctx.lineTo(sx + 34, 157);
+      sctx.stroke();
+    });
+
+    sctx.lineWidth = 10;
+    drawGradientStrokeLine(sctx, 540, 175, 598, 144, [[0,"#f87171"], [1,"#8b5cf6"]]);
+    drawGradientStrokeLine(sctx, 540, 175, 605, 170, [[0,"#f87171"], [1,"#8b5cf6"]]);
+    drawGradientStrokeLine(sctx, 540, 175, 598, 196, [[0,"#f87171"], [1,"#8b5cf6"]]);
+
+    ["#a78bfa", "#c4b5fd", "#8b5cf6"].forEach((c, i) => {
+      const pts = [[598,144],[605,170],[598,196]][i];
+      sctx.fillStyle = c;
+      sctx.beginPath(); sctx.arc(pts[0], pts[1], 8, 0, Math.PI*2); sctx.fill();
+      sctx.strokeStyle = "#6d28d9";
+      sctx.lineWidth = 1.5;
+      sctx.stroke();
+    });
+
+    if(nerve>0){
+      const signalX=206+(nerve/100)*324;
+      const glow=sctx.createRadialGradient(signalX,170,4,signalX,170,28);
+      glow.addColorStop(0,"rgba(239,68,68,0.95)");
+      glow.addColorStop(1,"rgba(239,68,68,0)");
+      sctx.fillStyle=glow;
+      sctx.beginPath();
+      sctx.arc(signalX,170,28,0,Math.PI*2);
+      sctx.fill();
+      sctx.strokeStyle="#dc2626";
+      sctx.lineWidth=5;
+      sctx.beginPath();
+      sctx.moveTo(Math.max(210,signalX-30),170);
+      sctx.quadraticCurveTo(signalX-10,148,signalX,170);
+      sctx.quadraticCurveTo(signalX+10,192,Math.min(530,signalX+30),170);
+      sctx.stroke();
+    }
+
+    sctx.strokeStyle="#b91c1c"; sctx.lineWidth=12; sctx.beginPath(); sctx.moveTo(530,170); sctx.lineTo(600,140); sctx.stroke(); sctx.beginPath(); sctx.moveTo(530,170); sctx.lineTo(606,170); sctx.stroke(); sctx.beginPath(); sctx.moveTo(530,170); sctx.lineTo(600,200); sctx.stroke();
+
+    sctx.fillStyle="#fee2e2"; drawRoundedRect(sctx,628,96,180,150,18); sctx.fill(); sctx.strokeStyle="#dc2626"; sctx.lineWidth=3; sctx.stroke();
+    sctx.strokeStyle="#ef4444"; sctx.lineWidth=4; for(let i=0;i<8;i++){ const x=656+i*18; sctx.beginPath(); sctx.moveTo(x,126); sctx.lineTo(x,214); sctx.stroke(); }
+    for(let i=0;i<7;i++){ const rx=652+i*20; sctx.strokeStyle=ach>20?"#059669":"#9ca3af"; sctx.lineWidth=3; sctx.beginPath(); sctx.moveTo(rx-5,110); sctx.lineTo(rx,123); sctx.lineTo(rx+5,110); sctx.stroke(); }
+
+    if(ach>0){ for(let i=0;i<10;i++){ const t=((pulse+i*18)%100)/100, x=590+t*55, y=136+((i%3)*24)+Math.sin((pulse+i*11)/18)*4; drawParticle(sctx,x,y,"ACh","#0f766e",9,"bold 9px Arial"); } }
+    if(calciumToggle.checked&&termCa>10){ for(let i=0;i<6;i++){ const x=552+(i%3)*18+Math.sin((pulse+i*13)/12)*2, y=140+Math.floor(i/3)*32; drawParticle(sctx,x,y,"Ca","#d97706",8,"bold 9px Arial"); } }
+    if(depol>5){ for(let i=0;i<6;i++){ const x=652+i*20, y=92+((pulse+i*10)%28); drawParticle(sctx,x,y,"Na","#dc2626",8,"bold 9px Arial"); sctx.strokeStyle="#dc2626"; sctx.lineWidth=2.5; sctx.beginPath(); sctx.moveTo(x,96); sctx.lineTo(x,118); sctx.stroke(); } }
+
+    sctx.fillStyle="#fff"; sctx.strokeStyle="#d1d5db"; drawRoundedRect(sctx,24,364,832,190,16); sctx.fill(); sctx.stroke();
+    sctx.fillStyle="#111827"; sctx.font="bold 16px Arial"; sctx.fillText("Propagação na fibra muscular: sarcolema, túbulos T e retículo sarcoplasmático",40,390);
+
+    sctx.strokeStyle="#dc2626"; sctx.lineWidth=4; drawRoundedRect(sctx,60,420,740,92,16); sctx.stroke();
+    sctx.strokeStyle="#7c3aed"; sctx.lineWidth=8; [220,430,640].forEach(x=>{ sctx.beginPath(); sctx.moveTo(x,420); sctx.lineTo(x,510); sctx.stroke(); });
+    sctx.strokeStyle="#0f766e"; sctx.lineWidth=8; [220,430,640].forEach(x=>{ sctx.beginPath(); sctx.moveTo(x-46,436); sctx.lineTo(x-10,436); sctx.stroke(); sctx.beginPath(); sctx.moveTo(x+10,436); sctx.lineTo(x+46,436); sctx.stroke(); sctx.beginPath(); sctx.moveTo(x-46,496); sctx.lineTo(x-10,496); sctx.stroke(); sctx.beginPath(); sctx.moveTo(x+10,496); sctx.lineTo(x+46,496); sctx.stroke(); });
+
+    if(depol>0){ const sx=70+(depol/100)*710; const glow=sctx.createRadialGradient(sx,466,4,sx,466,28); glow.addColorStop(0,"rgba(239,68,68,0.95)"); glow.addColorStop(1,"rgba(239,68,68,0)"); sctx.fillStyle=glow; sctx.beginPath(); sctx.arc(sx,466,28,0,Math.PI*2); sctx.fill(); sctx.strokeStyle="#dc2626"; sctx.lineWidth=5; sctx.beginPath(); sctx.moveTo(Math.max(70,sx-30),466); sctx.quadraticCurveTo(sx-10,444,sx,466); sctx.quadraticCurveTo(sx+10,488,Math.min(800,sx+30),466); sctx.stroke(); }
+    if(calciumToggle.checked&&fiberCa>5){ [220,430,640].forEach((x,idx)=>{ for(let i=0;i<4;i++){ const px=x-28+i*18+Math.sin((pulse+idx*20+i*12)/10)*2, py=452+(i%2)*26+Math.cos((pulse+i*10)/12)*2; drawParticle(sctx,px,py,"Ca","#d97706",8,"bold 9px Arial"); } }); }
+
+    const stripY=530; sctx.strokeStyle="#dc2626"; sctx.lineWidth=6; sctx.beginPath(); sctx.moveTo(120,stripY); sctx.lineTo(340,stripY); sctx.stroke(); sctx.beginPath(); sctx.moveTo(520,stripY); sctx.lineTo(740,stripY); sctx.stroke();
+    sctx.strokeStyle="#dc2626"; sctx.lineWidth=10; sctx.beginPath(); sctx.moveTo(360,stripY); sctx.lineTo(500,stripY); sctx.stroke();
+    if(ready>5){ for(let i=0;i<8;i++){ const hx=370+i*16; sctx.strokeStyle="#059669"; sctx.lineWidth=3; sctx.beginPath(); sctx.moveTo(hx,stripY); sctx.lineTo(hx+(i%2===0?-8:8),stripY-14); sctx.stroke(); } }
+
+    if(labelsToggle.checked){ sctx.fillStyle="#4b5563"; sctx.font="14px Arial"; sctx.fillText("Dendritos",62,96); sctx.fillText("Corpo celular",160,98); sctx.fillText("Axônio",380,118); sctx.fillText("Terminal axonal",506,92); sctx.fillText("Placa motora",672,80); sctx.fillText("Sarcolema",80,414); sctx.fillText("Túbulo T",184,528); sctx.fillText("Retículo sarcoplasmático",270,414); sctx.fillText("Actina",196,548); sctx.fillText("Miosina",416,548); sctx.fillText("Actina",618,548); }
+  }
+
+  function drawGraph(){
+    gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
+    gctx.fillStyle="#111827";
+    gctx.font="bold 20px Arial";
+    gctx.fillText("Sequência funcional da placa motora",18,28);
+
+    const x0=82, y0=430, w=700, h=300;
+    const labelBandY = 470;
+
+    // axes
+    gctx.strokeStyle="#374151";
+    gctx.lineWidth=1.8;
+    gctx.beginPath();
+    gctx.moveTo(x0,72);
+    gctx.lineTo(x0,y0);
+    gctx.lineTo(x0+w,y0);
+    gctx.stroke();
+
+    if(labelsToggle.checked){
+      gctx.fillStyle="#4b5563";
+      gctx.font="14px Arial";
+      gctx.fillText("Atividade relativa",18,64);
+      gctx.fillText("Tempo",758,500);
+    }
+
+    // horizontal grid
+    for(let i=0;i<=5;i++){
+      const gy = y0 - i*(h/5);
+      gctx.strokeStyle="#e5e7eb";
+      gctx.lineWidth=1;
+      gctx.beginPath();
+      gctx.moveTo(x0,gy);
+      gctx.lineTo(x0+w,gy);
+      gctx.stroke();
+      gctx.fillStyle="#6b7280";
+      gctx.font="13px Arial";
+      gctx.fillText(String(i*20),44,gy+5);
+    }
+
+    // phase bands and left-aligned staircase labels
+    stages.forEach((st,idx)=>{
+      const sx=x0+(st.start/TOTAL)*w;
+      const ex=x0+(st.end/TOTAL)*w;
+      gctx.fillStyle=st.color+"22";
+      gctx.fillRect(sx,labelBandY,ex-sx,16);
+
+      if(labelsToggle.checked){
+        gctx.fillStyle=st.color;
+        gctx.font="12px Arial";
+        const textX = sx + 2;              // aligned to left edge of the column
+        const textY = 500 + idx*18;        // staircase / diagonal layout
+        gctx.fillText(st.name, textX, textY);
+      }
+    });
+
+    // highlight current phase
+    const cur=getStage(frame);
+    const cs=x0+(cur.start/TOTAL)*w, ce=x0+(cur.end/TOTAL)*w;
+    gctx.fillStyle=cur.color+"18";
+    gctx.fillRect(cs,72,ce-cs,h+8);
+
+    function drawCurve(valueFn,color,labelY,label,dashed=false){
+      gctx.strokeStyle=color;
+      gctx.lineWidth=3;
+      if(dashed) gctx.setLineDash([6,5]); else gctx.setLineDash([]);
+      gctx.beginPath();
+      for(let i=0;i<=frame;i++){
+        const x=x0+(i/TOTAL)*w;
+        const y=y0-valueFn(i)*2.7;
+        if(i===0) gctx.moveTo(x,y); else gctx.lineTo(x,y);
+      }
+      gctx.stroke();
+      gctx.setLineDash([]);
+      if(labelsToggle.checked){
+        gctx.fillStyle=color;
+        gctx.font="bold 13px Arial";
+        gctx.fillText(label,570,labelY);
+      }
+    }
+
+    drawCurve(getNerveSignal,"#dc2626",96,"");
+    drawCurve(getSynapticACh,"#0f766e",118,"");
+    drawCurve(getMuscleDepol,"#dc2626",140,"");
+    if(calciumToggle.checked) drawCurve(getFiberCa,"#d97706",162,"",true);
+    drawCurve(getContractReady,"#059669",184,"");
+
+    if(labelsToggle.checked){
+      gctx.font="bold 13px Arial";
+      gctx.fillStyle="#dc2626"; gctx.fillText("Impulso nervoso", 815, 100);
+      gctx.fillStyle="#0f766e"; gctx.fillText("ACh na fenda", 815, 122);
+      gctx.fillStyle="#dc2626"; gctx.fillText("Despolarização muscular", 815, 144);
+      if(calciumToggle.checked){ gctx.fillStyle="#d97706"; gctx.fillText("Ca²⁺ muscular", 815, 166); }
+      gctx.fillStyle="#059669"; gctx.fillText("Preparação contrátil", 815, 188);
+    }
+
+    const px=x0+(frame/TOTAL)*w;
+    const py=y0-getMuscleDepol(frame)*2.7;
+    gctx.fillStyle=cur.color;
+    gctx.beginPath();
+    gctx.arc(px,py,6,0,Math.PI*2);
+    gctx.fill();
+
+    gctx.strokeStyle="#9ca3af";
+    gctx.setLineDash([4,4]);
+    pauseFrames.forEach(f=>{
+      const x=x0+(f/TOTAL)*w;
+      gctx.beginPath();
+      gctx.moveTo(x,72);
+      gctx.lineTo(x,y0);
+      gctx.stroke();
+    });
+    gctx.setLineDash([]);
+  }
+
+  function render(){ updateStatus(); drawScene(); drawGraph(); }
+  function pauseNow(markAwait=true){ running=false; if(raf) cancelAnimationFrame(raf); if(markAwait) stepAwaitPlay=true; render(); }
+  function play(){ if(running) return; running=true; stepAwaitPlay=false; lastTs=0; raf=requestAnimationFrame(loop); render(); }
+  function nextStage(){ if(frame>=TOTAL){ if(loopToggle.checked) frame=0; else { render(); return; } } const next=pauseFrames.find(p=>p>frame); if(next==null){ frame=loopToggle.checked?0:TOTAL; render(); return; } frame=next; stepAwaitPlay=true; render(); }
+  function resetAll(){ running=false; if(raf) cancelAnimationFrame(raf); frame=0; pulse=0; stepAwaitPlay=false; render(); }
+
+  function loop(ts){
+    if(!running) return;
+    if(!lastTs) lastTs=ts;
+    const dt=ts-lastTs; lastTs=ts; const inc=dt*0.055*getSpeed(); const prev=Math.floor(frame); frame+=inc; pulse+=dt*0.12*getSpeed(); if(frame>TOTAL) frame=TOTAL; const cur=Math.floor(frame);
+    if(stepModeToggle.checked){ const crossed=pauseFrames.find(p=>p>prev&&p<=cur); if(crossed!==undefined){ frame=crossed; pauseNow(true); return; } }
+    render();
+    if(frame>=TOTAL){ if(loopToggle.checked){ frame=0; pulse=0; if(stepModeToggle.checked){ pauseNow(true); return; } } else { running=false; render(); return; } }
+    raf=requestAnimationFrame(loop);
+  }
+
+  btnStart.addEventListener("click",play); btnPause.addEventListener("click",()=>pauseNow(false)); btnStep.addEventListener("click",nextStage); btnReset.addEventListener("click",resetAll);
+  speedRange.addEventListener("input",()=>{ speedLabel.textContent=parseFloat(speedRange.value).toFixed(1)+"x"; });
+  stepModeToggle.addEventListener("change",()=>{ if(stepModeToggle.checked&&running) pauseNow(true); else stepAwaitPlay=false; render(); });
+  labelsToggle.addEventListener("change",render); loopToggle.addEventListener("change",render); calciumToggle.addEventListener("change",render);
+
+  speedLabel.textContent=parseFloat(speedRange.value).toFixed(1)+"x";
+  render();
+})();
+</script>
+</body>
+</html>
