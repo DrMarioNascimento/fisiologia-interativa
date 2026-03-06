@@ -1,0 +1,905 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador Interativo do Potencial de Ação — v5</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --panel:#fbfbfd;
+      --line:#d9dce3;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --blue:#2563eb;
+      --cyan:#0891b2;
+      --green:#059669;
+      --amber:#d97706;
+      --red:#dc2626;
+      --violet:#7c3aed;
+      --gray:#6b7280;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 22px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      text-align: center;
+    }
+    .subtitle{
+      text-align:center;
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 16px;
+    }
+    .controls {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      justify-content:center;
+      align-items:center;
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding:12px;
+      margin: 0 auto 8px;
+      max-width: 1220px;
+    }
+    .mode-line{
+      max-width:1220px;
+      margin: 0 auto 14px;
+      text-align:right;
+      min-height: 22px;
+    }
+    .mode-badge{
+      display:inline-block;
+      font-size:12px;
+      color:var(--muted);
+      background:#fff;
+      border:1px solid #e1e5ec;
+      border-radius:999px;
+      padding:4px 10px;
+    }
+    button {
+      border:1px solid #b9c0cc;
+      border-radius:10px;
+      padding:10px 14px;
+      font-size:15px;
+      background:#fff;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+    button:hover { transform: translateY(-1px); }
+    .primary { border-color:#96b7ff; }
+    label {
+      display:flex;
+      gap:8px;
+      align-items:center;
+      font-size:14px;
+      color:var(--text);
+      background:#fff;
+      border:1px solid #e1e5ec;
+      border-radius:10px;
+      padding:9px 12px;
+    }
+    input[type="range"] { width:140px; }
+    .status-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .9fr .9fr;
+      gap:12px;
+      max-width:1220px;
+      margin: 0 auto 14px;
+    }
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:12px 14px;
+      min-height:92px;
+      position: relative;
+      overflow:hidden;
+      transition:.2s ease;
+    }
+    .card.colorized::before{
+      content:"";
+      position:absolute;
+      inset:0 auto 0 0;
+      width:8px;
+      background:var(--phase-color, var(--gray));
+    }
+    .card.colorized{
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
+    }
+    .card-title{
+      font-size:12px;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+    .phase{
+      font-size:26px;
+      font-weight:700;
+      line-height:1.12;
+      padding-left:4px;
+    }
+    .phase small{
+      font-size:14px;
+      color:var(--muted);
+      font-weight:400;
+      display:block;
+      margin-top:6px;
+    }
+    .layout{
+      display:grid;
+      grid-template-columns: minmax(460px, 1fr) minmax(460px, 1fr);
+      gap:16px;
+      max-width:1220px;
+      margin: 0 auto;
+    }
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px;
+    }
+    canvas{
+      width:100%;
+      height:auto;
+      display:block;
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:12px;
+    }
+    .legend{
+      max-width:1220px;
+      margin: 14px auto 0;
+      background: var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:14px 16px 28px 16px;
+      line-height:1.55;
+      font-size:15px;
+      position:relative;
+    }
+    .legend b { color: var(--text); }
+    .pill{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:12px;
+      border:1px solid var(--line);
+      margin-left:6px;
+      color:var(--muted);
+      background:#fff;
+    }
+    .signature{
+      text-align:right;
+      color:#4b5563;
+      font-size:14px;
+      margin-top:18px;
+      border-top:1px solid #e5e7eb;
+      padding-top:10px;
+    }
+    @media (max-width: 980px){
+      .layout{ grid-template-columns: 1fr; }
+      .status-grid{ grid-template-columns: 1fr; }
+
+    }
+  </style>
+</head>
+<body>
+  <h1>Simulador Interativo do Potencial de Ação</h1>
+  <p class="subtitle">Neurônio colorido, membrana ampliada, canais dependentes de voltagem e execução contínua ou por etapas.</p>
+
+  <div class="controls">
+    <button id="btnStart" class="primary">Iniciar</button>
+    <button id="btnPause">Pausar</button>
+    <button id="btnStep">Próxima etapa</button>
+    <button id="btnReset">Resetar</button>
+
+    <label>Velocidade
+      <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2">
+      <span id="speedLabel">1.2x</span>
+    </label>
+
+    <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
+    <label><input id="stepModeToggle" type="checkbox"> Executar por etapas</label>
+    <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+  </div>
+
+  <div class="mode-line">
+    <div id="modeBadge" class="mode-badge">Modo: contínuo</div>
+  </div>
+
+  <div class="status-grid">
+    <div class="card colorized" id="phaseCard">
+      <div class="card-title">Fase atual</div>
+      <div class="phase" id="phaseText">Repouso
+        <small id="phaseDesc">Membrana em torno de -70 mV.</small>
+      </div>
+    </div>
+    <div class="card colorized" id="mvCard">
+      <div class="card-title">Potencial de membrana</div>
+      <div class="phase" id="mvText">-70 mV
+        <small>Limiar clássico em torno de -55 mV.</small>
+      </div>
+    </div>
+    <div class="card colorized" id="flowCard">
+      <div class="card-title">Fluxo iônico predominante</div>
+      <div class="phase" id="flowText">Sem fluxo predominante
+        <small id="flowDesc">Predomínio de correntes de repouso.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <canvas id="neuronCanvas" width="860" height="540"></canvas>
+    </div>
+    <div class="panel">
+      <canvas id="graphCanvas" width="860" height="540"></canvas>
+    </div>
+  </div>
+
+  <div class="legend">
+    <b>Repouso:</b> cerca de -70 mV.
+    <b>Limiar:</b> por volta de -55 mV, quando a abertura regenerativa dos canais rápidos de Na<sup>+</sup> se torna evidente.
+    <b>Despolarização:</b> entrada predominante de Na<sup>+</sup>.
+    <b>Repolarização:</b> saída predominante de K<sup>+</sup>.
+    <b>Hiperpolarização:</b> canais de K<sup>+</sup> ainda permanecem abertos por algum tempo.
+    <span class="pill">v5</span>
+
+    <div class="signature">Professor Doutor Mário César Nascimento · Fisiologia Humana</div>
+  </div>
+
+<script>
+(() => {
+  const neuronCanvas = document.getElementById("neuronCanvas");
+  const graphCanvas = document.getElementById("graphCanvas");
+  const nctx = neuronCanvas.getContext("2d");
+  const gctx = graphCanvas.getContext("2d");
+
+  const btnStart = document.getElementById("btnStart");
+  const btnPause = document.getElementById("btnPause");
+  const btnStep = document.getElementById("btnStep");
+  const btnReset = document.getElementById("btnReset");
+  const speedRange = document.getElementById("speedRange");
+  const speedLabel = document.getElementById("speedLabel");
+  const loopToggle = document.getElementById("loopToggle");
+  const stepModeToggle = document.getElementById("stepModeToggle");
+  const labelsToggle = document.getElementById("labelsToggle");
+  const modeBadge = document.getElementById("modeBadge");
+
+  const phaseText = document.getElementById("phaseText");
+  const phaseDesc = document.getElementById("phaseDesc");
+  const mvText = document.getElementById("mvText");
+  const flowText = document.getElementById("flowText");
+  const flowDesc = document.getElementById("flowDesc");
+  const phaseCard = document.getElementById("phaseCard");
+  const mvCard = document.getElementById("mvCard");
+  const flowCard = document.getElementById("flowCard");
+
+  const TOTAL = 460;
+  const x0 = 85, xW = 680;
+  const baseY = 438;
+
+  const phases = [
+    { name:"Repouso", start:0, end:70, desc:"Membrana em torno de -70 mV.", color:"#6b7280", flow:"Sem fluxo predominante", flowDesc:"Predomínio de correntes de repouso." },
+    { name:"Limiar", start:71, end:125, desc:"Atinge aproximadamente -55 mV.", color:"#d97706", flow:"Entrada inicial de Na+", flowDesc:"Abertura crescente dos canais rápidos de Na+." },
+    { name:"Despolarização", start:126, end:210, desc:"Entrada predominante de Na+.", color:"#2563eb", flow:"Entrada de Na+", flowDesc:"Grande influxo de sódio para o interior da célula." },
+    { name:"Repolarização", start:211, end:315, desc:"Saída predominante de K+.", color:"#dc2626", flow:"Saída de K+", flowDesc:"Efluxo de potássio reduzindo o potencial de membrana." },
+    { name:"Hiperpolarização", start:316, end:390, desc:"K+ ainda permanece aberto por algum tempo.", color:"#7c3aed", flow:"Saída residual de K+", flowDesc:"Os canais de K+ ainda permanecem abertos além do necessário." },
+    { name:"Retorno ao repouso", start:391, end:460, desc:"Volta gradual ao potencial basal.", color:"#059669", flow:"Redução do efluxo de K+", flowDesc:"A membrana retorna progressivamente ao estado basal." }
+  ];
+  const pauseFrames = [70, 125, 210, 315, 390, 460];
+
+  let running = false;
+  let frame = 0;
+  let raf = null;
+  let lastTs = 0;
+  let flowPhase = 0;
+  let stepAwaitPlay = false;
+
+  function getSpeed() { return parseFloat(speedRange.value); }
+
+  function interp(v, a, b, ya, yb){
+    const t = (v - a) / (b - a);
+    return ya + (yb - ya) * Math.max(0, Math.min(1, t));
+  }
+
+  function getPotential(f){
+    if (f <= 70) return -70;
+    if (f <= 125) return interp(f, 70, 125, -70, -55);
+    if (f <= 210) return interp(f, 125, 210, -55, 30);
+    if (f <= 315) return interp(f, 210, 315, 30, -70);
+    if (f <= 390) return interp(f, 315, 390, -70, -85);
+    return interp(f, 390, 460, -85, -70);
+  }
+
+  function getPhase(f){
+    return phases.find(p => f >= p.start && f <= p.end) || phases[0];
+  }
+
+  function mvToY(mv){ return baseY - ((mv + 100) * 3.28); }
+  function formatMV(mv){ return `${mv >= 0 ? "+" : ""}${mv.toFixed(0)} mV`; }
+
+  function setCardsColor(color){
+    phaseCard.style.setProperty("--phase-color", color);
+    mvCard.style.setProperty("--phase-color", color);
+    flowCard.style.setProperty("--phase-color", color);
+  }
+
+  function updateStatus(){
+    const p = getPhase(frame);
+    const mv = getPotential(frame);
+
+    phaseText.firstChild.textContent = p.name;
+    phaseDesc.textContent = p.desc;
+    mvText.firstChild.textContent = formatMV(mv);
+    flowText.firstChild.textContent = p.flow;
+    flowDesc.textContent = p.flowDesc;
+    setCardsColor(p.color);
+
+    modeBadge.textContent = stepModeToggle.checked
+      ? (stepAwaitPlay ? "Modo: etapas (pausado)" : "Modo: etapas")
+      : "Modo: contínuo";
+  }
+
+  function drawRoundedRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r);
+    ctx.arcTo(x, y, x+w, y, r);
+    ctx.closePath();
+  }
+
+  function drawGradientStrokeLine(ctx, x1, y1, x2, y2, stops){
+    const grad = ctx.createLinearGradient(x1, y1, x2, y2);
+    stops.forEach(s => grad.addColorStop(s[0], s[1]));
+    ctx.strokeStyle = grad;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+
+  function drawNeuronBase(){
+    nctx.clearRect(0,0,neuronCanvas.width, neuronCanvas.height);
+
+    nctx.font = "bold 20px Arial";
+    nctx.fillStyle = "#111827";
+    nctx.fillText("Neurônio + detalhe ampliado da membrana", 18, 28);
+
+    // Dendrites with subtle pseudo-3D shading
+    nctx.lineWidth = 13;
+    drawGradientStrokeLine(nctx, 170, 175, 90, 110, [[0,"#22c55e"], [1,"#0f766e"]]);
+    drawGradientStrokeLine(nctx, 170, 175, 72, 170, [[0,"#22c55e"], [1,"#0f766e"]]);
+    drawGradientStrokeLine(nctx, 170, 175, 96, 236, [[0,"#22c55e"], [1,"#0f766e"]]);
+
+    nctx.lineWidth = 7;
+    drawGradientStrokeLine(nctx, 118, 127, 78, 88, [[0,"#4ade80"], [1,"#115e59"]]);
+    drawGradientStrokeLine(nctx, 111, 214, 69, 252, [[0,"#4ade80"], [1,"#115e59"]]);
+
+    // Soma gradient
+    const somaGrad = nctx.createRadialGradient(198, 148, 10, 220, 170, 78);
+    somaGrad.addColorStop(0, "#dcfce7");
+    somaGrad.addColorStop(0.55, "#4ade80");
+    somaGrad.addColorStop(1, "#0f766e");
+    nctx.fillStyle = somaGrad;
+    nctx.beginPath(); nctx.arc(220, 175, 62, 0, Math.PI*2); nctx.fill();
+
+    nctx.strokeStyle = "#0f766e";
+    nctx.lineWidth = 4;
+    nctx.stroke();
+
+    const nucleusGrad = nctx.createRadialGradient(212, 160, 3, 220, 175, 24);
+    nucleusGrad.addColorStop(0, "#ecfeff");
+    nucleusGrad.addColorStop(1, "#06b6d4");
+    nctx.fillStyle = nucleusGrad;
+    nctx.beginPath(); nctx.arc(220,175,21,0,Math.PI*2); nctx.fill();
+    nctx.strokeStyle = "#0e7490";
+    nctx.lineWidth = 2;
+    nctx.stroke();
+
+    // Axon pseudo-3D tube
+    const axonGrad = nctx.createLinearGradient(280, 145, 280, 205);
+    axonGrad.addColorStop(0, "#e0f2fe");
+    axonGrad.addColorStop(0.3, "#60a5fa");
+    axonGrad.addColorStop(0.7, "#2563eb");
+    axonGrad.addColorStop(1, "#1d4ed8");
+
+    nctx.lineCap = "round";
+    nctx.lineWidth = 18;
+    nctx.strokeStyle = axonGrad;
+    nctx.beginPath(); nctx.moveTo(282,175); nctx.lineTo(605,175); nctx.stroke();
+
+    // shiny highlight
+    nctx.strokeStyle = "rgba(255,255,255,0.65)";
+    nctx.lineWidth = 4;
+    nctx.beginPath(); nctx.moveTo(286,168); nctx.lineTo(602,168); nctx.stroke();
+
+    // Myelin segments
+    const segs = [320, 395, 470, 545];
+    segs.forEach(sx => {
+      const segGrad = nctx.createLinearGradient(sx, 148, sx, 202);
+      segGrad.addColorStop(0, "#f8fafc");
+      segGrad.addColorStop(0.45, "#cbd5e1");
+      segGrad.addColorStop(1, "#94a3b8");
+      nctx.fillStyle = segGrad;
+      nctx.strokeStyle = "#64748b";
+      nctx.lineWidth = 2;
+      drawRoundedRect(nctx, sx, 149, 48, 52, 12);
+      nctx.fill();
+      nctx.stroke();
+      nctx.strokeStyle = "rgba(255,255,255,0.65)";
+      nctx.lineWidth = 2;
+      nctx.beginPath();
+      nctx.moveTo(sx + 8, 157);
+      nctx.lineTo(sx + 40, 157);
+      nctx.stroke();
+    });
+
+    // Terminals
+    nctx.lineWidth = 10;
+    drawGradientStrokeLine(nctx, 605, 175, 675, 122, [[0,"#60a5fa"], [1,"#8b5cf6"]]);
+    drawGradientStrokeLine(nctx, 605, 175, 690, 175, [[0,"#60a5fa"], [1,"#8b5cf6"]]);
+    drawGradientStrokeLine(nctx, 605, 175, 675, 228, [[0,"#60a5fa"], [1,"#8b5cf6"]]);
+
+    // small synaptic bulbs
+    ["#a78bfa", "#c4b5fd", "#8b5cf6"].forEach((c, i) => {
+      const pts = [[675,122],[690,175],[675,228]][i];
+      nctx.fillStyle = c;
+      nctx.beginPath(); nctx.arc(pts[0], pts[1], 8, 0, Math.PI*2); nctx.fill();
+    });
+
+    if (labelsToggle.checked){
+      nctx.fillStyle = "#4b5563";
+      nctx.font = "14px Arial";
+      nctx.fillText("Dendritos", 62, 74);
+      nctx.fillText("Corpo celular", 162, 96);
+      nctx.fillText("Axônio", 442, 118);
+      nctx.fillText("Terminações", 642, 105);
+    }
+
+    // membrane zoom box
+    const zx = 76, zy = 313, zw = 700, zh = 184;
+    nctx.fillStyle = "#ffffff";
+    nctx.strokeStyle = "#d1d5db";
+    nctx.lineWidth = 2;
+    drawRoundedRect(nctx, zx, zy, zw, zh, 16);
+    nctx.fill(); nctx.stroke();
+
+    nctx.font = "bold 16px Arial";
+    nctx.fillStyle = "#111827";
+    nctx.fillText("Detalhe ampliado da membrana do axônio", zx + 16, zy + 24);
+
+    // membrane bilayer
+    const topY = zy + 62;
+    const botY = zy + 124;
+    for(let i=0;i<26;i++){
+      const px = zx + 24 + i*26;
+      const lipidGradTop = nctx.createRadialGradient(px-2, topY-2, 1, px, topY, 7);
+      lipidGradTop.addColorStop(0, "#a7f3d0");
+      lipidGradTop.addColorStop(1, "#10b981");
+      nctx.fillStyle = lipidGradTop;
+      nctx.beginPath(); nctx.arc(px, topY, 6.5, 0, Math.PI*2); nctx.fill();
+      const lipidGradBot = nctx.createRadialGradient(px-2, botY-2, 1, px, botY, 7);
+      lipidGradBot.addColorStop(0, "#a7f3d0");
+      lipidGradBot.addColorStop(1, "#10b981");
+      nctx.fillStyle = lipidGradBot;
+      nctx.beginPath(); nctx.arc(px, botY, 6.5, 0, Math.PI*2); nctx.fill();
+
+      nctx.strokeStyle = "#34d399";
+      nctx.lineWidth = 2;
+      nctx.beginPath(); nctx.moveTo(px, topY+7); nctx.lineTo(px, topY+22); nctx.stroke();
+      nctx.beginPath(); nctx.moveTo(px, botY-7); nctx.lineTo(px, botY-22); nctx.stroke();
+    }
+
+    nctx.font = "13px Arial";
+    nctx.fillStyle = "#6b7280";
+    nctx.fillText("Meio extracelular", zx + 18, zy + 50);
+    nctx.fillText("Meio intracelular", zx + 18, zy + 158);
+
+    drawChannels(zx, zy);
+  }
+
+  function phaseOpenNa(){ return frame >= 120 && frame <= 230; }
+  function phaseOpenK(){ return frame >= 210 && frame <= 390; }
+
+  function drawChannelUnit(cx, zy, type, openAmt){
+    const yTop = zy + 60;
+    const yBot = zy + 124;
+    const mid = (yTop + yBot)/2;
+
+    const shell = type === "Na"
+      ? [["#eff6ff","#93c5fd","#2563eb"], ["#1d4ed8","#60a5fa","#dbeafe"]]
+      : [["#fef2f2","#fca5a5","#dc2626"], ["#b91c1c","#f87171","#fee2e2"]];
+
+    const bodyGrad = nctx.createLinearGradient(cx-18, yTop-10, cx+18, yBot+10);
+    bodyGrad.addColorStop(0, shell[0][0]);
+    bodyGrad.addColorStop(0.5, shell[0][1]);
+    bodyGrad.addColorStop(1, shell[0][2]);
+
+    nctx.fillStyle = bodyGrad;
+    nctx.strokeStyle = type === "Na" ? "#1d4ed8" : "#b91c1c";
+    nctx.lineWidth = 2.5;
+    drawRoundedRect(nctx, cx-18, yTop-12, 36, 88, 12);
+    nctx.fill();
+    nctx.stroke();
+
+    const gap = 5 + openAmt * 16;
+    nctx.lineWidth = 3.5;
+    nctx.strokeStyle = type === "Na" ? "#2563eb" : "#dc2626";
+
+    nctx.beginPath();
+    nctx.moveTo(cx - 14, yTop + 4);
+    nctx.lineTo(cx - gap, mid);
+    nctx.lineTo(cx - 14, yBot - 4);
+    nctx.stroke();
+
+    nctx.beginPath();
+    nctx.moveTo(cx + 14, yTop + 4);
+    nctx.lineTo(cx + gap, mid);
+    nctx.lineTo(cx + 14, yBot - 4);
+    nctx.stroke();
+
+    nctx.strokeStyle = "rgba(255,255,255,0.7)";
+    nctx.lineWidth = 1.6;
+    nctx.beginPath();
+    nctx.moveTo(cx - 10, yTop - 2);
+    nctx.lineTo(cx + 10, yTop - 2);
+    nctx.stroke();
+
+    if (labelsToggle.checked){
+      nctx.font = "bold 12px Arial";
+      nctx.fillStyle = type === "Na" ? "#1d4ed8" : "#b91c1c";
+      nctx.fillText(type + "+", cx - 9, yTop - 18);
+    }
+  }
+
+  function drawChannels(zx, zy){
+    const naCenters = [zx + 260, zx + 342, zx + 424];
+    const kCenters = [zx + 550, zx + 632];
+    const naOpen = phaseOpenNa() ? 1 : 0.08;
+    const kOpen = phaseOpenK() ? 1 : 0.08;
+
+    naCenters.forEach(c => drawChannelUnit(c, zy, "Na", naOpen));
+    kCenters.forEach(c => drawChannelUnit(c, zy, "K", kOpen));
+
+    if (labelsToggle.checked){
+      nctx.font = "13px Arial";
+      nctx.fillStyle = "#6b7280";
+      nctx.fillText("Canais rápidos de Na+ dependentes de voltagem", zx + 175, zy + 172);
+      nctx.fillText("Canais de K+ dependentes de voltagem", zx + 520, zy + 172);
+    }
+  }
+
+  function drawActionPotentialWave(){
+    const p = getPhase(frame);
+    const waveX = 300 + ((frame * 2.0) % 320);
+    const y = 175;
+
+    nctx.strokeStyle = "#cbd5e1";
+    nctx.lineWidth = 3;
+    nctx.beginPath(); nctx.moveTo(300, y); nctx.lineTo(605, y); nctx.stroke();
+
+    if (frame >= 120 && frame <= 315){
+      const glow = nctx.createRadialGradient(waveX, y, 5, waveX, y, 34);
+      glow.addColorStop(0, p.name === "Despolarização" ? "rgba(59,130,246,0.95)" : "rgba(239,68,68,0.8)");
+      glow.addColorStop(1, "rgba(0,0,0,0)");
+      nctx.fillStyle = glow;
+      nctx.beginPath(); nctx.arc(waveX, y, 34, 0, Math.PI*2); nctx.fill();
+
+      nctx.strokeStyle = p.name === "Despolarização" ? "#2563eb" : "#dc2626";
+      nctx.lineWidth = 5;
+      nctx.beginPath();
+      nctx.moveTo(Math.max(300, waveX - 36), y);
+      nctx.quadraticCurveTo(waveX - 12, y - 27, waveX, y);
+      nctx.quadraticCurveTo(waveX + 12, y + 27, Math.min(605, waveX + 36), y);
+      nctx.stroke();
+    }
+  }
+
+  function drawIonParticle(x, y, label, color){
+    const grad = nctx.createRadialGradient(x-4, y-4, 2, x, y, 13);
+    if (color === "#2563eb"){
+      grad.addColorStop(0, "#dbeafe");
+      grad.addColorStop(1, "#2563eb");
+    } else {
+      grad.addColorStop(0, "#fee2e2");
+      grad.addColorStop(1, "#dc2626");
+    }
+    nctx.fillStyle = grad;
+    nctx.beginPath(); nctx.arc(x, y, 12.5, 0, Math.PI*2); nctx.fill();
+    nctx.strokeStyle = "rgba(255,255,255,0.9)";
+    nctx.lineWidth = 2;
+    nctx.stroke();
+    nctx.fillStyle = "#ffffff";
+    nctx.font = "bold 11px Arial";
+    nctx.fillText(label, x - 9, y + 4);
+  }
+
+  function animateInZoom(){
+    const zx = 76, zy = 313;
+    const topY = zy + 35;
+    const botY = zy + 149;
+
+    if (frame >= 126 && frame <= 230){
+      const centers = [336, 418, 500];
+      centers.forEach((cx, idx) => {
+        const yy = topY + ((flowPhase + idx*24) % 80);
+        drawIonParticle(cx, yy, "Na+", "#2563eb");
+      });
+      nctx.strokeStyle = "#2563eb";
+      nctx.lineWidth = 3;
+      centers.forEach(cx => {
+        nctx.beginPath();
+        nctx.moveTo(cx, zy + 34); nctx.lineTo(cx, zy + 148); nctx.stroke();
+        nctx.beginPath();
+        nctx.moveTo(cx - 6, zy + 138); nctx.lineTo(cx, zy + 148); nctx.lineTo(cx + 6, zy + 138); nctx.stroke();
+      });
+    }
+
+    if (frame >= 210 && frame <= 390){
+      const centers = [626, 708];
+      centers.forEach((cx, idx) => {
+        const yy = botY - ((flowPhase + idx*34) % 80);
+        drawIonParticle(cx, yy, "K+", "#dc2626");
+      });
+      nctx.strokeStyle = "#dc2626";
+      nctx.lineWidth = 3;
+      centers.forEach(cx => {
+        nctx.beginPath();
+        nctx.moveTo(cx, zy + 148); nctx.lineTo(cx, zy + 35); nctx.stroke();
+        nctx.beginPath();
+        nctx.moveTo(cx - 6, zy + 45); nctx.lineTo(cx, zy + 35); nctx.lineTo(cx + 6, zy + 45); nctx.stroke();
+      });
+    }
+  }
+
+  function animateOnNeuron(){
+    if (frame >= 126 && frame <= 230){
+      const xs = [308, 342, 376, 410];
+      xs.forEach((x, i) => {
+        const y = 126 + ((flowPhase + i*15) % 36);
+        drawIonParticle(x, y, "Na+", "#2563eb");
+        nctx.strokeStyle = "#2563eb";
+        nctx.lineWidth = 2.5;
+        nctx.beginPath();
+        nctx.moveTo(x, 139); nctx.lineTo(x, 165); nctx.stroke();
+      });
+    }
+
+    if (frame >= 210 && frame <= 390){
+      const xs = [468, 508, 548, 588];
+      xs.forEach((x, i) => {
+        const y = 220 - ((flowPhase + i*17) % 36);
+        drawIonParticle(x, y, "K+", "#dc2626");
+        nctx.strokeStyle = "#dc2626";
+        nctx.lineWidth = 2.5;
+        nctx.beginPath();
+        nctx.moveTo(x, 181); nctx.lineTo(x, 207); nctx.stroke();
+      });
+    }
+  }
+
+  function drawGraphBase(){
+    gctx.clearRect(0,0,graphCanvas.width, graphCanvas.height);
+    gctx.fillStyle = "#111827";
+    gctx.font = "bold 20px Arial";
+    gctx.fillText("Curva do potencial de ação", 18, 24);
+
+    gctx.strokeStyle = "#374151";
+    gctx.lineWidth = 1.8;
+    gctx.beginPath();
+    gctx.moveTo(x0, 72);
+    gctx.lineTo(x0, 438);
+    gctx.lineTo(795, 438);
+    gctx.stroke();
+
+    const marks = [-90, -70, -55, 0, 30];
+    gctx.font = "14px Arial";
+    for (const m of marks){
+      const y = mvToY(m);
+      gctx.strokeStyle = "#d1d5db";
+      gctx.lineWidth = 1;
+      gctx.beginPath(); gctx.moveTo(x0, y); gctx.lineTo(795, y); gctx.stroke();
+      gctx.fillStyle = "#4b5563";
+      gctx.fillText((m > 0 ? "+" : "") + m, 34, y + 5);
+    }
+
+    gctx.fillStyle = "#d97706";
+    gctx.fillText("Limiar", 718, mvToY(-55) - 8);
+
+    if (labelsToggle.checked){
+      gctx.fillStyle = "#4b5563";
+      gctx.fillText("mV", 34, 64);
+      gctx.fillText("Tempo", 748, 468);
+    }
+
+    phases.forEach(ph => {
+      const sx = x0 + (ph.start / TOTAL) * xW;
+      const ex = x0 + (ph.end / TOTAL) * xW;
+      gctx.fillStyle = ph.color + "22";
+      gctx.fillRect(sx, 446, ex - sx, 16);
+      if (labelsToggle.checked){
+        gctx.fillStyle = ph.color;
+        gctx.font = "12px Arial";
+        gctx.fillText(ph.name, sx + 2, 478);
+      }
+    });
+  }
+
+  function drawCurve(){
+    const p = getPhase(frame);
+
+    const sx = x0 + (p.start / TOTAL) * xW;
+    const ex = x0 + (p.end / TOTAL) * xW;
+    gctx.fillStyle = p.color + "18";
+    gctx.fillRect(sx, 72, ex - sx, 366);
+
+    gctx.lineWidth = 4;
+    gctx.strokeStyle = "#111827";
+    gctx.beginPath();
+    for (let i=0;i<=frame;i++){
+      const x = x0 + (i / TOTAL) * xW;
+      const y = mvToY(getPotential(i));
+      if (i === 0) gctx.moveTo(x,y);
+      else gctx.lineTo(x,y);
+    }
+    gctx.stroke();
+
+    const cx = x0 + (frame / TOTAL) * xW;
+    const cy = mvToY(getPotential(frame));
+    gctx.fillStyle = p.color;
+    gctx.beginPath(); gctx.arc(cx, cy, 6, 0, Math.PI*2); gctx.fill();
+
+    if (labelsToggle.checked){
+      gctx.fillStyle = "#2563eb";
+      gctx.font = "bold 14px Arial";
+      gctx.fillText("Entrada de Na+", 285, 100);
+      gctx.fillStyle = "#dc2626";
+      gctx.fillText("Saída de K+", 508, 136);
+    }
+
+    gctx.strokeStyle = "#9ca3af";
+    gctx.setLineDash([4,4]);
+    pauseFrames.forEach(f => {
+      const x = x0 + (f / TOTAL) * xW;
+      gctx.beginPath(); gctx.moveTo(x, 72); gctx.lineTo(x, 438); gctx.stroke();
+    });
+    gctx.setLineDash([]);
+  }
+
+  function render(){
+    updateStatus();
+    drawNeuronBase();
+    drawActionPotentialWave();
+    animateOnNeuron();
+    animateInZoom();
+    drawGraphBase();
+    drawCurve();
+  }
+
+  function pauseNow(markAwait=true){
+    running = false;
+    if (raf) cancelAnimationFrame(raf);
+    if (markAwait) stepAwaitPlay = true;
+    render();
+  }
+
+  function play(){
+    if (running) return;
+    running = true;
+    stepAwaitPlay = false;
+    lastTs = 0;
+    raf = requestAnimationFrame(loop);
+    render();
+  }
+
+  function nextStage(){
+    if (frame >= TOTAL){
+      if (loopToggle.checked) frame = 0;
+      else { render(); return; }
+    }
+    const next = pauseFrames.find(p => p > frame);
+    if (next == null){
+      frame = loopToggle.checked ? 0 : TOTAL;
+      render();
+      return;
+    }
+    frame = next;
+    stepAwaitPlay = true;
+    render();
+  }
+
+  function resetAll(){
+    running = false;
+    if (raf) cancelAnimationFrame(raf);
+    frame = 0;
+    flowPhase = 0;
+    stepAwaitPlay = false;
+    render();
+  }
+
+  function loop(ts){
+    if (!running) return;
+    if (!lastTs) lastTs = ts;
+    const dt = ts - lastTs;
+    lastTs = ts;
+
+    const inc = dt * 0.055 * getSpeed();
+    flowPhase += dt * 0.11 * getSpeed();
+    const prevInt = Math.floor(frame);
+    frame += inc;
+    if (frame > TOTAL) frame = TOTAL;
+    const curInt = Math.floor(frame);
+
+    if (stepModeToggle.checked){
+      const crossed = pauseFrames.find(p => p > prevInt && p <= curInt);
+      if (crossed !== undefined){
+        frame = crossed;
+        pauseNow(true);
+        return;
+      }
+    }
+
+    render();
+
+    if (frame >= TOTAL){
+      if (loopToggle.checked){
+        frame = 0;
+        flowPhase = 0;
+        if (stepModeToggle.checked){
+          pauseNow(true);
+          return;
+        } else {
+          raf = requestAnimationFrame(loop);
+          return;
+        }
+      } else {
+        running = false;
+        render();
+        return;
+      }
+    }
+    raf = requestAnimationFrame(loop);
+  }
+
+  btnStart.addEventListener("click", play);
+  btnPause.addEventListener("click", () => pauseNow(false));
+  btnReset.addEventListener("click", resetAll);
+  btnStep.addEventListener("click", nextStage);
+
+  speedRange.addEventListener("input", () => {
+    speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + "x";
+  });
+
+  stepModeToggle.addEventListener("change", () => {
+    if (stepModeToggle.checked){
+      if (running) pauseNow(true);
+    } else {
+      stepAwaitPlay = false;
+    }
+    render();
+  });
+
+  labelsToggle.addEventListener("change", render);
+  loopToggle.addEventListener("change", render);
+
+  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + "x";
+  render();
+})();
+</script>
+</body>
+</html>
