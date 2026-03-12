@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fisiologia Interativa</title>
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --panel:#ffffff;
+      --line:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
+      --shadow:0 10px 28px rgba(15,23,42,0.08);
+      --resp:#0ea5e9;
+      --cardio:#ef4444;
+      --neuro:#8b5cf6;
+      --general:#10b981;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg,#f8fafc 0%,#ffffff 100%);
+      color:var(--text);
+    }
+    .wrap{
+      max-width:1120px;
+      margin:0 auto;
+      padding:40px 20px 64px;
+    }
+    .hero{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:28px 28px 24px;
+      box-shadow:var(--shadow);
+      margin-bottom:22px;
+    }
+    h1{
+      margin:0 0 8px;
+      font-size:38px;
+      line-height:1.1;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.5;
+    }
+    .toolbar{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      margin:20px 0 26px;
+    }
+    .search{
+      flex:1 1 340px;
+      display:flex;
+      align-items:center;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px 14px;
+      box-shadow:var(--shadow);
+    }
+    .search input{
+      border:none;
+      outline:none;
+      width:100%;
+      font-size:15px;
+      background:transparent;
+      color:var(--text);
+    }
+    .chips{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      border:1px solid var(--line);
+      background:var(--panel);
+      color:var(--muted);
+      border-radius:999px;
+      padding:9px 12px;
+      font-size:13px;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+    .chip.active{
+      color:var(--text);
+      border-color:#cbd5e1;
+      box-shadow:var(--shadow);
+    }
+    .meta{
+      margin:0 0 18px;
+      color:var(--muted);
+      font-size:14px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:16px;
+    }
+    .card{
+      display:flex;
+      flex-direction:column;
+      min-height:220px;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:16px;
+      text-decoration:none;
+      color:inherit;
+      box-shadow:var(--shadow);
+      transition:.18s ease;
+    }
+    .card:hover{
+      transform:translateY(-3px);
+    }
+    .thumb{
+      height:88px;
+      border-radius:16px;
+      margin-bottom:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:30px;
+      font-weight:700;
+      color:white;
+      letter-spacing:.02em;
+    }
+    .thumb.respiratorio{background:linear-gradient(135deg,var(--resp),#38bdf8)}
+    .thumb.cardiovascular{background:linear-gradient(135deg,var(--cardio),#fb7185)}
+    .thumb.neural{background:linear-gradient(135deg,var(--neuro),#a78bfa)}
+    .thumb.geral{background:linear-gradient(135deg,var(--general),#34d399)}
+    .category{
+      display:inline-block;
+      font-size:12px;
+      color:var(--muted);
+      margin-bottom:6px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+    .title{
+      font-size:20px;
+      font-weight:700;
+      line-height:1.2;
+      margin-bottom:8px;
+    }
+    .desc{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+      flex:1;
+    }
+    .footer{
+      margin-top:28px;
+      color:var(--muted);
+      font-size:14px;
+      text-align:center;
+    }
+    .empty{
+      padding:28px;
+      text-align:center;
+      color:var(--muted);
+      background:var(--panel);
+      border:1px dashed #cbd5e1;
+      border-radius:18px;
+    }
+    @media (max-width:720px){
+      h1{font-size:30px}
+      .hero{padding:22px 18px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Fisiologia Interativa</h1>
+      <p class="subtitle">Portal automático de simuladores didáticos de fisiologia humana. Novos arquivos HTML no repositório aparecem aqui automaticamente.</p>
+    </section>
+
+    <section class="toolbar">
+      <label class="search" aria-label="Buscar simuladores">
+        <input id="searchInput" type="text" placeholder="Buscar simulador, sistema ou palavra-chave" />
+      </label>
+      <div class="chips" id="categoryChips">
+        <button class="chip active" data-filter="todos">Todos</button>
+        <button class="chip" data-filter="respiratorio">Respiratório</button>
+        <button class="chip" data-filter="cardiovascular">Cardiovascular</button>
+        <button class="chip" data-filter="neural">Neural</button>
+        <button class="chip" data-filter="geral">Geral</button>
+      </div>
+    </section>
+
+    <p class="meta" id="metaText">Carregando simuladores...</p>
+    <section class="grid" id="cardsGrid"></section>
+
+    <div class="footer">
+      Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento
+    </div>
+  </div>
+
+  <script>
+    const repo = 'DrMarioNascimento/fisiologia-interativa';
+    const cardsGrid = document.getElementById('cardsGrid');
+    const metaText = document.getElementById('metaText');
+    const searchInput = document.getElementById('searchInput');
+    const chips = Array.from(document.querySelectorAll('.chip'));
+
+    let simulators = [];
+    let activeFilter = 'todos';
+
+    // Fallback manual caso a API do GitHub falhe temporariamente
+    const fallbackFiles = [
+      'ventilacao_pulmonar.html'
+    ];
+
+    function titleFromFilename(name){
+      return name
+        .replace(/\.html$/i, '')
+        .replace(/[_-]+/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function inferCategory(name){
+      const n = name.toLowerCase();
+      if (/(pulmon|ventila|respira|pleura|alveol|bronq|complac)/.test(n)) return 'respiratorio';
+      if (/(card|frank|venos|hemo|pressao_arter|circula|miocard|coracao)/.test(n)) return 'cardiovascular';
+      if (/(neuro|neur|sinapse|potencial|axo|nervo|muscular)/.test(n)) return 'neural';
+      return 'geral';
+    }
+
+    function categoryLabel(cat){
+      const map = {
+        respiratorio: 'Respiratório',
+        cardiovascular: 'Cardiovascular',
+        neural: 'Neural',
+        geral: 'Geral'
+      };
+      return map[cat] || 'Geral';
+    }
+
+    function thumbText(title){
+      const words = title.split(' ').filter(Boolean);
+      return words.slice(0, 2).map(w => w[0]).join('').toUpperCase();
+    }
+
+    function descriptionFromName(name, title){
+      const n = name.toLowerCase();
+      if (n.includes('ventilacao_pulmonar')) return 'Mecânica ventilatória, pressões respiratórias e comparação entre condições clínicas.';
+      if (n.includes('complacencia')) return 'Relação entre volume, pressão e comportamento mecânico pulmonar.';
+      if (n.includes('frank') || n.includes('venoso')) return 'Modelo interativo de fisiologia cardiovascular e resposta hemodinâmica.';
+      if (n.includes('potencial') || n.includes('neuro')) return 'Visualização didática de eventos elétricos e condução neural.';
+      return `Simulador didático: ${title}.`;
+    }
+
+    function render(){
+      const query = searchInput.value.trim().toLowerCase();
+      const filtered = simulators.filter(item => {
+        const categoryOk = activeFilter === 'todos' || item.category === activeFilter;
+        const queryOk = !query || `${item.title} ${item.categoryLabel} ${item.description}`.toLowerCase().includes(query);
+        return categoryOk && queryOk;
+      });
+
+      metaText.textContent = `${filtered.length} simulador(es) encontrado(s)`;
+      cardsGrid.innerHTML = '';
+
+      if (!filtered.length){
+        cardsGrid.innerHTML = '<div class="empty">Nenhum simulador encontrado com esse filtro.</div>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const a = document.createElement('a');
+        a.className = 'card';
+        a.href = encodeURI(item.file);
+        a.innerHTML = `
+          <div class="thumb ${item.category}">${item.thumb}</div>
+          <span class="category">${item.categoryLabel}</span>
+          <div class="title">${item.title}</div>
+          <div class="desc">${item.description}</div>
+        `;
+        cardsGrid.appendChild(a);
+      });
+    }
+
+    function mapFilesToSimulators(fileNames){
+      return fileNames
+        .filter(name => name.toLowerCase().endsWith('.html') && name.toLowerCase() !== 'index.html')
+        .map(name => {
+          const title = titleFromFilename(name);
+          const category = inferCategory(name);
+          return {
+            file: name,
+            title,
+            category,
+            categoryLabel: categoryLabel(category),
+            thumb: thumbText(title),
+            description: descriptionFromName(name, title)
+          };
+        })
+        .sort((a, b) => a.title.localeCompare(b.title, 'pt-BR'));
+    }
+
+    async function loadFiles(){
+      try {
+        const response = await fetch(`https://api.github.com/repos/${repo}/contents`, {
+          headers: { 'Accept': 'application/vnd.github+json' }
+        });
+        if (!response.ok) throw new Error('Não foi possível ler o repositório');
+        const files = await response.json();
+
+        simulators = files
+          .filter(file => file.type === 'file')
+          .map(file => file.name)
+          .filter(name => name.endsWith('.html') && name.toLowerCase() !== 'index.html')
+          .map(name => {
+            const title = titleFromFilename(name);
+            const category = inferCategory(name);
+            return {
+              file: name,
+              title,
+              category,
+              categoryLabel: categoryLabel(category),
+              thumb: thumbText(title),
+              description: descriptionFromName(name, title)
+            };
+          })
+          .sort((a, b) => a.title.localeCompare(b.title, 'pt-BR'));
+
+        if (!simulators.length) {
+          simulators = mapFilesToSimulators(fallbackFiles);
+          metaText.textContent = 'Nenhum arquivo HTML encontrado automaticamente. Exibindo fallback.';
+        }
+        render();
+      } catch (error) {
+        simulators = mapFilesToSimulators(fallbackFiles);
+        metaText.textContent = 'API do GitHub indisponível no momento. Exibindo links de fallback.';
+        render();
+      }
+    }
+
+    loadFiles();
+  </script>
+</body>
+</html>
