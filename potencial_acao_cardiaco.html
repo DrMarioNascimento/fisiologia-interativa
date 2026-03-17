@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Potencial de Ação do Cardiomiócito Ventricular</title>
+  <style>
+    :root{
+      --bg:#ffffff; --panel:#fbfbfd; --line:#d9dce3; --text:#1f2937; --muted:#6b7280;
+      --phase:#2563eb; --curve-primary:#111827; --na:#2563eb; --k:#dc2626; --ligand:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;padding:22px;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+    h1{margin:0 0 8px;font-size:30px;text-align:center}
+    .subtitle{margin:0 0 12px;text-align:center;color:var(--muted);font-size:16px}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 auto 8px;max-width:1440px}
+    .mode-line{max-width:1440px;margin:0 auto 14px;text-align:right;min-height:22px}
+    .mode-badge{display:inline-block;font-size:12px;color:var(--muted);background:#fff;border:1px solid #e1e5ec;border-radius:999px;padding:4px 10px}
+    button{border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer}
+    .primary{border-color:#96b7ff}
+    label{display:flex;gap:8px;align-items:center;font-size:14px;background:#fff;border:1px solid #e1e5ec;border-radius:10px;padding:9px 12px}
+    input[type="range"]{width:140px}
+    .stage-map{max-width:1440px;margin:0 auto 12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+    .stage-track{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .stage-node{min-height:84px;padding:10px 12px;border-radius:14px;border:2px solid #d7dce5;background:#fff}
+    .stage-num{display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:999px;background:#eef2ff;color:#1e3a8a;font-size:12px;font-weight:700;margin-bottom:8px}
+    .stage-name{font-size:14px;font-weight:700;line-height:1.2}
+    .stage-mini{margin-top:6px;color:var(--muted);font-size:12px;line-height:1.3}
+    .status-grid{display:grid;grid-template-columns:1.15fr .9fr .95fr;gap:12px;max-width:1440px;margin:0 auto 14px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:126px;position:relative;overflow:hidden}
+    .card::before{content:"";position:absolute;inset:0 auto 0 0;width:8px;background:var(--phase)}
+    .card-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+    .phase{font-size:26px;font-weight:700;line-height:1.12;padding-left:4px;min-height:86px;display:flex;flex-direction:column;justify-content:flex-start}
+    .phase small{display:block;margin-top:6px;font-size:14px;color:var(--muted);font-weight:400}
+    .layout{display:grid;grid-template-columns:minmax(560px,1.12fr) minmax(520px,.95fr);gap:16px;max-width:1440px;margin:0 auto}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+    canvas{width:100%;height:auto;display:block;background:#fff;border:1px solid #e5e7eb;border-radius:12px}
+    .legend{max-width:1440px;margin:14px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px 28px;line-height:1.55;font-size:15px}
+    .signature{text-align:right;color:#4b5563;font-size:14px;margin-top:18px;border-top:1px solid #e5e7eb;padding-top:10px}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);margin-left:6px;color:var(--muted);background:#fff}
+    @media (max-width:1180px){.layout{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr}.stage-track{grid-template-columns:1fr 1fr}}
+  
+.graph-dot{
+  filter: drop-shadow(0 0 6px rgba(37,99,235,.6));
+  animation: dotPulse 1.6s ease-in-out infinite;
+}
+@keyframes dotPulse{
+  0%{filter: drop-shadow(0 0 4px rgba(37,99,235,.4));}
+  50%{filter: drop-shadow(0 0 12px rgba(37,99,235,.9));}
+  100%{filter: drop-shadow(0 0 4px rgba(37,99,235,.4));}
+}
+
+.pro-graph-note{font-size:13px;color:#64748b;text-align:right;max-width:1440px;margin:4px auto 0;padding-right:8px}
+</style>
+</head>
+<body>
+  <h1>Potencial de Ação do Cardiomiócito Ventricular</h1>
+  <p class="subtitle">Simulador didático do potencial de ação ventricular com platô, canais de Na⁺ rápido, Ca²⁺ tipo L e K⁺.</p>
+
+  <div class="controls">
+    <button id="btnStart" class="primary">Iniciar</button>
+    <button id="btnPause">Pausar</button>
+    <button id="btnStep">Próxima etapa</button>
+    <button id="btnReset">Resetar</button>
+
+    <label>Velocidade
+      <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2">
+      <span id="speedLabel">1.2x</span>
+    </label>
+
+    <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
+    <label><input id="stepModeToggle" type="checkbox"> Executar por etapas</label>
+    <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+  </div>
+
+  <div class="controls" id="pharmControls" style="margin-top:6px">
+<strong style="margin-right:4px">Modulação farmacológica:</strong>
+<label><input type="radio" name="pharm" value="normal" checked> Normal</label>
+<label><input type="radio" name="pharm" value="lido"> Lidocaína (Na⁺)</label>
+<label><input type="radio" name="pharm" value="vera"> Verapamil (Ca²⁺)</label>
+<label><input type="radio" name="pharm" value="amio"> Amiodarona (K⁺)</label>
+</div>
+
+
+  <div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+  <div class="stage-map"><div id="stageTrack" class="stage-track"></div></div>
+
+  <div class="status-grid">
+    <div class="card" id="phaseCard">
+      <div class="card-title">Fase atual</div>
+      <div class="phase" id="phaseText">Repouso<small id="phaseDesc">Membrana polarizada, com interior negativo e canais dependentes de voltagem fechados.</small></div>
+    </div>
+    <div class="card" id="valueCard">
+      <div class="card-title">Potencial de membrana</div>
+      <div class="phase" id="valueText">-70 mV<small id="valueDesc">Valor instantâneo do potencial transmembrana.</small></div>
+    </div>
+    <div class="card" id="flowCard">
+      <div class="card-title">Evento predominante</div>
+      <div class="phase" id="flowText">Gradientes mantidos<small id="flowDesc">Permeabilidade basal maior ao K⁺ e distribuição iônica desigual entre meio intra e extracelular.</small></div>
+    </div>
+  </div>
+
+  <div class="pro-graph-note">Gráfico com contraste ampliado e leitura otimizada para projeção em sala.</div>
+
+  <div class="layout">
+    <div class="panel"><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
+    <div class="panel"><canvas id="graphCanvas" width="920" height="660"></canvas></div>
+  </div>
+
+  <div class="legend">
+    <b>Como interpretar:</b> a cena à esquerda mostra a <b>membrana do cardiomiócito ventricular</b> com três canais principais: <b>Na⁺ rápido</b>, <b>Ca²⁺ tipo L</b> e <b>K⁺</b>. O gráfico à direita acompanha as <b>fases 4, 0, 1, 2 e 3</b> do potencial de ação cardíaco, incluindo o <b>platô</b>. A <b>Lidocaína</b> reduz a fase 0 mediada por Na⁺, o <b>Verapamil</b> reduz o platô ao diminuir a entrada de Ca²⁺, e a <b>Amiodarona</b> prolonga a repolarização ao reduzir correntes de K⁺. Os gradientes iônicos são restaurados por mecanismos como <b>Na⁺/K⁺-ATPase</b>, <b>NCX</b> e <b>SERCA</b>.
+    <span class="pill">eletrofisiologia cardíaca</span>
+    <span class="pill">cardiomiócito ventricular</span>
+    <span class="pill">potencial com platô</span>
+    <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento</div>
+  </div>
+
+<script>
+(() => {
+let pharmMode='normal';
+  const TOTAL = 400;
+
+const pharmInputs = [...document.querySelectorAll('input[name="pharm"]')];
+pharmInputs.forEach(r=>{
+  r.addEventListener('change',e=>{pharmMode=e.target.value; render();});
+});
+function isLido(){ return pharmMode === 'lido'; }
+function isVera(){ return pharmMode === 'vera'; }
+function isAmio(){ return pharmMode === 'amio'; }
+
+  const actionStages = [
+    { name:'Fase 4. Repouso', short:'Fase 4', start:0, end:72, color:'#2563eb', desc:'Potencial de repouso estável em torno de -90 mV.', event:'Repouso ventricular', eventDesc:'Predomínio funcional da permeabilidade ao K⁺ e manutenção dos gradientes iônicos.' },
+    { name:'Fase 0. Despolarização rápida', short:'Fase 0', start:73, end:114, color:'#dc2626', desc:'Abertura abrupta dos canais rápidos de Na⁺ com ascensão íngreme do potencial.', event:'Entrada rápida de Na⁺', eventDesc:'A fase 0 do cardiomiócito ventricular depende do influxo rápido de Na⁺.' },
+    { name:'Fase 1. Repolarização inicial', short:'Fase 1', start:115, end:136, color:'#f97316', desc:'Pequena queda inicial após o pico do potencial.', event:'Repolarização inicial', eventDesc:'Inativação dos canais rápidos de Na⁺ e correntes transitórias iniciais de saída.' },
+    { name:'Fase 2. Platô', short:'Fase 2', start:137, end:232, color:'#7c3aed', desc:'Equilíbrio entre a entrada de Ca²⁺ e a saída de K⁺ sustenta o platô.', event:'Ca²⁺ entra / K⁺ sai', eventDesc:'A fase 2 é a característica clássica do cardiomiócito ventricular.' },
+    { name:'Fase 3. Repolarização', short:'Fase 3', start:233, end:400, color:'#0f766e', desc:'A saída progressiva de K⁺ domina e a membrana retorna ao repouso.', event:'Saída de K⁺', eventDesc:'A repolarização ventricular leva o potencial de volta ao repouso.' }
+  ];
+  const subStages = [
+    { name:'1. Repouso', short:'Repouso', start:0, end:56, color:'#2563eb', desc:'Membrana estável em torno de -70 mV.', event:'Gradientes mantidos', eventDesc:'Distribuição iônica desigual em repouso.' },
+    { name:'2. Estímulo inicial', short:'Estímulo', start:57, end:126, color:'#0ea5e9', desc:'Estímulo local produz discreta entrada de cargas positivas.', event:'Perturbação local', eventDesc:'A despolarização é pequena e gradativa.' },
+    { name:'3. Aproximação do limiar', short:'Quase limiar', start:127, end:185, color:'#f59e0b', desc:'O potencial sobe, mas permanece abaixo do limiar.', event:'Sub-limiar', eventDesc:'Não há recrutamento regenerativo suficiente.' },
+    { name:'4. Potencial sub-limiar máximo', short:'Máximo sub-limiar', start:186, end:228, color:'#fb923c', desc:'Pico sub-limiar sem disparo de potencial de ação.', event:'Sem disparo', eventDesc:'A membrana não entra em despolarização rápida.' },
+    { name:'5. Dissipação', short:'Dissipação', start:229, end:286, color:'#94a3b8', desc:'O sinal local começa a se dissipar.', event:'Decaimento passivo', eventDesc:'A energia eletrotônica diminui com o tempo.' },
+    { name:'6. Retorno progressivo', short:'Retorno', start:287, end:348, color:'#64748b', desc:'A membrana volta gradualmente ao repouso.', event:'Fechamento progressivo', eventDesc:'Os poucos canais abertos retornam ao basal.' },
+    { name:'7. Repouso restabelecido', short:'Repouso final', start:349, end:400, color:'#2563eb', desc:'Retorno completo ao nível de repouso.', event:'Homeostase', eventDesc:'A membrana recupera seu estado basal.' }
+  ];
+
+  const sceneCanvas = document.getElementById('sceneCanvas');
+  const graphCanvas = document.getElementById('graphCanvas');
+  const sctx = sceneCanvas.getContext('2d');
+  const gctx = graphCanvas.getContext('2d');
+
+  const btnStart = document.getElementById('btnStart');
+  const btnPause = document.getElementById('btnPause');
+  const btnStep = document.getElementById('btnStep');
+  const btnReset = document.getElementById('btnReset');
+  const speedRange = document.getElementById('speedRange');
+  const speedLabel = document.getElementById('speedLabel');
+  const loopToggle = document.getElementById('loopToggle');
+  const stepModeToggle = document.getElementById('stepModeToggle');
+  const labelsToggle = document.getElementById('labelsToggle');
+  const subthresholdToggle = { checked:false, addEventListener:()=>{} };
+  const modeBadge = document.getElementById('modeBadge');
+
+  function updateModeBadge(){
+    let base = stepModeToggle.checked ? 'Modo: por etapas' : 'Modo: contínuo';
+    let pharm = ' | Farmacologia: Normal';
+    if (isLido()) pharm = ' | Farmacologia: Lidocaína (Na⁺)';
+    else if (isVera()) pharm = ' | Farmacologia: Verapamil (Ca²⁺)';
+    else if (isAmio()) pharm = ' | Farmacologia: Amiodarona (K⁺)';
+    modeBadge.textContent = base + pharm;
+  }
+  const stageTrack = document.getElementById('stageTrack');
+
+  const phaseText = document.getElementById('phaseText');
+  const phaseDesc = document.getElementById('phaseDesc');
+  const valueText = document.getElementById('valueText');
+  const valueDesc = document.getElementById('valueDesc');
+  const flowText = document.getElementById('flowText');
+  const flowDesc = document.getElementById('flowDesc');
+  const phaseCard = document.getElementById('phaseCard');
+  const valueCard = document.getElementById('valueCard');
+  const flowCard = document.getElementById('flowCard');
+
+  let running = false, frame = 0, raf = null, lastTs = 0, stepAwaitPlay = false;
+
+  const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+  const lerp = (a,b,t)=>a+(b-a)*t;
+  const ease = t => { t = clamp(t,0,1); return 0.5 - 0.5*Math.cos(Math.PI*t); };
+  const getSpeed = ()=>parseFloat(speedRange.value);
+  const isSub = ()=>false;
+  const getStages = ()=> actionStages;
+  const getStage = f => getStages().find(s => f >= s.start && f <= s.end) || getStages()[0];
+  const getPauseFrames = ()=> getStages().map(s => s.end);
+  const setCardsColor = color => { phaseCard.style.setProperty('--phase', color); valueCard.style.setProperty('--phase', color); flowCard.style.setProperty('--phase', color); };
+  const pressureToY = v => 492 - ((v + 92) / 130) * 350;
+
+  function getVmBase(f){
+    if (f <= 72) return -90;
+    if (f <= 114) return lerp(-90, 24, ease((f - 72) / 42));
+    if (f <= 136) return lerp(24, 7, ease((f - 114) / 22));
+    if (f <= 232) return lerp(7, 2, ease((f - 136) / 96));
+    return lerp(2, -90, ease((f - 232) / 168));
+  }
+  function getVm(f){
+    if (isLido()) {
+      if (f <= 72) return -90;
+      if (f <= 118) return lerp(-90, 6, ease((f - 72) / 46));
+      if (f <= 140) return lerp(6, 1, ease((f - 118) / 22));
+      if (f <= 232) return lerp(1, -2, ease((f - 140) / 92));
+      return lerp(-2, -90, ease((f - 232) / 168));
+    }
+    if (isVera()) {
+      if (f <= 72) return -90;
+      if (f <= 114) return lerp(-90, 24, ease((f - 72) / 42));
+      if (f <= 136) return lerp(24, 4, ease((f - 114) / 22));
+      if (f <= 188) return lerp(4, -8, ease((f - 136) / 52));
+      return lerp(-8, -90, ease((f - 188) / 212));
+    }
+    if (isAmio()) {
+      if (f <= 72) return -90;
+      if (f <= 114) return lerp(-90, 24, ease((f - 72) / 42));
+      if (f <= 136) return lerp(24, 8, ease((f - 114) / 22));
+      if (f <= 255) return lerp(8, 2, ease((f - 136) / 119));
+      return lerp(2, -90, ease((f - 255) / 145));
+    }
+    return getVmBase(f);
+  }
+
+
+  function getNaOpenBase(f){
+    if (f < 64 || f > 132) return 0.04;
+    if (f <= 102) return lerp(0.06, 1, ease((f - 64) / 38));
+    return lerp(1, 0.02, ease((f - 102) / 30));
+  }
+  function getNaOpen(f){
+    const base = getNaOpenBase(f);
+    if (isLido()) return base * 0.28;
+    return base;
+  }
+  function getKOpenBase(f){
+    if (f <= 125) return 0.08;
+    if (f <= 210) return lerp(0.10, 0.34, ease((f - 125) / 85));
+    return lerp(0.34, 0.98, ease((f - 210) / 190));
+  }
+  function getKOpen(f){
+    const base = getKOpenBase(f);
+    if (isAmio()) return base * 0.48;
+    return base;
+  }
+  function getCaOpen(f){
+    let base;
+    if (f <= 135) base = 0.05;
+    else if (f <= 175) base = lerp(0.08, 0.92, ease((f - 135) / 40));
+    else if (f <= 280) base = lerp(0.92, 0.40, ease((f - 175) / 105));
+    else base = lerp(0.40, 0.06, ease((f - 280) / 120));
+    if (isVera()) return base * 0.24;
+    return base;
+  }
+
+  function updateStatus(){
+    const st = getStage(frame), vm = getVm(frame), polarity = vm >= 0 ? 'Interior positivo' : 'Interior negativo';
+    phaseText.firstChild.textContent = st.name;
+    phaseDesc.textContent = st.desc;
+    valueText.firstChild.textContent = `${Math.round(vm)} mV`;
+    valueDesc.textContent = `${polarity}; limiar didático em torno de -55 mV.`;
+    flowText.firstChild.textContent = st.event;
+    flowDesc.textContent = st.eventDesc;
+    setCardsColor(st.color);
+    const bits = [stepModeToggle.checked ? (stepAwaitPlay ? 'Modo: etapas (pausado)' : 'Modo: etapas') : 'Modo: contínuo', isSub() ? 'Sub-limiar ON' : 'PA completo'];
+    modeBadge.textContent = bits.join(' · ');
+  }
+
+  function renderStageMap(){
+    const stages = getStages();
+    const currentStageIndex = stages.findIndex(s => frame >= s.start && frame <= s.end);
+    stageTrack.innerHTML = stages.map((s, idx) => {
+      const active = idx === currentStageIndex;
+      return `
+      <div class="stage-node" style="border-color:${s.color};box-shadow:${active ? '0 0 0 2px ' + s.color + '55, 0 10px 24px ' + s.color + '22, inset 0 0 0 1px ' + s.color + '30' : 'inset 0 0 0 1px ' + s.color + '20'};background:${active ? s.color + '12' : '#fff'}">
+        <div class="stage-num" style="background:${active ? s.color : '#eef2ff'};color:${active ? '#fff' : '#1e3a8a'}">${idx+1}</div>
+        <div class="stage-name" style="color:${s.color}">${s.short}</div>
+        <div class="stage-mini" style="font-weight:${active ? '700' : '400'}">${s.event}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function roundedBox(ctx, x, y, w, h, r){
+    ctx.beginPath(); ctx.moveTo(x+r, y); ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h); ctx.lineTo(x+r, y+h);
+    ctx.quadraticCurveTo(x, y+h, x, y+h-r); ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y); ctx.closePath();
+  }
+
+  function drawPhospholipid(x, topMem, bottomMem){
+    const headTop = sctx.createRadialGradient(x-5, topMem-6, 2, x, topMem, 13);
+    headTop.addColorStop(0, '#ffffff');
+    headTop.addColorStop(0.38, '#cbe5ff');
+    headTop.addColorStop(0.72, '#60a5fa');
+    headTop.addColorStop(1, '#1d4ed8');
+    sctx.save();
+    sctx.shadowColor = 'rgba(29,78,216,0.18)';
+    sctx.shadowBlur = 8;
+    sctx.beginPath(); sctx.arc(x, topMem, 12, 0, Math.PI*2); sctx.fillStyle = headTop; sctx.fill();
+    sctx.restore();
+    const headBottom = sctx.createRadialGradient(x-5, bottomMem-6, 2, x, bottomMem, 13);
+    headBottom.addColorStop(0, '#ffffff');
+    headBottom.addColorStop(0.38, '#cbe5ff');
+    headBottom.addColorStop(0.72, '#60a5fa');
+    headBottom.addColorStop(1, '#1d4ed8');
+    sctx.save();
+    sctx.shadowColor = 'rgba(29,78,216,0.18)';
+    sctx.shadowBlur = 8;
+    sctx.beginPath(); sctx.arc(x, bottomMem, 12, 0, Math.PI*2); sctx.fillStyle = headBottom; sctx.fill();
+    sctx.restore();
+
+    const tail = sctx.createLinearGradient(x, topMem+16, x, topMem+58);
+    tail.addColorStop(0, '#ffe1b4');
+    tail.addColorStop(0.45, '#fbbf24');
+    tail.addColorStop(1, '#d97706');
+    sctx.save();
+    sctx.lineCap = 'round';
+    sctx.lineWidth = 2.8;
+    sctx.strokeStyle = tail;
+    sctx.shadowColor = 'rgba(217,119,6,0.18)';
+    sctx.shadowBlur = 4;
+    sctx.beginPath();
+    sctx.moveTo(x-2.8, topMem+14); sctx.bezierCurveTo(x-8.5, topMem+26, x-7.5, topMem+40, x-5, topMem+56);
+    sctx.moveTo(x+2.8, topMem+14); sctx.bezierCurveTo(x+8.5, topMem+27, x+7.5, topMem+40, x+5, topMem+56);
+    sctx.moveTo(x-2.8, bottomMem-14); sctx.bezierCurveTo(x-8.5, bottomMem-26, x-7.5, bottomMem-40, x-5, bottomMem-56);
+    sctx.moveTo(x+2.8, bottomMem-14); sctx.bezierCurveTo(x+8.5, bottomMem-27, x+7.5, bottomMem-40, x+5, bottomMem-56);
+    sctx.stroke();
+    sctx.restore();
+  }
+  function drawProtein(x, y, w, h, color1, color2){
+    const radius = Math.min(w * 0.5, 999);
+
+    sctx.save();
+    roundedBox(sctx, x, y, w, h, radius);
+    sctx.clip();
+
+    const body = sctx.createLinearGradient(x, y, x, y + h);
+    body.addColorStop(0, color1);
+    body.addColorStop(0.18, color1);
+    body.addColorStop(0.68, color2);
+    body.addColorStop(1, color2);
+    sctx.fillStyle = body;
+    sctx.fillRect(x, y, w, h);
+
+    const leftGloss = sctx.createLinearGradient(x, y, x + w * 0.34, y);
+    leftGloss.addColorStop(0, 'rgba(255,255,255,0.22)');
+    leftGloss.addColorStop(0.45, 'rgba(255,255,255,0.08)');
+    leftGloss.addColorStop(1, 'rgba(255,255,255,0.00)');
+    sctx.fillStyle = leftGloss;
+    sctx.fillRect(x, y, w * 0.36, h);
+
+    const centerReflex = sctx.createLinearGradient(x + w * 0.48, y, x + w * 0.62, y);
+    centerReflex.addColorStop(0, 'rgba(255,255,255,0.00)');
+    centerReflex.addColorStop(0.55, 'rgba(255,255,255,0.06)');
+    centerReflex.addColorStop(1, 'rgba(255,255,255,0.00)');
+    sctx.fillStyle = centerReflex;
+    sctx.fillRect(x + w * 0.42, y, w * 0.26, h);
+
+    const baseShade = sctx.createRadialGradient(x + w * 0.46, y + h * 0.97, 1, x + w * 0.46, y + h * 0.97, w * 0.56);
+    baseShade.addColorStop(0, 'rgba(255,255,255,0.18)');
+    baseShade.addColorStop(0.52, 'rgba(255,255,255,0.06)');
+    baseShade.addColorStop(1, 'rgba(255,255,255,0.00)');
+    sctx.fillStyle = baseShade;
+    sctx.fillRect(x, y, w, h);
+
+    const lowerLeftGlow = sctx.createRadialGradient(x + w * 0.20, y + h * 0.92, 1, x + w * 0.20, y + h * 0.92, w * 0.28);
+    lowerLeftGlow.addColorStop(0, 'rgba(255,255,255,0.16)');
+    lowerLeftGlow.addColorStop(0.48, 'rgba(255,255,255,0.06)');
+    lowerLeftGlow.addColorStop(1, 'rgba(255,255,255,0.00)');
+    sctx.fillStyle = lowerLeftGlow;
+    sctx.fillRect(x, y, w, h);
+
+    sctx.restore();
+
+    const shine1 = sctx.createRadialGradient(x + w * 0.14, y + h * 0.08, 0.5, x + w * 0.14, y + h * 0.08, w * 0.11);
+    shine1.addColorStop(0, 'rgba(255,255,255,0.96)');
+    shine1.addColorStop(0.46, 'rgba(255,255,255,0.56)');
+    shine1.addColorStop(1, 'rgba(255,255,255,0.00)');
+    sctx.beginPath();
+    sctx.arc(x + w * 0.14, y + h * 0.08, Math.max(4.2, w * 0.055), 0, Math.PI * 2);
+    sctx.fillStyle = shine1;
+    sctx.fill();
+
+    const shine2 = sctx.createRadialGradient(x + w * 0.34, y + h * 0.13, 0.5, x + w * 0.34, y + h * 0.13, w * 0.12);
+    shine2.addColorStop(0, 'rgba(255,255,255,0.92)');
+    shine2.addColorStop(0.42, 'rgba(255,255,255,0.50)');
+    shine2.addColorStop(1, 'rgba(255,255,255,0.00)');
+    sctx.beginPath();
+    sctx.arc(x + w * 0.34, y + h * 0.13, Math.max(3.8, w * 0.052), 0, Math.PI * 2);
+    sctx.fillStyle = shine2;
+    sctx.fill();
+
+    const shine3 = sctx.createRadialGradient(x + w * 0.55, y + h * 0.08, 0.5, x + w * 0.55, y + h * 0.08, w * 0.13);
+    shine3.addColorStop(0, 'rgba(255,248,230,0.92)');
+    shine3.addColorStop(0.48, 'rgba(255,248,230,0.48)');
+    shine3.addColorStop(1, 'rgba(255,248,230,0.00)');
+    sctx.beginPath();
+    sctx.arc(x + w * 0.55, y + h * 0.08, Math.max(4.0, w * 0.056), 0, Math.PI * 2);
+    sctx.fillStyle = shine3;
+    sctx.fill();
+  }
+  function drawGate(cx, cy, openness, color){
+    const gap = 8 + openness * 18; sctx.save();
+    sctx.strokeStyle = color; sctx.lineWidth = 4.5; sctx.shadowColor = color + '66'; sctx.shadowBlur = 10; sctx.beginPath();
+    sctx.moveTo(cx - 16, cy - 18); sctx.lineTo(cx - gap / 2, cy); sctx.lineTo(cx - 16, cy + 18);
+    sctx.moveTo(cx + 16, cy - 18); sctx.lineTo(cx + gap / 2, cy); sctx.lineTo(cx + 16, cy + 18); sctx.stroke();
+    sctx.restore();
+  }
+  function drawIon(x, y, r, color, label){
+    const grd = sctx.createRadialGradient(x - r * .4, y - r * .4, 1, x, y, r); grd.addColorStop(0, '#ffffff'); grd.addColorStop(.55, color); grd.addColorStop(1, 'rgba(15,23,42,0.9)');
+    sctx.save();
+    sctx.shadowColor = color + '55'; sctx.shadowBlur = 8;
+    sctx.beginPath(); sctx.arc(x, y, r, 0, Math.PI * 2); sctx.fillStyle = grd; sctx.fill();
+    sctx.restore();
+    sctx.strokeStyle = 'rgba(17,24,39,0.08)'; sctx.lineWidth = 0.8; sctx.stroke();
+    sctx.fillStyle = '#ffffff'; sctx.font = 'bold 10px Arial'; sctx.textAlign = 'center'; sctx.fillText(label, x, y + 3); sctx.textAlign = 'left';
+  }
+  function drawFlowArrows(cx, topY, bottomY, count, color, direction){
+    sctx.save();
+    sctx.strokeStyle = color; sctx.fillStyle = color; sctx.lineWidth = 3.5; sctx.shadowColor = color + '44'; sctx.shadowBlur = 8;
+    for (let i = 0; i < count; i++) {
+      const x = cx + (i - (count - 1) / 2) * 18, fromY = direction === 'down' ? topY : bottomY, toY = direction === 'down' ? bottomY : topY;
+      sctx.beginPath(); sctx.moveTo(x, fromY); sctx.lineTo(x, toY); sctx.stroke(); sctx.beginPath();
+      if (direction === 'down') { sctx.moveTo(x, toY); sctx.lineTo(x - 6, toY - 10); sctx.lineTo(x + 6, toY - 10); }
+      else { sctx.moveTo(x, toY); sctx.lineTo(x - 6, toY + 10); sctx.lineTo(x + 6, toY + 10); }
+      sctx.closePath(); sctx.fill();
+    }
+    sctx.restore();
+  }
+  function drawLabel(text, x, y, color='#374151', font='15px Arial'){ sctx.fillStyle = color; sctx.font = font; sctx.fillText(text, x, y); }
+    function drawParticleStream(cx, direction, progress, color, label, radius=8){
+    for (let i = 0; i < 7; i++) {
+      const phase = (progress * 0.018 + i / 7) % 1; const y = direction === 'down' ? 196 + phase * 310 : 548 - phase * 310; const x = cx + Math.sin(progress * 0.014 + i) * 7;
+      drawIon(x, y, radius, color, label);
+    }
+  }
+
+  function drawScene(){
+    sctx.clearRect(0, 0, sceneCanvas.width, sceneCanvas.height);
+    const vm = getVm(frame), naOpen = getNaOpen(frame), caOpen = getCaOpen(frame), kOpen = getKOpen(frame), showLabels = labelsToggle.checked;
+    const stages = getStages(), currentStageIndex = stages.findIndex(s => frame >= s.start && frame <= s.end);
+    sctx.fillStyle = '#111827'; sctx.font = 'bold 21px Arial'; sctx.fillText('Membrana plasmática', 18, 30);
+
+    const topMem = 226, bottomMem = 408, headR = 12, phosphoSpacing = 32;
+    const innerShade = sctx.createLinearGradient(0, topMem + 18, 0, bottomMem - 18); innerShade.addColorStop(0, '#f9d8b3'); innerShade.addColorStop(.45, '#ffe9c9'); innerShade.addColorStop(1, '#f5c58c');
+    sctx.fillStyle = innerShade; sctx.fillRect(88, topMem + 12, 744, bottomMem - topMem - 24);
+    for (let x = 104; x <= 812; x += phosphoSpacing) { drawPhospholipid(x, topMem, bottomMem); }
+
+    drawProtein(205, topMem - 34, 96, 250, '#dbeafe', '#60a5fa');
+    drawProtein(413, topMem - 34, 96, 250, '#ede9fe', '#a78bfa');
+    drawProtein(621, topMem - 34, 96, 250, '#fee2e2', '#f87171');
+    drawGate(253, topMem + 17, naOpen, '#2563eb'); drawGate(461, topMem + 17, caOpen, '#7c3aed'); drawGate(669, topMem + 17, kOpen, '#dc2626');
+
+    if (isLido()) {
+      sctx.save();
+      sctx.strokeStyle = 'rgba(37,99,235,0.9)';
+      sctx.lineWidth = 3.2;
+      sctx.beginPath(); sctx.arc(253, topMem + 19, 24, 0, Math.PI * 2); sctx.stroke();
+      sctx.beginPath(); sctx.moveTo(235, topMem + 2); sctx.lineTo(271, topMem + 36); sctx.stroke();
+      sctx.fillStyle = 'rgba(37,99,235,0.95)'; sctx.font = 'bold 12px Arial'; sctx.fillText('Na⁺ ↓', 232, topMem - 8);
+      sctx.restore();
+    }
+    if (isVera()) {
+      sctx.save();
+      sctx.strokeStyle = 'rgba(124,58,237,0.9)';
+      sctx.lineWidth = 3.2;
+      sctx.beginPath(); sctx.arc(461, topMem + 19, 24, 0, Math.PI * 2); sctx.stroke();
+      sctx.beginPath(); sctx.moveTo(443, topMem + 2); sctx.lineTo(479, topMem + 36); sctx.stroke();
+      sctx.fillStyle = 'rgba(124,58,237,0.95)'; sctx.font = 'bold 12px Arial'; sctx.fillText('Ca²⁺ ↓', 438, topMem - 8);
+      sctx.restore();
+    }
+    if (isAmio()) {
+      sctx.save();
+      sctx.strokeStyle = 'rgba(220,38,38,0.9)';
+      sctx.lineWidth = 3.2;
+      sctx.beginPath(); sctx.arc(669, topMem + 19, 24, 0, Math.PI * 2); sctx.stroke();
+      sctx.beginPath(); sctx.moveTo(651, topMem + 2); sctx.lineTo(687, topMem + 36); sctx.stroke();
+      sctx.fillStyle = 'rgba(220,38,38,0.95)'; sctx.font = 'bold 12px Arial'; sctx.fillText('K⁺ ↓', 651, topMem - 8);
+      sctx.restore();
+    }
+
+    if (naOpen > 0.15) { drawFlowArrows(253, 170, 482, Math.max(1, Math.round(naOpen * 4)), '#2563eb', 'down'); drawParticleStream(253, 'down', frame, '#60a5fa', 'Na', 8); }
+    if (caOpen > 0.12) { drawFlowArrows(461, 170, 482, Math.max(1, Math.round(caOpen * 4)), '#7c3aed', 'down'); drawParticleStream(461, 'down', frame, '#a78bfa', 'Ca', 8); }
+    if (kOpen > 0.12) { drawFlowArrows(669, 170, 482, Math.max(1, Math.round(kOpen * 4)), '#dc2626', 'up'); drawParticleStream(669, 'up', frame * 0.9, '#f87171', 'K', 8); }
+
+    for (let i = 0; i < 8; i++) {
+      const t = (frame * 0.01 + i / 8) % 1;
+      drawIon(110 + i * 82 + Math.sin(frame * 0.02 + i) * 6, 128 + t * 18, 12, '#60a5fa', 'Na');
+      drawIon(108 + i * 82 + Math.cos(frame * 0.017 + i) * 6, 514 - t * 15, 12, '#f87171', 'K');
+    }
+
+    if (showLabels) {
+      drawLabel('Meio extracelular', 88, 80, '#111827', 'bold 17px Arial');
+      drawLabel('Meio intracelular', 88, 560, '#111827', 'bold 17px Arial');
+    }
+
+    roundedBox(sctx, 764, 78, 172, 62, 14); sctx.fillStyle = '#fff'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.lineWidth = 1.4; sctx.stroke();
+    sctx.fillStyle = vm >= 0 ? '#dc2626' : '#111827'; sctx.font = 'bold 25px Arial'; sctx.fillText(`${Math.round(vm)} mV`, 782, 117);
+
+    roundedBox(sctx, 24, 576, 700, 100, 16); sctx.fillStyle = '#fff'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.stroke();
+    sctx.fillStyle = '#111827'; sctx.font = 'bold 16px Arial'; sctx.fillText('Resumo fisiológico', 40, 599); sctx.font = '14px Arial';
+    sctx.fillStyle = '#475569'; sctx.fillText(`Etapa atual: ${stages[currentStageIndex]?.name || stages[0].name}`, 40, 622);
+    let pharmLabel = 'Farmacologia: Normal';
+    if (isLido()) pharmLabel = 'Farmacologia: Lidocaína — fase 0 reduzida';
+    else if (isVera()) pharmLabel = 'Farmacologia: Verapamil — platô reduzido';
+    else if (isAmio()) pharmLabel = 'Farmacologia: Amiodarona — repolarização prolongada';
+    sctx.fillStyle = '#7c3aed'; sctx.fillText(pharmLabel, 40, 668);
+    sctx.fillStyle = '#2563eb'; sctx.fillText(`Abertura Na⁺: ${Math.round(naOpen * 100)}%`, 40, 645);
+    sctx.fillStyle = '#7c3aed'; sctx.fillText(`Abertura Ca²⁺: ${Math.round(caOpen * 100)}%`, 230, 645);
+    sctx.fillStyle = '#dc2626'; sctx.fillText(`Abertura K⁺: ${Math.round(kOpen * 100)}%`, 420, 645);
+
+    roundedBox(sctx, 24, 688, 900, 54, 16); sctx.fillStyle = '#fff'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.stroke();
+    sctx.font = '14px Arial';
+    sctx.fillStyle = '#2563eb'; sctx.fillText('■ Canal rápido de Na⁺', 40, 706);
+    sctx.fillStyle = '#7c3aed'; sctx.fillText('■ Canal de Ca²⁺ tipo L', 308, 706);
+    sctx.fillStyle = '#dc2626'; sctx.fillText('■ Canal de K⁺', 598, 706);
+    sctx.fillStyle = '#2563eb'; sctx.fillText('▲ Na⁺ → dentro', 40, 728);
+    sctx.fillStyle = '#7c3aed'; sctx.fillText('▲ Ca²⁺ → dentro', 218, 728);
+    sctx.fillStyle = '#dc2626'; sctx.fillText('▲ K⁺ → fora', 424, 728);
+  }
+
+  function drawGraphBase(){
+    gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
+    const left=75, top=82, right=845, bottom=500, width=right-left, height=bottom-top;
+
+    const bg = gctx.createLinearGradient(0, 12, 0, 638);
+    bg.addColorStop(0, '#ffffff');
+    bg.addColorStop(1, '#f8fafc');
+    gctx.fillStyle = bg;
+    roundedBox(gctx, 14, 12, 892, 626, 18);
+    gctx.fill();
+    gctx.strokeStyle = '#d7dde6';
+    gctx.lineWidth = 1.5;
+    gctx.stroke();
+
+    gctx.fillStyle = '#0f172a';
+    gctx.font = 'bold 24px Arial';
+    gctx.textAlign = 'center';
+    gctx.fillText('Gráfico do potencial de ação cardíaco', 460, 38);
+    gctx.fillStyle = '#64748b';
+    gctx.font = '15px Arial';
+    gctx.fillText('Traçado ventricular clássico com platô', 460, 62);
+    gctx.textAlign = 'left';
+
+    gctx.fillStyle = '#ffffff';
+    roundedBox(gctx, left-16, top-10, width+28, height+26, 16);
+    gctx.fill();
+    gctx.strokeStyle = '#cbd5e1';
+    gctx.lineWidth = 1.4;
+    gctx.stroke();
+
+    [-90,-70,-55,-40,0,30].forEach(v=>{
+      const y=pressureToY(v);
+      gctx.strokeStyle = v===-55 ? '#f59e0b' : (v===-70 ? '#cbd5e1' : '#ecf0f5');
+      gctx.setLineDash(v===-55 ? [6,6] : []);
+      gctx.lineWidth = v===-55 ? 2.1 : (v===-70 ? 1.8 : 1.1);
+      gctx.beginPath(); gctx.moveTo(left,y); gctx.lineTo(right,y); gctx.stroke();
+      gctx.fillStyle = v===-55 ? '#b45309' : '#334155';
+      gctx.font='bold 14px Arial'; gctx.fillText(`${v} mV`, 16, y+5);
+    });
+    gctx.setLineDash([]);
+
+    gctx.strokeStyle = '#334155';
+    gctx.lineWidth = 2.6;
+    gctx.beginPath(); gctx.moveTo(left,top); gctx.lineTo(left,bottom); gctx.lineTo(right,bottom); gctx.stroke();
+
+    gctx.fillStyle='#b45309'; gctx.font='bold 14px Arial'; gctx.fillText('Limiar', 854, pressureToY(-55)+5);
+    gctx.fillStyle='#475569'; gctx.font='bold 15px Arial'; gctx.textAlign = 'center'; gctx.fillText('Tempo', (left+right)/2, 548); gctx.textAlign = 'left';
+
+    getStages().forEach((st)=>{
+      const sx=left+(st.start/TOTAL)*width, ex=left+(st.end/TOTAL)*width;
+      gctx.fillStyle = st.color+'20'; roundedBox(gctx, sx, 566, Math.max(18, ex-sx), 16, 7); gctx.fill();
+      if(labelsToggle.checked){ gctx.fillStyle=st.color; gctx.font='bold 13px Arial'; gctx.textAlign='center'; gctx.fillText(st.short, sx + Math.max(18, ex-sx)/2, 604); gctx.textAlign='left'; }
+    });
+  }
+
+
+  
+  function drawNormalReferenceCurve(){
+    if (!(isLido() || isVera() || isAmio())) return;
+
+    const left=90, top=82, right=860, bottom=500, width=right-left, height=bottom-top;
+    const vmToY = v => bottom - ((v + 90) / 120) * height;
+
+    gctx.save();
+    gctx.strokeStyle = 'rgba(148,163,184,0.55)';
+    gctx.lineWidth = 3;
+    gctx.setLineDash([6,6]);
+    gctx.lineJoin='round';
+    gctx.lineCap='round';
+
+    gctx.beginPath();
+    for(let i=0;i<=TOTAL;i++){
+      const x = left + (i / TOTAL) * width;
+      const y = vmToY(getVmBase(i));
+      if(i===0) gctx.moveTo(x,y); else gctx.lineTo(x,y);
+    }
+    gctx.stroke();
+
+    gctx.setLineDash([]);
+    gctx.restore();
+  }
+
+
+  function drawCurve(){
+
+    const left=90, top=82, right=860, bottom=500, width=right-left, st = getStage(frame);
+    const currentStart = left + (st.start / TOTAL) * width, currentEnd = left + (st.end / TOTAL) * width;
+    gctx.fillStyle = st.color + '10';
+    roundedBox(gctx, currentStart, top+2, Math.max(16, currentEnd - currentStart), bottom - top - 4, 10);
+    gctx.fill();
+
+    gctx.save();
+    gctx.beginPath();
+    for(let i=0;i<=TOTAL;i++){
+      const x = left + (i/TOTAL)*width, y = pressureToY(getVm(i));
+      if(i===0) gctx.moveTo(x,y); else gctx.lineTo(x,y);
+    }
+    gctx.lineTo(right, bottom);
+    gctx.lineTo(left, bottom);
+    gctx.closePath();
+    const fill = gctx.createLinearGradient(0, top, 0, bottom);
+    fill.addColorStop(0, st.color + '24');
+    fill.addColorStop(1, 'rgba(255,255,255,0)');
+    gctx.fillStyle = fill;
+    gctx.fill();
+    gctx.restore();
+
+    gctx.strokeStyle = '#0f172a';
+    gctx.lineWidth=5.2;
+    gctx.lineJoin = 'round';
+    gctx.lineCap = 'round';
+    gctx.beginPath();
+    for(let i=0;i<=TOTAL;i++){
+      const x = left + (i/TOTAL)*width, y = pressureToY(getVm(i));
+      if(i===0) gctx.moveTo(x,y); else gctx.lineTo(x,y);
+    }
+    gctx.stroke();
+
+    gctx.strokeStyle=st.color + '66';
+    gctx.lineWidth=2.2;
+    gctx.setLineDash([4,5]);
+    getPauseFrames().forEach(f=>{ const px = left + (f / TOTAL) * width; gctx.beginPath(); gctx.moveTo(px, top+4); gctx.lineTo(px, bottom - 4); gctx.stroke(); });
+    gctx.setLineDash([]);
+
+    const px = left + (frame / TOTAL) * width;
+    const py = pressureToY(getVm(frame));
+
+    const halo = gctx.createRadialGradient(px, py, 2, px, py, 22);
+    halo.addColorStop(0, st.color + '99');
+    halo.addColorStop(0.45, st.color + '33');
+    halo.addColorStop(1, 'rgba(255,255,255,0)');
+    gctx.beginPath();
+    gctx.arc(px, py, 22, 0, Math.PI * 2);
+    gctx.fillStyle = halo;
+    gctx.fill();
+
+    gctx.beginPath();
+    gctx.arc(px, py, 7.5, 0, Math.PI * 2);
+    gctx.fillStyle = st.color;
+    gctx.fill();
+    gctx.lineWidth = 2;
+    gctx.strokeStyle = '#ffffff';
+    gctx.stroke();
+  }
+
+  function render(){
+    if (typeof updateModeBadge === 'function') updateModeBadge(); updateStatus(); renderStageMap(); drawScene(); drawGraphBase(); drawNormalReferenceCurve(); drawCurve(); }
+  function pauseNow(markAwait){ running = false; if (raf) cancelAnimationFrame(raf); if (markAwait) stepAwaitPlay = true; render(); }
+  function play(){ if (running) return; running = true; stepAwaitPlay = false; lastTs = 0; raf = requestAnimationFrame(loop); render(); }
+  function nextStage(){ const pauseFrames = getPauseFrames(); if (frame >= TOTAL) { if (loopToggle.checked) frame = 0; else { render(); return; } } const next = pauseFrames.find(p => p > frame); if (next == null) { frame = loopToggle.checked ? 0 : TOTAL; render(); return; } frame = next; stepAwaitPlay = true; render(); }
+  function resetAll(){ running = false; if (raf) cancelAnimationFrame(raf); frame = 0; stepAwaitPlay = false; render(); }
+
+  function loop(ts){
+    if (!running) return; if (!lastTs) lastTs = ts; const dt = ts - lastTs; lastTs = ts; const inc = dt * 0.055 * getSpeed(); const prev = Math.floor(frame); frame += inc; if (frame > TOTAL) frame = TOTAL; const cur = Math.floor(frame);
+    if (stepModeToggle.checked) { const crossed = getPauseFrames().find(p => p > prev && p <= cur); if (crossed !== undefined) { frame = crossed; pauseNow(true); return; } }
+    render(); if (frame >= TOTAL) { if (loopToggle.checked) { frame = 0; if (stepModeToggle.checked) { pauseNow(true); return; } } else { running = false; render(); return; } } raf = requestAnimationFrame(loop);
+  }
+
+  [btnStart, btnPause, btnStep, btnReset].forEach(btn => btn.style.userSelect = 'none');
+  btnStart.addEventListener('click', play); btnPause.addEventListener('click', () => pauseNow(false)); btnStep.addEventListener('click', nextStage); btnReset.addEventListener('click', resetAll);
+  speedRange.addEventListener('input', () => speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x');
+  stepModeToggle.addEventListener('change', () => { if (stepModeToggle.checked && running) pauseNow(true); else stepAwaitPlay = false; render(); });
+  [labelsToggle, loopToggle].forEach(el => el.addEventListener('change', render));
+  subthresholdToggle.addEventListener('change', () => { renderStageMap(); render(); });
+  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x';
+  render();
+})();
+</script>
+</body>
+</html>
