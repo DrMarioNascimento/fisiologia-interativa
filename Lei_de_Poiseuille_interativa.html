@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lei de Poiseuille – fisiologia interativa</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --panel:#fbfbfd;
+  --line:#d9dce3;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --blue:#2563eb;
+  --red:#dc2626;
+  --violet:#8b5cf6;
+  --green:#10b981;
+  --amber:#f59e0b;
+  --normal:#cbd5e1;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:22px;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);color:var(--text)
+}
+h1{margin:0 0 8px;font-size:30px;text-align:center}
+.subtitle{margin:0 0 14px;text-align:center;color:var(--muted);font-size:16px}
+.controls,.quick{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:12px;margin:0 auto 10px;max-width:1440px
+}
+button{
+  border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer
+}
+.primary{border-color:#96b7ff}
+label{
+  display:flex;gap:8px;align-items:center;font-size:14px;background:#fff;border:1px solid #e1e5ec;border-radius:10px;padding:9px 12px
+}
+input[type=range]{width:150px}
+.mode-line{max-width:1440px;margin:0 auto 14px;text-align:right;min-height:22px}
+.mode-badge{display:inline-block;font-size:12px;color:var(--muted);background:#fff;border:1px solid #e1e5ec;border-radius:999px;padding:4px 10px}
+.status-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;max-width:1440px;margin:0 auto 14px
+}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:128px;position:relative;overflow:hidden
+}
+.card::before{content:"";position:absolute;inset:0 auto 0 0;width:8px;background:var(--blue)}
+.card-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.phase{font-size:26px;font-weight:700;line-height:1.12;padding-left:4px;min-height:84px;display:flex;flex-direction:column;justify-content:flex-start}
+.phase small{display:block;margin-top:6px;font-size:14px;color:var(--muted);font-weight:400}
+.layout{
+  display:grid;grid-template-columns:minmax(560px,1.12fr) minmax(520px,.95fr);gap:16px;max-width:1440px;margin:0 auto
+}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+canvas{width:100%;height:auto;display:block;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+.legend{
+  max-width:1440px;margin:14px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px 28px;line-height:1.55;font-size:15px
+}
+.signature{text-align:right;color:#4b5563;font-size:14px;margin-top:18px;border-top:1px solid #e5e7eb;padding-top:10px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);margin-left:6px;color:var(--muted);background:#fff}
+@media (max-width:1180px){
+  .layout{grid-template-columns:1fr}
+  .status-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<h1>Lei de Poiseuille</h1>
+<p class="subtitle">Relação entre fluxo, gradiente de pressão, raio do vaso, viscosidade e comprimento em um simulador interativo.</p>
+
+<div class="controls">
+  <button id="btnStart" class="primary">Iniciar</button>
+  <button id="btnPause">Pausar</button>
+  <button id="btnDemo">Modo demonstração</button>
+  <button id="btnReset">Resetar</button>
+
+  <label>Velocidade
+    <input id="speedRange" type="range" min="0.5" max="2.4" step="0.1" value="1.0">
+    <span id="speedLabel">1.0x</span>
+  </label>
+
+  <label>Raio
+    <input id="radiusRange" type="range" min="20" max="80" step="1" value="40">
+    <span id="radiusLabel">4.0 mm</span>
+  </label>
+
+  <label>ΔP
+    <input id="pressureRange" type="range" min="20" max="140" step="1" value="80">
+    <span id="pressureLabel">80 mmHg</span>
+  </label>
+
+  <label>Viscosidade (mPa·s)
+    <input id="viscRange" type="range" min="10" max="40" step="1" value="20">
+    <span id="viscLabel">2.0 mPa·s</span>
+  </label>
+
+  <label>Comprimento
+    <input id="lengthRange" type="range" min="40" max="160" step="1" value="100">
+    <span id="lengthLabel">10.0 cm</span>
+  </label>
+
+  <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+  <label><input id="curveToggle" type="checkbox" checked> Mostrar curva teórica</label>
+</div>
+
+<div class="quick">
+  <strong style="margin-right:4px">Estados rápidos:</strong>
+  <label><input type="radio" name="preset" value="normal" checked> Normal</label>
+  <label><input type="radio" name="preset" value="vasoconstricao"> Vasoconstrição</label>
+  <label><input type="radio" name="preset" value="vasodilatacao"> Vasodilatação</label>
+  <label><input type="radio" name="preset" value="policitemia"> ↑ viscosidade</label>
+  <label><input type="radio" name="preset" value="anemia"> ↓ viscosidade</label>
+</div>
+
+<div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+
+<div class="status-grid">
+  <div class="card" id="flowCard">
+    <div class="card-title">Fluxo em relação a 2,0 mm</div>
+    <div class="phase" id="flowText">1.0x<small id="flowDesc">Multiplicador do fluxo em comparação com o raio de referência de 2,0 mm.</small></div>
+  </div>
+  <div class="card" id="resCard">
+    <div class="card-title">Resistência relativa</div>
+    <div class="phase" id="resText">1.00<small id="resDesc">A resistência sobe fortemente quando o raio diminui.</small></div>
+  </div>
+  <div class="card" id="insightCard">
+    <div class="card-title">Insight didático</div>
+    <div class="phase" id="insightText">r⁴ domina<small id="insightDesc">Pequenas mudanças no raio geram grandes mudanças no fluxo.</small></div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="panel"><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
+  <div class="panel"><canvas id="graphCanvas" width="920" height="760"></canvas></div>
+</div>
+
+<div class="legend">
+  <b style="color:#0f172a; font-weight:600;">Como interpretar:</b>
+  <div style="text-align: justify; color:#475569; font-weight:400;">
+    <b style="color:#0f172a; font-weight:600;">Gradiente de pressão (ΔP):</b> quanto maior a diferença de pressão entre entrada e saída do vaso, maior tende a ser o fluxo.
+    <b style="color:#0f172a; font-weight:600;">Raio:</b> é a variável mais impactante, pois o fluxo depende de r⁴.
+    <b style="color:#0f172a; font-weight:600;">Viscosidade (mPa·s):</b> quanto maior a viscosidade, maior a resistência ao escoamento.
+    <b style="color:#0f172a; font-weight:600;">Comprimento:</b> vasos mais longos aumentam a resistência e reduzem o fluxo.
+    <b style="color:#0f172a; font-weight:600;">Leitura visual:</b> no vaso à esquerda, maior diâmetro e maior velocidade aparente das partículas indicam maior fluxo; no gráfico à direita, a curva mostra por que o raio é o principal modulador.
+    <b style="color:#0f172a; font-weight:600;">Aplicação clínica:</b> vasoconstrição reduz intensamente o fluxo; vasodilatação o amplia; aumento da viscosidade, como na policitemia, dificulta o escoamento; redução da viscosidade, como na anemia, tende a facilitar o fluxo.
+  </div>
+  <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento.</div>
+</div>
+
+<script>
+(()=>{
+const sceneCanvas=document.getElementById('sceneCanvas');
+const graphCanvas=document.getElementById('graphCanvas');
+const sctx=sceneCanvas.getContext('2d');
+const gctx=graphCanvas.getContext('2d');
+
+const btnStart=document.getElementById('btnStart');
+const btnPause=document.getElementById('btnPause');
+const btnDemo=document.getElementById('btnDemo');
+const btnReset=document.getElementById('btnReset');
+
+const speedRange=document.getElementById('speedRange');
+const radiusRange=document.getElementById('radiusRange');
+const pressureRange=document.getElementById('pressureRange');
+const viscRange=document.getElementById('viscRange');
+const lengthRange=document.getElementById('lengthRange');
+
+const speedLabel=document.getElementById('speedLabel');
+const radiusLabel=document.getElementById('radiusLabel');
+const pressureLabel=document.getElementById('pressureLabel');
+const viscLabel=document.getElementById('viscLabel');
+const lengthLabel=document.getElementById('lengthLabel');
+
+const labelsToggle=document.getElementById('labelsToggle');
+const curveToggle=document.getElementById('curveToggle');
+const presetInputs=[...document.querySelectorAll('input[name="preset"]')];
+
+const modeBadge=document.getElementById('modeBadge');
+const flowText=document.getElementById('flowText');
+const flowDesc=document.getElementById('flowDesc');
+const resText=document.getElementById('resText');
+const resDesc=document.getElementById('resDesc');
+const insightText=document.getElementById('insightText');
+const insightDesc=document.getElementById('insightDesc');
+
+let running=false, raf=null, lastTs=0, t=0;
+let demoMode=false, demoPhase=0;
+
+let radius=40;   // 2.0 to 8.0 mm shown as /10
+let pressure=80; // mmHg
+let viscosity=20;// 1.0 to 4.0 mPa·s shown as /10
+let length=100;  // 4.0 to 16.0 cm shown as /10
+
+function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+
+function roundedBox(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function calcFlow(r=radius,p=pressure,v=viscosity,l=length){
+  const rr = r/10;
+  const vv = v/10;
+  const ll = l/10;
+  return (Math.PI * p * Math.pow(rr,4)) / (8 * vv * ll);
+}
+
+function calcResistance(r=radius,v=viscosity,l=length){
+  const rr = r/10;
+  const vv = v/10;
+  const ll = l/10;
+  return (8 * vv * ll) / (Math.PI * Math.pow(rr,4));
+}
+
+function flowMultiplier(r=radius){
+  const refRadius = 20; // 2.0 mm
+  return Math.pow((r/10)/(refRadius/10),4);
+}
+
+function maxFlowMultiplier(){
+  return flowMultiplier(80); // 8.0 mm = 256x
+}
+
+function applyPreset(name){
+  demoMode=false;
+  if(name==='normal'){ radius=40; pressure=80; viscosity=20; length=100; }
+  if(name==='vasoconstricao'){ radius=25; pressure=80; viscosity=20; length=100; }
+  if(name==='vasodilatacao'){ radius=60; pressure=80; viscosity=20; length=100; }
+  if(name==='policitemia'){ radius=40; pressure=80; viscosity=34; length=100; }
+  if(name==='anemia'){ radius=40; pressure=80; viscosity=12; length=100; }
+  syncControls();
+  render();
+}
+
+function syncControls(){
+  radiusRange.value=radius;
+  pressureRange.value=pressure;
+  viscRange.value=viscosity;
+  lengthRange.value=length;
+  radiusLabel.textContent=(radius/10).toFixed(1)+' mm';
+  pressureLabel.textContent=pressure+' mmHg';
+  viscLabel.textContent=(viscosity/10).toFixed(1)+' mPa·s';
+  lengthLabel.textContent=(length/10).toFixed(1)+' cm';
+  speedLabel.textContent=parseFloat(speedRange.value).toFixed(1)+'x';
+}
+
+function updateModeBadge(){
+  modeBadge.textContent = `${demoMode?'Modo: demonstração':'Modo: contínuo'} | raio ${(radius/10).toFixed(1)} mm | ΔP ${pressure} mmHg`;
+}
+
+function updateStatus(){
+  const q=calcFlow();
+  const mult=flowMultiplier();
+  const r=calcResistance();
+  const rBase=calcResistance(40,20,100);
+  const rRel=r/rBase;
+  flowText.firstChild.textContent=mult.toFixed(1)+'x';
+  flowDesc.textContent=`Multiplicador do fluxo em relação a 2,0 mm | ΔP ${pressure} mmHg · raio ${(radius/10).toFixed(1)} mm · η ${(viscosity/10).toFixed(1)} mPa·s · L ${(length/10).toFixed(1)} cm`;
+  resText.firstChild.textContent=rRel.toFixed(2);
+  resDesc.textContent = rRel>1 ? 'Resistência acima do padrão: o escoamento encontra mais oposição.' : 'Resistência abaixo do padrão: o escoamento está mais favorecido.';
+  insightText.firstChild.textContent = radius<32 ? 'Vasoconstrição pesa' : radius>52 ? 'Vasodilatação amplia' : 'r⁴ domina';
+  insightDesc.textContent = radius<32
+    ? 'Mesmo com ΔP estável, o fluxo cai intensamente quando o raio reduz.'
+    : radius>52
+    ? 'A expansão do raio aumenta o fluxo de forma desproporcional.'
+    : 'Em comparação com outras variáveis, pequenas mudanças no raio têm maior impacto.';
+  updateModeBadge();
+}
+
+function drawIon(x,y,r,color,label){
+  const grd=sctx.createRadialGradient(x-r*.45,y-r*.45,1,x,y,r);
+  grd.addColorStop(0,'#ffffff');
+  grd.addColorStop(.62,color);
+  grd.addColorStop(1,'rgba(15,23,42,0.28)');
+  sctx.save();
+  sctx.shadowColor=color+'33';
+  sctx.shadowBlur=3;
+  sctx.beginPath();
+  sctx.arc(x,y,r,0,Math.PI*2);
+  sctx.fillStyle=grd;
+  sctx.fill();
+  sctx.lineWidth=1.0;
+  sctx.strokeStyle='rgba(15,23,42,0.22)';
+  sctx.stroke();
+  sctx.restore();
+  sctx.fillStyle='#fff';
+  sctx.font='bold 10px Arial';
+  sctx.textAlign='center';
+  sctx.fillText(label,x,y+3);
+  sctx.textAlign='left';
+}
+
+function drawArrow(x1,y1,x2,y2,color,width=5,label=''){
+  const a=Math.atan2(y2-y1,x2-x1);
+  const nx=-Math.sin(a), ny=Math.cos(a);
+  sctx.save();
+  sctx.lineCap='round';
+  sctx.lineJoin='round';
+  sctx.shadowColor=color+'55';
+  sctx.shadowBlur=6;
+
+  sctx.strokeStyle=color+'33';
+  sctx.lineWidth=width+3;
+  sctx.beginPath();
+  sctx.moveTo(x1,y1);
+  sctx.lineTo(x2,y2);
+  sctx.stroke();
+
+  sctx.strokeStyle=color;
+  sctx.lineWidth=width;
+  sctx.beginPath();
+  sctx.moveTo(x1,y1);
+  sctx.lineTo(x2,y2);
+  sctx.stroke();
+
+  const headLength=20, wing=Math.PI/7;
+  sctx.shadowBlur=0;
+  sctx.fillStyle=color;
+  sctx.beginPath();
+  sctx.moveTo(x2,y2);
+  sctx.lineTo(x2-headLength*Math.cos(a-wing),y2-headLength*Math.sin(a-wing));
+  sctx.lineTo(x2-headLength*0.72*Math.cos(a),y2-headLength*0.72*Math.sin(a));
+  sctx.lineTo(x2-headLength*Math.cos(a+wing),y2-headLength*Math.sin(a+wing));
+  sctx.closePath();
+  sctx.fill();
+
+  if(label && labelsToggle.checked){
+    const mx=(x1+x2)/2 + nx*22;
+    const my=(y1+y2)/2 + ny*22;
+    sctx.fillStyle=color;
+    sctx.font='bold 14px Arial';
+    sctx.fillText(label,mx,my);
+  }
+  sctx.restore();
+}
+
+function drawScene(){
+  sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);
+
+  sctx.fillStyle='#111827';
+  sctx.font='bold 22px Arial';
+  sctx.fillText('Escoamento em um vaso cilíndrico', 18, 30);
+
+  const q=calcFlow();
+  const mult=flowMultiplier();
+  const tubeX=80, tubeY=230, tubeW=820, tubeH=300;
+  const rPix = radius*1.7;
+  const lumenH = clamp(rPix*2.1, 72, 226);
+  const lumenY = tubeY + tubeH/2 - lumenH/2;
+  const pressureRatio=(pressure-20)/(140-20);
+  const inletWidth=90 + pressureRatio*30;
+  const outletWidth=70 + pressureRatio*16;
+
+  roundedBox(sctx,40,105,900,86,14);
+  sctx.fillStyle='#fff';
+  sctx.fill();
+  sctx.strokeStyle='#d1d5db';
+  sctx.stroke();
+
+  sctx.fillStyle='#111827';
+  sctx.font='bold 18px Arial';
+  sctx.fillText('Fórmula',60,138);
+  sctx.font='bold 30px Arial';
+  sctx.fillStyle='#2563eb';
+  sctx.fillText('Q = (π · ΔP · r⁴) / (8 · η · L)',170,146);
+  sctx.fillStyle='#64748b';
+  sctx.font='14px Arial';
+  sctx.fillText('Fluxo cresce muito com o raio e cai com o aumento da viscosidade e do comprimento.',60,170);
+
+  roundedBox(sctx,tubeX,tubeY,tubeW,tubeH,46);
+  const vesselGrad=sctx.createLinearGradient(tubeX,tubeY,tubeX,tubeY+tubeH);
+  vesselGrad.addColorStop(0,'#fecaca');
+  vesselGrad.addColorStop(.5,'#f87171');
+  vesselGrad.addColorStop(1,'#ef4444');
+  sctx.fillStyle=vesselGrad;
+  sctx.shadowColor = radius>52 ? '#2563eb44' : radius<32 ? '#dc262644' : '#94a3b844';
+  sctx.shadowBlur = 20;
+  sctx.fill();
+  sctx.shadowBlur = 0;
+  sctx.strokeStyle = radius>52 ? '#2563eb' : radius<32 ? '#dc2626' : '#dc2626';
+  sctx.lineWidth = radius>52 || radius<32 ? 3.2 : 2.4;
+  sctx.stroke();
+
+  roundedBox(sctx,tubeX+32,lumenY,tubeW-64,lumenH,38);
+  const lumenGrad=sctx.createLinearGradient(tubeX,lumenY,tubeX,lumenY+lumenH);
+  lumenGrad.addColorStop(0,'#eff6ff');
+  lumenGrad.addColorStop(.5,'#dbeafe');
+  lumenGrad.addColorStop(1,'#bfdbfe');
+  sctx.fillStyle=lumenGrad;
+  sctx.fill();
+
+  // pressure cones
+  sctx.fillStyle='rgba(37,99,235,0.10)';
+  sctx.beginPath();
+  sctx.moveTo(tubeX-10,tubeY+tubeH/2);
+  sctx.lineTo(tubeX+46,tubeY+tubeH/2-inletWidth/2);
+  sctx.lineTo(tubeX+46,tubeY+tubeH/2+inletWidth/2);
+  sctx.closePath();
+  sctx.fill();
+
+  sctx.fillStyle='rgba(220,38,38,0.10)';
+  sctx.beginPath();
+  sctx.moveTo(tubeX+tubeW+10,tubeY+tubeH/2);
+  sctx.lineTo(tubeX+tubeW-46,tubeY+tubeH/2-outletWidth/2);
+  sctx.lineTo(tubeX+tubeW-46,tubeY+tubeH/2+outletWidth/2);
+  sctx.closePath();
+  sctx.fill();
+
+  drawArrow(24, tubeY+tubeH/2, tubeX-16, tubeY+tubeH/2, '#2563eb', 5, 'ΔP');
+  drawArrow(tubeX+tubeW+16, tubeY+tubeH/2, 956, tubeY+tubeH/2, '#64748b', 5, '');
+
+  const speedFactor = clamp(mult/8, 0.35, 5.2) * parseFloat(speedRange.value);
+  const particleCount = Math.round(clamp(mult/6, 5, 18));
+  for(let i=0;i<particleCount;i++){
+    const tt=((t*0.0015*speedFactor)+(i/particleCount))%1;
+    const x=tubeX+58+tt*(tubeW-116);
+    const y=tubeY+tubeH/2 + Math.sin(tt*8 + i)*lumenH*0.20 + (i%2===0? -lumenH*0.12 : lumenH*0.12);
+    drawIon(x,y,15,'#60a5fa','Q');
+  }
+
+  if(labelsToggle.checked){
+    sctx.fillStyle='#111827';
+    sctx.font='bold 17px Arial';
+    sctx.fillText('Entrada', tubeX+40, tubeY+36);
+    sctx.fillText('Saída', tubeX+tubeW-92, tubeY+36);
+
+    sctx.fillStyle='#2563eb';
+    sctx.font='bold 15px Arial';
+    sctx.fillText(`Raio atual: ${(radius/10).toFixed(1)} mm`, tubeX+52, tubeY+tubeH+42);
+
+    sctx.fillStyle='#8b5cf6';
+    sctx.fillText(`Viscosidade (mPa·s): ${(viscosity/10).toFixed(1)} mPa·s`, tubeX+320, tubeY+tubeH+42);
+
+    sctx.fillStyle='#10b981';
+    sctx.fillText(`Comprimento: ${(length/10).toFixed(1)} cm`, tubeX+600, tubeY+tubeH+42);
+
+    sctx.fillStyle=radius<32 ? '#dc2626' : '#2563eb';
+    sctx.font='bold 18px Arial';
+    sctx.fillText('Fluxo depende de r⁴', tubeX+300, tubeY-20);
+  }
+
+  // lower explanatory boxes
+  function note(x,y,w,h,title,text,color){
+    roundedBox(sctx,x,y,w,h,12);
+    sctx.fillStyle='#fff';
+    sctx.fill();
+    sctx.strokeStyle=color;
+    sctx.lineWidth=2;
+    sctx.stroke();
+    sctx.fillStyle=color;
+    sctx.font='bold 16px Arial';
+    sctx.fillText(title,x+14,y+26);
+    sctx.fillStyle='#475569';
+    sctx.font='14px Arial';
+    wrapText(sctx,text,x+14,y+50,w-28,18);
+  }
+
+  note(60,590,260,120,'Raio', 'É a variável com maior impacto. Dobrar o raio aumenta muito mais o fluxo do que dobrar ΔP.', '#2563eb');
+  note(360,590,260,120,'Viscosidade (mPa·s)', 'Maior viscosidade dificulta o escoamento e eleva a resistência ao fluxo.', '#8b5cf6');
+  note(660,590,260,120,'Comprimento', 'Vasos mais longos aumentam a resistência e reduzem o fluxo para um mesmo ΔP.', '#10b981');
+}
+
+function wrapText(ctx,text,x,y,maxWidth,lineHeight){
+  const words=text.split(' ');
+  let line='';
+  for(let n=0;n<words.length;n++){
+    const test=line+words[n]+' ';
+    const metrics=ctx.measureText(test);
+    if(metrics.width>maxWidth && n>0){
+      ctx.fillText(line,x,y);
+      line=words[n]+' ';
+      y+=lineHeight;
+    }else{
+      line=test;
+    }
+  }
+  ctx.fillText(line,x,y);
+}
+
+function drawGraphBase(){
+  gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
+
+  roundedBox(gctx,16,14,888,732,18);
+  gctx.fillStyle='#fff';
+  gctx.fill();
+  gctx.strokeStyle='#d7dde6';
+  gctx.lineWidth=1.5;
+  gctx.stroke();
+
+  gctx.fillStyle='#0f172a';
+  gctx.font='bold 22px Arial';
+  gctx.textAlign='center';
+  gctx.fillText('Multiplicador do fluxo em função do raio', 460, 42);
+  gctx.fillStyle='#64748b';
+  gctx.font='14px Arial';
+  gctx.fillText('Referência: raio de 2,0 mm = 1x. A curva cresce com r⁴.', 460, 68);
+
+  const left=104, right=852, top=104, bottom=592;
+  const width=right-left, height=bottom-top;
+
+  for(let i=0;i<=8;i++){
+    const y=bottom-(i/8)*height;
+    gctx.strokeStyle=i===0||i===8 ? '#d6dde7' : '#ecf0f5';
+    gctx.lineWidth=i===0||i===8 ? 1 : 0.7;
+    gctx.beginPath();
+    gctx.moveTo(left,y);
+    gctx.lineTo(right,y);
+    gctx.stroke();
+
+    gctx.fillStyle='#334155';
+    gctx.font='bold 13px Arial';
+    gctx.textAlign='right';
+    gctx.fillText((i*12.5).toFixed(0), left-12, y+4);
+  }
+
+  for(let i=0;i<=6;i++){
+    const x=left+(i/6)*width;
+    gctx.strokeStyle='#ecf0f5';
+    gctx.lineWidth=0.7;
+    gctx.beginPath();
+    gctx.moveTo(x,top);
+    gctx.lineTo(x,bottom);
+    gctx.stroke();
+
+    gctx.fillStyle='#334155';
+    gctx.font='bold 13px Arial';
+    gctx.textAlign='center';
+    gctx.fillText((2+i).toFixed(0), x, bottom+26);
+  }
+
+  gctx.strokeStyle='#334155';
+  gctx.lineWidth=2.2;
+  gctx.beginPath();
+  gctx.moveTo(left,top);
+  gctx.lineTo(left,bottom);
+  gctx.lineTo(right,bottom);
+  gctx.stroke();
+
+  gctx.save();
+  gctx.translate(36,(top+bottom)/2);
+  gctx.rotate(-Math.PI/2);
+  gctx.fillStyle='#475569';
+  gctx.font='bold 14px Arial';
+  gctx.textAlign='center';
+  gctx.fillText('Fluxo (× em relação a 2,0 mm)',0,0);
+  gctx.restore();
+
+  gctx.fillStyle='#475569';
+  gctx.font='bold 14px Arial';
+  gctx.textAlign='center';
+  gctx.fillText('Raio do vaso (mm)', (left+right)/2, bottom+70);
+
+  // side panel
+  roundedBox(gctx,80,650,760,90,12);
+  gctx.fillStyle='#f8fafc';
+  gctx.fill();
+  gctx.strokeStyle='#d1d5db';
+  gctx.stroke();
+  gctx.textAlign='left';
+  gctx.fillStyle='#0f172a';
+  gctx.font='bold 16px Arial';
+  gctx.fillText('Leitura atual', 102, 680);
+  gctx.fillStyle='#475569';
+  gctx.font='14px Arial';
+  gctx.fillText(`Raio selecionado: ${(radius/10).toFixed(1)} mm`, 102, 710);
+  gctx.fillText(`Fluxo: ${flowMultiplier().toFixed(1)}x`, 322, 710);
+  gctx.fillText(`Resistência relativa: ${(calcResistance()/calcResistance(40,20,100)).toFixed(2)}`, 548, 710);
+}
+
+function graphXFromRadius(r){
+  const left=104, right=852;
+  const minR=20, maxR=80;
+  return left + ((r-minR)/(maxR-minR))*(right-left);
+}
+function graphYFromFlow(mult){
+  const top=90, bottom=580;
+  return bottom - (mult/260)*(bottom-top);
+}
+
+function drawGraphCurves(){
+  const left=104, right=852;
+
+  if(curveToggle.checked){
+    gctx.strokeStyle='#2563eb';
+    gctx.lineWidth=4.6;
+    gctx.lineCap='round';
+    gctx.lineJoin='round';
+    gctx.beginPath();
+    for(let r=20;r<=80;r++){
+      const mult=flowMultiplier(r);
+      const x=graphXFromRadius(r);
+      const y=graphYFromFlow(mult);
+      if(r===20) gctx.moveTo(x,y); else gctx.lineTo(x,y);
+    }
+    gctx.stroke();
+  }
+
+  // comparison line
+  gctx.strokeStyle='#cbd5e1';
+  gctx.lineWidth=2.5;
+  gctx.setLineDash([6,7]);
+  gctx.beginPath();
+  const baseY=graphYFromFlow(flowMultiplier(40));
+  gctx.moveTo(left,baseY);
+  gctx.lineTo(right,baseY);
+  gctx.stroke();
+  gctx.setLineDash([]);
+
+  const mult=flowMultiplier();
+  const px=graphXFromRadius(radius);
+  const py=graphYFromFlow(mult);
+
+  const halo=gctx.createRadialGradient(px,py,2,px,py,18);
+  halo.addColorStop(0,'#2563eb99');
+  halo.addColorStop(.45,'#2563eb33');
+  halo.addColorStop(1,'rgba(255,255,255,0)');
+  gctx.beginPath();
+  gctx.arc(px,py,18,0,Math.PI*2);
+  gctx.fillStyle=halo;
+  gctx.fill();
+
+  gctx.beginPath();
+  gctx.arc(px,py,6,0,Math.PI*2);
+  gctx.fillStyle = radius<32 ? '#dc2626' : radius>52 ? '#10b981' : '#2563eb';
+  gctx.fill();
+  gctx.lineWidth=2;
+  gctx.strokeStyle='#fff';
+  gctx.stroke();
+
+  gctx.strokeStyle='#94a3b8';
+  gctx.lineWidth=1.5;
+  gctx.setLineDash([4,4]);
+  gctx.beginPath();
+  gctx.moveTo(px,592);
+  gctx.lineTo(px,py);
+  gctx.moveTo(104,py);
+  gctx.lineTo(px,py);
+  gctx.stroke();
+  gctx.setLineDash([]);
+
+  gctx.fillStyle='#0f172a';
+  gctx.font='bold 14px Arial';
+  gctx.fillText('Ponto atual', px+14, py-10);
+
+  // legend
+  gctx.strokeStyle='#2563eb';
+  gctx.lineWidth=4;
+  gctx.beginPath();
+  gctx.moveTo(108,724); gctx.lineTo(150,724); gctx.stroke();
+  gctx.fillStyle='#334155';
+  gctx.font='bold 14px Arial';
+  gctx.fillText('Curva do multiplicador do fluxo (r⁴)', 160, 729);
+
+  gctx.strokeStyle='#cbd5e1';
+  gctx.lineWidth=2.5;
+  gctx.setLineDash([6,7]);
+  gctx.beginPath();
+  gctx.moveTo(356,724); gctx.lineTo(398,724); gctx.stroke();
+  gctx.setLineDash([]);
+  gctx.fillText('Referência em 4,0 mm', 408, 729);
+}
+
+function render(){
+  syncControls();
+  updateStatus();
+  drawScene();
+  drawGraphBase();
+  drawGraphCurves();
+}
+
+function play(){
+  if(running) return;
+  running=true;
+  lastTs=0;
+  raf=requestAnimationFrame(loop);
+}
+function pause(){
+  running=false;
+  if(raf) cancelAnimationFrame(raf);
+}
+function resetAll(){
+  pause();
+  demoMode=false;
+  presetInputs.find(i=>i.value==='normal').checked=true;
+  applyPreset('normal');
+  t=0;
+  render();
+}
+
+function startDemo(){
+  demoMode=true;
+  play();
+}
+
+function loop(ts){
+  if(!running) return;
+  if(!lastTs) lastTs=ts;
+  const dt=ts-lastTs;
+  lastTs=ts;
+  const speed=parseFloat(speedRange.value);
+  t += dt*speed;
+
+  if(demoMode){
+    const cyc = (t*0.00022)%1;
+    radius = 22 + (Math.sin(cyc*Math.PI*2 - Math.PI/2)+1)/2 * 48;
+    pressure = 80;
+    viscosity = 20;
+    length = 100;
+    presetInputs.forEach(i=>i.checked=false);
+  }
+
+  render();
+  raf=requestAnimationFrame(loop);
+}
+
+btnStart.addEventListener('click', play);
+btnPause.addEventListener('click', pause);
+btnDemo.addEventListener('click', startDemo);
+btnReset.addEventListener('click', resetAll);
+
+speedRange.addEventListener('input', ()=>{ speedLabel.textContent=parseFloat(speedRange.value).toFixed(1)+'x'; render(); });
+radiusRange.addEventListener('input', e=>{ demoMode=false; radius=Number(e.target.value); presetInputs.forEach(i=>i.checked=false); render(); });
+pressureRange.addEventListener('input', e=>{ demoMode=false; pressure=Number(e.target.value); presetInputs.forEach(i=>i.checked=false); render(); });
+viscRange.addEventListener('input', e=>{ demoMode=false; viscosity=Number(e.target.value); presetInputs.forEach(i=>i.checked=false); render(); });
+lengthRange.addEventListener('input', e=>{ demoMode=false; length=Number(e.target.value); presetInputs.forEach(i=>i.checked=false); render(); });
+[labelsToggle, curveToggle].forEach(el=>el.addEventListener('change', render));
+presetInputs.forEach(input=>input.addEventListener('change', e=>{ if(e.target.checked) applyPreset(e.target.value); }));
+
+applyPreset('normal');
+render();
+})();
+</script>
+</body>
+</html>
