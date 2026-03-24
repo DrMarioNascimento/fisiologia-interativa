@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curva de Dissociação da Hemoglobina (O₂) — troca O₂/CO₂ corrigida</title>
+  <style>
+    :root{--bg:#ffffff;--panel:#fbfbfd;--line:#d9dce3;--text:#183153;--muted:#5a7597;--blue:#2f66dc;--red:#ef476f;--green:#0f766e;--purple:#7c3aed;--gray:#bcc7d6;--card:#f6f8fb}
+    *{box-sizing:border-box}
+    body{margin:0;padding:20px;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+    h1{margin:0 0 8px;text-align:center;font-size:30px;color:#132d55}
+    .subtitle{max-width:1460px;margin:0 auto 16px;text-align:center;color:var(--muted);line-height:1.45;font-size:16px}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;max-width:1460px;margin:0 auto 10px}
+    .controls label{display:flex;align-items:center;gap:8px;font-size:14px;border:1px solid #dfe6f0;background:white;border-radius:10px;padding:8px 10px}
+    .controls input[type="range"]{width:132px;accent-color:var(--blue)}
+    button{border:1px solid #b7c5d8;background:white;color:#183153;border-radius:10px;padding:10px 14px;cursor:pointer;font-size:15px}
+    button.primary{border-color:#98b8f3}
+    .preset.active{background:#edf4ff;border-color:#9ec0ff;color:var(--blue);font-weight:700}
+    .badge-line{max-width:1460px;margin:0 auto 10px;text-align:right;min-height:22px}
+    .badge{display:inline-block;border:1px solid #dfe6f0;background:white;color:var(--muted);font-size:12px;border-radius:999px;padding:5px 10px}
+    .layout{max-width:1460px;margin:0 auto;display:grid;grid-template-columns:1.05fr 1.25fr;gap:18px;align-items:start}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 2px 10px rgba(12,32,66,.04)}
+    .panel-title{font-size:22px;font-weight:700;color:#183153;margin:8px 0 18px 14px}
+    .molecule-head{font-size:28px;font-weight:700;color:#183153;margin:6px 0 10px}
+    .molecule-sub{color:var(--muted);line-height:1.55;text-align:justify;font-size:15px;margin-top:14px}
+    canvas{width:100%;height:auto;display:block;background:transparent}
+    .pillbar{margin-top:12px}
+    .pill{display:inline-block;padding:7px 10px;border-radius:999px;border:1px solid #dfe6f0;background:white;color:var(--muted);font-size:12px;margin:0 8px 8px 0;font-weight:700}
+    .signature{max-width:1180px;margin:14px auto 20px auto;padding:0 6px;text-align:right;color:#64748b;font:600 13px/1.4 Arial,Helvetica,sans-serif}
+    .legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;padding:8px 12px 8px;justify-content:start}
+    .legend-item{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--muted);white-space:nowrap}
+    .legend-dot{width:14px;height:14px;border-radius:50%;flex:0 0 14px}
+    .stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:10px 12px 2px}
+    .stat{background:var(--card);border:1px solid #dfe6f0;border-radius:22px;padding:12px 18px;min-height:74px;display:flex;flex-direction:column;justify-content:center}
+    .stat-label{color:var(--muted);font-size:16px;margin-bottom:6px;line-height:1.05}
+    .stat-value{color:#132d55;font-size:18px;font-weight:900;line-height:1}
+    .vo2-card{margin:10px 12px 14px;padding:16px 18px;border:1px solid #dfe6f0;border-radius:22px;background:linear-gradient(180deg,#f9fbff,#eef4ff)}
+    .vo2-title{font-size:18px;font-weight:900;color:#16376a;margin-bottom:8px}
+    .vo2-formula{font-size:22px;font-weight:900;color:#1d4ed8;margin-bottom:10px}
+    .vo2-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+    .vo2-col{background:#fff;border:1px solid #dfe6f0;border-radius:18px;padding:12px 14px}
+    .vo2-col-title{font-size:15px;font-weight:900;color:#16376a;margin-bottom:6px}
+    .vo2-text{font-size:14px;line-height:1.45;color:#35506f}
+    .vo2-note{margin-top:10px;font-size:13px;line-height:1.35;color:#5d728d}
+    @media (max-width:1200px){.layout{max-width:1460px;margin:0 auto;display:grid;grid-template-columns:1.05fr 1.25fr;gap:18px;align-items:start}.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;padding:8px 12px 8px;justify-content:start}}
+    @media (max-width:760px){.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;padding:8px 12px 8px;justify-content:start}.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:10px 12px 2px}}
+  
+    .co2-box{border:1px solid #dfe6f0;border-radius:16px;background:linear-gradient(180deg,#fcfdff 0%,#f4f8fc 100%);padding:12px 14px;box-shadow:0 10px 24px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.85)}
+    .co2-title{margin:0 0 10px 0;color:#183153;font:700 16px Arial,Helvetica,sans-serif}
+    .co2-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch}
+    .co2-card{position:relative;border:1px solid #dfe6f0;border-radius:14px;background:linear-gradient(180deg,#ffffff 0%,#f6f9fd 100%);padding:10px 12px;box-shadow:0 10px 20px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.9);transform:translateZ(0)}
+    .co2-card::before{content:"";position:absolute;left:10px;right:10px;top:0;height:38%;border-radius:14px 14px 40% 40%/14px 14px 55% 55%;background:linear-gradient(180deg,rgba(255,255,255,.65),rgba(255,255,255,0));pointer-events:none}
+    .co2-card-title{position:relative;font:700 14px Arial,Helvetica,sans-serif;margin-bottom:6px}
+    .co2-card-text{position:relative;color:#5a7597;font:14px/1.45 Arial,Helvetica,sans-serif;text-align:justify}
+    .co2-green .co2-card-title{color:#0f766e}
+    .co2-blue .co2-card-title{color:#2f66dc}
+    .co2-purple .co2-card-title{color:#7c3aed}
+    .co2-anim{position:relative;height:50px;margin:6px 0 10px 0;border-radius:14px;background:linear-gradient(180deg,#fdfefe 0%,#eef4f9 62%,#e4ebf3 100%);overflow:hidden;box-shadow:inset 0 2px 7px rgba(255,255,255,.95), inset 0 -7px 12px rgba(148,163,184,.12), 0 6px 12px rgba(15,23,42,.06)}
+    .co2-anim::before{content:"";position:absolute;left:6px;right:6px;top:6px;height:38%;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(255,255,255,0));pointer-events:none}
+    .co2-anim::after{content:"";position:absolute;left:10px;right:10px;bottom:5px;height:10px;border-radius:50%;background:radial-gradient(ellipse at center, rgba(15,23,42,.12) 0%, rgba(15,23,42,.06) 45%, rgba(15,23,42,0) 78%);pointer-events:none}
+    .co2-track{position:absolute;left:10px;right:10px;top:50%;height:8px;border-radius:999px;background:linear-gradient(180deg,#d8e2ee 0%,#c8d5e4 48%,#e8eff6 100%);transform:translateY(-50%);box-shadow:inset 0 1px 2px rgba(255,255,255,.9), inset 0 -1px 2px rgba(100,116,139,.2)}
+    .co2-dot{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 32% 28%,#d9fffb 0%,#49d1c8 28%,#0f766e 58%,#0a4f4a 100%);transform:translateY(-50%);opacity:.96;box-shadow:0 5px 10px rgba(15,118,110,.28), inset 2px 2px 3px rgba(255,255,255,.65), inset -3px -4px 5px rgba(0,0,0,.18);animation:flow 3s linear infinite}
+    .co2-dot::before{content:"";position:absolute;left:2px;top:2px;width:36%;height:36%;border-radius:50%;background:rgba(255,255,255,.8);filter:blur(.2px)}
+    .co2-blue .co2-dot{background:radial-gradient(circle at 32% 28%,#eef5ff 0%,#8ab3ff 28%,#2f66dc 58%,#1f4698 100%);box-shadow:0 5px 10px rgba(47,102,220,.28), inset 2px 2px 3px rgba(255,255,255,.68), inset -3px -4px 5px rgba(0,0,0,.18)}
+    .co2-purple .co2-dot{background:radial-gradient(circle at 32% 28%,#faf4ff 0%,#c59bff 28%,#7c3aed 58%,#5322a8 100%);box-shadow:0 5px 10px rgba(124,58,237,.28), inset 2px 2px 3px rgba(255,255,255,.68), inset -3px -4px 5px rgba(0,0,0,.18)}
+    .co2-dot.dot1{animation-delay:0s}
+    .co2-dot.dot2{animation-delay:1s}
+    .co2-dot.dot3{animation-delay:2s}
+    .co2-bind{position:absolute;right:12px;top:50%;transform:translateY(-50%);padding:5px 10px;border-radius:999px;background:linear-gradient(180deg,#f6fbff 0%,#dbeafe 100%);color:#2f66dc;font:700 12px Arial;box-shadow:0 5px 10px rgba(47,102,220,.16), inset 0 1px 0 rgba(255,255,255,.92), inset 0 -2px 3px rgba(47,102,220,.08)}
+    .hco3-tag{position:absolute;left:10px;top:50%;transform:translateY(-50%);padding:5px 10px;border-radius:999px;background:linear-gradient(180deg,#fbf7ff 0%,#ead9ff 100%);color:#7c3aed;font:700 12px Arial;box-shadow:0 5px 10px rgba(124,58,237,.16), inset 0 1px 0 rgba(255,255,255,.92), inset 0 -2px 3px rgba(124,58,237,.08);animation:flowTag 3.2s ease-in-out infinite}
+    @keyframes flow{0%{left:10px;opacity:0;transform:translateY(-50%) scale(.75)}12%{opacity:1;transform:translateY(calc(-50% - 2px)) scale(1)}50%{transform:translateY(calc(-50% + 2px)) scale(1.06)}88%{opacity:1;transform:translateY(calc(-50% - 1px)) scale(.98)}100%{left:calc(100% - 26px);opacity:0;transform:translateY(-50%) scale(.75)}}
+    @keyframes flowTag{0%{left:10px;opacity:.2;transform:translateY(-50%) scale(.9)}20%{opacity:1;transform:translateY(calc(-50% - 1px)) scale(1)}80%{opacity:1;transform:translateY(calc(-50% + 1px)) scale(1.02)}100%{left:calc(100% - 46px);opacity:.2;transform:translateY(-50%) scale(.9)}}
+    @media (max-width:900px){.co2-grid{grid-template-columns:1fr}}
+
+
+    #sceneCanvas,#graphCanvas{display:block !important;visibility:visible !important;opacity:1 !important}
+  </style>
+</head>
+<body>
+  <h1>Curva de Dissociação da Hemoglobina (O₂)</h1>
+  
+  <div class="controls">
+    <button id="btnStart" class="primary">Iniciar</button>
+    <button id="btnPause">Pausar</button>
+    <button id="btnStep">Próxima etapa</button>
+    <button id="btnReset">Resetar</button>
+    <label>Velocidade <input id="speedRange" type="range" min="0.5" max="2.5" step="0.1" value="1.0"><span id="speedLabel">1.0x</span></label>
+    <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+    <label><input id="normalToggle" type="checkbox" checked> Curva normal ao fundo</label>
+    <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
+  </div>
+
+  <div class="controls">
+    <strong>Estados rápidos:</strong>
+    <button class="preset active" data-preset="normal">Normal</button>
+    <button class="preset" data-preset="exercise">Exercício</button>
+    <button class="preset" data-preset="fever">Febre</button>
+    <button class="preset" data-preset="acidosis">Acidose</button>
+    <button class="preset" data-preset="alkalosis">Alcalose</button>
+    <button class="preset" data-preset="fetal">Hb fetal</button>
+    <button class="preset" data-preset="co">Intoxicação por CO</button>
+    <button class="preset" data-preset="emphysema">Enfisema</button>
+    <button class="preset" data-preset="fibrosis">Fibrose</button>
+  </div>
+
+  <div class="controls">
+    <label>pH <input id="phRange" type="range" min="7.00" max="7.60" step="0.01" value="7.40"><span id="phLabel">7,40</span></label>
+    <label>PCO₂ <input id="pco2Range" type="range" min="20" max="80" step="1" value="40"><span id="pco2Label">40 mmHg</span></label>
+    <label>Temperatura <input id="tempRange" type="range" min="35" max="41" step="0.1" value="37.0"><span id="tempLabel">37,0 °C</span></label>
+    <label>2,3-BPG <input id="bpgRange" type="range" min="0.60" max="1.80" step="0.01" value="1.00"><span id="bpgLabel">1,00×</span></label>
+  </div>
+
+  <div class="badge-line"><span id="modeBadge" class="badge">Modo: pausado | Estado: Normal</span></div>
+
+  <div class="layout">
+    <div class="panel">
+      <div class="molecule-head" style="font-size:22px; white-space:nowrap;">Representação molecular didática da hemoglobina</div>
+      <canvas id="sceneCanvas" width="1180" height="920"></canvas>
+<div id="co2TransportBox" style="display:block;margin-top:12px;">
+        <div class="co2-box">
+          <div class="co2-title">Transporte de CO₂</div>
+          <div class="co2-grid">
+            <div class="co2-card co2-green">
+              <div class="co2-card-title">CO₂ dissolvido</div>
+              <div class="co2-anim">
+                <div class="co2-track"></div>
+                <div class="co2-dot dot1"></div>
+                <div class="co2-dot dot2"></div>
+                <div class="co2-dot dot3"></div>
+              </div>
+
+      
+              <div class="co2-card-text">Pequena fração transportada diretamente dissolvida no plasma.</div>
+            </div>
+            <div class="co2-card co2-blue">
+              <div class="co2-card-title">Carbamino-Hb</div>
+              <div class="co2-anim">
+                <div class="co2-track"></div>
+                <div class="co2-dot dot1"></div>
+                <div class="co2-dot dot2"></div>
+                <div class="co2-bind">Hb</div>
+              </div>
+              <div class="co2-card-text">Parte do CO₂ liga-se à globina da hemoglobina.</div>
+            </div>
+            <div class="co2-card co2-purple">
+              <div class="co2-card-title">Bicarbonato (HCO₃⁻)</div>
+              <div class="co2-anim">
+                <div class="co2-track"></div>
+                <div class="hco3-tag">HCO₃⁻</div>
+              </div>
+              <div class="co2-card-text">Principal forma de transporte do CO₂ no plasma.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="pillbar" style="display:none">
+        <span class="pill" id="pillShift">Estado R favorecido</span>
+        <span class="pill" id="pillO2">O₂ afastando-se do Fe</span>
+        <span class="pill" id="pillCO2">CO₂ aproximando-se do Fe</span>
+      </div>
+      
+      <div class="molecule-sub" id="interpretation" style="display:none"></div>
+      
+    </div>
+
+    <div class="panel">
+      <div class="panel-title" style="font-size:22px;">Curva sigmoide</div>
+      <canvas id="graphCanvas" width="860" height="560"></canvas>
+      <div class="legend-grid">
+        <div class="legend-item"><span class="legend-dot" style="background:#bcc7d6"></span>Curva normal</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#2f66dc"></span>Curva ativa</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#ef4444"></span>Pulmão (~100 mmHg)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#0f766e"></span>Tecido em repouso (~40 mmHg)</div>
+        <div class="legend-item"><span class="legend-dot" style="background:#7c3aed"></span>Tecido em exercício (~20 mmHg)</div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="stat-label">P50 estimada</div><div class="stat-value" id="p50Value">26,6</div></div>
+        <div class="stat"><div class="stat-label">Deslocamento predominante</div><div class="stat-value" id="shiftValue" style="font-size:34px">Normal</div></div>
+        <div class="stat"><div class="stat-label">Sat. em 100 mmHg</div><div class="stat-value" id="sat100Value">97%</div></div>
+        <div class="stat"><div class="stat-label">Sat. em 40 mmHg</div><div class="stat-value" id="sat40Value">75%</div></div>
+        <div class="stat" id="sat20Stat"><div class="stat-label">Sat. em 20 mmHg</div><div class="stat-value" id="sat20Value">35%</div></div>
+        <div class="stat"><div class="stat-label">Liberação 100→40 mmHg</div><div class="stat-value" id="releaseValue">22%</div></div>
+      </div>
+      <div class="vo2-card">
+        <div class="vo2-title">Consumo de oxigênio (didático)</div>
+        <div class="vo2-formula">VO₂ = Q × (Cₐ − Cᵥ)</div>
+        <div class="vo2-grid">
+          <div class="vo2-col">
+            <div class="vo2-col-title">Normal</div>
+            <div class="vo2-text">Q ≈ 5 L/min<br>Dif. A–V ≈ 5 mL O₂/dL<br><strong id="vo2NormalValue">VO₂ ≈ 250 mL/min</strong></div>
+          </div>
+          <div class="vo2-col">
+            <div class="vo2-col-title">Exercício</div>
+            <div class="vo2-text">Q ≈ 25 L/min<br>Dif. A–V ≈ 15 mL O₂/dL<br><strong id="vo2ExerciseValue">VO₂ ≈ 3750 mL/min</strong></div>
+          </div>
+        </div>
+        <div class="vo2-note" id="vo2Note">A diferença arterio-venosa de O₂ aumenta no exercício e contribui para elevar o VO₂.</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+const sceneCanvas = document.getElementById('sceneCanvas');
+const graphCanvas = document.getElementById('graphCanvas');
+const sctx = sceneCanvas.getContext('2d');
+const gctx = graphCanvas.getContext('2d');
+const btnStart = document.getElementById('btnStart');
+const btnPause = document.getElementById('btnPause');
+const btnStep = document.getElementById('btnStep');
+const btnReset = document.getElementById('btnReset');
+const speedRange = document.getElementById('speedRange');
+const speedLabel = document.getElementById('speedLabel');
+const labelsToggle = document.getElementById('labelsToggle');
+const normalToggle = document.getElementById('normalToggle');
+const loopToggle = document.getElementById('loopToggle');
+const co2TransportToggle = document.getElementById('co2TransportToggle');
+const phRange = document.getElementById('phRange');
+const pco2Range = document.getElementById('pco2Range');
+const tempRange = document.getElementById('tempRange');
+const bpgRange = document.getElementById('bpgRange');
+const phLabel = document.getElementById('phLabel');
+const pco2Label = document.getElementById('pco2Label');
+const tempLabel = document.getElementById('tempLabel');
+const bpgLabel = document.getElementById('bpgLabel');
+const modeBadge = document.getElementById('modeBadge');
+const interpretation = document.getElementById('interpretation');
+const pillShift = document.getElementById('pillShift');
+const pillO2 = document.getElementById('pillO2');
+const pillCO2 = document.getElementById('pillCO2');
+const p50Value = document.getElementById('p50Value');
+const shiftValue = document.getElementById('shiftValue');
+const sat100Value = document.getElementById('sat100Value');
+const sat40Value = document.getElementById('sat40Value');
+const sat20Value = document.getElementById('sat20Value');
+const releaseValue = document.getElementById('releaseValue');
+
+const presets = {
+  normal:{ph:7.40,pco2:40,temp:37.0,bpg:1.00,fetal:false,co:false,name:'Normal'},
+  exercise:{ph:7.28,pco2:52,temp:38.6,bpg:1.15,fetal:false,co:false,name:'Exercício'},
+  fever:{ph:7.40,pco2:40,temp:39.2,bpg:1.03,fetal:false,co:false,name:'Febre'},
+  acidosis:{ph:7.18,pco2:50,temp:37.0,bpg:1.08,fetal:false,co:false,name:'Acidose'},
+  alkalosis:{ph:7.55,pco2:30,temp:36.5,bpg:0.94,fetal:false,co:false,name:'Alcalose'},
+  fetal:{ph:7.40,pco2:40,temp:37.0,bpg:0.78,fetal:true,co:false,name:'Hb fetal'},
+  co:{ph:7.40,pco2:40,temp:37.0,bpg:0.90,fetal:false,co:true,name:'Intoxicação por CO'},
+  emphysema:{ph:7.35,pco2:55,temp:37.0,bpg:1.10,fetal:false,co:false,name:'Enfisema'},
+  fibrosis:{ph:7.45,pco2:32,temp:37.0,bpg:0.95,fetal:false,co:false,name:'Fibrose'},
+  emphysema:{ph:7.35,pco2:55,temp:37.0,bpg:1.10,fetal:false,co:false,name:'Enfisema'},
+  fibrosis:{ph:7.45,pco2:32,temp:37.0,bpg:0.95,fetal:false,co:false,name:'Fibrose'}
+};
+const state = { ph:7.40,pco2:40,temp:37.0,bpg:1.00,fetal:false,co:false,preset:'normal' };
+let frame=0,running=false,raf=null,lastTs=0;
+const TOTAL=460;
+const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const ease=t=>{t=clamp(t,0,1);return 0.5-0.5*Math.cos(Math.PI*t)};
+const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t)};
+const fmt=(n,d=1)=>n.toFixed(d).replace('.',',');
+function mix(c1,c2,t){
+  const a=c1.replace('#',''); const b=c2.replace('#','');
+  const ar=parseInt(a.slice(0,2),16), ag=parseInt(a.slice(2,4),16), ab=parseInt(a.slice(4,6),16);
+  const br=parseInt(b.slice(0,2),16), bg=parseInt(b.slice(2,4),16), bb=parseInt(b.slice(4,6),16);
+  const m=(x,y)=>Math.round(x+(y-x)*Math.max(0,Math.min(1,t)));
+  return `rgb(${m(ar,br)}, ${m(ag,bg)}, ${m(ab,bb)})`;
+}
+
+function roundedBox(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath()}
+function darkenHex(hex, factor=.38){const h=hex.replace('#','');const r=parseInt(h.slice(0,2),16), g=parseInt(h.slice(2,4),16), b=parseInt(h.slice(4,6),16);const d=v=>Math.max(0, Math.round(v*(1-factor)));return `rgb(${d(r)}, ${d(g)}, ${d(b)})`;}
+function drawSphereShadow(ctx,x,y,r,a=.16){ctx.save();const g=ctx.createRadialGradient(x+r*0.28,y+r*0.34,2,x+r*0.28,y+r*0.34,r*1.18);g.addColorStop(0,`rgba(7,28,44,${a})`);g.addColorStop(.55,`rgba(7,28,44,${a*0.45})`);g.addColorStop(1,'rgba(7,28,44,0)');ctx.beginPath();ctx.arc(x+r*0.12,y+r*0.16,r*1.05,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.restore();}
+function drawCurveTube(ctx, points, baseColor='#2f66dc'){if(!points.length)return;ctx.save();ctx.lineCap='round';ctx.lineJoin='round';ctx.beginPath();points.forEach((p,i)=>{if(i===0)ctx.moveTo(p[0],p[1]);else ctx.lineTo(p[0],p[1]);});ctx.strokeStyle='rgba(16,36,64,0.18)';ctx.lineWidth=14;ctx.translate(0,3);ctx.stroke();ctx.restore();ctx.save();ctx.beginPath();points.forEach((p,i)=>{if(i===0)ctx.moveTo(p[0],p[1]);else ctx.lineTo(p[0],p[1]);});const gx=ctx.createLinearGradient(points[0][0],0,points[points.length-1][0],0);gx.addColorStop(0,'#8dc0ff');gx.addColorStop(.25,'#5f96f1');gx.addColorStop(.58,baseColor);gx.addColorStop(1,'#123f9f');ctx.strokeStyle=gx;ctx.lineWidth=10;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();ctx.restore();ctx.save();ctx.beginPath();points.forEach((p,i)=>{if(i===0)ctx.moveTo(p[0],p[1]-2.2);else ctx.lineTo(p[0],p[1]-2.2);});const hi=ctx.createLinearGradient(points[0][0],0,points[points.length-1][0],0);hi.addColorStop(0,'rgba(255,255,255,0.92)');hi.addColorStop(.18,'rgba(255,255,255,0.55)');hi.addColorStop(.5,'rgba(255,255,255,0.18)');hi.addColorStop(1,'rgba(255,255,255,0.04)');ctx.strokeStyle=hi;ctx.lineWidth=3.2;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();ctx.restore();}
+
+function drawGraphBall3D(ctx,x,y,r,baseColor,outline='#ffffff'){
+  ctx.save();
+  drawSphereShadow(ctx,x,y,r+1.2,.16);
+
+  const halo=ctx.createRadialGradient(x,y,r*.28,x,y,r*2.45);
+  halo.addColorStop(0,'rgba(255,255,255,0)');
+  halo.addColorStop(.56,'rgba(255,255,255,0)');
+  halo.addColorStop(.82,'rgba(255,255,255,.16)');
+  halo.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.beginPath();ctx.arc(x,y,r*2.15,0,Math.PI*2);ctx.fillStyle=halo;ctx.fill();
+
+  const body=ctx.createRadialGradient(x-r*.34,y-r*.42,1,x,y,r*1.08);
+  if(baseColor==='#ef4444'){body.addColorStop(0,'#fffefe');body.addColorStop(.18,'#ffdede');body.addColorStop(.42,'#ff9aac');body.addColorStop(.72,'#ef4444');body.addColorStop(1,'#83182b');}
+  else if(baseColor==='#0f766e'){body.addColorStop(0,'#ffffff');body.addColorStop(.18,'#dcfff6');body.addColorStop(.42,'#7de9cf');body.addColorStop(.72,'#0f766e');body.addColorStop(1,'#063533');}
+  else if(baseColor==='#7c3aed'){body.addColorStop(0,'#ffffff');body.addColorStop(.18,'#efe3ff');body.addColorStop(.42,'#caa7ff');body.addColorStop(.72,'#7c3aed');body.addColorStop(1,'#42147f');}
+  else if(baseColor==='#314867'){body.addColorStop(0,'#ffffff');body.addColorStop(.18,'#e4edf8');body.addColorStop(.42,'#9bb2ce');body.addColorStop(.72,'#314867');body.addColorStop(1,'#122033');}
+  else {body.addColorStop(0,'#ffffff');body.addColorStop(.18,'#e7f0ff');body.addColorStop(.42,'#a8c5ff');body.addColorStop(.72,baseColor);body.addColorStop(1,'#173b8d');}
+  ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=body;ctx.fill();
+
+  const gloss=ctx.createRadialGradient(x-r*.38,y-r*.44,1,x-r*.26,y-r*.28,r*.98);
+  gloss.addColorStop(0,'rgba(255,255,255,.98)');
+  gloss.addColorStop(.24,'rgba(255,255,255,.78)');
+  gloss.addColorStop(.52,'rgba(255,255,255,.28)');
+  gloss.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.beginPath();ctx.ellipse(x-r*.12,y-r*.18,r*.58,r*.43,-0.55,0,Math.PI*2);ctx.fillStyle=gloss;ctx.fill();
+
+  const lowerShade=ctx.createRadialGradient(x+r*.22,y+r*.26,1,x+r*.18,y+r*.24,r*.92);
+  lowerShade.addColorStop(0,'rgba(7,18,38,0)');
+  lowerShade.addColorStop(.64,'rgba(7,18,38,0)');
+  lowerShade.addColorStop(1,'rgba(7,18,38,.18)');
+  ctx.beginPath();ctx.arc(x,y,r*.96,0,Math.PI*2);ctx.fillStyle=lowerShade;ctx.fill();
+
+  ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.lineWidth=.65;
+  ctx.strokeStyle=baseColor==='#314867' ? 'rgba(16,28,46,.95)' : 'rgba(255,255,255,.72)';
+  ctx.stroke();
+
+  ctx.beginPath();ctx.arc(x-r*.30,y-r*.32,Math.max(1.0,r*.16),0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.90)';ctx.fill();
+  ctx.restore();
+}
+
+function drawAtom(ctx,x,y,r,color,label,txt=14,withShadow=true){if(withShadow) drawSphereShadow(ctx,x,y,r,.18);const grd=ctx.createRadialGradient(x-r*.35,y-r*.35,1,x,y,r);grd.addColorStop(0,'#ffffff');grd.addColorStop(.55,color);grd.addColorStop(1,'rgba(15,23,42,.92)');ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fillStyle=grd;ctx.fill();ctx.strokeStyle=darkenHex(color,.42);ctx.lineWidth=0.9;ctx.stroke();ctx.fillStyle='#fff';ctx.font=`bold ${txt}px Arial`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(label,x,y+1);ctx.textAlign='left';ctx.textBaseline='alphabetic'}
+function drawQuad(ctx,cx,cy,r,start,end,label,darker=false,offset=0,bulge=0){const rr=r+bulge,dx=Math.cos((start+end)/2)*offset,dy=Math.sin((start+end)/2)*offset,mx=cx+dx,my=cy+dy;ctx.save();ctx.shadowColor='rgba(12,34,66,0.18)';ctx.shadowBlur=24;ctx.shadowOffsetX=10;ctx.shadowOffsetY=14;const grad=ctx.createLinearGradient(mx-r*0.9,my-r*0.95,mx+r*0.95,my+r*0.95);grad.addColorStop(0,darker?'#97d2ee':'#a9daf1');grad.addColorStop(.22,darker?'#4fa6d1':'#64b8dc');grad.addColorStop(.55,darker?'#1f7ca8':'#2486b3');grad.addColorStop(.82,darker?'#115f87':'#13698f');grad.addColorStop(1,darker?'#0b4969':'#0c5578');ctx.beginPath();ctx.moveTo(mx,my);ctx.arc(mx,my,rr,start,end);ctx.closePath();ctx.fillStyle=grad;ctx.fill();ctx.restore();ctx.strokeStyle=darker?'#2b6987':'#2c7394';ctx.lineWidth=3;ctx.stroke();const rim=ctx.createLinearGradient(mx-r*0.8,my-r*0.8,mx+r*0.8,my+r*0.8);rim.addColorStop(0,'rgba(255,255,255,0.60)');rim.addColorStop(.45,'rgba(255,255,255,0.08)');rim.addColorStop(1,'rgba(9,43,66,0.22)');ctx.beginPath();ctx.moveTo(mx,my);ctx.arc(mx,my,rr*0.92,start,end);ctx.closePath();ctx.fillStyle=rim;ctx.fill();const mid=(start+end)/2;const hx=mx+Math.cos(mid)*rr*0.54-Math.cos(mid)*18;const hy=my+Math.sin(mid)*rr*0.54-Math.sin(mid)*18;const gloss=ctx.createRadialGradient(hx,hy,4,hx,hy,rr*0.50);gloss.addColorStop(0,'rgba(255,255,255,0.70)');gloss.addColorStop(.35,'rgba(255,255,255,0.18)');gloss.addColorStop(1,'rgba(255,255,255,0)');ctx.beginPath();ctx.moveTo(mx,my);ctx.arc(mx,my,rr*0.84,start,end);ctx.closePath();ctx.fillStyle=gloss;ctx.fill();ctx.fillStyle='rgba(7,28,44,0.16)';ctx.beginPath();ctx.moveTo(mx,my);ctx.arc(mx,my,rr*0.98,start,end);ctx.closePath();ctx.strokeStyle='rgba(7,28,44,0.16)';ctx.lineWidth=8;ctx.stroke();ctx.fillStyle='#eef9fb';ctx.font='72px Georgia';ctx.textAlign='center';ctx.textBaseline='middle';ctx.shadowColor='rgba(9,43,66,0.16)';ctx.shadowBlur=8;ctx.fillText(label,mx+Math.cos(mid)*rr*0.42,my+Math.sin(mid)*rr*0.42+4);ctx.shadowBlur=0;ctx.textAlign='left';ctx.textBaseline='alphabetic'}
+function drawHeme3D(ctx,x,y,radius,pulse=0){const rr=radius+pulse;const grad=ctx.createRadialGradient(x-rr*.35,y-rr*.35,2,x,y,rr);grad.addColorStop(0,'#ffe8b0');grad.addColorStop(.35,'#f1c45b');grad.addColorStop(.7,'#6a4b12');grad.addColorStop(1,'#4b3410');ctx.beginPath();ctx.arc(x,y,rr,0,Math.PI*2);ctx.fillStyle=grad;ctx.fill();ctx.lineWidth=3;ctx.strokeStyle='#5e4516';ctx.stroke();const feGrad=ctx.createRadialGradient(x-6,y-6,1,x,y,rr*.46);feGrad.addColorStop(0,'#fff4c4');feGrad.addColorStop(.45,'#e3c45e');feGrad.addColorStop(1,'#8a6a19');ctx.beginPath();ctx.arc(x,y,rr*.38,0,Math.PI*2);ctx.fillStyle=feGrad;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle='#7b641c';ctx.stroke();ctx.fillStyle='#2b2108';ctx.font='bold 18px Arial';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Fe',x,y+1);ctx.textAlign='left';ctx.textBaseline='alphabetic'}
+function drawHbSphere(ctx,cx,cy,r){
+  ctx.save();
+
+  // esfera principal mais convincente
+  const outer = ctx.createRadialGradient(cx-r*0.34,cy-r*0.42,8,cx,cy,r*1.10);
+  outer.addColorStop(0,'#f8fdff');
+  outer.addColorStop(0.22,'#dff4fb');
+  outer.addColorStop(0.58,'#77bddb');
+  outer.addColorStop(0.82,'#2b86af');
+  outer.addColorStop(1,'#174d66');
+  ctx.beginPath();
+  ctx.arc(cx,cy,r+10,0,Math.PI*2);
+  ctx.fillStyle=outer;
+  ctx.fill();
+
+  const body = ctx.createRadialGradient(cx-r*0.28,cy-r*0.34,10,cx,cy,r);
+  body.addColorStop(0,'#eefbff');
+  body.addColorStop(0.18,'#d6eff9');
+  body.addColorStop(0.46,'#8fcce3');
+  body.addColorStop(0.74,'#3a96be');
+  body.addColorStop(1,'#14556f');
+  ctx.beginPath();
+  ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle=body;
+  ctx.fill();
+
+  // reflexo grande superior-esquerdo
+  const glossMain = ctx.createRadialGradient(cx-r*0.40,cy-r*0.40,4,cx-r*0.24,cy-r*0.22,r*0.86);
+  glossMain.addColorStop(0,'rgba(255,255,255,0.92)');
+  glossMain.addColorStop(0.18,'rgba(255,255,255,0.40)');
+  glossMain.addColorStop(0.46,'rgba(255,255,255,0.10)');
+  glossMain.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.beginPath();
+  ctx.arc(cx,cy,r*0.98,0,Math.PI*2);
+  ctx.fillStyle=glossMain;
+  ctx.fill();
+
+  // sombreamento inferior-direito para dar volume de esfera
+  const shadow = ctx.createRadialGradient(cx+r*0.24,cy+r*0.28,10,cx+r*0.16,cy+r*0.18,r*0.95);
+  shadow.addColorStop(0,'rgba(9,43,66,0)');
+  shadow.addColorStop(0.58,'rgba(9,43,66,0.06)');
+  shadow.addColorStop(1,'rgba(7,28,44,0.28)');
+  ctx.beginPath();
+  ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle=shadow;
+  ctx.fill();
+
+  // cruz branca fina e elegante, clipada dentro da esfera
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx,cy,r*0.94,0,Math.PI*2);
+  ctx.clip();
+
+  ctx.strokeStyle='rgba(255,255,255,0.88)';
+  ctx.lineCap='round';
+  ctx.lineWidth=10;
+  ctx.beginPath();
+  ctx.moveTo(cx-r*0.88,cy);
+  ctx.lineTo(cx+r*0.88,cy);
+  ctx.moveTo(cx,cy-r*0.88);
+  ctx.lineTo(cx,cy+r*0.88);
+  ctx.stroke();
+
+  // halo sutil da cruz para evitar aspecto chapado
+  ctx.strokeStyle='rgba(255,255,255,0.20)';
+  ctx.lineWidth=18;
+  ctx.beginPath();
+  ctx.moveTo(cx-r*0.72,cy);
+  ctx.lineTo(cx+r*0.72,cy);
+  ctx.moveTo(cx,cy-r*0.72);
+  ctx.lineTo(cx,cy+r*0.72);
+  ctx.stroke();
+
+  // brilho central, reforçando que continua sendo uma única esfera
+  const centerGlow = ctx.createRadialGradient(cx-r*0.02,cy-r*0.02,2,cx,cy,r*0.18);
+  centerGlow.addColorStop(0,'rgba(255,255,255,0.50)');
+  centerGlow.addColorStop(0.45,'rgba(255,255,255,0.16)');
+  centerGlow.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.beginPath();
+  ctx.arc(cx,cy,r*0.22,0,Math.PI*2);
+  ctx.fillStyle=centerGlow;
+  ctx.fill();
+
+  // rótulos das subunidades
+  ctx.fillStyle='rgba(242,251,254,0.98)';
+  ctx.font='bold 58px Georgia';
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.shadowColor='rgba(9,43,66,0.10)';
+  ctx.shadowBlur=5;
+  const d=r*0.34;
+  ctx.fillText('α',cx-d,cy-d+2);
+  ctx.fillText('β',cx+d,cy-d+2);
+  ctx.fillText('β',cx-d,cy+d+2);
+  ctx.fillText('α',cx+d,cy+d+2);
+  ctx.restore();
+
+  // aro externo
+  const rim = ctx.createLinearGradient(cx-r,cy-r,cx+r,cy+r);
+  rim.addColorStop(0,'rgba(255,255,255,0.85)');
+  rim.addColorStop(0.22,'rgba(220,246,255,0.90)');
+  rim.addColorStop(0.60,'rgba(91,160,192,0.85)');
+  rim.addColorStop(1,'rgba(31,93,120,0.95)');
+  ctx.beginPath();
+  ctx.arc(cx,cy,r+1.5,0,Math.PI*2);
+  ctx.strokeStyle=rim;
+  ctx.lineWidth=5;
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+
+function drawArrow(ctx,x1,y1,x2,y2,color='#64748b',w=3){
+  const ang=Math.atan2(y2-y1,x2-x1),len=12;
+  ctx.save();
+  ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=w; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-len*Math.cos(ang-Math.PI/7), y2-len*Math.sin(ang-Math.PI/7));
+  ctx.lineTo(x2-len*Math.cos(ang+Math.PI/7), y2-len*Math.sin(ang+Math.PI/7));
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function drawTag(ctx,x,y,w,h,label,bg='#ffffff',fg='#183153',bd='#dfe6f0',font='bold 16px Arial'){
+  ctx.save();
+  roundedBox(ctx,x,y,w,h,12); ctx.fillStyle=bg; ctx.fill(); ctx.strokeStyle=bd; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.fillStyle=fg; ctx.font=font; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(label,x+w/2,y+h/2+1);
+  ctx.restore();
+}
+function drawCO2TransportPanel(ctx, progress){
+  const panelX=56, panelY=706, panelW=640, panelH=146;
+  ctx.save();
+  ctx.globalAlpha=0.98;
+  roundedBox(ctx,panelX,panelY,panelW,panelH,18); ctx.fillStyle='#f8fbff'; ctx.fill(); ctx.strokeStyle='#dbe6f2'; ctx.lineWidth=1.6; ctx.stroke();
+  ctx.fillStyle='#17375e'; ctx.font='bold 18px Arial'; ctx.textAlign='left'; ctx.fillText('Transporte de CO₂', panelX+18, panelY+26);
+
+  const y=panelY+84;
+  const p1=Math.max(0, Math.min(1, (progress-0.10)/0.28));
+  const p2=Math.max(0, Math.min(1, (progress-0.30)/0.28));
+  const p3=Math.max(0, Math.min(1, (progress-0.50)/0.28));
+
+  // CO2 dissolvido
+  drawAtom(ctx, panelX+58, y, 20, '#0f766e', 'CO₂', 12);
+  drawArrow(ctx, panelX+86, y, panelX+168, y, '#0f766e', 3);
+  ctx.globalAlpha=0.35 + 0.65*p1;
+  drawTag(ctx, panelX+178, y-22, 156, 44, 'CO₂ dissolvido', '#ecfdf5', '#0f766e', '#b7ead7');
+
+  // Carbamino-Hb
+  ctx.globalAlpha=1;
+  drawAtom(ctx, panelX+355, y, 20, '#0f766e', 'CO₂', 12);
+  drawArrow(ctx, panelX+383, y, panelX+462, y, '#64748b', 3);
+  ctx.globalAlpha=0.35 + 0.65*p2;
+  drawTag(ctx, panelX+472, y-22, 156, 44, 'Carbamino-Hb', '#eff6ff', '#1d4ed8', '#cfe0ff');
+
+  // Bicarbonato
+  ctx.globalAlpha=1;
+  drawAtom(ctx, panelX+58, panelY+118, 18, '#0f766e', 'CO₂', 11);
+  drawArrow(ctx, panelX+84, panelY+118, panelX+170, panelY+118, '#64748b', 3);
+  ctx.globalAlpha=0.35 + 0.65*p3;
+  drawTag(ctx, panelX+180, panelY+96, 220, 44, 'Bicarbonato (HCO₃⁻) no plasma', '#f5f3ff', '#6d28d9', '#ddd1ff');
+
+  ctx.globalAlpha=1;
+  ctx.fillStyle='#64748b'; ctx.font='14px Arial';
+  ctx.fillText('fração pequena', panelX+214, y+36);
+  ctx.fillText('ligação à globina', panelX+503, y+36);
+  ctx.fillText('principal via de transporte', panelX+238, panelY+144);
+
+  ctx.restore();
+}
+
+function computeP50(){let p50=26.6;p50+=(40-state.pco2)*(-0.10);p50+=(7.40-state.ph)*42;p50+=(state.temp-37)*0.9;p50+=(state.bpg-1.0)*11.5;if(state.fetal)p50-=6.5;if(state.co)p50-=7.5;return clamp(p50,16,38)}
+function sat(po2,p50){const n=2.7;return 100*(Math.pow(po2,n)/(Math.pow(p50,n)+Math.pow(po2,n)))}
+function shiftLabel(){const p50=computeP50();if(state.co)return 'Esquerda (CO)';if(state.fetal)return 'Esquerda (HbF)';if(p50>28.2)return 'Direita';if(p50<25.0)return 'Esquerda';return 'Normal'}
+function getProgress(){const t=clamp(frame/TOTAL,0,1); const active=t<0.78 ? (t/0.78) : 1; return ease(active)}
+function syncUI(){phLabel.textContent=fmt(state.ph,2);pco2Label.textContent=`${Math.round(state.pco2)} mmHg`;tempLabel.textContent=`${fmt(state.temp,1)} °C`;bpgLabel.textContent=`${fmt(state.bpg,2)}×`;speedLabel.textContent=`${parseFloat(speedRange.value).toFixed(1)}x`;modeBadge.textContent=`${running?'Modo: contínuo':'Modo: pausado'} | Estado: ${presets[state.preset]?.name||'Personalizado'} | Deslocamento: ${shiftLabel()}`}
+function drawGraph(){
+  const ctx=gctx,W=graphCanvas.width,H=graphCanvas.height;ctx.clearRect(0,0,W,H);
+  const left=82,right=804,top=26,bottom=476,width=right-left,height=bottom-top,x=po2=>left+(po2/100)*width,y=s=>bottom-(s/100)*height;
+  const p50=computeP50(),normalP50=26.6,s100=sat(100,p50),s40=sat(40,p50),s20=sat(20,p50),activeShift=shiftLabel();
+  ctx.strokeStyle='#d8e0eb';ctx.lineWidth=1.1;for(let gy=0;gy<=100;gy+=10){const yy=y(gy);ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(right,yy);ctx.stroke();ctx.fillStyle='#4a668b';ctx.font='14px Arial';ctx.textAlign='right';ctx.fillText(`${gy}`,left-12,yy+6)}
+  for(let gx=0;gx<=100;gx+=10){const xx=x(gx);ctx.beginPath();ctx.moveTo(xx,top);ctx.lineTo(xx,bottom);ctx.stroke();ctx.fillStyle='#4a668b';ctx.font='14px Arial';ctx.textAlign='center';ctx.fillText(`${gx}`,xx,bottom+28)}
+  ctx.strokeStyle='#43536d';ctx.lineWidth=2.6;ctx.beginPath();ctx.moveTo(left,top);ctx.lineTo(left,bottom);ctx.lineTo(right,bottom);ctx.stroke();ctx.fillStyle='#1b3a66';ctx.font='bold 18px Arial';ctx.textAlign='center';ctx.fillText('PO₂ (mmHg)',(left+right)/2,H-8);ctx.save();ctx.translate(30,(top+bottom)/2);ctx.rotate(-Math.PI/2);ctx.fillText('Saturação da Hb (%)',0,0);ctx.restore();
+  if(normalToggle.checked){const normalPts=[];for(let i=0;i<=100;i++){normalPts.push([x(i),y(sat(i,normalP50))]);}ctx.beginPath();normalPts.forEach((p,i)=>{if(i===0)ctx.moveTo(p[0],p[1]);else ctx.lineTo(p[0],p[1]);});ctx.strokeStyle='#bcc7d6';ctx.lineWidth=8;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();}
+  const activePts=[];for(let i=0;i<=100;i++){activePts.push([x(i),y(sat(i,p50))]);}
+  drawCurveTube(ctx,activePts,'#2f66dc');
+  const isNormalPreset = state.preset==='normal';
+  [{po2:100,color:'#ef4444',label:'Sangue arterial',labelDx:-4,labelDy:54,textAlign:'right'},
+   {po2:40,color:'#0f766e',label:'Sangue venoso',labelDx:54,labelDy:-4,textAlign:'left'},
+   {po2:20,color:'#7c3aed',hide:isNormalPreset}].forEach(m=>{if(m.hide)return;const xx=x(m.po2),yy=y(sat(m.po2,p50));ctx.setLineDash([7,7]);ctx.strokeStyle=m.color+'bb';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(left,yy);ctx.lineTo(xx,yy);ctx.stroke();ctx.beginPath();ctx.moveTo(xx,yy);ctx.lineTo(xx,bottom);ctx.stroke();ctx.setLineDash([]);drawGraphBall3D(ctx,xx,yy,8,m.color);if(m.label){ctx.fillStyle=m.color;ctx.font='bold 14px Arial';ctx.textAlign=m.textAlign;ctx.fillText(m.label,xx+m.labelDx,yy+m.labelDy)}});
+  const xx50=x(p50),yy50=y(50);ctx.setLineDash([7,7]);ctx.strokeStyle='#90a4c2';ctx.lineWidth=1.8;ctx.beginPath();ctx.moveTo(left,yy50);ctx.lineTo(xx50,yy50);ctx.stroke();ctx.beginPath();ctx.moveTo(xx50,bottom);ctx.lineTo(xx50,yy50);ctx.stroke();ctx.setLineDash([]);drawGraphBall3D(ctx,xx50,yy50,6.5,'#314867');ctx.fillStyle='#1c355b';ctx.font='bold 13px Arial';ctx.textAlign='left';ctx.fillText(`P50 = ${fmt(p50,1)} mmHg`,xx50+34,yy50+6);
+  const animStartPo2 = isNormalPreset ? 40 : 20;
+  const animPo2Line = lerp(100,animStartPo2,getProgress()), animSatLine = sat(animPo2Line,p50);
+  const ax=x(animPo2Line),ay=y(animSatLine);const halo=ctx.createRadialGradient(ax,ay,3,ax,ay,22);halo.addColorStop(0,'#2f66dcaa');halo.addColorStop(.45,'#2f66dc44');halo.addColorStop(1,'rgba(255,255,255,0)');ctx.beginPath();ctx.arc(ax,ay,22,0,Math.PI*2);ctx.fillStyle=halo;ctx.fill();drawSphereShadow(ctx,ax,ay,10,.20);const ball=ctx.createRadialGradient(ax-3,ay-3,1,ax,ay,10);ball.addColorStop(0,'#ffffff');ball.addColorStop(.3,'#9cc3ff');ball.addColorStop(.7,'#2f66dc');ball.addColorStop(1,'#163a8c');ctx.beginPath();ctx.arc(ax,ay,8,0,Math.PI*2);ctx.fillStyle=ball;ctx.fill();ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.stroke();ctx.beginPath();ctx.arc(ax-2.5,ay-2.5,2.2,0,Math.PI*2);ctx.fillStyle='rgba(255,255,255,.75)';ctx.fill();
+  p50Value.textContent=fmt(p50,1);shiftValue.textContent=activeShift;shiftValue.style.fontSize='18px';sat100Value.textContent=`${Math.round(s100)}%`;sat40Value.textContent=`${Math.round(s40)}%`;sat20Value.textContent=`${Math.round(s20)}%`;releaseValue.textContent=`${Math.round(s100-s40)}%`;
+  document.getElementById('sat20Stat').style.display = isNormalPreset ? 'none' : '';
+  document.getElementById('vo2NormalValue').textContent = 'VO₂ ≈ 250 mL/min';
+  document.getElementById('vo2ExerciseValue').textContent = 'VO₂ ≈ 3750 mL/min';
+  document.getElementById('vo2Note').textContent = isNormalPreset ? 'Em repouso, a extração tecidual mantém o sangue venoso por volta de 40 mmHg; a diferença arterio-venosa de O₂ é menor.' : 'No exercício, o ponto venoso cai para ~20 mmHg, a diferença arterio-venosa aumenta e isso ajuda a sustentar o VO₂ máximo.'
+}
+function drawScene(){
+  const ctx=sctx,W=sceneCanvas.width,H=sceneCanvas.height;ctx.clearRect(0,0,W,H);
+  const sceneProgress=getProgress();
+  const p50=computeP50(),shift=shiftLabel(),rightShift=shift==='Direita',leftShift=shift.startsWith('Esquerda'),progress=getProgress();
+  const isEmphysema=state.preset==='emphysema';
+  const isFibrosis=state.preset==='fibrosis';
+
+  // Ajustes clínicos da animação:
+  // Enfisema: O₂ se desprende mais facilmente e CO₂ ocupa antes.
+  // Fibrose: troca mais lenta/travada, com menor ocupação efetiva de O₂.
+  const o2DelayProgress=isEmphysema?0.34:(isFibrosis?0.62:0.50);
+  const delayedProgress=clamp(progress-o2DelayProgress,0,1);
+  const baseO2Raw=clamp(Math.round((sat(100,p50)/100)*4),1,4);
+  const baseO2=isFibrosis?Math.max(1,baseO2Raw-1):baseO2Raw;
+  const o2End=Math.max(0,baseO2-(isEmphysema?3:(rightShift?3:leftShift?1:2)));
+  const o2Shown=clamp(Math.round(lerp(baseO2,o2End,isFibrosis?smooth(delayedProgress*0.72):delayedProgress)),0,4);
+  const co2Start=isEmphysema?0.28:(isFibrosis?0.48:0.40);
+  const co2Span=isEmphysema?0.72:(isFibrosis?0.52:0.60);
+  const co2Target=isEmphysema?4:(isFibrosis?2:(rightShift?4:leftShift?2:3));
+  const co2Shown=clamp(Math.round(lerp(0,co2Target,clamp((progress-co2Start)/co2Span,0,1))),0,4);
+  roundedBox(ctx,16,16,W-32,H-32,20);ctx.fillStyle='#ffffff';ctx.fill();ctx.strokeStyle='#d9e1eb';ctx.lineWidth=1.6;ctx.stroke();
+  const cx=590,cy=460,baseR=206,tState=0;
+  drawHbSphere(ctx,cx,cy,baseR);
+  const hemePulseBase=3+2*Math.sin(progress*Math.PI*4);
+  const hemes=[
+    {hx:418-18*tState,hy:286-14*tState,attachX:446-8*tState,attachY:314-6*tState,o2x:382-6*tState,o2y:246-8*tState,co2x:382-6*tState,co2y:246-8*tState},
+    {hx:762+18*tState,hy:286-14*tState,attachX:734+8*tState,attachY:314-6*tState,o2x:798+6*tState,o2y:246-8*tState,co2x:798+6*tState,co2y:246-8*tState},
+    {hx:418-18*tState,hy:634+14*tState,attachX:446-8*tState,attachY:606+6*tState,o2x:382-6*tState,o2y:674+8*tState,co2x:382-6*tState,co2y:674+8*tState},
+    {hx:762+18*tState,hy:634+14*tState,attachX:734+8*tState,attachY:606+6*tState,o2x:798+6*tState,o2y:674+8*tState,co2x:798+6*tState,co2y:674+8*tState}
+  ];
+
+  const co2Trails=[
+    {startDx:-330,startDy:-150,ctrl1Dx:-230,ctrl1Dy:-10,ctrl2Dx:-80,ctrl2Dy:-86},
+    {startDx:320,startDy:-172,ctrl1Dx:212,ctrl1Dy:-126,ctrl2Dx:88,ctrl2Dy:-28},
+    {startDx:-342,startDy:164,ctrl1Dx:-196,ctrl1Dy:126,ctrl2Dx:-84,ctrl2Dy:42},
+    {startDx:0,startDy:0,ctrl1Dx:0,ctrl1Dy:0,ctrl2Dx:0,ctrl2Dy:0}
+  ];
+
+  hemes.forEach((h,i)=>{
+    const keepBottomRightO2=(i===3),keepBottomRightCO2Far=(i===3);
+    const trail=co2Trails[i];
+    ctx.strokeStyle='#5a6f84';ctx.lineWidth=8;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(h.attachX,h.attachY);ctx.lineTo(h.hx,h.hy);ctx.stroke();
+    const hemePulse=(i<o2Shown||keepBottomRightO2)?hemePulseBase:0;drawHeme3D(ctx,h.hx,h.hy,34,hemePulse);
+
+    // Fase 1: O2 se desprende e percorre trajeto longo para outra área.
+    // Fase 2: somente depois que o O2 já abriu espaço, o CO2 inicia a aproximação.
+    const leaveTBase=isEmphysema
+      ? smooth(clamp((delayedProgress-0.04)/0.34,0,1))
+      : (isFibrosis
+          ? smooth(clamp((delayedProgress-0.16)/0.56,0,1))
+          : smooth(clamp((delayedProgress-0.10)/0.42,0,1)));
+    const leaveT=leaveTBase;
+    const enterGate=clamp((leaveT-(isFibrosis?0.70:0.58))/(isFibrosis?0.30:0.42),0,1);
+    const enterTBase=isEmphysema
+      ? smooth(clamp((progress-0.34)/0.42,0,1))
+      : (isFibrosis
+          ? smooth(clamp((progress-0.56)/0.30,0,1))
+          : smooth(clamp((progress-0.48)/0.34,0,1)));
+    const enterT=enterTBase*enterGate;
+
+    // O2: sai do sítio e, ao chegar ao destino, desaparece completamente.
+    const o2Fixed=keepBottomRightO2;
+    const o2StartX=h.o2x,o2StartY=h.o2y;
+    const o2CtrlX=h.o2x+(h.hx<cx?-150:150), o2CtrlY=h.o2y-(h.hy<cy?-94:94);
+    const o2EndX=h.o2x+(h.hx<cx?-300:300), o2EndY=h.o2y+(h.hy<cy?-126:126);
+    const omt=1-leaveT;
+    const ox=o2Fixed?o2StartX:(omt*omt*o2StartX + 2*omt*leaveT*o2CtrlX + leaveT*leaveT*o2EndX);
+    const oy=o2Fixed?o2StartY:(omt*omt*o2StartY + 2*omt*leaveT*o2CtrlY + leaveT*leaveT*o2EndY);
+    const alphaO2=o2Fixed?1:Math.max(0,1-Math.pow(leaveT,1.35));
+
+    // CO2 entra em trajetórias diferentes até se acoplar.
+    let cx2,cy2,alpha2;
+    if(keepBottomRightCO2Far){cx2=W-104;cy2=H-88;alpha2=0.95}
+    else{
+      const startX=h.co2x+trail.startDx, startY=h.co2y+trail.startDy;
+      const ctrl1X=h.co2x+trail.ctrl1Dx, ctrl1Y=h.co2y+trail.ctrl1Dy;
+      const ctrl2X=h.co2x+trail.ctrl2Dx, ctrl2Y=h.co2y+trail.ctrl2Dy;
+      const omt2=1-enterT;
+      cx2=omt2*omt2*omt2*startX + 3*omt2*omt2*enterT*ctrl1X + 3*omt2*enterT*enterT*ctrl2X + enterT*enterT*enterT*h.co2x;
+      cy2=omt2*omt2*omt2*startY + 3*omt2*omt2*enterT*ctrl1Y + 3*omt2*enterT*enterT*ctrl2Y + enterT*enterT*enterT*h.co2y;
+      alpha2=enterT<=0?0:(isEmphysema?Math.max(0.24,0.22+enterT*0.90):(isFibrosis?Math.max(0.12,0.10+enterT*0.55):Math.max(0.18,0.16+enterT*0.84)));
+    }
+
+    if(!o2Fixed && alphaO2>0.02){
+      const trailCount=4;
+      for(let k=1;k<=trailCount;k++){
+        const tt=Math.max(0, leaveT - k*0.065);
+        const omtK=1-tt;
+        const tx=(omtK*omtK*o2StartX + 2*omtK*tt*o2CtrlX + tt*tt*o2EndX);
+        const ty=(omtK*omtK*o2StartY + 2*omtK*tt*o2CtrlY + tt*tt*o2EndY);
+        ctx.save();
+        ctx.globalAlpha=Math.max(0, 0.10 - k*0.02);
+        drawAtom(ctx,tx,ty,Math.max(6,13-k*1.9),'#ffd9e6','',1,false);
+        ctx.restore();
+      }
+    }
+    ctx.globalAlpha=alphaO2;drawAtom(ctx,ox,oy,30,'#ef476f','O₂',17,false);ctx.globalAlpha=1;
+    if(alpha2>0){
+      if(!keepBottomRightCO2Far){
+        const trailCount2=4;
+        for(let k=1;k<=trailCount2;k++){
+          const tt=Math.max(0, enterT - k*0.07);
+          const omtK=1-tt;
+          const tx=omtK*omtK*omtK*(h.co2x+trail.startDx) + 3*omtK*omtK*tt*(h.co2x+trail.ctrl1Dx) + 3*omtK*tt*tt*(h.co2x+trail.ctrl2Dx) + tt*tt*tt*h.co2x;
+          const ty=omtK*omtK*omtK*(h.co2y+trail.startDy) + 3*omtK*omtK*tt*(h.co2y+trail.ctrl1Dy) + 3*omtK*tt*tt*(h.co2y+trail.ctrl2Dy) + tt*tt*tt*h.co2y;
+          ctx.save();
+          ctx.globalAlpha=Math.max(0, 0.09 - k*0.018);
+          drawAtom(ctx,tx,ty,Math.max(6,12-k*1.7),'#d8fff7','',1,false);
+          ctx.restore();
+        }
+      }
+      const co2Bound = keepBottomRightCO2Far
+        ? 0
+        : smooth(clamp((enterT-0.93)/0.07,0,1));
+      const co2Color = co2Bound>0 ? mix('#0f766e','#2f66dc',co2Bound) : '#0f766e';
+      ctx.globalAlpha=alpha2;drawAtom(ctx,cx2,cy2,30,co2Color,'CO₂',15,false);ctx.globalAlpha=1;
+    }
+  });
+
+  // Moléculas fixas adicionais: agora o movimento responde ao ponto fisiológico
+  // representado na curva. Quanto mais à direita (PO₂ alto), menor a troca aparente;
+  // quanto mais o sistema caminha para 40/20 mmHg, maior e mais natural fica a oscilação.
+  const currentPo2 = (state.preset==='normal')
+    ? lerp(100,40,progress)
+    : lerp(100,20,progress);
+  const exchangeDrive = smooth(clamp((100-currentPo2)/80,0,1));
+  const driftT = frame/32;
+  const ampScale = 0.22 + exchangeDrive*1.18;
+  const speedScale = 0.82 + exchangeDrive*0.52;
+  const fixedMolecules=[
+    {x:184,y:172,r:24,color:'#0f766e',label:'CO₂',txt:12,ax:7.5,ay:6.0,wx:0.90,wy:1.15,phaseX:0.4,phaseY:1.1},
+    {x:1006,y:188,r:24,color:'#0f766e',label:'CO₂',txt:12,ax:6.8,ay:7.2,wx:1.06,wy:0.84,phaseX:1.9,phaseY:0.2},
+    {x:948,y:532,r:24,color:'#ef476f',label:'O₂',txt:14,ax:7.0,ay:5.8,wx:0.86,wy:1.04,phaseX:2.5,phaseY:1.6}
+  ];
+  fixedMolecules.forEach(m=>{
+    const fx = m.x
+      + Math.sin(driftT*m.wx*speedScale + m.phaseX)*(m.ax*ampScale)
+      + Math.sin(driftT*0.47 + m.phaseY)*0.9*exchangeDrive;
+    const fy = m.y
+      + Math.cos(driftT*m.wy*speedScale + m.phaseY)*(m.ay*ampScale)
+      + Math.sin(driftT*0.36 + m.phaseX)*0.7*exchangeDrive;
+    drawAtom(ctx,fx,fy,m.r,m.color,m.label,m.txt,false);
+  });
+
+  const pulseY=lerp(150,770,progress);
+  ctx.save();
+  const barGrad=ctx.createLinearGradient(1136,138,1144,780);
+  barGrad.addColorStop(0,'#9cc3ff');
+  barGrad.addColorStop(0.18,'#5f96f1');
+  barGrad.addColorStop(0.55,'#2f66dc');
+  barGrad.addColorStop(1,'#163a8c');
+  ctx.strokeStyle='rgba(16,36,64,0.16)';
+  ctx.lineWidth=10;
+  ctx.lineCap='round';
+  ctx.beginPath();
+  ctx.moveTo(1140,138);
+  ctx.lineTo(1140,780);
+  ctx.stroke();
+  ctx.strokeStyle=barGrad;
+  ctx.lineWidth=6;
+  ctx.beginPath();
+  ctx.moveTo(1140,138);
+  ctx.lineTo(1140,780);
+  ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,0.72)';
+  ctx.lineWidth=1.6;
+  ctx.beginPath();
+  ctx.moveTo(1138.8,138);
+  ctx.lineTo(1138.8,780);
+  ctx.stroke();
+  ctx.restore();
+  const halo=ctx.createRadialGradient(1140,pulseY,4,1140,pulseY,28);halo.addColorStop(0,(rightShift?'#ef4444':'#2f66dc')+'88');halo.addColorStop(.45,(rightShift?'#ef4444':'#2f66dc')+'24');halo.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.beginPath();ctx.arc(1140,pulseY,28,0,Math.PI*2);ctx.fillStyle=halo;ctx.fill();
+  const markerGrad=ctx.createRadialGradient(1137,pulseY-3,1,1140,pulseY,10);
+  markerGrad.addColorStop(0,'#ffffff');
+  markerGrad.addColorStop(.34,rightShift?'#ffb3bf':'#9cc3ff');
+  markerGrad.addColorStop(.7,rightShift?'#ef4444':'#2f66dc');
+  markerGrad.addColorStop(1,rightShift?'#9f1239':'#163a8c');
+  ctx.beginPath();ctx.arc(1140,pulseY,9,0,Math.PI*2);ctx.fillStyle=markerGrad;ctx.fill();ctx.lineWidth=1.6;ctx.strokeStyle='#fff';ctx.stroke();
+  const p50BoxW=240,p50BoxH=50,p50BoxX=(W-p50BoxW)/2,p50BoxY=H-p50BoxH-30;
+  drawTag(ctx,p50BoxX,p50BoxY,p50BoxW,p50BoxH,`P50 = ${fmt(p50,1)} mmHg`,'#f5f3ff','#6d28d9','#ddd1ff','14px Arial');
+  ctx.textAlign='left';
+  if(labelsToggle.checked){ctx.fillStyle='#316d88';ctx.font='bold 17px Arial';ctx.fillText('4 proteínas / 4 sítios heme-Fe',444,64)}
+  pillShift.textContent=rightShift?'Transição R → T discreta':'Estado R favorecido';
+  pillO2.textContent=isEmphysema?'O₂ desprendendo-se mais facilmente':(isFibrosis?'O₂ com entrada/saída mais lenta':(delayedProgress>0.40?'O₂ saindo em trajetória longa':'Captação/retensão de O₂'));
+  pillCO2.textContent=isEmphysema?'CO₂ ocupando mais cedo':(isFibrosis?'CO₂ com troca mais lenta':(progress>0.40?'CO₂ entrando em trajetória longa':'CO₂ ainda discreto'));
+  let txt='';
+
+  interpretation.textContent='Observe a relação entre a curva e a animação para entender quando a hemoglobina tende a reter ou liberar O₂.';
+  // Caixa de Transporte de CO₂ mantida apenas abaixo da representação molecular,
+  // evitando duplicidade dentro da própria área molecular.
+  // if(co2TransportToggle.checked){ drawCO2TransportPanel(ctx, progress); }
+  // suaviza a transição do fim para o início do loop
+  let fadeAlpha=0;
+  if(sceneProgress>0.94){
+    fadeAlpha=(sceneProgress-0.94)/0.06;
+  }else if(sceneProgress<0.06){
+    fadeAlpha=(0.06-sceneProgress)/0.06;
+  }
+  if(fadeAlpha>0){
+    ctx.save();
+    ctx.globalAlpha=Math.min(0.18, fadeAlpha*0.18);
+    ctx.fillStyle='#ffffff';
+    ctx.fillRect(0,0,W,H);
+    ctx.restore();
+  }
+}
+function render(){syncUI();drawScene();drawGraph()}
+function setPreset(key){const p=presets[key];state.ph=p.ph;state.pco2=p.pco2;state.temp=p.temp;state.bpg=p.bpg;state.fetal=p.fetal;state.co=p.co;state.preset=key;phRange.value=state.ph;pco2Range.value=state.pco2;tempRange.value=state.temp;bpgRange.value=state.bpg;document.querySelectorAll('.preset').forEach(btn=>btn.classList.toggle('active',btn.dataset.preset===key));render()}
+function getSpeed(){return parseFloat(speedRange.value)}
+function play(){if(running)return;running=true;lastTs=0;raf=requestAnimationFrame(loop);render()}
+function pauseNow(){running=false;if(raf)cancelAnimationFrame(raf);render()}
+function stepOnce(){frame=Math.min(TOTAL,frame+55);render()}
+function resetAll(){running=false;if(raf)cancelAnimationFrame(raf);frame=0;render()}
+function loop(ts){if(!running)return;if(!lastTs)lastTs=ts;const dt=ts-lastTs;lastTs=ts;frame+=dt*0.05*getSpeed();if(frame>TOTAL){if(loopToggle.checked)frame=0;else{frame=TOTAL;running=false;render();return}}render();raf=requestAnimationFrame(loop)}
+btnStart.addEventListener('click',play);btnPause.addEventListener('click',pauseNow);btnStep.addEventListener('click',stepOnce);btnReset.addEventListener('click',resetAll);
+speedRange.addEventListener('input',render);labelsToggle.addEventListener('change',render);normalToggle.addEventListener('change',render);loopToggle.addEventListener('change',render);
+phRange.addEventListener('input',e=>{state.ph=+e.target.value;state.fetal=false;state.co=false;state.preset='custom';document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));render()});
+pco2Range.addEventListener('input',e=>{state.pco2=+e.target.value;state.fetal=false;state.co=false;state.preset='custom';document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));render()});
+tempRange.addEventListener('input',e=>{state.temp=+e.target.value;state.fetal=false;state.co=false;state.preset='custom';document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));render()});
+bpgRange.addEventListener('input',e=>{state.bpg=+e.target.value;state.fetal=false;state.co=false;state.preset='custom';document.querySelectorAll('.preset').forEach(b=>b.classList.remove('active'));render()});
+document.querySelectorAll('.preset').forEach(btn=>btn.addEventListener('click',()=>setPreset(btn.dataset.preset)));
+render();
+window.addEventListener("load", render);
+window.addEventListener("resize", render);
+})();
+</script>
+
+
+<div style="max-width:1460px;margin:20px auto 10px auto;padding-left:20px;padding-right:20px;box-sizing:border-box;">
+  <div style="border:1px solid #dfe6f0;border-radius:14px;background:#fbfbfd;color:#183153;font:14px/1.6 Arial,Helvetica,sans-serif;text-align:justify;padding:12px 16px;">
+    <b>Como interpretar:</b> <b>Pulmão (Captação):</b> Em altas pressões de O₂ (~100 mmHg), a hemoglobina apresenta alta afinidade, promovendo saturação quase completa. <b>Hemoglobina (Transporte):</b> O O₂ liga-se ao ferro (Fe²⁺) nos grupos heme, permitindo transporte eficiente até os tecidos. <b>Tecidos (Liberação):</b> Em pressões menores (~40 mmHg ou menos), ocorre liberação progressiva de O₂ conforme a demanda metabólica. <b>CO₂ (Retorno):</b> O CO₂ produzido pelos tecidos é transportado dissolvido, ligado à hemoglobina (carbamino-Hb) ou principalmente como bicarbonato (HCO₃⁻) no plasma. <b>Curva de dissociação (Regulação):</b> Deslocamentos para a direita (↑CO₂, ↓pH, ↑temperatura, ↑2,3-BPG) facilitam a liberação de O₂; deslocamentos para a esquerda aumentam a afinidade e dificultam a liberação. <b>Em repouso:</b> A extração tecidual mantém o sangue venoso por volta de 40 mmHg; a diferença arterio-venosa de O₂ é menor. <b>Estados clínicos:</b> Exercício e acidose favorecem a entrega de O₂ aos tecidos; intoxicação por CO reduz drasticamente o transporte de O₂; enfisema associa-se à retenção de CO₂ e dificuldade de troca gasosa; fibrose pulmonar reduz a difusão de O₂, limitando a oxigenação.
+  </div>
+</div>
+
+<div style="max-width:1460px;margin:20px auto 10px auto;text-align:right;font:600 13px Arial;color:#64748b;">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento.</div>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const cb = document.getElementById('co2TransportToggle');
+  const box = document.getElementById('co2TransportBox');
+  if (!cb || !box) return;
+  function sync() { box.style.display = cb.checked ? 'block' : 'none'; }
+  cb.addEventListener('change', sync);
+  sync();
+});
+</script>
+
+</body>
+</html>
