@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VO2, débito cardíaco e diferença arterio-venosa – fisiologia interativa</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --panel:#fbfbfd;
+  --line:#d9dce3;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --blue:#2563eb;
+  --red:#dc2626;
+  --green:#10b981;
+  --violet:#8b5cf6;
+  --amber:#f59e0b;
+  --teal:#14b8a6;
+  --rose:#e11d48;
+  --slate:#64748b;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:22px;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+h1{margin:0 0 8px;font-size:30px;text-align:center}
+.subtitle{margin:0 0 12px;text-align:center;color:var(--muted);font-size:16px}
+.controls,.selector,.quick{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start;align-items:center;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 auto 10px;max-width:1460px
+}
+.selector-block{width:min(1460px,100%);display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:16px}
+.selector-head{display:flex;flex-direction:column;gap:2px;min-width:240px;max-width:62%}
+.selector-title{font-size:12px;font-weight:700;color:#0f172a}
+.selector-sub{font-size:11px;color:var(--muted)}
+.checks{display:flex;flex-wrap:nowrap;gap:10px;justify-content:flex-end;align-items:center;margin-left:auto}
+label.pick,label.control{
+  display:flex;gap:6px;align-items:center;font-size:13px;background:#fff;border:1px solid #e1e5ec;border-radius:10px;padding:8px 10px;min-height:40px
+}
+.control-name{display:inline-block;min-width:60px;font-weight:600}
+.control-value{display:inline-block;min-width:96px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.control-value.speed{min-width:38px}
+input[type=range]{width:130px;flex:0 0 130px}
+button{border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer}
+button.primary{border-color:#96b7ff}
+.quick button.active{background:#fff1f2;border-color:#ef4444;color:#b91c1c;font-weight:700;box-shadow:0 0 0 3px rgba(239,68,68,0.20), 0 0 18px rgba(239,68,68,0.45), inset 0 0 10px rgba(255,255,255,0.35)}
+.quick button.active, .quick button:focus{background:#fff1f2;border-color:#ef4444;color:#b91c1c;box-shadow:0 0 0 4px rgba(239,68,68,0.35), 0 0 26px rgba(239,68,68,0.75), inset 0 0 14px rgba(255,255,255,0.45);}
+.notice{
+  max-width:1460px;margin:0 auto 10px;text-align:center;font-size:13px;color:#b45309;min-height:18px
+}
+.mode-line{max-width:1460px;margin:0 auto 14px;text-align:right;min-height:22px}
+.mode-badge{display:inline-block;font-size:12px;color:var(--muted);background:#fff;border:1px solid #e1e5ec;border-radius:999px;padding:4px 10px}
+.status-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;max-width:1460px;margin:0 auto 14px
+}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:124px;position:relative;overflow:hidden
+}
+.card::before{content:"";position:absolute;inset:0 auto 0 0;width:8px;background:var(--blue)}
+.card.vo2::before{background:var(--blue)}
+.card.q::before{background:var(--amber)}
+.card.dav::before{background:var(--green)}
+.card.mass::before{background:var(--violet)}
+.card.stage::before{background:var(--rose)}
+.card-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.phase{font-size:26px;font-weight:700;line-height:1.12;padding-left:4px;min-height:82px;display:flex;flex-direction:column;justify-content:flex-start}
+.phase small{display:block;margin-top:6px;font-size:13px;color:var(--muted);font-weight:400}
+.main-layout{display:grid;grid-template-columns:minmax(620px,1.35fr) minmax(360px,.9fr);gap:16px;max-width:1460px;margin:0 auto}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+.panel-title{font-size:18px;font-weight:700;color:#0f172a;margin:0 0 10px}
+.panel-sub{font-size:13px;color:var(--muted);margin:0 0 10px}
+.canvas-wrap{display:flex;justify-content:center}
+canvas{width:100%;height:auto;display:block;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+.eq-box,.readout-box{
+  background:#fff;border:1px solid #e1e5ec;border-radius:14px;padding:12px 14px;margin-bottom:10px
+}
+.eq-box{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.eq-box .panel-title,.eq-box .eq-main,.eq-box .eq-sub{text-align:center;width:100%}
+.eq-main{font-size:26px;font-weight:700;color:#0f172a;text-align:center;line-height:1.25}
+.eq-sub{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.result-pill{
+  background:#fff;border:1px solid #e1e5ec;border-radius:14px;padding:12px
+}
+.result-pill .lab{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.result-pill .val{font-size:26px;font-weight:700;color:#0f172a}
+.result-pill .sub{font-size:12px;color:var(--muted);margin-top:4px}.result-pill{text-align:center}
+.stage-list{display:grid;gap:10px}
+.stage-item{
+  display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:flex-start;background:#fff;border:1px solid #e1e5ec;border-radius:12px;padding:10px 12px
+}
+.stage-dot{width:14px;height:14px;border-radius:50%;margin-top:3px;background:#cbd5e1}
+.stage-item.active .stage-dot{background:var(--rose);box-shadow:0 0 0 4px rgba(225,29,72,.12)}
+.stage-item .ttl{font-size:12px;font-weight:700;color:#0f172a}
+.stage-item .txt{font-size:13px;color:#475569;line-height:1.45}
+.interpret-block{
+  max-width:1460px;
+  margin:18px auto 0 auto;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px 22px 26px;
+  box-sizing:border-box;
+}
+.interpret-title{
+  font-size:16px;
+  font-weight:700;
+  color:#0f172a;
+  margin-bottom:10px;
+}
+.interpret-text{
+  text-align:justify;
+  color:#475569;
+  line-height:1.6;
+  font-size:15px;
+}
+.interpret-text b{
+  color:#0f172a;
+  font-weight:600;
+}
+.interpret-footer{
+  margin-top:18px;
+  border-top:1px solid #e5e7eb;
+  padding-top:10px;
+  text-align:right;
+  color:#4b5563;
+  font-size:12px;
+}
+.value-chip{
+  display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid #dbe2ea;background:#fff;color:#334155;font-size:12px;margin-left:6px
+}
+@media (max-width:1220px){
+  .main-layout{grid-template-columns:1fr}
+  .status-grid{grid-template-columns:1fr 1fr}
+}
+.como-interpretar{font-size:12px;line-height:1.5;text-align:justify}
+
+.controls-sliders{
+  margin-top:4px !important;
+  margin-bottom:10px !important;
+  padding:10px 12px !important;
+  gap:12px !important;
+}
+.controls-sliders label.control{
+  display:grid !important;
+  grid-template-columns:auto 1fr auto !important;
+  align-items:center !important;
+  gap:8px !important;
+  min-height:58px !important;
+  padding:8px 12px !important;
+  flex:1 1 0 !important;
+}
+.controls-sliders .control-name{
+  min-width:56px !important;
+  align-self:center !important;
+}
+.controls-sliders .control-value{
+  min-width:110px !important;
+  align-self:center !important;
+}
+.controls-sliders input[type=range]{
+  width:100% !important;
+  flex:none !important;
+  align-self:center !important;
+  margin:0 !important;
+  height:6px !important;
+  vertical-align:middle !important;
+}
+.controls-sliders input[type=range]::-webkit-slider-runnable-track{
+  height:6px !important;
+}
+.controls-sliders input[type=range]::-webkit-slider-thumb{
+  margin-top:-5px !important;
+}
+.quick{
+  margin-top:0 !important;
+}
+
+.controls-actions{max-width:900px !important;margin-left:auto !important;margin-right:auto !important}
+
+.controls-actions{
+  max-width:1460px !important;
+  width:100% !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  justify-content:flex-start !important;
+}
+
+.controls,.selector,.quick{
+  width:min(1460px,100%);
+  margin-left:auto;
+  margin-right:auto;
+}
+
+
+.controls-actions{
+  max-width:1460px !important;
+  width:min(1460px,100%) !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+  justify-content:flex-start !important;
+}
+
+
+.panel .result-grid{
+  gap:14px !important;
+}
+.panel .result-pill{
+  padding:14px 12px !important;
+}
+
+
+.panel .result-grid{
+  display:grid !important;
+  grid-template-columns:repeat(3, minmax(0, 1fr)) !important;
+  gap:18px !important;
+  width:100% !important;
+  align-items:stretch !important;
+}
+.panel .result-pill{
+  width:100% !important;
+  min-width:0 !important;
+  min-height:108px !important;
+  padding:16px 14px !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+}
+.eq-box{
+  padding:14px 16px !important;
+}
+
+
+.result-pill .val{
+  color:#dc2626 !important;
+}
+
+</style>
+</head>
+<body>
+<h1>Consumo de oxigênio, débito cardíaco e diferença arterio-venosa de O₂</h1>
+<p class="subtitle">Simulador interativo da equação de Fick para integrar VO2, débito cardíaco, extração tecidual e valor relativo por quilograma.</p>
+
+
+<div class="selector">
+  <div class="selector-block">
+    <div class="selector-head">
+      <div class="selector-title">Selecione a variável a calcular</div>
+      <div class="selector-sub">A variável escolhida ficará automática; as demais permanecem livres para manipulação por botão deslizável.</div>
+    </div>
+    <div class="checks">
+      <label class="pick"><input type="radio" name="solveFor" value="vo2" checked> Calcular VO2</label>
+      <label class="pick"><input type="radio" name="solveFor" value="q"> Calcular Q</label>
+      <label class="pick"><input type="radio" name="solveFor" value="dav"> Calcular Δ a-v O₂</label>
+    </div>
+  </div>
+</div>
+
+<div id="notice" class="notice"></div>
+
+<div class="controls controls-sliders">
+  <label class="control"><span class="control-name">VO2</span>
+    <input id="vo2Range" type="range" min="100" max="5000" step="10" value="250">
+    <span id="vo2Label" class="control-value">0,25 L/min</span>
+  </label>
+
+  <label class="control"><span class="control-name">Q</span>
+    <input id="qRange" type="range" min="2.0" max="30.0" step="0.1" value="5.0">
+    <span id="qLabel" class="control-value">5.0 L/min</span>
+  </label>
+
+  <label class="control"><span class="control-name">Δ a-v O₂</span>
+    <input id="davRange" type="range" min="2.0" max="18.0" step="0.1" value="5.0">
+    <span id="davLabel" class="control-value">5.0 mL/dL</span>
+  </label>
+
+  <label class="control"><span class="control-name">Massa</span>
+    <input id="massRange" type="range" min="40" max="150" step="1" value="70">
+    <span id="massLabel" class="control-value">70 kg</span>
+  </label>
+</div>
+
+<div class="quick" id="quickStates">
+  <strong style="margin-right:4px">Estados rápidos:</strong>
+  <button data-preset="rest">Repouso</button>
+  <button data-preset="light">Exercício leve</button>
+  <button data-preset="moderate">Exercício moderado</button>
+  <button data-preset="intense">Exercício intenso</button>
+  <button data-preset="athlete">Atleta</button>
+  <button data-preset="hf">Insuficiência cardíaca</button>
+  <button data-preset="anemia">Anemia</button>
+  <button data-preset="normal">Normalizar</button>
+</div>
+
+<div class="controls controls-actions">
+  <button id="btnStart" class="primary">Iniciar</button>
+  <button id="btnPause">Pausar</button>
+  <button id="btnReset">Resetar</button>
+  <label class="control"><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+  <label class="control"><span class="control-name">Velocidade</span>
+    <input id="speedRange" type="range" min="0.5" max="2.4" step="0.1" value="1.0">
+    <span id="speedLabel" class="control-value speed">1.0x</span>
+  </label>
+</div>
+
+<div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: calcular VO2</div></div>
+
+<div class="main-layout">
+
+  <div class="panel">
+    <div class="panel-title">Animação integrada</div>
+    <div class="canvas-wrap"><canvas id="sceneCanvas" width="980" height="680"></canvas></div>
+<div class="readout-box" style="margin-top:10px">
+      <div class="panel-title" style="font-size:16px;margin-bottom:8px">Leitura fisiológica imediata</div>
+      <div id="instantRead" style="font-size:12px;color:#475569;line-height:1.55;text-align:justify">
+        O consumo de oxigênio resulta da interação entre débito cardíaco e extração tecidual. Na forma detalhada da equação de Fick, a diferença arterio-venosa pode ser lida como a diferença entre o conteúdo arterial de O₂ (CaO2) e o conteúdo venoso de O₂ (CvO2). A normalização pela massa corporal permite comparar indivíduos de tamanhos corporais diferentes.
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="eq-box">
+      <div class="panel-title" style="font-size:16px;margin-bottom:8px">Equação ativa</div>
+      <div id="equationMain" class="eq-main">VO2 = Q × Δ a-v O₂ × 10</div>
+      <div id="equationSub" class="eq-sub">Com Q em L/min e Δ a-v O₂ em mL/dL, o fator 10 converte litros em decilitros.</div>
+    </div>
+
+    <div class="result-grid" style="margin-top:14px">
+      <div class="result-pill">
+        <div class="lab">VO2 absoluto</div>
+        <div class="val" id="calcMain">0,25</div>
+        <div class="sub" id="calcSub">L/min</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">VO2 relativo</div>
+        <div class="val" id="relMain">3,57</div>
+        <div class="sub">mL/kg/min</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">Massa corporal</div>
+        <div class="val" id="massCard">70</div>
+        <div class="sub">kg</div>
+      </div>
+
+      <div class="result-pill">
+        <div class="lab">Débito cardíaco (Q)</div>
+        <div class="val" id="qCard">5,0</div>
+        <div class="sub">L/min</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">Sangue venoso</div>
+        <div class="val" id="venMain">15,0</div>
+        <div class="sub">mL O₂/dL</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">Δ a-v O₂</div>
+        <div class="val" id="davCard">5,0</div>
+        <div class="sub">mL/dL</div>
+      </div>
+    </div>
+
+    
+
+    <div class="eq-box" style="margin-top:10px">
+      <div class="panel-title" style="font-size:16px;margin-bottom:8px">Equação alternativa (conteúdo de O₂)</div>
+      <div class="eq-main">VO2 = Q × (CaO2 − CvO2) × 10</div>
+      <div class="eq-sub">Forma fisiológica detalhada da equação de Fick</div>
+    </div>
+
+    <div class="result-grid" style="margin-top:14px">
+      <div class="result-pill">
+        <div class="lab">Q</div>
+        <div class="val" id="altQ">5,0</div>
+        <div class="sub">L/min</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">CaO2</div>
+        <div class="val" id="altCaO2">20,0</div>
+        <div class="sub">mL/dL</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">CvO2</div>
+        <div class="val" id="altCvO2">15,0</div>
+        <div class="sub">mL/dL</div>
+      </div>
+    </div>
+
+    <div class="result-grid" style="margin-top:6px">
+      <div class="result-pill">
+        <div class="lab">Conteúdo arterial</div>
+        <div class="val">20,0</div>
+        <div class="sub">mL/dL</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">Conteúdo venoso</div>
+        <div class="val">15,0</div>
+        <div class="sub">mL/dL</div>
+      </div>
+      <div class="result-pill" style="opacity:0"></div>
+    </div>
+  </div>
+</div>
+
+<div class="interpret-block">
+  <div class="interpret-title">Como interpretar</div>
+  <div class="interpret-text">
+    <b>Equação de Fick:</b> este simulador usa a relação <b>VO2 = Q × Δ a-v O₂ × 10</b>, em que <b>Q</b> representa o débito cardíaco em L/min e <b>Δ a-v O₂</b> representa a diferença arterio-venosa de oxigênio em mL/dL.
+    <b>Débito cardíaco:</b> quanto maior o fluxo sanguíneo enviado aos tecidos, maior tende a ser o potencial de oferta de oxigênio.
+    <b>Conteúdo arterial de O₂ (CaO2):</b> representa a quantidade de oxigênio disponível no sangue arterial para ser entregue aos tecidos. <b>Conteúdo venoso de O₂ (CvO2):</b> representa o oxigênio remanescente após a extração tecidual. <b>Diferença arterio-venosa:</b> corresponde à diferença entre CaO2 e CvO2; quanto maior essa diferença, maior foi a utilização de O₂ pelos tecidos.
+    <b>VO2 relativo:</b> é obtido dividindo o VO2 absoluto pela massa corporal, permitindo comparar indivíduos de massas diferentes.
+    <b>Modo de cálculo:</b> a variável selecionada no topo é resolvida automaticamente; as demais permanecem manipuláveis por botão deslizável, preservando a coerência do modelo.
+    <b>Leitura didática:</b> aumentos de <b>Q</b> e/ou de <b>Δ a-v O₂</b> elevam o VO2 absoluto; já a massa corporal altera apenas o valor relativo por quilograma.
+    <b>Equação alternativa:</b> na forma completa da equação de Fick, o consumo de oxigênio pode ser expresso como <b>VO2 = Q × (CaO2 − CvO2) × 10</b>, em que <b>CaO2</b> representa o conteúdo arterial de oxigênio e <b>CvO2</b> o conteúdo venoso. Essa abordagem evidencia que a diferença arterio-venosa decorre diretamente da quantidade de oxigênio entregue aos tecidos menos a quantidade que retorna, reforçando a integração entre oferta e extração de O₂.
+
+  </div>
+  <div class="interpret-footer">
+    Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento.
+  </div>
+</div>
+
+<script>
+(()=>{
+const sceneCanvas=document.getElementById('sceneCanvas');
+const sctx=sceneCanvas.getContext('2d');
+
+const btnStart=document.getElementById('btnStart');
+const btnPause=document.getElementById('btnPause');
+const btnReset=document.getElementById('btnReset');
+const labelsToggle=document.getElementById('labelsToggle');
+const speedRange=document.getElementById('speedRange');
+const speedLabel=document.getElementById('speedLabel');
+const notice=document.getElementById('notice');
+
+const vo2Range=document.getElementById('vo2Range');
+const qRange=document.getElementById('qRange');
+const davRange=document.getElementById('davRange');
+const massRange=document.getElementById('massRange');
+
+const vo2Label=document.getElementById('vo2Label');
+const qLabel=document.getElementById('qLabel');
+const davLabel=document.getElementById('davLabel');
+const massLabel=document.getElementById('massLabel');
+
+const vo2Text=document.getElementById('vo2Text');
+const qText=document.getElementById('qText');
+const davText=document.getElementById('davText');
+const relText=document.getElementById('relText');
+const equationMain=document.getElementById('equationMain');
+const equationSub=document.getElementById('equationSub');
+const calcMain=document.getElementById('calcMain');
+const calcSub=document.getElementById('calcSub');
+const relMain=document.getElementById('relMain');
+const venMain=document.getElementById('venMain');
+const qCard=document.getElementById('qCard');
+const davCard=document.getElementById('davCard');
+const massCard=document.getElementById('massCard');
+const instantRead=document.getElementById('instantRead');
+const altQ=document.getElementById('altQ');
+const altCaO2=document.getElementById('altCaO2');
+const altCvO2=document.getElementById('altCvO2');
+const modeBadge=document.getElementById('modeBadge');
+const radioSolve=[...document.querySelectorAll('input[name="solveFor"]')];
+const quickButtons=[...document.querySelectorAll('[data-preset]')];
+
+let VO2=250, Q=5.0, DAV=5.0, MASS=70;
+let solveFor='vo2';
+let running=false, raf=null, lastTs=0, t=0;
+
+
+function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+function r1(v){ return Math.round(v*10)/10; }
+function r2(v){ return Math.round(v*100)/100; }
+function fmtPt(v){ return v.toFixed(2).replace('.',','); }
+
+function getStageIndex(){
+  const cycle = 4.8;
+  const mod = (t*0.001*parseFloat(speedRange.value)) % cycle;
+  return Math.floor(mod/1.2);
+}
+
+function setNotice(msg=''){ notice.textContent = msg; }
+
+function updateActiveButtons(){
+  radioSolve.forEach(r=>{
+    const lab = r.closest('label');
+    if(lab){
+      lab.style.fontWeight = r.checked ? '700' : '400';
+      lab.style.borderColor = r.checked ? '#ef4444' : '#e1e5ec';
+      lab.style.background = r.checked ? '#fff1f2' : '#fff';
+      lab.style.color = r.checked ? '#b91c1c' : '';
+      lab.style.boxShadow = r.checked
+        ? '0 0 0 3px rgba(239,68,68,0.20), 0 0 18px rgba(239,68,68,0.45), inset 0 0 10px rgba(255,255,255,0.35)'
+        : 'none';
+    }
+  });
+  quickButtons.forEach(btn=>btn.classList.toggle('active', false));
+}
+
+function syncDisabled(){
+  vo2Range.disabled = (solveFor==='vo2');
+  qRange.disabled   = (solveFor==='q');
+  davRange.disabled = (solveFor==='dav');
+}
+
+function derive(){
+  if(solveFor==='vo2'){
+    VO2 = clamp(Q * DAV * 10, 100, 5000);
+  }else if(solveFor==='q'){
+    Q = clamp(VO2 / (DAV * 10), 2.0, 30.0);
+  }else if(solveFor==='dav'){
+    DAV = clamp(VO2 / (Q * 10), 2.0, 18.0);
+  }
+  VO2 = Math.round(VO2/10)*10;
+  Q = r1(Q);
+  DAV = r1(DAV);
+}
+
+function renderLabels(){
+  vo2Range.value = VO2;
+  qRange.value = Q;
+  davRange.value = DAV;
+  massRange.value = MASS;
+  vo2Label.textContent = `${fmtPt(VO2/1000)} L/min`;
+  qLabel.textContent = `${Q.toFixed(1)} L/min`;
+  davLabel.textContent = `${DAV.toFixed(1)} mL/dL`;
+  massLabel.textContent = `${Math.round(MASS)} kg`;
+  speedLabel.textContent = `${parseFloat(speedRange.value).toFixed(1)}x`;
+}
+
+function updateEquation(){
+  if(solveFor==='vo2'){
+    equationMain.textContent = 'VO2 = Q × Δ a-v O₂ × 10';
+    equationSub.textContent = 'Com Q em L/min e Δ a-v O₂ em mL/dL, o fator 10 converte litros em decilitros.';
+    calcMain.textContent = `${fmtPt(VO2/1000)}`;
+    calcSub.textContent = 'L/min';
+    modeBadge.textContent = 'Modo: calcular VO2';
+  }else if(solveFor==='q'){
+    equationMain.textContent = 'Q = VO2 ÷ (Δ a-v O₂ × 10)';
+    equationSub.textContent = 'O débito cardíaco passa a ser a incógnita resolvida automaticamente.';
+    calcMain.textContent = `${Q.toFixed(1)}`;
+    calcSub.textContent = 'L/min';
+    modeBadge.textContent = 'Modo: calcular Q';
+  }else{
+    equationMain.textContent = 'Δ a-v O₂ = VO2 ÷ (Q × 10)';
+    equationSub.textContent = 'A extração tecidual passa a ser a incógnita resolvida automaticamente.';
+    calcMain.textContent = `${DAV.toFixed(1)}`;
+    calcSub.textContent = 'mL/dL';
+    modeBadge.textContent = 'Modo: calcular Δ a-v O₂';
+  }
+}
+
+function updateReadouts(){
+  const rel = VO2 / MASS;
+  const CaO2 = 20.0;
+  const CvO2 = clamp(CaO2 - DAV, 2, 18);
+  vo2Label.textContent = `${fmtPt(VO2/1000)} L/min`;
+  relMain.textContent = `${fmtPt(rel)}`;
+  venMain.textContent = `${CvO2.toFixed(1).replace('.',',')}`;
+  qCard.textContent = `${Q.toFixed(1).replace('.',',')}`;
+  davCard.textContent = `${DAV.toFixed(1).replace('.',',')}`;
+  massCard.textContent = `${Math.round(MASS)}`;
+
+  if(altQ) altQ.textContent = Q.toFixed(1).replace('.',',');
+  if(altCaO2) altCaO2.textContent = CaO2.toFixed(1).replace('.',',');
+  if(altCvO2) altCvO2.textContent = CvO2.toFixed(1).replace('.',',');
+
+  instantRead.textContent =
+    `O consumo de oxigênio resulta da interação entre débito cardíaco e extração tecidual. Na forma detalhada da equação de Fick, a diferença arterio-venosa pode ser lida como a diferença entre o conteúdo arterial de O₂ (CaO2) e o conteúdo venoso de O₂ (CvO2). A normalização pela massa corporal permite comparar indivíduos de tamanhos corporais diferentes.`;
+}
+
+function roundedBox(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function drawHeart(x,y,w,h,beatAmp){
+  const pulse = 1 + 0.055*Math.sin(t*0.010*(beatAmp));
+  sctx.save();
+  sctx.translate(x+w/2,y+h/2);
+  sctx.scale(pulse,pulse);
+  sctx.translate(-(x+w/2),-(y+h/2));
+
+  sctx.beginPath();
+  sctx.moveTo(x+w/2, y+h*0.88);
+  sctx.bezierCurveTo(x-w*0.10, y+h*0.62, x+w*0.00, y+h*0.10, x+w*0.28, y+h*0.26);
+  sctx.bezierCurveTo(x+w*0.44, y+h*0.02, x+w*0.84, y+h*0.06, x+w*0.86, y+h*0.34);
+  sctx.bezierCurveTo(x+w*0.88, y+h*0.60, x+w*0.66, y+h*0.82, x+w/2, y+h*0.88);
+  const grd=sctx.createLinearGradient(x,y,x+w,y+h);
+  grd.addColorStop(0,'#fde7eb');
+  grd.addColorStop(0.30,'#fda4af');
+  grd.addColorStop(0.62,'#fb7185');
+  grd.addColorStop(1,'#b91c1c');
+  sctx.fillStyle=grd;
+  sctx.shadowColor='rgba(239,68,68,0.38)';
+  sctx.shadowBlur=28;
+  sctx.fill();
+  sctx.shadowBlur=0;
+  sctx.lineWidth=2.2;
+  sctx.strokeStyle='rgba(136,19,55,0.85)';
+  sctx.stroke();
+
+  const heartGlow = sctx.createRadialGradient(x+w*0.48,y+h*0.46,10,x+w*0.48,y+h*0.46,w*0.78);
+  heartGlow.addColorStop(0,'rgba(255,120,140,0.18)');
+  heartGlow.addColorStop(0.6,'rgba(239,68,68,0.10)');
+  heartGlow.addColorStop(1,'rgba(239,68,68,0)');
+  sctx.fillStyle=heartGlow;
+  sctx.fill();
+
+  const highlight = sctx.createRadialGradient(x+w*0.34,y+h*0.30,2,x+w*0.34,y+h*0.30,w*0.36);
+  highlight.addColorStop(0,'rgba(255,255,255,0.75)');
+  highlight.addColorStop(1,'rgba(255,255,255,0)');
+  sctx.fillStyle=highlight;
+  sctx.fill();
+
+  sctx.strokeStyle='rgba(127,29,29,0.28)';
+  sctx.lineWidth=2.4;
+  sctx.beginPath();
+  sctx.moveTo(x+w*0.50, y+h*0.18);
+  sctx.quadraticCurveTo(x+w*0.43, y+h*0.40, x+w*0.49, y+h*0.74);
+  sctx.stroke();
+  sctx.restore();
+}
+
+function drawArrow(x1,y1,x2,y2,color,width=5,label=''){
+  const a=Math.atan2(y2-y1,x2-x1);
+  sctx.save();
+  sctx.lineCap='round'; sctx.lineJoin='round';
+  sctx.strokeStyle=color; sctx.lineWidth=width;
+  sctx.beginPath(); sctx.moveTo(x1,y1); sctx.lineTo(x2,y2); sctx.stroke();
+  const head=16, wing=Math.PI/7;
+  sctx.fillStyle=color;
+  sctx.beginPath();
+  sctx.moveTo(x2,y2);
+  sctx.lineTo(x2-head*Math.cos(a-wing),y2-head*Math.sin(a-wing));
+  sctx.lineTo(x2-head*0.72*Math.cos(a),y2-head*0.72*Math.sin(a));
+  sctx.lineTo(x2-head*Math.cos(a+wing),y2-head*Math.sin(a+wing));
+  sctx.closePath();
+  sctx.fill();
+  if(label && labelsToggle.checked){
+    const mx=(x1+x2)/2;
+    let my=(y1+y2)/2 + 24;
+    if(label==='Q') my=(y1+y2)/2 + 28;
+    if(label==='Retorno venoso') my=(y1+y2)/2 + 24;
+    if(label==='Extração') my=(y1+y2)/2 + 26;
+    sctx.fillStyle=color;
+    sctx.font='bold 14px Arial';
+    sctx.textAlign='center';
+    sctx.fillText(label,mx,my);
+  }
+  sctx.restore();
+}
+
+function drawParticle(x,y,r,fill,border){
+  const grd=sctx.createRadialGradient(x-r*0.35,y-r*0.35,1,x,y,r);
+  grd.addColorStop(0,'rgba(255,255,255,.9)');
+  grd.addColorStop(0.55,fill);
+  grd.addColorStop(1,border);
+  sctx.beginPath();
+  sctx.arc(x,y,r,0,Math.PI*2);
+  sctx.fillStyle=grd;
+  sctx.fill();
+  sctx.lineWidth=0.8;
+  sctx.strokeStyle='rgba(15,23,42,0.20)';
+  sctx.stroke();
+}
+
+function bezierPoint(p0,p1,p2,p3,u){
+  const v=1-u;
+  return {
+    x:v*v*v*p0.x + 3*v*v*u*p1.x + 3*v*u*u*p2.x + u*u*u*p3.x,
+    y:v*v*v*p0.y + 3*v*v*u*p1.y + 3*v*u*u*p2.y + u*u*u*p3.y
+  };
+}
+
+function drawScene(){
+  sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);
+
+  const flowNorm = clamp((Q-2)/(30-2),0,1);
+  const extractionNorm = clamp((DAV-2)/(18-2),0,1);
+  const rel = VO2/MASS;
+  const stageIndex=getStageIndex();
+  const heartBeatAmp = 1.2 + flowNorm*2.4;
+  const bloodSpeedFactor = 0.85 + flowNorm*1.05;
+
+  sctx.fillStyle='#111827';
+  sctx.font='bold 22px Arial';
+  sctx.textAlign='left';
+  sctx.fillText('Fluxo central, extração periférica e resultado metabólico', 18, 18);
+
+  roundedBox(sctx,24,40,932,94,14);
+  sctx.fillStyle='#fff';
+  sctx.fill();
+  sctx.strokeStyle='#d1d5db';
+  sctx.stroke();
+
+  sctx.fillStyle='#111827';
+  sctx.font='bold 18px Arial';
+  sctx.fillText('Equação aplicada', 48, 70);
+  sctx.fillStyle='#2563eb';
+  sctx.font='bold 24px Arial';
+  if(solveFor==='vo2') sctx.fillText('VO2 = Q × Δ a-v O₂ × 10', 255, 74);
+  if(solveFor==='q') sctx.fillText('Q = VO2 ÷ (Δ a-v O₂ × 10)', 230, 74);
+  if(solveFor==='dav') sctx.fillText('Δ a-v O₂ = VO2 ÷ (Q × 10)', 220, 74);
+  sctx.fillStyle='#64748b';
+  sctx.font='14px Arial';
+  sctx.fillText('O conteúdo arterial é mantido como referência didática; a diferença arterio-venosa define o conteúdo venoso estimado.', 48, 106);
+
+  // labels
+  if(labelsToggle.checked){
+    sctx.fillStyle='#111827';
+    sctx.font='bold 16px Arial';
+    sctx.fillText('Coração',122,180);
+    sctx.fillText('Sangue venoso',405,180);
+    sctx.fillText('Tecidos',790,180);
+    sctx.fillText('Sangue arterial', 405, 602);
+  }
+  // heart and vessels
+  // vasos retos, mantendo leitura didática e com a ponta esquerda coberta pelo coração
+  const tissueX = 770, tissueY = 243, tissueW = 170, tissueH = 248;
+  const tissueTop = tissueY;
+  const tissueBottom = tissueY + tissueH;
+
+  const arterialOuter = 40;
+  const arterialInner = 34;
+  const venousOuter = 40;
+  const venousInner = 34;
+
+  // alinhamentos pedidos:
+  // arterial: linha externa inferior coincide com o canto inferior esquerdo do tecido
+  // venoso: linha externa superior coincide com o canto superior esquerdo do tecido
+  const arterialY = tissueBottom - arterialOuter/2 - 8;
+  const arterialInnerY = arterialY - (arterialOuter - arterialInner)/2; // 491 - 19 = 472
+  const venousY = tissueTop + venousOuter/2;
+  const venousInnerY = venousY + (venousOuter - venousInner)/2;        // 243 + 13 = 256
+
+  const vesselLeftX = 235;
+  const vesselRightX = tissueX;
+
+  // labels
+  if(labelsToggle.checked){
+    sctx.fillStyle='#111827';
+    sctx.font='bold 16px Arial';
+    sctx.fillText('Coração',122,180);
+    sctx.fillText('Sangue venoso',405,180);
+    sctx.fillText('Tecidos',790,180);
+    sctx.fillText('Sangue arterial', 405, 602);
+  }
+
+  // vaso arterial
+  const vesselBorderWidth = 4;
+  const bloodDiameter = 23;
+  const minLumenW = bloodDiameter + 4; // margem de segurança
+
+  const arterialBodyW = 38 + flowNorm*8;
+  const venousBodyW = 38 - flowNorm*6;
+
+  const arterialLumenW = Math.max(minLumenW, 34 + flowNorm*8);
+  const venousLumenW = Math.max(minLumenW, 34 - flowNorm*5);
+
+  const artOuterTop = arterialY - arterialBodyW/2;
+  const artOuterBottom = arterialY + arterialBodyW/2;
+  const artInnerTop = arterialInnerY - arterialLumenW/2;
+  const artInnerBottom = arterialInnerY + arterialLumenW/2;
+
+  // lúmen arterial
+  sctx.strokeStyle='#fca5a5';
+  sctx.lineWidth=arterialLumenW;
+  sctx.lineCap='butt';
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, arterialInnerY);
+  sctx.lineTo(vesselLeftX, arterialInnerY);
+  sctx.stroke();
+
+  // bordas do lúmen arterial
+  sctx.strokeStyle='#7f1d1d';
+  sctx.lineWidth=vesselBorderWidth;
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, artInnerTop);
+  sctx.lineTo(vesselLeftX, artInnerTop);
+  sctx.stroke();
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, artInnerBottom);
+  sctx.lineTo(vesselLeftX, artInnerBottom);
+  sctx.stroke();
+
+  // vaso venoso
+  const venOuterTop = venousY - venousBodyW/2;
+  const venOuterBottom = venousY + venousBodyW/2;
+  const venInnerTop = venousInnerY - venousLumenW/2;
+  const venInnerBottom = venousInnerY + venousLumenW/2;
+
+  // lúmen venoso
+  sctx.strokeStyle='#93c5fd';
+  sctx.lineWidth=venousLumenW;
+  sctx.lineCap='butt';
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, venousInnerY);
+  sctx.lineTo(vesselLeftX, venousInnerY);
+  sctx.stroke();
+
+  // bordas do lúmen venoso
+  sctx.strokeStyle='#1e3a8a';
+  sctx.lineWidth=vesselBorderWidth;
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, venInnerTop);
+  sctx.lineTo(vesselLeftX, venInnerTop);
+  sctx.stroke();
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, venInnerBottom);
+  sctx.lineTo(vesselLeftX, venInnerBottom);
+  sctx.stroke();
+
+  // sangue arterial e venoso centralizados no lúmen dos vasos retos
+  function drawBloodGasMolecule(x,y,label,fill,edge){
+    const r = 11.5; // 30 px de diâmetro
+    const bg = sctx.createRadialGradient(x-r*0.35,y-r*0.35,1,x,y,r);
+    bg.addColorStop(0,'rgba(255,255,255,0.94)');
+    bg.addColorStop(0.55,fill);
+    bg.addColorStop(1,edge);
+    sctx.beginPath();
+    sctx.arc(x,y,r,0,Math.PI*2);
+    sctx.fillStyle = bg;
+    sctx.fill();
+    sctx.lineWidth = 1.0;
+    sctx.strokeStyle = 'rgba(15,23,42,0.22)';
+    sctx.stroke();
+    sctx.fillStyle = '#ffffff';
+    sctx.font = 'bold 8.5px Arial';
+    sctx.textAlign = 'center';
+    sctx.textBaseline = 'middle';
+    sctx.fillText(label, x, y+0.5);
+    sctx.textAlign = 'left';
+    sctx.textBaseline = 'alphabetic';
+  }
+
+  const arterialCount = 15;
+  for(let i=0;i<arterialCount;i++){
+    const u = ((t*(0.00016 + flowNorm*0.00018)*parseFloat(speedRange.value)*bloodSpeedFactor) + i*(1/arterialCount)) % 1;
+    const x = vesselLeftX + (vesselRightX - vesselLeftX) * u;
+    const isCO2 = (i % 5 === 4); // a cada 4 de O₂, 1 de CO₂
+    drawBloodGasMolecule(
+      x,
+      arterialInnerY,
+      isCO2 ? 'CO₂' : 'O₂',
+      isCO2 ? 'rgba(16,185,129,0.96)' : 'rgba(239,68,68,0.96)',
+      isCO2 ? 'rgba(5,150,105,0.98)' : 'rgba(153,27,27,0.98)'
+    );
+  }
+
+  const venousCount = 14;
+  for(let i=0;i<venousCount;i++){
+    const u = ((t*(0.00015 + flowNorm*0.00016)*parseFloat(speedRange.value)*bloodSpeedFactor) + i*(1/venousCount)) % 1;
+    const x = vesselRightX - (vesselRightX - vesselLeftX) * u;
+    const isO2 = (i % 7 === 6); // a cada 6 de CO₂, 1 de O₂
+    drawBloodGasMolecule(
+      x,
+      venousInnerY,
+      isO2 ? 'O₂' : 'CO₂',
+      isO2 ? 'rgba(239,68,68,0.96)' : 'rgba(16,185,129,0.96)',
+      isO2 ? 'rgba(153,27,27,0.98)' : 'rgba(5,150,105,0.98)'
+    );
+  }
+
+  // coração desenhado por último para cobrir a ponta esquerda dos vasos
+  drawHeart(60,200,330,330,heartBeatAmp);
+
+  drawArrow(600,venousY + 28,430,venousY + 28,'#64748b',5,'Retorno venoso');
+  drawArrow(430,arterialY + 42,600,arterialY + 42,'#f59e0b',5,'Q');
+  drawArrow(780,500,930,500,'#10b981',5,'Extração');
+
+  // tecidos – aumentados novamente, mantendo o centro
+  roundedBox(sctx,tissueX,tissueY,tissueW,tissueH,18);
+  const tg=sctx.createLinearGradient(tissueX,tissueY,tissueX+tissueW,tissueY+tissueH);
+  tg.addColorStop(0,'#f6fffd');
+  tg.addColorStop(0.55,'#e6fff7');
+  tg.addColorStop(1,'#d7faef');
+  sctx.fillStyle=tg;
+  sctx.shadowColor='rgba(45,212,191,0.42)';
+  sctx.shadowBlur=26;
+  sctx.fill();
+  sctx.shadowBlur=0;
+  sctx.strokeStyle='#86e2ce';
+  sctx.lineWidth=1.4;
+  sctx.stroke();
+
+  // halo interno
+  const tissueGlow = sctx.createRadialGradient(855,367,8,855,367,150);
+  tissueGlow.addColorStop(0,'rgba(255,255,255,0.95)');
+  tissueGlow.addColorStop(0.28,'rgba(180,255,235,0.42)');
+  tissueGlow.addColorStop(0.62,'rgba(45,212,191,0.22)');
+  tissueGlow.addColorStop(1,'rgba(45,212,191,0)');
+  sctx.fillStyle=tissueGlow;
+  sctx.fill();
+
+  // microrede capilar/estroma sutil ajustada para a nova altura
+  sctx.strokeStyle='rgba(16,185,129,0.24)';
+  sctx.lineWidth=4;
+  const tissueLines = [
+    [[776,278],[808,246],[850,256],[894,242]],
+    [[770,312],[814,300],[856,310],[900,298]],
+    [[772,346],[820,336],[862,346],[900,336]],
+    [[774,380],[820,372],[864,382],[902,372]],
+    [[776,414],[822,406],[864,416],[902,406]],
+    [[778,448],[824,440],[866,450],[904,440]],
+    [[786,266],[794,304],[790,352],[798,468]],
+    [[824,264],[832,304],[828,354],[836,470]],
+    [[862,264],[868,306],[864,356],[870,470]],
+    [[900,264],[894,306],[900,356],[892,468]],
+  ];
+  tissueLines.forEach(line=>{
+    sctx.beginPath();
+    sctx.moveTo(line[0][0],line[0][1]);
+    sctx.bezierCurveTo(line[1][0],line[1][1],line[2][0],line[2][1],line[3][0],line[3][1]);
+    sctx.stroke();
+  });
+
+  function drawTissueLobule(cx,cy,rx,ry,fillA,fillB,stroke,nucleus='#14b8a6'){
+    sctx.save();
+    sctx.translate(cx,cy);
+    const g = sctx.createRadialGradient(-rx*0.35,-ry*0.35,2,0,0,Math.max(rx,ry)*1.15);
+    g.addColorStop(0,'rgba(255,255,255,0.92)');
+    g.addColorStop(0.48,fillA);
+    g.addColorStop(1,fillB);
+    sctx.beginPath();
+    sctx.ellipse(0,0,rx,ry,0,0,Math.PI*2);
+    sctx.fillStyle=g;
+    sctx.shadowColor='rgba(15,23,42,0.10)';
+    sctx.shadowBlur=8;
+    sctx.fill();
+    sctx.shadowBlur=0;
+    sctx.lineWidth=1.1;
+    sctx.strokeStyle=stroke;
+    sctx.stroke();
+
+    sctx.beginPath();
+    sctx.ellipse(-rx*0.18,-ry*0.22,rx*0.42,ry*0.24,0,0,Math.PI*2);
+    sctx.fillStyle='rgba(255,255,255,0.34)';
+    sctx.fill();
+
+    const ng = sctx.createRadialGradient(-2,-2,1,0,0,Math.min(rx,ry)*0.42);
+    ng.addColorStop(0,'rgba(255,255,255,0.95)');
+    ng.addColorStop(0.55,nucleus);
+    ng.addColorStop(1,'rgba(13,148,136,0.95)');
+    sctx.beginPath();
+    sctx.ellipse(1,1,rx*0.24,ry*0.24,0,0,Math.PI*2);
+    sctx.fillStyle=ng;
+    sctx.fill();
+    sctx.restore();
+  }
+
+  const lobules = [
+    [792,282,22,17],[830,278,23,18],[868,280,22,17],[906,284,22,17],
+    [786,326,23,18],[826,322,24,18],[866,324,24,18],[906,328,23,18],
+    [790,370,22,17],[832,366,24,18],[872,368,23,18],[912,372,22,17],
+    [794,414,22,17],[836,410,24,18],[876,412,23,18],[914,416,22,17],
+    [800,456,22,17],[844,452,23,18],[886,454,22,17]
+  ];
+  lobules.forEach((d,i)=>{
+    const [x,y,rx,ry]=d;
+    drawTissueLobule(
+      x,y,rx,ry,
+      i%2===0?'rgba(110,231,183,0.82)':'rgba(74,222,128,0.82)',
+      i%2===0?'rgba(16,185,129,0.95)':'rgba(5,150,105,0.95)',
+      'rgba(5,150,105,0.30)',
+      i%2===0?'rgba(45,212,191,0.92)':'rgba(20,184,166,0.92)'
+    );
+  });
+
+  // moléculas (agora à frente das células)
+
+  for(let i=0;i<16;i++){
+    const col = i % 4;
+    const row = Math.floor(i / 4);
+    const mx = 792 + col*34 + Math.sin((t*0.002)+(i*0.7))*5;
+    const my = 292 + row*42 + Math.cos((t*0.0022)+(i*0.5))*5;
+    const mg = sctx.createRadialGradient(mx-2,my-2,0.5,mx,my,7);
+    const isCO2 = (i % 3 === 2);
+    mg.addColorStop(0,'rgba(255,255,255,0.95)');
+    mg.addColorStop(0.55, isCO2 ? 'rgba(16,185,129,0.88)' : 'rgba(239,68,68,0.88)');
+    mg.addColorStop(1, isCO2 ? 'rgba(5,150,105,0.98)' : 'rgba(185,28,28,0.98)');
+    sctx.beginPath();
+    sctx.arc(mx,my,6.2,0,Math.PI*2);
+    sctx.fillStyle = mg;
+    sctx.fill();
+    sctx.lineWidth = 0.9;
+    sctx.strokeStyle = 'rgba(15,23,42,0.24)';
+    sctx.stroke();
+  }
+
+
+  }
+
+function render(){
+  derive();
+  syncDisabled();
+  renderLabels();
+  updateEquation();
+  updateReadouts();
+  drawScene();
+}
+
+function play(){
+  if(running) return;
+  running=true; lastTs=0; raf=requestAnimationFrame(loop);
+}
+function pause(){
+  running=false;
+  if(raf) cancelAnimationFrame(raf);
+}
+function resetAll(){
+  pause();
+  VO2=250; Q=5.0; DAV=5.0; MASS=70; solveFor='vo2';
+  document.querySelector('input[name="solveFor"][value="vo2"]').checked=true;
+  setNotice('');
+  updateActiveButtons();
+  render();
+}
+function loop(ts){
+  if(!running) return;
+  if(!lastTs) lastTs=ts;
+  const dt=ts-lastTs; lastTs=ts;
+  t += dt;
+  render();
+  raf=requestAnimationFrame(loop);
+}
+
+function applyPreset(name){
+  quickButtons.forEach(btn=>btn.classList.toggle('active', btn.dataset.preset===name));
+  if(name==='rest'){ VO2=250; Q=5.0; DAV=5.0; MASS=70; solveFor='vo2'; }
+  if(name==='light'){ VO2=700; Q=9.0; DAV=7.8; MASS=70; solveFor='vo2'; }
+  if(name==='moderate'){ VO2=1500; Q=12.5; DAV=12.0; MASS=70; solveFor='vo2'; }
+  if(name==='intense'){ VO2=3200; Q=22.0; DAV=14.5; MASS=70; solveFor='vo2'; }
+  if(name==='athlete'){ VO2=4200; Q=28.0; DAV=15.0; MASS=68; solveFor='vo2'; }
+  if(name==='hf'){ VO2=700; Q=3.5; DAV=20.0/2.4; MASS=78; solveFor='vo2'; } // ~8.3
+  if(name==='anemia'){ VO2=900; Q=7.0; DAV=6.0; MASS=70; solveFor='vo2'; }
+  if(name==='normal'){ VO2=250; Q=5.0; DAV=5.0; MASS=70; solveFor='vo2'; }
+  document.querySelector(`input[name="solveFor"][value="${solveFor}"]`).checked=true;
+  updateActiveButtons();
+  setNotice('');
+  render();
+}
+
+radioSolve.forEach(r=>r.addEventListener('change', e=>{
+  solveFor = e.target.value;
+  updateActiveButtons();
+  render();
+}));
+
+vo2Range.addEventListener('input', e=>{ VO2=Number(e.target.value); render(); });
+qRange.addEventListener('input', e=>{ Q=Number(e.target.value); render(); });
+davRange.addEventListener('input', e=>{ DAV=Number(e.target.value); render(); });
+massRange.addEventListener('input', e=>{ MASS=Number(e.target.value); render(); });
+speedRange.addEventListener('input', render);
+labelsToggle.addEventListener('change', render);
+btnStart.addEventListener('click', play);
+btnPause.addEventListener('click', pause);
+btnReset.addEventListener('click', resetAll);
+quickButtons.forEach(btn=>btn.addEventListener('click', ()=>applyPreset(btn.dataset.preset)));
+
+updateActiveButtons();
+render();
+})();
+</script>
+</body>
+</html>
