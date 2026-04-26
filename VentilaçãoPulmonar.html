@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Ventilação Pulmonar</title>
+  <style>
+    :root{
+      --bg:#ffffff;
+      --panel:#fbfbfd;
+      --line:#d9dce3;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --phase:#2563eb;
+      --lung:#e79aae;
+      --bronchus:#7b8794;
+      --trachea:#d1d5db;
+      --diaphragmTop:#dc7f67;
+      --diaphragmBottom:#8f332f;
+      --pleuraVisceral:#10b981;
+      --pleuraParietal:#6366f1;
+      --intrapulmonar:#111827;
+      --intrapleural:#2563eb;
+      --atm:#9ca3af;
+      --c-fase:#2563eb;
+      --c-volume:#1F78B4;
+      --c-palv:#111827;
+      --c-ppl:#2563eb;
+      --c-comp:#33A02C;
+      --c-res:#FF7F00;
+      --c-sao2:#6A3D9A;
+      --c-rv:#14532D;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      padding:22px;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    h1{ margin:0 0 8px; font-size:30px; text-align:center; }
+    .subtitle{ text-align:center; margin:0 0 12px; color:var(--muted); font-size:16px; }
+    .controls{
+      display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center;
+      background:var(--panel); border:1px solid var(--line); border-radius:14px;
+      padding:12px; margin:0 auto 8px; max-width:1220px;
+    }
+    .mode-line{ max-width:1220px; margin:0 auto 14px; text-align:right; min-height:22px; }
+    .mode-badge{
+      display:inline-block; font-size:12px; color:var(--muted); background:#fff;
+      border:1px solid #e1e5ec; border-radius:999px; padding:4px 10px;
+    }
+    button{
+      border:1px solid #b9c0cc; border-radius:10px; padding:10px 14px;
+      font-size:15px; background:#fff; cursor:pointer;
+    }
+    .primary{ border-color:#96b7ff; }
+    label{
+      display:flex; gap:8px; align-items:center; font-size:14px; background:#fff;
+      border:1px solid #e1e5ec; border-radius:10px; padding:9px 12px;
+    }
+    input[type="range"]{ width:140px; }
+    select{
+      border:1px solid #e1e5ec; border-radius:10px; padding:9px 12px;
+      background:#fff; color:var(--text); font-size:14px;
+    }
+    .state-row{
+      max-width:1220px; margin:0 auto 14px;
+      display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:8px;
+    }
+    .state-btn{
+      border:1px solid #d9dce3; background:#fff; border-radius:12px; padding:9px 10px;
+      font-weight:700; font-size:13.5px; color:#374151; box-shadow:0 3px 10px rgba(15,23,42,.04);
+    }
+    .state-btn.active{ outline:2px solid #93c5fd; background:#eff6ff; }
+    .status-grid{
+      display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:12px;
+      max-width:1220px; margin:0 auto 14px;
+    }
+    .card{
+      --card-color:var(--phase);
+      background:#ffffff;
+      border:1px solid var(--line);
+      border-left:7px solid var(--card-color);
+      border-radius:16px;
+      padding:13px 16px 13px 15px;
+      min-height:96px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 6px 18px rgba(15,23,42,.08);
+      isolation:isolate;
+    }
+    .card > *{ position:relative; z-index:1; }
+    .card::before{ content:none; }
+    .card::after{
+      content:"";
+      position:absolute;
+      right:-55px;
+      bottom:-55px;
+      width:132px;
+      height:132px;
+      border-radius:50%;
+      background:radial-gradient(circle at center, var(--card-soft, rgba(37,99,235,.12)) 0%, rgba(255,255,255,0) 68%);
+      box-shadow:0 0 0 1.3px var(--card-soft, rgba(37,99,235,.16)), 0 0 11px 2px var(--card-soft, rgba(37,99,235,.16));
+      opacity:.9;
+      z-index:0;
+      pointer-events:none;
+    }
+    #phaseCard{ --card-color:var(--phase); --card-soft:color-mix(in srgb, var(--phase) 18%, transparent); }
+    #valueCard{ --card-color:var(--c-volume); --card-soft:rgba(31,120,180,.18); }
+    #palvCard{ --card-color:var(--c-palv); --card-soft:rgba(17,24,39,.14); }
+    #pplCard{ --card-color:var(--c-ppl); --card-soft:rgba(37,99,235,.18); }
+    #compCard{ --card-color:var(--c-comp); --card-soft:rgba(51,160,44,.18); }
+    #resCard{ --card-color:var(--c-res); --card-soft:rgba(255,127,0,.18); }
+    #sao2Card{ --card-color:var(--c-sao2); --card-soft:rgba(106,61,154,.18); }
+    #rvCard{ --card-color:var(--c-rv); --card-soft:rgba(20,83,45,.18); }
+    .card-title{
+      font-size:13.5px;
+      color:#52667d;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      margin-bottom:8px;
+      font-weight:900;
+      line-height:1.15;
+      white-space:nowrap;
+    }
+    .phase{
+      font-size:31px;
+      font-weight:900;
+      line-height:1.05;
+      padding-left:0;
+      color:var(--card-color);
+    }
+    .phase small{ display:block; margin-top:7px; font-size:15px; color:#52667d; font-weight:800; line-height:1.15; }
+    #phaseCard .phase{font-size:26px;}
+    #phaseCard .phase small{font-size:14.5px;}
+    .layout{
+      display:grid; grid-template-columns:minmax(460px,1fr) minmax(460px,1fr);
+      gap:16px; max-width:1220px; margin:0 auto;
+    }
+    .panel{ background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:12px; }
+    canvas{
+      width:100%; height:auto; display:block; background:#fff;
+      border:1px solid #e5e7eb; border-radius:12px;
+    }
+    .legend{
+      max-width:1220px; margin:14px auto 0; background:var(--panel); border:1px solid var(--line);
+      border-radius:14px; padding:14px 16px 28px; line-height:1.55; font-size:15px;
+    }
+    .signature{
+      text-align:right; color:#4b5563; font-size:14px; margin-top:18px;
+      border-top:1px solid #e5e7eb; padding-top:10px;
+    }
+    .pill{
+      display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px;
+      border:1px solid var(--line); margin-left:6px; color:var(--muted); background:#fff;
+    }
+    @media (max-width:980px){
+      .layout{ grid-template-columns:1fr; }
+      .status-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .state-row{ grid-template-columns:repeat(2, minmax(120px,1fr)); }
+    }
+    @media (max-width:620px){
+      .status-grid{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Ventilação Pulmonar</h1>
+  <p class="subtitle">Simulador didático com mecânica ventilatória e curvas de pressão intrapulmonar e intrapleural.</p>
+
+  <div class="controls">
+    <button id="btnStart" class="primary">Iniciar</button>
+    <button id="btnPause">Pausar</button>
+    <button id="btnStep">Próxima etapa</button>
+    <button id="btnReset">Resetar</button>
+    <label>Velocidade
+      <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2">
+      <span id="speedLabel">1.2x</span>
+    </label>
+    <label>Modo
+      <select id="ventMode">
+        <option value="spont">Ventilação espontânea</option>
+        <option value="mech">Ventilação mecânica</option>
+      </select>
+    </label>
+    <label>Complacência
+      <input id="complianceRange" type="range" min="0.35" max="1.60" step="0.05" value="1.00">
+      <span id="complianceLabel">1.00</span>
+    </label>
+    <label>Resistência
+      <input id="resistanceRange" type="range" min="0.60" max="2.40" step="0.05" value="1.00">
+      <span id="resistanceLabel">1.00</span>
+    </label>
+    <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
+    <label><input id="stepModeToggle" type="checkbox"> Executar por etapas</label>
+    <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+  </div>
+
+  <div class="state-row" id="stateRow">
+    <button class="state-btn" data-state="asma">Asma</button>
+    <button class="state-btn" data-state="capacidade_vital">Capacidade Vital</button>
+    <button class="state-btn" data-state="enfisema">Enfisema</button>
+    <button class="state-btn active" data-state="eupneia">Eupneia</button>
+    <button class="state-btn" data-state="aerobio_intenso">Exercício Aeróbio Intenso</button>
+    <button class="state-btn" data-state="aerobio_leve">Exercício Aeróbio Leve</button>
+    <button class="state-btn" data-state="aerobio_moderado">Exercício Aeróbio Moderado</button>
+    <button class="state-btn" data-state="fibrose">Fibrose</button>
+    <button class="state-btn" data-state="hiperventilacao">Hiperventilação</button>
+    <button class="state-btn" data-state="hipoventilacao">Hipoventilação</button>
+    <button class="state-btn" data-state="profunda">Inspiração profunda</button>
+    <button class="state-btn" data-state="peep">PEEP alta</button>
+    <button class="state-btn" data-state="mecanica">Vent. mecânica</button>
+  </div>
+
+  <div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+
+  <div class="status-grid">
+    <div class="card" id="phaseCard">
+      <div class="card-title">Fase atual</div>
+      <div class="phase" id="phaseText">Inspiração<small id="phaseDesc">Entrada de ar e expansão pulmonar.</small></div>
+    </div>
+    <div class="card" id="valueCard">
+      <div class="card-title">Volume pulmonar relativo</div>
+      <div class="phase" id="valueText">50%<small id="valueDesc">Representação visual do enchimento pulmonar.</small></div>
+    </div>
+    <div class="card" id="palvCard">
+      <div class="card-title">Palv · pressão alveolar</div>
+      <div class="phase" id="palvText">0.0<small>cmH₂O</small></div>
+    </div>
+    <div class="card" id="pplCard">
+      <div class="card-title">Ppl · pressão pleural</div>
+      <div class="phase" id="pplText">-4.0<small>cmH₂O</small></div>
+    </div>
+    <div class="card" id="compCard">
+      <div class="card-title">Complacência</div>
+      <div class="phase" id="compText">1.00<small>relativa</small></div>
+    </div>
+    <div class="card" id="resCard">
+      <div class="card-title">Resistência vias aéreas</div>
+      <div class="phase" id="resText">1.00<small>relativa</small></div>
+    </div>
+    <div class="card" id="sao2Card">
+      <div class="card-title">SaO₂ estimada</div>
+      <div class="phase" id="sao2Text">98%<small>oxigenação</small></div>
+    </div>
+    <div class="card" id="rvCard">
+      <div class="card-title">RV estimado</div>
+      <div class="phase" id="rvText">5.0<small>L/min</small></div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="panel"><canvas id="sceneCanvas" width="860" height="540"></canvas></div>
+    <div class="panel"><canvas id="graphCanvas" width="860" height="540"></canvas></div>
+  </div>
+
+  <div class="legend">
+    <b>Como interpretar:</b> a cena mostra a relação entre caixa torácica, pleuras, pulmões e diafragma. <b>Palv (pressão alveolar)</b> move o ar para dentro ou para fora. <b>Ppl (pressão pleural)</b> fica mais negativa na inspiração espontânea e favorece o <b>RV (retorno venoso)</b>; na ventilação mecânica, a pressão positiva pode reduzir o RV. <b>Complacência pulmonar</b> representa facilidade de expansão; <b>resistência das vias aéreas</b> representa dificuldade ao fluxo. A ventilação alveolar repercute na <b>SaO₂</b>.
+    <span class="pill">ventilação</span>
+    <span class="pill">mecânica respiratória</span>
+    <span class="pill">pressões</span>
+    <div class="signature">Professor Doutor Mário César Nascimento · Fisiologia Humana</div>
+  </div>
+
+<script>
+(() => {
+  const TOTAL = 400;
+  const stages = [
+    { name:'Transição expiratória', start:0, end:50, color:'#d97706', desc:'Fim da expiração e retorno ao basal.', event:'Retorno elástico', eventDesc:'A intrapleural aproxima-se do valor basal.' },
+    { name:'Expiração', start:51, end:180, color:'#dc2626', desc:'O diafragma sobe e os pulmões retraem.', event:'Saída de ar', eventDesc:'A pressão intrapulmonar torna-se ligeiramente positiva.' },
+    { name:'Transição inspiratória', start:181, end:230, color:'#7c3aed', desc:'Fim da inspiração. Fluxo mínimo.', event:'Equilíbrio transitório', eventDesc:'A pressão intrapulmonar retorna à atmosférica.' },
+    { name:'Inspiração', start:231, end:360, color:'#2563eb', desc:'O diafragma desce e os pulmões expandem.', event:'Entrada de ar', eventDesc:'A pressão intrapulmonar cai levemente e a intrapleural fica mais negativa.' },
+    { name:'Repouso final', start:361, end:400, color:'#6b7280', desc:'Novo ponto de equilíbrio do ciclo.', event:'Estabilização', eventDesc:'Sem fluxo significativo de ar.' }
+  ];
+  const pauseFrames = stages.map(s => s.end);
+
+  const sceneCanvas = document.getElementById('sceneCanvas');
+  const graphCanvas = document.getElementById('graphCanvas');
+  const sctx = sceneCanvas.getContext('2d');
+  const gctx = graphCanvas.getContext('2d');
+
+  const btnStart = document.getElementById('btnStart');
+  const btnPause = document.getElementById('btnPause');
+  const btnStep = document.getElementById('btnStep');
+  const btnReset = document.getElementById('btnReset');
+  const speedRange = document.getElementById('speedRange');
+  const speedLabel = document.getElementById('speedLabel');
+  const loopToggle = document.getElementById('loopToggle');
+  const stepModeToggle = document.getElementById('stepModeToggle');
+  const labelsToggle = document.getElementById('labelsToggle');
+  const ventMode = document.getElementById('ventMode');
+  const complianceRange = document.getElementById('complianceRange');
+  const complianceLabel = document.getElementById('complianceLabel');
+  const resistanceRange = document.getElementById('resistanceRange');
+  const resistanceLabel = document.getElementById('resistanceLabel');
+  const stateRow = document.getElementById('stateRow');
+  const modeBadge = document.getElementById('modeBadge');
+
+  const phaseText = document.getElementById('phaseText');
+  const phaseDesc = document.getElementById('phaseDesc');
+  const valueText = document.getElementById('valueText');
+  const valueDesc = document.getElementById('valueDesc');
+  const palvText = document.getElementById('palvText');
+  const pplText = document.getElementById('pplText');
+  const compText = document.getElementById('compText');
+  const resText = document.getElementById('resText');
+  const sao2Text = document.getElementById('sao2Text');
+  const rvText = document.getElementById('rvText');
+  const phaseCard = document.getElementById('phaseCard');
+  const valueCard = document.getElementById('valueCard');
+  const palvCard = document.getElementById('palvCard');
+  const pplCard = document.getElementById('pplCard');
+  const compCard = document.getElementById('compCard');
+  const resCard = document.getElementById('resCard');
+  const sao2Card = document.getElementById('sao2Card');
+  const rvCard = document.getElementById('rvCard');
+
+  let running = false;
+  let frame = 0;
+  let raf = null;
+  let lastTs = 0;
+  let stepAwaitPlay = false;
+
+  const model = {
+    mode:'spont',
+    compliance:1.0,
+    resistance:1.0,
+    freq:12,
+    vtTarget:0.50,
+    state:'Eupneia'
+  };
+
+  function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
+  function lerp(a, b, t){ return a + (b - a) * t; }
+  function ease(t){ t = clamp(t, 0, 1); return 0.5 - 0.5 * Math.cos(Math.PI * t); }
+  function getSpeed(){ return parseFloat(speedRange.value); }
+  function getStage(f){ return stages.find(s => f >= s.start && f <= s.end) || stages[0]; }
+
+  function getBaseLungInflation(f){
+    if (f <= 130) return lerp(0.22, 1.00, ease(f / 130));
+    if (f <= 180) return lerp(1.00, 0.92, ease((f - 130) / 50));
+    if (f <= 320) return lerp(0.92, 0.18, ease((f - 180) / 140));
+    if (f <= 360) return lerp(0.18, 0.26, ease((f - 320) / 40));
+    return lerp(0.26, 0.30, ease((f - 360) / 40));
+  }
+
+  function getLungInflation(f){
+    // Mantém a animação original estável: os controles mudam a amplitude,
+    // mas não deslocam o tempo nem deformam excessivamente o desenho.
+    const base = getBaseLungInflation(f);
+    const vtFactor = model.vtTarget / 0.50;
+    const resistancePenalty = 1 + Math.max(0, model.resistance - 1) * 0.18;
+    const amp = clamp(vtFactor * model.compliance / resistancePenalty, 0.55, 1.05);
+    return clamp(0.50 + (base - 0.50) * amp, 0.18, 1.00);
+  }
+
+  function getPressure(f){
+    // Palv: na espontânea fica negativa na inspiração e positiva na expiração.
+    // Na ventilação mecânica a pressão positiva gera Palv positiva na inspiração.
+    const rBoost = 0.75 + model.resistance * 0.35;
+    if (model.mode === 'mech') {
+      if (f <= 130) return lerp(0.0, 4.2 * rBoost, ease(f / 130));
+      if (f <= 180) return lerp(4.2 * rBoost, 1.0, ease((f - 130) / 50));
+      if (f <= 320) return lerp(1.0, -0.3, ease((f - 180) / 140));
+      return lerp(-0.3, 0.0, ease((f - 320) / 80));
+    }
+    if (f <= 130) return lerp(0, -1.0 * rBoost, ease(f / 130));
+    if (f <= 180) return lerp(-1.0 * rBoost, 0, ease((f - 130) / 50));
+    if (f <= 250) return lerp(0, 1.2 * rBoost, ease((f - 180) / 70));
+    if (f <= 320) return lerp(1.2 * rBoost, 0.2, ease((f - 250) / 70));
+    return lerp(0.2, 0, ease((f - 320) / 80));
+  }
+
+  function getPleuralPressure(f){
+    if (model.mode === 'mech') {
+      if (f <= 130) return lerp(-4.0, 1.8, ease(f / 130));
+      if (f <= 180) return lerp(1.8, 0.5, ease((f - 130) / 50));
+      if (f <= 320) return lerp(0.5, -3.4, ease((f - 180) / 140));
+      return lerp(-3.4, -4.0, ease((f - 320) / 80));
+    }
+    const effort = clamp(1.0 + (model.resistance - 1) * 0.16 + Math.max(0, 1 - model.compliance) * 0.30, 0.75, 1.35);
+    if (f <= 130) return lerp(-4.0, -6.2 * effort, ease(f / 130));
+    if (f <= 180) return lerp(-6.2 * effort, -5.1, ease((f - 130) / 50));
+    if (f <= 320) return lerp(-5.1, -4.2, ease((f - 180) / 140));
+    return lerp(-4.2, -4.0, ease((f - 320) / 80));
+  }
+
+  function getFlowDirection(f){
+    if (f <= 130) return 'in';
+    if (f > 180 && f <= 320) return 'out';
+    return 'none';
+  }
+
+  function getVentilationMetrics(){
+    const infl = getLungInflation(frame);
+    const palv = getPressure(frame);
+    const ppl = getPleuralPressure(frame);
+    const vtML = 500 * clamp(0.45 + infl * 0.75, 0.35, 1.25);
+    const alveolarVent = Math.max(0, (vtML - 150) * model.freq / 1000); // L/min, espaço morto 150 mL
+    const expectedVA = 4.2;
+    const saO2 = clamp(98 - Math.max(0, expectedVA - alveolarVent) * 3.2 - Math.max(0, model.resistance - 1) * 3.0 - Math.max(0, 1 - model.compliance) * 7.0, 82, 99);
+    let rv = 5.0;
+    if (model.mode === 'mech') rv *= clamp(1 - Math.max(0, palv) * 0.065 - Math.max(0, ppl) * 0.08, 0.55, 1.05);
+    else rv *= clamp(1 + Math.max(0, -ppl - 4.0) * 0.08, 0.80, 1.30);
+    return { infl, palv, ppl, vtML, alveolarVent, saO2, rv };
+  }
+
+  function applyState(state){
+    model.state = state;
+    const presets = {
+      eupneia:{mode:'spont', compliance:1.00, resistance:1.00, freq:12, vtTarget:0.50},
+      asma:{mode:'spont', compliance:0.95, resistance:2.10, freq:18, vtTarget:0.45},
+      capacidade_vital:{mode:'spont', compliance:1.20, resistance:0.85, freq:6, vtTarget:1.10},
+      enfisema:{mode:'spont', compliance:1.45, resistance:1.55, freq:18, vtTarget:0.42},
+      aerobio_intenso:{mode:'spont', compliance:1.10, resistance:0.80, freq:34, vtTarget:0.78},
+      aerobio_leve:{mode:'spont', compliance:1.05, resistance:0.92, freq:18, vtTarget:0.58},
+      aerobio_moderado:{mode:'spont', compliance:1.08, resistance:0.86, freq:26, vtTarget:0.68},
+      fibrose:{mode:'spont', compliance:0.45, resistance:1.15, freq:22, vtTarget:0.34},
+      hiperventilacao:{mode:'spont', compliance:1.05, resistance:0.85, freq:24, vtTarget:0.60},
+      hipoventilacao:{mode:'spont', compliance:0.95, resistance:1.05, freq:7, vtTarget:0.38},
+      profunda:{mode:'spont', compliance:1.15, resistance:0.90, freq:8, vtTarget:0.95},
+      peep:{mode:'mech', compliance:0.95, resistance:1.05, freq:14, vtTarget:0.60},
+      mecanica:{mode:'mech', compliance:1.00, resistance:1.00, freq:14, vtTarget:0.55}
+    };
+    Object.assign(model, presets[state] || presets.eupneia);
+    ventMode.value = model.mode;
+    complianceRange.value = model.compliance.toFixed(2);
+    resistanceRange.value = model.resistance.toFixed(2);
+    complianceLabel.textContent = Number(model.compliance).toFixed(2);
+    resistanceLabel.textContent = Number(model.resistance).toFixed(2);
+    document.querySelectorAll('.state-btn').forEach(btn => btn.classList.toggle('active', btn.dataset.state === state));
+    render();
+  }
+
+  function setCardsColor(color){
+    [phaseCard,valueCard,palvCard,pplCard,compCard,resCard,sao2Card,rvCard].forEach(card => card.style.setProperty('--phase', color));
+  }
+
+  function updateStatus(){
+    const st = getStage(frame);
+    const m = getVentilationMetrics();
+    phaseText.firstChild.textContent = st.name;
+    phaseDesc.textContent = st.desc;
+    valueText.firstChild.textContent = Math.round(m.infl * 100) + '%';
+    valueDesc.textContent = 'Volume pulmonar relativo determinado por complacência, resistência e modo ventilatório.';
+    palvText.firstChild.textContent = m.palv.toFixed(1);
+    pplText.firstChild.textContent = m.ppl.toFixed(1);
+    compText.firstChild.textContent = Number(model.compliance).toFixed(2);
+    resText.firstChild.textContent = Number(model.resistance).toFixed(2);
+    sao2Text.firstChild.textContent = Math.round(m.saO2) + '%';
+    rvText.firstChild.textContent = m.rv.toFixed(1);
+    setCardsColor(st.color);
+    modeBadge.textContent = (model.mode === 'mech' ? 'Ventilação mecânica' : 'Ventilação espontânea') + ' · ' + (stepModeToggle.checked ? (stepAwaitPlay ? 'etapas pausado' : 'etapas') : 'contínuo');
+  }
+
+  function drawArrow(ctx, x1, y1, x2, y2, color, lw){
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lw || 4;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 12 * Math.cos(angle - Math.PI / 6), y2 - 12 * Math.sin(angle - Math.PI / 6));
+    ctx.lineTo(x2 - 12 * Math.cos(angle + Math.PI / 6), y2 - 12 * Math.sin(angle + Math.PI / 6));
+    ctx.closePath();
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+
+  function drawLabel(ctx, text, x, y){
+    ctx.fillStyle = '#374151';
+    ctx.font = '17px Arial';
+    ctx.fillText(text, x, y);
+  }
+
+  function roundedBox(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  function createLungPath(ctx, cx, cy, w, h, side, diaphragmLimitY){
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - h / 2);
+    if (side === 'left') {
+      ctx.bezierCurveTo(cx - w * 0.12, cy - h * 0.54, cx - w * 0.86, cy - h * 0.26, cx - w * 0.96, cy + h * 0.18);
+      ctx.bezierCurveTo(cx - w * 0.98, cy + h * 0.44, cx - w * 0.56, diaphragmLimitY, cx - w * 0.10, diaphragmLimitY);
+      ctx.bezierCurveTo(cx + w * 0.04, diaphragmLimitY, cx + w * 0.06, cy + h * 0.08, cx + w * 0.03, cy + h * 0.00);
+      ctx.bezierCurveTo(cx + w * 0.02, cy - h * 0.12, cx + w * 0.10, cy - h * 0.28, cx, cy - h / 2);
+    } else {
+      ctx.bezierCurveTo(cx + w * 0.12, cy - h * 0.54, cx + w * 0.86, cy - h * 0.26, cx + w * 0.96, cy + h * 0.18);
+      ctx.bezierCurveTo(cx + w * 0.98, cy + h * 0.44, cx + w * 0.56, diaphragmLimitY, cx + w * 0.10, diaphragmLimitY);
+      ctx.bezierCurveTo(cx - w * 0.04, diaphragmLimitY, cx - w * 0.06, cy + h * 0.08, cx - w * 0.03, cy + h * 0.00);
+      ctx.bezierCurveTo(cx - w * 0.02, cy - h * 0.12, cx - w * 0.10, cy - h * 0.28, cx, cy - h / 2);
+    }
+    ctx.closePath();
+  }
+
+  function cubicPoint(p0, p1, p2, p3, t){
+    const mt = 1 - t;
+    const mt2 = mt * mt;
+    const t2 = t * t;
+    return {
+      x: mt2 * mt * p0.x + 3 * mt2 * t * p1.x + 3 * mt * t2 * p2.x + t2 * t * p3.x,
+      y: mt2 * mt * p0.y + 3 * mt2 * t * p1.y + 3 * mt * t2 * p2.y + t2 * t * p3.y
+    };
+  }
+
+  function getLungContourPoints(cx, cy, w, h, side, diaphragmLimitY, samplesPerSeg = 24){
+    const p0 = { x: cx, y: cy - h / 2 };
+    let segs;
+    if (side === 'left') {
+      segs = [
+        [p0, { x: cx - w * 0.12, y: cy - h * 0.54 }, { x: cx - w * 0.86, y: cy - h * 0.26 }, { x: cx - w * 0.96, y: cy + h * 0.18 }],
+        [{ x: cx - w * 0.96, y: cy + h * 0.18 }, { x: cx - w * 0.98, y: cy + h * 0.44 }, { x: cx - w * 0.56, y: diaphragmLimitY }, { x: cx - w * 0.10, y: diaphragmLimitY }],
+        [{ x: cx - w * 0.10, y: diaphragmLimitY }, { x: cx + w * 0.04, y: diaphragmLimitY }, { x: cx + w * 0.06, y: cy + h * 0.08 }, { x: cx + w * 0.03, y: cy + h * 0.00 }],
+        [{ x: cx + w * 0.03, y: cy + h * 0.00 }, { x: cx + w * 0.02, y: cy - h * 0.12 }, { x: cx + w * 0.10, y: cy - h * 0.28 }, p0]
+      ];
+    } else {
+      segs = [
+        [p0, { x: cx + w * 0.12, y: cy - h * 0.54 }, { x: cx + w * 0.86, y: cy - h * 0.26 }, { x: cx + w * 0.96, y: cy + h * 0.18 }],
+        [{ x: cx + w * 0.96, y: cy + h * 0.18 }, { x: cx + w * 0.98, y: cy + h * 0.44 }, { x: cx + w * 0.56, y: diaphragmLimitY }, { x: cx + w * 0.10, y: diaphragmLimitY }],
+        [{ x: cx + w * 0.10, y: diaphragmLimitY }, { x: cx - w * 0.04, y: diaphragmLimitY }, { x: cx - w * 0.06, y: cy + h * 0.08 }, { x: cx - w * 0.03, y: cy + h * 0.00 }],
+        [{ x: cx - w * 0.03, y: cy + h * 0.00 }, { x: cx - w * 0.02, y: cy - h * 0.12 }, { x: cx - w * 0.10, y: cy - h * 0.28 }, p0]
+      ];
+    }
+
+    const pts = [];
+    segs.forEach((seg, segIndex) => {
+      for (let i = 0; i <= samplesPerSeg; i++) {
+        if (segIndex > 0 && i === 0) continue;
+        pts.push(cubicPoint(seg[0], seg[1], seg[2], seg[3], i / samplesPerSeg));
+      }
+    });
+    return pts;
+  }
+
+  function polygonSignedArea(points){
+    let area = 0;
+    for (let i = 0; i < points.length; i++) {
+      const a = points[i];
+      const b = points[(i + 1) % points.length];
+      area += a.x * b.y - b.x * a.y;
+    }
+    return area / 2;
+  }
+
+  function drawOffsetPolyline(points, offsetPx){
+    const area = polygonSignedArea(points);
+    const outwardSign = area > 0 ? -1 : 1;
+
+    const out = [];
+    for (let i = 0; i < points.length; i++) {
+      const prev = points[(i - 1 + points.length) % points.length];
+      const next = points[(i + 1) % points.length];
+      const tx = next.x - prev.x;
+      const ty = next.y - prev.y;
+      const len = Math.hypot(tx, ty) || 1;
+      const nx = outwardSign * (-ty / len);
+      const ny = outwardSign * (tx / len);
+      out.push({ x: points[i].x + nx * offsetPx, y: points[i].y + ny * offsetPx });
+    }
+
+    // suavização reforçada em 2 passes para eliminar ângulos residuais
+    function smoothPass(arr){
+      const n = arr.length;
+      const sm = [];
+      for (let i = 0; i < n; i++) {
+        const p0 = arr[(i - 2 + n) % n];
+        const p1 = arr[(i - 1 + n) % n];
+        const p2 = arr[i];
+        const p3 = arr[(i + 1) % n];
+        const p4 = arr[(i + 2) % n];
+        sm.push({
+          x: (p0.x + 2*p1.x + 4*p2.x + 2*p3.x + p4.x) / 10,
+          y: (p0.y + 2*p1.y + 4*p2.y + 2*p3.y + p4.y) / 10
+        });
+      }
+      return sm;
+    }
+
+    const smooth1 = smoothPass(out);
+    const smooth2 = smoothPass(smooth1);
+
+    sctx.beginPath();
+    sctx.lineJoin = 'round';
+    sctx.lineCap = 'round';
+
+    for (let i = 0; i < smooth2.length; i++) {
+      const p0 = smooth2[(i - 1 + smooth2.length) % smooth2.length];
+      const p1 = smooth2[i];
+      const p2 = smooth2[(i + 1) % smooth2.length];
+      const p3 = smooth2[(i + 2) % smooth2.length];
+
+      const cp1x = p1.x + (p2.x - p0.x) / 6;
+      const cp1y = p1.y + (p2.y - p0.y) / 6;
+      const cp2x = p2.x - (p3.x - p1.x) / 6;
+      const cp2y = p2.y - (p3.y - p1.y) / 6;
+
+      if (i === 0) sctx.moveTo(p1.x, p1.y);
+      sctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
+    }
+
+    sctx.closePath();
+    sctx.stroke();
+  }
+
+  function drawLung(cx, cy, w, h, side, diaphragmLimitY){
+    const grad = sctx.createRadialGradient(cx - w * 0.18, cy - h * 0.24, 12, cx, cy, h);
+    grad.addColorStop(0, '#ffe8ee');
+    grad.addColorStop(0.58, getComputedStyle(document.documentElement).getPropertyValue('--lung').trim());
+    grad.addColorStop(1, '#d98298');
+    sctx.fillStyle = grad;
+    sctx.strokeStyle = '#c96f87';
+    sctx.lineWidth = 3;
+    createLungPath(sctx, cx, cy, w, h, side, diaphragmLimitY);
+    sctx.fill();
+    sctx.stroke();
+
+    sctx.save();
+    createLungPath(sctx, cx, cy, w, h, side, diaphragmLimitY);
+    sctx.clip();
+    sctx.strokeStyle = 'rgba(255,255,255,0.34)';
+    sctx.lineWidth = 2;
+    for (let i = 0; i < 5; i++) {
+      const yy = cy - h * 0.26 + i * h * 0.15;
+      sctx.beginPath();
+      if (side === 'left') {
+        sctx.moveTo(cx - w * 0.60, yy);
+        sctx.quadraticCurveTo(cx - w * 0.18, yy - 8, cx + w * 0.01, yy + 8);
+      } else {
+        sctx.moveTo(cx + w * 0.60, yy);
+        sctx.quadraticCurveTo(cx + w * 0.18, yy - 8, cx - w * 0.01, yy + 8);
+      }
+      sctx.stroke();
+    }
+    sctx.restore();
+  }
+
+  function drawVisceralPleuraParallel(cx, cy, w, h, side, diaphragmLimitY){
+    // Pleura visceral com offset fixo de 8px do pulmão
+    const points = getLungContourPoints(cx, cy, w, h, side, diaphragmLimitY, 28);
+    sctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--pleuraVisceral').trim();
+    sctx.lineWidth = 3.5;
+    drawOffsetPolyline(points, 8);
+  }
+
+  function drawParietalPleura(cx, cy, w, h, side, diaphragmLimitY){
+    // Pleura parietal a 10px da pleura visceral (offset total 18px do pulmão)
+    const points = getLungContourPoints(cx, cy, w, h, side, diaphragmLimitY, 160);
+    sctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--pleuraParietal').trim();
+    sctx.lineWidth = 3.5;
+    drawOffsetPolyline(points, 18);
+  }
+
+  function redrawLungOutline(cx, cy, w, h, side, diaphragmLimitY){
+    sctx.strokeStyle = '#c96f87';
+    sctx.lineWidth = 3;
+    createLungPath(sctx, cx, cy, w, h, side, diaphragmLimitY);
+    sctx.stroke();
+  }
+
+  function drawScene(){
+    sctx.clearRect(0, 0, sceneCanvas.width, sceneCanvas.height);
+
+    const infl = getLungInflation(frame);
+    const flow = getFlowDirection(frame);
+
+    // Variação pulmonar mais evidente e sincronizada com o gráfico
+    const leftW = lerp(138, 208, infl);
+    const leftH = lerp(208, 302, infl);
+    const rightW = lerp(148, 218, infl);
+    const rightH = lerp(216, 310, infl);
+
+    // Diafragma: cúpula alta na expiração e achatamento progressivo na inspiração
+    const apexY = 304 + Math.pow(1 - infl, 1.30) * 104;
+    const diaphragmLimitY = apexY - 10;
+
+    sctx.fillStyle = '#111827';
+    sctx.font = 'bold 24px Arial';
+    sctx.fillText('Mecânica ventilatória', 18, 28);
+
+    // Caixa torácica com leve movimento respiratório
+    const thoraxOpen = infl * 16;      // abertura lateral ~16px (dobrada para visualização)
+    const thoraxLift = infl * 6;      // elevação superior ~6px (dobrada para visualização)
+
+    sctx.strokeStyle = '#cbd5e1';
+    sctx.lineWidth = 4;
+    sctx.beginPath();
+
+    // lado esquerdo
+    sctx.moveTo(140 + thoraxOpen, 54 - thoraxLift);
+    sctx.quadraticCurveTo(115 + thoraxOpen, 122, 102 + thoraxOpen, 244);
+    sctx.quadraticCurveTo(92 + thoraxOpen, 372, 166 + thoraxOpen, 500);
+
+    // lado direito
+    sctx.moveTo(720 - thoraxOpen, 54 - thoraxLift);
+    sctx.quadraticCurveTo(745 - thoraxOpen, 122, 758 - thoraxOpen, 244);
+    sctx.quadraticCurveTo(768 - thoraxOpen, 372, 694 - thoraxOpen, 500);
+
+    sctx.stroke();
+
+    // Traqueia
+    sctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--trachea').trim();
+    sctx.strokeStyle = '#6b7280';
+    sctx.lineWidth = 2;
+    sctx.fillRect(405, 76, 50, 124);
+    sctx.strokeRect(405, 76, 50, 124);
+    for (let y = 92; y < 192; y += 18) {
+      sctx.beginPath();
+      sctx.moveTo(408, y);
+      sctx.lineTo(452, y);
+      sctx.stroke();
+    }
+
+    function drawAirwayTube(x, y, length, width, angle, ringCount){
+      sctx.save();
+      sctx.translate(x, y);
+      sctx.rotate(angle);
+      sctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--trachea').trim();
+      sctx.strokeStyle = '#6b7280';
+      sctx.lineWidth = 2;
+      sctx.fillRect(0, -width / 2, length, width);
+      sctx.strokeRect(0, -width / 2, length, width);
+
+      if (ringCount > 0) {
+        const gap = length / (ringCount + 1);
+        for (let i = 1; i <= ringCount; i++) {
+          const px = i * gap;
+          sctx.beginPath();
+          sctx.moveTo(px, -width / 2 + 2);
+          sctx.lineTo(px, width / 2 - 2);
+          sctx.stroke();
+        }
+      }
+      sctx.restore();
+
+      return {
+        x: x + Math.cos(angle) * length,
+        y: y + Math.sin(angle) * length
+      };
+    }
+
+    function drawMainBronchi(){
+      // Sistema tubular alinhado geometricamente:
+      // traqueia -> carina -> brônquios principais
+      const carinaLeft = { x: 417, y: 188 };
+      const carinaRight = { x: 443, y: 188 };
+      drawAirwayTube(carinaLeft.x, carinaLeft.y, 68, 18, 2.42, 3);
+      drawAirwayTube(carinaRight.x, carinaRight.y, 68, 18, 0.72, 3);
+    }
+
+    drawMainBronchi();
+
+    // (Removida a segunda subdivisão / bronquíolos para simplificação didática)
+
+    // Pulmões
+    drawLung(366, 290, leftW, leftH, 'left', diaphragmLimitY);
+    drawLung(494, 292, rightW, rightH, 'right', diaphragmLimitY);
+
+    // Pleura visceral
+    drawVisceralPleuraParallel(366, 290, leftW, leftH, 'left', diaphragmLimitY);
+    drawVisceralPleuraParallel(494, 292, rightW, rightH, 'right', diaphragmLimitY);
+
+    // Pleura parietal (24px externa à visceral)
+    drawParietalPleura(366, 290, leftW, leftH, 'left', diaphragmLimitY);
+    drawParietalPleura(494, 292, rightW, rightH, 'right', diaphragmLimitY);
+
+    // Redesenha o contorno pulmonar por cima para garantir a linha vermelha visível
+    redrawLungOutline(366, 290, leftW, leftH, 'left', diaphragmLimitY);
+    redrawLungOutline(494, 292, rightW, rightH, 'right', diaphragmLimitY);
+
+    // Reapresenta os brônquios por cima para encobrir a linha verde/vermelha na região central
+    drawMainBronchi();
+
+    // Diafragma
+    sctx.beginPath();
+    sctx.moveTo(180, 438);
+    sctx.bezierCurveTo(260, 402, 340, apexY + 18, 430, apexY);
+    sctx.bezierCurveTo(520, apexY + 18, 600, 402, 680, 438);
+    sctx.lineTo(680, 462);
+    sctx.bezierCurveTo(600, 430, 520, apexY + 40, 430, apexY + 30);
+    sctx.bezierCurveTo(340, apexY + 40, 260, 430, 180, 462);
+    sctx.closePath();
+    const dgrad = sctx.createLinearGradient(0, apexY, 0, 470);
+    dgrad.addColorStop(0, getComputedStyle(document.documentElement).getPropertyValue('--diaphragmTop').trim());
+    dgrad.addColorStop(1, getComputedStyle(document.documentElement).getPropertyValue('--diaphragmBottom').trim());
+    sctx.fillStyle = dgrad;
+    sctx.fill();
+    sctx.strokeStyle = '#7f1d1d';
+    sctx.lineWidth = 2.5;
+    sctx.stroke();
+
+    // Setas: manter como já estão corretas
+    if (flow === 'in') {
+      drawArrow(sctx, 430, 108, 430, 56, '#2563eb', 4);
+      drawArrow(sctx, 430, 184, 430, 126, '#2563eb', 4);
+      // setas exatamente sobre os eixos dos brônquios (inspiração)
+      // brônquio esquerdo
+      drawArrow(sctx, 370, 228, 395, 206, '#2563eb', 3.5);
+      // brônquio direito
+      drawArrow(sctx, 490, 228, 465, 206, '#2563eb', 3.5);
+    } else if (flow === 'out') {
+      // setas exatamente sobre os eixos dos brônquios (expiração)
+      drawArrow(sctx, 395, 206, 370, 228, '#dc2626', 3.5);
+      drawArrow(sctx, 465, 206, 490, 228, '#dc2626', 3.5);
+      drawArrow(sctx, 430, 124, 430, 184, '#dc2626', 4);
+      drawArrow(sctx, 430, 56, 430, 108, '#dc2626', 4);
+    }
+
+    if (labelsToggle.checked) {
+      drawLabel(sctx, 'Traqueia', 465, 104);
+      drawLabel(sctx, flow === 'in' ? 'Inspiração' : flow === 'out' ? 'Expiração' : 'Transição', 382, 42);
+    }
+
+    roundedBox(sctx, 18, 460, 520, 60, 16);
+    sctx.fillStyle = '#fff';
+    sctx.fill();
+    sctx.strokeStyle = '#d1d5db';
+    sctx.lineWidth = 1.4;
+    sctx.stroke();
+
+    // caixa legenda pleuras (direita)
+    roundedBox(sctx, 620, 460, 220, 60, 16);
+    sctx.fillStyle = '#fff';
+    sctx.fill();
+    sctx.strokeStyle = '#d1d5db';
+    sctx.lineWidth = 1.4;
+    sctx.stroke();
+
+    // texto resumo fisiológico
+    sctx.fillStyle = '#111827';
+    sctx.font = 'bold 18px Arial';
+    sctx.fillText('Resumo fisiológico', 34, 480);
+
+    sctx.font = '16px Arial';
+    sctx.fillStyle = '#111827';
+    sctx.fillText('Pressão intrapulmonar ' + getPressure(frame).toFixed(1), 34, 500);
+
+    sctx.fillStyle = '#2563eb';
+    sctx.fillText('Pressão intrapleural ' + getPleuralPressure(frame).toFixed(1), 260, 500);
+
+    sctx.fillStyle = '#111827';
+    sctx.fillText('Volume ' + Math.round(infl * 100) + '%', 440, 500);
+
+    // legenda das pleuras (texto apenas, sem desenhar as linhas ainda)
+    sctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--pleuraParietal').trim();
+    sctx.font = '16px Arial';
+    sctx.fillText('■ Pleura parietal', 636, 484);
+
+    sctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--pleuraVisceral').trim();
+    sctx.fillText('■ Pleura visceral', 636, 504);
+
+    
+  }
+
+  function pressureToY(v){ return 210 - (v * 30); }
+
+  function drawGraphBase(){
+    gctx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+    gctx.fillStyle = '#111827';
+    gctx.font = 'bold 24px Arial';
+    gctx.fillText('Mecânica ventilatória integrada × tempo', 18, 24);
+
+    gctx.strokeStyle = '#374151';
+    gctx.lineWidth = 1.8;
+    gctx.beginPath();
+    gctx.moveTo(85, 72);
+    gctx.lineTo(85, 438);
+    gctx.lineTo(795, 438);
+    gctx.stroke();
+
+    const atmY = pressureToY(0);
+    gctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--atm').trim();
+    gctx.setLineDash([6, 5]);
+    gctx.beginPath();
+    gctx.moveTo(85, atmY);
+    gctx.lineTo(795, atmY);
+    gctx.stroke();
+    gctx.setLineDash([]);
+
+    gctx.fillStyle = '#4b5563';
+    gctx.font = '17px Arial';
+    gctx.fillText('+ pressão', 18, 92);
+    gctx.fillText('0', 62, atmY + 5);
+    gctx.fillText('- pressão', 14, 412);
+    gctx.fillStyle = '#6b7280';
+    gctx.font = 'bold 15px Arial';
+    gctx.fillText('Pressão atmosférica', 590, atmY - 10);
+    gctx.fillText('Tempo', 20, 438);
+
+    stages.forEach((st, idx) => {
+      const sx = 85 + (st.start / TOTAL) * 680;
+      const ex = 85 + (st.end / TOTAL) * 680;
+      gctx.fillStyle = st.color + '16';
+      gctx.fillRect(sx, 446, ex - sx, 18);
+      if (labelsToggle.checked) {
+        const baseY = idx % 2 === 0 ? 480 : 494;
+        gctx.fillStyle = st.color;
+        gctx.font = '14px Arial';
+        const phaseLabel = st.name.replace('Transição expiratória','Trans. expiratória').replace('Transição inspiratória','Trans. inspiratória');
+        gctx.fillText(phaseLabel, sx + 2, baseY);
+      }
+    });
+
+    gctx.lineWidth = 4;
+    gctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--intrapulmonar').trim();
+    gctx.beginPath();
+    gctx.moveTo(430, 84);
+    gctx.lineTo(470, 84);
+    gctx.stroke();
+    gctx.fillStyle = '#111827';
+    gctx.font = '14px Arial';
+    gctx.fillText('Palv (pressão alveolar)', 478, 88);
+
+    gctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--intrapleural').trim();
+    gctx.beginPath();
+    gctx.moveTo(430, 104);
+    gctx.lineTo(470, 104);
+    gctx.stroke();
+    gctx.fillStyle = '#2563eb';
+    gctx.fillText('Ppl (pressão pleural)', 478, 108);
+  }
+
+  function drawCurve(){
+    const st = getStage(frame);
+    const currentStart = 85 + (st.start / TOTAL) * 680;
+    const currentEnd = 85 + (st.end / TOTAL) * 680;
+    gctx.fillStyle = st.color + '10';
+    gctx.fillRect(currentStart, 72, currentEnd - currentStart, 326);
+
+    const atmY = pressureToY(0);
+    gctx.beginPath();
+    gctx.moveTo(85, atmY);
+    for (let i = 0; i <= frame; i++) {
+      const xFill = 85 + (i / TOTAL) * 680;
+      const yFill = pressureToY(getPressure(i));
+      gctx.lineTo(xFill, yFill);
+    }
+    gctx.lineTo(85 + (frame / TOTAL) * 680, atmY);
+    gctx.closePath();
+    gctx.fillStyle = getPressure(frame) <= 0 ? 'rgba(37,99,235,0.08)' : 'rgba(220,38,38,0.08)';
+    gctx.fill();
+
+    gctx.strokeStyle = '#111827';
+    gctx.lineWidth = 4;
+    gctx.beginPath();
+    for (let i = 0; i <= frame; i++) {
+      const x = 85 + (i / TOTAL) * 680;
+      const y = pressureToY(getPressure(i));
+      if (i === 0) gctx.moveTo(x, y); else gctx.lineTo(x, y);
+    }
+    gctx.stroke();
+
+    gctx.strokeStyle = '#2563eb';
+    gctx.lineWidth = 4;
+    gctx.beginPath();
+    for (let i = 0; i <= frame; i++) {
+      const x = 85 + (i / TOTAL) * 680;
+      const y = pressureToY(getPleuralPressure(i));
+      if (i === 0) gctx.moveTo(x, y); else gctx.lineTo(x, y);
+    }
+    gctx.stroke();
+
+    gctx.strokeStyle = '#9ca3af';
+    gctx.setLineDash([4, 4]);
+    pauseFrames.forEach(f => {
+      const px = 85 + (f / TOTAL) * 680;
+      gctx.beginPath();
+      gctx.moveTo(px, 72);
+      gctx.lineTo(px, 398);
+      gctx.stroke();
+    });
+    gctx.setLineDash([]);
+
+    const x = 85 + (frame / TOTAL) * 680;
+    const yIntra = pressureToY(getPressure(frame));
+    const yPleur = pressureToY(getPleuralPressure(frame));
+
+    gctx.fillStyle = st.color;
+    gctx.beginPath();
+    gctx.arc(x, yIntra, 7, 0, Math.PI * 2);
+    gctx.fill();
+
+    gctx.fillStyle = '#2563eb';
+    gctx.beginPath();
+    gctx.arc(x, yPleur, 6, 0, Math.PI * 2);
+    gctx.fill();
+
+    if (labelsToggle.checked) {
+      gctx.fillStyle = '#111827';
+      gctx.font = '14px Arial';
+      gctx.fillText('Fases do ciclo', 760, 456);
+    }
+  }
+
+  function render(){
+    updateStatus();
+    drawScene();
+    drawGraphBase();
+    drawCurve();
+  }
+
+  function pauseNow(markAwait){
+    running = false;
+    if (raf) cancelAnimationFrame(raf);
+    if (markAwait) stepAwaitPlay = true;
+    render();
+  }
+
+  function play(){
+    if (running) return;
+    running = true;
+    stepAwaitPlay = false;
+    lastTs = 0;
+    raf = requestAnimationFrame(loop);
+    render();
+  }
+
+  function nextStage(){
+    if (frame >= TOTAL) {
+      if (loopToggle.checked) frame = 0;
+      else { render(); return; }
+    }
+    const next = pauseFrames.find(p => p > frame);
+    if (next == null) {
+      frame = loopToggle.checked ? 0 : TOTAL;
+      render();
+      return;
+    }
+    frame = next;
+    stepAwaitPlay = true;
+    render();
+  }
+
+  function resetAll(){
+    running = false;
+    if (raf) cancelAnimationFrame(raf);
+    frame = 0;
+    stepAwaitPlay = false;
+    render();
+  }
+
+  function loop(ts){
+    if (!running) return;
+    if (!lastTs) lastTs = ts;
+    const dt = ts - lastTs;
+    lastTs = ts;
+
+    const inc = dt * 0.055 * getSpeed();
+    const prev = Math.floor(frame);
+    frame += inc;
+    if (frame > TOTAL) frame = TOTAL;
+    const cur = Math.floor(frame);
+
+    if (stepModeToggle.checked) {
+      const crossed = pauseFrames.find(p => p > prev && p <= cur);
+      if (crossed !== undefined) {
+        frame = crossed;
+        pauseNow(true);
+        return;
+      }
+    }
+
+    render();
+
+    if (frame >= TOTAL) {
+      if (loopToggle.checked) {
+        frame = 0;
+        if (stepModeToggle.checked) {
+          pauseNow(true);
+          return;
+        }
+      } else {
+        running = false;
+        render();
+        return;
+      }
+    }
+    raf = requestAnimationFrame(loop);
+  }
+
+  btnStart.addEventListener('click', play);
+  btnPause.addEventListener('click', function(){ pauseNow(false); });
+  btnStep.addEventListener('click', nextStage);
+  btnReset.addEventListener('click', resetAll);
+  speedRange.addEventListener('input', function(){ speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x'; });
+  ventMode.addEventListener('change', function(){ model.mode = ventMode.value; model.state = ventMode.value === 'mech' ? 'mecanica' : 'eupneia'; render(); });
+  complianceRange.addEventListener('input', function(){ model.compliance = parseFloat(complianceRange.value); complianceLabel.textContent = model.compliance.toFixed(2); render(); });
+  resistanceRange.addEventListener('input', function(){ model.resistance = parseFloat(resistanceRange.value); resistanceLabel.textContent = model.resistance.toFixed(2); render(); });
+  stateRow.addEventListener('click', function(e){ const btn = e.target.closest('.state-btn'); if(btn) applyState(btn.dataset.state); });
+  stepModeToggle.addEventListener('change', function(){
+    if (stepModeToggle.checked && running) pauseNow(true);
+    else stepAwaitPlay = false;
+    render();
+  });
+  labelsToggle.addEventListener('change', render);
+  loopToggle.addEventListener('change', render);
+
+  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x';
+  complianceLabel.textContent = parseFloat(complianceRange.value).toFixed(2);
+  resistanceLabel.textContent = parseFloat(resistanceRange.value).toFixed(2);
+  applyState('eupneia');
+})();
+</script>
+</body>
+</html>
