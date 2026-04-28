@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador Interativo da Contração Muscular</title>
+  <style>
+    :root{
+      --bg:#ffffff; --panel:#fbfbfd; --line:#d9dce3; --text:#1f2937; --muted:#6b7280;
+      --blue:#2563eb; --red:#dc2626; --green:#059669; --amber:#d97706; --violet:#7c3aed; --teal:#0f766e;
+      --rose:#e11d48; --slate:#475569;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;padding:22px;background:var(--bg);color:var(--text);font-family:Inter,"Segoe UI",Roboto,Arial,Helvetica,sans-serif}
+    h1{margin:0 0 8px;font-size:31px;text-align:center;letter-spacing:-.02em}
+    .subtitle{text-align:center;color:var(--muted);margin:0 0 12px;font-size:16px}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 auto 8px;max-width:1280px}
+    .mode-line{max-width:1280px;margin:0 auto 12px;text-align:right;min-height:22px}
+    .mode-badge{display:inline-block;font-size:12px;color:var(--muted);background:#fff;border:1px solid #e1e5ec;border-radius:999px;padding:4px 10px}
+    button{border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer;transition:.15s transform,.15s box-shadow}
+    button:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(15,23,42,.08)}
+    .primary{border-color:#96b7ff}
+    label{display:flex;gap:8px;align-items:center;font-size:14px;background:#fff;border:1px solid #e1e5ec;border-radius:10px;padding:9px 12px}
+    input[type="range"]{width:140px}
+    .timeline{max-width:1280px;margin:0 auto 14px;background:linear-gradient(180deg,#ffffff 0%,#f9fafb 100%);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:118px;overflow:hidden}
+    .timeline-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+    .timeline-row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;align-items:center;min-height:72px}
+    .timeline-step{position:relative;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:11px 10px 12px;min-height:72px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:13px;line-height:1.2;font-weight:600}
+    .timeline-step.active{border-color:var(--phaseColor,#2563eb);border-width:2px;box-shadow:0 0 0 3px color-mix(in srgb, var(--phaseColor,#2563eb) 30%, white), 0 0 18px color-mix(in srgb, var(--phaseColor,#2563eb) 28%, transparent);color:var(--phaseColor,#2563eb)}
+    .timeline-step::after{content:"→";position:absolute;right:-11px;top:50%;transform:translateY(-50%);color:#94a3b8;font-size:18px}
+    .timeline-step:last-child::after{display:none}
+    .status-grid{display:grid;grid-template-columns:1.05fr .95fr .95fr;gap:12px;max-width:1280px;margin:0 auto 14px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;height:146px;position:relative;overflow:hidden}
+    .card::before{content:"";position:absolute;inset:0 auto 0 0;width:8px;background:var(--phase,var(--blue))}
+    .card-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+    .phase{font-size:25px;font-weight:700;line-height:1.12;padding-left:4px;min-height:92px}
+    .phase small{display:block;margin-top:6px;font-size:14px;color:var(--muted);font-weight:400}
+    .layout{display:grid;grid-template-columns:minmax(500px,1fr) minmax(500px,1fr);gap:16px;max-width:1280px;margin:0 auto}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+    canvas{width:100%;height:auto;display:block;background:#fff;border:1px solid #e5e7eb;border-radius:12px}
+    .legend{max-width:1280px;margin:14px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px 28px;line-height:1.58;font-size:15px;text-align:justify;text-justify:inter-word}.legend .pill{display:block;width:max-content;margin:10px 0 0 auto}.legend .signature{display:block;text-align:right;margin-top:8px}
+    .signature{text-align:right;color:#4b5563;font-size:14px;margin-top:18px;border-top:1px solid #e5e7eb;padding-top:10px}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);margin-left:6px;color:var(--muted);background:#fff}
+    .warn{color:#991b1b;font-weight:600}
+    @media (max-width:1100px){.layout{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr}.timeline-row{grid-template-columns:1fr}}
+  
+.sarcomere-legend{
+  width:calc(100% - 28px);
+  margin:14px auto 0;
+  padding:22px 34px;
+  border:2px solid #cfd5dc;
+  border-radius:28px;
+  background:#f8fafc;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  box-sizing:border-box;
+  font-family:Inter, Arial, sans-serif;
+  font-size:18px;
+  font-weight:600;
+  box-shadow:0 1px 4px rgba(0,0,0,0.06);
+}
+.sarcomere-legend .actina{color:#3b82f6}
+.sarcomere-legend .miosina{color:#ef4444}
+.sarcomere-legend .troponina{color:#22c55e}
+.sarcomere-legend .tropomiosina{color:#d97706}
+
+
+/* === Padronização visual premium — ecossistema dos simuladores === */
+:root{
+  --std-shadow:0 10px 24px rgba(18,42,66,.10);
+  --std-radius:18px;
+  --c-actina:#1F78B4;
+  --c-miosina:#E31A1C;
+  --c-troponina:#33A02C;
+  --c-tropomiosina:#FF7F00;
+  --c-ca:#B15928;
+  --c-atp:#6A3D9A;
+  --c-forca:#000000;
+  --c-pontes:#33A02C;
+}
+body{
+  background:linear-gradient(180deg,#f8fbff 0%, #eef4fb 100%);
+}
+h1{color:#17324d;font-weight:900;}
+.subtitle{color:#5c7086;}
+.controls,.states,.timeline,.status-grid .card,.panel,.legend{
+  background:#ffffff;
+  border:1px solid #d7e1ec;
+  box-shadow:var(--std-shadow);
+}
+.controls{
+  border-radius:20px;
+  margin-bottom:10px;
+}
+.states{
+  max-width:1280px;
+  margin:0 auto 12px;
+  border-radius:20px;
+  padding:10px 12px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  justify-content:center;
+}
+.states strong{font-size:14px;color:#17324d;margin-right:4px;}
+button{
+  border:none!important;
+  border-radius:14px;
+  padding:9px 13px;
+  font-size:14px;
+  font-weight:850;
+  color:#17324d;
+  background:linear-gradient(180deg,#ffffff 0%, #eef4ff 100%);
+  box-shadow:0 1px 4px rgba(18,42,66,.06);
+  cursor:pointer;
+  transition:.18s transform,.18s filter,.18s box-shadow;
+}
+button:hover{transform:translateY(-1px);filter:brightness(1.03);box-shadow:0 7px 16px rgba(18,42,66,.11);}
+button:active{transform:translateY(0);}
+button.primary,#btnStart{
+  color:#fff;
+  background:linear-gradient(135deg,#2f80ed,#57a7ff);
+  box-shadow:0 0 0 3px rgba(47,128,237,.14),0 8px 18px rgba(47,128,237,.18);
+}
+#btnPause{
+  color:#fff;
+  background:linear-gradient(135deg,#f59e0b,#fbbf24);
+  box-shadow:0 0 0 3px rgba(245,158,11,.12),0 8px 18px rgba(245,158,11,.14);
+}
+#btnReset{
+  color:#fff;
+  background:linear-gradient(135deg,#64748b,#94a3b8);
+  box-shadow:0 0 0 3px rgba(100,116,139,.12),0 8px 18px rgba(100,116,139,.13);
+}
+#btnStep{
+  color:#fff;
+  background:linear-gradient(135deg,#6A3D9A,#9b6bd1);
+  box-shadow:0 0 0 3px rgba(106,61,154,.12),0 8px 18px rgba(106,61,154,.14);
+}
+button.state-btn{
+  border:1px solid #d7e1ec!important;
+  background:#ffffff;
+  color:#17324d;
+  border-radius:14px;
+  font-weight:850;
+}
+button.state-btn em{font-style:italic;}
+button.state-btn.active{
+  color:#ffffff;
+  background:linear-gradient(135deg,var(--state-color,#2f80ed),color-mix(in srgb,var(--state-color,#2f80ed) 72%,white 28%));
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--state-color,#2f80ed) 22%,transparent),0 8px 18px color-mix(in srgb,var(--state-color,#2f80ed) 18%,transparent);
+}
+label{
+  border:1px solid #d7e1ec;
+  border-radius:14px;
+  background:#ffffff;
+  box-shadow:0 1px 4px rgba(18,42,66,.05);
+  color:#17324d;
+  font-weight:700;
+}
+input[type="range"]{accent-color:#2f80ed;}
+.mode-badge{border-color:#d7e1ec;color:#5c7086;background:#fff;}
+.timeline,.card,.panel,.legend{border-radius:18px;}
+.timeline-title,.card-title{color:#5c7086;font-weight:900;}
+.timeline-step{
+  border:1px solid #d7e1ec;
+  box-shadow:0 1px 5px rgba(18,42,66,.05), inset 0 1px 0 rgba(255,255,255,.86);
+}
+.timeline-step.active{
+  background:linear-gradient(180deg,#ffffff 0%, color-mix(in srgb,var(--phaseColor,#2563eb) 9%,white 91%) 100%);
+}
+.card{
+  background:linear-gradient(180deg,#ffffff 0%,#f7fbff 100%);
+}
+.card::before{
+  box-shadow:0 0 12px color-mix(in srgb,var(--phase,var(--blue)) 42%,transparent);
+}
+.phase{color:#17324d;}
+.phase small{color:#5c7086;}
+.panel canvas{
+  border-radius:16px;
+  border:1px solid #d7e1ec;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75);
+}
+.sarcomere-legend{
+  border:1px solid #d7e1ec;
+  border-radius:18px;
+  background:#ffffff;
+  box-shadow:var(--std-shadow);
+}
+.sarcomere-legend .actina{color:var(--c-actina)}
+.sarcomere-legend .miosina{color:var(--c-miosina)}
+.sarcomere-legend .troponina{color:var(--c-troponina)}
+.sarcomere-legend .tropomiosina{color:var(--c-tropomiosina)}
+.legend{
+  padding:16px 18px;
+  color:#17324d;
+}
+.legend .signature{
+  color:#5c7086;
+  font-weight:650;
+}
+
+
+
+/* === Refinamento final aplicado: cards dashboard + gráfico/legenda premium === */
+.status-grid .card{
+  --cardColor:var(--phase,var(--blue));
+  position:relative;
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid color-mix(in srgb,var(--cardColor) 22%,#d7e1ec 78%);
+  background:linear-gradient(180deg,#ffffff 0%,#f6f9fd 100%);
+  box-shadow:0 10px 24px rgba(18,42,66,.10), inset 0 1px 0 rgba(255,255,255,.92);
+  transition:.22s border-color,.22s box-shadow,.22s transform,.22s background;
+}
+.status-grid .card:hover{
+  transform:translateY(-1px);
+  box-shadow:0 14px 28px rgba(18,42,66,.13), inset 0 1px 0 rgba(255,255,255,.95);
+}
+/* barra lateral forte, no padrão dashboard médico */
+.status-grid .card::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:7px;
+  border-radius:18px 0 0 18px;
+  background:linear-gradient(180deg,var(--cardColor) 0%,color-mix(in srgb,var(--cardColor) 76%,white 24%) 100%);
+  box-shadow:0 0 14px color-mix(in srgb,var(--cardColor) 34%,transparent);
+  opacity:.98;
+}
+/* semicírculo/marca d'água à direita */
+.status-grid .card::after{
+  content:"";
+  position:absolute;
+  right:-72px;
+  top:50%;
+  transform:translateY(-50%);
+  width:174px;
+  height:174px;
+  border-radius:50%;
+  background:radial-gradient(circle at center,
+    color-mix(in srgb,var(--cardColor) 9%,white 91%) 0%,
+    rgba(255,255,255,0) 62%);
+  border:2px solid color-mix(in srgb,var(--cardColor) 16%,transparent);
+  box-shadow:inset 0 0 22px color-mix(in srgb,var(--cardColor) 10%,transparent),0 0 18px color-mix(in srgb,var(--cardColor) 8%,transparent);
+  pointer-events:none;
+}
+.status-grid .card > *{position:relative;z-index:1;}
+.status-grid .card-title{
+  padding-left:2px;
+  color:#53677f;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:.08em;
+}
+.status-grid .phase{
+  color:#17324d;
+  font-weight:900;
+  padding-left:2px;
+}
+.status-grid .phase small{
+  color:#5c7086;
+  font-weight:600;
+}
+
+.graph-metric-grid{
+  margin:12px auto 0;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+.graph-metric{
+  --gcolor:#1F78B4;
+  position:relative;
+  overflow:hidden;
+  min-height:64px;
+  border:1px solid color-mix(in srgb,var(--gcolor) 22%,#d7e1ec 78%);
+  border-radius:18px;
+  background:linear-gradient(180deg,#ffffff 0%,#f6f9fd 100%);
+  box-shadow:0 4px 12px rgba(18,42,66,.07), inset 0 1px 0 rgba(255,255,255,.90);
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:11px 13px 11px 16px;
+  color:#17324d;
+  font-size:14px;
+  font-weight:950;
+}
+.graph-metric::before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;width:6px;
+  border-radius:18px 0 0 18px;
+  background:var(--gcolor);
+  box-shadow:0 0 12px color-mix(in srgb,var(--gcolor) 30%,transparent);
+}
+.graph-metric::after{
+  content:"";
+  position:absolute;
+  right:-44px;
+  bottom:-50px;
+  width:124px;
+  height:124px;
+  border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--gcolor) 10%,white 90%) 0%,rgba(255,255,255,0) 68%);
+  border:1.5px solid color-mix(in srgb,var(--gcolor) 14%,transparent);
+  pointer-events:none;
+}
+.graph-metric > *{position:relative;z-index:1;}
+.graph-metric .sample-line{width:46px;height:16px;border-radius:999px;position:relative;flex:0 0 auto;}
+.graph-metric .sample-line::before{
+  content:"";position:absolute;left:0;right:0;top:5px;height:6px;border-radius:999px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--gcolor) 36%,white 64%) 0%,var(--gcolor) 55%,color-mix(in srgb,var(--gcolor) 72%,black 28%) 100%);
+  box-shadow:0 1px 3px color-mix(in srgb,var(--gcolor) 26%,transparent), inset 0 1px 0 rgba(255,255,255,.42), inset 0 -1px 0 rgba(0,0,0,.18);
+}
+.graph-metric .sample-line.dashed::before{
+  height:5px;top:5px;
+  background:repeating-linear-gradient(90deg,var(--gcolor) 0 8px,transparent 8px 13px);
+  box-shadow:0 1px 2px color-mix(in srgb,var(--gcolor) 22%,transparent);
+}
+.graph-metric .sample-dot{
+  width:16px;height:16px;border-radius:50%;
+  background:radial-gradient(circle at 30% 26%,#ffffff 0 15%,color-mix(in srgb,var(--gcolor) 52%,white 48%) 16% 34%,var(--gcolor) 56%,color-mix(in srgb,var(--gcolor) 70%,black 30%) 100%);
+  box-shadow:0 2px 5px rgba(15,23,42,.18), inset -2px -2px 3px rgba(0,0,0,.20), inset 1.5px 1.5px 2px rgba(255,255,255,.68);
+  flex:0 0 auto;
+}
+@media (max-width:760px){.graph-metric-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <h1>Simulador Interativo da Contração Muscular</h1>
+  <p class="subtitle">Acoplamento excitação–contração, Ca²⁺, ATP e ciclo completo das pontes cruzadas com foco ampliado no sarcômero e na zona H.</p>
+
+  <div class="controls">
+    <button id="btnStart" class="primary">Iniciar</button>
+    <button id="btnPause">Pausar</button>
+    <button id="btnStep">Próxima etapa</button>
+    <button id="btnReset">Resetar</button>
+
+    <label>Velocidade
+      <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2">
+      <span id="speedLabel">1.2x</span>
+    </label>
+
+    <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
+    <label><input id="stepModeToggle" type="checkbox"> Executar por etapas</label>
+    <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+  </div>
+
+  <div class="states" id="statesBar">
+    <strong>Estados rápidos:</strong>
+    <button type="button" class="state-btn active" id="stateNormal" data-state="normal" style="--state-color:#2f80ed">Normal</button>
+    <button type="button" class="state-btn" id="stateRigor" data-state="rigor" style="--state-color:#991b1b">Sem ATP (rigor mortis)</button>
+    <button type="button" class="state-btn" id="stateCaBlock" data-state="cablock" style="--state-color:#FF7F00">Bloqueio de Ca²⁺</button>
+    <button type="button" class="state-btn" id="stateMyasthenia" data-state="myasthenia" style="--state-color:#1F78B4">Miastenia gravis</button>
+    <button type="button" class="state-btn" id="stateBotulismo" data-state="botulismo" style="--state-color:#6A3D9A">Infecção por <em>Clostridium botulinum</em></button>
+    <button type="button" class="state-btn" id="stateTetano" data-state="tetano" style="--state-color:#E31A1C">Infecção por <em>Clostridium tetani</em></button>
+    <button type="button" class="state-btn" id="stateCurare" data-state="curare" style="--state-color:#FF7F00">Bloqueio neuromuscular por Curare</button>
+  </div>
+
+  <div class="mode-line">
+    <div id="modeBadge" class="mode-badge">Modo: contínuo</div>
+  </div>
+
+  <div class="status-grid">
+    <div class="card" id="phaseCard">
+      <div class="card-title">Fase atual</div>
+      <div class="phase" id="phaseText">Repouso
+        <small id="phaseDesc">Tropomiosina cobrindo os sítios de ligação da actina.</small>
+      </div>
+    </div>
+    <div class="card" id="caCard">
+      <div class="card-title">Cálcio / ATP</div>
+      <div class="phase" id="caText">Ca²⁺ baixo · ATP disponível
+        <small id="caDesc">Sem ativação relevante das pontes cruzadas.</small>
+      </div>
+    </div>
+    <div class="card" id="eventCard">
+      <div class="card-title">Evento predominante</div>
+      <div class="phase" id="eventText">Repouso do sarcômero
+        <small id="eventDesc">As cabeças de miosina ainda não estão produzindo deslizamento efetivo.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-title">Linha temporal do acoplamento excitação–contração</div>
+    <div class="timeline-row" id="timelineRow">
+      <div class="timeline-step" data-timeline="0">Potencial de ação no sarcolema</div>
+      <div class="timeline-step" data-timeline="1">Túbulos T</div>
+      <div class="timeline-step" data-timeline="2">Retículo sarcoplasmático libera Ca²⁺</div>
+      <div class="timeline-step" data-timeline="3">Ca²⁺ liga-se à troponina</div>
+      <div class="timeline-step" data-timeline="4">Exposição da actina e ponte cruzada</div>
+      <div class="timeline-step" data-timeline="5">Golpe de força</div>
+      <div class="timeline-step" data-timeline="6">ATP dissocia e recarrega a miosina</div>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="panel">
+      <canvas id="sceneCanvas" width="920" height="760"></canvas>
+      <div class="sarcomere-legend">
+        <span class="actina">Actina</span>
+        <span class="miosina">Miosina</span>
+        <span class="troponina">Troponina</span>
+        <span class="tropomiosina">Tropomiosina</span>
+      </div>
+    </div>
+
+
+    <div class="panel">
+      <canvas id="graphCanvas" width="920" height="620"></canvas>
+      <div class="graph-metric-grid" aria-label="Legenda do gráfico">
+        <div class="graph-metric" style="--gcolor:var(--c-forca)"><span class="sample-line"></span><span class="sample-dot"></span><span>Força de contração</span></div>
+        <div class="graph-metric" style="--gcolor:var(--c-ca)"><span class="sample-line dashed"></span><span class="sample-dot"></span><span>Ca²⁺ relativo</span></div>
+        <div class="graph-metric" style="--gcolor:var(--c-pontes)"><span class="sample-line"></span><span class="sample-dot"></span><span>Pontes cruzadas</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="legend-text">
+      <b>Repouso:</b> tropomiosina cobre os sítios da actina. 
+      <b>Liberação de Ca²⁺:</b> o retículo sarcoplasmático aumenta o Ca²⁺ citosólico. 
+      <b>Troponina:</b> o Ca²⁺ liga-se à troponina e desloca a tropomiosina. 
+      <b>Ponte cruzada:</b> a miosina liga-se à actina. 
+      <b>Golpe de força:</b> o deslizamento dos filamentos aproxima os discos Z. 
+      <b>ATP:</b> o ATP dissocia a ponte cruzada, recarrega a cabeça de miosina e também sustenta o retorno do Ca²⁺ ao retículo sarcoplasmático. 
+      <b>Bandas:</b> a <b>banda A</b> permanece praticamente constante, enquanto a <b>banda I</b> diminui com o encurtamento. 
+      <b>Interpretação:</b> <b>Sem ATP (rigor mortis):</b> a miosina liga-se à actina, realiza o golpe de força e não consegue se desligar, mantendo as pontes cruzadas fixas. 
+      <b>Bloqueio de Ca²⁺:</b> sem Ca²⁺ a troponina não muda de conformação e a tropomiosina continua bloqueando os sítios da actina, impedindo a contração. 
+      <b>Miastenia gravis:</b> a redução da transmissão neuromuscular diminui a liberação de Ca²⁺ e o número de pontes cruzadas, produzindo contração fraca.
+      <b>Infecção por <em>Clostridium botulinum</em>:</b> a toxina botulínica impede a liberação de acetilcolina, causando paralisia flácida.
+      <b>Infecção por <em>Clostridium tetani</em>:</b> a toxina tetânica remove a inibição neural e favorece contração sustentada, espasmos e rigidez.
+      <b>Bloqueio neuromuscular por Curare:</b> o bloqueio dos receptores nicotínicos impede a ativação da placa motora e reduz a contração.
+    </div>
+    <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
+  </div>
+
+<script>
+(() => {
+  const sceneCanvas = document.getElementById("sceneCanvas");
+  const graphCanvas = document.getElementById("graphCanvas");
+  const sctx = sceneCanvas.getContext("2d");
+  const gctx = graphCanvas.getContext("2d");
+
+  const btnStart = document.getElementById("btnStart");
+  const btnPause = document.getElementById("btnPause");
+  const btnStep = document.getElementById("btnStep");
+  const btnReset = document.getElementById("btnReset");
+  const speedRange = document.getElementById("speedRange");
+  const speedLabel = document.getElementById("speedLabel");
+  const loopToggle = document.getElementById("loopToggle");
+  const stepModeToggle = document.getElementById("stepModeToggle");
+  const labelsToggle = document.getElementById("labelsToggle");
+  const modeBadge = document.getElementById("modeBadge");
+  const stateButtons = [...document.querySelectorAll('.state-btn')];
+  let pathologyState = 'normal';
+
+  const phaseText = document.getElementById("phaseText");
+  const phaseDesc = document.getElementById("phaseDesc");
+  const caText = document.getElementById("caText");
+  const caDesc = document.getElementById("caDesc");
+  const eventText = document.getElementById("eventText");
+  const eventDesc = document.getElementById("eventDesc");
+  const phaseCard = document.getElementById("phaseCard");
+  const caCard = document.getElementById("caCard");
+  const eventCard = document.getElementById("eventCard");
+  const timelineSteps = [...document.querySelectorAll('.timeline-step')];
+
+  const TOTAL = 900;
+  const STD_COLORS = {
+    actina:'#1F78B4', miosina:'#E31A1C', troponina:'#33A02C', tropomiosina:'#FF7F00',
+    calcio:'#B15928', atp:'#6A3D9A', forca:'#000000', pontes:'#33A02C', fase:'#64748b'
+  };
+  const pauseFrames = [80,140,220,320,420,560,720,900];
+
+  const stages = [
+    {name:"Repouso",start:0,end:80,color:STD_COLORS.fase,timeline:0,desc:"Tropomiosina cobrindo os sítios de ligação da actina.",ca:"Ca²⁺ baixo · ATP disponível",caDesc:"Sem ativação relevante das pontes cruzadas.",event:"Repouso do sarcômero",eventDesc:"A cabeça de miosina está preparada, mas sem deslizamento efetivo."},
+    {name:"Acoplamento elétrico",start:81,end:140,color:"#64748b",timeline:1,desc:"O potencial de ação percorre sarcolema e túbulos T.",ca:"Ca²⁺ ainda baixo · ATP disponível",caDesc:"O estímulo elétrico precede a resposta mecânica.",event:"Ativação dos túbulos T",eventDesc:"A despolarização chega ao sistema tubular e prepara a liberação de Ca²⁺."},
+    {name:"Liberação de Ca²⁺",start:141,end:220,color:STD_COLORS.calcio,timeline:2,desc:"O retículo sarcoplasmático libera Ca²⁺ para o sarcoplasma.",ca:"Ca²⁺ em ascensão · ATP disponível",caDesc:"A troponina começa a ser ocupada pelo cálcio.",event:"Aumento do Ca²⁺ citosólico",eventDesc:"O Ca²⁺ aproxima o sistema regulatório do estado ativo."},
+    {name:"Troponina ativada",start:221,end:300,color:STD_COLORS.troponina,timeline:3,desc:"Ca²⁺ liga-se à troponina e desloca a tropomiosina.",ca:"Ca²⁺ alto · ATP disponível",caDesc:"Os sítios ativos da actina tornam-se acessíveis.",event:"Desbloqueio da actina",eventDesc:"A barreira estérica é removida e a miosina pode ligar-se."},
+    {name:"Ponte cruzada",start:301,end:380,color:"#14b8a6",timeline:4,desc:"As cabeças de miosina ligam-se à actina.",ca:"Ca²⁺ alto · ATP disponível",caDesc:"A ponte actina-miosina está formada.",event:"Ligação actina-miosina",eventDesc:"Início efetivo do ciclo das pontes cruzadas."},
+    {name:"Golpe de força",start:381,end:470,color:STD_COLORS.miosina,timeline:5,desc:"A miosina gira e puxa o filamento fino.",ca:"Ca²⁺ alto · ATP sendo utilizado",caDesc:"A energia química é convertida em trabalho mecânico.",event:"Deslizamento do sarcômero",eventDesc:"Os discos Z aproximam-se e a banda I diminui."},
+    {name:"Ligação do ATP",start:471,end:550,color:STD_COLORS.atp,timeline:6,desc:"O ATP liga-se à miosina e dissocia a ponte cruzada.",ca:"Ca²⁺ em queda · ATP necessário",caDesc:"Sem ATP, a dissociação da ponte não ocorre adequadamente.",event:"Separação actina-miosina",eventDesc:"A miosina se desprende da actina pela ligação do ATP."},
+    {name:"Recarga e relaxamento",start:551,end:640,color:STD_COLORS.actina,timeline:6,desc:"A hidrólise do ATP recarrega a cabeça de miosina e o Ca²⁺ retorna ao retículo.",ca:"Ca²⁺ baixo novamente · ATP disponível",caDesc:"O sarcômero retorna progressivamente ao estado basal.",event:"Pronto para novo ciclo",eventDesc:"A cabeça de miosina fica recarregada e a tropomiosina volta a cobrir a actina."}
+  ];
+
+  let frame = 0, running = false, lastTs = 0, raf = null, pulse = 0, stepAwaitPlay = false;
+
+  function getSpeed(){ return parseFloat(speedRange.value); }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b,v)); }
+  function lerp(a,b,t){ return a + (b-a)*t; }
+  function getStage(f){ return stages.find(s => f >= s.start && f <= s.end) || stages[0]; }
+  function rigorMode(){ return pathologyState === 'rigor'; }
+  function caBlockMode(){ return pathologyState === 'cablock'; }
+  function myastheniaMode(){ return pathologyState === 'myasthenia'; }
+  function botulismoMode(){ return pathologyState === 'botulismo'; }
+  function tetanoMode(){ return pathologyState === 'tetano'; }
+  function curareMode(){ return pathologyState === 'curare'; }
+
+  function getCalcium(f){
+    if (caBlockMode() || curareMode()) return 2;
+    if (botulismoMode()) return 4;
+    let base;
+    if (f <= 140) base = 10;
+    else if (f <= 220) base = lerp(10,72,(f-140)/80);
+    else if (f <= 300) base = lerp(72,96,(f-220)/80);
+    else if (f <= 470) base = 96;
+    else if (f <= 550) base = lerp(96,38,(f-470)/80);
+    else base = lerp(38,12,(f-550)/90);
+    if (myastheniaMode()) base *= 0.45;
+    if (tetanoMode()) {
+      if (f < 180) base = Math.max(base, lerp(18, 88, clamp((f-70)/110,0,1)));
+      else base = Math.max(base, 88);
+    }
+    return clamp(base,0,100);
+  }
+
+  function getCrossBridges(f){
+    if (caBlockMode() || curareMode() || botulismoMode()) return 0;
+    let base;
+    if (f <= 300) base = 0;
+    else if (f <= 380) base = lerp(0,52,(f-300)/80);
+    else if (f <= 470) base = lerp(52,100,(f-380)/90);
+    else if (f <= 550) base = rigorMode() ? 100 : lerp(100,24,(f-470)/80);
+    else base = rigorMode() ? 100 : lerp(24,0,(f-550)/90);
+    if (myastheniaMode()) base *= 0.30;
+    if (tetanoMode()) {
+      if (f <= 260) base = lerp(8, 72, clamp((f-90)/170,0,1));
+      else base = 92;
+    }
+    return clamp(base,0,100);
+  }
+
+  
+function getContraction(f){
+    // Banda I mais lenta: alongamos a janela de deslocamento da actina
+    if (caBlockMode() || curareMode() || botulismoMode()) return 0;
+    let base;
+    if (rigorMode()) {
+      if (f <= 320) base = 0;
+      else if (f <= 430) base = lerp(0, 16, (f - 320) / 110);
+      else if (f <= 520) base = lerp(16, 30, (f - 430) / 90);
+      else base = 30;
+      return clamp(base,0,100);
+    }
+    if (tetanoMode()) {
+      if (f <= 180) base = lerp(0, 54, clamp((f - 70) / 110, 0, 1));
+      else if (f <= 340) base = lerp(54, 96, (f - 180) / 160);
+      else base = 96;
+      return clamp(base,0,100);
+    }
+    if (f <= 320) base = 0;
+    else if (f <= 420) base = lerp(0, 18, (f - 320) / 100);
+    else if (f <= 540) base = lerp(18, 75, (f - 420) / 120);
+    else if (f <= 660) base = lerp(75, 100, (f - 540) / 120);
+    else if (f <= 740) base = 100;
+    else if (f <= 820) base = lerp(100, 36, (f - 740) / 80);
+    else base = lerp(36, 0, (f - 820) / 60);
+    if (myastheniaMode()) base *= 0.28;
+    return clamp(base,0,100);
+}
+
+
+  function getIBandWidth(contraction){ return lerp(142,18,contraction/100); }
+  function getABandWidth(){ return 220; }
+
+  function setCardsColor(color){
+    phaseCard.style.setProperty("--phase", color);
+    caCard.style.setProperty("--phase", color);
+    eventCard.style.setProperty("--phase", color);
+    document.documentElement.style.setProperty("--phaseColor", color);
+  }
+
+  function syncPathology(){
+    stateButtons.forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.state === pathologyState);
+    });
+  }
+
+  function pathologyText(){
+    if (rigorMode()) return ' · patologia: rigor mortis';
+    if (caBlockMode()) return ' · patologia: bloqueio de Ca²⁺';
+    if (myastheniaMode()) return ' · patologia: miastenia gravis';
+    if (botulismoMode()) return ' · infecção por Clostridium botulinum';
+    if (tetanoMode()) return ' · infecção por Clostridium tetani';
+    if (curareMode()) return ' · bloqueio neuromuscular por Curare';
+    return '';
+  }
+
+  function updateTimeline(stage){
+    timelineSteps.forEach((el, idx) => {
+      if (idx === stage.timeline) el.classList.add('active');
+      else el.classList.remove('active');
+    });
+  }
+
+  function updateStatus(){
+    syncPathology();
+    const st = getStage(frame);
+    const contraction = getContraction(frame);
+    const calcium = getCalcium(frame);
+    const bridges = getCrossBridges(frame);
+
+    let phaseName = st.name + pathologyText();
+    let phaseDescription = st.desc;
+    let caLine = st.ca;
+    let caDescription = st.caDesc;
+    let eventName = st.event;
+    let eventDescription = st.eventDesc;
+
+    if (rigorMode()) {
+      phaseDescription = 'Sem ATP, a ponte cruzada não se desfaz adequadamente e o relaxamento fica comprometido.';
+      caLine = `Ca²⁺ ${calcium < 30 ? 'baixo' : 'alto'} · ATP ausente`;
+      caDescription = 'A falta de ATP impede a dissociação actina-miosina e compromete a SERCA.';
+      eventName = contraction > 60 ? 'Rigidez mantida' : st.event;
+      eventDescription = 'A miosina permanece aderida à actina por falha de dissociação.';
+    } else if (caBlockMode()) {
+      phaseDescription = 'O bloqueio do Ca²⁺ impede a ligação à troponina e a exposição eficaz da actina.';
+      caLine = 'Ca²⁺ muito baixo · ATP disponível';
+      caDescription = 'Sem Ca²⁺ citosólico suficiente, o ciclo de pontes cruzadas praticamente não acontece.';
+      eventName = 'Contração inibida';
+      eventDescription = 'Troponina pouco ativada e força quase ausente.';
+    } else if (myastheniaMode()) {
+      caLine = st.ca.replace('alto','moderado').replace('ascensão','ascensão menor');
+      caDescription = 'Menor ativação da fibra muscular por falha de transmissão neuromuscular.';
+      eventName = st.event + ' reduzido';
+      eventDescription = 'A quantidade de pontes cruzadas e a força gerada ficam diminuídas.';
+    } else if (botulismoMode()) {
+      phaseDescription = 'A toxina botulínica impede a liberação de acetilcolina no terminal pré-sináptico da junção neuromuscular.';
+      caLine = 'Ca²⁺ muito baixo · ATP disponível';
+      caDescription = 'Sem estímulo colinérgico efetivo, há pouca despolarização da fibra e pouca liberação de Ca²⁺.';
+      eventName = 'Paralisia flácida';
+      eventDescription = 'A fibra não recebe comando suficiente para formar pontes cruzadas e gerar força.';
+    } else if (tetanoMode()) {
+      phaseDescription = 'A toxina tetânica reduz a inibição neural e mantém descarga motora excessiva, favorecendo contração sustentada.';
+      caLine = 'Ca²⁺ alto sustentado · ATP consumido continuamente';
+      caDescription = 'A ativação persistente mantém o sarcômero em estado contrátil, com relaxamento prejudicado.';
+      eventName = 'Espasmo / contração sustentada';
+      eventDescription = 'Pontes cruzadas e força permanecem elevadas, simulando rigidez espástica.';
+    } else if (curareMode()) {
+      phaseDescription = 'O curare bloqueia competitivamente receptores nicotínicos de acetilcolina na placa motora.';
+      caLine = 'Ca²⁺ muito baixo · ATP disponível';
+      caDescription = 'Sem ativação pós-sináptica efetiva, a fibra não libera Ca²⁺ suficiente para contrair.';
+      eventName = 'Bloqueio neuromuscular';
+      eventDescription = 'A transmissão falha na placa motora e a contração praticamente desaparece.';
+    }
+
+    phaseText.firstChild.textContent = phaseName;
+    phaseDesc.textContent = phaseDescription;
+    caText.firstChild.textContent = caLine;
+    caDesc.textContent = caDescription;
+    eventText.firstChild.textContent = eventName;
+    eventDesc.textContent = eventDescription;
+    setCardsColor(st.color);
+    updateTimeline(st);
+    modeBadge.textContent = stepModeToggle.checked ? (stepAwaitPlay ? 'Modo: etapas (pausado)' : 'Modo: etapas') : 'Modo: contínuo';
+    if (rigorMode()) modeBadge.textContent += ' · sem ATP';
+    else if (caBlockMode()) modeBadge.textContent += ' · bloqueio de Ca²⁺';
+    else if (myastheniaMode()) modeBadge.textContent += ' · miastenia';
+    else if (botulismoMode()) modeBadge.textContent += ' · Clostridium botulinum';
+    else if (tetanoMode()) modeBadge.textContent += ' · Clostridium tetani';
+    else if (curareMode()) modeBadge.textContent += ' · Curare';
+  }
+
+  function drawRoundedRect(ctx, x, y, w, h, r){
+    ctx.beginPath();
+    ctx.moveTo(x+r, y);
+    ctx.arcTo(x+w, y, x+w, y+h, r);
+    ctx.arcTo(x+w, y+h, x, y+h, r);
+    ctx.arcTo(x, y+h, x, y, r);
+    ctx.arcTo(x, y, x+w, y, r);
+    ctx.closePath();
+  }
+
+  function drawBandBracket(ctx, x1, x2, y, label, color){
+    ctx.strokeStyle = color; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x1, y); ctx.lineTo(x2, y);
+    ctx.moveTo(x1, y-8); ctx.lineTo(x1, y+8);
+    ctx.moveTo(x2, y-8); ctx.lineTo(x2, y+8);
+    ctx.stroke();
+    ctx.fillStyle = color; ctx.font = '13px Inter, Arial';
+
+    if (label === 'Banda A (constante)') {
+      const top = 'Banda A';
+      const bottom = '(constante)';
+      ctx.fillText(top, (x1+x2)/2 - ctx.measureText(top).width/2, y-12);
+      ctx.fillText(bottom, (x1+x2)/2 - ctx.measureText(bottom).width/2, y+24);
+    } else {
+      ctx.fillText(label, (x1+x2)/2 - ctx.measureText(label).width/2, y-12);
+    }
+  }
+
+  function drawScene(){
+    sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);
+    const st = getStage(frame);
+    const contraction = getContraction(frame);
+    const calcium = getCalcium(frame);
+    const bridges = getCrossBridges(frame);
+
+    sctx.fillStyle = '#111827';
+    sctx.font = 'bold 22px Inter, Arial';
+    sctx.fillText('Sarcômero ampliado e dinâmica das bandas A/I', 18, 34);
+
+    sctx.fillStyle = '#fff';
+    sctx.strokeStyle = '#d1d5db';
+    sctx.lineWidth = 2;
+    drawRoundedRect(sctx, 24, 56, 872, 540, 16);
+    sctx.fill(); sctx.stroke();
+
+    const center = 460;
+    const aBand = getABandWidth();
+    const iBand = getIBandWidth(contraction);
+    const halfSarcomere = aBand + iBand;
+    const zLeft = center - halfSarcomere;
+    const zRight = center + halfSarcomere;
+    const mLeft = center - aBand;
+    const mRight = center + aBand;
+
+    // ===== Miolo recodificado com geometria fixa =====
+    // Base inferior e restante do layout permanecem travados.
+    const MYOSIN_ROWS = [220, 364];
+    const THIN_FILAMENT_LEN = 224;
+    const LEFT_ACTIN_X0 = zLeft + 10;
+    const LEFT_ACTIN_X1 = LEFT_ACTIN_X0 + THIN_FILAMENT_LEN;
+    const RIGHT_ACTIN_X1 = zRight - 10;
+    const RIGHT_ACTIN_X0 = RIGHT_ACTIN_X1 - THIN_FILAMENT_LEN;
+
+    const hZoneHalf = Math.max(0, center - LEFT_ACTIN_X1);
+
+    // 8 actinas no total: 4 da esquerda e 4 da direita
+    const ACTIN_ROWS = [
+      { id: 1, y: 188, side: 'left', orient: 'upper' },
+      { id: 2, y: 252, side: 'left', orient: 'upper' },
+      { id: 3, y: 328, side: 'left', orient: 'lower' },
+      { id: 4, y: 400, side: 'left', orient: 'lower' },
+      { id: 5, y: 182, side: 'right', orient: 'upper' },
+      { id: 6, y: 244, side: 'right', orient: 'upper' },
+      { id: 7, y: 328, side: 'right', orient: 'lower' },
+      { id: 8, y: 400, side: 'right', orient: 'lower' },
+    ];
+
+    // Distâncias fixas em pixels
+    const DIST_ACTIN_TROPONIN = 8;
+    const DIST_TROPONIN_TROPOMYOSIN = 12;
+    const DIST_TROPOMYOSIN_TO_HEAD_TARGET = 10; // gap visual pequeno: o conjunto fino quase toca a miosina
+    const HEAD_LEN_REST = 10;
+    const HEAD_LEN_UP = 13;
+    const HEAD_SWING = 4;
+
+    const caVisible = calcium > 18 && !caBlockMode() && !curareMode() && !botulismoMode();
+    const caAlpha = clamp((calcium - 18) / 56, 0, 1);
+    const regulationBackT = clamp((frame - 220) / 80, 0, 1);
+    const regulationAlpha = 1 - 0.72 * regulationBackT;
+    const liftT = clamp((frame - 230) / 110, 0, 1);
+    const strokeT = clamp((frame - 380) / 90, 0, 1);
+    const releaseT = rigorMode() ? 0 : clamp((frame - 470) / 80, 0, 1);
+    const easedLift = -(Math.cos(Math.PI * liftT) - 1) / 2;
+    const easedStroke = -(Math.cos(Math.PI * strokeT) - 1) / 2;
+    const easedRelease = -(Math.cos(Math.PI * releaseT) - 1) / 2;
+
+    sctx.strokeStyle = '#7c3aed';
+    sctx.lineWidth = 8;
+    sctx.beginPath(); sctx.moveTo(zLeft, 148); sctx.lineTo(zLeft, 430); sctx.stroke();
+    sctx.beginPath(); sctx.moveTo(zRight, 148); sctx.lineTo(zRight, 430); sctx.stroke();
+
+    // Fundo branco no sarcômero ampliado para facilitar a leitura.
+
+    function drawMoleculeBubble(ctx, x, y, r, fill1, fill2, label, textColor='#7c2d12'){
+      const g = ctx.createRadialGradient(x-r*0.25, y-r*0.25, r*0.2, x, y, r);
+      g.addColorStop(0, fill2);
+      g.addColorStop(1, fill1);
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle = 'rgba(120,120,120,.35)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+      ctx.fillStyle = textColor;
+      ctx.font = `bold ${Math.max(10, Math.round(r*0.9))}px Inter, Arial`;
+      const w = ctx.measureText(label).width;
+      ctx.fillText(label, x - w/2, y + 4);
+    }
+
+    function drawActinSet(row){
+      const isLeft = row.side === 'left';
+      const x0 = isLeft ? LEFT_ACTIN_X0 : RIGHT_ACTIN_X0;
+      const x1 = isLeft ? LEFT_ACTIN_X1 : RIGHT_ACTIN_X1;
+      const xMin = Math.min(x0, x1);
+      const xMax = Math.max(x0, x1);
+      const actinSpacing = 20;
+      const beadR = 5;
+      const actinHelixOffset = 5;
+      const baseTroponinR = 6;
+      const baseTropomyosinW = 6;
+
+      let actinY = row.y;
+      let caYBase = actinY;
+
+      // Reguladoras sempre voltadas para a respectiva miosina.
+      // Como algumas actinas foram reposicionadas verticalmente,
+      // a direção é definida pela posição real de cada actina em relação à miosina mais próxima.
+      let sideDir;
+      if ([2, 6].includes(row.id)) {
+        // Actinas 2 e 6 estão abaixo da miosina 1, então as regulatórias ficam acima.
+        sideDir = -1;
+      } else if ([3, 7].includes(row.id)) {
+        // Actinas 3 e 7 estão acima da miosina 2, então as regulatórias ficam abaixo.
+        sideDir = 1;
+      } else {
+        // Demais actinas mantêm a orientação padrão em direção ao centro contrátil.
+        sideDir = row.orient === 'upper' ? 1 : -1;
+      }
+      let troponinY = actinY + sideDir * DIST_ACTIN_TROPONIN;
+      let tropoY = troponinY + sideDir * DIST_TROPONIN_TROPOMYOSIN;
+
+      // troponina cola na actina; tropomiosina cola na troponina.
+      // Durante a ativação, ambas escorregam visualmente para trás da actina,
+      // mas preservando a sequência espacial actina → troponina → tropomiosina.
+      const collapsedTroponinOffset = sideDir * 1.8;
+      const collapsedTropoOffset = sideDir * 7.2;
+      const effectiveRegBackT = (caBlockMode() || curareMode() || botulismoMode()) ? 0 : regulationBackT;
+      const displayedTroponinY = (troponinY + (actinY + collapsedTroponinOffset - troponinY) * effectiveRegBackT);
+      const displayedTropoY = (tropoY + ((displayedTroponinY + collapsedTropoOffset) - tropoY) * effectiveRegBackT);
+      const troponinR = baseTroponinR * (1 - 0.32 * effectiveRegBackT);
+      const tropomyosinW = Math.max(2.0, baseTropomyosinW * (1 - 0.42 * effectiveRegBackT));
+
+      // actina em dupla cadeia helicoidal estilizada, sem ocupar mais espaço total
+      const strandStart = xMin - beadR;
+      const strandEnd = xMax + beadR;
+
+      function drawActinBead(x, y){
+        const g = sctx.createRadialGradient(x - beadR * 0.35, y - beadR * 0.35, beadR * 0.25, x, y, beadR);
+        g.addColorStop(0, '#93c5fd');
+        g.addColorStop(1, STD_COLORS.actina);
+        sctx.fillStyle = g;
+        sctx.beginPath();
+        sctx.arc(x, y, beadR, 0, Math.PI * 2);
+        sctx.fill();
+        sctx.strokeStyle = '#1d4ed8';
+        sctx.lineWidth = 1.2;
+        sctx.stroke();
+      }
+
+      for(let x = strandStart; x <= strandEnd; x += actinSpacing){
+        drawActinBead(x, actinY - actinHelixOffset);
+      }
+
+      for(let x = strandStart + actinSpacing / 2; x <= strandEnd - actinSpacing / 2; x += actinSpacing){
+        drawActinBead(x, actinY + actinHelixOffset);
+      }
+
+      // Preenche os vazios da hélice sem aumentar o limite total ocupado:
+      // adiciona novas subunidades de actina sobrepostas entre as duas fileiras.
+      for(let x = strandStart + actinSpacing / 4; x <= strandEnd - actinSpacing / 4; x += actinSpacing / 2){
+        drawActinBead(x, actinY);
+      }
+      // regulatórias no padrão helicoidal aprovado, corrigido para ficar fiel ao esboço:
+      // - sem alterar o tamanho base das troponinas
+      // - mais pares ao longo da actina
+      // - conexão lateral preservada
+      // - alternância suave para sugerir espiral
+      sctx.save();
+      sctx.globalAlpha = caBlockMode() ? 1 : regulationAlpha;
+
+      const pairCount = 6;
+      const pairSpacing = (xMax - xMin) / (pairCount - 1);
+      const pairDx = troponinR * 0.82;
+      const pairDy = sideDir * troponinR * 0.62;
+      const waveAmp = sideDir * troponinR * 0.42;
+      const rodWidth = Math.max(3, tropomyosinW * 1.15);
+      const rodHighlightW = Math.max(1.5, rodWidth * 0.34);
+
+      function drawSphere(cx, cy, r, cLight, cDark){
+        const g = sctx.createRadialGradient(
+          cx - r * 0.35, cy - r * 0.35, r * 0.22,
+          cx, cy, r
+        );
+        g.addColorStop(0, cLight);
+        g.addColorStop(1, cDark);
+        sctx.fillStyle = g;
+        sctx.beginPath();
+        sctx.arc(cx, cy, r, 0, Math.PI * 2);
+        sctx.fill();
+      }
+
+      function drawRod(x1, y1, x2, y2){
+        sctx.strokeStyle = '#b45309';
+        sctx.lineWidth = rodWidth;
+        sctx.lineCap = 'round';
+        sctx.beginPath();
+        sctx.moveTo(x1, y1);
+        sctx.lineTo(x2, y2);
+        sctx.stroke();
+
+        sctx.strokeStyle = '#fdba74';
+        sctx.lineWidth = rodHighlightW;
+        sctx.beginPath();
+        sctx.moveTo(x1 - 0.9, y1 - 0.9);
+        sctx.lineTo(x2 - 0.9, y2 - 0.9);
+        sctx.stroke();
+      }
+
+      const pairs = [];
+      for(let i = 0; i < pairCount; i++){
+        const baseX = xMin + i * pairSpacing;
+        const wave = (i % 2 === 0 ? -waveAmp : waveAmp);
+        const xA = baseX - pairDx;
+        const yA = displayedTroponinY + wave - pairDy;
+        const xB = baseX + pairDx;
+        const yB = displayedTroponinY + wave + pairDy;
+        pairs.push({xA, yA, xB, yB});
+      }
+
+      // filamento laranja: lateral da segunda esfera -> lateral da primeira do próximo conjunto
+      for(let i = 0; i < pairs.length - 1; i++){
+        const a = pairs[i];
+        const b = pairs[i + 1];
+
+        const startX = a.xB + troponinR * 0.88;
+        const startY = a.yB + (b.yA < a.yB ? -troponinR * 0.22 : troponinR * 0.22);
+        const endX = b.xA - troponinR * 0.88;
+        const endY = b.yA + (b.yA < a.yB ? troponinR * 0.22 : -troponinR * 0.22);
+
+        drawRod(startX, startY, endX, endY);
+      }
+
+      // troponinas por cima
+      for(const p of pairs){
+        drawSphere(p.xA, p.yA, troponinR, '#bbf7bb', STD_COLORS.troponina);
+        drawSphere(p.xB, p.yB, troponinR, '#bbf7bb', STD_COLORS.troponina);
+      }
+
+      sctx.restore();
+
+
+      if (caVisible){
+        sctx.save();
+        sctx.globalAlpha = caAlpha;
+        [0.18, 0.50, 0.82].forEach(t => {
+          const x = xMin + (xMax-xMin)*t;
+          drawMoleculeBubble(sctx, x, caYBase, 14, '#c2410c', '#fb923c', 'Ca', '#431407');
+        });
+        sctx.restore();
+      }
+    }
+
+    function drawHead(anchorX, anchorY, orientX, orientY, phaseOffset=0, showEnergy=false){
+      // Miosina lidera: movimento mais rápido, comprimento fixo e ativação só quando a actina chegou.
+      const localFrame = frame - phaseOffset;
+
+      // comprimentos um pouco menores para reduzir o braço
+      const neckLen = 4.2;
+      const armLen = 13.4;
+      const headOffset = 6.8;
+      const headR = 3.8;
+      const jointR1 = 2.4;
+      const jointR2 = 2.7;
+
+      const deg32 = 32 * Math.PI / 180;
+      const deg55 = 55 * Math.PI / 180;
+      const deg85 = 85 * Math.PI / 180;
+
+      const startAng = Math.atan2(orientY * Math.sin(deg32), orientX * Math.cos(deg32));
+      const bindAng  = Math.atan2(orientY * Math.sin(deg55), orientX * Math.cos(deg55));
+      const strokeAng = Math.atan2(orientY * Math.sin(deg85), orientX * Math.cos(deg85));
+
+      const nearestThinX = orientX < 0 ? LEFT_ACTIN_X1 - 6 : RIGHT_ACTIN_X0 + 6;
+      let targetY;
+      if (anchorY < 280) {
+        targetY = orientY < 0 ? 220 : 252;
+      } else {
+        targetY = orientY < 0 ? 308 : 340;
+      }
+      const targetX = nearestThinX + orientX * DIST_TROPOMYOSIN_TO_HEAD_TARGET;
+
+      // Gatilho espacial: a cabeça só entra em ação quando a actina alcançou essa região.
+      const reachThreshold = anchorX + orientX * 34;
+      let reach;
+      if (orientX < 0) {
+        reach = clamp((LEFT_ACTIN_X1 - reachThreshold) / 28, 0, 1);
+      } else {
+        reach = clamp((reachThreshold - RIGHT_ACTIN_X0) / 28, 0, 1);
+      }
+
+      // Sem actina chegando: fica em repouso.
+      const t1 = reach * clamp((localFrame - 320) / 40, 0, 1);  // aproximação sincronizada com banda I
+      const t2 = reach * clamp((localFrame - 360) / 28, 0, 1);  // ligação
+      const t3 = reach * clamp((localFrame - 388) / 150, 0, 1);  // stroke mais longo para acompanhar a actina
+      const t4 = rigorMode() ? 0 : reach * clamp((localFrame - 560) / 120, 0, 1); // retorno mais tardio e suave
+
+      const e1 = -(Math.cos(Math.PI * t1) - 1) / 2;
+      const e2 = -(Math.cos(Math.PI * t2) - 1) / 2;
+      const e3 = -(Math.cos(Math.PI * t3) - 1) / 2;
+      const e4 = -(Math.cos(Math.PI * t4) - 1) / 2;
+
+      const isRelaxPhase = frame >= 720;
+      let angle = startAng;
+      if (isRelaxPhase && !rigorMode()) {
+        angle = startAng;
+      }
+      if (!(isRelaxPhase && !rigorMode())) {
+        angle = angle + (bindAng - angle) * e1;
+        angle = angle + (strokeAng - angle) * (0.50 * e2 + 0.50 * e3);
+        angle = angle + (startAng - angle) * e4;
+      if (rigorMode() && frame >= 520) angle = bindAng + (strokeAng - bindAng) * 0.35;
+      }
+
+      const neckX = anchorX + Math.cos(angle) * neckLen;
+      const neckY = anchorY + Math.sin(angle) * neckLen;
+      const armX = neckX + Math.cos(angle) * armLen;
+      const armY = neckY + Math.sin(angle) * armLen;
+      const headX = armX + Math.cos(angle) * headOffset;
+      const headY = armY + Math.sin(angle) * headOffset;
+
+      function drawRod3D(x1, y1, x2, y2, width, base, hi){
+        sctx.strokeStyle = base;
+        sctx.lineWidth = width;
+        sctx.lineCap = 'round';
+        sctx.beginPath();
+        sctx.moveTo(x1, y1);
+        sctx.lineTo(x2, y2);
+        sctx.stroke();
+
+        sctx.strokeStyle = hi;
+        sctx.lineWidth = Math.max(1.0, width * 0.32);
+        sctx.beginPath();
+        sctx.moveTo(x1 - 0.8, y1 - 0.8);
+        sctx.lineTo(x2 - 0.8, y2 - 0.8);
+        sctx.stroke();
+      }
+
+      function drawBall3D(cx, cy, r, c1, c2){
+        const g = sctx.createRadialGradient(
+          cx - r * 0.35, cy - r * 0.35, r * 0.2,
+          cx, cy, r
+        );
+        g.addColorStop(0, c2);
+        g.addColorStop(1, c1);
+        sctx.fillStyle = g;
+        sctx.beginPath();
+        sctx.arc(cx, cy, r, 0, Math.PI * 2);
+        sctx.fill();
+      }
+
+      drawRod3D(anchorX, anchorY, neckX, neckY, 2.5, '#9f3030', '#fca5a5');
+      drawBall3D(neckX, neckY, jointR1, '#c24141', '#fecaca');
+      drawRod3D(neckX, neckY, armX, armY, 2.4, '#b13b3b', '#fca5a5');
+      drawBall3D(armX, armY, jointR2, '#c24141', '#fecaca');
+      drawRod3D(armX, armY, headX, headY, 2.3, '#b13b3b', '#fca5a5');
+      drawBall3D(headX, headY, headR, '#c24141', '#fca5a5');
+
+      if (showEnergy){
+        const bubbleX = headX + orientX * 9;
+        const bubbleY = headY + orientY * 5;
+        const showATP = localFrame >= 221 && localFrame < 381;
+        const showADP = localFrame >= 381 && localFrame < 551 && !rigorMode();
+        if (showATP){
+          drawMoleculeBubble(sctx, bubbleX, bubbleY, 7, '#22c55e', '#bbf7d0', 'ATP', '#14532d');
+        } else if (showADP){
+          drawMoleculeBubble(sctx, bubbleX, bubbleY, 7, '#f97316', '#fdba74', 'ADP', '#7c2d12');
+        }
+      }
+    }
+
+    function drawMyosinRow(yBody, rowIndex){
+      function drawBackbone3D(x, y, w, h){
+        const g = sctx.createLinearGradient(x, y - h / 2, x, y + h / 2);
+        g.addColorStop(0, '#fca5a5');
+        g.addColorStop(0.28, STD_COLORS.miosina);
+        g.addColorStop(0.72, '#991b1b');
+        g.addColorStop(1, '#7f1d1d');
+        sctx.fillStyle = g;
+        sctx.beginPath();
+        sctx.roundRect(x, y - h / 2, w, h, h / 2);
+        sctx.fill();
+
+        sctx.strokeStyle = 'rgba(255,150,150,0.80)';
+        sctx.lineWidth = 1.2;
+        sctx.beginPath();
+        sctx.moveTo(x + 8, y - h * 0.18);
+        sctx.lineTo(x + w - 8, y - h * 0.18);
+        sctx.stroke();
+      }
+
+      const bodyX = center - aBand;
+      const bodyW = aBand * 2;
+      drawBackbone3D(bodyX, yBody, bodyW, 12);
+
+      const leftAnchors = [center - aBand + 58, center - aBand + 112, center - aBand + 166];
+      const rightAnchors = [center + 52, center + 106, center + 160];
+
+      // delays irregulares para naturalidade
+      const topLeftOffsets = [0, 34, 77];
+      const topRightOffsets = [15, 51, 96];
+      const bottomLeftOffsets = [22, 66, 108];
+      const bottomRightOffsets = [9, 44, 88];
+
+      leftAnchors.forEach((x, i) => drawHead(x, yBody - 1, -1, -1, topLeftOffsets[i] + rowIndex * 9, i !== 2));
+      rightAnchors.forEach((x, i) => drawHead(x, yBody - 1, 1, -1, topRightOffsets[i] + rowIndex * 7, i !== 0));
+
+      leftAnchors.forEach((x, i) => drawHead(x, yBody + 1, -1, 1, bottomLeftOffsets[i] + rowIndex * 8, i === 1));
+      rightAnchors.forEach((x, i) => drawHead(x, yBody + 1, 1, 1, bottomRightOffsets[i] + rowIndex * 10, i === 1));
+    }
+
+    ACTIN_ROWS.forEach(drawActinSet);
+    drawMyosinRow(MYOSIN_ROWS[0], 0);
+    drawMyosinRow(MYOSIN_ROWS[1], 1);
+
+    drawBandBracket(sctx, zLeft, mLeft, 472, 'Banda I', STD_COLORS.actina);
+    drawBandBracket(sctx, center-aBand, center+aBand, 502, 'Banda A (constante)', STD_COLORS.miosina);
+    drawBandBracket(sctx, mRight, zRight, 472, 'Banda I', STD_COLORS.actina);
+
+    if (hZoneHalf > 6){
+      drawBandBracket(sctx, center - hZoneHalf, center + hZoneHalf, 458, 'Zona H', '#f28b8b');
+      sctx.fillStyle = 'rgba(255,120,120,.07)';
+      sctx.fillRect(center - hZoneHalf, 186, hZoneHalf * 2, 206);
+    }
+
+    if (labelsToggle.checked){
+      // Disco Z acompanha a movimentação embaixo, como na versão aprovada
+      sctx.font = '14px Inter, Arial';
+      sctx.fillStyle = '#7c3aed';
+      sctx.fillText('Disco Z', zLeft-22, 576);
+      sctx.fillText('Disco Z', zRight-22, 576);
+      sctx.fillStyle = '#059669';
+      sctx.font = '14px Inter, Arial';
+      const encTxt = 'Encurtamento do sarcômero';
+      sctx.fillText(encTxt, center - sctx.measureText(encTxt).width/2, 570);
+
+    }
+
+    sctx.strokeStyle = '#059669'; sctx.lineWidth = 3;
+    sctx.beginPath(); sctx.moveTo(zLeft+12, 548); sctx.lineTo(center-18, 548); sctx.stroke();
+    sctx.beginPath(); sctx.moveTo(center+18, 548); sctx.lineTo(zRight-12, 548); sctx.stroke();
+    sctx.beginPath(); sctx.moveTo(center-30, 542); sctx.lineTo(center-18, 548); sctx.lineTo(center-30, 554); sctx.stroke();
+    sctx.beginPath(); sctx.moveTo(center+30, 542); sctx.lineTo(center+18, 548); sctx.lineTo(center+30, 554); sctx.stroke();
+  }
+
+  function drawLegendSwatch(ctx, x, y, color, dashed=false){
+    ctx.strokeStyle = color; ctx.lineWidth = 3;
+    if (dashed) ctx.setLineDash([7,5]);
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x+30, y); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function drawGraphLine3D(ctx, points, color, width=4, dashed=false){
+    if (!points.length) return;
+    ctx.save();
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.shadowColor = color; ctx.shadowBlur = 8; ctx.globalAlpha = 0.28;
+    ctx.strokeStyle = color; ctx.lineWidth = width + 5;
+    if (dashed) ctx.setLineDash([12,8]);
+    ctx.beginPath(); points.forEach((p,i)=> i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y)); ctx.stroke();
+    ctx.shadowBlur = 0; ctx.globalAlpha = 1; ctx.strokeStyle = color; ctx.lineWidth = width;
+    if (dashed) ctx.setLineDash([9,7]); else ctx.setLineDash([]);
+    ctx.beginPath(); points.forEach((p,i)=> i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y)); ctx.stroke();
+    ctx.globalAlpha = 0.42; ctx.strokeStyle = 'rgba(255,255,255,.88)'; ctx.lineWidth = Math.max(1.2,width*.28);
+    if (dashed) ctx.setLineDash([7,9]); else ctx.setLineDash([]);
+    ctx.beginPath(); points.forEach((p,i)=> i ? ctx.lineTo(p.x,p.y-1.1) : ctx.moveTo(p.x,p.y-1.1)); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawGraphSphere(ctx, x, y, r, color){
+    ctx.save();
+    ctx.shadowColor = color; ctx.shadowBlur = 14; ctx.shadowOffsetY = 2;
+    const grad = ctx.createRadialGradient(x-r*0.35,y-r*0.38,r*0.16,x,y,r);
+    grad.addColorStop(0,'#ffffff');
+    grad.addColorStop(0.22,'rgba(255,255,255,.92)');
+    grad.addColorStop(0.42,color);
+    grad.addColorStop(1,'rgba(15,23,42,.72)');
+    ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+    ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(15,23,42,.18)'; ctx.lineWidth = 1.2; ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,.72)'; ctx.beginPath(); ctx.arc(x-r*0.32,y-r*0.36,r*0.24,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawGraph(){
+    gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
+    gctx.fillStyle = '#111827'; gctx.font = 'bold 22px Inter, Arial';
+    gctx.fillText('Força, Ca²⁺ e número de pontes cruzadas', 18, 30);
+
+    const x0 = 86, y0 = 485, w = 752, h = 350;
+    gctx.strokeStyle = '#374151'; gctx.lineWidth = 1.8;
+    gctx.beginPath(); gctx.moveTo(x0, 84); gctx.lineTo(x0, y0); gctx.lineTo(x0+w, y0); gctx.stroke();
+
+    if (labelsToggle.checked){
+      gctx.fillStyle = '#4b5563'; gctx.font = '14px Inter, Arial';
+      gctx.fillText('Intensidade relativa', 18, 74); gctx.fillText('Tempo', 790, 548);
+    }
+
+    for(let i=0;i<=5;i++){
+      const gy = y0 - i*(h/5);
+      gctx.strokeStyle = '#e5e7eb'; gctx.lineWidth = 1;
+      gctx.beginPath(); gctx.moveTo(x0, gy); gctx.lineTo(x0+w, gy); gctx.stroke();
+      gctx.fillStyle = '#6b7280'; gctx.font = '13px Inter, Arial';
+      gctx.fillText(String(i*20), 46, gy+5);
+    }
+
+    stages.forEach((st, i) => {
+      const sx = x0 + (st.start/TOTAL)*w, ex = x0 + (st.end/TOTAL)*w;
+      gctx.fillStyle = st.color + '22'; gctx.fillRect(sx, 514, ex - sx, 18);
+      if (labelsToggle.checked){
+        gctx.fillStyle = st.color;
+        gctx.font = '12px Inter, Arial';
+        const stepCycle = [0, 14, 28];
+        const stepOffset = stepCycle[i % 3];
+        gctx.fillText(st.name, sx + 2, 548 + stepOffset);
+      }
+    });
+
+    // prolongamento cinza da faixa inferior até o fim do eixo do tempo
+    {
+      const lastStageEndX = x0 + (stages[stages.length - 1].end / TOTAL) * w;
+      gctx.fillStyle = '#d1d5db';
+      gctx.fillRect(lastStageEndX, 514, (x0 + w) - lastStageEndX, 18);
+    }
+
+    const cur = getStage(frame);
+    const cs = x0 + (cur.start/TOTAL)*w, ce = x0 + (cur.end/TOTAL)*w;
+    gctx.fillStyle = cur.color + '16'; gctx.fillRect(cs, 84, ce - cs, h+20);
+
+    const forcePoints = [];
+    const calciumPoints = [];
+    const bridgePoints = [];
+    for(let i=0;i<=frame;i++){
+      const x = x0 + (i/TOTAL)*w;
+      forcePoints.push({x, y:y0 - getContraction(i)*3.5});
+      calciumPoints.push({x, y:y0 - getCalcium(i)*2.45});
+      bridgePoints.push({x, y:y0 - getCrossBridges(i)*2.9});
+    }
+    drawGraphLine3D(gctx, forcePoints, STD_COLORS.forca, 4.4, false);
+    drawGraphLine3D(gctx, calciumPoints, STD_COLORS.calcio, 3.0, true);
+    drawGraphLine3D(gctx, bridgePoints, STD_COLORS.pontes, 3.8, false);
+
+    const px = x0 + (frame/TOTAL)*w, py = y0 - getContraction(frame)*3.5;
+    drawGraphSphere(gctx, px, py, 8.5, cur.color);
+
+    gctx.strokeStyle = '#9ca3af'; gctx.setLineDash([4,4]);
+    pauseFrames.forEach(f => {
+      const x = x0 + (f/TOTAL)*w;
+      gctx.beginPath(); gctx.moveTo(x, 84); gctx.lineTo(x, y0); gctx.stroke();
+    });
+    gctx.setLineDash([]);
+
+    if (rigorMode()) {
+      gctx.fillStyle = '#991b1b'; gctx.font = 'bold 16px Inter, Arial';
+      gctx.fillText('Sem ATP: queda da força é prejudicada e as pontes permanecem elevadas.', 248, 596);
+
+      // mensagem final no espaço da última coluna cinza
+      if (frame >= TOTAL - 2){
+        const lastStageEndX = x0 + (stages[stages.length - 1].end / TOTAL) * w;
+        const finalColCenterX = lastStageEndX + ((x0 + w) - lastStageEndX) / 2 + 30;
+
+        gctx.textAlign = 'center';
+        gctx.fillStyle = '#374151';
+        gctx.font = 'bold 12px Inter, Arial';
+        gctx.fillText('ATP = 0', finalColCenterX, 330);
+
+        gctx.fillStyle = '#4b5563';
+        gctx.font = 'bold 12px Inter, Arial';
+        gctx.fillText('Rigor mortis', finalColCenterX, 348);
+
+        gctx.fillStyle = '#111827';
+        gctx.font = 'bold 13px Inter, Arial';
+        gctx.fillText('GAME OVER 🪦', finalColCenterX, 366);
+
+        gctx.textAlign = 'start';
+      }
+    } else if (caBlockMode()) {
+      gctx.fillStyle = '#92400e'; gctx.font = 'bold 16px Inter, Arial';
+      gctx.fillText('Bloqueio de Ca²⁺: curvas achatadas por falha de ativação contrátil.', 282, 596);
+    } else if (myastheniaMode()) {
+      gctx.fillStyle = '#1d4ed8'; gctx.font = 'bold 16px Inter, Arial';
+      gctx.fillText('Miastenia gravis: menor pico de força e menor recrutamento de pontes.', 275, 596);
+    } else if (botulismoMode()) {
+      gctx.fillStyle = '#6A3D9A'; gctx.font = 'bold 16px Inter, Arial';
+      gctx.fillText('Clostridium botulinum: ausência de ACh → Ca²⁺ e força quase zerados.', 240, 596);
+    } else if (tetanoMode()) {
+      gctx.fillStyle = '#E31A1C'; gctx.font = 'bold 16px Inter, Arial';
+      gctx.fillText('Clostridium tetani: ativação sustentada → força e pontes permanecem elevadas.', 205, 596);
+    } else if (curareMode()) {
+      gctx.fillStyle = '#FF7F00'; gctx.font = 'bold 16px Inter, Arial';
+      gctx.fillText('Curare: receptor nicotínico bloqueado → falha de ativação e contração.', 245, 596);
+    }
+  }
+
+  function render(){ updateStatus(); drawScene(); drawGraph(); }
+
+  function pauseNow(markAwait=true){
+    running = false;
+    if (raf) cancelAnimationFrame(raf);
+    if (markAwait) stepAwaitPlay = true;
+    render();
+  }
+
+  function play(){
+    if (running) return;
+    running = true; stepAwaitPlay = false; lastTs = 0; window.__cycleHoldCount = 0;
+    raf = requestAnimationFrame(loop); render();
+  }
+
+  function nextStage(){
+    if (frame >= TOTAL){ if (loopToggle.checked) frame = 0; else { render(); return; } }
+    const next = pauseFrames.find(p => p > frame);
+    if (next == null){ frame = loopToggle.checked ? 0 : TOTAL; render(); return; }
+    frame = next; stepAwaitPlay = true; render();
+  }
+
+  function resetAll(){ running = false; if (raf) cancelAnimationFrame(raf); frame = 0; pulse = 0; stepAwaitPlay = false; window.__cycleHoldCount = 0; render(); }
+
+  function loop(ts){
+    if (!running) return;
+    if (!lastTs) lastTs = ts;
+    const dt = ts - lastTs;
+    lastTs = ts;
+    const inc = dt * 0.052 * getSpeed();
+    const prev = Math.floor(frame);
+    frame += inc;
+    pulse += dt * 0.12 * getSpeed();
+    if (frame > TOTAL) frame = TOTAL;
+    const cur = Math.floor(frame);
+
+    if (stepModeToggle.checked){
+      const crossed = pauseFrames.find(p => p > prev && p <= cur);
+      if (crossed !== undefined){ frame = crossed; pauseNow(true); return; }
+    }
+
+    render();
+
+    if (frame >= TOTAL){
+      if (rigorMode()) { running = false; render(); return; }
+      if (loopToggle.checked){
+        if (!window.__cycleHoldCount) window.__cycleHoldCount = 0;
+        if (window.__cycleHoldCount < 4){
+          window.__cycleHoldCount += 1;
+          render();
+          raf = requestAnimationFrame(loop);
+          return;
+        }
+        window.__cycleHoldCount = 0;
+        frame = 0; pulse = 0;
+        if (stepModeToggle.checked){ pauseNow(true); return; }
+      } else { running = false; render(); return; }
+    }
+    raf = requestAnimationFrame(loop);
+  }
+
+  btnStart.addEventListener('click', play);
+  btnPause.addEventListener('click', () => pauseNow(false));
+  btnStep.addEventListener('click', nextStage);
+  btnReset.addEventListener('click', resetAll);
+  speedRange.addEventListener('input', () => { speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x'; });
+  stepModeToggle.addEventListener('change', () => { if (stepModeToggle.checked && running) pauseNow(true); else stepAwaitPlay = false; render(); });
+  labelsToggle.addEventListener('change', render);
+  loopToggle.addEventListener('change', render);
+  stateButtons.forEach(btn => btn.addEventListener('click', () => {
+    pathologyState = btn.dataset.state;
+    frame = 0;
+    stepAwaitPlay = false;
+    syncPathology();
+    render();
+  }));
+
+  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x';
+  syncPathology();
+  render();
+})();
+</script>
+
+</body>
+</html>
