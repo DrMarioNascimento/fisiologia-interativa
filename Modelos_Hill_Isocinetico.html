@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Fisiologia Muscular Interativa — Hill + Isocinético</title>
+<style>
+:root{
+  --bg:#ffffff;
+  --panel:#fbfbfd;
+  --line:#d9dce3;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --blue:#2563eb;
+  --red:#dc2626;
+  --green:#10b981;
+  --violet:#8b5cf6;
+  --amber:#f59e0b;
+  --teal:#14b8a6;
+  --rose:#e11d48;
+  --navy:#1e3a8a;
+  --shadow:0 10px 24px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.92);
+  --panel-shadow:0 12px 26px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.95);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:22px;
+  font-family:Inter,"Segoe UI",Roboto,Arial,Helvetica,sans-serif;
+  background:var(--bg);color:var(--text)
+}
+h1{margin:0 0 8px;font-size:30px;text-align:center}
+.subtitle{margin:0 0 14px;text-align:center;color:var(--muted);font-size:16px}
+.topbar,.controls,.quick,.mode-tabs,.interpret-block{
+  width:min(1460px,100%);
+  margin:0 auto 10px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+}
+.topbar{padding:12px 16px}
+.mode-tabs{
+  padding:8px;
+  display:flex;gap:8px;align-items:center
+}
+.mode-tab{
+  appearance:none;border:1px solid #cfd6e2;background:#fff;color:#0f172a;
+  padding:10px 14px;border-radius:10px;cursor:pointer;font-size:15px
+}
+.mode-tab.active{
+  background:#eef4ff;border-color:#8bb4ff;color:#1d4ed8;font-weight:700;
+  box-shadow:0 0 0 3px rgba(37,99,235,.14)
+}
+.controls{
+  padding:12px;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px
+}
+label.control{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  gap:8px;
+  align-items:center;
+  min-height:58px;
+  background:#fff;
+  border:1px solid #e1e5ec;
+  border-radius:12px;
+  padding:8px 12px;
+}
+.control-name{font-size:13px;font-weight:700;min-width:90px}
+.control-value{font-size:13px;color:#334155;min-width:104px;text-align:right;font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;margin:0}
+.quick{padding:10px 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.quick button{
+  border:1px solid #b9c0cc;border-radius:12px;padding:9px 12px;font-size:14px;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);cursor:pointer;font-weight:700;transition:.18s ease;box-shadow:0 1px 4px rgba(15,23,42,.04)
+}
+.quick button:hover{transform:translateY(-1px);box-shadow:0 7px 16px rgba(15,23,42,.10)}
+.quick button.active{
+  background:#fff1f2;border-color:#ef4444;color:#b91c1c;font-weight:700;
+  box-shadow:0 0 0 3px rgba(239,68,68,0.18)
+}
+.main-layout{
+  display:grid;
+  grid-template-columns:minmax(620px,1.25fr) minmax(360px,.95fr);
+  gap:16px;
+  max-width:1460px;
+  margin:0 auto
+}
+.panel{
+  background:linear-gradient(180deg,#fcfcfe 0%, #f7f9fc 100%);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:12px;
+  box-shadow:0 12px 26px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.95);
+}
+.panel-title{font-size:18px;font-weight:700;color:#0f172a;margin:0 0 10px}
+.canvas-wrap{display:flex;justify-content:center}
+canvas{
+  width:100%;height:auto;display:block;border:1px solid #e5e7eb;border-radius:12px;
+  background:linear-gradient(180deg,#ffffff 0%, #fbfcfe 100%);
+  box-shadow:0 10px 26px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.result-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  align-items:end
+}
+.result-pill{
+  background:#fff;border:1px solid #e1e5ec;border-radius:14px;padding:14px 12px;text-align:center;min-height:104px;
+  display:flex;flex-direction:column;justify-content:flex-end
+}
+.result-pill .lab{
+  font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px
+}
+.result-pill .val{
+  font-size:26px;font-weight:700;color:#0f172a
+}
+.result-pill .sub{font-size:12px;color:var(--muted);margin-top:4px}
+.eq-box{
+  background:linear-gradient(180deg,#ffffff 0%, #f8fafc 100%);
+  border:1px solid #e1e5ec;border-radius:14px;padding:14px 16px;margin-bottom:10px;text-align:center;
+  box-shadow:0 8px 18px rgba(15,23,42,.05), inset 0 1px 0 rgba(255,255,255,.95)
+}
+.eq-main{font-size:23px;font-weight:700;color:#0f172a;line-height:1.25}
+.eq-sub{font-size:13px;color:var(--muted);margin-top:8px}
+.interpret-block{padding:18px 22px 22px}
+.interpret-title{font-size:16px;font-weight:700;color:#0f172a;margin-bottom:10px}
+.interpret-text{font-size:15px;line-height:1.6;color:#475569;text-align:justify}
+.interpret-text b{color:#0f172a}
+.interpret-footer{
+  margin-top:16px;padding-top:10px;border-top:1px solid #e5e7eb;
+  text-align:right;color:#4b5563;font-size:12px
+}
+.hidden{display:none !important}
+.badge-line{
+  max-width:1460px;margin:0 auto 10px;text-align:left;min-height:24px
+}
+.badge{
+  display:inline-block;font-size:12px;color:var(--muted);background:#fff;border:1px solid #e1e5ec;border-radius:999px;padding:4px 10px
+}
+@media (max-width:1220px){
+  .main-layout{grid-template-columns:1fr}
+  .controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  .controls{grid-template-columns:1fr}
+  .result-grid{grid-template-columns:1fr}
+}
+
+/* iOS-style model switch */
+.ios-mode-wrap{
+  display:flex;align-items:center;gap:14px;padding:4px 6px;
+}
+.ios-mode-label{
+  font-size:15px;font-weight:700;color:#0f172a;min-width:140px;
+}
+.ios-switch{
+  position:relative;width:58px;height:32px;display:inline-block;flex:0 0 auto;
+}
+.ios-switch input{
+  opacity:0;width:0;height:0;position:absolute;
+}
+.ios-switch-slider{
+  position:absolute;
+  inset:0;
+  border-radius:999px;
+  background:#2563eb !important;
+  transition:.22s ease;
+  box-shadow:inset 0 0 0 1px rgba(15,23,42,.08);
+}
+.ios-switch input:not(:checked) + .ios-switch-slider{
+  background:#2563eb !important;
+}
+.ios-switch input:checked + .ios-switch-slider{
+  background:#22c55e !important;
+}
+.ios-switch-slider:before{
+  content:"";position:absolute;left:4px;top:4px;width:24px;height:24px;border-radius:50%;
+  background:#fff;transition:.22s ease;
+  box-shadow:0 1px 3px rgba(0,0,0,.18), 0 1px 2px rgba(0,0,0,.10);
+}
+.ios-switch input:checked + .ios-switch-slider{
+  background:#2563eb;background:#34c759;}
+.ios-switch input:checked + .ios-switch-slider:before{
+  transform:translateX(26px);
+  box-shadow:0 0 6px rgba(34,197,94,0.6);
+}
+.ios-switch input:not(:checked) + .ios-switch-slider:before{
+  box-shadow:0 0 6px rgba(37,99,235,0.6);
+}
+.ios-mode-sub{
+  font-size:12px;color:#6b7280;
+}
+.eq-main .red-val{color:#dc2626;}
+
+
+/* Dynamic label coloring */
+.ios-mode-label{
+  transition: color 0.25s ease;
+}
+.ios-mode-label.hill-active{
+  color:#2563eb;
+}
+.ios-mode-label.iso-active{
+  color:#22c55e;
+}
+
+
+.hill-number{color:#2563eb !important;}
+.iso-number{color:#22c55e !important;}
+
+
+
+.main-layout{align-items:stretch}
+.panel.stats-panel{
+  min-height:650px;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+.panel.stats-panel .eq-box{
+  flex:1 1 auto;
+}
+.panel.stats-panel .results-bottom{
+  margin-top:auto;
+}
+.panel.stats-panel .result-grid{
+  margin-top:auto !important;
+  align-items:end;
+}
+
+label:has(input[type="checkbox"]:checked){
+  border-color:#8fb3ff;
+  background:linear-gradient(180deg,#ffffff 0%, #e6f0ff 100%);
+  box-shadow:0 0 0 3px rgba(47,128,237,.15), 0 8px 18px rgba(15,23,42,.08);
+}
+button{transition:.18s ease}
+button:hover{transform:translateY(-1px);box-shadow:0 7px 16px rgba(15,23,42,.10)}
+
+.result-pill{position:relative;overflow:hidden}
+.result-pill::before{content:"";position:absolute;left:-5px;top:12px;bottom:12px;width:9px;border-radius:12px;background:linear-gradient(180deg,#93c5fd,#2563eb);opacity:.75}
+#isoResults .result-pill::before{background:linear-gradient(180deg,#86efac,#22c55e)}
+.eq-box{min-height:150px}
+
+
+/* === Final premium dashboard cards === */
+.result-grid.dashboard-cards{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  align-items:stretch;
+  margin-top:auto !important;
+}
+.metric-card{
+  --accent:#2563eb;
+  background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%);
+  border:1px solid #d9e1ec;
+  border-left:8px solid var(--accent);
+  border-radius:18px;
+  min-height:118px;
+  padding:16px 18px;
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 12px 26px rgba(15,23,42,.07), inset 0 1px 0 rgba(255,255,255,.96);
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+}
+.metric-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.82) 0%,rgba(255,255,255,0) 58%);
+  pointer-events:none;
+}
+.metric-card::after{
+  content:"";
+  position:absolute;
+  right:-44px;
+  bottom:-44px;
+  width:126px;
+  height:126px;
+  border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.88) 0%,color-mix(in srgb,var(--accent) 16%,white 84%) 42%,rgba(255,255,255,0) 70%);
+  border:2px solid color-mix(in srgb,var(--accent) 24%,white 76%);
+  opacity:.82;
+  pointer-events:none;
+}
+.metric-title{
+  position:relative;
+  font-size:13px;
+  font-weight:900;
+  color:#4b617c;
+  text-transform:uppercase;
+  letter-spacing:.085em;
+  line-height:1.15;
+  margin-bottom:10px;
+}
+.metric-value{
+  position:relative;
+  font-size:34px;
+  font-weight:900;
+  color:var(--accent);
+  line-height:1.02;
+  letter-spacing:-.03em;
+  font-variant-numeric:tabular-nums;
+  text-shadow:0 1px 0 rgba(255,255,255,.7);
+}
+.metric-sub{
+  position:relative;
+  margin-top:7px;
+  font-size:13px;
+  font-weight:800;
+  color:#50637b;
+  line-height:1.25;
+}
+.metric-card.wide{grid-column:1/-1;min-height:106px;justify-content:center}
+.metric-blue{--accent:#2563eb}.metric-green{--accent:#15803d}.metric-orange{--accent:#f97316}.metric-purple{--accent:#7c3aed}.metric-rose{--accent:#e11d48}.metric-teal{--accent:#0f766e}.metric-navy{--accent:#0f172a}.metric-amber{--accent:#d97706}
+.panel.stats-panel .result-grid{align-items:stretch}
+.hill-number,.iso-number{color:inherit !important;}
+
+
+/* === Botões de ação padronizados === */
+#actionControls{
+  grid-template-columns:none!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:12px!important;
+  padding:16px 18px!important;
+  border-radius:20px!important;
+  background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%)!important;
+  box-shadow:0 16px 34px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.96)!important;
+}
+#actionControls button{
+  border:none!important;
+  border-radius:22px!important;
+  padding:12px 20px!important;
+  min-height:46px!important;
+  font-size:17px!important;
+  font-weight:900!important;
+  color:#fff!important;
+  letter-spacing:.01em!important;
+  cursor:pointer!important;
+  box-shadow:0 9px 18px rgba(15,23,42,.14), inset 0 1px 0 rgba(255,255,255,.28)!important;
+  transition:transform .18s ease, filter .18s ease, box-shadow .18s ease!important;
+}
+#actionControls button:hover{
+  transform:translateY(-1px)!important;
+  filter:brightness(1.045)!important;
+  box-shadow:0 12px 24px rgba(15,23,42,.18), inset 0 1px 0 rgba(255,255,255,.32)!important;
+}
+#btnStart{background:linear-gradient(135deg,#2f80ed 0%,#57a7ff 100%)!important;}
+#btnPause{background:linear-gradient(135deg,#36536d 0%,#587894 100%)!important;}
+#btnReset{background:linear-gradient(135deg,#d54646 0%,#ee6767 100%)!important;}
+#actionControls label.control{
+  min-height:46px!important;
+  border-radius:24px!important;
+  padding:9px 14px!important;
+  background:#ffffff!important;
+  border:1px solid #d7e1ec!important;
+  box-shadow:0 8px 20px rgba(15,23,42,.07), inset 0 1px 0 rgba(255,255,255,.96)!important;
+  font-size:14px!important;
+  font-weight:900!important;
+}
+#actionControls label.control:has(input:checked){
+  border-color:#8fb3ff!important;
+  background:linear-gradient(180deg,#ffffff 0%,#eaf3ff 100%)!important;
+  box-shadow:0 0 0 3px rgba(31,120,180,.16),0 8px 18px rgba(15,23,42,.09)!important;
+}
+
+
+/* === Destaque externo do seletor de modelo: preserva o switch estilo Apple === */
+.mode-tabs.model-selector{
+  position:relative;
+  display:block;
+  padding:14px 16px 13px;
+  background:
+    linear-gradient(135deg, rgba(220,38,38,0.12) 0%, rgba(220,38,38,0.055) 44%, rgba(255,255,255,0.92) 100%);
+  border:1px solid rgba(220,38,38,0.20);
+  box-shadow:
+    0 0 0 1px rgba(220,38,38,0.05),
+    0 12px 26px rgba(220,38,38,0.10),
+    inset 0 1px 0 rgba(255,255,255,.92);
+}
+.mode-tabs.model-selector:hover{
+  box-shadow:
+    0 0 0 1px rgba(220,38,38,0.12),
+    0 0 20px rgba(220,38,38,0.18),
+    0 12px 28px rgba(220,38,38,0.12),
+    inset 0 1px 0 rgba(255,255,255,.95);
+}
+.model-title{
+  margin:0 0 9px 2px;
+  font-size:13px;
+  font-weight:900;
+  line-height:1;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:#b91c1c;
+}
+.mode-tabs.model-selector .ios-mode-wrap{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:4px 6px;
+}
+
+</style>
+</head>
+<body>
+<h1>Fisiologia Muscular Interativa</h1>
+<p class="subtitle">Simulador integrado do Modelo de Hill e do Modelo Isocinético para ensino de força, velocidade, torque e potência.</p>
+
+<div class="mode-tabs model-selector">
+  <div class="model-title">ESCOLHA O MODELO:</div>
+  <div class="ios-mode-wrap">
+    <div class="ios-mode-label" style="color:#0f172a;min-width:auto">Modelo:</div>
+    <div id="labelHill" class="ios-mode-label hill-active">Hill</div>
+    <label class="ios-switch" aria-label="Selecionar modelo">
+      <input id="modeSwitch" type="checkbox">
+      <span class="ios-switch-slider"></span>
+    </label>
+    <div id="labelIso" class="ios-mode-label">Isocinético</div>
+  </div>
+</div>
+<div class="badge-line"><span id="modeBadge" class="badge">Modo atual: Hill — a velocidade emerge da relação entre força e carga.</span></div>
+
+<div id="hillControls" class="controls">
+  <label class="control"><span class="control-name">Ativação</span>
+    <input id="hillActivation" type="range" min="0" max="100" step="1" value="70">
+    <span id="hillActivationLabel" class="control-value">70%</span>
+  </label>
+  <label class="control"><span class="control-name">Carga externa</span>
+    <input id="hillLoad" type="range" min="0" max="100" step="1" value="45">
+    <span id="hillLoadLabel" class="control-value">45% Fmáx</span>
+  </label>
+  <label class="control"><span class="control-name">Comprimento inicial</span>
+    <input id="hillLength" type="range" min="0.7" max="1.3" step="0.01" value="1.00">
+    <span id="hillLengthLabel" class="control-value">1,00 L₀</span>
+  </label>
+  <label class="control"><span class="control-name">Rigidez do tendão</span>
+    <input id="hillStiffness" type="range" min="20" max="100" step="1" value="60">
+    <span id="hillStiffnessLabel" class="control-value">60%</span>
+  </label>
+</div>
+
+<div id="isoControls" class="controls hidden">
+  <label class="control"><span class="control-name">Ativação</span>
+    <input id="isoActivation" type="range" min="0" max="100" step="1" value="80">
+    <span id="isoActivationLabel" class="control-value">80%</span>
+  </label>
+  <label class="control"><span class="control-name">Velocidade</span>
+    <input id="isoVelocity" type="range" min="20" max="300" step="5" value="120">
+    <span id="isoVelocityLabel" class="control-value">120 °/s</span>
+  </label>
+  <label class="control"><span class="control-name">Resistência</span>
+    <input id="isoResistance" type="range" min="0" max="100" step="1" value="40">
+    <span id="isoResistanceLabel" class="control-value">40%</span>
+  </label>
+  <label class="control"><span class="control-name">Amplitude</span>
+    <input id="isoAmplitude" type="range" min="30" max="140" step="1" value="90">
+    <span id="isoAmplitudeLabel" class="control-value">90°</span>
+  </label>
+</div>
+
+<div id="quickHill" class="quick">
+  <strong>Estados rápidos (Hill):</strong>
+  <button data-hill="rest">Repouso</button>
+  <button data-hill="optimal">Ótimo</button>
+  <button data-hill="heavy">Carga alta</button>
+  <button data-hill="short">Músculo curto</button>
+  <button data-hill="long">Músculo alongado</button>
+  <button data-hill="compliant">Tendão complacente</button>
+</div>
+
+<div id="quickIso" class="quick hidden">
+  <strong>Estados rápidos (Isocinético):</strong>
+  <button data-iso="rehab">Reabilitação</button>
+  <button data-iso="strength">Força</button>
+  <button data-iso="power">Potência</button>
+  <button data-iso="eccentric">Excêntrico</button>
+  <button data-iso="fatigue">Fadiga</button>
+</div>
+
+
+<div class="controls" id="actionControls" style="grid-template-columns:none;display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+  <button id="btnStart" style="border:1px solid #96b7ff;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer">Iniciar</button>
+  <button id="btnPause" style="border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer">Pausar</button>
+  <button id="btnReset" style="border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer">Resetar</button>
+  <label class="control" style="min-width:170px"><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+  <label class="control" style="min-width:250px"><span class="control-name">Velocidade</span>
+    <input id="speedRange" type="range" min="0.5" max="2.0" step="0.1" value="1.0">
+    <span id="speedLabel" class="control-value">1.0x</span>
+  </label>
+</div>
+
+<div class="main-layout">
+  <div class="panel">
+    <div class="panel-title">Animação integrada</div>
+    <div class="canvas-wrap"><canvas id="sceneCanvas" width="980" height="650"></canvas></div>
+  </div>
+
+  <div class="panel stats-panel">
+    <div class="eq-box">
+      <div id="eqTitle" class="panel-title" style="font-size:16px;margin-bottom:8px">Equação ativa</div>
+      <div id="eqMain" class="eq-main">v emerge da diferença entre força gerada e carga externa</div>
+      <div id="eqSub" class="eq-sub">No modelo de Hill, a velocidade não é imposta diretamente; ela decorre do balanço entre força muscular, comprimento e carga.</div>
+    </div>
+
+    <div id="hillResults" class="result-grid dashboard-cards">
+      <div class="metric-card metric-green"><div class="metric-title">Força total</div><div id="hillTotalForce" class="metric-value">0</div><div class="metric-sub">% Fmáx</div></div>
+      <div class="metric-card metric-blue"><div class="metric-title">Força ativa</div><div id="hillActiveForce" class="metric-value">0</div><div class="metric-sub">% Fmáx</div></div>
+      <div class="metric-card metric-purple"><div class="metric-title">Força passiva</div><div id="hillPassiveForce" class="metric-value">0</div><div class="metric-sub">% Fmáx</div></div>
+      <div class="metric-card metric-orange"><div class="metric-title">Velocidade</div><div id="hillVelocityOut" class="metric-value">0</div><div class="metric-sub">L₀/s</div></div>
+      <div class="metric-card metric-rose"><div class="metric-title">Comprimento muscular</div><div id="hillMuscleLengthOut" class="metric-value">0</div><div class="metric-sub">L₀</div></div>
+      <div class="metric-card metric-amber"><div class="metric-title">Comprimento do tendão</div><div id="hillTendonLengthOut" class="metric-value">0</div><div class="metric-sub">relativo</div></div>
+      <div class="metric-card metric-navy wide"><div class="metric-title">Tipo de contração</div><div id="hillContractionType" class="metric-value">—</div><div class="metric-sub">concêntrica · isométrica · excêntrica</div></div>
+    </div>
+
+    <div id="isoResults" class="result-grid dashboard-cards hidden">
+      <div class="metric-card metric-blue"><div class="metric-title">Torque pico</div><div id="isoTorquePeak" class="metric-value">0</div><div class="metric-sub">% máx</div></div>
+      <div class="metric-card metric-navy"><div class="metric-title">Torque médio</div><div id="isoTorqueMean" class="metric-value">0</div><div class="metric-sub">% máx</div></div>
+      <div class="metric-card metric-green"><div class="metric-title">Potência pico</div><div id="isoPowerPeak" class="metric-value">0</div><div class="metric-sub">relativa</div></div>
+      <div class="metric-card metric-teal"><div class="metric-title">Potência média</div><div id="isoPowerMean" class="metric-value">0</div><div class="metric-sub">relativa</div></div>
+      <div class="metric-card metric-orange"><div class="metric-title">Velocidade imposta</div><div id="isoVelocityOut" class="metric-value">0</div><div class="metric-sub">°/s</div></div>
+      <div class="metric-card metric-purple"><div class="metric-title">Amplitude</div><div id="isoAmpOut" class="metric-value">0</div><div class="metric-sub">°</div></div>
+      <div class="metric-card metric-navy wide"><div class="metric-title">Condição predominante</div><div id="isoConditionType" class="metric-value">—</div><div class="metric-sub">força · potência · reabilitação · excêntrico</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="interpret-block">
+  <div class="interpret-title">Como interpretar</div>
+  <div id="interpretText" class="interpret-text">
+    <b>Modelo de Hill:</b> a velocidade de contração não é controlada diretamente; ela emerge da relação entre força produzida e carga externa. <b>Ativação:</b> aumenta o componente ativo e eleva a força disponível. <b>Comprimento inicial:</b> modifica a sobreposição entre filamentos, deslocando o sistema na curva força–comprimento. <b>Tendão:</b> sua rigidez altera quanto da deformação ocorre no componente elástico em série. <b>Leitura didática:</b> quando a força muscular supera a carga externa, a contração tende a ser <b>concêntrica</b>; quando se igualam, <b>isométrica</b>; quando a carga supera a força gerada, <b>excêntrica</b>.
+  </div>
+  <div class="interpret-footer">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
+</div>
+
+<script>
+(()=>{
+const canvas=document.getElementById('sceneCanvas');
+const ctx=canvas.getContext('2d');
+
+const modeSwitch=document.getElementById('modeSwitch');
+const labelHill=document.getElementById('labelHill');
+const labelIso=document.getElementById('labelIso');
+const modeSwitchLabel=document.getElementById('modeSwitchLabel');
+const hillControls=document.getElementById('hillControls');
+const isoControls=document.getElementById('isoControls');
+const quickHill=document.getElementById('quickHill');
+const quickIso=document.getElementById('quickIso');
+const hillResults=document.getElementById('hillResults');
+const isoResults=document.getElementById('isoResults');
+const modeBadge=document.getElementById('modeBadge');
+const eqMain=document.getElementById('eqMain');
+const eqSub=document.getElementById('eqSub');
+const interpretText=document.getElementById('interpretText');
+const btnStart=document.getElementById('btnStart');
+const btnPause=document.getElementById('btnPause');
+const btnReset=document.getElementById('btnReset');
+const labelsToggle=document.getElementById('labelsToggle');
+const speedRange=document.getElementById('speedRange');
+const speedLabel=document.getElementById('speedLabel');
+
+const hillActivation=document.getElementById('hillActivation');
+const hillLoad=document.getElementById('hillLoad');
+const hillLength=document.getElementById('hillLength');
+const hillStiffness=document.getElementById('hillStiffness');
+
+const hillActivationLabel=document.getElementById('hillActivationLabel');
+const hillLoadLabel=document.getElementById('hillLoadLabel');
+const hillLengthLabel=document.getElementById('hillLengthLabel');
+const hillStiffnessLabel=document.getElementById('hillStiffnessLabel');
+
+const isoVelocity=document.getElementById('isoVelocity');
+const isoActivation=document.getElementById('isoActivation');
+const isoResistance=document.getElementById('isoResistance');
+const isoAmplitude=document.getElementById('isoAmplitude');
+
+const isoVelocityLabel=document.getElementById('isoVelocityLabel');
+const isoActivationLabel=document.getElementById('isoActivationLabel');
+const isoResistanceLabel=document.getElementById('isoResistanceLabel');
+const isoAmplitudeLabel=document.getElementById('isoAmplitudeLabel');
+
+let mode='hill';
+let t=0;
+let timeSec=0;
+let running=false;
+let raf=null,lastTs=0;
+let displayHillActive=0, displayHillLoad=0, displayHillVelocity=0;
+let displayIsoVel=0, displayIsoTorque=0, displayIsoPower=0;
+
+function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
+function fmt1(v){return v.toFixed(1).replace('.',',')}
+function fmt2(v){return v.toFixed(2).replace('.',',')}
+function fmt0(v){return Math.round(v).toString()}
+function approach(current,target,factor){
+  return current + (target-current)*factor;
+}
+
+function roundedBox(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function drawSphere(ctx,x,y,r,color,edge='rgba(15,23,42,.18)',glow='rgba(15,23,42,.10)'){
+  const g=ctx.createRadialGradient(x-r*0.35,y-r*0.42,r*0.12,x,y,r);
+  g.addColorStop(0,'#ffffff');
+  g.addColorStop(0.16,'rgba(255,255,255,.92)');
+  g.addColorStop(0.38,color);
+  g.addColorStop(1,color);
+  ctx.save();
+  ctx.shadowColor=glow;
+  ctx.shadowBlur=r*0.55;
+  ctx.fillStyle=g;
+  ctx.beginPath();
+  ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle=edge;
+  ctx.lineWidth=Math.max(1.2,r*0.12);
+  ctx.stroke();
+  const h=ctx.createRadialGradient(x-r*0.42,y-r*0.48,1,x-r*0.42,y-r*0.48,r*0.42);
+  h.addColorStop(0,'rgba(255,255,255,.96)');
+  h.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=h;
+  ctx.beginPath();
+  ctx.arc(x-r*0.34,y-r*0.38,r*0.36,0,Math.PI*2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function draw3DLine(ctx,x1,y1,x2,y2,width,color,edge='rgba(15,23,42,.25)'){
+  ctx.save();
+  ctx.lineCap='round';
+  ctx.lineJoin='round';
+
+  const dx=x2-x1, dy=y2-y1;
+  const len=Math.hypot(dx,dy) || 1;
+  const nx=-dy/len, ny=dx/len;
+
+  // sombra base contínua: mesma leitura volumétrica nos dois modelos
+  ctx.strokeStyle=edge;
+  ctx.lineWidth=width+5;
+  ctx.beginPath();
+  ctx.moveTo(x1+1.7,y1+2.2);
+  ctx.lineTo(x2+1.7,y2+2.2);
+  ctx.stroke();
+
+  // corpo cilíndrico com gradiente transversal: limpo, vivo e com sombra lateral
+  const body=ctx.createLinearGradient(
+    x1+nx*width*.58, y1+ny*width*.58,
+    x1-nx*width*.58, y1-ny*width*.58
+  );
+  body.addColorStop(0.00,'rgba(15,23,42,.26)');
+  body.addColorStop(0.10,edge);
+  body.addColorStop(0.26,color);
+  body.addColorStop(0.48,'rgba(255,255,255,.78)');
+  body.addColorStop(0.62,color);
+  body.addColorStop(0.86,color);
+  body.addColorStop(1.00,edge);
+
+  ctx.strokeStyle=body;
+  ctx.lineWidth=width;
+  ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  ctx.lineTo(x2,y2);
+  ctx.stroke();
+
+  // highlight especular deslocado: o mesmo truque visual que deixa o isocinético superior
+  const hi=ctx.createLinearGradient(x1,y1,x2,y2);
+  hi.addColorStop(0.00,'rgba(255,255,255,.05)');
+  hi.addColorStop(0.15,'rgba(255,255,255,.58)');
+  hi.addColorStop(0.56,'rgba(255,255,255,.84)');
+  hi.addColorStop(0.88,'rgba(255,255,255,.38)');
+  hi.addColorStop(1.00,'rgba(255,255,255,.04)');
+  ctx.strokeStyle=hi;
+  ctx.lineWidth=Math.max(1.2,width*.145);
+  ctx.beginPath();
+  ctx.moveTo(x1-nx*width*.25,y1-ny*width*.25);
+  ctx.lineTo(x2-nx*width*.25,y2-ny*width*.25);
+  ctx.stroke();
+
+  // sub-highlight leve para polimento, sem sujar a cor
+  ctx.strokeStyle='rgba(255,255,255,.22)';
+  ctx.lineWidth=Math.max(1,width*.07);
+  ctx.beginPath();
+  ctx.moveTo(x1-nx*width*.40,y1-ny*width*.40);
+  ctx.lineTo(x2-nx*width*.40,y2-ny*width*.40);
+  ctx.stroke();
+
+  // sombra fina oposta ao highlight
+  ctx.strokeStyle='rgba(15,23,42,.22)';
+  ctx.lineWidth=Math.max(1.1,width*.085);
+  ctx.beginPath();
+  ctx.moveTo(x1+nx*width*.39,y1+ny*width*.39);
+  ctx.lineTo(x2+nx*width*.39,y2+ny*width*.39);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawPremiumArrow(ctx,x1,y1,x2,y2,color){
+  const ang=Math.atan2(y2-y1,x2-x1);
+  draw3DLine(ctx,x1,y1,x2,y2,7,color,'rgba(15,23,42,.18)');
+  ctx.save();
+  ctx.translate(x2,y2);
+  ctx.rotate(ang);
+  ctx.beginPath();
+  ctx.moveTo(0,0);ctx.lineTo(-16,-8);ctx.lineTo(-12,0);ctx.lineTo(-16,8);ctx.closePath();
+  ctx.fillStyle=color;ctx.fill();
+  ctx.restore();
+}
+
+function setMode(next){
+  mode=next;
+  const hill=mode==='hill';
+  modeSwitch.checked = !hill;
+  if(hill){
+    labelHill.classList.add('hill-active');
+    labelHill.classList.remove('iso-active');
+    labelIso.classList.remove('iso-active');
+  }else{
+    labelIso.classList.add('iso-active');
+    labelHill.classList.remove('hill-active');
+  }
+  
+  hillControls.classList.toggle('hidden', !hill);
+  isoControls.classList.toggle('hidden', hill);
+  quickHill.classList.toggle('hidden', !hill);
+  quickIso.classList.toggle('hidden', hill);
+  hillResults.classList.toggle('hidden', !hill);
+  isoResults.classList.toggle('hidden', hill);
+
+
+  if(hill){
+    modeBadge.textContent='Modo atual: Hill — a velocidade emerge da relação entre força e carga.';
+    eqMain.innerHTML='<span style="color:#2563eb;font-size:22px">v = f(F total − Carga)</span>';
+    eqSub.textContent='No modelo de Hill, a velocidade não é imposta diretamente; ela decorre do balanço entre força muscular total e carga externa.';
+    interpretText.innerHTML='<b>Modelo de Hill:</b> a velocidade de contração não é controlada diretamente; ela emerge da relação entre força produzida e carga externa. <b>Ativação:</b> aumenta o componente ativo e eleva a força disponível. <b>Comprimento inicial:</b> modifica a sobreposição entre filamentos, deslocando o sistema na curva força–comprimento. <b>Tendão:</b> sua rigidez altera quanto da deformação ocorre no componente elástico em série. <b>Leitura didática:</b> quando a força muscular supera a carga externa, a contração tende a ser <b>concêntrica</b>; quando se igualam, <b>isométrica</b>; quando a carga supera a força gerada, <b>excêntrica</b>.';
+  }else{
+    modeBadge.textContent='Modo atual: Isocinético — a velocidade é imposta e modifica torque e potência.';
+    eqMain.innerHTML='<span style="color:#22c55e;font-size:22px">Potência = Torque × Velocidade</span>';
+    eqSub.textContent='No modo isocinético, a velocidade é uma condição imposta; torque e potência tornam-se as saídas principais.';
+    interpretText.innerHTML='<b>Modelo Isocinético:</b> a velocidade é uma condição controlada, como em dinamometria isocinética. <b>Velocidade:</b> valores muito baixos favorecem torque mais alto, enquanto velocidades intermediárias tendem a maximizar potência. <b>Ativação:</b> eleva a produção de torque ao longo do movimento. <b>Resistência:</b> desloca o sistema para maior exigência mecânica. <b>Leitura didática:</b> o simulador ajuda a relacionar fisiologia muscular, treinamento e reabilitação, distinguindo respostas de força e potência em diferentes contextos.';
+  }
+  render();
+}
+
+function flCurve(L){
+  return Math.exp(-Math.pow((L-1.0)/0.22,2));
+}
+function fpCurve(L){
+  return L <= 1 ? 0 : Math.min(1.2, 3.2*Math.pow(L-1,2));
+}
+function tendonStretch(force, stiffness01){
+  const compliance = 1.15 - stiffness01; // mais rígido = menos alonga
+  return clamp(force * 0.18 * compliance, 0, 0.22);
+}
+function hillState(){
+  const a = Number(hillActivation.value)/100;
+  const load = Number(hillLoad.value)/100;
+  const L = Number(hillLength.value);
+  const stiffness01 = Number(hillStiffness.value)/100;
+
+  const active = a * flCurve(L) * 100;
+  const passive = fpCurve(L) * 100;
+  const total = active + passive;
+  const balance = (total - load*100)/100; // positivo: vence carga
+
+  let v = 0;
+  let type = 'Isométrica';
+  if(Math.abs(balance) < 0.03){
+    v = 0;
+    type = 'Isométrica';
+  }else if(balance > 0){
+    v = clamp(balance * 1.25, 0, 1.6);
+    type = 'Concêntrica';
+  }else{
+    v = clamp(balance * 0.75, -1.1, 0);
+    type = 'Excêntrica';
+  }
+
+  const tendon = 1 + tendonStretch(total/100, stiffness01);
+  const muscle = clamp(L - (v*0.11), 0.72, 1.34);
+
+  return {
+    activation:a, load:load*100, L, stiffness01,
+    active, passive, total, v, tendon, muscle, type
+  };
+}
+
+function isoState(){
+  const vel = Number(isoVelocity.value);
+  const act = Number(isoActivation.value)/100;
+  const res = Number(isoResistance.value)/100;
+  const amp = Number(isoAmplitude.value);
+
+  // Em isocinética, a velocidade angular é imposta.
+  // O braço percorre ida e volta com velocidade dependente diretamente do slider.
+  const cycleDeg = amp * 2; // ida + volta
+  const traveled = (timeSec * vel * 0.38) % cycleDeg;
+  const phase = traveled <= amp ? traveled : (2*amp - traveled);
+  const normAngle = amp > 0 ? phase/amp : 0;
+
+  const lengthFactor = 0.72 + 0.28*Math.sin(normAngle*Math.PI);
+  const velocityFactor = clamp(1.18 - (vel/320), 0.30, 1.12);
+  const torque = act * lengthFactor * velocityFactor * (1 - 0.35*res) * 100;
+  const torqueAdjusted = clamp(torque + res*22, 0, 135);
+  const power = torqueAdjusted * vel / 300;
+  const eccentricBoost = vel < 80 && res > 0.65 ? 1.12 : 1;
+  const torquePeak = clamp(torqueAdjusted * eccentricBoost, 0, 150);
+  const torqueMean = torquePeak * 0.78;
+  const powerPeak = torquePeak * vel / 300;
+  const powerMean = powerPeak * 0.74;
+
+  let condition='Força';
+  if(vel >= 140 && vel <= 220) condition='Potência';
+  if(vel <= 80 && res < 0.45) condition='Reabilitação';
+  if(res > 0.7 && vel < 90) condition='Excêntrico';
+
+  return {
+    vel, act, res:res*100, amp, phase, normAngle,
+    torquePeak, torqueMean, powerPeak, powerMean, condition
+  };
+}
+
+function updateLabels(){
+  hillActivationLabel.textContent=`${hillActivation.value}%`;
+  hillLoadLabel.textContent=`${hillLoad.value}% Fmáx`;
+  hillLengthLabel.textContent=`${fmt2(Number(hillLength.value))} L₀`;
+  hillStiffnessLabel.textContent=`${hillStiffness.value}%`;
+
+  isoVelocityLabel.textContent=`${isoVelocity.value} °/s`;
+  isoActivationLabel.textContent=`${isoActivation.value}%`;
+  isoResistanceLabel.textContent=`${isoResistance.value}%`;
+  isoAmplitudeLabel.textContent=`${isoAmplitude.value}°`;
+  speedLabel.textContent=`${parseFloat(speedRange.value).toFixed(1)}x`;
+}
+
+function updateReadouts(){
+  if(mode==='hill'){
+    const s=hillState();
+    displayHillActive = approach(displayHillActive, s.active, 0.10);
+    displayHillLoad = approach(displayHillLoad, s.total, 0.10);
+    displayHillVelocity = approach(displayHillVelocity, s.v, 0.10);
+
+    document.getElementById('hillTotalForce').innerHTML=`<span class="hill-number">${fmt1(displayHillLoad)}</span>`;
+    document.getElementById('hillActiveForce').innerHTML=`<span class="hill-number">${fmt1(displayHillActive)}</span>`;
+    document.getElementById('hillPassiveForce').innerHTML=`<span class="hill-number">${fmt1(s.passive)}</span>`;
+    document.getElementById('hillVelocityOut').innerHTML=`<span class="hill-number">${fmt2(displayHillVelocity)}</span>`;
+    document.getElementById('hillMuscleLengthOut').innerHTML=`<span class="hill-number">${fmt2(s.muscle)}</span>`;
+    document.getElementById('hillTendonLengthOut').innerHTML=`<span class="hill-number">${fmt2(s.tendon)}</span>`;
+    document.getElementById('hillContractionType').textContent=s.type;
+
+    eqMain.innerHTML=`<span style="color:#2563eb;font-size:22px">v = f(F total − Carga) = f(${fmt1(s.total)} − ${fmt1(s.load)}) → ${fmt2(displayHillVelocity)} L₀/s</span>`;
+    eqSub.textContent=`Força ativa = ${fmt1(s.active)}% Fmáx | Força passiva = ${fmt1(s.passive)}% Fmáx | Força total = ${fmt1(s.total)}% Fmáx. A velocidade emerge do balanço entre a força total produzida e a carga externa.`;
+  }else{
+    const s=isoState();
+    displayIsoVel = approach(displayIsoVel, s.vel, 0.08);
+    displayIsoTorque = approach(displayIsoTorque, s.torquePeak, 0.08);
+    displayIsoPower = approach(displayIsoPower, s.powerPeak, 0.08);
+
+    document.getElementById('isoTorquePeak').innerHTML=`<span class="iso-number">${fmt1(displayIsoTorque)}</span>`;
+    document.getElementById('isoTorqueMean').innerHTML=`<span class="iso-number">${fmt1(s.torqueMean)}</span>`;
+    document.getElementById('isoPowerPeak').innerHTML=`<span class="iso-number">${fmt1(displayIsoPower)}</span>`;
+    document.getElementById('isoPowerMean').innerHTML=`<span class="iso-number">${fmt1(s.powerMean)}</span>`;
+    document.getElementById('isoVelocityOut').innerHTML=`<span class="iso-number">${fmt1(displayIsoVel)}</span>`;
+    document.getElementById('isoAmpOut').innerHTML=`<span class="iso-number">${fmt1(s.amp)}</span>`;
+    document.getElementById('isoConditionType').textContent=s.condition;
+
+    eqMain.innerHTML=`<span style="color:#22c55e;font-size:22px">Potência = Torque × Velocidade = ${fmt1(displayIsoTorque)} × ${fmt1(displayIsoVel)} → ${fmt1(displayIsoPower)}</span>`;
+    eqSub.textContent=`Velocidade imposta = ${fmt1(s.vel)} °/s | Torque pico = ${fmt1(s.torquePeak)} | Torque médio = ${fmt1(s.torqueMean)} | Potência pico = ${fmt1(s.powerPeak)}. No isocinético, a velocidade é controlada e as saídas mecânicas variam com ela.`;
+  }
+}
+
+function drawBar(x,y,w,h,val,max,color,label){
+  // outer shell
+  roundedBox(ctx,x,y,w,h,10);
+  const shell = ctx.createLinearGradient(x,y,x,y+h);
+  shell.addColorStop(0,'#ffffff');
+  shell.addColorStop(1,'#f1f5f9');
+  ctx.fillStyle=shell;
+  ctx.shadowColor='rgba(15,23,42,0.10)';
+  ctx.shadowBlur=10;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='#cfd8e3';
+  ctx.lineWidth=1.2;
+  ctx.stroke();
+
+  // top highlight
+  ctx.beginPath();
+  ctx.moveTo(x+10,y+6);
+  ctx.lineTo(x+w-10,y+6);
+  ctx.strokeStyle='rgba(255,255,255,.85)';
+  ctx.lineWidth=1.4;
+  ctx.stroke();
+
+  const fillW = Math.max(0, Math.min(1, val/max))*(w-6);
+  roundedBox(ctx,x+3,y+3,fillW,h-6,8);
+
+  const base = color;
+  const fg = ctx.createLinearGradient(x+3,y+3,x+3,y+h-3);
+  // keep color family but add depth by blending with white/darker tone
+  fg.addColorStop(0,'rgba(255,255,255,.22)');
+  fg.addColorStop(0.08, base);
+  fg.addColorStop(1, base);
+  ctx.fillStyle=fg;
+  ctx.shadowColor='rgba(15,23,42,.08)';
+  ctx.shadowBlur=6;
+  ctx.fill();
+  ctx.shadowBlur=0;
+
+  // glossy highlight on colored fill
+  if(fillW > 18){
+    roundedBox(ctx,x+7,y+6,Math.max(0,fillW-12),(h-6)*0.32,6);
+    ctx.fillStyle='rgba(255,255,255,.22)';
+    ctx.fill();
+  }
+
+  ctx.fillStyle='#0f172a';
+  ctx.font='bold 13px Arial';
+  ctx.textAlign='left';
+  ctx.fillText(label, x+10, y+18);
+  ctx.textAlign='right';
+  ctx.fillText(fmt1(val), x+w-10, y+18);
+}
+
+function drawHillScene(){
+  const s=hillState();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle='#111827';
+  ctx.font='bold 16px Arial';
+  ctx.textAlign='left';
+  ctx.fillText('Modelo de Hill: força, carga, comprimento e velocidade emergente', 18, 24);
+
+  roundedBox(ctx,22,42,936,86,14);
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#d1d5db'; ctx.stroke();
+
+  ctx.fillStyle='#111827';
+  ctx.font='bold 18px Arial';
+  ctx.fillText('Mensagem central', 44, 72);
+  ctx.fillStyle='#2563eb';
+  ctx.font='bold 18px Arial';
+  ctx.fillText('A velocidade emerge da relação entre força gerada e carga externa', 210, 75);
+  ctx.fillStyle='#64748b';
+  ctx.font='14px Arial';
+  ctx.fillText('Ativação, comprimento inicial e tendão modulam a força ativa, a força passiva e a resposta mecânica do sistema.', 44, 104);
+
+  // conjunto reduzido e deslocado para não invadir a área do gráfico
+  const originX=72, muscleY=336;
+  const tendonBase=78;
+  const muscleBase=175;
+
+  // animação contínua suave
+  const osc = Math.sin(t*0.045);
+  const pulse = 1 + 0.018*Math.sin(t*0.06);
+
+  const tendonW = tendonBase * (0.88 + (s.tendon-1)*1.15) * (1 + 0.02*osc);
+  const muscleW = muscleBase * (0.90 + (s.muscle-0.72)/(1.34-0.72)*0.26);
+  const muscleH = 112 * (1 + Math.max(0,s.v)*0.10 - Math.max(0,-s.v)*0.05) * pulse;
+  const loadX = originX + tendonW + muscleW + 34;
+
+  if(labelsToggle.checked){
+    ctx.fillStyle='#111827';
+    ctx.font='bold 15px Arial';
+    ctx.textAlign='center';
+    ctx.fillText('Tendão', 126, 248);
+    ctx.fillText('Músculo', 250, 294);
+    ctx.fillText('Carga', 404, 248);
+    ctx.fillText('Gráfico força-velocidade/potência', 740, 150);
+  }
+
+  // anchor with metallic 3D finish
+  draw3DLine(ctx,42,muscleY-58,42,muscleY+58,5,'#64748b','#334155');
+  for(let i=0;i<7;i++){
+    draw3DLine(ctx,42,muscleY-58+i*18,24,muscleY-50+i*18,4,'#94a3b8','#475569');
+  }
+
+  // tendon with premium 3D oscillation
+  ctx.save();
+  ctx.shadowColor='rgba(245,158,11,.22)';
+  ctx.shadowBlur=8;
+  draw3DLine(ctx, originX, muscleY, originX+tendonW, muscleY, 24, '#f59e0b', '#b45309');
+  ctx.restore();
+  drawSphere(ctx, originX, muscleY, 12, '#fbbf24', '#b45309', 'rgba(245,158,11,.28)');
+  drawSphere(ctx, originX+tendonW, muscleY, 12, '#f59e0b', '#b45309', 'rgba(245,158,11,.28)');
+
+  // muscle belly with dynamic size
+  const mx = originX + tendonW;
+  const my = muscleY - muscleH/2;
+  roundedBox(ctx,mx,my,muscleW,muscleH,28);
+  const mg=ctx.createLinearGradient(mx,my,mx,mx+muscleW);
+  mg.addColorStop(0,'#fce7f3');
+  mg.addColorStop(.34,'#fb7185');
+  mg.addColorStop(1,'#be123c');
+  ctx.fillStyle=mg;
+  ctx.shadowColor='rgba(225,29,72,.20)';
+  ctx.shadowBlur=20;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='#9f1239';
+  ctx.lineWidth=2;
+  ctx.stroke();
+
+  // fiber texture
+  ctx.strokeStyle='rgba(255,255,255,.18)';
+  ctx.lineWidth=1.0;
+  for(let i=0;i<6;i++){
+    const yy = my+18+i*((muscleH-36)/5);
+    draw3DLine(ctx, mx+14, yy, mx+muscleW-14, yy, 1.6, 'rgba(255,255,255,.22)', 'rgba(159,18,57,.10)');
+  }
+  // sarcômeros/esferas móveis: acompanham o encurtamento/alongamento do músculo no modo Hill
+  const sphereDir = s.v >= 0 ? 1 : -1;
+  const sphereTravel = (t*0.055*(Math.abs(s.v)+0.35)) % 1;
+  const sphereSpacing = (muscleW-58)/5;
+  for(let i=0;i<6;i++){
+    const phase = (i/6 + sphereTravel) % 1;
+    const sx = mx + 25 + phase*(muscleW-50);
+    const sy = muscleY + Math.sin(t*0.07 + i*0.9)*3.2;
+    const sr = 5.8 + 1.2*Math.sin(t*0.09 + i*0.75);
+    drawSphere(ctx, sx, sy, sr, '#fecdd3', '#be123c', 'rgba(225,29,72,.22)');
+  }
+
+  // load block with response movement and size linked to carga externa
+  const loadShift = Math.max(0,s.v)*8 - Math.max(0,-s.v)*4;
+  const loadScale = 0.82 + (s.load/100)*0.55;
+  const loadW = 56 * loadScale;
+  const loadH = 96 * loadScale;
+  const loadR = 14 * Math.min(loadScale, 1.2);
+  const loadBoxX = loadX + loadShift - (loadW-56)/2;
+  const loadBoxY = muscleY - loadH/2;
+
+  roundedBox(ctx,loadBoxX,loadBoxY,loadW,loadH,loadR);
+  const loadGrad = ctx.createLinearGradient(loadBoxX,loadBoxY,loadBoxX,loadBoxY+loadH);
+  loadGrad.addColorStop(0,'#f8fafc');
+  loadGrad.addColorStop(.55,'#cbd5e1');
+  loadGrad.addColorStop(1,'#94a3b8');
+  ctx.fillStyle=loadGrad;
+  ctx.shadowColor='rgba(15,23,42,.10)';
+  ctx.shadowBlur=10;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='#475569';
+  ctx.lineWidth=2;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(loadBoxX+8,loadBoxY+8);
+  ctx.lineTo(loadBoxX+loadW-8,loadBoxY+8);
+  ctx.strokeStyle='rgba(255,255,255,.55)';
+  ctx.lineWidth=1.2;
+  ctx.stroke();
+
+  drawSphere(ctx, loadBoxX+loadW-10, loadBoxY+12, 6, '#e2e8f0', '#64748b', 'rgba(100,116,139,.18)');
+  ctx.fillStyle='#0f172a'; ctx.font='bold 16px Arial'; ctx.textAlign='center';
+  ctx.fillText('Carga', loadBoxX+loadW/2, loadBoxY+loadH/2-10);
+  ctx.font='bold 14px Arial';
+  ctx.fillText(`${Math.round(s.load)}%`, loadBoxX+loadW/2, loadBoxY+loadH/2+12);
+
+  // direction arrow with pulse
+  const direction = s.v>0.03 ? 1 : (s.v<-0.03 ? -1 : 0);
+  ctx.strokeStyle= direction >= 0 ? '#10b981' : '#dc2626';
+  ctx.lineWidth=7; ctx.lineCap='round';
+  if(direction !== 0){
+    const amp = 48 + 6*Math.sin(t*0.08);
+    const x1 = mx+muscleW/2 - amp*direction;
+    const x2 = mx+muscleW/2 + amp*direction;
+    drawPremiumArrow(ctx, x1, my+muscleH+42, x2, my+muscleH+42, direction >=0 ? '#10b981' : '#dc2626');
+  }
+  ctx.fillStyle='#334155'; ctx.font='bold 14px Arial'; ctx.textAlign='center';
+  ctx.fillText(`v = ${fmt2(s.v)} L₀/s`, mx+muscleW/2, my+muscleH+72);
+
+  // graph at right — visual equalizado com o isocinético: eixo 3D leve, curvas com glow e marcadores vivos
+  const gx=520, gy=174, gw=430, gh=330;
+  roundedBox(ctx,gx,gy,gw,gh,14);
+  const graphBox = ctx.createLinearGradient(gx,gy,gx,gy+gh);
+  graphBox.addColorStop(0,'#ffffff');
+  graphBox.addColorStop(1,'#f6f8fb');
+  ctx.fillStyle=graphBox;
+  ctx.shadowColor='rgba(15,23,42,.08)';
+  ctx.shadowBlur=12;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='#dbe2ea';
+  ctx.lineWidth=1.2;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(gx+12,gy+8);
+  ctx.lineTo(gx+gw-12,gy+8);
+  ctx.strokeStyle='rgba(255,255,255,.85)';
+  ctx.lineWidth=1.2;
+  ctx.stroke();
+
+  const left = gx+42, right=gx+gw-24, top=gy+28, bottom=gy+gh-42;
+  const xMap = v => left + ((v + 1.0) / 2.6) * (right-left);
+  const yMap = val => bottom - clamp(val,0,130) / 130 * (bottom-top);
+  const forceAt = (v) => {
+    if(v >= 0){
+      return clamp((s.total * (1 - v/2.0)), 8, 130);
+    }
+    return clamp(s.total * (1 + (-v)*0.38), 0, 130);
+  };
+  const powerAt = (v) => Math.max(0, forceAt(v) * Math.max(0,v)) * 0.9;
+
+  // zona didática de potência positiva, igual ao destaque do isocinético
+  const powerZoneX0=xMap(0.35), powerZoneX1=xMap(1.20);
+  ctx.fillStyle='rgba(16,185,129,.055)';
+  roundedBox(ctx,powerZoneX0,top,powerZoneX1-powerZoneX0,bottom-top,8);
+  ctx.fill();
+
+  // grade suave e técnica
+  ctx.strokeStyle='rgba(148,163,184,0.24)'; ctx.lineWidth=1;
+  [0,25,50,75,100,125].forEach(val=>{
+    const y=yMap(val);
+    ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(right,y); ctx.stroke();
+  });
+  [-1.0,-0.5,0,0.5,1.0,1.5].forEach(v=>{
+    const x=xMap(v);
+    ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,bottom); ctx.stroke();
+  });
+
+  // eixo 3D leve, com a mesma hierarquia visual do isocinético
+  ctx.lineCap='round';
+  ctx.strokeStyle='rgba(15,23,42,.18)'; ctx.lineWidth=5;
+  ctx.beginPath(); ctx.moveTo(left,top); ctx.lineTo(left,bottom); ctx.lineTo(right,bottom); ctx.stroke();
+  ctx.strokeStyle='#64748b'; ctx.lineWidth=2.2;
+  ctx.beginPath(); ctx.moveTo(left,top); ctx.lineTo(left,bottom); ctx.lineTo(right,bottom); ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.70)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(left+1,top); ctx.lineTo(left+1,bottom-1); ctx.lineTo(right,bottom-1); ctx.stroke();
+
+  // título, unidades e valores dos eixos
+  ctx.shadowColor='rgba(255,255,255,.85)'; ctx.shadowBlur=2;
+  ctx.fillStyle='#0f172a'; ctx.font='bold 14px Arial'; ctx.textAlign='left';
+  ctx.fillText('Curva força-velocidade e potência', gx+18, gy-10);
+  ctx.fillStyle='#334155'; ctx.font='bold 12px Arial'; ctx.textAlign='left';
+  ctx.fillText('Y = Força / Potência relativa (%)', left, top-8);
+  ctx.textAlign='right';
+  ctx.fillText('X = Velocidade (L₀/s)', right, bottom+34);
+
+  ctx.font='bold 12px Arial'; ctx.fillStyle='#0f172a'; ctx.textAlign='right';
+  [0,25,50,75,100,125].forEach(val=>ctx.fillText(String(val), left-8, yMap(val)+4));
+  ctx.font='bold 12px Arial'; ctx.fillStyle='#475569'; ctx.textAlign='center';
+  [-1.0,-0.5,0,0.5,1.0,1.5].forEach(val=>ctx.fillText(val.toFixed(1).replace('.',','), xMap(val), bottom+18));
+  ctx.shadowBlur=0;
+
+  // curva de força com glow e highlight superior
+  ctx.save();
+  ctx.strokeStyle='rgba(37,99,235,0.20)'; ctx.lineWidth=9; ctx.beginPath();
+  for(let i=0;i<=180;i++){
+    const v=-1.0 + (i/180)*2.6, x=xMap(v), y=yMap(forceAt(v));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.strokeStyle='#2563eb'; ctx.lineWidth=4.6; ctx.beginPath();
+  for(let i=0;i<=180;i++){
+    const v=-1.0 + (i/180)*2.6, x=xMap(v), y=yMap(forceAt(v));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.68)'; ctx.lineWidth=1.2; ctx.beginPath();
+  for(let i=0;i<=180;i++){
+    const v=-1.0 + (i/180)*2.6, x=xMap(v), y=yMap(forceAt(v))-1.5;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.restore();
+
+  // curva de potência com glow mais evidente
+  ctx.save();
+  ctx.shadowColor='rgba(16,185,129,0.25)'; ctx.shadowBlur=7;
+  ctx.strokeStyle='rgba(16,185,129,0.28)'; ctx.lineWidth=9; ctx.beginPath();
+  for(let i=0;i<=180;i++){
+    const v=-1.0 + (i/180)*2.6, x=xMap(v), y=yMap(powerAt(v));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='#10b981'; ctx.lineWidth=4.8; ctx.beginPath();
+  for(let i=0;i<=180;i++){
+    const v=-1.0 + (i/180)*2.6, x=xMap(v), y=yMap(powerAt(v));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.62)'; ctx.lineWidth=1.1; ctx.beginPath();
+  for(let i=0;i<=180;i++){
+    const v=-1.0 + (i/180)*2.6, x=xMap(v), y=yMap(powerAt(v))-1.5;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.restore();
+
+  const currentForce = clamp(s.total,0,130);
+  const currentPower = powerAt(s.v);
+  // marcadores atuais com micro-movimento/pulso para o Hill não ficar estático na execução
+  const markerPulse = Math.sin(t*0.08);
+  const markerV = clamp(s.v + markerPulse*0.035*(Math.abs(s.v)+0.25), -1.0, 1.6);
+  drawSphere(ctx, xMap(markerV), yMap(currentForce), 7.5 + 0.8*Math.max(0,markerPulse), '#2563eb', '#1d4ed8', 'rgba(37,99,235,.46)');
+  drawSphere(ctx, xMap(markerV), yMap(powerAt(markerV)), 7.5 + 0.8*Math.max(0,-markerPulse), '#10b981', '#047857', 'rgba(16,185,129,.46)');
+
+  ctx.textAlign='left';
+  ctx.fillStyle='#2563eb'; ctx.fillRect(gx+180, gy+gh+16, 18, 4);
+  ctx.fillStyle='#0f172a'; ctx.font='13px Arial'; ctx.fillText('Força', gx+204, gy+gh+20);
+  ctx.fillStyle='#10b981'; ctx.fillRect(gx+280, gy+gh+16, 18, 4);
+  ctx.fillStyle='#0f172a'; ctx.fillText('Potência', gx+304, gy+gh+20);
+
+  // summary boxes down
+  drawBar(88,600,260,42,s.active,100,'#60a5fa','Força ativa');
+  drawBar(360,600,260,42,s.passive,100,'#8b5cf6','Força passiva');
+  drawBar(632,600,260,42,s.total,130,'#10b981','Força total');
+}
+
+function drawIsoScene(){
+  const s=isoState();
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  ctx.fillStyle='#111827';
+  ctx.font='bold 18px Arial';
+  ctx.textAlign='left';
+  ctx.fillText('Modelo Isocinético: torque e potência sob velocidade imposta', 18, 24);
+
+  roundedBox(ctx,22,42,936,86,14);
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#d1d5db'; ctx.stroke();
+
+  ctx.fillStyle='#111827';
+  ctx.font='bold 18px Arial';
+  ctx.fillText('Mensagem central', 44, 72);
+  ctx.fillStyle='#2563eb';
+  ctx.font='bold 18px Arial';
+  ctx.fillText('A velocidade é imposta; torque e potência passam a ser as principais saídas', 210, 75);
+  ctx.fillStyle='#64748b';
+  ctx.font='14px Arial';
+  ctx.fillText('Velocidades baixas favorecem torque; velocidades intermediárias tendem a maximizar potência; resistência e ativação deslocam a resposta.', 44, 104);
+
+  if(labelsToggle.checked){
+    ctx.fillStyle='#111827';
+    ctx.font='bold 15px Arial';
+    ctx.textAlign='left';
+    ctx.fillText('Braço / alavanca', 24, 250);
+    ctx.fillText('Gráfico torque-potência', 735, 150);
+  }
+  // dynamometer arm
+  const cx=255, cy=340, armLen=190;
+  const angle = (-s.amp/2 + s.phase) * Math.PI/180;
+  ctx.beginPath();
+  ctx.arc(cx,cy,42,0,Math.PI*2);
+  const rg=ctx.createRadialGradient(cx-10,cy-12,6,cx,cy,46);
+  rg.addColorStop(0,'#ffffff');
+  rg.addColorStop(.55,'#9ec5ff');
+  rg.addColorStop(1,'#2563eb');
+  ctx.fillStyle=rg; ctx.fill();
+  ctx.strokeStyle='#1e3a8a'; ctx.lineWidth=2; ctx.stroke();
+
+  const ex=cx + armLen*Math.cos(angle);
+  const ey=cy + armLen*Math.sin(angle);
+  draw3DLine(ctx, cx, cy, ex, ey, 22, '#f59e0b', '#b45309');
+  drawSphere(ctx, cx, cy, 14, '#60a5fa', '#1e3a8a', 'rgba(37,99,235,.25)');
+  drawSphere(ctx, ex, ey, 11, '#fbbf24', '#b45309', 'rgba(245,158,11,.28)');
+
+  // handle
+  draw3DLine(ctx, ex-16*Math.sin(angle), ey+16*Math.cos(angle), ex+16*Math.sin(angle), ey-16*Math.cos(angle), 8, '#64748b', '#334155');
+
+  // carga/resistência visual cresce com a resistência
+  const loadScale = 0.88 + (s.res/100)*0.62;
+  const loadW = 52 * loadScale;
+  const loadH = 42 * loadScale;
+  const loadX = ex + 26*Math.cos(angle) - loadW/2;
+  const loadY = ey + 26*Math.sin(angle) - loadH/2;
+
+  roundedBox(ctx, loadX, loadY, loadW, loadH, 10);
+  const lg = ctx.createLinearGradient(loadX, loadY, loadX+loadW, loadY+loadH);
+  lg.addColorStop(0,'#f8fafc');
+  lg.addColorStop(0.55,'#cbd5e1');
+  lg.addColorStop(1,'#94a3b8');
+  ctx.fillStyle = lg;
+  ctx.shadowColor='rgba(15,23,42,.10)';
+  ctx.shadowBlur=10;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle = '#475569';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(loadX+8, loadY+8);
+  ctx.lineTo(loadX+loadW-8, loadY+8);
+  ctx.strokeStyle='rgba(255,255,255,.55)';
+  ctx.lineWidth=1.2;
+  ctx.stroke();
+
+  ctx.fillStyle='#0f172a';
+  ctx.font='bold 14px Arial';
+  ctx.textAlign='center';
+  ctx.fillText(`${Math.round(s.res)}%`, loadX + loadW/2, loadY + loadH/2 + 5);
+
+  ctx.fillStyle='#0f172a'; ctx.font='bold 15px Arial'; ctx.textAlign='center';
+  ctx.textAlign='left';
+  ctx.fillText(`Velocidade de execução: ${fmt1(s.vel)} °/s`, 24, cy+118);
+  ctx.fillText(`Amplitude de execução: ${fmt1(s.amp)}°`, 24, cy+142);
+
+  // torque/power graph — eixo X em graus, eixo Y em %, marcador dinâmico e 3D leve
+  const gx=520, gy=174, gw=430, gh=330;
+  roundedBox(ctx,gx,gy,gw,gh,14);
+  const graphBox = ctx.createLinearGradient(gx,gy,gx,gy+gh);
+  graphBox.addColorStop(0,'#ffffff');
+  graphBox.addColorStop(1,'#f6f8fb');
+  ctx.fillStyle=graphBox;
+  ctx.shadowColor='rgba(15,23,42,.08)';
+  ctx.shadowBlur=12;
+  ctx.fill();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='#dbe2ea';
+  ctx.lineWidth=1.2;
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(gx+12,gy+8);
+  ctx.lineTo(gx+gw-12,gy+8);
+  ctx.strokeStyle='rgba(255,255,255,.85)';
+  ctx.lineWidth=1.2;
+  ctx.stroke();
+
+  const left=gx+42, right=gx+gw-24, top=gy+28, bottom=gy+gh-42;
+  const xMap = u => left + u*(right-left);
+  const yMap = val => bottom - clamp(val,0,130)/130*(bottom-top);
+  const torqueAt = (u) => {
+    const shape = clamp(Math.sin((u*0.86 + 0.08)*Math.PI),0,1); // leve assimetria fisiológica
+    return (0.62 + 0.38*shape) * (0.55 + 0.45*s.act) * (1.18 - s.vel/320) * (1 - 0.18*s.res/100) * 100;
+  };
+  const powerAt = (u) => torqueAt(u) * s.vel / 300;
+
+  // zona de potência intermediária
+  const midX0=xMap(0.38), midX1=xMap(0.66);
+  ctx.fillStyle='rgba(16,185,129,.07)';
+  roundedBox(ctx,midX0,top,midX1-midX0,bottom-top,8);
+  ctx.fill();
+
+  // grade suave
+  ctx.strokeStyle='rgba(148,163,184,0.24)'; ctx.lineWidth=1;
+  [0,25,50,75,100,125].forEach(val=>{
+    const y=yMap(val);
+    ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(right,y); ctx.stroke();
+  });
+  for(let i=0;i<=4;i++){
+    const x=xMap(i/4);
+    ctx.beginPath(); ctx.moveTo(x,top); ctx.lineTo(x,bottom); ctx.stroke();
+  }
+
+  // eixo 3D leve
+  ctx.lineCap='round';
+  ctx.strokeStyle='rgba(15,23,42,.18)'; ctx.lineWidth=5;
+  ctx.beginPath(); ctx.moveTo(left,top); ctx.lineTo(left,bottom); ctx.lineTo(right,bottom); ctx.stroke();
+  ctx.strokeStyle='#64748b'; ctx.lineWidth=2.2;
+  ctx.beginPath(); ctx.moveTo(left,top); ctx.lineTo(left,bottom); ctx.lineTo(right,bottom); ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.70)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(left+1,top); ctx.lineTo(left+1,bottom-1); ctx.lineTo(right,bottom-1); ctx.stroke();
+
+  // título, unidades e valores dos eixos
+  ctx.shadowColor='rgba(255,255,255,.85)'; ctx.shadowBlur=2;
+  ctx.fillStyle='#0f172a'; ctx.font='bold 14px Arial'; ctx.textAlign='left';
+  ctx.fillText('Torque e potência ao longo do ângulo articular', gx+18, gy-10);
+  ctx.fillStyle='#334155'; ctx.font='bold 12px Arial'; ctx.textAlign='left';
+  ctx.fillText('Y = Torque / Potência relativa (%)', left, top-8);
+  ctx.textAlign='right';
+  ctx.fillText('X = Ângulo articular (°)', right, bottom+34);
+
+  ctx.font='bold 12px Arial'; ctx.fillStyle='#0f172a'; ctx.textAlign='right';
+  [0,25,50,75,100,125].forEach(val=>{
+    ctx.fillText(String(val), left-8, yMap(val)+4);
+  });
+  ctx.font='bold 12px Arial'; ctx.fillStyle='#475569'; ctx.textAlign='center';
+  const ampHalf=s.amp/2;
+  [0,.25,.5,.75,1].forEach(u=>{
+    const deg = -ampHalf + u*s.amp;
+    const label = `${deg>0?'+':''}${Math.round(deg)}°`;
+    ctx.fillText(label, xMap(u), bottom+18);
+  });
+  ctx.shadowBlur=0;
+
+  // curva de torque com glow
+  ctx.save();
+  ctx.strokeStyle='rgba(37,99,235,0.20)'; ctx.lineWidth=9; ctx.beginPath();
+  for(let i=0;i<=140;i++){
+    const u=i/140, x=xMap(u), y=yMap(torqueAt(u));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.strokeStyle='#2563eb'; ctx.lineWidth=4.6; ctx.beginPath();
+  for(let i=0;i<=140;i++){
+    const u=i/140, x=xMap(u), y=yMap(torqueAt(u));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.68)'; ctx.lineWidth=1.2; ctx.beginPath();
+  for(let i=0;i<=140;i++){
+    const u=i/140, x=xMap(u), y=yMap(torqueAt(u))-1.5;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.restore();
+
+  // curva de potência com glow mais evidente
+  ctx.save();
+  ctx.shadowColor='rgba(16,185,129,0.25)'; ctx.shadowBlur=7;
+  ctx.strokeStyle='rgba(16,185,129,0.28)'; ctx.lineWidth=9; ctx.beginPath();
+  for(let i=0;i<=140;i++){
+    const u=i/140, x=xMap(u), y=yMap(powerAt(u));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.strokeStyle='#10b981'; ctx.lineWidth=4.8; ctx.beginPath();
+  for(let i=0;i<=140;i++){
+    const u=i/140, x=xMap(u), y=yMap(powerAt(u));
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.strokeStyle='rgba(255,255,255,.62)'; ctx.lineWidth=1.1; ctx.beginPath();
+  for(let i=0;i<=140;i++){
+    const u=i/140, x=xMap(u), y=yMap(powerAt(u))-1.5;
+    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  ctx.restore();
+
+  // marcador dinâmico conectado ao braço
+  const uNow=clamp(s.normAngle,0,1);
+  drawSphere(ctx, xMap(uNow), yMap(torqueAt(uNow)), 7.5, '#2563eb', '#1d4ed8', 'rgba(37,99,235,.42)');
+  drawSphere(ctx, xMap(uNow), yMap(powerAt(uNow)), 7.5, '#10b981', '#047857', 'rgba(16,185,129,.42)');
+
+  // legenda
+  ctx.textAlign='left'; ctx.font='13px Arial';
+  ctx.fillStyle='#2563eb'; ctx.fillRect(gx+236, gy+gh+10, 18, 4);
+  ctx.fillStyle='#0f172a'; ctx.fillText('Torque', gx+260, gy+gh+14);
+  ctx.fillStyle='#10b981'; ctx.fillRect(gx+322, gy+gh+10, 18, 4);
+  ctx.fillStyle='#0f172a'; ctx.fillText('Potência', gx+346, gy+gh+14);
+  ctx.fillStyle='rgba(16,185,129,.16)'; ctx.fillRect(gx+236, gy+gh+26, 18, 8);
+  ctx.fillStyle='#475569'; ctx.font='12px Arial'; ctx.fillText('zona de potência intermediária', gx+260, gy+gh+34);
+
+  // summary bars
+  drawBar(88,600,260,42,s.torquePeak,150,'#60a5fa','Torque pico');
+  drawBar(360,600,260,42,s.powerPeak,120,'#10b981','Potência pico');
+  drawBar(632,600,260,42,s.torqueMean,150,'#8b5cf6','Torque médio');
+}
+
+function render(){
+  updateLabels();
+  updateReadouts();
+  if(mode==='hill') drawHillScene();
+  else drawIsoScene();
+}
+
+function loop(ts){
+  if(!running) return;
+  if(!lastTs) lastTs=ts;
+  const dt=ts-lastTs;
+  lastTs=ts;
+  const speedMul = parseFloat(speedRange.value);
+  t += dt*0.06*speedMul;
+  timeSec += (dt/1000)*speedMul;
+  render();
+  raf=requestAnimationFrame(loop);
+}
+
+modeSwitch.addEventListener('change', e=>setMode(e.target.checked ? 'iso' : 'hill'));
+
+[hillActivation,hillLoad,hillLength,hillStiffness,isoVelocity,isoActivation,isoResistance,isoAmplitude].forEach(el=>{
+  el.addEventListener('input', render);
+});
+
+document.querySelectorAll('[data-hill]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-hill]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const p=btn.dataset.hill;
+    if(p==='rest'){ hillActivation.value=25; hillLoad.value=15; hillLength.value=1.00; hillStiffness.value=55; }
+    if(p==='optimal'){ hillActivation.value=80; hillLoad.value=35; hillLength.value=1.00; hillStiffness.value=65; }
+    if(p==='heavy'){ hillActivation.value=85; hillLoad.value=85; hillLength.value=1.00; hillStiffness.value=70; }
+    if(p==='short'){ hillActivation.value=75; hillLoad.value=40; hillLength.value=0.82; hillStiffness.value=60; }
+    if(p==='long'){ hillActivation.value=75; hillLoad.value=40; hillLength.value=1.18; hillStiffness.value=60; }
+    if(p==='compliant'){ hillActivation.value=75; hillLoad.value=40; hillLength.value=1.00; hillStiffness.value=25; }
+    render();
+  });
+});
+
+document.querySelectorAll('[data-iso]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('[data-iso]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const p=btn.dataset.iso;
+    if(p==='rehab'){ isoVelocity.value=40; isoActivation.value=45; isoResistance.value=20; isoAmplitude.value=70; }
+    if(p==='strength'){ isoVelocity.value=60; isoActivation.value=95; isoResistance.value=75; isoAmplitude.value=90; }
+    if(p==='power'){ isoVelocity.value=180; isoActivation.value=90; isoResistance.value=45; isoAmplitude.value=100; }
+    if(p==='eccentric'){ isoVelocity.value=50; isoActivation.value=85; isoResistance.value=85; isoAmplitude.value=80; }
+    if(p==='fatigue'){ isoVelocity.value=140; isoActivation.value=60; isoResistance.value=65; isoAmplitude.value=110; }
+    render();
+  });
+});
+
+btnStart.addEventListener('click', ()=>{
+  if(running) return;
+  running = true;
+  lastTs = 0;
+  raf = requestAnimationFrame(loop);
+});
+btnPause.addEventListener('click', ()=>{
+  running = false;
+  if(raf) cancelAnimationFrame(raf);
+});
+btnReset.addEventListener('click', ()=>{
+  running = false;
+  if(raf) cancelAnimationFrame(raf);
+  lastTs = 0;
+  t = 0;
+  timeSec = 0;
+  hillActivation.value=70; hillLoad.value=45; hillLength.value=1.00; hillStiffness.value=60;
+  isoVelocity.value=120; isoActivation.value=80; isoResistance.value=40; isoAmplitude.value=90;
+  document.querySelectorAll('[data-hill], [data-iso]').forEach(b=>b.classList.remove('active'));
+  render();
+});
+speedRange.addEventListener('input', render);
+labelsToggle.addEventListener('change', render);
+
+setMode('hill');
+render();
+render();
+})();
+</script>
+</body>
+</html>
