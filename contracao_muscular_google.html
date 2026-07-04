@@ -39,6 +39,7 @@ input[type=range]{width:140px}
 .modal .actions{display:flex;justify-content:flex-end;gap:10px;margin-top:14px}
 .modal button.secondary{background:linear-gradient(135deg,#64748b 0%,#94a3b8 52%,#475569 100%)}
 .modal button.ok{background:linear-gradient(135deg,#10b981 0%,#22c55e 48%,#16a34a 100%)}
+.authStatus{margin-top:12px;padding:10px 12px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;color:#17324d;font-weight:800;min-height:42px}.authStatus.bad{color:#991b1b}.authStatus.ok{color:#166534}
 @media(max-width:760px){body{padding:10px}h1{font-size:24px}.controls{gap:8px;padding:10px}button{font-size:13px;padding:9px 12px}}
 </style>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -94,16 +95,16 @@ input[type=range]{width:140px}
 </div>
 <div class="signature"><strong>Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</strong></div>
 
-<div id="g_id_onload"
-  data-client_id="1038408690730-bk2oqlv00mjtteeeogtcu7im5548fklp.apps.googleusercontent.com"
-  data-callback="handleCredentialResponse"
-  data-auto_prompt="false">
-</div>
 <div class="modalBackdrop" id="captureModal">
   <div class="modal">
     <h2>Captura</h2>
     <div id="googleStep">
-      <p style="font-weight:900;color:#17324d;margin:0 0 12px">Exportação restrita ao autor do material.</p>
+      <p style="margin:0 0 12px;font-weight:900;color:#17324d">Exportação restrita ao autor do material.</p>
+      <div id="g_id_onload"
+        data-client_id="1038408690730-bk2oqlv00mjtteeeogtcu7im5548fklp.apps.googleusercontent.com"
+        data-callback="handleCredentialResponse"
+        data-auto_prompt="false">
+      </div>
       <div class="g_id_signin"
         data-type="standard"
         data-size="large"
@@ -112,8 +113,8 @@ input[type=range]{width:140px}
         data-shape="pill"
         data-logo_alignment="left">
       </div>
-      <div id="authError" style="color:#dc2626;font-weight:800;min-height:22px;margin-top:12px"></div>
-      <div class="actions"><button class="secondary" id="cancelAuth">Cancelar</button></div>
+      <div id="authStatus" class="authStatus">Faça login com sua conta Google para liberar PNG/PDF.</div>
+      <div class="actions"><button class="secondary" id="cancelPass">Cancelar</button></div>
     </div>
     <div id="exportStep" style="display:none">
       <div class="row"><label><input type="radio" name="format" value="png" checked> PNG</label><label><input type="radio" name="format" value="pdf"> PDF</label></div>
@@ -141,10 +142,49 @@ const SIMULATOR_INFO = {
   palavrasChave: ["contração muscular","placa motora","junção neuromuscular","acetilcolina","ACh","potencial de ação","sarcolema","túbulos T","retículo sarcoplasmático","cisternas terminais","cálcio","Ca2+","troponina","tropomiosina","pontes cruzadas","miosina","actina","ATP","SERCA","relaxamento muscular","fisiologia muscular","excitação-contração"],
   versao: "1.0"
 };
-(() => {
 const AUTHORIZED_EMAIL = "mariocnascimento@gmail.com";
-let googleAuthorized = false;
-let googleUserEmail = "";
+let googleExportAuthenticated = false;
+let googleExportUserEmail = "";
+
+function decodeJwtPayload(token){
+  const payload = token.split('.')[1];
+  const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
+  const json = decodeURIComponent(atob(normalized).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  return JSON.parse(json);
+}
+
+function handleCredentialResponse(response){
+  const status = document.getElementById('authStatus');
+  try{
+    const data = decodeJwtPayload(response.credential);
+    const email = data.email || '';
+    const verified = data.email_verified === true;
+    googleExportUserEmail = email;
+    if(email === AUTHORIZED_EMAIL && verified){
+      googleExportAuthenticated = true;
+      if(status){
+        status.className = 'authStatus ok';
+        status.textContent = 'Login autorizado: ' + email;
+      }
+      document.getElementById('googleStep').style.display = 'none';
+      document.getElementById('exportStep').style.display = 'block';
+    }else{
+      googleExportAuthenticated = false;
+      if(status){
+        status.className = 'authStatus bad';
+        status.textContent = 'Exportação bloqueada para: ' + (email || 'conta não identificada');
+      }
+    }
+  }catch(err){
+    googleExportAuthenticated = false;
+    if(status){
+      status.className = 'authStatus bad';
+      status.textContent = 'Erro ao validar login Google: ' + err.message;
+    }
+  }
+}
+
+(() => {
 const DUR = [5,5,5,6,8,4,6];
 const TOTAL = DUR.reduce((a,b)=>a+b,0);
 const tlX = [185,456,753,1046,1326,1607,1885];
@@ -325,7 +365,7 @@ async function snapshot(state){
   if(state==='initial') t=0;
   // Estado Final exporta o frame mestre: instante em que o número ⑦ aparece.
   // Evita o estado final absoluto, que gerava sobreposição visual na região de "Cisterna terminal".
-  if(state==='final') t=revealTimes[6] + 0.05;
+  if(state==='final') t=revealTimes[6];
   update(t);
   // Exportação final limpa: remove elementos transitórios que podem cobrir rótulos da imagem-base.
   if(state==='final'){
@@ -366,46 +406,21 @@ function makePdfFromJpeg(dataUrl){
   add(`trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF`);
   return new Blob([new Uint8Array(parts.flat())],{type:'application/pdf'});
 }
-function decodeJwtPayload(token){
-  const payload = token.split('.')[1];
-  const normalized = payload.replace(/-/g, '+').replace(/_/g, '/');
-  const json = decodeURIComponent(atob(normalized).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-  return JSON.parse(json);
-}
-window.handleCredentialResponse = function(response){
-  try{
-    const data = decodeJwtPayload(response.credential);
-    const email = data.email || '';
-    const verified = data.email_verified === true;
-    googleUserEmail = email;
-    if(email === AUTHORIZED_EMAIL && verified){
-      googleAuthorized = true;
-      $('authError').textContent = '';
-      $('googleStep').style.display='none';
-      $('exportStep').style.display='block';
-    } else {
-      googleAuthorized = false;
-      $('authError').textContent = 'Exportação bloqueada para esta conta: ' + (email || 'e-mail não identificado');
-    }
-  }catch(err){
-    googleAuthorized = false;
-    $('authError').textContent = 'Erro ao validar login Google: ' + err.message;
-  }
-};
 const modal=$('captureModal'), googleStep=$('googleStep'), exportStep=$('exportStep');
 $('btnCapture').onclick=()=>{
   modal.style.display='flex';
-  $('authError').textContent='';
-  if(googleAuthorized){
+  exportStep.style.display='none';
+  const status=$('authStatus');
+  if(googleExportAuthenticated){
     googleStep.style.display='none';
     exportStep.style.display='block';
-  } else {
+  }else{
     googleStep.style.display='block';
-    exportStep.style.display='none';
+    if(status){status.className='authStatus'; status.textContent='Faça login com sua conta Google para liberar PNG/PDF.';}
   }
 };
-$('cancelAuth').onclick=$('cancelExport').onclick=()=>modal.style.display='none';
-$('doExport').onclick=async()=>{const format=modal.querySelector('input[name=format]:checked').value; const state=modal.querySelector('input[name=state]:checked').value; const canvas=await snapshot(state); if(format==='png'){canvas.toBlob(b=>downloadBlob(b,`contracao-muscular-${state}.png`));} else {const pdf=makePdfFromJpeg(canvas.toDataURL('image/jpeg',.92)); downloadBlob(pdf,`contracao-muscular-${state}.pdf`);} modal.style.display='none';};
+$('cancelPass').onclick=$('cancelExport').onclick=()=>modal.style.display='none';
+$('doExport').onclick=async()=>{const format=document.querySelector('input[name=format]:checked').value; const state=document.querySelector('input[name=state]:checked').value; const canvas=await snapshot(state); if(format==='png'){canvas.toBlob(b=>downloadBlob(b,`contracao-muscular-${state}.png`));} else {const pdf=makePdfFromJpeg(canvas.toDataURL('image/jpeg',.92)); downloadBlob(pdf,`contracao-muscular-${state}.pdf`);} modal.style.display='none';};
 update(0);
 })();
 </script>
