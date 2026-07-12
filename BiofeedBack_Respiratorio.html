@@ -1,3 +1,16 @@
+<!--
+Fisiologia Interativa
+Biofeedback Respiratório
+
+Versão: 1.0
+Autor: Prof. Mário César Nascimento. PhD
+Plataformas:
+- Desktop
+- Smartphone
+- Tablet
+
+© 2026
+-->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -570,6 +583,74 @@
 
   </style>
 
+<style>
+    /* Botões padrão Fisiologia Interativa — versão oficial */
+    .control-capsule .icon-btn,
+    .control-capsule .icon-btn.primary,
+    .control-capsule .icon-btn.danger{
+      width:44px !important;
+      height:44px !important;
+      min-width:44px !important;
+      min-height:44px !important;
+      padding:0 !important;
+      border-radius:14px !important;
+      display:grid !important;
+      place-items:center !important;
+      background:linear-gradient(135deg,var(--accent-dark),var(--accent-light)) !important;
+      color:#fff !important;
+      border:1px solid var(--accent) !important;
+      box-shadow:
+        0 7px 14px color-mix(in srgb,var(--accent) 28%,transparent),
+        inset 0 1px 0 rgba(255,255,255,.55) !important;
+      transition:
+        transform .16s ease,
+        box-shadow .16s ease,
+        filter .16s ease !important;
+    }
+
+    .control-capsule .icon-btn:hover{
+      transform:translateY(-1px) !important;
+      box-shadow:
+        0 10px 18px color-mix(in srgb,var(--accent) 34%,transparent),
+        inset 0 1px 0 rgba(255,255,255,.58) !important;
+      filter:brightness(1.03);
+    }
+
+    .control-capsule .icon-btn:active{
+      transform:translateY(1px) scale(.98) !important;
+    }
+
+    .control-capsule .icon-btn:disabled{
+      opacity:.62 !important;
+      cursor:not-allowed !important;
+      filter:saturate(.72) !important;
+      transform:none !important;
+    }
+
+    .pause-icon{
+      position:relative;
+      width:18px;
+      height:20px;
+      display:block;
+    }
+
+    .pause-icon::before,
+    .pause-icon::after{
+      content:"";
+      position:absolute;
+      top:0;
+      width:5px;
+      height:20px;
+      border-radius:2px;
+      background:#fff;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.38),
+        0 1px 2px rgba(15,23,42,.18);
+    }
+
+    .pause-icon::before{left:2px}
+    .pause-icon::after{right:2px}
+</style>
 </head>
 <body>
   <h1 id="seo-title" style="display:none;">Biofeedback Respiratório</h1>
@@ -597,10 +678,10 @@
     <section class="main-layout">
       <section class="visual-card card">
         <div class="control-capsule" aria-label="Controles do simulador">
-          <button id="iniciar" class="icon-btn primary" title="Iniciar">▶</button>
+          <button id="iniciar" class="icon-btn primary" title="Iniciar" aria-label="Iniciar">▶</button>
           <button id="pausar" class="icon-btn" title="Pausar" aria-label="Pausar" disabled><span class="pause-icon" aria-hidden="true"></span></button>
-          <button id="resetar" class="icon-btn danger" title="Resetar">↻</button>
-          <button id="telaCheia" class="icon-btn" title="Tela cheia">⛶</button>
+          <button id="resetar" class="icon-btn danger" title="Resetar" aria-label="Resetar">↻</button>
+          <button id="telaCheia" class="icon-btn" title="Tela cheia" aria-label="Tela cheia">⛶</button>
         </div>
 
         <div class="orbital">
@@ -974,12 +1055,50 @@
     r.resetar.addEventListener("click",resetar);
     r.resetAll.addEventListener("click",resetTudo);
 
-    r.telaCheia.addEventListener("click",async()=>{
+    async function alternarTelaCheia(){
+      const doc=document;
+      const el=document.documentElement;
+      const ativo=
+        doc.fullscreenElement ||
+        doc.webkitFullscreenElement ||
+        doc.msFullscreenElement;
+
       try{
-        if(!document.fullscreenElement)await document.documentElement.requestFullscreen();
-        else await document.exitFullscreen();
-      }catch(e){}
-    });
+        if(!ativo){
+          if(el.requestFullscreen){
+            await el.requestFullscreen();
+          }else if(el.webkitRequestFullscreen){
+            el.webkitRequestFullscreen();
+          }else if(el.msRequestFullscreen){
+            el.msRequestFullscreen();
+          }
+        }else{
+          if(doc.exitFullscreen){
+            await doc.exitFullscreen();
+          }else if(doc.webkitExitFullscreen){
+            doc.webkitExitFullscreen();
+          }else if(doc.msExitFullscreen){
+            doc.msExitFullscreen();
+          }
+        }
+      }catch(e){
+        console.warn("Tela cheia indisponível neste navegador.",e);
+      }
+    }
+
+    function atualizarBotaoTelaCheia(){
+      const ativo=
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement;
+
+      r.telaCheia.title=ativo?"Sair da tela cheia":"Tela cheia";
+      r.telaCheia.setAttribute("aria-label",ativo?"Sair da tela cheia":"Tela cheia");
+    }
+
+    r.telaCheia.addEventListener("click",alternarTelaCheia);
+    document.addEventListener("fullscreenchange",atualizarBotaoTelaCheia);
+    document.addEventListener("webkitfullscreenchange",atualizarBotaoTelaCheia);
 
     document.addEventListener("visibilitychange",()=>{
       if(document.visibilityState==="visible"&&executando&&!pausado)bloquearTela();
