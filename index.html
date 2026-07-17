@@ -332,6 +332,8 @@
     .mindmap-links > span { color: var(--group-color, var(--petrol-800)); font-size: .72rem; font-weight: 760; }
     .mindmap-trigger { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 7px; padding: 0; border: 0; color: var(--group-color, var(--petrol-800)); background: transparent; font-size: .72rem; font-weight: 760; cursor: pointer; }
     .mindmap-links .mindmap-trigger { margin: 0; }
+    .mindmap-trigger.is-featured { padding: 5px 10px; border-radius: 999px; color: #fff; background: var(--group-color, var(--petrol-800)); box-shadow: 0 7px 18px color-mix(in srgb, var(--group-color) 34%, transparent); }
+    .mindmap-trigger.is-featured::after { color: var(--group-color, var(--petrol-800)); background: #fff; box-shadow: none; }
     .mindmap-trigger strong { font-weight: 900; }
     .mindmap-trigger::after { content: "↗"; width: 21px; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; color: #fff; background: var(--group-color, var(--petrol-800)); font-size: .67rem; box-shadow: 0 5px 13px color-mix(in srgb, var(--group-color) 24%, transparent); transition: transform .2s ease; }
     .mindmap-trigger:hover::after { transform: translate(2px, -2px); }
@@ -675,7 +677,11 @@
         {src:'assets/maps/cardiovascular-02-circulacao-hemodinamica.webp', title:'Sistema Cardiovascular — Circulação e Hemodinâmica'},
         {src:'assets/maps/cardiovascular-03-regulacao-adaptacoes.webp', title:'Sistema Cardiovascular — Regulação e Adaptações'}
       ]},
-      {id:'respiratorio', number:'05', color:'#1976B9', title:'Sistema respiratório', description:'Mecânica ventilatória, transporte de gases e estratégias de controle respiratório.'},
+      {id:'respiratorio', number:'05', color:'#1976B9', title:'Sistema respiratório', description:'Estrutura e mecânica ventilatória, trocas gasosas, controle da ventilação e biofeedback respiratório.', mindmaps:[
+        {src:'assets/maps/respiratorio-01-estrutura-mecanica-ventilacao.webp', title:'Sistema Respiratório — Estrutura, Mecânica e Ventilação'},
+        {src:'assets/maps/respiratorio-02-trocas-gasosas-controle.webp', title:'Sistema Respiratório — Trocas Gasosas e Controle'},
+        {src:'assets/maps/respiratorio-03-biofeedback.webp', title:'Biofeedback Respiratório', label:'Biofeedback', featured:true}
+      ]},
       {id:'integracao', number:'06', color:'#0B7C82', title:'Integração cardiorrespiratória', description:'Respostas integradas do coração, pulmões, circulação e metabolismo em diferentes estados fisiológicos.'}
     ];
 
@@ -777,7 +783,7 @@
       const maps = sectionMindmaps(section);
       if (!maps.length) return '';
       if (maps.length === 1) return `<button class="mindmap-trigger" type="button" data-mindmap="${section.id}" data-mindmap-index="0">Relembre o conteúdo: <strong>Mapa mental</strong></button>`;
-      return `<div class="mindmap-links"><span>Relembre o conteúdo:</span>${maps.map((map,index) => `<button class="mindmap-trigger" type="button" data-mindmap="${section.id}" data-mindmap-index="${index}" aria-label="Abrir mapa mental ${index + 1}: ${map.title}"><strong>Mapa ${String(index + 1).padStart(2,'0')}</strong></button>`).join('')}</div>`;
+      return `<div class="mindmap-links"><span>Relembre o conteúdo:</span>${maps.map((map,index) => `<button class="mindmap-trigger${map.featured ? ' is-featured' : ''}" type="button" data-mindmap="${section.id}" data-mindmap-index="${index}" aria-label="Abrir ${map.label || `mapa mental ${index + 1}`}: ${map.title}"><strong>${map.label || `Mapa ${String(index + 1).padStart(2,'0')}`}</strong></button>`).join('')}</div>`;
     }
 
     function openMindmap(section, index, trigger) {
