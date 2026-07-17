@@ -328,7 +328,10 @@
     .curriculum-head { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: 18px; align-items: start; margin-bottom: 22px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
     .curriculum-number { width: 50px; aspect-ratio: 1; display: grid; place-items: center; border-radius: 16px; color: #fff; background: var(--group-color, var(--petrol-800)); font-size: .88rem; font-weight: 850; }
     .curriculum-kicker { margin: 1px 0 5px; color: var(--group-color, var(--orange)); font-size: .68rem; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+    .mindmap-links { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 12px; margin: 0 0 7px; }
+    .mindmap-links > span { color: var(--group-color, var(--petrol-800)); font-size: .72rem; font-weight: 760; }
     .mindmap-trigger { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 7px; padding: 0; border: 0; color: var(--group-color, var(--petrol-800)); background: transparent; font-size: .72rem; font-weight: 760; cursor: pointer; }
+    .mindmap-links .mindmap-trigger { margin: 0; }
     .mindmap-trigger strong { font-weight: 900; }
     .mindmap-trigger::after { content: "↗"; width: 21px; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; color: #fff; background: var(--group-color, var(--petrol-800)); font-size: .67rem; box-shadow: 0 5px 13px color-mix(in srgb, var(--group-color) 24%, transparent); transition: transform .2s ease; }
     .mindmap-trigger:hover::after { transform: translate(2px, -2px); }
@@ -667,7 +670,11 @@
       {id:'celular', number:'01', color:'#6A3D9A', title:'Fisiologia celular, transporte de substâncias e potenciais de ação', description:'Membrana plasmática, gradientes eletroquímicos, transporte ativo e geração de sinais elétricos.', mindmap:'assets/maps/organizacao-funcional-membranas.webp', mindmapTitle:'Organização funcional e membranas'},
       {id:'muscular', number:'02', color:'#E87513', title:'Excitabilidade e Sistema Muscular', description:'Da excitabilidade e condução à placa motora, ao sarcômero, à força, ao controle motor e aos tipos de contração.', mindmap:'assets/maps/excitabilidade-sistema-muscular.webp', mindmapTitle:'Excitabilidade e Sistema Muscular'},
       {id:'osteoarticular', number:'03', color:'#2B8A66', title:'Sistema Osteoarticular', description:'Estrutura óssea, remodelação, cálcio, vitamina D, articulações, movimento e saúde osteoarticular.', mindmap:'assets/maps/sistema-osteoarticular.webp', mindmapTitle:'Sistema Osteoarticular'},
-      {id:'cardiovascular', number:'04', color:'#D8393E', title:'Sistema cardiovascular', description:'Eletrofisiologia cardíaca, hemodinâmica, fluxo, pressões, retorno venoso e função de bomba.'},
+      {id:'cardiovascular', number:'04', color:'#D8393E', title:'Sistema cardiovascular', description:'Sangue, circulação, hemodinâmica, microcirculação, controle da pressão arterial e adaptações cardiovasculares.', mindmaps:[
+        {src:'assets/maps/cardiovascular-01-sangue.webp', title:'Sistema Cardiovascular — Sangue'},
+        {src:'assets/maps/cardiovascular-02-circulacao-hemodinamica.webp', title:'Sistema Cardiovascular — Circulação e Hemodinâmica'},
+        {src:'assets/maps/cardiovascular-03-regulacao-adaptacoes.webp', title:'Sistema Cardiovascular — Regulação e Adaptações'}
+      ]},
       {id:'respiratorio', number:'05', color:'#1976B9', title:'Sistema respiratório', description:'Mecânica ventilatória, transporte de gases e estratégias de controle respiratório.'},
       {id:'integracao', number:'06', color:'#0B7C82', title:'Integração cardiorrespiratória', description:'Respostas integradas do coração, pulmões, circulação e metabolismo em diferentes estados fisiológicos.'}
     ];
@@ -761,11 +768,25 @@
       document.querySelector('#conteudo').focus();
     });
 
-    function openMindmap(section, trigger) {
+    function sectionMindmaps(section) {
+      if (section.mindmaps) return section.mindmaps;
+      return section.mindmap ? [{src:section.mindmap, title:section.mindmapTitle}] : [];
+    }
+
+    function mindmapButtons(section) {
+      const maps = sectionMindmaps(section);
+      if (!maps.length) return '';
+      if (maps.length === 1) return `<button class="mindmap-trigger" type="button" data-mindmap="${section.id}" data-mindmap-index="0">Relembre o conteúdo: <strong>Mapa mental</strong></button>`;
+      return `<div class="mindmap-links"><span>Relembre o conteúdo:</span>${maps.map((map,index) => `<button class="mindmap-trigger" type="button" data-mindmap="${section.id}" data-mindmap-index="${index}" aria-label="Abrir mapa mental ${index + 1}: ${map.title}"><strong>Mapa ${String(index + 1).padStart(2,'0')}</strong></button>`).join('')}</div>`;
+    }
+
+    function openMindmap(section, index, trigger) {
+      const map = sectionMindmaps(section)[index];
+      if (!map) return;
       lastMindmapTrigger = trigger;
-      mindmapTitle.textContent = section.mindmapTitle;
-      mindmapImage.src = section.mindmap;
-      mindmapImage.alt = `Mapa mental: ${section.mindmapTitle}`;
+      mindmapTitle.textContent = map.title;
+      mindmapImage.src = map.src;
+      mindmapImage.alt = `Mapa mental: ${map.title}`;
       mindmapModal.hidden = false;
       document.body.classList.add('modal-open');
       closeMindmap.focus();
@@ -794,13 +815,13 @@
         if (!items.length) return '';
         const countLabel = `${items.length} ${items.length === 1 ? 'simulador' : 'simuladores'}`;
         return `<section class="curriculum-block" aria-labelledby="section-${section.id}" style="--group-color:${section.color}">
-          <div class="curriculum-head"><span class="curriculum-number">${section.number}</span><div>${section.mindmap ? `<button class="mindmap-trigger" type="button" data-mindmap="${section.id}">Relembre o conteúdo: <strong>Mapa mental</strong></button>` : ''}<h3 id="section-${section.id}">${section.title}</h3><p>${section.description}</p></div><span class="curriculum-count">${countLabel}</span></div>
+          <div class="curriculum-head"><span class="curriculum-number">${section.number}</span><div>${mindmapButtons(section)}<h3 id="section-${section.id}">${section.title}</h3><p>${section.description}</p></div><span class="curriculum-count">${countLabel}</span></div>
           <div class="module-grid">${items.map(({item,index}) => cardTemplate(item,index)).join('')}</div>
         </section>`;
       }).join('');
       empty.hidden = visible.length > 0;
       grid.hidden = visible.length === 0;
-      grid.querySelectorAll('.mindmap-trigger').forEach(button => button.addEventListener('click', () => openMindmap(curriculum.find(section => section.id === button.dataset.mindmap), button)));
+      grid.querySelectorAll('.mindmap-trigger').forEach(button => button.addEventListener('click', () => openMindmap(curriculum.find(section => section.id === button.dataset.mindmap), Number(button.dataset.mindmapIndex), button)));
     }
 
     filters.forEach(button => button.addEventListener('click', () => {
