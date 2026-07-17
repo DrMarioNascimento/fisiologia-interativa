@@ -536,14 +536,14 @@
   </header>
 
   <div class="ambient-layer" aria-hidden="true">
-    <span class="ambient ambient-cell" style="--x:3%;--y:18%;--s:54px;--o:.17;--d:17s;--dx:20px;--dy:-34px"></span>
-    <span class="ambient ambient-molecule" style="--x:91%;--y:13%;--s:21px;--o:.22;--d:14s;--delay:-4s;--dx:-24px;--dy:30px"></span>
-    <span class="ambient ambient-cell" style="--x:94%;--y:47%;--s:78px;--o:.13;--d:22s;--delay:-8s;--dx:-31px;--dy:-22px"></span>
-    <span class="ambient ambient-molecule" style="--x:5%;--y:70%;--s:17px;--o:.2;--d:13s;--delay:-6s;--dx:26px;--dy:-36px"></span>
-    <span class="ambient ambient-cell" style="--x:78%;--y:82%;--s:43px;--o:.14;--d:19s;--delay:-2s;--dx:18px;--dy:-30px"></span>
-    <span class="ambient ambient-molecule" style="--x:22%;--y:89%;--s:14px;--o:.18;--d:16s;--delay:-10s;--dx:-22px;--dy:27px"></span>
-    <span class="ambient ambient-cell" style="--x:48%;--y:7%;--s:32px;--o:.1;--d:20s;--delay:-5s;--dx:28px;--dy:20px"></span>
-    <span class="ambient ambient-molecule" style="--x:68%;--y:38%;--s:12px;--o:.16;--d:12s;--delay:-3s;--dx:-18px;--dy:-25px"></span>
+    <span class="ambient ambient-cell" style="--x:3%;--y:18%;--s:54px;--o:.25;--d:17s;--dx:20px;--dy:-34px"></span>
+    <span class="ambient ambient-molecule" style="--x:91%;--y:13%;--s:21px;--o:.32;--d:14s;--delay:-4s;--dx:-24px;--dy:30px"></span>
+    <span class="ambient ambient-cell" style="--x:94%;--y:47%;--s:78px;--o:.21;--d:22s;--delay:-8s;--dx:-31px;--dy:-22px"></span>
+    <span class="ambient ambient-molecule" style="--x:5%;--y:70%;--s:17px;--o:.30;--d:13s;--delay:-6s;--dx:26px;--dy:-36px"></span>
+    <span class="ambient ambient-cell" style="--x:78%;--y:82%;--s:43px;--o:.22;--d:19s;--delay:-2s;--dx:18px;--dy:-30px"></span>
+    <span class="ambient ambient-molecule" style="--x:22%;--y:89%;--s:14px;--o:.28;--d:16s;--delay:-10s;--dx:-22px;--dy:27px"></span>
+    <span class="ambient ambient-cell" style="--x:48%;--y:7%;--s:32px;--o:.18;--d:20s;--delay:-5s;--dx:28px;--dy:20px"></span>
+    <span class="ambient ambient-molecule" style="--x:68%;--y:38%;--s:12px;--o:.25;--d:12s;--delay:-3s;--dx:-18px;--dy:-25px"></span>
   </div>
 
   <main id="conteudo" tabindex="-1">
@@ -682,7 +682,7 @@
         {src:'assets/maps/respiratorio-02-trocas-gasosas-controle.webp', title:'Sistema Respiratório — Trocas Gasosas e Controle'},
         {src:'assets/maps/respiratorio-03-biofeedback.webp', title:'Biofeedback Respiratório', label:'Biofeedback', featured:true}
       ]},
-      {id:'integracao', number:'06', color:'#0B7C82', title:'Integração cardiorrespiratória', description:'Respostas integradas do coração, pulmões, circulação e metabolismo em diferentes estados fisiológicos.'}
+      {id:'integracao', number:'06', color:'#0B7C82', title:'Integração cardiorrespiratória', description:'Respostas integradas do coração, pulmões, circulação e metabolismo em diferentes estados fisiológicos.', mindmap:'assets/maps/integracao-cardiorrespiratoria.webp', mindmapTitle:'Integração Cardiorrespiratória'}
     ];
 
     const modules = [
@@ -698,7 +698,7 @@
 
       {group:'osteoarticular', title:'Homeostase do cálcio', tags:['Osteoarticular','Cálcio'], shot:'assets/screenshots/homeostase-calcio.jpg', objective:'Integrar vitamina D, PTH, calcitonina, intestino, rim, osso e concentração plasmática de cálcio.', use:'Análise da regulação mineral e das respostas compensatórias em diferentes cenários.', meta:'Regulação hormonal'},
 
-      {group:'cardiovascular', title:'Potencial de ação cardíaco', tags:['Cardiovascular','Eletrofisiologia'], shot:'assets/screenshots/potencial-acao-cardiaco.jpg', objective:'Reconhecer as fases do potencial de ação do cardiomiócito e relacioná-las aos fluxos iônicos e ao período refratário.', use:'Introdução à eletrofisiologia cardíaca e análise orientada das fases 0 a 4.', meta:'Fases 0–4'},
+      {group:'celular', title:'Potencial de ação cardíaco', tags:['Fisiologia celular','Cardiomiócito'], shot:'assets/screenshots/potencial-acao-cardiaco.jpg', objective:'Reconhecer as fases do potencial de ação do cardiomiócito e relacioná-las aos fluxos iônicos e ao período refratário.', use:'Introdução à eletrofisiologia cardíaca e análise orientada das fases 0 a 4.', meta:'Fases 0–4'},
       {group:'cardiovascular', title:'Pressão arterial, DC e RPT', tags:['Cardiovascular','Hemodinâmica'], shot:'assets/screenshots/hemodinamica.jpg', objective:'Relacionar pressão arterial, débito cardíaco, resistência periférica total, PAM e pressão de pulso.', use:'Comparação entre exercício, hemorragia, hipertensão, insuficiência cardíaca e alterações vasculares.', meta:'Variáveis integradas'},
       {group:'cardiovascular', title:'Retorno venoso', tags:['Cardiovascular','Hemodinâmica'], shot:'assets/screenshots/retorno-venoso.jpg', objective:'Compreender como pressão atrial direita, volume, tônus, complacência, resistência e bombas periféricas determinam o retorno venoso.', use:'Construção da curva de retorno venoso e discussão de ortostatismo, exercício e hemorragia.', meta:'Curvas ajustáveis'},
       {group:'cardiovascular', title:'Loop cardíaco funcional', tags:['Cardiovascular','Ciclo cardíaco'], shot:'assets/screenshots/loop-cardiaco.jpg', objective:'Integrar enchimento, ejeção, volumes ventriculares e abertura e fechamento das válvulas ao longo do ciclo cardíaco.', use:'Leitura orientada das fases do ciclo e das relações entre eventos mecânicos e hemodinâmicos.', meta:'Ciclo completo'},
