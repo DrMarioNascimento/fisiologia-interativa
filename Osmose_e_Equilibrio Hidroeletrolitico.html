@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Osmose e Equilíbrio Hidroeletrolítico — Fisiologia Interativa</title>
+<meta name="description" content="Simulador interativo de osmose, osmolaridade, tonicidade, permeabilidade de membrana e pressão osmótica." />
+<meta name="sim-category" content="Celular" />
+<meta name="sim-author" content="Prof. Mário César Nascimento. PhD" />
+<style>
+  :root {
+    --bg: #0e1726;
+    --panel: #16223a;
+    --panel-2: #1d2c49;
+    --border: #2a3c5f;
+    --text: #e8eef7;
+    --muted: #9db0cc;
+    --accent: #38bdf8;
+    --accent-2: #22d3a7;
+    --water: #2f6fed;
+    --water-top: #4f8bff;
+    --danger: #ef6f6c;
+    --warn: #f4b942;
+    /* cores de dados (íons) */
+    --na: #f4a742;
+    --cl: #33c2a6;
+    --k:  #ef6f8c;
+    --glu:#e7d24b;
+    --prot:#7aa2ff;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--bg); }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(900px 480px at 50% -120px, #203a63 0%, transparent 62%),
+      linear-gradient(145deg, #0b1321 0%, var(--bg) 48%, #101e33 100%);
+    min-height: 100vh;
+  }
+  header {
+    padding: 18px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 20px;
+    align-items: baseline;
+    background: linear-gradient(180deg, #1a2d4c 0%, #101b2e 58%, #0e1726 100%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 7px 20px rgba(0,0,0,.22);
+  }
+  header h1 { font-size: 20px; margin: 0; letter-spacing: 0.2px; }
+  header p { margin: 0; color: var(--muted); font-size: 13px; }
+  .layout {
+    display: grid;
+    grid-template-columns: 330px minmax(0, 1fr) 350px;
+    gap: 18px;
+    padding: 18px;
+    max-width: 1700px;
+    margin: 0 auto;
+    align-items: start;
+  }
+  @media (max-width: 1400px){ .layout { grid-template-columns: 320px minmax(0, 1fr); } }
+  @media (max-width: 1050px){ .layout { grid-template-columns: 1fr; } }
+
+  .card {
+    background: linear-gradient(145deg, rgba(34,52,83,.96), rgba(17,29,50,.98));
+    border: 1px solid #31476f;
+    border-radius: var(--radius);
+    padding: 16px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.065), inset 0 -1px 0 rgba(0,0,0,.22), 0 14px 28px rgba(0,0,0,.18);
+  }
+  .card h2 { font-size: 14px; margin: 0 0 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); }
+
+  /* ---- Scenario buttons ---- */
+  .top-control-card { grid-column: 1 / -1; padding: 12px 16px; }
+  .states-wrap { position:relative; border-top:1px solid #3c5b88; padding-top:9px; }
+  .states-title { position:absolute; top:0; left:10px; transform:translateY(-50%); padding:0 8px; background:#1d304f; font-size:11px; font-weight:700; letter-spacing:.5px; color:var(--accent-2); margin:0; white-space:nowrap; }
+  .scenarios { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin: 0; }
+  .scenarios button {
+    background: linear-gradient(180deg, #294064, #1a2a46);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 7px 8px;
+    border-radius: 999px;
+    font-size: 11.5px;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 3px 0 #0c1525, 0 5px 8px rgba(0,0,0,.20);
+    transition: transform .15s, box-shadow .15s, border-color .15s, color .15s;
+  }
+  .scenarios button:hover { border-color: var(--accent); color: #fff; transform: translateY(-1px); }
+  .scenarios button:active { transform: translateY(2px); box-shadow: inset 0 1px 4px rgba(0,0,0,.32), 0 1px 0 #0c1525; }
+  .scenarios button.active { background: linear-gradient(180deg, #68d2ff, #27a9df); border-color: #86ddff; color: #04121f; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 3px 0 #167ba9, 0 6px 11px rgba(0,0,0,.24); }
+  @media (max-width: 900px){ .scenarios { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 620px){ .scenarios { grid-template-columns: 1fr 1fr; } }
+
+  /* ---- Controls ---- */
+  .controls-top { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+  .control-btn { min-height: 42px; }
+  .btn {
+    background: linear-gradient(180deg, #70d6ff, #27a7dd);
+    color: #04121f;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 3px 0 #147da9, 0 6px 12px rgba(0,0,0,.25);
+    transition: transform .14s, box-shadow .14s, filter .14s;
+  }
+  .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .btn.secondary { background: linear-gradient(180deg, #2c4266, #1b2a46); color: var(--text); border: 1px solid #3c5680; box-shadow: inset 0 1px 0 rgba(255,255,255,.12), 0 3px 0 #0d1728, 0 6px 12px rgba(0,0,0,.22); }
+  .btn.start { background:linear-gradient(180deg,#55e4a9,#18a875); box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 3px 0 #0b7651,0 6px 12px rgba(0,0,0,.25); }
+  .btn.reset { background:linear-gradient(180deg,#ffc86e,#e99028); color:#271504; border:1px solid #ffd393; box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 3px 0 #a65d12,0 6px 12px rgba(0,0,0,.25); }
+  .btn.fullscreen { background:linear-gradient(180deg,#b79aff,#7858dd); color:#fff; border:1px solid #c6b5ff; box-shadow:inset 0 1px 0 rgba(255,255,255,.5),0 3px 0 #4f36a5,0 6px 12px rgba(0,0,0,.25); }
+  .btn:active { transform: translateY(2px); box-shadow: inset 0 2px 5px rgba(0,0,0,.30), 0 1px 0 #147da9; }
+  .toggle-row { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); }
+  .speed { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); }
+  .speed b { color:var(--text); min-width:30px; font-variant-numeric:tabular-nums; }
+  .speed input { width: 90px; }
+
+  /* ---- SVG stage ---- */
+  .stage-wrap { position: relative; border-radius: 12px; overflow: hidden; box-shadow: inset 0 1px 0 rgba(255,255,255,.06), inset 0 0 34px rgba(0,0,0,.25); }
+  svg { width: 100%; height: auto; display: block; }
+  .status-banner {
+    text-align: center;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: linear-gradient(145deg, #263b5e, #172641);
+    border: 1px solid var(--border);
+    margin-top: 12px;
+  }
+  .status-banner b { color: var(--accent-2); }
+
+  /* ---- Compartment control blocks ---- */
+  .comp-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
+  @media (min-width: 1401px){ .comp-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 1400px) and (min-width: 1051px){ .comp-grid { grid-template-columns: 1fr 1fr; } }
+  .comp {
+    background: var(--panel-2);
+    border: 1px solid #344d77;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 5px 12px rgba(0,0,0,.16);
+  }
+  .comp h3 { margin: 0 0 4px; font-size: 13px; display: flex; align-items: center; gap: 6px; }
+  .dot {
+    width: 11px; height: 11px; flex: 0 0 11px; border-radius: 50%; display: inline-block;
+    background: radial-gradient(circle at 31% 27%, #fff 0 7%, color-mix(in srgb, var(--dot-color) 83%, #fff) 18%, var(--dot-color) 43%, color-mix(in srgb, var(--dot-color) 55%, #000) 100%);
+    border: 1px solid color-mix(in srgb, var(--dot-color) 60%, #fff);
+    box-shadow: inset -1px -1px 2px rgba(0,0,0,.42), 0 1px 3px rgba(0,0,0,.48);
+  }
+  .field { margin-bottom: 8px; }
+  .field label { display: flex; justify-content: space-between; font-size: 11.5px; color: var(--muted); margin-bottom: 2px; }
+  .field label span.val { color: var(--text); font-variant-numeric: tabular-nums; }
+  input[type="range"] { width: 100%; accent-color: var(--accent); filter: drop-shadow(0 1px 1px rgba(0,0,0,.45)); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 10px; font-size: 12px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+
+  /* ---- Readouts ---- */
+  table.readout { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  table.readout th, table.readout td { padding: 6px 8px; text-align: right; border-bottom: 1px solid var(--border); font-variant-numeric: tabular-nums; }
+  table.readout th:first-child, table.readout td:first-child { text-align: left; color: var(--muted); }
+  table.readout thead th { color: var(--muted); font-weight: 600; }
+  .eq {
+    background: linear-gradient(145deg, #253a5d, #182743);
+    border: 1px solid #344d77;
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 12px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 4px 10px rgba(0,0,0,.12);
+  }
+  .eq code { color: var(--accent-2); font-size: 12.5px; }
+  .perm-section { margin-top: 14px; padding: 13px; border: 1px solid #3d5a86; border-radius: 12px; background:linear-gradient(145deg,#213a5f,#162743); box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 6px 14px rgba(0,0,0,.15); }
+  .perm-section h2 { margin-bottom: 6px; }
+  .perm-intro { font-size: 12px; color: var(--muted); margin: 0 0 8px; }
+  .perm-toggles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 8px; font-size: 11.5px; }
+  .perm-toggles label { display: flex; align-items: center; gap: 7px; color: var(--solute-color); font-weight: 700; padding:8px 9px; border:1px solid color-mix(in srgb, var(--solute-color) 43%, #344d77); border-radius:9px; background:color-mix(in srgb, var(--solute-color) 9%, #172641); cursor:pointer; }
+  .perm-toggles input { appearance:none; width:30px; height:17px; margin:0; border-radius:999px; border:1px solid #6680a7; background:#0f1a2d; position:relative; transition:.18s; }
+  .perm-toggles input::after { content:""; position:absolute; width:11px; height:11px; left:2px; top:2px; border-radius:50%; background:#dce8f8; box-shadow:0 1px 2px rgba(0,0,0,.55); transition:.18s; }
+  .perm-toggles input:checked { background:var(--solute-color); border-color:var(--solute-color); }
+  .perm-toggles input:checked::after { transform:translateX(13px); background:#fff; }
+  .perm-toggles .dot { box-shadow: inset -1px -1px 2px rgba(0,0,0,.42), 0 0 7px color-mix(in srgb, var(--solute-color) 65%, transparent), 0 1px 3px rgba(0,0,0,.48); }
+  .mode-row { display:flex; align-items:center; gap:7px; margin:0; padding:8px 9px; border:1px solid color-mix(in srgb, var(--warn) 43%, #344d77); border-radius:9px; background:color-mix(in srgb, var(--warn) 9%, #172641); font-size:11.5px; color:var(--warn); font-weight:700; cursor:pointer; }
+  .mode-row input { appearance:none; flex:0 0 auto; width:30px; height:17px; margin:0; border-radius:999px; border:1px solid #6680a7; background:#0f1a2d; position:relative; transition:.18s; }
+  .mode-row input::after { content:""; position:absolute; width:11px; height:11px; left:2px; top:2px; border-radius:50%; background:#dce8f8; box-shadow:0 1px 2px rgba(0,0,0,.55); transition:.18s; }
+  .mode-row input:checked { background:var(--warn); border-color:var(--warn); }
+  .mode-row input:checked::after { transform:translateX(13px); background:#fff; }
+  details.help { margin-top: 12px; }
+  details.help summary { cursor: pointer; color: var(--accent); font-size: 13px; }
+  details.help div { font-size: 12.5px; color: var(--muted); margin-top: 8px; }
+  .tag { font-size: 10.5px; padding: 1px 7px; border-radius: 999px; border:1px solid var(--border); color: var(--muted); }
+  details.control-accordion { border-top: 1px solid var(--border); padding-top: 12px; }
+  details.control-accordion summary { cursor:pointer; color:var(--accent); font-size:14px; font-weight:700; letter-spacing:.3px; }
+  details.control-accordion > div { margin-top: 12px; }
+  .signature { max-width:1700px; margin: 0 auto; padding: 18px 24px 28px; border-top:1px solid var(--border); text-align:center; color:var(--muted); font-size:12px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Osmose e Equilíbrio Hidroeletrolítico</h1>
+  <p class="subtitle">Fisiologia Interativa — modelo quantitativo de osmolaridade, tonicidade e permeabilidade de membrana</p>
+</header>
+
+<div class="layout">
+  <section class="card top-control-card" aria-label="Controles e estados rápidos">
+    <div class="controls-top">
+      <button class="btn start control-btn" id="playBtn">▶ Iniciar</button>
+      <button class="btn reset control-btn" id="resetBtn">↻ Reiniciar</button>
+      <button class="btn fullscreen control-btn" id="fullscreenBtn">⛶ Tela cheia</button>
+      <div class="speed"><span>Velocidade</span><b id="speedValue">1,4×</b><input type="range" id="speed" min="0.2" max="4" step="0.1" value="1.4" /></div>
+    </div>
+    <div class="states-wrap">
+      <p class="states-title">ESTADOS RÁPIDOS</p>
+      <div class="scenarios" id="scenarios"></div>
+    </div>
+  </section>
+
+  <!-- ===================== COLUNA ESQUERDA: LEITURA ===================== -->
+  <div>
+    <div class="card">
+      <h2>Leitura quantitativa</h2>
+      <table class="readout">
+        <thead>
+          <tr><th>Grandeza</th><th id="hA">Compartimento A</th><th id="hB">Compartimento B</th></tr>
+        </thead>
+        <tbody id="readoutBody"></tbody>
+      </table>
+      <div class="eq">
+    <div style="text-align: justify;">
+    <div><b style="color: #2563eb;">Osmolaridade:</b> <code>Osm = Σ (i · C)</code> — soma de cada soluto (mOsm/L), onde <i>i</i> = fator de van't Hoff.</div>
+    <div style="margin-top:6px;"><b style="color: #16a34a;">Pressão osmótica (van't Hoff):</b> <code>π = i · C · R · T</code>, com R = 0,0821 L·atm·mol⁻¹·K⁻¹ e T = 310 K (37 °C).</div>
+    <div style="margin-top:6px;"><b style="color: #7c3aed;">Fluxo de água:</b> move-se do meio <i>hipotônico</i> (menor Osm) para o <i>hipertônico</i> (maior Osm) até o equilíbrio.</div>
+</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== COLUNA CENTRAL: PALCO ===================== -->
+  <div>
+    <div class="card">
+      <div class="stage-wrap">
+        <svg id="stage" viewBox="0 0 760 380" role="img" aria-label="Dois compartimentos separados por membrana semipermeável">
+          <!-- preenchido dinamicamente -->
+        </svg>
+      </div>
+
+      <div class="status-banner" id="status">Ajuste as variáveis ou escolha um cenário e clique em <b>Iniciar</b>.</div>
+
+      <section class="perm-section" aria-labelledby="permTitle">
+        <h2 id="permTitle">Ajustes da membrana</h2>
+        <p class="perm-intro">A água sempre atravessa. Selecione os solutos que também podem atravessar a membrana.</p>
+        <div class="perm-toggles" id="permToggles"></div>
+      </section>
+
+      <div class="legend">
+        <span><i class="dot" style="--dot-color:var(--na)"></i> Na⁺</span>
+        <span><i class="dot" style="--dot-color:var(--cl)"></i> Cl⁻</span>
+        <span><i class="dot" style="--dot-color:var(--k)"></i> K⁺</span>
+        <span><i class="dot" style="--dot-color:var(--glu)"></i> Glicose</span>
+        <span><i class="dot" style="--dot-color:var(--prot)"></i> Proteína</span>
+        <span><i class="dot" style="--dot-color:var(--water-top)"></i> Água (H₂O)</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:18px;">
+      <details class="help" open>
+        <summary>Como interpretar</summary>
+        <div>
+<p style="text-align: justify;">
+    <b style="color: #2563eb;">1. Observe a osmolaridade:</b> ela conta todas as partículas dissolvidas. A água se move do meio com menor Osm para o de maior Osm. 
+    <b style="color: #16a34a;">2. Compare a tonicidade:</b> ela considera somente os solutos <i>impermeantes</i>. Solutos que atravessam a membrana se equilibram e deixam de sustentar movimento líquido de água. 
+    <b style="color: #7c3aed;">3. Teste a permeabilidade:</b> marque a glicose como “atravessa” e compare o resultado com o mesmo cenário em que ela fica impermeante. 
+    <b style="color: #d97706;">4. Use paredes rígidas:</b> o volume não muda; em seu lugar, surge a diferença de pressão osmótica (Δπ), útil para discutir osmose e pressão oncótica das proteínas.
+</p>
+	</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ===================== COLUNA DIREITA: VARIÁVEIS ===================== -->
+  <div>
+    <div class="card">
+      <details class="control-accordion" open>
+        <summary>Variáveis dos compartimentos</summary>
+        <div class="comp-grid" id="compControls"></div>
+      </details>
+    </div>
+  </div>
+</div>
+<footer class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</footer>
+
+<script>
+"use strict";
+
+/* ============================================================
+   CONSTANTES DO MODELO
+   ============================================================ */
+const R = 0.0821;          // L·atm·mol⁻¹·K⁻¹
+const T = 310;             // K (37 °C)
+const MMHG_PER_ATM = 760;
+
+// Definição dos solutos: fator de van't Hoff (i), cor e limites de UI
+const SOLUTES = [
+  { key:"na",   name:"Na⁺",      i:1, color:"var(--na)",   hex:"#f4a742", max:220 },
+  { key:"cl",   name:"Cl⁻",      i:1, color:"var(--cl)",   hex:"#33c2a6", max:220 },
+  { key:"k",    name:"K⁺",       i:1, color:"var(--k)",    hex:"#ef6f8c", max:200 },
+  { key:"glu",  name:"Glicose",  i:1, color:"var(--glu)",  hex:"#e7d24b", max:100 },
+  { key:"prot", name:"Proteína", i:1, color:"var(--prot)", hex:"#7aa2ff", max:120 },
+];
+
+// Permeabilidade padrão da membrana (proteína nunca atravessa por padrão)
+const defaultPerm = { na:false, cl:false, k:false, glu:false, prot:false };
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+// Cada compartimento guarda V (litros) e n (mmol) de cada soluto.
+let state = null;          // { A:{V,n:{}}, B:{V,n:{}}, labelA, labelB }
+let perm = { ...defaultPerm };
+let rigidWalls = false;
+let running = false;
+let speed = 1.4;
+let currentScenario = "iso";
+let ionPositions = { A:{}, B:{} };  // posições cacheadas dos pontos
+
+const Vmax = 3.0;          // litros — usado para escala visual da altura
+
+/* ============================================================
+   CENÁRIOS (concentrações em mmol/L, volumes em L)
+   Cada cenário define A e B, rótulos, permeabilidade e paredes.
+   ============================================================ */
+const SCENARIOS = {
+  iso: {
+    label:"Isotônico (equilíbrio)",
+    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC)",
+    A:{ V:1.0, na:15,  cl:10,  k:140, glu:10, prot:80 },
+    B:{ V:1.0, na:142, cl:103, k:4,   glu:5,  prot:1  },
+    perm:{...defaultPerm}, rigid:false,
+    note:"Osmolaridades iguais (255 mOsm/L dos dois lados): não há movimento líquido de água."
+  },
+  hipo: {
+    label:"Meio hipotônico (incha)",
+    labelA:"Célula", labelB:"Meio externo",
+    A:{ V:1.0, na:15, cl:10, k:140, glu:10, prot:20 },
+    B:{ V:1.5, na:40, cl:40, k:2,   glu:0,  prot:0  },
+    perm:{...defaultPerm}, rigid:false,
+    note:"Meio externo com baixa osmolaridade → água entra na célula → ela incha."
+  },
+  hiper: {
+    label:"Meio hipertônico (murcha)",
+    labelA:"Célula", labelB:"Meio externo",
+    A:{ V:1.0, na:15, cl:10, k:140, glu:10, prot:20 },
+    B:{ V:1.5, na:220, cl:200, k:5, glu:40, prot:0 },
+    perm:{...defaultPerm}, rigid:false,
+    note:"Meio externo hipertônico → água sai da célula → ela murcha (crenação)."
+  },
+  desidratacao: {
+    label:"Desidratação",
+    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC)",
+    A:{ V:1.0, na:15, cl:10, k:140, glu:5, prot:20 },
+    B:{ V:0.6, na:160, cl:125, k:4, glu:6, prot:1 },
+    perm:{...defaultPerm}, rigid:false,
+    note:"Perda de água do LEC eleva sua osmolaridade → água sai da célula para o LEC."
+  },
+  hiponatremia: {
+    label:"Hiponatremia",
+    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC)",
+    A:{ V:1.0, na:15, cl:10, k:140, glu:5, prot:20 },
+    B:{ V:1.2, na:115, cl:85, k:4, glu:5, prot:1 },
+    perm:{...defaultPerm}, rigid:false,
+    note:"Na⁺ baixo no LEC → LEC hipotônico → água entra na célula (edema celular)."
+  },
+  hipernatremia: {
+    label:"Hipernatremia",
+    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC)",
+    A:{ V:1.0, na:15, cl:10, k:140, glu:5, prot:20 },
+    B:{ V:1.2, na:170, cl:135, k:4, glu:6, prot:1 },
+    perm:{...defaultPerm}, rigid:false,
+    note:"Na⁺ alto no LEC → LEC hipertônico → água sai da célula (desidratação celular)."
+  },
+  reidratacao: {
+    label:"Reidratação c/ soro",
+    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC) + soro",
+    A:{ V:1.0, na:15, cl:10, k:140, glu:5, prot:20 },
+    B:{ V:1.8, na:154, cl:154, k:0, glu:0, prot:0 },
+    perm:{...defaultPerm}, rigid:false,
+    note:"Soro fisiológico (NaCl 0,9% ≈ 154 mmol/L de cada íon) expande o LEC de forma ~isotônica."
+  },
+  hemacia: {
+    label:"Hemácia (osmose clássica)",
+    labelA:"Hemácia", labelB:"Plasma / solução",
+    A:{ V:1.0, na:15, cl:10, k:140, glu:10, prot:20 },
+    B:{ V:2.0, na:80, cl:70, k:4, glu:5, prot:0 },
+    perm:{...defaultPerm}, rigid:false,
+    note:"Clássico: em solução hipotônica a hemácia sofre hemólise; em hipertônica, crenação."
+  },
+};
+
+/* ============================================================
+   INICIALIZAÇÃO A PARTIR DE UM CENÁRIO
+   ============================================================ */
+function loadScenario(key){
+  const s = SCENARIOS[key];
+  currentScenario = key;
+  perm = { ...s.perm };
+  rigidWalls = !!s.rigid;
+
+  state = {
+    labelA: s.labelA, labelB: s.labelB,
+    A:{ V:s.A.V, n:{} }, B:{ V:s.B.V, n:{} },
+  };
+  for(const sol of SOLUTES){
+    state.A.n[sol.key] = s.A[sol.key] * s.A.V;   // mmol = conc × V
+    state.B.n[sol.key] = s.B[sol.key] * s.B.V;
+  }
+  running = false;
+  document.getElementById("playBtn").textContent = "▶ Iniciar";
+  regenIonPositions();
+  buildCompControls();
+  buildPermToggles();
+  document.getElementById("rigidWalls").checked = rigidWalls;
+  syncScenarioButtons();
+  render();
+  setStatus(s.note);
+}
+
+/* ============================================================
+   CÁLCULOS
+   ============================================================ */
+function conc(comp, key){ return comp.n[key] / comp.V; }           // mmol/L
+function osmolarity(comp){                                          // mOsm/L
+  let sum = 0;
+  for(const sol of SOLUTES) sum += sol.i * conc(comp, key(sol));
+  return sum;
+}
+function key(sol){ return sol.key; }
+// tonicidade = osmolaridade apenas dos solutos IMPERMEANTES
+function effectiveOsm(comp){
+  let sum = 0;
+  for(const sol of SOLUTES){ if(!perm[sol.key]) sum += sol.i * conc(comp, sol.key); }
+  return sum;
+}
+function osmoticPressure(osmMol){ return osmMol/1000 * R * T; }     // atm (recebe mOsm/L)
+
+/* ============================================================
+   PASSO DE SIMULAÇÃO (integração numérica)
+   ============================================================ */
+const kW = 0.00018;   // permeabilidade hidráulica (L por (mOsm/L) por passo)
+const kS = 0.0016;    // taxa de difusão de solutos permeantes
+
+function step(dt){
+  const A = state.A, B = state.B;
+
+  // 1) Fluxo de água (se paredes não forem rígidas)
+  if(!rigidWalls){
+    const dOsm = osmolarity(A) - osmolarity(B);   // >0 → água entra em A
+    let dV = kW * dOsm * dt;
+    // limites: manter volumes positivos e conservar água total
+    const minV = 0.15;
+    if(A.V + dV < minV) dV = minV - A.V;
+    if(B.V - dV < minV) dV = (B.V - minV);
+    A.V += dV; B.V -= dV;
+  }
+
+  // 2) Difusão dos solutos permeantes (do lado concentrado ao diluído)
+  for(const sol of SOLUTES){
+    if(!perm[sol.key]) continue;
+    const cA = conc(A, sol.key), cB = conc(B, sol.key);
+    let j = kS * (cA - cB) * dt;          // mmol/L·... → aproximação
+    // converter em mmol movidos, limitado para não inverter o gradiente
+    let moved = j * Math.min(A.V, B.V);
+    const maxMove = (cA - cB) * (A.V * B.V) / (A.V + B.V); // quantidade p/ igualar
+    if(Math.abs(moved) > Math.abs(maxMove)) moved = maxMove;
+    A.n[sol.key] -= moved; B.n[sol.key] += moved;
+  }
+}
+
+function atEquilibrium(){
+  if(rigidWalls){
+    // equilíbrio quando solutos permeantes já igualaram
+    for(const sol of SOLUTES){
+      if(perm[sol.key] && Math.abs(conc(state.A,sol.key)-conc(state.B,sol.key))>0.05) return false;
+    }
+    return true;
+  }
+  return Math.abs(osmolarity(state.A) - osmolarity(state.B)) < 0.15;
+}
+
+/* ============================================================
+   LOOP DE ANIMAÇÃO
+   ============================================================ */
+let lastGen = 0;
+function tick(){
+  if(!running) return;
+  // vários sub-passos por frame para convergência suave
+  const sub = 6;
+  const dt = speed;
+  for(let s=0; s<sub; s++) step(dt);
+
+  render();
+
+  if(atEquilibrium()){
+    running = false;
+    document.getElementById("playBtn").textContent = "▶ Iniciar";
+    setStatus("<b>Equilíbrio atingido.</b> " + tonicityText());
+    return;
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ============================================================
+   TEXTO DE TONICIDADE / STATUS
+   ============================================================ */
+function tonicityText(){
+  const eA = effectiveOsm(state.A), eB = effectiveOsm(state.B);
+  const diff = eB - eA;
+  let rel;
+  if(Math.abs(diff) < 1.5) rel = `O meio B é <b>isotônico</b> em relação a A — sem movimento líquido de água.`;
+  else if(diff > 0) rel = `O meio B é <b>hipertônico</b> em relação a A → água sai de A (A murcha / perde volume).`;
+  else rel = `O meio B é <b>hipotônico</b> em relação a A → água entra em A (A incha / ganha volume).`;
+  return rel;
+}
+function setStatus(html){ document.getElementById("status").innerHTML = html; }
+
+/* ============================================================
+   RENDERIZAÇÃO SVG
+   ============================================================ */
+const STAGE = { w:760, h:380, beakerW:230, beakerH:300, top:40, gap:60, bottomY:340 };
+
+function beakerX(side){
+  const totalW = STAGE.beakerW*2 + STAGE.gap;
+  const startX = (STAGE.w - totalW)/2;
+  return side==="A" ? startX : startX + STAGE.beakerW + STAGE.gap;
+}
+
+function regenIonPositions(){
+  for(const side of ["A","B"]){
+    ionPositions[side] = {};
+    for(const sol of SOLUTES){
+      ionPositions[side][sol.key] = [];
+      for(let i=0;i<80;i++){
+        ionPositions[side][sol.key].push({ rx:Math.random(), ry:Math.random() });
+      }
+    }
+  }
+}
+
+function render(){
+  const svg = document.getElementById("stage");
+  const A = state.A, B = state.B;
+  const parts = [];
+
+  // fundo e bancada: pequeno "laboratório" com profundidade, sem distrair da leitura
+  parts.push(`<rect x="0" y="0" width="${STAGE.w}" height="${STAGE.h}" rx="12" fill="url(#stageBg)"/>`);
+  parts.push(`<ellipse cx="${STAGE.w/2}" cy="${STAGE.bottomY+14}" rx="${STAGE.w/2-34}" ry="24" fill="#020814" opacity=".58" filter="url(#softShadow)"/>`);
+  parts.push(`<path d="M20 ${STAGE.bottomY} H${STAGE.w-20}" stroke="#52709c" stroke-opacity=".70" stroke-width="2"/>`);
+  parts.push(`<path d="M20 ${STAGE.bottomY+3} H${STAGE.w-20}" stroke="#050b17" stroke-opacity=".65" stroke-width="4"/>`);
+
+  for(const side of ["A","B"]){
+    const comp = side==="A"?A:B;
+    const x = beakerX(side);
+    const w = STAGE.beakerW;
+    const baseY = STAGE.bottomY;
+    const topY = baseY - STAGE.beakerH;
+    const rimRy = 9;              // "profundidade" da elipse de topo/base
+    // altura da água proporcional ao volume
+    const fillH = Math.max(20, Math.min(STAGE.beakerH, (comp.V / Vmax) * STAGE.beakerH));
+    const waterY = baseY - fillH;
+    const cx = x + w/2;
+
+    // sombra projetada na bancada (dá o "chão" 3D)
+    parts.push(`<ellipse cx="${cx+5}" cy="${baseY+8}" rx="${w/2+13}" ry="10" fill="#020611" opacity=".58" filter="url(#softShadow)"/>`);
+
+    // vidro: corpo cilíndrico (fundo)
+    parts.push(`<path d="M ${x} ${topY} L ${x} ${baseY} A ${w/2} ${rimRy} 0 0 0 ${x+w} ${baseY} L ${x+w} ${topY}"
+      fill="url(#glassBody)" stroke="#6381af" stroke-opacity=".72" stroke-width="1.7"/>`);
+    // base elíptica do vidro
+    parts.push(`<ellipse cx="${cx}" cy="${baseY}" rx="${w/2}" ry="${rimRy}" fill="url(#glassBase)" stroke="#6381af" stroke-opacity=".72" stroke-width="1.7"/>`);
+
+    // água (corpo do líquido com menisco elíptico no topo)
+    parts.push(`<path d="M ${x+3} ${waterY}
+      L ${x+3} ${baseY} A ${w/2-3} ${rimRy-1} 0 0 0 ${x+w-3} ${baseY}
+      L ${x+w-3} ${waterY} A ${w/2-3} ${rimRy-1} 0 0 1 ${x+3} ${waterY} Z"
+      fill="url(#waterGrad)"/>`);
+    // curvatura/brilho do líquido (cilindro)
+    parts.push(`<rect x="${x+3}" y="${waterY}" width="${w-6}" height="${fillH}" fill="url(#waterCurve)"/>`);
+    // superfície da água (elipse superior)
+    parts.push(`<ellipse cx="${cx}" cy="${waterY}" rx="${w/2-3}" ry="${rimRy-1}" fill="var(--water-top)" opacity="0.85"/>`);
+    parts.push(`<ellipse cx="${cx}" cy="${waterY}" rx="${w/2-3}" ry="${rimRy-1}" fill="url(#surfaceSheen)"/>`);
+
+    // íons como esferas (quantidade proporcional à quantidade em mmol, com teto)
+    for(const sol of SOLUTES){
+      const amount = comp.n[sol.key];
+      const nDots = Math.min(70, Math.round(amount / 4)); // 1 esfera por ~4 mmol
+      const pos = ionPositions[side][sol.key];
+      for(let i=0;i<nDots;i++){
+        const p = pos[i % pos.length];
+        const ix = x + 12 + p.rx * (w-24);
+        const iy = waterY + rimRy + 6 + p.ry * (fillH - rimRy - 14);
+        parts.push(`<circle cx="${(ix+1.2).toFixed(1)}" cy="${(iy+1.7).toFixed(1)}" r="4.8" fill="#020611" opacity=".30"/>`);
+        parts.push(`<circle cx="${ix.toFixed(1)}" cy="${iy.toFixed(1)}" r="4.6" fill="url(#sph_${sol.key})" stroke="#ffffff" stroke-opacity=".16" stroke-width=".45"/>`);
+      }
+    }
+
+    // vidro: reflexo frontal + borda do topo (frente, por cima da água)
+    parts.push(`<path d="M ${x} ${topY} L ${x} ${baseY} A ${w/2} ${rimRy} 0 0 0 ${x+w} ${baseY} L ${x+w} ${topY}"
+      fill="url(#glassSheen)" stroke="none"/>`);
+    parts.push(`<path d="M ${x+13} ${topY+16} L ${x+13} ${baseY-20}" stroke="#ffffff" stroke-opacity=".20" stroke-width="4" stroke-linecap="round"/>`);
+    // abertura elíptica do topo (rim)
+    parts.push(`<ellipse cx="${cx}" cy="${topY}" rx="${w/2}" ry="${rimRy}" fill="url(#glassRim)" stroke="#7d9fce" stroke-opacity=".85" stroke-width="1.9"/>`);
+
+    // rótulo e volume
+    parts.push(`<text x="${cx}" y="${topY-14}" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="600">${side==="A"?state.labelA:state.labelB}</text>`);
+    parts.push(`<text x="${cx}" y="${baseY+26}" text-anchor="middle" fill="var(--muted)" font-size="12.5">V = ${comp.V.toFixed(2)} L · ${osmolarity(comp).toFixed(0)} mOsm/L</text>`);
+  }
+
+  // membrana no meio
+  const mx = STAGE.w/2;
+  parts.push(`<line x1="${mx}" y1="${STAGE.bottomY-STAGE.beakerH}" x2="${mx}" y2="${STAGE.bottomY}" stroke="var(--accent)" stroke-width="3" stroke-dasharray="6 5" opacity="0.8"/>`);
+  parts.push(`<text x="${mx}" y="${STAGE.bottomY-STAGE.beakerH-12}" text-anchor="middle" fill="var(--accent)" font-size="11">membrana semipermeável</text>`);
+
+  // seta de fluxo de água
+  const dOsm = osmolarity(A) - osmolarity(B);
+  if(!rigidWalls && Math.abs(dOsm) > 0.4 && running){
+    const dir = dOsm > 0 ? -1 : 1; // dOsm>0 água entra em A → seta aponta p/ A (esquerda)
+    const y = STAGE.bottomY - STAGE.beakerH/2;
+    const x1 = mx + (dir* -1)*18, x2 = mx + dir*38;
+    parts.push(`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="var(--water-top)" stroke-width="4" marker-end="url(#arrow)"/>`);
+    parts.push(`<text x="${mx}" y="${y-14}" text-anchor="middle" fill="var(--water-top)" font-size="11">H₂O</text>`);
+  }
+  if(rigidWalls){
+    const dp = (osmoticPressure(osmolarity(A))-osmoticPressure(osmolarity(B)));
+    const y = STAGE.bottomY - STAGE.beakerH/2;
+    parts.push(`<text x="${mx}" y="${y-16}" text-anchor="middle" fill="var(--warn)" font-size="11">Pressão osmótica</text>`);
+    parts.push(`<text x="${mx}" y="${y}" text-anchor="middle" fill="var(--warn)" font-size="12">Δπ = ${Math.abs(dp).toFixed(2)} atm (${(Math.abs(dp)*MMHG_PER_ATM).toFixed(0)} mmHg)</text>`);
+    parts.push(`<text x="${mx}" y="${y+16}" text-anchor="middle" fill="var(--warn)" font-size="10.5">(paredes rígidas)</text>`);
+  }
+
+  // defs — gradientes que dão o aspecto 3D
+  const darken = (hex, f)=>{
+    const n = parseInt(hex.slice(1),16);
+    let r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+    r=Math.round(r*f); g=Math.round(g*f); b=Math.round(b*f);
+    return "#"+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+  };
+  const sphereDefs = SOLUTES.map(sol=>{
+    const base = sol.hex;
+    return `<radialGradient id="sph_${sol.key}" cx="35%" cy="30%" r="72%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="22%" stop-color="${base}"/>
+      <stop offset="100%" stop-color="${darken(base,0.55)}"/>
+    </radialGradient>`;
+  }).join("");
+
+  const defs = `<defs>
+    ${sphereDefs}
+    <linearGradient id="stageBg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#172b49"/>
+      <stop offset="58%" stop-color="#12213a"/>
+      <stop offset="100%" stop-color="#0b1425"/>
+    </linearGradient>
+    <linearGradient id="waterGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--water-top)"/>
+      <stop offset="100%" stop-color="var(--water)"/>
+    </linearGradient>
+    <linearGradient id="waterCurve" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#000000" stop-opacity="0.30"/>
+      <stop offset="16%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="42%" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="70%" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.34"/>
+    </linearGradient>
+    <linearGradient id="glassBody" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#b9dcff" stop-opacity="0.16"/>
+      <stop offset="12%" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="47%" stop-color="#9ec8ff" stop-opacity="0.10"/>
+      <stop offset="78%" stop-color="#ffffff" stop-opacity="0.025"/>
+      <stop offset="100%" stop-color="#8ec2ff" stop-opacity="0.15"/>
+    </linearGradient>
+    <linearGradient id="glassSheen" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="30%" stop-color="#ffffff" stop-opacity="0.16"/>
+      <stop offset="40%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="glassRim" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#263f64"/>
+      <stop offset="70%" stop-color="#1a2e4e"/>
+      <stop offset="100%" stop-color="#0b1629"/>
+    </radialGradient>
+    <linearGradient id="glassBase" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.02"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+    </linearGradient>
+    <radialGradient id="surfaceSheen" cx="42%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="var(--water-top)"/>
+    </marker>
+    <filter id="softShadow" x="-20%" y="-100%" width="140%" height="300%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+  </defs>`;
+
+  svg.innerHTML = defs + parts.join("");
+  updateReadout();
+}
+
+/* ============================================================
+   TABELA DE LEITURA
+   ============================================================ */
+function updateReadout(){
+  document.getElementById("hA").textContent = state.labelA;
+  document.getElementById("hB").textContent = state.labelB;
+  const A = state.A, B = state.B;
+  const rows = [];
+  const row = (label, va, vb) => rows.push(`<tr><td>${label}</td><td>${va}</td><td>${vb}</td></tr>`);
+
+  row("Volume (L)", A.V.toFixed(2), B.V.toFixed(2));
+  for(const sol of SOLUTES){
+    row(sol.name + " (mmol/L)", conc(A,sol.key).toFixed(1), conc(B,sol.key).toFixed(1));
+  }
+  const osA = osmolarity(A), osB = osmolarity(B);
+  row("<b>Osmolaridade (mOsm/L)</b>", `<b>${osA.toFixed(1)}</b>`, `<b>${osB.toFixed(1)}</b>`);
+  const piA = osmoticPressure(osA), piB = osmoticPressure(osB);
+  row("<b>Pressão osmótica π (atm)</b>", `<b>${piA.toFixed(2)}</b>`, `<b>${piB.toFixed(2)}</b>`);
+  row("Pressão osmótica π (mmHg)", (piA*MMHG_PER_ATM).toFixed(0), (piB*MMHG_PER_ATM).toFixed(0));
+  row("Tonicidade efetiva (mOsm/L)", effectiveOsm(A).toFixed(1), effectiveOsm(B).toFixed(1));
+
+  document.getElementById("readoutBody").innerHTML = rows.join("");
+}
+
+/* ============================================================
+   CONTROLES DE VARIÁVEIS
+   ============================================================ */
+function buildCompControls(){
+  const cont = document.getElementById("compControls");
+  cont.innerHTML = "";
+  for(const side of ["A","B"]){
+    const comp = state[side];
+    const label = side==="A"?state.labelA:state.labelB;
+    const div = document.createElement("div");
+    div.className = "comp";
+    let html = `<h3><span class="dot" style="--dot-color:var(--accent)"></span>${label} <span class="tag">${side}</span></h3>`;
+    // Volume
+    html += fieldHTML(side, "V", "Volume", "L", comp.V, 0.15, Vmax, 0.05);
+    // Solutos (concentração)
+    for(const sol of SOLUTES){
+      html += fieldHTML(side, sol.key, sol.name, "mmol/L", conc(comp, sol.key), 0, sol.max, 1);
+    }
+    div.innerHTML = html;
+    cont.appendChild(div);
+  }
+  // listeners
+  cont.querySelectorAll("input[type=range]").forEach(inp=>{
+    inp.addEventListener("input", onControlChange);
+  });
+}
+
+function fieldHTML(side, k, name, unit, value, min, max, stepv){
+  const id = `ctl-${side}-${k}`;
+  const disp = k==="V" ? value.toFixed(2) : value.toFixed(0);
+  return `<div class="field">
+    <label for="${id}">${name} <span class="val"><span id="val-${side}-${k}">${disp}</span> ${unit}</span></label>
+    <input type="range" id="${id}" data-side="${side}" data-key="${k}" min="${min}" max="${max}" step="${stepv}" value="${value}" />
+  </div>`;
+}
+
+function onControlChange(e){
+  const side = e.target.dataset.side;
+  const k = e.target.dataset.key;
+  const v = parseFloat(e.target.value);
+  const comp = state[side];
+  if(k==="V"){
+    // manter concentrações? Ao mexer no volume, mantemos as quantidades (n) e a concentração muda,
+    // EXCETO: para facilitar o uso didático, ajustamos n para preservar concentração atual.
+    const factor = v / comp.V;
+    for(const sol of SOLUTES) comp.n[sol.key] *= factor;
+    comp.V = v;
+    document.getElementById(`val-${side}-V`).textContent = v.toFixed(2);
+    // atualizar displays de concentração (mantidos)
+  } else {
+    comp.n[k] = v * comp.V;  // conc → mmol
+    document.getElementById(`val-${side}-${k}`).textContent = v.toFixed(0);
+  }
+  regenIonPositions();
+  render();
+  setStatus("Configuração ajustada manualmente. Clique em <b>Iniciar</b> para simular. " + tonicityText());
+}
+
+function refreshControlValues(){
+  for(const side of ["A","B"]){
+    const comp = state[side];
+    const vEl = document.getElementById(`ctl-${side}-V`);
+    if(vEl){ vEl.value = comp.V; document.getElementById(`val-${side}-V`).textContent = comp.V.toFixed(2); }
+    for(const sol of SOLUTES){
+      const el = document.getElementById(`ctl-${side}-${sol.key}`);
+      if(el){ const c = conc(comp,sol.key); el.value = c; document.getElementById(`val-${side}-${sol.key}`).textContent = c.toFixed(0); }
+    }
+  }
+}
+
+/* ============================================================
+   TOGGLES DE PERMEABILIDADE
+   ============================================================ */
+function buildPermToggles(){
+  const cont = document.getElementById("permToggles");
+  cont.innerHTML = "";
+  for(const sol of SOLUTES){
+    const id = `perm-${sol.key}`;
+    const lab = document.createElement("label");
+    lab.style.setProperty("--solute-color", sol.hex);
+    lab.innerHTML = `<input type="checkbox" id="${id}" ${perm[sol.key]?"checked":""}/>
+      <span class="dot" style="--dot-color:${sol.color}"></span>${sol.name} atravessa`;
+    cont.appendChild(lab);
+    lab.querySelector("input").addEventListener("change", (e)=>{
+      perm[sol.key] = e.target.checked;
+      render();
+    });
+  }
+  const walls = document.createElement("label");
+  walls.className = "mode-row";
+  walls.innerHTML = `<input type="checkbox" id="rigidWalls" ${rigidWalls ? "checked" : ""}/> Paredes rígidas`;
+  cont.appendChild(walls);
+  walls.querySelector("input").addEventListener("change", e=>{
+    rigidWalls = e.target.checked;
+    render();
+  });
+}
+
+/* ============================================================
+   BOTÕES DE CENÁRIO
+   ============================================================ */
+function buildScenarioButtons(){
+  const cont = document.getElementById("scenarios");
+  cont.innerHTML = "";
+  for(const key of Object.keys(SCENARIOS)){
+    const b = document.createElement("button");
+    b.textContent = SCENARIOS[key].label;
+    b.dataset.key = key;
+    b.addEventListener("click", ()=> loadScenario(key));
+    cont.appendChild(b);
+  }
+}
+function syncScenarioButtons(){
+  document.querySelectorAll("#scenarios button").forEach(b=>{
+    b.classList.toggle("active", b.dataset.key === currentScenario);
+  });
+}
+
+/* ============================================================
+   CONTROLES GERAIS
+   ============================================================ */
+document.getElementById("playBtn").addEventListener("click", ()=>{
+  if(running){
+    running = false;
+    document.getElementById("playBtn").textContent = "▶ Continuar";
+  } else {
+    running = true;
+    document.getElementById("playBtn").textContent = "❚❚ Pausar";
+    setStatus("Simulando... " + tonicityText());
+    requestAnimationFrame(tick);
+  }
+});
+document.getElementById("resetBtn").addEventListener("click", ()=> loadScenario(currentScenario));
+document.getElementById("fullscreenBtn").addEventListener("click", async ()=>{
+  try {
+    if(document.fullscreenElement) await document.exitFullscreen();
+    else await document.documentElement.requestFullscreen();
+  } catch (_) { setStatus("A tela cheia não está disponível neste navegador."); }
+});
+document.getElementById("speed").addEventListener("input", e=>{
+  speed = parseFloat(e.target.value);
+  document.getElementById("speedValue").textContent = speed.toFixed(1).replace(".", ",") + "×";
+});
+
+// Atualiza os sliders enquanto simula
+const _origRender = render;
+render = function(){ _origRender(); if(running) refreshControlValues(); };
+
+/* ============================================================
+   START
+   ============================================================ */
+buildScenarioButtons();
+loadScenario("iso");
+</script>
+</body>
+</html>
