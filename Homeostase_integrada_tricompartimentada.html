@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homeostase Integrada</title>
+<style>
+  :root{--ink:#15334a;--muted:#66808c;--green:#137554;--green2:#32a176;--line:#d9e9ed;--card:#f9fcfd;--plasma:#2f86cb;--lec:#77cce0;--lic:#83bd91;--na:#ed4a65;--k:#7450c5;--cl:#efbd33;--a:#44546e}
+  *{box-sizing:border-box} body{margin:0;background:#edf5f7;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  button,input{font:inherit}.app{max-width:1540px;margin:24px auto;padding:22px;background:#fff;border-radius:28px;box-shadow:0 20px 55px #1f4b5924}
+  header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:0 4px 18px;border-bottom:1px solid var(--line)} h1{margin:0;font-size:28px;letter-spacing:-.7px}.subtitle{margin:4px 0 0;color:var(--muted);font-size:14px}.header-tools{display:grid;grid-template-columns:238px auto;gap:10px;align-items:center}.time-speed{--clock:#1688bd;--clock-soft:#eaf7fc;display:grid;grid-template-columns:1fr;gap:4px;padding:7px 10px 6px;border:1px solid color-mix(in srgb,var(--clock) 35%,#d6e6ea);border-left:6px solid var(--clock);border-radius:14px;background:linear-gradient(110deg,var(--clock-soft),#fff);box-shadow:0 4px 12px color-mix(in srgb,var(--clock) 12%,transparent);transition:border-color .35s,background .35s,box-shadow .35s}.time-speed[data-scale="electric"]{--clock:#7849bd;--clock-soft:#f3edfb}.time-speed[data-scale="active"]{--clock:#188a73;--clock-soft:#eaf8f4}.time-speed[data-scale="osmotic"]{--clock:#1688bd;--clock-soft:#eaf7fc}.time-speed[data-scale="capillary"]{--clock:#246ca8;--clock-soft:#eaf3fb}.time-speed[data-scale="systemic"]{--clock:#2b8b57;--clock-soft:#edf8f1}.clock-main{display:flex;align-items:end;justify-content:space-between;gap:9px}.clock-main span{max-width:122px;color:#5d7085;font-size:8px;font-weight:900;line-height:1.05;text-transform:uppercase;letter-spacing:.25px}.clock-main b{color:var(--clock);font-size:17px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}.time-line{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#687f89;font-size:8px;font-weight:800}.time-line output{padding:2px 6px;border-radius:999px;background:var(--clock);color:#fff;font-size:9px;white-space:nowrap}.time-speed input{height:16px;margin:0;width:100%;accent-color:var(--clock)}
+  .modes{display:flex;gap:7px;padding:5px;background:#e9f1f3;border-radius:17px;box-shadow:inset 0 2px 5px #24515d16}.modes button{border:0;background:transparent;color:#59727c;border-radius:12px;padding:10px 13px;font-size:12px;font-weight:750;cursor:pointer}.modes button.active{color:#fff;background:linear-gradient(#3ca77c,#116a4c);box-shadow:0 4px 0 #084730,0 8px 14px #17705438}
+  .layout{display:grid;grid-template-columns:minmax(0,1fr) 314px;gap:20px;margin-top:20px}.stage{position:relative;min-height:674px;overflow:hidden;border:1px solid #d6e8ed;border-radius:23px;background:linear-gradient(140deg,#fbffff,#e7f6f9);box-shadow:inset 0 2px #fff}.stage-head{display:flex;justify-content:space-between;align-items:end;padding:20px 22px 7px}.stage-head b{font-size:17px}.stage-head span{font-size:12px;color:var(--muted)}
+  .compartments{display:grid;grid-template-columns:1fr 34px 1fr 34px 1fr;gap:0;align-items:center;padding:12px 18px 12px}.tank-wrap{min-width:0}.tank-title{text-align:center;font-size:14px;font-weight:800;letter-spacing:.3px;margin:0 0 10px}.tank-sub{text-align:center;font-size:11px;color:var(--muted);margin:-6px 0 10px}.tank{height:445px;position:relative;overflow:hidden;border:4px solid #5b8b9b;border-radius:22px 22px 16px 16px;background:linear-gradient(108deg,#fff9,#dbf2f880);box-shadow:inset 10px 0 18px #fff9,inset -8px 0 16px #1e68751c,0 13px 21px #24536418}.tank::before{content:"";position:absolute;z-index:5;left:-4px;top:-14px;width:calc(100% + 8px);height:28px;border:4px solid #6e9eae;border-radius:50%;background:#e8fbff9e}.tank::after{content:"";position:absolute;z-index:6;left:12%;top:18px;width:11px;height:255px;border-radius:12px;background:#fff8;box-shadow:0 0 10px #fff}.fluid{position:absolute;z-index:1;bottom:0;left:0;width:100%;height:63%;background:linear-gradient(180deg,#74cce6dd,#1881b7e8);transition:height 1s ease,background 1s ease}.fluid::before{content:"";position:absolute;left:-4%;top:-11px;width:108%;height:22px;border-radius:50%;background:#bceeffcc;border:2px solid #dffaff}.plasma .fluid{background:linear-gradient(180deg,#66c5e6dd,#1973b7e9)}.lic .fluid{background:linear-gradient(180deg,#b5e3b8e6,#5caa72e9)}
+  .particles{position:absolute;z-index:2;inset:31px 13px 8px;pointer-events:none}.ion{position:absolute;display:grid;place-items:center;width:33px;height:33px;border-radius:50%;border:2px solid #ffffffbd;background:#fff9;font-size:12px;font-weight:850;box-shadow:0 3px 7px #153d4a33}.ion.na{color:#bf2541;border-color:#ec6c82}.ion.k{color:#5d35ad;border-color:#9173d1}.ion.cl{color:#a47400;border-color:#e5c45d}.ion.a{color:#33445d;border-color:#6e7b90}.charge{position:absolute;z-index:3;font-size:18px;font-weight:900}.charge.plus{color:#216fc0}.charge.minus{color:#9e4264}.charge-band{position:absolute;z-index:8;top:83px;bottom:91px;display:flex;flex-direction:column;justify-content:space-around;font-size:18px;font-weight:900;line-height:1;text-shadow:0 0 8px #fff}.charge-band.outside{color:#216fc0}.charge-band.inside{left:5px;color:#9e4264}.charge-band::before{content:"";position:absolute;top:-6px;bottom:-6px;width:20px;z-index:-1;filter:blur(9px);opacity:.45}.charge-band.outside::before{right:-6px;background:#53a9e5}.charge-band.inside::before{left:-6px;background:#dc7caa}.metric-label{position:absolute;z-index:4;left:16px;right:16px;bottom:14px;padding:10px 11px;border-radius:12px;background:#ffffffcf;box-shadow:0 4px 10px #1f50611a;font-size:12px;line-height:1.55}.metric-label b{float:right;color:#116b50}.barrier{height:330px;position:relative;display:flex;align-items:center;justify-content:center}.barrier .charge-band.outside{top:63px;bottom:72px;right:0}.barrier-line,.barrier-note{display:none}.barrier-cell{display:block;position:absolute;inset:0;pointer-events:none}.channel-gate{position:absolute;z-index:10;left:50%;width:24px;height:38px;transform:translateX(-50%) scaleX(var(--open,.45));border:3px solid currentColor;border-radius:11px;background:#ffffffd9;box-shadow:0 0 14px currentColor;opacity:calc(.35 + .65 * var(--open,.45));transition:transform .25s,opacity .25s,box-shadow .25s}.channel-gate.na{top:105px;color:#ed4a65}.channel-gate.k{top:173px;color:#7450c5}.channel-gate.water{top:252px;color:#36a9dc}.flow{position:absolute;width:52px;height:13px;border-radius:10px;background:#fff;border:2px solid #5e8591;box-shadow:0 2px 5px #153d4a22}.flow::after{content:"";position:absolute;right:-9px;top:-5px;border-left:12px solid #5e8591;border-top:9px solid transparent;border-bottom:9px solid transparent}.flow.back{transform:rotate(180deg)}.flow.f1{top:130px}.flow.f2{top:224px}.flow.f3{top:285px}.flow.negative{border-color:#a35a6c}.flow.negative::after{border-left-color:#a35a6c}.mover{position:absolute;z-index:12;display:grid;place-items:center;width:19px;height:19px;border-radius:50%;font-size:8px;font-weight:900;opacity:.92;pointer-events:none;animation-duration:1.25s;animation-timing-function:linear;animation-iteration-count:infinite;animation-play-state:running}.mover.na{color:#bd2441;border:2px solid #ef7287;background:#fff}.mover.k{color:#5f37ad;border:2px solid #9574d8;background:#fff}.mover.water{width:12px;height:12px;background:#4bb9e3;border:2px solid #d7f9ff;box-shadow:0 0 8px #52c6e9}.mover.to-right{animation-name:move-right}.mover.to-left{animation-name:move-left}.mover.slow{animation-duration:1.85s}.mover.still{animation-play-state:paused;opacity:.22}@keyframes move-right{from{transform:translateX(-10px)}to{transform:translateX(47px)}}@keyframes move-left{from{transform:translateX(47px)}to{transform:translateX(-10px)}}.boundaries{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 20px 16px}.boundary-card{border:1px solid #cfe3e8;border-radius:14px;background:#f8fcfd;padding:10px 14px;text-align:center;box-shadow:0 3px 8px #1d50600c}.boundary-card b{display:block;font-size:12px}.boundary-card span{display:block;margin-top:3px;font-size:11px;color:#63808b}.boundary-card.cell{border-color:#cde6d2}.boundary-card.cell b{color:#276b3f}
+  .status{display:flex;gap:10px;align-items:center;margin:0 22px 20px;padding:12px 15px;border-radius:15px;background:#f6fbfc;border:1px solid #dcecef;font-size:13px}.lamp{width:11px;height:11px;border-radius:50%;background:#3cb180;box-shadow:0 0 0 4px #3cb18022}.status b{margin-left:auto;color:#137554}
+  aside{display:flex;flex-direction:column;gap:13px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 5px 14px #224e5d0b}.card h2{font-size:15px;margin:0 0 11px}.card p{font-size:12px;color:#617985;line-height:1.45;margin:0}.card summary{cursor:pointer;font-size:15px;font-weight:800;list-style:none}.card summary::after{content:'+';float:right;color:#137554;font-size:20px;line-height:13px}.card[open] summary{margin-bottom:10px}.card[open] summary::after{content:'−'}.scenario-grid,.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.scenario{border:1px solid #cee2e6;border-radius:11px;padding:9px 7px;background:#fff;color:#315263;font-size:11px;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #d5e5e9}.scenario:hover{border-color:#38a277;color:#126a4c}.action{border:0;border-radius:12px;padding:11px 8px;color:#fff;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #1b405655,0 8px 12px #24495822}.action.na{background:linear-gradient(#ef667e,#d92d50)}.action.k{background:linear-gradient(#9368e3,#6637bc)}.action.water{background:linear-gradient(#35aee1,#1779ba)}.action.reset{background:linear-gradient(#93a1aa,#65737c)}.control{border-top:1px solid #dbe8eb;padding-top:11px;margin-top:11px}.control:first-of-type{border-top:0;padding-top:0;margin-top:0}.control label{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:750}.control output{color:#137554;font-variant-numeric:tabular-nums}input[type=range]{width:100%;margin:8px 0 0;accent-color:#36a9dc}.run{width:100%;border:0;border-radius:13px;padding:13px;background:linear-gradient(#3aa67b,#11694b);color:#fff;font-weight:850;cursor:pointer;box-shadow:0 5px 0 #084630,0 10px 15px #176b5033}
+  @media(max-width:1100px){header{align-items:flex-start;flex-direction:column}.header-tools{width:100%;grid-template-columns:238px minmax(0,1fr)}}
+  @media(max-width:940px){.app{margin:0;border-radius:0;padding:14px}.layout{grid-template-columns:1fr}.compartments{padding:10px 8px 12px;grid-template-columns:1fr 28px 1fr 28px 1fr}.tank{height:390px}.tank-title{font-size:11px}.stage-head{padding:16px}.modes{max-width:100%;overflow:auto}.modes button{white-space:nowrap}.status{margin:0 13px 15px}.boundaries{margin:0 13px 14px}}
+  @media(max-width:620px){.header-tools{grid-template-columns:1fr}.modes{width:100%}.modes button{padding:9px 8px;font-size:10px}.compartments{grid-template-columns:1fr 18px 1fr 18px 1fr}.tank{height:330px;border-width:3px}.barrier{height:260px}.flow{width:29px}.tank::after{width:6px}.ion{width:25px;height:25px;font-size:9px}.metric-label{left:5px;right:5px;padding:6px;font-size:9px}.charge-band{font-size:13px;top:72px;bottom:76px}.stage{min-height:570px}.stage-head span{display:none}.boundaries{grid-template-columns:1fr;margin:0 13px 14px}.boundary-card{padding:8px}}
+  @keyframes move-right{0%{transform:translateX(-10px);opacity:0}15%{opacity:.96}82%{opacity:.96}100%{transform:translateX(47px);opacity:0}}
+  @keyframes move-left{0%{transform:translateX(47px);opacity:0}15%{opacity:.96}82%{opacity:.96}100%{transform:translateX(-10px);opacity:0}}
+  .comp-controls{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin:0 20px 16px}
+  .mover.cl{color:#956800;border:2px solid #e8bf48;background:#fff}.mover.transient{animation-iteration-count:1;pointer-events:none}
+  .comp-control{padding:12px;border:1px solid #cfe2e7;border-radius:15px;background:#fff;box-shadow:0 4px 12px #224e5d10}
+  .comp-control h3{margin:0 0 3px;font-size:13px}.comp-control>p{margin:0 0 9px;font-size:10px;color:#6a818a}
+  .dose{display:grid;grid-template-columns:43px 1fr 44px;gap:7px;align-items:center;margin-top:7px;font-size:10px;font-weight:800}
+  .dose output{text-align:right;color:#137554;font-variant-numeric:tabular-nums}
+  .dose input{margin:0;width:100%;height:25px}
+  .level-focus{transition:opacity .35s,filter .35s}.stage[data-mode="1"] .vascular-focus{opacity:.18;filter:saturate(.3)}
+  .stage[data-mode="1"] .boundaries .boundary-card:first-child{opacity:.35}
+  .stage[data-mode="2"] .vascular-focus{opacity:.42}
+  .stage[data-mode="3"] .level-focus{opacity:1;filter:none}
+  .phase-banner{margin:0 20px 12px;padding:11px 14px;border-radius:13px;background:linear-gradient(90deg,#e9f8f2,#f6fbfc);border:1px solid #cfe8de;color:#285f4c;font-size:12px;font-weight:750}
+  @media(max-width:940px){.comp-controls{margin:0 13px 14px}}
+  @media(max-width:700px){.comp-controls{grid-template-columns:1fr}.dose{grid-template-columns:46px 1fr 48px}}
+  .intervention-console{margin:0 20px 16px;padding:15px 18px;border:1px solid #cfe2e7;border-radius:18px;background:#fff;box-shadow:0 5px 15px #224e5d10}
+  .intervention-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.intervention-head h3{margin:0;font-size:14px}.intervention-head span{font-size:11px;color:#667f89}
+  .substances{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.substance{border:1px solid #cfe1e5;background:#f7fbfc;color:#345664;border-radius:12px;padding:8px 12px;font-size:11px;font-weight:850;cursor:pointer;box-shadow:0 3px 0 #d8e6e9}.substance.active{color:#fff;background:linear-gradient(#35a277,#126a4d);border-color:#126a4d;box-shadow:0 4px 0 #084630}
+  .tri-rail{position:relative;padding:27px 5px 3px}.tri-rail-labels{display:grid;grid-template-columns:1fr 1fr 1fr;margin-bottom:5px;font-size:11px;font-weight:850;color:#385865}.tri-rail-labels span:nth-child(2){text-align:center}.tri-rail-labels span:last-child{text-align:right}
+  .tri-rail input{width:100%;height:34px;margin:0;accent-color:#16805b}.rail-nodes{position:absolute;left:9px;right:9px;bottom:12px;display:flex;justify-content:space-between;pointer-events:none}.rail-node{width:16px;height:16px;border-radius:50%;background:#d9e8eb;border:3px solid #fff;box-shadow:0 0 0 2px #5c8793;transition:transform .4s,background .4s,box-shadow .4s}.rail-node.active{background:#36ad7d;box-shadow:0 0 0 2px #147557,0 0 14px #29a97999}
+  .distribution{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:9px}.share{height:7px;border-radius:8px;background:#e1ecef;overflow:hidden}.share i{display:block;height:100%;width:0;background:linear-gradient(90deg,#62c7dc,#238ab6);transition:width .7s}
+  .dose-rail{display:grid;grid-template-columns:75px 1fr 78px;gap:10px;align-items:center;margin-top:14px;font-size:11px;font-weight:800}.dose-rail input{width:100%;height:32px}.dose-rail output{text-align:right;color:#127252;font-variant-numeric:tabular-nums}
+  .multi-rails{display:flex;flex-direction:column;gap:9px}.substance-rail{display:grid;grid-template-columns:52px 1fr 112px;gap:10px;align-items:center;padding:7px 9px;border-radius:12px;border:1px solid transparent;transition:background .25s,border-color .25s}.substance-rail.active{background:#edf8f4;border-color:#bee1d3}.substance-rail b{font-size:11px}.substance-rail input{width:100%;height:28px;margin:0}.substance-rail output{text-align:right;font-size:9px;color:#55717d;font-variant-numeric:tabular-nums}
+  .intervention-console[data-mode="1"] .substance-rail input,.intervention-console[data-mode="2"] .substance-rail input{width:66.666%;margin-left:33.333%}
+  .intervention-console[data-mode="1"] .tri-rail-labels span:first-child,.intervention-console[data-mode="2"] .tri-rail-labels span:first-child{opacity:.25}
+  @keyframes move-right{0%{transform:translateX(-42px);opacity:0}15%{opacity:.96}82%{opacity:.96}100%{transform:translateX(76px);opacity:0}}
+  @keyframes move-left{0%{transform:translateX(76px);opacity:0}15%{opacity:.96}82%{opacity:.96}100%{transform:translateX(-42px);opacity:0}}
+  @media(max-width:940px){.intervention-console{margin:0 13px 14px}}@media(max-width:620px){.intervention-head{align-items:flex-start;flex-direction:column}.dose-rail{grid-template-columns:60px 1fr 60px}}
+  @media(max-width:620px){.substance-rail{grid-template-columns:42px 1fr 78px}.substance-rail output{font-size:8px}}
+  .signature{margin-top:20px;padding:15px 6px 2px;border-top:1px solid #dce9ed;text-align:center;color:#607985;font-size:12px;font-weight:700}
+  .flux-note{display:flex;justify-content:space-between;margin-top:2px;color:#66808c;font-size:10px}.flux-note b{color:#15334a;font-variant-numeric:tabular-nums}
+  .membrane-strip{margin-top:11px;padding-top:10px;border-top:1px solid #dce9ec}.membrane-strip h3{margin:0 0 7px;font-size:12px}.membrane-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.membrane-control{min-width:0}.membrane-control label{display:flex;justify-content:space-between;gap:6px;font-size:10px;font-weight:800}.membrane-control input{height:20px;margin:3px 0 0}.membrane-control .flux-note{font-size:9px;white-space:nowrap}.model-matrix{width:100%;border-collapse:separate;border-spacing:4px}.model-matrix th{padding:3px 2px;color:#57727d;font-size:9px;text-align:center}.model-matrix th:first-child{text-align:left}.model-matrix td{padding:7px 4px;border:1px solid #deeaed;border-radius:8px;background:#fff;text-align:center;font-size:10px;font-weight:850;font-variant-numeric:tabular-nums}.model-matrix td:first-child{border:0;background:transparent;text-align:left;font-size:10px}.model-matrix .row-na td:first-child{color:#d83d59}.model-matrix .row-k td:first-child{color:#6e48bf}.model-matrix .row-cl td:first-child{color:#a77800}.model-matrix .row-osm td:first-child{color:#1688bd}.model-matrix .row-vol td:first-child{color:#137554}.matrix-units{display:block;color:#78909a;font-size:8px;font-weight:700}.system-readings{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid #dce8eb}.system-reading{padding:7px;border-radius:9px;background:#fff;border:1px solid #e0edef;color:#607783;font-size:9px}.system-reading b{display:block;margin-top:2px;color:#143a52;font-size:11px;font-variant-numeric:tabular-nums}
+  .membrane-strip[data-mode="1"] .membrane-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .model-matrix{table-layout:fixed}.model-matrix tr.row-na{--row:#d83d59}.model-matrix tr.row-k{--row:#6e48bf}.model-matrix tr.row-cl{--row:#d0a21b}.model-matrix tr.row-osm{--row:#1688bd}.model-matrix tr.row-vol{--row:#259263}.model-matrix td,.model-matrix td:first-child{height:42px;padding:6px 4px;border:1px solid #deeaed;border-left:4px solid var(--row);border-radius:8px;background:#fff;text-align:center;color:#274958;font-size:10px;vertical-align:middle}.model-matrix td:first-child::before{content:"";display:inline-block;width:8px;height:8px;margin-right:5px;border-radius:50%;background:var(--row);box-shadow:0 0 0 3px color-mix(in srgb,var(--row) 18%,transparent);vertical-align:1px}.system-reading{position:relative;min-height:52px;padding:7px 7px 7px 10px;border-left:4px solid var(--sys)}.system-reading::before{content:"";display:inline-block;width:7px;height:7px;margin-right:5px;border-radius:50%;background:var(--sys);vertical-align:1px}.system-reading:nth-child(1){--sys:#8b4cac}.system-reading:nth-child(2){--sys:#1688bd}.system-reading:nth-child(3){--sys:#246ca8}.system-reading:nth-child(4){--sys:#259263}
+  .model-matrix{border-spacing:5px}.model-matrix tr.row-na{--label:"Na⁺";--unit:"mEq/L"}.model-matrix tr.row-k{--label:"K⁺";--unit:"mEq/L"}.model-matrix tr.row-cl{--label:"Cl⁻";--unit:"mEq/L"}.model-matrix tr.row-osm{--label:"Osmolaridade";--unit:"mOsm/L"}.model-matrix tr.row-vol{--label:"Volume";--unit:"L"}.model-matrix th{font-size:9px;font-weight:850;text-transform:uppercase}.model-matrix th:first-child,.model-matrix td:first-child{display:none}.model-matrix td:not(:first-child){position:relative;overflow:hidden;height:68px;padding:25px 5px 7px 11px;border:1px solid #d4dee8;border-left:7px solid var(--row);border-radius:13px;background:radial-gradient(circle at 112% 112%,color-mix(in srgb,var(--row) 10%,white) 0 29%,transparent 30%),radial-gradient(circle at 112% 112%,transparent 0 35%,color-mix(in srgb,var(--row) 28%,transparent) 36% 37%,transparent 38%),#fff;box-shadow:0 3px 9px #17384d10;text-align:left;color:var(--row);font-size:16px;font-weight:900;line-height:1}.model-matrix td:not(:first-child)::before{content:var(--label);position:absolute;z-index:1;left:11px;right:4px;top:8px;color:#5d7085;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.model-matrix .row-vol td[data-compartment="p"]::before{content:"Volume (plasma)"}.model-matrix td:not(:first-child)::after{content:var(--unit);position:relative;z-index:1;display:block;margin-top:5px;color:#5d7085;font-size:8px;font-weight:850;line-height:1}.system-reading{overflow:hidden;min-height:68px;padding:10px 9px 8px 13px;border:1px solid #d4dee8;border-left:7px solid var(--sys);border-radius:13px;background:radial-gradient(circle at 110% 110%,color-mix(in srgb,var(--sys) 10%,white) 0 31%,transparent 32%),radial-gradient(circle at 110% 110%,transparent 0 38%,color-mix(in srgb,var(--sys) 28%,transparent) 39% 40%,transparent 41%),#fff;box-shadow:0 3px 9px #17384d10;color:#5d7085;font-size:9px;font-weight:850;text-transform:uppercase}.system-reading::before{content:none}.system-reading b{position:relative;z-index:1;margin-top:5px;color:var(--sys);font-size:13px;text-transform:none}
+  .state-panel{display:grid;gap:8px;padding:9px 10px}.state-meter{min-width:0}.meter-head{display:flex;justify-content:center;align-items:center;text-align:center;font-size:9px;font-weight:850;text-transform:uppercase;letter-spacing:.2px}.meter-head b{display:none}.battery-scale{position:relative;height:10px;margin-top:4px;border:2px solid #fff;border-radius:999px;background:linear-gradient(90deg,#d94b55 0%,#ef9d3d 22%,#43ae79 43%,#43ae79 57%,#ef9d3d 78%,#d94b55 100%);box-shadow:0 0 0 1px #587b863d,inset 0 1px 2px #2349562c}.battery-scale::after{content:"";position:absolute;right:-5px;top:1px;width:4px;height:4px;border-radius:0 3px 3px 0;background:#67828c}.battery-scale i{position:absolute;z-index:2;left:50%;top:50%;width:4px;height:17px;border-radius:3px;background:#173a4d;border:1px solid #fff;box-shadow:0 1px 4px #163a4d99;transform:translate(-50%,-50%);transition:left .7s ease}.meter-ends{display:flex;justify-content:space-between;margin-top:2px;color:#6c838d;font-size:7px;font-weight:700}.state-meter.osm .battery-scale{background:linear-gradient(90deg,#c93f52 0%,#ed9c3d 22%,#39aa79 43%,#39aa79 57%,#ed9c3d 78%,#c93f52 100%)}
+  .compartment-meters{display:grid;grid-template-columns:1fr 34px 1fr 34px 1fr;gap:0;padding:0 18px 10px}.compartment-meter{padding:7px 10px;border:1px solid #d8e8eb;border-radius:12px;background:#ffffffc9;box-shadow:0 3px 8px #214d5910}.compartment-meter:nth-child(1){grid-column:1}.compartment-meter:nth-child(2){grid-column:3}.compartment-meter:nth-child(3){grid-column:5}.compartment-meter .state-panel{grid-template-columns:1fr 1fr;gap:10px;padding:0}.sidebar-boundaries{display:grid;gap:7px}.sidebar-boundaries .boundary-card{padding:8px 9px;text-align:left}.sidebar-boundaries .boundary-card b{font-size:10px}.sidebar-boundaries .boundary-card span{font-size:9px;line-height:1.35}.sidebar-boundaries .boundary-card.cell{margin:0}
+  @media(max-width:940px){.compartment-meters{grid-template-columns:1fr 28px 1fr 28px 1fr;padding:0 8px 10px}}
+  @media(max-width:620px){.compartment-meters{grid-template-columns:1fr 18px 1fr 18px 1fr}.compartment-meter{padding:6px 5px}.compartment-meter .state-panel{grid-template-columns:1fr;gap:5px}.meter-head{font-size:7px}.meter-head b{font-size:7px}}
+  @media(max-width:700px){.membrane-controls{grid-template-columns:1fr}.membrane-control .flux-note{white-space:normal}}
+  .science{margin-top:22px;border:1px solid #cfe2e7;border-radius:20px;background:#f9fcfd;overflow:hidden;box-shadow:0 7px 20px #214e5c10}.science>summary{cursor:pointer;list-style:none;padding:17px 20px;color:#174d3c;font-size:16px;font-weight:850;background:linear-gradient(90deg,#e9f8f2,#f7fbfc)}.science>summary::after{content:"＋";float:right;color:#137554}.science[open]>summary::after{content:"−"}.science-body{padding:14px 18px 20px}.science-intro{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:13px}.legend-chip{padding:5px 9px;border-radius:999px;background:#fff;border:1px solid currentColor;font-size:10px;font-weight:850}.c-na{color:#d83d59}.c-k{color:#6e48bf}.c-cl{color:#a77800}.c-water{color:#1688bd}.c-lec{color:#25889c}.c-lic{color:#388052}.c-plasma{color:#246ca8}.c-pump{color:#147554}.science-sub{margin-top:9px;border-top:1px solid #d9e8eb}.science-sub>summary{cursor:pointer;list-style:none;padding:13px 4px;font-size:13px;font-weight:850}.science-sub>summary::after{content:"＋";float:right;color:#64808b}.science-sub[open]>summary::after{content:"−"}.science-content{padding:0 4px 12px;color:#425f6c;font-size:12px;line-height:1.65}.science-content p{margin:6px 0 10px}.science-content h3{margin:15px 0 6px;color:#173a4d;font-size:13px}.equation-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.equation-card{padding:13px 14px;border-left:5px solid var(--eq,#5b8794);border-radius:10px;background:#fff;box-shadow:0 3px 10px #234d5910}.equation-card.full{grid-column:1/-1}.equation-title{font-weight:850;color:#173a4d}.formula{margin:8px 0;padding:9px 10px;border-radius:8px;background:#f1f7f8;color:#173a4d;font-family:Georgia,"Times New Roman",serif;font-size:16px;overflow-wrap:anywhere}.substitution{font-size:11px;color:#607985}.live-result{margin-top:7px;font-weight:850;color:#137554;font-variant-numeric:tabular-nums}.interpretation{margin-top:6px;color:#526c77}.variables{width:100%;border-collapse:collapse}.variables th,.variables td{padding:8px 7px;border-bottom:1px solid #dfeaec;text-align:left;vertical-align:top}.variables th{color:#173a4d}.science-note{padding:10px 12px;border-radius:9px;background:#fff8e6;border-left:4px solid #d6a72d;color:#695827}.references{margin:0;padding-left:20px}.references li{margin:8px 0}.references a{color:#176e8a}.model-tag{display:inline-block;margin-right:6px;padding:2px 6px;border-radius:5px;background:#e7f3ef;color:#176347;font-size:9px;font-weight:850;text-transform:uppercase;letter-spacing:.2px}
+  @media(max-width:760px){.equation-grid{grid-template-columns:1fr}.equation-card.full{grid-column:auto}.science-body{padding:11px}.science>summary{padding:15px}.formula{font-size:14px}}
+  .model-matrix .row-vol td[data-compartment="p"]::before{content:"Volume"}
+  .model-matrix .row-vol td[data-compartment="p"]::after{content:"L de plasma"}
+  .tank.lic.cell-warning{border-color:#d88922;box-shadow:0 0 0 4px #f4b94226,0 14px 30px #924d151f}
+  .tank.lic.cell-lysis{border-color:#d83d59;box-shadow:0 0 0 5px #d83d5933,0 14px 34px #8c17362b;animation:lysisPulse 1s ease-in-out infinite alternate}
+  @keyframes lysisPulse{to{filter:saturate(1.25) brightness(1.04)}}
+  .tank{--glass:#6f9cac;overflow:visible;border:0;border-left:3px solid var(--glass);border-right:3px solid var(--glass);border-radius:2px;background:linear-gradient(100deg,#fff8 0 8%,#effbfe5c 24%,#d6eef433 72%,#8fc1ce26 100%);box-shadow:inset 12px 0 20px #fff8,inset -10px 0 18px #2d71801a,0 13px 24px #24536412}
+  .tank::before{left:-3px;top:-13px;width:calc(100% + 6px);height:27px;border:3px solid var(--glass);border-radius:50%;background:linear-gradient(180deg,#f8feffb8,#dceff54f);box-shadow:inset 0 3px 7px #fff9,0 2px 4px #214d5912}
+  .tank::after{left:8%;top:25px;width:8px;height:255px;border-radius:10px;background:linear-gradient(#ffffffb8,#ffffff66 72%,transparent);box-shadow:0 0 9px #fff8}
+  .glass-bottom{position:absolute;z-index:9;left:-3px;bottom:-12px;width:calc(100% + 6px);height:25px;border:3px solid var(--glass);border-radius:50%;background:linear-gradient(180deg,transparent 25%,#dceff54d 100%);box-shadow:inset 0 -3px 7px #fff8,0 3px 6px #214d5917;pointer-events:none}
+  .tank .fluid{left:2px;width:calc(100% - 4px);bottom:0;border-radius:0 0 46% 46%/0 0 10px 10px}
+  .tank .fluid::before{left:-2%;width:104%;height:19px;border-width:1px}
+  .tank.lic.cell-warning{--glass:#d88922}
+  .tank.lic.cell-lysis{--glass:#d83d59}
+  .tank{--glass:#6796a7;--rim:#55aeca;border-left-width:2px;border-right-width:2px;background:linear-gradient(98deg,#ffffff8a 0 7%,#ffffff26 19%,#d9f0f51c 72%,#76aab716 100%);box-shadow:inset 10px 0 16px #ffffff70,inset -7px 0 13px #3a71800d,0 10px 18px #2453640b}
+  .tank.plasma{--rim:#2f86cb}.tank.lec{--rim:#59b9d2}.tank.lic{--rim:#6eb77e}
+  .tank::before{left:0;top:-12px;width:100%;height:24px;border-width:2px;border-color:var(--glass);background:transparent;box-shadow:inset 0 2px 4px #ffffff8a,0 1px 2px #214d590c}
+  .glass-bottom{left:0;bottom:-12px;width:100%;height:24px;border-width:2px;border-color:var(--glass);background:color-mix(in srgb,var(--rim) 16%,transparent);box-shadow:inset 0 -2px 4px #ffffff70,0 2px 3px #214d590d}
+  .tank .fluid{left:2px;width:calc(100% - 4px);bottom:0;border-radius:0}
+.tank .fluid::before{left:0;width:100%;height:20px;border:1px solid #d9f8ffcc}
+.tank::after{left:6%;top:28px;width:7px;height:245px;background:linear-gradient(#ffffffa6,#ffffff4d 76%,transparent);box-shadow:0 0 7px #ffffff70}
+
+/* Recipiente técnico: vidro fino, continuidade óptica e base elíptica real. */
+.tank{
+  --glass:#6b99a8;
+  border-left:1px solid color-mix(in srgb,var(--glass) 82%,transparent);
+  border-right:1px solid color-mix(in srgb,var(--glass) 82%,transparent);
+  background:
+    linear-gradient(90deg,#ffffff52 0 1.8%,transparent 5% 91%,#78a8b414 97%,#ffffff38 100%),
+    linear-gradient(105deg,#ffffff20,#dff2f50b 58%,#86b1bb0d);
+  box-shadow:
+    inset 3px 0 5px #ffffff6b,
+    inset -3px 0 5px #315e6809,
+    0 8px 18px #234e5907
+}
+.tank::before{
+  left:-1px;
+  top:-9px;
+  width:calc(100% + 2px);
+  height:18px;
+  border:1px solid color-mix(in srgb,var(--glass) 88%,transparent);
+  background:
+    linear-gradient(180deg,#ffffff36 0 42%,transparent 43%),
+    radial-gradient(ellipse at center,#dff5f718 0 58%,transparent 60%);
+  box-shadow:
+    inset 0 1px 0 #ffffffb0,
+    0 1px 1px #315d6808
+}
+.tank .fluid{
+  left:4px;
+  width:calc(100% - 8px);
+  bottom:-8px;
+  border-radius:0 0 50% 50%/0 0 9px 9px;
+  filter:saturate(.9);
+  box-shadow:inset 0 -7px 12px #174d6410
+}
+.tank .fluid::before{
+  left:0;
+  width:100%;
+  height:17px;
+  top:-8px;
+  border:1px solid #e6fbffad;
+  background:linear-gradient(180deg,#d9f7f7a8,#92dbe4a8);
+  box-shadow:inset 0 2px 3px #ffffff70,0 1px 2px #23637512
+}
+.glass-bottom{
+  z-index:7;
+  left:-1px;
+  bottom:-8px;
+  width:calc(100% + 2px);
+  height:17px;
+  border:1px solid color-mix(in srgb,var(--glass) 76%,transparent);
+  background:linear-gradient(180deg,transparent 38%,color-mix(in srgb,var(--rim) 8%,transparent) 100%);
+  opacity:1;
+  clip-path:none;
+  box-shadow:inset 0 -1px 0 #ffffff8c,0 2px 3px #234e5908
+}
+.tank::after{
+  left:5%;
+  top:22px;
+  width:4px;
+  height:34%;
+  border-radius:999px;
+  background:linear-gradient(180deg,#ffffffa8 0,#ffffff54 45%,#ffffff12 82%,transparent);
+  box-shadow:0 0 4px #ffffff50
+}
+
+/* Identidade cromática dos três compartimentos. */
+.tank.plasma{--glass:#b96a73;--rim:#d87882}
+.tank.lec{--glass:#6b99a8;--rim:#59b9d2}
+.tank.lic{--glass:#b9a35d;--rim:#ddc76f}
+.tank.plasma .fluid{
+  background:linear-gradient(180deg,#efafb4e8 0%,#dc7d87eb 48%,#b9505fe8 100%);
+  box-shadow:inset 0 -9px 15px #7e26351c
+}
+.tank.plasma .fluid::before{
+  border-color:#ffe5e7bd;
+  background:linear-gradient(180deg,#ffe8e9c2,#eaa0a8bd);
+  box-shadow:inset 0 2px 3px #ffffff70,0 1px 2px #7f34411a
+}
+.tank.lec .fluid{
+  background:linear-gradient(180deg,#74cce6dd,#1881b7e8);
+  box-shadow:inset 0 -7px 12px #174d6410
+}
+.tank.lic .fluid{
+  background:linear-gradient(180deg,#f5e9afe8 0%,#e6d17ee8 48%,#c8ac4ee8 100%);
+  box-shadow:inset 0 -9px 15px #765e1718
+}
+.tank.lic .fluid::before{
+  border-color:#fff9d8c7;
+  background:linear-gradient(180deg,#fffbe6c9,#f0dfa0bd);
+  box-shadow:inset 0 2px 3px #ffffff70,0 1px 2px #745c1815
+}
+.tank.lic .charge-band.inside::before{opacity:0}
+
+/* Profundidade visual comum: vidro, partículas, mostradores e controles. */
+.tank{
+  box-shadow:
+    inset 3px 0 5px #ffffff6b,
+    inset -3px 0 5px #315e6809,
+    0 0 0 1px color-mix(in srgb,var(--glass) 16%,transparent),
+    0 0 6px color-mix(in srgb,var(--glass) 28%,transparent),
+    0 8px 18px #234e5907
+}
+.tank::before{
+  box-shadow:
+    inset 0 1px 0 #ffffffd0,
+    inset 0 -1px 2px color-mix(in srgb,var(--glass) 20%,transparent),
+    0 0 4px color-mix(in srgb,var(--glass) 30%,transparent)
+}
+.glass-bottom{
+  box-shadow:
+    inset 0 -1px 0 #ffffff9c,
+    0 0 4px color-mix(in srgb,var(--glass) 25%,transparent),
+    0 2px 3px #234e5908
+}
+
+.ion{
+  --orb-hi:#ffffff;
+  --orb-mid:#e8f0f3;
+  --orb-low:#9aacb5;
+  border:1px solid color-mix(in srgb,var(--orb-low) 75%,#ffffff);
+  background:
+    radial-gradient(circle at 29% 24%,#ffffff 0 7%,#ffffffb8 8% 14%,transparent 15%),
+    radial-gradient(circle at 34% 30%,var(--orb-hi) 0 16%,var(--orb-mid) 48%,var(--orb-low) 100%);
+  box-shadow:
+    inset 3px 3px 5px #ffffffb0,
+    inset -5px -6px 8px #17384d2b,
+    0 3px 5px #17384d38,
+    0 7px 11px #17384d1f;
+  text-shadow:0 1px 0 #ffffffa8
+}
+.ion.na{--orb-hi:#fff4f5;--orb-mid:#f8b2bd;--orb-low:#d74d67;border-color:#dc6679;color:#9f1731}
+.ion.k{--orb-hi:#f7f2ff;--orb-mid:#c5b3ec;--orb-low:#7652bf;border-color:#8062c2;color:#4d2994}
+.ion.cl{--orb-hi:#fff9dc;--orb-mid:#f2d86f;--orb-low:#d2a522;border-color:#d6af35;color:#735200}
+.ion.a{--orb-hi:#f5f8fa;--orb-mid:#bdc9d0;--orb-low:#617184;border-color:#68788a;color:#24384e}
+
+.mover{
+  --orb-hi:#ffffff;
+  --orb-mid:#dfecef;
+  --orb-low:#79929d;
+  border-width:1px;
+  background:
+    radial-gradient(circle at 29% 24%,#ffffff 0 10%,transparent 12%),
+    radial-gradient(circle at 35% 30%,var(--orb-hi),var(--orb-mid) 48%,var(--orb-low));
+  box-shadow:inset -3px -4px 5px #17384d31,inset 2px 2px 3px #ffffffbf,0 2px 5px #163b4938;
+  text-shadow:0 1px #ffffff
+}
+.mover.na{--orb-hi:#fff4f5;--orb-mid:#f3a5b2;--orb-low:#cf405d;background:radial-gradient(circle at 29% 24%,#fff 0 10%,transparent 12%),radial-gradient(circle at 35% 30%,var(--orb-hi),var(--orb-mid) 48%,var(--orb-low))}
+.mover.k{--orb-hi:#f6f1ff;--orb-mid:#bba7e7;--orb-low:#714db9;background:radial-gradient(circle at 29% 24%,#fff 0 10%,transparent 12%),radial-gradient(circle at 35% 30%,var(--orb-hi),var(--orb-mid) 48%,var(--orb-low))}
+.mover.cl{--orb-hi:#fff9dc;--orb-mid:#efd367;--orb-low:#c99b19;background:radial-gradient(circle at 29% 24%,#fff 0 10%,transparent 12%),radial-gradient(circle at 35% 30%,var(--orb-hi),var(--orb-mid) 48%,var(--orb-low))}
+.mover.water{
+  background:radial-gradient(circle at 30% 25%,#ffffff 0 10%,#9beaff 22%,#3cb9df 55%,#117cae 100%);
+  border:1px solid #d7f9ff;
+  box-shadow:inset -2px -3px 4px #075a8238,inset 2px 2px 3px #ffffffb5,0 0 7px #52c6e980
+}
+
+.compartment-meter{
+  border-color:#cedde1;
+  background:linear-gradient(145deg,#ffffffed,#eef5f7d6);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    inset 0 -2px 4px #355a6510,
+    0 4px 8px #17384d18
+}
+.battery-scale{
+  height:12px;
+  border:1px solid #ffffff;
+  background:
+    linear-gradient(180deg,#ffffff8c 0 18%,transparent 20% 62%,#15384c22 100%),
+    linear-gradient(90deg,#d94b55 0%,#ef9d3d 22%,#43ae79 43%,#43ae79 57%,#ef9d3d 78%,#d94b55 100%);
+  box-shadow:
+    0 0 0 1px #587b8657,
+    inset 0 2px 3px #ffffff9c,
+    inset 0 -3px 4px #17384d38,
+    0 2px 4px #17384d22
+}
+.state-meter.osm .battery-scale{
+  background:
+    linear-gradient(180deg,#ffffff8c 0 18%,transparent 20% 62%,#15384c22 100%),
+    linear-gradient(90deg,#c93f52 0%,#ed9c3d 22%,#39aa79 43%,#39aa79 57%,#ed9c3d 78%,#c93f52 100%)
+}
+.battery-scale::after{
+  right:-5px;
+  top:2px;
+  width:5px;
+  height:6px;
+  background:linear-gradient(180deg,#91a6ae,#506c77);
+  box-shadow:inset 0 1px #ffffff8a,0 1px 2px #17384d36
+}
+.battery-scale i{
+  width:9px;
+  height:20px;
+  border:1px solid #ffffff;
+  border-radius:7px;
+  background:
+    radial-gradient(circle at 35% 24%,#ffffff 0 8%,transparent 10%),
+    linear-gradient(145deg,#557d8b,#153a4d 70%);
+  box-shadow:inset 2px 2px 2px #ffffff72,inset -2px -3px 3px #071d28a8,0 2px 5px #163a4d8f
+}
+
+input[type="range"]{
+  --slider:#299b78;
+  appearance:none;
+  -webkit-appearance:none;
+  height:22px;
+  padding:0;
+  background:transparent;
+  cursor:pointer
+}
+input[type="range"]::-webkit-slider-runnable-track{
+  height:8px;
+  border:1px solid #ffffff;
+  border-radius:999px;
+  background:linear-gradient(180deg,#b8cbd1,#eef5f6 44%,#9db5bd);
+  box-shadow:0 0 0 1px #78929b,inset 0 2px 3px #45616b45,0 2px 3px #17384d1f
+}
+input[type="range"]::-webkit-slider-thumb{
+  appearance:none;
+  -webkit-appearance:none;
+  width:19px;
+  height:19px;
+  margin-top:-6px;
+  border:1px solid #ffffff;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 25%,#ffffff 0 8%,#ffffffa8 9% 15%,transparent 17%),
+    radial-gradient(circle at 38% 32%,color-mix(in srgb,var(--slider) 48%,#ffffff),var(--slider) 58%,color-mix(in srgb,var(--slider) 72%,#102d38));
+  box-shadow:inset 2px 2px 3px #ffffff91,inset -3px -4px 5px #102d385c,0 2px 5px #17384d5c
+}
+input[type="range"]::-moz-range-track{
+  height:8px;
+  border:1px solid #ffffff;
+  border-radius:999px;
+  background:linear-gradient(180deg,#b8cbd1,#eef5f6 44%,#9db5bd);
+  box-shadow:0 0 0 1px #78929b,inset 0 2px 3px #45616b45,0 2px 3px #17384d1f
+}
+input[type="range"]::-moz-range-progress{
+  height:8px;
+  border-radius:999px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--slider) 55%,#ffffff),var(--slider));
+  box-shadow:inset 0 1px #ffffff70,inset 0 -2px 3px #17384d38
+}
+input[type="range"]::-moz-range-thumb{
+  width:19px;
+  height:19px;
+  border:1px solid #ffffff;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 32% 25%,#ffffff 0 8%,#ffffffa8 9% 15%,transparent 17%),
+    radial-gradient(circle at 38% 32%,color-mix(in srgb,var(--slider) 48%,#ffffff),var(--slider) 58%,color-mix(in srgb,var(--slider) 72%,#102d38));
+  box-shadow:inset 2px 2px 3px #ffffff91,inset -3px -4px 5px #102d385c,0 2px 5px #17384d5c
+}
+.time-speed input[type="range"]{--slider:var(--clock)}
+.membrane-control input[type="range"]{--slider:#36a9dc}
+.substance-rail input[type="range"],.tri-rail input[type="range"],.dose-rail input[type="range"]{--slider:#26966f}
+
+/* Partículas moleculares: volume óptico sem aparência de botão. */
+.ion{
+  width:31px;
+  height:31px;
+  border-width:1px;
+  font-style:normal;
+  font-size:11px;
+  letter-spacing:-.25px;
+  box-shadow:
+    inset 3px 3px 5px #ffffff80,
+    inset -6px -7px 9px #102d3852,
+    0 2px 3px #17384d3d,
+    0 5px 8px #17384d20
+}
+.ion.na{
+  color:#ffffff;
+  border-color:#dd526a;
+  background:
+    radial-gradient(circle at 29% 23%,#ffffff 0 5%,#fff7f8 6% 10%,transparent 11%),
+    radial-gradient(circle at 34% 30%,#ffdce1 0 12%,#ef8191 43%,#c93451 73%,#83142e 100%);
+  text-shadow:0 1px 2px #721127
+}
+.ion.k{
+  color:#ffffff;
+  border-color:#7452bd;
+  background:
+    radial-gradient(circle at 29% 23%,#ffffff 0 5%,#faf7ff 6% 10%,transparent 11%),
+    radial-gradient(circle at 34% 30%,#e4d9fa 0 12%,#a98ddf 43%,#744dbd 73%,#42217f 100%);
+  text-shadow:0 1px 2px #35176d
+}
+.ion.cl{
+  color:#5e4300;
+  border-color:#d1a21f;
+  background:
+    radial-gradient(circle at 29% 23%,#ffffff 0 5%,#fffdf1 6% 10%,transparent 11%),
+    radial-gradient(circle at 34% 30%,#fff4b8 0 12%,#edd062 43%,#cba122 73%,#896300 100%);
+  text-shadow:0 1px 1px #fff4b8
+}
+.ion.a{
+  color:#ffffff;
+  border-color:#596a7d;
+  background:
+    radial-gradient(circle at 29% 23%,#ffffff 0 5%,#f9fbfc 6% 10%,transparent 11%),
+    radial-gradient(circle at 34% 30%,#dbe3e8 0 12%,#9cabb5 43%,#5d6e80 73%,#2e3d50 100%);
+  text-shadow:0 1px 2px #253448
+}
+@media(max-width:620px){.ion{width:25px;height:25px;font-size:9px}}
+.ion{
+  animation:molecular-drift var(--drift,5s) ease-in-out var(--delay,0s) infinite alternate;
+  will-change:transform
+}
+@keyframes molecular-drift{
+  0%{transform:translate3d(var(--dx0,0),var(--dy0,0),0) rotate(-.7deg)}
+  48%{transform:translate3d(var(--dx1,1px),var(--dy1,-1px),0) rotate(.8deg)}
+  100%{transform:translate3d(var(--dx2,-1px),var(--dy2,1px),0) rotate(-.2deg)}
+}
+@media(prefers-reduced-motion:reduce){.ion{animation:none}}
+
+/* Acabamento final: leitura luminosa das bordas e setas sempre em primeiro plano. */
+.tank{
+  box-shadow:
+    inset 3px 0 5px #ffffff78,
+    inset -3px 0 5px #315e6809,
+    0 0 0 1px color-mix(in srgb,var(--glass) 22%,transparent),
+    0 0 9px 1px color-mix(in srgb,var(--glass) 42%,transparent),
+    0 8px 18px #234e5908
+}
+.tank::before{
+  box-shadow:
+    inset 0 1px 0 #ffffffe0,
+    inset 0 -1px 2px color-mix(in srgb,var(--glass) 24%,transparent),
+    0 0 7px 1px color-mix(in srgb,var(--glass) 42%,transparent)
+}
+.glass-bottom{
+  box-shadow:
+    inset 0 -1px 0 #ffffffad,
+    0 0 7px 1px color-mix(in srgb,var(--glass) 38%,transparent),
+    0 2px 3px #234e5908
+}
+.tank-wrap{position:relative;z-index:1}
+.barrier{z-index:20}
+.flow{
+  z-index:24;
+  box-shadow:0 2px 5px #153d4a38,0 0 5px #ffffff
+}
+.flow::after{
+  z-index:25;
+  filter:drop-shadow(1px 1px 1px #153d4a42)
+}
+.ambient-context{
+  position:absolute;
+  z-index:0;
+  inset:68px 18px auto;
+  height:128px;
+  overflow:hidden;
+  pointer-events:none
+}
+.ambient-context img{
+  position:absolute;
+  display:block;
+  object-fit:contain;
+  opacity:.38;
+  filter:saturate(.82) blur(.15px)
+}
+.ambient-context .context-cell-a{left:3%;top:1px;width:82px}
+.ambient-context .context-cell-b{left:63%;top:9px;width:72px;transform:rotate(13deg)}
+.ambient-context .context-molecule-a{left:36%;top:27px;width:43px;transform:rotate(-12deg)}
+.ambient-context .context-molecule-b{right:4%;top:42px;width:38px;transform:rotate(18deg)}
+.ambient-context .context-cell-c{left:22%;top:-4px;width:66px;transform:rotate(-10deg);opacity:.32}
+.ambient-context .context-cell-d{right:18%;top:-7px;width:64px;transform:rotate(8deg);opacity:.32}
+.ambient-context .context-molecule-c{left:17%;top:47px;width:36px;transform:rotate(14deg);opacity:.4}
+.ambient-context .context-molecule-d{left:51%;top:50px;width:34px;transform:rotate(-18deg);opacity:.4}
+@media(max-width:620px){
+  .ambient-context{inset:64px 8px auto;height:92px}
+  .ambient-context .context-cell-a{width:58px}
+  .ambient-context .context-cell-b{width:52px}
+  .ambient-context .context-molecule-a{width:31px}
+  .ambient-context .context-molecule-b{width:28px}
+  .ambient-context .context-cell-c{width:46px}
+  .ambient-context .context-cell-d{width:45px}
+  .ambient-context .context-molecule-c{width:27px}
+  .ambient-context .context-molecule-d{width:25px}
+}
+</style>
+</head>
+<body>
+<main class="app">
+  <header><div><h1>Homeostase integrada</h1><p class="subtitle">Modelo Dinâmico Autocompensatório Tri-Compartimental</p></div><div class="header-tools"><label class="time-speed" id="adaptive-clock" data-scale="electric"><span class="clock-main"><span id="clock-process">Resposta elétrica</span><b id="clock">0 ms</b></span><span class="time-line"><span id="total-clock">Tempo fisiológico: 00 h 00 min</span><output id="speed-out">1× · ms</output></span><input id="sim-speed" type="range" min="0.25" max="4" step="0.25" value="1" aria-label="Velocidade de reprodução do tempo fisiológico"></label><nav class="modes" aria-label="Níveis de complexidade"><button class="active">1 · Potencial de membrana</button><button>2 · Osmose e Donnan</button><button>3 · Homeostase integrada</button></nav></div></header>
+  <section class="layout"><section class="stage"><div class="stage-head"><div><b>Vaso ⇄ LEC ⇄ LIC</b><br><span>Observe a redistribuição de água, íons, cargas e volume.</span></div></div>
+    <div class="ambient-context" aria-hidden="true">
+      <img class="context-cell-a" alt="" src="data:image/webp;base64,UklGRiABAABXRUJQVlA4IBQBAABwDgCdASpvAIcAPpFGnEslp6MiopZrCPASCWkA06SpcByM7rcVorKTGWofxHq1P1yjqhYXVycoAW2xC/Egq/JWBPFZvEoc2TsKnqaeBOvSUR03h9Elrob5+ejt7u2sz67g6YZOeZrEOq4IgBlwUsOSAM4Xe7wsageotugAAP738nNI1pKtAHV9H+J10Vn+irpZ12SoKnJ3uNGly4L7IC5hs7hh+kuk0JeamTU4Gomuo3LhM8rRwhBuj8frVaGi2A4RQ2ZcSJs1MzplqWdxh0FMz2mpXnPeduUVbXdRIZqFRs7OoM7WGGaQzKcgSc02r2kE9LfZgo6yiKep++A7zDr8pR7Z5K/2RAh4gRwqHWIN0ygAAAA=">
+      <img class="context-molecule-a" alt="" src="data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABwBgCdASo0ACsAPpE8m0gloyKhMBgJWLASCWcA0HVOwYGs21DMaHZzloi0n4npkvcNJC8CfSmf4+tPbAAA/vsoIDtxg0shpczIyUCNfxln/Cosn8L9rAAjNfc6aztdLSjX570wi4soxKtvNzlRQwD+MCmk1kr6fCz2CJYBJ9MWvcAAAAA=">
+      <img class="context-cell-b" alt="" src="data:image/webp;base64,UklGRiABAABXRUJQVlA4IBQBAABwDgCdASpvAIcAPpFGnEslp6MiopZrCPASCWkA06SpcByM7rcVorKTGWofxHq1P1yjqhYXVycoAW2xC/Egq/JWBPFZvEoc2TsKnqaeBOvSUR03h9Elrob5+ejt7u2sz67g6YZOeZrEOq4IgBlwUsOSAM4Xe7wsageotugAAP738nNI1pKtAHV9H+J10Vn+irpZ12SoKnJ3uNGly4L7IC5hs7hh+kuk0JeamTU4Gomuo3LhM8rRwhBuj8frVaGi2A4RQ2ZcSJs1MzplqWdxh0FMz2mpXnPeduUVbXdRIZqFRs7OoM7WGGaQzKcgSc02r2kE9LfZgo6yiKep++A7zDr8pR7Z5K/2RAh4gRwqHWIN0ygAAAA=">
+      <img class="context-molecule-b" alt="" src="data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABwBgCdASo0ACsAPpE8m0gloyKhMBgJWLASCWcA0HVOwYGs21DMaHZzloi0n4npkvcNJC8CfSmf4+tPbAAA/vsoIDtxg0shpczIyUCNfxln/Cosn8L9rAAjNfc6aztdLSjX570wi4soxKtvNzlRQwD+MCmk1kr6fCz2CJYBJ9MWvcAAAAA=">
+      <img class="context-cell-c" alt="" src="data:image/webp;base64,UklGRiABAABXRUJQVlA4IBQBAABwDgCdASpvAIcAPpFGnEslp6MiopZrCPASCWkA06SpcByM7rcVorKTGWofxHq1P1yjqhYXVycoAW2xC/Egq/JWBPFZvEoc2TsKnqaeBOvSUR03h9Elrob5+ejt7u2sz67g6YZOeZrEOq4IgBlwUsOSAM4Xe7wsageotugAAP738nNI1pKtAHV9H+J10Vn+irpZ12SoKnJ3uNGly4L7IC5hs7hh+kuk0JeamTU4Gomuo3LhM8rRwhBuj8frVaGi2A4RQ2ZcSJs1MzplqWdxh0FMz2mpXnPeduUVbXdRIZqFRs7OoM7WGGaQzKcgSc02r2kE9LfZgo6yiKep++A7zDr8pR7Z5K/2RAh4gRwqHWIN0ygAAAA=">
+      <img class="context-molecule-c" alt="" src="data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABwBgCdASo0ACsAPpE8m0gloyKhMBgJWLASCWcA0HVOwYGs21DMaHZzloi0n4npkvcNJC8CfSmf4+tPbAAA/vsoIDtxg0shpczIyUCNfxln/Cosn8L9rAAjNfc6aztdLSjX570wi4soxKtvNzlRQwD+MCmk1kr6fCz2CJYBJ9MWvcAAAAA=">
+      <img class="context-cell-d" alt="" src="data:image/webp;base64,UklGRiABAABXRUJQVlA4IBQBAABwDgCdASpvAIcAPpFGnEslp6MiopZrCPASCWkA06SpcByM7rcVorKTGWofxHq1P1yjqhYXVycoAW2xC/Egq/JWBPFZvEoc2TsKnqaeBOvSUR03h9Elrob5+ejt7u2sz67g6YZOeZrEOq4IgBlwUsOSAM4Xe7wsageotugAAP738nNI1pKtAHV9H+J10Vn+irpZ12SoKnJ3uNGly4L7IC5hs7hh+kuk0JeamTU4Gomuo3LhM8rRwhBuj8frVaGi2A4RQ2ZcSJs1MzplqWdxh0FMz2mpXnPeduUVbXdRIZqFRs7OoM7WGGaQzKcgSc02r2kE9LfZgo6yiKep++A7zDr8pR7Z5K/2RAh4gRwqHWIN0ygAAAA=">
+      <img class="context-molecule-d" alt="" src="data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABwBgCdASo0ACsAPpE8m0gloyKhMBgJWLASCWcA0HVOwYGs21DMaHZzloi0n4npkvcNJC8CfSmf4+tPbAAA/vsoIDtxg0shpczIyUCNfxln/Cosn8L9rAAjNfc6aztdLSjX570wi4soxKtvNzlRQwD+MCmk1kr6fCz2CJYBJ9MWvcAAAAA=">
+    </div>
+    <div class="compartments">
+      <div class="tank-wrap level-focus vascular-focus"><p class="tank-title">VASO SANGUÍNEO</p><p class="tank-sub">Plasma</p><div class="tank plasma"><div class="fluid" id="plasma-fluid"></div><div class="particles" id="plasma-particles"></div><div class="glass-bottom" aria-hidden="true"></div></div></div>
+      <div class="barrier level-focus vascular-focus"><span class="barrier-note">MEMBRANA CAPILAR<br>ENDOTÉLIO</span><span class="barrier-line"></span><span class="mover na to-right" id="cap-na" style="top:105px">Na⁺</span><span class="mover cl to-right slow" id="cap-cl" style="top:165px">Cl⁻</span><span class="mover water to-right slow" id="cap-water" style="top:220px"></span><span class="mover water to-left slow" id="cap-water-back" style="top:260px"></span><span class="flow f1"></span><span class="flow f2 back"></span><span class="flow f3 negative"></span></div>
+      <div class="tank-wrap level-focus"><p class="tank-title">INTERSTÍCIO</p><p class="tank-sub">Líquido extracelular (LEC)</p><div class="tank lec"><div class="fluid" id="lec-fluid"></div><div class="particles" id="lec-particles"></div><div class="glass-bottom" aria-hidden="true"></div></div></div>
+      <div class="barrier cell"><span class="barrier-note">MEMBRANA<br>PLASMÁTICA</span><span class="barrier-line"></span><span class="barrier-cell"><i class="channel-gate na" id="na-gate"></i><i class="channel-gate k" id="k-gate"></i><i class="channel-gate water" id="water-gate"></i></span><div class="charge-band outside" aria-label="cargas positivas externas"><i>+</i><i>+</i><i>+</i><i>+</i><i>+</i><i>+</i><i>+</i></div><span class="mover na to-right" id="mem-na" style="top:117px">Na⁺</span><span class="mover k to-left" id="mem-k" style="top:185px">K⁺</span><span class="mover water to-right slow" id="mem-water" style="top:264px"></span><span class="flow f1 back"></span><span class="flow f2"></span><span class="flow f3 negative back"></span></div>
+      <div class="tank-wrap level-focus"><p class="tank-title">CÉLULA</p><p class="tank-sub">Líquido intracelular (LIC)</p><div class="tank lic"><div class="fluid" id="lic-fluid"></div><div class="particles" id="lic-particles"></div><div class="charge-band inside" aria-label="cargas negativas internas"><i>−</i><i>−</i><i>−</i><i>−</i><i>−</i><i>−</i><i>−</i></div><div class="glass-bottom" aria-hidden="true"></div></div></div>
+    </div>
+    <div class="compartment-meters">
+      <div class="compartment-meter level-focus vascular-focus"><div class="state-panel"><div class="state-meter"><div class="meter-head"><span>Volume</span><b id="p-vol-state">Equilibrado</b></div><div class="battery-scale" id="p-vol-meter" aria-label="Volume plasmático equilibrado"><i id="p-vol-marker"></i></div><div class="meter-ends"><span>baixo</span><span>alto</span></div></div><div class="state-meter osm"><div class="meter-head"><span>Osmolaridade</span><b id="p-osm-state">Equilibrada</b></div><div class="battery-scale" id="p-osm-meter" aria-label="Osmolaridade plasmática equilibrada"><i id="p-osm-marker"></i></div><div class="meter-ends"><span>diluída</span><span>concentrada</span></div></div></div></div>
+      <div class="compartment-meter level-focus"><div class="state-panel"><div class="state-meter"><div class="meter-head"><span>Volume</span><b id="e-vol-state">Equilibrado</b></div><div class="battery-scale" id="e-vol-meter" aria-label="Volume intersticial equilibrado"><i id="e-vol-marker"></i></div><div class="meter-ends"><span>baixo</span><span>alto</span></div></div><div class="state-meter osm"><div class="meter-head"><span>Osmolaridade</span><b id="e-osm-state">Equilibrada</b></div><div class="battery-scale" id="e-osm-meter" aria-label="Osmolaridade intersticial equilibrada"><i id="e-osm-marker"></i></div><div class="meter-ends"><span>diluída</span><span>concentrada</span></div></div></div></div>
+      <div class="compartment-meter level-focus"><div class="state-panel"><div class="state-meter"><div class="meter-head"><span>Volume</span><b id="i-vol-state">Equilibrado</b></div><div class="battery-scale" id="i-vol-meter" aria-label="Volume intracelular equilibrado"><i id="i-vol-marker"></i></div><div class="meter-ends"><span>baixo</span><span>alto</span></div></div><div class="state-meter osm"><div class="meter-head"><span>Osmolaridade</span><b id="i-osm-state">Equilibrada</b></div><div class="battery-scale" id="i-osm-meter" aria-label="Osmolaridade intracelular equilibrada"><i id="i-osm-marker"></i></div><div class="meter-ends"><span>diluída</span><span>concentrada</span></div></div></div></div>
+    </div>
+    <div class="phase-banner" id="phase-banner">Estado basal: fluxos bidirecionais em equilíbrio dinâmico.</div>
+    <section class="intervention-console">
+      <div class="intervention-head"><h3>Intervenção tri-compartimental</h3><span>Escolha a substância, o compartimento e a dose.</span></div>
+      <div class="tri-rail-labels"><span>VASO</span><span>LEC</span><span>LIC</span></div>
+      <div class="multi-rails">
+        <label class="substance-rail active"><b>Água</b><input data-substance-rail="water" type="range" min="0" max="2" step="0.01" value="0"><output id="dist-water">100% · 0% · 0%</output></label>
+        <label class="substance-rail"><b>Na⁺</b><input data-substance-rail="Na" type="range" min="0" max="2" step="0.01" value="0"><output id="dist-Na">100% · 0% · 0%</output></label>
+        <label class="substance-rail"><b>K⁺</b><input data-substance-rail="K" type="range" min="0" max="2" step="0.01" value="0"><output id="dist-K">100% · 0% · 0%</output></label>
+        <label class="substance-rail"><b>Cl⁻</b><input data-substance-rail="Cl" type="range" min="0" max="2" step="0.01" value="0"><output id="dist-Cl">100% · 0% · 0%</output></label>
+        <label class="substance-rail"><b>NaCl</b><input data-substance-rail="NaCl" type="range" min="0" max="2" step="0.01" value="0"><output id="dist-NaCl">100% · 0% · 0%</output></label>
+      </div>
+      <label class="dose-rail"><span>− Retirar</span><input id="giant-dose" type="range" min="-100" max="100" step="5" value="0"><output id="giant-dose-out">0</output></label>
+      <section class="membrane-strip">
+        <h3>Canais e membranas</h3>
+        <div class="membrane-controls">
+          <div class="membrane-control" data-levels="1,2,3"><label>Permeabilidade ao Na⁺ <output id="na-perm-out">0,006</output></label><input id="na-perm" type="range" min="0" max="0.1" value="0.006" step="0.001"><div class="flux-note"><span>Fluxo eletroquímico</span><b id="na-flux-out">0,000 mEq/min</b></div></div>
+          <div class="membrane-control" data-levels="1,2,3"><label>Permeabilidade ao K⁺ <output id="k-perm-out">1,00</output></label><input id="k-perm" type="range" min="0" max="1" value="1" step="0.05"><div class="flux-note"><span>Fluxo passivo</span><b id="k-flux-out">0,000 mEq/min</b></div></div>
+          <div class="membrane-control" data-levels="2,3"><label>Aquaporinas (água) <output id="water-perm-out">1,00</output></label><input id="water-perm" type="range" min="0" max="1" value="1" step="0.05"><div class="flux-note"><span>Fluxo osmótico</span><b id="water-flux-out">0,000 L/min</b></div></div>
+        </div>
+      </section>
+    </section>
+    <div class="status"><i class="lamp"></i><span id="status-text">Estado basal: equilíbrio osmótico.</span><b id="event-text">Pronto</b></div>
+  </section>
+  <aside>
+    <details class="card" id="quick-states" open><summary>Estados rápidos</summary><div class="scenario-grid"><button class="scenario" data-scenario="basal" data-levels="1,2,3">Estado basal</button><button class="scenario" data-scenario="hypertonic" data-levels="2">Meio hipertônico</button><button class="scenario" data-scenario="hypotonic" data-levels="2">Meio hipotônico</button><button class="scenario" data-scenario="meal-na" data-levels="3">Refeição rica em sal</button><button class="scenario" data-scenario="water" data-levels="3">Ingestão de água</button><button class="scenario" data-scenario="hyper-k" data-levels="1,2,3">Hipercalemia</button><button class="scenario" data-scenario="sweat" data-levels="3">Sudorese</button><button class="scenario" data-scenario="dehydration" data-levels="3">Desidratação</button><button class="scenario" data-scenario="vomiting" data-levels="3">Vômitos</button><button class="scenario" data-scenario="diarrhea" data-levels="3">Diarreia</button><button class="scenario" data-scenario="hemorrhage" data-levels="3">Hemorragia</button></div></details>
+    <section class="card"><h2>Intervenções rápidas</h2><div class="actions"><button class="action na" data-action="na" data-levels="2,3">+ Sal (NaCl)</button><button class="action k" data-action="k" data-levels="1,2,3">+ Potássio (K⁺)</button><button class="action water" data-action="water" data-levels="2,3">+ Água pura</button><button class="action reset" data-action="reset" data-levels="1,2,3">Resetar</button></div></section>
+    <button class="run" id="run">❚❚ Pausar simulação</button>
+    <section class="card matrix-card"><h2>Leituras do modelo</h2><table class="model-matrix"><thead><tr><th>Variável</th><th data-compartment="p">Vaso</th><th>LEC</th><th>LIC</th></tr></thead><tbody><tr class="row-na"><td>Na⁺<span class="matrix-units">mEq/L</span></td><td data-compartment="p" id="mx-p-na">142,0</td><td id="mx-e-na">139,0</td><td id="mx-i-na">14,0</td></tr><tr class="row-k"><td>K⁺<span class="matrix-units">mEq/L</span></td><td data-compartment="p" id="mx-p-k">4,2</td><td id="mx-e-k">4,0</td><td id="mx-i-k">140,0</td></tr><tr class="row-cl"><td>Cl⁻<span class="matrix-units">mEq/L</span></td><td data-compartment="p" id="mx-p-cl">108,0</td><td id="mx-e-cl">108,0</td><td id="mx-i-cl">4,0</td></tr><tr class="row-osm" data-levels="2,3"><td>Osm<span class="matrix-units">mOsm/L</span></td><td data-compartment="p" id="mx-p-osm">290,0</td><td id="mx-e-osm">290,0</td><td id="mx-i-osm">290,0</td></tr><tr class="row-vol" data-levels="2,3"><td>Volume<span class="matrix-units">L</span></td><td data-compartment="p" id="mx-p-vol">3,00</td><td id="mx-e-vol">12,00</td><td id="mx-i-vol">28,00</td></tr></tbody></table><div class="system-readings"><div class="system-reading" data-levels="1,2,3">Potencial<b id="vm">−90 mV</b></div><div class="system-reading" data-levels="2,3">Água LIC ↔ LEC<b id="water-flow">0,000 L/min</b></div><div class="system-reading" data-levels="3">Starling vaso ↔ LEC<b id="starling-read">0,000 L/min</b></div><div class="system-reading" data-levels="1,2,3">Bomba Na⁺/K⁺<b id="pump-read">100%</b></div></div></section>
+    <section class="card sidebar-boundaries"><div class="boundary-card"><b>Membrana capilar · endotélio</b><span>Forças de Starling; água e pequenos íons atravessam. Proteínas plasmáticas ficam retidas.</span></div><div class="boundary-card cell"><b>Membrana plasmática</b><span>Separação de cargas → potencial de membrana; canais, transportadores e bomba Na⁺/K⁺.</span></div></section>
+    <section class="card"><p>Modelo didático exploratório: valores e respostas são simplificados para evidenciar relações fisiológicas.</p></section>
+  </aside></section>
+  <details class="science" id="science-panel">
+    <summary>Base científica · fundamentação, equações e referências</summary>
+    <div class="science-body">
+      <div class="science-intro" aria-label="Identidade cromática das variáveis"><span class="legend-chip c-na">Na⁺</span><span class="legend-chip c-k">K⁺</span><span class="legend-chip c-cl">Cl⁻</span><span class="legend-chip c-water">H₂O</span><span class="legend-chip c-plasma">Plasma</span><span class="legend-chip c-lec">LEC</span><span class="legend-chip c-lic">LIC</span><span class="legend-chip c-pump">Na⁺/K⁺-ATPase</span></div>
+      <details class="science-sub" open>
+        <summary>Fundamentação teórica</summary>
+        <div class="science-content">
+          <div data-levels="1,2,3"><h3>Nível 1 · Potencial de membrana</h3><p>O potencial de membrana resulta da distribuição desigual de íons, da permeabilidade seletiva e da manutenção dos gradientes pela <span class="c-pump">Na⁺/K⁺-ATPase</span>. Em repouso, a maior permeabilidade ao <span class="c-k">K⁺</span> aproxima o potencial do equilíbrio desse íon; o pequeno vazamento de <span class="c-na">Na⁺</span> torna o valor menos negativo.</p></div>
+          <div data-levels="2,3"><h3>Nível 2 · Osmose e Donnan</h3><p>A água atravessa a membrana em resposta à diferença de osmolaridade entre <span class="c-lec">LEC</span> e <span class="c-lic">LIC</span>. Proteínas intracelulares impermeantes contribuem para a distribuição de íons difusíveis e para o efeito de Donnan; eletroneutralidade e transporte ativo impedem que essa relação seja interpretada isoladamente.</p></div>
+          <div data-levels="3"><h3>Nível 3 · Homeostase integrada</h3><p>O <span class="c-plasma">plasma</span> e o interstício trocam água e pequenos solutos pelo endotélio capilar. Pressões hidrostáticas e coloidosmóticas determinam o fluxo de água, enquanto sede, ADH e rim atuam mais lentamente na conservação ou eliminação de água e eletrólitos.</p></div>
+          <div><h3>Tempo fisiológico multiescala</h3><p>O motor conserva um tempo fisiológico contínuo, mas integra cada mecanismo em sua escala característica: milissegundos e segundos para eletricidade, minutos para transporte, osmose e Starling, e horas para compensação sistêmica. O seletor altera somente a velocidade de reprodução; não modifica constantes, sequência ou equilíbrio final.</p></div>
+        </div>
+      </details>
+      <details class="science-sub">
+        <summary>Equações em tempo real</summary>
+        <div class="science-content equation-grid">
+          <article class="equation-card" style="--eq:#6e48bf" data-levels="1,2,3"><div class="equation-title">Potencial de Nernst — <span class="c-k">K⁺</span></div><div class="formula">E<sub>K</sub> = (RT/F) ln([<span class="c-k">K⁺</span>]<sub>LEC</sub>/[<span class="c-k">K⁺</span>]<sub>LIC</sub>)</div><div class="substitution" id="sci-nernst-k-sub">Substituição...</div><div class="live-result" id="sci-nernst-k">E<sub>K</sub> = −95 mV</div><div class="interpretation">Indica o potencial no qual o gradiente elétrico equilibra o gradiente químico do K⁺.</div></article>
+          <article class="equation-card" style="--eq:#d83d59" data-levels="1,2,3"><div class="equation-title">Potencial de Nernst — <span class="c-na">Na⁺</span></div><div class="formula">E<sub>Na</sub> = (RT/F) ln([<span class="c-na">Na⁺</span>]<sub>LEC</sub>/[<span class="c-na">Na⁺</span>]<sub>LIC</sub>)</div><div class="substitution" id="sci-nernst-na-sub">Substituição...</div><div class="live-result" id="sci-nernst-na">E<sub>Na</sub> = +61 mV</div><div class="interpretation">Mostra a forte tendência eletroquímica para entrada de Na⁺ em uma célula em repouso.</div></article>
+	          <article class="equation-card full" style="--eq:#147554" data-levels="1,2,3"><div class="equation-title">Goldman–Hodgkin–Katz — potencial e fluxo eletroquímico</div><div class="formula">V<sub>GHK</sub> = (RT/F) ln((P<sub>K</sub>[K]ₒ + P<sub>Na</sub>[Na]ₒ + P<sub>Cl</sub>[Cl]ᵢ)/(P<sub>K</sub>[K]ᵢ + P<sub>Na</sub>[Na]ᵢ + P<sub>Cl</sub>[Cl]ₒ))<br>J<sub>i</sub> = P<sub>i</sub>z<sub>i</sub>FV<sub>m</sub>/(RT) · ([i]ᵢ − [i]ₒe<sup>−zFV/RT</sup>)/(1 − e<sup>−zFV/RT</sup>)</div><div class="substitution" id="sci-ghk-sub">Permeabilidades, concentrações e potencial atuais...</div><div class="live-result" id="sci-ghk">V<sub>m</sub> = −90 mV</div><div class="interpretation">A concentração, a valência, o potencial elétrico e a permeabilidade determinam conjuntamente a direção e a intensidade dos fluxos.</div></article>
+	          <article class="equation-card" style="--eq:#1688bd" data-levels="2,3"><div class="equation-title">Kedem–Katchalsky, van’t Hoff e elasticidade</div><div class="formula">π = RTΣC<sub>i</sub> &nbsp; e &nbsp; J<sub>H₂O</sub> = L<sub>p</sub>[(π<sub>LEC</sub> − π<sub>LIC</sub>) + P<sub>cel</sub>]<br>P<sub>cel</sub> = K<sub>el</sub>(V<sub>LIC</sub>/V₀ − 1)</div><div class="substitution" id="sci-osm-sub">Substituição...</div><div class="live-result" id="sci-osm">Fluxo = 0,000 L/min</div><div class="interpretation" id="sci-osm-text">Sem gradiente líquido relevante.</div></article>
+	          <article class="equation-card" style="--eq:#a77800" data-levels="2,3"><div class="equation-title">Donnan acoplado ao motor</div><div class="formula">[<span class="c-na">Na⁺</span>]<sub>LEC</sub>[<span class="c-cl">Cl⁻</span>]<sub>LEC</sub> ↔ [<span class="c-na">Na⁺</span>]<sub>LIC</sub>[<span class="c-cl">Cl⁻</span>]<sub>LIC</sub> &nbsp; com A⁻ impermeante</div><div class="substitution" id="sci-donnan-sub">Produtos iônicos e atividade dos ânions fixos...</div><div class="live-result" id="sci-donnan">Acoplamento basal</div><div class="interpretation">Os ânions impermeantes modificam o componente elétrico e osmótico, sem impor equilíbrio de Donnan puro a uma célula com transporte ativo.</div></article>
+	          <article class="equation-card full" style="--eq:#8b4cac" data-levels="1,2,3"><div class="equation-title">Capacitância da membrana e corrente eletrogênica</div><div class="formula">Q = C<sub>m</sub>V<sub>m</sub> &nbsp; e &nbsp; C<sub>m</sub>dV<sub>m</sub>/dt = −ΣI<sub>i</sub> − I<sub>bomba</sub></div><div class="substitution" id="sci-cap-sub">Cₘ = 1,0 µF/cm²; carga e correntes atuais...</div><div class="live-result" id="sci-cap">Carga capacitiva relativa...</div><div class="interpretation">A capacitância determina a velocidade com que a membrana acompanha o potencial de Goldman, o efeito de Donnan e a corrente líquida da Na⁺/K⁺-ATPase.</div></article>
+          <article class="equation-card full" style="--eq:#246ca8" data-levels="3"><div class="equation-title">Fluxo transcapilar — Starling simplificado</div><div class="formula">J<sub>v</sub> = K<sub>f</sub>[(P<sub>c</sub> − P<sub>i</sub>) − σ(π<sub>c</sub> − π<sub>i</sub>)]</div><div class="substitution" id="sci-starling-sub">Pressões atuais...</div><div class="live-result" id="sci-starling">J<sub>v</sub> = 0,000 L/min</div><div class="interpretation" id="sci-starling-text">Fluxo líquido transcapilar próximo do basal.</div></article>
+        </div>
+      </details>
+      <details class="science-sub">
+        <summary>Variáveis e unidades</summary>
+	        <div class="science-content"><table class="variables"><thead><tr><th>Símbolo</th><th>Significado</th><th>Unidade</th></tr></thead><tbody><tr><td>V</td><td>Volume do compartimento</td><td>L</td></tr><tr><td>[íon]</td><td>Concentração calculada por quantidade/volume</td><td>mEq/L</td></tr><tr><td>A⁻</td><td>Proteínas e ânions fixos impermeantes</td><td>mEq/L</td></tr><tr><td>O</td><td>Outros osmóis não representados individualmente</td><td>mOsm/L</td></tr><tr><td>Osm</td><td>Concentração osmótica total</td><td>mOsm/L</td></tr><tr><td>P<sub>íon</sub></td><td>Permeabilidade relativa da membrana</td><td>adimensional</td></tr><tr><td>E<sub>íon</sub>, V<sub>m</sub></td><td>Potencial de equilíbrio e potencial de membrana</td><td>mV</td></tr><tr><td>C<sub>m</sub></td><td>Capacitância específica da membrana</td><td>µF/cm²</td></tr><tr data-levels="2,3"><td>P<sub>cel</sub></td><td>Pressão elástica intracelular relativa ao volume basal</td><td>mmHg</td></tr><tr data-levels="2,3"><td>J<sub>H₂O</sub></td><td>Fluxo líquido de água LIC → LEC quando positivo</td><td>L/min</td></tr><tr data-levels="3"><td>J<sub>v</sub></td><td>Fluxo transcapilar vaso → interstício quando positivo</td><td>L/min</td></tr></tbody></table></div>
+      </details>
+      <details class="science-sub">
+        <summary>Pressupostos e limitações</summary>
+	        <div class="science-content"><p><span class="model-tag">Modelo de referência</span>Os volumes basais são 3 L de plasma, 12 L de interstício e 28 L de LIC. Proteínas/ânions fixos são separados dos demais osmóis. As quantidades são conservadas, exceto nas intervenções e na compensação renal.</p><p><span class="model-tag">Acoplamento</span>Os fluxos iônicos seguem GHK; a capacitância possui constante temporal elétrica; o Donnan participa pelos componentes osmótico e elétrico; a troca capilar segue constantes de equilíbrio em minutos; e a compensação renal possui constante temporal de 360 min.</p><p><span class="model-tag">Reprodução</span>O relógio do processo muda entre ms, s, min e h. A reprodução de 0,25× a 4× acelera somente a apresentação, preservando o tempo fisiológico calculado e o resultado do motor.</p><p><span class="model-tag">Segurança celular</span>A elasticidade se opõe à expansão. Entre 120% e 140% do volume basal há alerta de edema; ao atingir 140%, o modelo sinaliza lise e pausa.</p><p><span class="model-tag">Limite</span>Permeabilidades efetivas representam um sistema corporal de referência, não uma célula isolada com área individual medida. Glicocálix, drenagem linfática, ácido–base e detalhes hormonais continuam reduzidos.</p><div class="science-note">O simulador demonstra direção, dependência e reequilíbrio. Ele não substitui medidas laboratoriais, modelagem clínica validada ou decisão terapêutica.</div></div>
+      </details>
+      <details class="science-sub">
+        <summary>Referências acadêmicas</summary>
+	        <div class="science-content"><ol class="references"><li>Hall JE, Hall ME. <em>Guyton and Hall Textbook of Medical Physiology</em>. 14th ed. Elsevier; 2021.</li><li>Boron WF, Boulpaep EL. <em>Medical Physiology</em>. 4th ed. Elsevier; 2022.</li><li>Koeppen BM, Stanton BA. <em>Berne &amp; Levy Physiology</em>. 7th ed. Elsevier; 2018.</li><li>Alberts B et al. <em>Molecular Biology of the Cell</em>. 6th ed. Garland Science; 2014.</li><li>Nernst W. Zur Kinetik der in Lösung befindlichen Körper. <em>Z Phys Chem</em>. 1888;2:613–637.</li><li>Goldman DE. Potential, impedance, and rectification in membranes. <em>J Gen Physiol</em>. 1943;27:37–60. <a href="https://doi.org/10.1085/jgp.27.1.37">doi:10.1085/jgp.27.1.37</a>.</li><li>Hodgkin AL, Katz B. The effect of sodium ions on the electrical activity of the giant axon of the squid. <em>J Physiol</em>. 1949;108:37–77. <a href="https://doi.org/10.1113/jphysiol.1949.sp004244">doi:10.1113/jphysiol.1949.sp004244</a>.</li><li>Donnan FG. Theorie der Membrangleichgewichte und Kapillarelektrizität. <em>Z Elektrochem</em>. 1911;17:572–581.</li><li>Aidley DJ. <em>The Physiology of Excitable Cells</em>. 4th ed. Cambridge University Press; 1998.</li><li>van ’t Hoff JH. Die Rolle des osmotischen Druckes in der Analogie zwischen Lösungen und Gasen. <em>Z Phys Chem</em>. 1887;1:481–508.</li><li>Kedem O, Katchalsky A. Thermodynamic analysis of the permeability of biological membranes to non-electrolytes. <em>Biochim Biophys Acta</em>. 1958;27:229–246.</li><li>Starling EH. On the absorption of fluids from the connective tissue spaces. <em>J Physiol</em>. 1896;19:312–326.</li><li>Skou JC. The influence of some cations on an adenosine triphosphatase from peripheral nerves. <em>Biochim Biophys Acta</em>. 1957;23:394–401.</li><li>Läuger P. <em>Electrogenic Ion Pumps</em>. Sinauer Associates; 1991.</li><li>Levick JR, Michel CC. Microvascular fluid exchange and the revised Starling principle. <em>Cardiovasc Res</em>. 2010;87:198–210. <a href="https://doi.org/10.1093/cvr/cvq062">doi:10.1093/cvr/cvq062</a>.</li></ol></div>
+      </details>
+    </div>
+  </details>
+  <footer class="signature">Prof. Mário César Nascimento. PhD ©</footer>
+</main>
+<script>
+(() => {
+  "use strict";
+  const $=id=>document.getElementById(id), clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const R=8.314,T=310.15,F=96485,RTF=R*T/F*1000,CM=1,CELL_V0=28,CELL_WARN=1.20,CELL_LYSIS=1.40;
+  const PHASE_SCALES={
+    electric:{label:"Resposta elétrica",rate:.003,unit:"ms"},
+    active:{label:"Transporte ativo",rate:.35,unit:"min"},
+    osmotic:{label:"Equilíbrio osmótico",rate:.75,unit:"min"},
+    capillary:{label:"Redistribuição capilar",rate:1,unit:"min"},
+    systemic:{label:"Compensação sistêmica",rate:12,unit:"h"}
+  };
+  const TAU_CAP={Na:3,K:2.5,Cl:3},KF=.006,SIGMA=.90,LP_CELL=.0004,K_ELASTIC=24,TAU_RENAL=360;
+  const GHK_COUPLING={Na:.030,K:.020,Cl:.020},VMAX_PUMP=.28,KM_NA=10,KM_K=1.5,TAU_MEMBRANE_MIN=.05/60;
+  const BASE={
+    p:{v:3,Na:426,K:12.6,Cl:324,A:3.6,O:103.8},
+    e:{v:12,Na:1668,K:48,Cl:1296,A:2.4,O:465.6},
+    i:{v:28,Na:392,K:3920,Cl:112,A:112,O:3584}
+  };
+  const BASE_A={p:1.2,e:.2,i:4},BASE_PUMP=.145;
+  const clone=o=>JSON.parse(JSON.stringify(o));
+  const newState=()=>({c:clone(BASE),time:0,scenario:null,scenarioTime:0,mode:1,vm:-90,lysis:false,phaseKey:"electric",phaseStarted:0,processLabel:"Resposta elétrica",flows:{capNa:0,capK:0,capCl:0,starling:0,cellWater:0,Na:0,K:0,Cl:0,pump:0},phase:"Estado basal: potencial de membrana em equilíbrio dinâmico."});
+  let s=newState(),running=true,paintClock=0,spawnClock=0,selectedSubstance="Na",railManualUntil={water:0,Na:0,K:0,Cl:0,NaCl:0},manualPackets={};
+  const conc=(key,ion)=>s.c[key][ion]/s.c[key].v;
+  const osm=key=>(s.c[key].Na+s.c[key].K+s.c[key].Cl+s.c[key].A+s.c[key].O)/s.c[key].v;
+  const fmt=n=>n.toFixed(1).replace(".",",");
+  function moveAmount(a,b,ion,amount){
+    if(!Number.isFinite(amount)||Math.abs(amount)<1e-10)return 0;
+    if(amount>0){amount=Math.min(amount,s.c[a][ion]);s.c[a][ion]-=amount;s.c[b][ion]+=amount}
+    else {amount=-Math.min(-amount,s.c[b][ion]);s.c[a][ion]-=amount;s.c[b][ion]+=amount}
+    return amount;
+  }
+  function moveWater(a,b,liters){
+    if(liters>0)liters=Math.min(liters,s.c[a].v-.35);
+    else liters=-Math.min(-liters,s.c[b].v-.35);
+    s.c[a].v-=liters;s.c[b].v+=liters;return liters;
+  }
+  function equilibrateSolute(a,b,ion,tauMinutes,dt){
+    const total=s.c[a][ion]+s.c[b][ion],targetA=total*s.c[a].v/(s.c[a].v+s.c[b].v);
+    return moveAmount(a,b,ion,(s.c[a][ion]-targetA)*(1-Math.exp(-dt/tauMinutes)));
+  }
+  function setPhase(key,text,label=null){
+    if(s.phaseKey!==key){s.phaseKey=key;s.phaseStarted=s.time}
+    s.processLabel=label||PHASE_SCALES[key].label;s.phase=text;
+  }
+  function ghkVoltage(){
+    const PNa=+$("na-perm").value,PK=+$("k-perm").value,PCl=.12;
+    const num=PK*conc("e","K")+PNa*conc("e","Na")+PCl*conc("i","Cl");
+    const den=PK*conc("i","K")+PNa*conc("i","Na")+PCl*conc("e","Cl");
+    return clamp(RTF*Math.log(Math.max(num,1e-9)/Math.max(den,1e-9)),-140,40);
+  }
+  function membranePotential(){return s.vm}
+  function nernst(ion){
+    const z=ion==="Cl"?-1:1;
+    return clamp(RTF/z*Math.log(Math.max(conc("e",ion),1e-9)/Math.max(conc("i",ion),1e-9)),-180,180);
+  }
+  function ghkInwardFlux(ion,permeability){
+    const z=ion==="Cl"?-1:1,v=clamp(s.vm/RTF,-8,8),ci=Math.max(conc("i",ion),1e-9),co=Math.max(conc("e",ion),1e-9);
+    if(Math.abs(v)<1e-5)return permeability*(co-ci);
+    const exponent=Math.exp(clamp(-z*v,-20,20)),ratio=(ci-co*exponent)/(1-exponent);
+    return permeability*(-z*v)*ratio;
+  }
+  function donnanVoltage(){
+    const ai=Math.max(conc("i","A")/BASE_A.i,1e-6),ae=Math.max(conc("e","A")/BASE_A.e,1e-6);
+    return clamp(-.18*RTF*Math.log(ai/ae),-12,12);
+  }
+  function cellPressure(){
+    return K_ELASTIC*(s.c.i.v/CELL_V0-1);
+  }
+  function updateMembraneVoltage(dt,pumpFraction){
+    const target=clamp(ghkVoltage()+donnanVoltage()-1.2*clamp(pumpFraction,0,1.5),-140,40);
+    const conductance=.18+(+$("na-perm").value)+(.65*(+$("k-perm").value))+.12;
+    const tau=TAU_MEMBRANE_MIN*CM/Math.max(conductance,.05);
+    s.vm+= (target-s.vm)*(1-Math.exp(-dt/Math.max(tau,.015)));
+  }
+  function removeEcfFluid(dv,composition){
+    const total=s.c.p.v+s.c.e.v,parts=[["p",s.c.p.v/total],["e",s.c.e.v/total]];
+    for(const [key,fraction] of parts){
+      const loss=dv*fraction;s.c[key].v=Math.max(.35,s.c[key].v-loss);
+      for(const solute of ["Na","K","Cl","O"])s.c[key][solute]=Math.max(0,s.c[key][solute]-(composition[solute]||0)*loss);
+    }
+  }
+  function removePlasma(dv){
+    const v=s.c.p.v,actual=Math.min(dv,v-.4),fraction=actual/v;
+    for(const solute of ["Na","K","Cl","A","O"])s.c.p[solute]*=(1-fraction);
+    s.c.p.v-=actual;
+  }
+  function applyScenario(dt){
+    if(!s.scenario)return;
+    const previous=s.scenarioTime;
+    s.scenarioTime+=dt;
+    const t=s.scenarioTime,windowDt=end=>Math.max(0,Math.min(t,end)-Math.min(previous,end));
+    if(s.scenario==="salt"){
+      if(previous<2){const doseDt=windowDt(2);s.c.p.Na+=15*doseDt;s.c.p.Cl+=15*doseDt;s.c.p.v+=.125*doseDt;setPhase("active","0–2 min · Absorção: Na⁺, Cl⁻ e água entram no plasma.","Absorção intestinal")}
+      else if(t<=10)setPhase("capillary","2–10 min · Na⁺ e Cl⁻ difundem-se do plasma para o interstício.");
+      else if(t<=25)setPhase("osmotic","10–25 min · Água deixa o LIC; a célula retrai e o LEC expande.");
+      else if(t<=60)setPhase("capillary","25–60 min · Starling redistribui água entre plasma e interstício.");
+      else setPhase("systemic",s.mode===3?"Após 60 min · Sede, ADH e rim aproximam água e NaCl do basal.":"Após 60 min · Compensação renal disponível no nível 3.");
+    }
+    if(s.scenario==="water"){
+      if(previous<2){s.c.p.v+=.5*windowDt(2);setPhase("active","0–2 min · Água absorvida expande e dilui o plasma.","Absorção de água")}
+      else if(t<=30)setPhase("osmotic","2–30 min · Água distribui-se pelo LEC e entra na célula.");
+      else if(t<=60)setPhase("capillary","30–60 min · Os volumes plasmático e intersticial se reajustam.");
+      else setPhase("systemic","Após 60 min · ADH e rim regulam a eliminação do excesso de água.");
+    }
+    if(s.scenario==="hyperK"){
+      const target=s.mode===3?"p":"e";
+      if(previous<1){s.c[target].K+=12*windowDt(1);setPhase("active",s.mode===3?"0–1 min · K⁺ entra no plasma.":"0–1 min · K⁺ é elevado diretamente no LEC.","Elevação do K⁺")}
+      else if(t<=1.02)setPhase("electric","Resposta imediata · O potencial acompanha a redução do gradiente de K⁺.","Resposta à hipercalemia");
+      else if(t<=30)setPhase("active","Bomba Na⁺/K⁺ e fluxos eletroquímicos iniciam a compensação.","Compensação iônica");
+      else setPhase("systemic","Fase tardia · A regulação renal do K⁺ passa a predominar.");
+    }
+    if(s.scenario==="hypertonic"){
+      if(previous<2){const doseDt=windowDt(2);s.c.e.Na+=12*doseDt;s.c.e.Cl+=12*doseDt;setPhase("active","Meio hipertônico · NaCl é acrescentado diretamente ao LEC.","Aplicação de NaCl")}
+      else setPhase("osmotic","Água deixa o LIC; o volume celular diminui até o novo equilíbrio.");
+    }
+    if(s.scenario==="hypotonic"){
+      if(previous<2){s.c.e.v+=.30*windowDt(2);setPhase("active","Meio hipotônico · Água é acrescentada diretamente ao LEC.","Aplicação de água")}
+      else setPhase("osmotic","Água entra no LIC; o volume celular aumenta até o novo equilíbrio.");
+    }
+    if(s.scenario==="sweat"){
+      if(previous<20){
+        const loss=.06*windowDt(20),total=s.c.p.v+s.c.e.v,fp=s.c.p.v/total;
+        for(const [k,f] of [["p",fp],["e",1-fp]]){
+          const dv=loss*f,naLoss=50*dv,kLoss=5*dv,clLoss=45*dv,oLoss=20*dv;
+          s.c[k].v=Math.max(.4,s.c[k].v-dv);s.c[k].Na=Math.max(0,s.c[k].Na-naLoss);s.c[k].K=Math.max(0,s.c[k].K-kLoss);s.c[k].Cl=Math.max(0,s.c[k].Cl-clLoss);s.c[k].O=Math.max(0,s.c[k].O-oLoss);
+        }
+        setPhase("active","Sudorese · Saem água, Na⁺, Cl⁻ e K⁺; a perda de água predomina.","Perda pelo suor");
+      } else if(t<=60)setPhase("osmotic","Pós-sudorese · Água sai da célula e os volumes extracelulares se reajustam.");
+      else setPhase("systemic","Fase tardia · Sede, ADH e rim conservam água e sódio.");
+    }
+    if(s.scenario==="dehydration"){
+      if(previous<30){removeEcfFluid(.05*windowDt(30),{Na:0,K:0,Cl:0,O:0});setPhase("active","Desidratação · Perda predominante de água concentra os solutos do LEC.","Perda de água")}
+      else if(t<=60)setPhase("osmotic","Pós-desidratação · Água deixa o LIC e sustenta parcialmente o LEC.");
+      else setPhase("systemic","Fase tardia · Sede, ADH e rim reduzem a perda de água.");
+    }
+    if(s.scenario==="vomiting"){
+      if(previous<20){removeEcfFluid(.04*windowDt(20),{Na:60,K:10,Cl:90,O:130});setPhase("active","Vômitos · Perda de água, Na⁺, K⁺ e sobretudo Cl⁻ do compartimento extracelular.","Perda gastrointestinal")}
+      else if(t<=60)setPhase("capillary","Pós-vômitos · Hipovolemia e hipocloremia orientam a redistribuição.");
+      else setPhase("systemic","Fase tardia · Rim e respostas hormonais conservam volume e eletrólitos.");
+    }
+    if(s.scenario==="diarrhea"){
+      if(previous<20){removeEcfFluid(.055*windowDt(20),{Na:90,K:25,Cl:70,O:105});setPhase("active","Diarreia · Perda isotônica rica em água, Na⁺, Cl⁻ e K⁺.","Perda gastrointestinal")}
+      else if(t<=60)setPhase("capillary","Pós-diarreia · O LEC contrai e os gradientes eletrolíticos se reajustam.");
+      else setPhase("systemic","Fase tardia · Rim e respostas hormonais conservam volume e eletrólitos.");
+    }
+    if(s.scenario==="hemorrhage"){
+      if(previous<10){removePlasma(.08*windowDt(10));setPhase("active","Hemorragia · Plasma e seus solutos são perdidos na mesma proporção.","Perda sanguínea")}
+      else if(t<=60)setPhase("capillary","Compensação transcapilar · Água migra do interstício para o vaso.");
+      else setPhase("systemic","Fase tardia · Retenção renal e respostas hormonais tentam restaurar o volume.");
+    }
+  }
+  function renalCompensation(dt){
+    if(s.mode!==3||s.scenarioTime<60)return;
+    const fraction=1-Math.exp(-dt/TAU_RENAL);
+    for(const ion of ["Na","Cl"]){
+      const target=BASE.p[ion]+BASE.e[ion],now=s.c.p[ion]+s.c.e[ion],change=(target-now)*fraction;
+      s.c.p[ion]+=change;
+    }
+    const targetV=15,nowV=s.c.p.v+s.c.e.v,water=(targetV-nowV)*fraction;
+    s.c.p.v=Math.max(.4,s.c.p.v+water);
+  }
+  function step(dt){
+    applyScenario(dt);
+    const capOn=s.mode===3;
+    if(capOn){
+      s.flows.capNa=equilibrateSolute("p","e","Na",TAU_CAP.Na,dt)/dt;
+      s.flows.capK=equilibrateSolute("p","e","K",TAU_CAP.K,dt)/dt;
+      s.flows.capCl=equilibrateSolute("p","e","Cl",TAU_CAP.Cl,dt)/dt;
+      const vp=s.c.p.v,ve=s.c.e.v;
+      const Pc=17+8*(vp/3-1),Pi=2*(ve/12-1),piP=28*(conc("p","A")/BASE_A.p),piE=5*(conc("e","A")/BASE_A.e);
+      const baseline=(17-0)-SIGMA*(28-5);
+      s.flows.starling=KF*(((Pc-Pi)-SIGMA*(piP-piE))-baseline);
+      moveWater("p","e",s.flows.starling*dt);
+    } else {s.flows.capNa=s.flows.capK=s.flows.capCl=s.flows.starling=0}
+    if(s.mode>=2){
+      const waterPerm=+$("water-perm").value;
+      const osmoticPressure=19.3*(osm("e")-osm("i"));
+      s.flows.cellWater=LP_CELL*(osmoticPressure+cellPressure())*waterPerm;
+      moveWater("i","e",s.flows.cellWater*dt);
+    } else s.flows.cellWater=0;
+    const pNa=+$("na-perm").value,pK=+$("k-perm").value;
+    s.flows.Na=moveAmount("e","i","Na",ghkInwardFlux("Na",pNa)*GHK_COUPLING.Na*dt)/dt;
+    s.flows.K=moveAmount("e","i","K",ghkInwardFlux("K",pK)*GHK_COUPLING.K*dt)/dt;
+    s.flows.Cl=moveAmount("e","i","Cl",ghkInwardFlux("Cl",.12)*GHK_COUPLING.Cl*dt)/dt;
+    const satNa=Math.pow(conc("i","Na")/(conc("i","Na")+KM_NA),3),satK=Math.pow(conc("e","K")/(conc("e","K")+KM_K),2);
+    const cycles=VMAX_PUMP*satNa*satK*dt;
+    const naPump=moveAmount("i","e","Na",3*cycles),kPump=moveAmount("e","i","K",2*cycles);
+    s.flows.pump=(Math.abs(naPump)+Math.abs(kPump))/Math.max(dt,1e-6);
+    updateMembraneVoltage(dt,s.flows.pump/BASE_PUMP);
+    renalCompensation(dt);
+    for(const k of ["p","e","i"])s.c[k].v=clamp(s.c[k].v,.35,k==="i"?CELL_V0*CELL_LYSIS:45);
+    if(!s.lysis&&s.c.i.v>=CELL_V0*CELL_LYSIS-.001){
+      s.c.i.v=CELL_V0*CELL_LYSIS;s.lysis=true;running=false;
+      setPhase("osmotic","⚠ Lise celular · O LIC atingiu 140% do volume basal; a simulação foi pausada.","Limite de lise");
+    }
+    s.time+=dt;
+  }
+  function fluidVisualPercent(key){
+    const gain={p:34,e:20,i:20}[key];
+    return clamp(55+(s.c[key].v-BASE[key].v)*gain,14,94);
+  }
+  function particlePool(id,key){
+    const defs=[["na","Na⁺",conc(key,"Na"),18],["k","K⁺",conc(key,"K"),key==="i"?12:2],["cl","Cl⁻",conc(key,"Cl"),15],["a","A⁻",conc(key,"A"),key==="i"?2:1]];
+    const entries=defs.map(([cls,label,value,scale])=>{
+      const minimum=cls==="a"?(value>.05?1:0):(cls==="k"&&key!=="i"?1:2);
+      const ion=cls==="na"?"Na":cls==="k"?"K":cls==="cl"?"Cl":"A";
+      const basalConcentration=BASE[key][ion]/BASE[key].v;
+      const basalCount=clamp(Math.round(basalConcentration/scale),minimum,10);
+      const visualPacket=ion==="K"?4:ion==="A"?Infinity:10;
+      const interventionDelta=(s.c[key][ion]-BASE[key][ion])/visualPacket;
+      const concentrationDelta=(value-basalConcentration)/Math.max(scale*.7,1e-6);
+      const count=clamp(Math.round(basalCount+interventionDelta+concentrationDelta),minimum,12);
+      return {cls,label,count};
+    });
+    const particleSet=[];
+    entries.forEach((entry,group)=>{
+      for(let n=0;n<entry.count;n++){
+        const phase=((n+.5)/Math.max(entry.count,1)+group*.037+({p:.011,e:.023,i:.041}[key]))%1;
+        particleSet.push({cls:entry.cls,label:entry.label,group,phase});
+      }
+    });
+    particleSet.sort((a,b)=>a.phase-b.phase||a.group-b.group);
+    const total=particleSet.length,items=[];
+    const columns=Math.max(4,Math.min(7,Math.ceil(Math.sqrt(total*1.45))));
+    const rows=Math.max(1,Math.ceil(total/columns));
+    const liquidTop=clamp(100-fluidVisualPercent(key)+4,10,84);
+    const usableHeight=Math.max(8,88-liquidTop);
+    particleSet.forEach(({cls,label,group},slot)=>{
+      const col=slot%columns,row=Math.floor(slot/columns);
+      const jitterX=((slot*7+group*3)%5-2)*.55,jitterY=((slot*5+group*2)%5-2)*.45;
+      const x=4+(columns===1?0:col*(82/(columns-1)))+jitterX;
+      const y=liquidTop+(rows===1?usableHeight/2:row*(usableHeight/(rows-1)))+jitterY;
+      const dx1=((slot*11+group*5)%7-3)*.65,dy1=((slot*13+group*3)%7-3)*.55;
+      const dx2=((slot*17+group*7)%7-3)*.6,dy2=((slot*19+group*2)%7-3)*.5;
+      const drift=4.2+((slot*7+group)%9)*.28,delay=((slot*13+group*3)%17)*.31;
+      items.push(`<i class="ion ${cls}" style="left:${x.toFixed(1)}%;top:${y.toFixed(1)}%;--dx1:${dx1.toFixed(1)}px;--dy1:${dy1.toFixed(1)}px;--dx2:${dx2.toFixed(1)}px;--dy2:${dy2.toFixed(1)}px;--drift:${drift.toFixed(2)}s;--delay:-${delay.toFixed(2)}s">${label}</i>`);
+    });
+    const pool=$(id),signature=`${entries.map(item=>item.count).join("-")}:${Math.round(fluidVisualPercent(key)/2)}`;
+    if(pool.dataset.signature!==signature){pool.innerHTML=items.join("");pool.dataset.signature=signature}
+  }
+  function animationSpeed(){return +$("sim-speed").value||1}
+  function setMover(id,value,rightWhenPositive=true,strength=null){
+    const el=$(id);if(!el)return;
+    const right=rightWhenPositive?value>=0:value<0;
+    const visual=strength===null?clamp(Math.abs(value)*3,0,1):clamp(strength,0,1);
+    el.classList.toggle("to-right",right);el.classList.toggle("to-left",!right);el.classList.toggle("still",!running||visual<.01);
+    el.style.animationDuration=`${(clamp(2.2-visual*1.5,.7,2.2)/animationSpeed()).toFixed(2)}s`;
+    el.style.opacity=String(.25+visual*.75);
+  }
+  function spawn(barrier,type,right,intensity,strength=null){
+    const visual=strength===null?clamp(Math.abs(intensity)*3,0,1):clamp(strength,0,1);
+    if(!running||visual<.01||Math.random()>.08+visual*.82)return;
+    const el=document.createElement("i");el.className=`mover ${type} transient ${right?"to-right":"to-left"}`;
+    el.textContent=type==="na"?"Na⁺":type==="k"?"K⁺":type==="cl"?"Cl⁻":"";
+    el.style.top=`${70+Math.random()*210}px`;el.style.animationDuration=`${(clamp(2.0-visual*1.35,.65,2)/animationSpeed()).toFixed(2)}s`;
+    barrier.appendChild(el);setTimeout(()=>el.remove(),2200);
+  }
+  function distribution(substance){
+    const keys=["p","e","i"];
+    let values=keys.map(k=>{
+      if(substance==="water")return Math.abs(s.c[k].v-BASE[k].v);
+      if(substance==="NaCl")return Math.abs((s.c[k].Na+s.c[k].Cl)-(BASE[k].Na+BASE[k].Cl));
+      return Math.abs(s.c[k][substance]-BASE[k][substance]);
+    });
+    let total=values.reduce((a,b)=>a+b,0);
+    if(total<1e-6){
+      values=keys.map(k=>substance==="water"?s.c[k].v:substance==="NaCl"?s.c[k].Na+s.c[k].Cl:s.c[k][substance]);
+      total=values.reduce((a,b)=>a+b,0);
+    }
+    return values.map(v=>v/Math.max(total,1e-9));
+  }
+  function renderRail(){
+    document.querySelectorAll("[data-substance-rail]").forEach(rail=>{
+      const sub=rail.dataset.substanceRail,shares=distribution(sub);
+      if(s.mode<3){shares[0]=0;const total=shares[1]+shares[2]||1;shares[1]/=total;shares[2]/=total}
+      if(Date.now()>railManualUntil[sub])rail.value=(shares[1]+2*shares[2]).toFixed(2);
+      $(`dist-${sub}`).textContent=shares.map(v=>`${Math.round(v*100)}%`).join(" · ");
+      rail.parentElement.classList.toggle("active",sub===selectedSubstance);
+    });
+  }
+  function meterPosition(delta,negativeLimit,positiveLimit){
+    if(Math.abs(delta)<1e-9)return 50;
+    const limit=delta<0?negativeLimit:positiveLimit;
+    const response=Math.pow(clamp(Math.abs(delta)/limit,0,1),.72);
+    return 50+Math.sign(delta)*response*46;
+  }
+  function updateStateMeters(key,currentOsm){
+    const volumeDelta=s.c[key].v/BASE[key].v-1,osmDelta=currentOsm-290;
+    const volumeLimits={p:[.25,.25],e:[.12,.12],i:[.10,.10]}[key];
+    const volumePosition=meterPosition(volumeDelta,volumeLimits[0],volumeLimits[1]);
+    const osmPosition=meterPosition(osmDelta,20,20);
+    let volumeState=Math.abs(volumeDelta)<=.02?"Equilibrado":volumeDelta<0?"Reduzido":"Aumentado";
+    if(key==="i"&&s.lysis)volumeState="Lise";
+    else if(key==="i"&&s.c.i.v/BASE.i.v>=CELL_WARN)volumeState="Edema";
+    const osmState=Math.abs(osmDelta)<=2?"Equilibrada":osmDelta<0?"Diluída":"Concentrada";
+    $(`${key}-vol-marker`).style.left=`${volumePosition}%`;$(`${key}-osm-marker`).style.left=`${osmPosition}%`;
+    $(`${key}-vol-state`).textContent=volumeState;$(`${key}-osm-state`).textContent=osmState;
+    $(`${key}-vol-meter`).setAttribute("aria-label",`Volume ${volumeState.toLowerCase()}: ${s.c[key].v.toFixed(2).replace(".",",")} litros`);
+    $(`${key}-osm-meter`).setAttribute("aria-label",`Osmolaridade ${osmState.toLowerCase()}: ${currentOsm.toFixed(1).replace(".",",")} miliosmóis por litro`);
+  }
+  function currentScale(){return PHASE_SCALES[s.phaseKey]||PHASE_SCALES.osmotic}
+  function phaseClockDisplay(){
+    const elapsed=Math.max(0,s.time-s.phaseStarted),scale=currentScale();
+    if(s.phaseKey==="electric"){
+      const milliseconds=Math.round(elapsed*60000);
+      if(milliseconds<1000)return {text:`${milliseconds} ms`,unit:"ms"};
+      return {text:`${(milliseconds/1000).toFixed(2).replace(".",",")} s`,unit:"s"};
+    }
+    if(s.phaseKey==="systemic"){
+      const hours=Math.floor(elapsed/60),minutes=Math.floor(elapsed%60);
+      return {text:`${String(hours).padStart(2,"0")}:${String(minutes).padStart(2,"0")} h`,unit:"h"};
+    }
+    const minutes=Math.floor(elapsed),seconds=Math.floor((elapsed-minutes)*60);
+    return {text:`${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")} min`,unit:"min"};
+  }
+  function renderClocks(){
+    const phaseClock=phaseClockDisplay(),speed=animationSpeed(),totalHours=Math.floor(s.time/60),totalMinutes=Math.floor(s.time%60);
+    $("adaptive-clock").dataset.scale=s.phaseKey;$("clock-process").textContent=s.processLabel;
+    $("clock").textContent=phaseClock.text;$("total-clock").textContent=`Tempo fisiológico: ${String(totalHours).padStart(2,"0")} h ${String(totalMinutes).padStart(2,"0")} min`;
+    $("speed-out").textContent=`${speed.toLocaleString("pt-BR",{maximumFractionDigits:2})}× · ${phaseClock.unit}`;
+  }
+  function render(){
+    const c=s.c,op=osm("p"),oe=osm("e"),oi=osm("i"),vm=membranePotential();
+    updateStateMeters("p",op);updateStateMeters("e",oe);updateStateMeters("i",oi);
+    const cellRatio=c.i.v/BASE.i.v,licTank=document.querySelector(".tank.lic");
+    licTank.classList.toggle("cell-warning",cellRatio>=CELL_WARN&&!s.lysis);licTank.classList.toggle("cell-lysis",s.lysis);
+    $("plasma-fluid").style.height=`calc(${fluidVisualPercent("p")}% + 8px)`;$("lec-fluid").style.height=`calc(${fluidVisualPercent("e")}% + 8px)`;$("lic-fluid").style.height=`calc(${fluidVisualPercent("i")}% + 8px)`;
+    $("water-flow").textContent=`${s.flows.cellWater>=0?"LIC→LEC ":"LEC→LIC "}${Math.abs(s.flows.cellWater).toFixed(3).replace(".",",")} L/min`;$("vm").textContent=`${vm.toFixed(1).replace(".",",")} mV`;
+    for(const key of ["p","e","i"])for(const ion of ["Na","K","Cl"])$(`mx-${key}-${ion.toLowerCase()}`).textContent=fmt(conc(key,ion));
+    $("mx-p-osm").textContent=fmt(op);$("mx-e-osm").textContent=fmt(oe);$("mx-i-osm").textContent=fmt(oi);
+    $("mx-p-vol").textContent=c.p.v.toFixed(2).replace(".",",");$("mx-e-vol").textContent=c.e.v.toFixed(2).replace(".",",");$("mx-i-vol").textContent=c.i.v.toFixed(2).replace(".",",");
+    $("starling-read").textContent=`${s.flows.starling>=0?"Vaso→LEC ":"LEC→Vaso "}${Math.abs(s.flows.starling).toFixed(3).replace(".",",")} L/min`;
+    $("na-flux-out").textContent=`${Math.abs(s.flows.Na).toFixed(3).replace(".",",")} mEq/min`;$("k-flux-out").textContent=`${Math.abs(s.flows.K).toFixed(3).replace(".",",")} mEq/min`;$("water-flux-out").textContent=`${Math.abs(s.flows.cellWater).toFixed(3).replace(".",",")} L/min`;
+    const pNa=+$("na-perm").value,pK=+$("k-perm").value,pWater=+$("water-perm").value;
+    $("na-gate").style.setProperty("--open",String(.18+.82*pNa));$("k-gate").style.setProperty("--open",String(.18+.82*pK));$("water-gate").style.setProperty("--open",String(.18+.82*pWater));
+    const eK=nernst("K"),eNa=nernst("Na"),comma=n=>Number(n).toFixed(1).replace(".",",");
+    $("sci-nernst-k-sub").textContent=`26,7 × ln(${comma(conc("e","K"))}/${comma(conc("i","K"))})`;
+    $("sci-nernst-k").innerHTML=`E<sub>K</sub> = ${eK>=0?"+":""}${comma(eK)} mV`;
+    $("sci-nernst-na-sub").textContent=`26,7 × ln(${comma(conc("e","Na"))}/${comma(conc("i","Na"))})`;
+    $("sci-nernst-na").innerHTML=`E<sub>Na</sub> = ${eNa>=0?"+":""}${comma(eNa)} mV`;
+    $("sci-ghk-sub").textContent=`PNa=${pNa.toFixed(3).replace(".",",")}; PK=${pK.toFixed(2).replace(".",",")}; PCl=0,12; VGHK=${comma(ghkVoltage())} mV`;
+    $("sci-ghk").innerHTML=`V<sub>m</sub> = ${vm>=0?"+":""}${comma(vm)} mV`;
+    const osmoticPressure=19.3*(oe-oi),pCell=cellPressure();
+    $("sci-osm-sub").textContent=`LEC=${comma(oe)}; LIC=${comma(oi)} mOsm/L; Δπ=${comma(osmoticPressure)} mmHg; Pcel=${comma(pCell)} mmHg`;
+    $("sci-osm").textContent=`Fluxo = ${s.flows.cellWater>=0?"+":""}${s.flows.cellWater.toFixed(3).replace(".",",")} L/min`;
+    $("sci-osm-text").textContent=Math.abs(s.flows.cellWater)<.001?"Sem gradiente líquido relevante.":s.flows.cellWater>0?"Água sai do LIC em direção ao LEC; a célula tende a retrair.":"Água entra no LIC; a célula tende a aumentar de volume.";
+    const donnanE=conc("e","Na")*conc("e","Cl"),donnanI=conc("i","Na")*conc("i","Cl"),donnanRatio=donnanE/Math.max(donnanI,1e-9);
+    $("sci-donnan-sub").textContent=`LEC: ${comma(conc("e","Na"))} × ${comma(conc("e","Cl"))}; LIC: ${comma(conc("i","Na"))} × ${comma(conc("i","Cl"))}`;
+    $("sci-donnan").textContent=`Razão LEC/LIC = ${donnanRatio.toFixed(2).replace(".",",")}; contribuição elétrica = ${comma(donnanVoltage())} mV`;
+    $("sci-cap-sub").textContent=`Cₘ=${CM.toFixed(1).replace(".",",")} µF/cm²; τ elétrico basal=${Math.round(TAU_MEMBRANE_MIN*60000)} ms; VGHK=${comma(ghkVoltage())} mV; bomba=${Math.round(clamp(s.flows.pump/BASE_PUMP*100,0,150))}%`;
+    $("sci-cap").innerHTML=`Q/C<sub>m</sub> = ${comma(vm)} mV; resposta RC ativa`;
+    const vp=c.p.v,ve=c.e.v,Pc=17+8*(vp/3-1),Pi=2*(ve/12-1),piP=28*(conc("p","A")/BASE_A.p),piE=5*(conc("e","A")/BASE_A.e);
+    $("sci-starling-sub").textContent=`Kf=${KF.toFixed(3).replace(".",",")} L/min/mmHg; σ=${SIGMA.toFixed(2).replace(".",",")}; Pc=${comma(Pc)}; Pi=${comma(Pi)}; πc=${comma(piP)}; πi=${comma(piE)} mmHg`;
+    $("sci-starling").innerHTML=`J<sub>v</sub> = ${s.flows.starling>=0?"+":""}${s.flows.starling.toFixed(3).replace(".",",")} L/min`;
+    $("sci-starling-text").textContent=Math.abs(s.flows.starling)<.001?"Fluxo líquido transcapilar próximo do basal.":s.flows.starling>0?"Predomina filtração do vaso para o interstício.":"Predomina absorção do interstício para o vaso.";
+    const pumpPct=clamp(s.flows.pump/BASE_PUMP*100,0,150);$("pump-read").textContent=`${pumpPct.toFixed(0)}%`;
+    renderClocks();
+    $("phase-banner").textContent=s.phase;$("event-text").textContent=s.scenario?`${s.scenarioTime.toFixed(1)} min`:"Equilíbrio";
+    const imbalance=Math.abs(oe-oi)+Math.abs(op-oe);$("status-text").textContent=s.lysis?"Lise celular: limite de 140% do LIC atingido.":cellRatio>=CELL_WARN?"Edema celular: a pressão elástica cresce conforme o LIC se aproxima do limite de lise.":imbalance<.8?"Equilíbrio dinâmico próximo.":"Reequilíbrio em curso: acompanhe volumes, solutos e fluxos.";
+    $("run").textContent=s.lysis?"↺ Resetar após lise":running?"❚❚ Pausar simulação":"▶ Retomar simulação";
+    renderRail();
+    setMover("cap-na",s.flows.capNa||.004);setMover("cap-cl",s.flows.capCl||.004);setMover("cap-water",s.flows.starling||.004);setMover("cap-water-back",-(s.flows.starling||.004));setMover("mem-na",s.flows.Na,true,pNa);setMover("mem-k",s.flows.K,true,pK);setMover("mem-water",s.flows.cellWater,false,pWater*Math.min(1,Math.abs(oe-oi)/8));
+    if(++paintClock%8===0){particlePool("plasma-particles","p");particlePool("lec-particles","e");particlePool("lic-particles","i")}
+    if(++spawnClock%2===0){
+      const bars=document.querySelectorAll(".barrier"),speed=animationSpeed(),attempts=Math.ceil(speed),frequencyScale=Math.min(1,speed);
+      for(let n=0;n<attempts;n++){
+        spawn(bars[0],"na",s.flows.capNa>=0,s.flows.capNa*frequencyScale);spawn(bars[0],"cl",s.flows.capCl>=0,s.flows.capCl*frequencyScale);spawn(bars[0],"water",s.flows.starling>=0,s.flows.starling*10*frequencyScale);
+        spawn(bars[1],"na",s.flows.Na>=0,s.flows.Na,pNa*frequencyScale);spawn(bars[1],"k",s.flows.K>=0,s.flows.K,pK*frequencyScale);spawn(bars[1],"water",s.flows.cellWater<0,s.flows.cellWater*10,pWater*Math.min(1,Math.abs(oe-oi)/8)*frequencyScale);
+      }
+    }
+  }
+  function tick(){if(running){const dt=currentScale().rate*.1*animationSpeed(),substeps=Math.max(3,Math.ceil(dt/.08));for(let n=0;n<substeps;n++)step(dt/substeps)}render()}
+  function configureLevel(mode){
+    const allowed=mode===1?new Set(["Na","K","Cl"]):new Set(["water","Na","K","Cl","NaCl"]);
+    document.querySelectorAll("[data-substance-rail]").forEach(rail=>{
+      const show=allowed.has(rail.dataset.substanceRail);rail.parentElement.hidden=!show;
+      rail.min=mode===3?"0":"1";rail.max="2";if(+rail.value<+rail.min)rail.value=rail.min;
+    });
+    if(!allowed.has(selectedSubstance))selectedSubstance="Na";
+    document.querySelectorAll("[data-levels]").forEach(el=>el.hidden=!el.dataset.levels.split(",").includes(String(mode)));
+    document.querySelector(".stage").dataset.mode=String(mode);
+    document.querySelector(".intervention-console").dataset.mode=String(mode);
+    document.querySelector(".membrane-strip").dataset.mode=String(mode);
+    document.querySelectorAll('[data-compartment="p"]').forEach(el=>el.hidden=mode<3);
+    document.querySelectorAll(".modes button").forEach((b,i)=>b.classList.toggle("active",i===mode-1));
+    $("quick-states").open=true;document.querySelectorAll("details.card:not(#quick-states)").forEach(d=>d.open=false);
+  }
+  function reset(mode=s.mode||2){
+    s=newState();s.mode=mode;running=true;selectedSubstance=mode===1?"Na":"water";manualPackets={};railManualUntil={water:0,Na:0,K:0,Cl:0,NaCl:0};
+    s.phaseKey=mode===1?"electric":mode===2?"osmotic":"capillary";s.processLabel=PHASE_SCALES[s.phaseKey].label;s.phaseStarted=0;
+    configureLevel(mode);$("run").textContent="❚❚ Pausar simulação";render()
+  }
+  function scenario(name){
+    const mode=s.mode;reset(mode);s.scenario=name;s.scenarioTime=0;s.phase="Cenário iniciado.";
+    selectedSubstance=name==="salt"||name==="hypertonic"?"NaCl":name==="hyperK"?"K":"water";configureLevel(mode);
+  }
+  function packetDose(substance){
+    if(substance==="water")return {water:.75};
+    if(substance==="NaCl")return {Na:20,Cl:20};
+    return {[substance]:substance==="K"?8:20};
+  }
+  function changePacket(key,substance,sign){
+    const dose=packetDose(substance);
+    if(dose.water)s.c[key].v=clamp(s.c[key].v+sign*dose.water,.35,45);
+    for(const ion of ["Na","K","Cl"])if(dose[ion])s.c[key][ion]=Math.max(0,s.c[key][ion]+sign*dose[ion]);
+  }
+  function placePacket(substance,target){
+    const key=["p","e","i"][target],old=manualPackets[substance];
+    if(old&&old.key===key)return;
+    if(old)changePacket(old.key,substance,-1);
+    changePacket(key,substance,1);manualPackets[substance]={key};
+    s.scenario=null;setPhase(substance==="water"?"osmotic":substance==="NaCl"?"active":"electric",`${substance==="water"?"Água":substance} aplicada diretamente no ${key==="p"?"vaso":key==="e"?"LEC":"LIC"}; o motor iniciou a redistribuição.`,substance==="water"?"Redistribuição de água":"Resposta à intervenção");
+  }
+  function applyGiantDose(){
+    const rail=document.querySelector(`[data-substance-rail="${selectedSubstance}"]`),dose=$("giant-dose"),pct=+dose.value;if(!pct)return;
+    const key=["p","e","i"][Math.round(+rail.value)],sign=pct/100;
+    if(selectedSubstance==="water")s.c[key].v=clamp(s.c[key].v+sign*1.5,.35,45);
+    else if(selectedSubstance==="NaCl"){s.c[key].Na=Math.max(0,s.c[key].Na+sign*30);s.c[key].Cl=Math.max(0,s.c[key].Cl+sign*30)}
+    else {const max=selectedSubstance==="K"?12:30;s.c[key][selectedSubstance]=Math.max(0,s.c[key][selectedSubstance]+sign*max)}
+    s.scenario=null;setPhase(selectedSubstance==="water"?"osmotic":selectedSubstance==="NaCl"?"active":"electric",`Intervenção manual: ${pct>0?"adicionado":"retirado"} ${selectedSubstance==="water"?"água":selectedSubstance} no ${key==="p"?"vaso":key==="e"?"LEC":"LIC"}.`,selectedSubstance==="water"?"Redistribuição de água":"Resposta à intervenção");
+    dose.value=0;$("giant-dose-out").textContent="0";railManualUntil[selectedSubstance]=Date.now()+5000;render();
+  }
+  document.querySelectorAll("[data-substance-rail]").forEach(rail=>{
+    rail.oninput=()=>{selectedSubstance=rail.dataset.substanceRail;railManualUntil[selectedSubstance]=Date.now()+5000;const target=Math.round(+rail.value);placePacket(selectedSubstance,target);render()};
+    rail.onchange=()=>{rail.value=String(Math.round(+rail.value));render()};
+  });
+  $("giant-dose").oninput=()=>{$("giant-dose-out").textContent=`${+$("giant-dose").value>0?"+":""}${$("giant-dose").value}%`};
+  $("giant-dose").onchange=applyGiantDose;
+  $("sim-speed").oninput=render;
+  document.querySelectorAll("[data-scenario]").forEach(b=>b.onclick=()=>{const name=b.dataset.scenario;if(name==="basal"){reset();return}scenario(name==="meal-na"?"salt":name==="hyper-k"?"hyperK":name)});
+  document.querySelectorAll("[data-action]").forEach(b=>b.onclick=()=>{const a=b.dataset.action;if(a==="reset"){reset(s.mode);return}const key=s.mode===3?"p":"e",place=key==="p"?"vaso":"LEC";if(a==="na"){s.c[key].Na+=20;s.c[key].Cl+=20;setPhase("active",`NaCl adicionado diretamente ao ${place}.`,`Aplicação de NaCl`)}if(a==="k"){s.c[key].K+=8;setPhase("electric",`K⁺ adicionado diretamente ao ${place}.`,`Resposta ao K⁺`)}if(a==="water"){s.c[key].v+=.6;setPhase("osmotic",`Água adicionada diretamente ao ${place}.`,`Redistribuição de água`)}render()});
+  ["na-perm","k-perm","water-perm"].forEach(id=>$(id).oninput=()=>{const v=+$(id).value;$(id+"-out").textContent=v<.1?v.toFixed(3).replace(".",","):v.toFixed(2).replace(".",",");setPhase(id==="water-perm"?"osmotic":"electric",id==="water-perm"?"A permeabilidade à água foi alterada; o equilíbrio osmótico se reajusta.":"A permeabilidade iônica foi alterada; a membrana responde em sua escala elétrica.",id==="water-perm"?"Resposta das aquaporinas":"Resposta dos canais");render()});
+  $("run").onclick=()=>{if(s.lysis){reset(s.mode);return}running=!running;render()};
+  document.querySelectorAll(".modes button").forEach((b,i)=>b.onclick=()=>{const mode=i+1;reset(mode);setPhase(mode===1?"electric":mode===2?"osmotic":"capillary",mode===1?"Nível 1: potencial, canais e bomba na membrana plasmática.":mode===2?"Nível 2: osmose, Donnan e volume entre LEC e LIC.":"Nível 3: vaso, interstício e célula acoplados.");render()});
+  configureLevel(1);particlePool("plasma-particles","p");particlePool("lec-particles","e");particlePool("lic-particles","i");render();setInterval(tick,100);
+})();
+</script>
+</body></html>
