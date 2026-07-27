@@ -739,6 +739,92 @@
       'Consumo_de_O2_Q_e_dif_a-v_Avancado.html'
     ];
 
+    const automaticGroups = {
+      celular: 'celular',
+      'fisiologia celular': 'celular',
+      muscular: 'muscular',
+      osteoarticular: 'osteoarticular',
+      cardiovascular: 'cardiovascular',
+      respiratorio: 'respiratorio',
+      'respiratório': 'respiratorio',
+      integracao: 'integracao',
+      'integração': 'integracao'
+    };
+
+    function normaliseText(value = '') {
+      return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    function titleFromFileName(fileName) {
+      return fileName.replace(/\.html$/i, '').replace(/[_-]+/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
+    }
+
+    function automaticGroup(fileName, title, description, declaredCategory) {
+      const declared = automaticGroups[normaliseText(declaredCategory)];
+      if (declared) return declared;
+      const text = normaliseText(`${fileName} ${title} ${description}`);
+      if (/(contracao|sarcomero|actina|miosina|troponina|muscul)/.test(text)) return 'muscular';
+      if (/(calcio|osso|oste|articul|vitamina d|pth|calcitonina)/.test(text)) return 'osteoarticular';
+      if (/(cardio|coracao|pressao arterial|hemodinam|venos|circul|poiseuille)/.test(text)) return 'cardiovascular';
+      if (/(pulmon|ventila|respira|alveol|hemoglobina|pleura)/.test(text)) return 'respiratorio';
+      if (/(fick|consumo de o2|vo2|cardiopulmonar|integracao cardiorrespiratoria)/.test(text)) return 'integracao';
+      return 'celular';
+    }
+
+    function textFromHtml(html, selector) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      return (doc.querySelector(selector)?.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    async function discoverNewSimulators() {
+      try {
+        const response = await fetch('https://api.github.com/repos/DrMarioNascimento/fisiologia-interativa/contents', {
+          headers: { Accept: 'application/vnd.github+json' }
+        });
+        if (!response.ok) throw new Error('Não foi possível consultar o repositório.');
+        const entries = await response.json();
+        const knownFiles = new Set(simulatorFiles.map(file => decodeURIComponent(file).toLowerCase()));
+
+        const newFiles = entries.filter(entry =>
+          entry.type === 'file' &&
+          entry.name.toLowerCase().endsWith('.html') &&
+          entry.name.toLowerCase() !== 'index.html' &&
+          !knownFiles.has(entry.name.toLowerCase())
+        );
+
+        const discovered = await Promise.all(newFiles.map(async entry => {
+          try {
+            const fileResponse = await fetch(entry.download_url, { cache: 'no-cache' });
+            if (!fileResponse.ok) throw new Error('Arquivo indisponível.');
+            const html = await fileResponse.text();
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const title = textFromHtml(html, 'h1') || doc.querySelector('title')?.textContent?.trim() || titleFromFileName(entry.name);
+            const description = doc.querySelector('meta[name="description"]')?.content?.trim() || textFromHtml(html, '.subtitle') || `Simulador interativo: ${title}.`;
+            const declaredCategory = doc.querySelector('meta[name="sim-category"]')?.content || '';
+            return {
+              file: entry.name,
+              module: {
+                group: automaticGroup(entry.name, title, description, declaredCategory),
+                title,
+                tags: [declaredCategory || 'Fisiologia celular'],
+                objective: description,
+                meta: 'Novo simulador'
+              }
+            };
+          } catch (error) {
+            return null;
+          }
+        }));
+
+        discovered.filter(Boolean).forEach(({ file, module }) => {
+          simulatorFiles.push(file);
+          modules.push(module);
+        });
+      } catch (error) {
+        console.warn('Não foi possível atualizar automaticamente a lista de simuladores.', error);
+      }
+    }
+
     const grid = document.querySelector('#moduleGrid');
     const empty = document.querySelector('#empty');
     const search = document.querySelector('#search');
@@ -850,7 +936,7 @@
       const target = document.querySelector(link.getAttribute('href'));
       if (target) { event.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
     }));
-    render();
+    discoverNewSimulators().finally(render);
   </script>
 </body>
 </html>
