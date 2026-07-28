@@ -8,8 +8,8 @@ O projeto complementa aulas, estudos dirigidos e atividades acadêmicas por meio
 
 ## Acesso
 
-- **Educação Física:** <a href="https://drmarionascimento.github.io/fisiologia-interativa/" target="_blank" rel="noopener noreferrer">drmarionascimento.github.io/fisiologia-interativa</a>
-- **Fisioterapia:** <a href="https://drmarionascimento.github.io/fisiologia-interativa/fisioterapia/" target="_blank" rel="noopener noreferrer">drmarionascimento.github.io/fisiologia-interativa/fisioterapia</a>
+- **Educação Física:** [drmarionascimento.github.io/fisiologia-interativa](https://drmarionascimento.github.io/fisiologia-interativa/)
+- **Fisioterapia:** [drmarionascimento.github.io/fisiologia-interativa/fisioterapia](https://drmarionascimento.github.io/fisiologia-interativa/fisioterapia/)
 - **Hospedagem institucional:** em processo de implantação na infraestrutura da UDESC
 - **Endereço institucional sugerido:** `fisiologia-interativa-sites.cefid.udesc.br`
 
