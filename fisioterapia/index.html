@@ -1,0 +1,943 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Percurso de simuladores interativos de Fisiologia Humana organizado para a Fisioterapia.">
+  <meta name="theme-color" content="#0c5c67">
+  <title>Fisiologia Interativa — Fisioterapia — Prof. Mário César Nascimento</title>
+  <style>
+    :root {
+      --petrol-950: #06383f;
+      --petrol-900: #084953;
+      --petrol-800: #0c5c67;
+      --petrol-700: #11717d;
+      --petrol-100: #d9eff0;
+      --petrol-50: #eef9f9;
+      --orange: #c86635;
+      --orange-soft: #f7e1d5;
+      --ink: #10262b;
+      --muted: #5e7175;
+      --line: #dbe7e8;
+      --surface: #ffffff;
+      --canvas: #f5f9f9;
+      --shadow-sm: 0 10px 28px rgba(8, 73, 83, .08);
+      --shadow-lg: 0 26px 70px rgba(8, 73, 83, .17);
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      position: relative;
+      isolation: isolate;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 92% 5%, rgba(200, 102, 53, .09), transparent 23rem),
+        linear-gradient(180deg, #fff 0%, var(--canvas) 58%, #fff 100%);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    main, footer { position: relative; z-index: 1; }
+
+    button, input, a { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+    img, svg { display: block; max-width: 100%; }
+    [hidden] { display: none !important; }
+
+    .skip-link {
+      position: fixed;
+      z-index: 100;
+      top: 10px;
+      left: 10px;
+      transform: translateY(-160%);
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: var(--ink);
+      color: #fff;
+    }
+    .skip-link:focus { transform: translateY(0); }
+
+    .shell { width: min(calc(100% - 40px), var(--max)); margin-inline: auto; }
+
+    .site-header {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      border-bottom: 1px solid rgba(219, 231, 232, .75);
+      background: rgba(255, 255, 255, .86);
+      backdrop-filter: blur(18px);
+    }
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand-mark {
+      width: 42px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      color: #fff;
+      background: linear-gradient(145deg, var(--petrol-700), var(--petrol-950));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 8px 18px rgba(8, 73, 83, .18);
+    }
+    .brand-mark svg { width: 23px; }
+    .brand-copy { display: grid; line-height: 1.1; }
+    .brand-copy strong { font-size: 1rem; letter-spacing: -.02em; }
+    .brand-copy span { margin-top: 4px; color: var(--muted); font-size: .76rem; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links > a:not(.btn) { color: #355257; font-size: .92rem; text-decoration: none; }
+    .nav-links > a:not(.btn):hover { color: var(--petrol-800); }
+
+    .btn {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-weight: 720;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:focus-visible, .filter:focus-visible, .search input:focus-visible, .icon-btn:focus-visible {
+      outline: 3px solid rgba(200, 102, 53, .35);
+      outline-offset: 3px;
+    }
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--petrol-700), var(--petrol-950));
+      box-shadow: 0 12px 26px rgba(8, 73, 83, .23);
+    }
+    .btn-secondary { border-color: var(--line); background: #fff; color: var(--petrol-900); }
+    .btn-quiet { min-height: 42px; padding-inline: 14px; background: var(--petrol-50); color: var(--petrol-900); }
+    .btn svg { width: 18px; height: 18px; }
+
+    .hero {
+      position: relative;
+      min-height: 640px;
+      display: grid;
+      align-items: center;
+      overflow: clip;
+      padding: 54px 0 68px;
+    }
+    .hero-grid {
+      display: block;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 22px;
+      color: var(--petrol-800);
+      font-size: .78rem;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--orange); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      max-width: 720px;
+      margin-bottom: 24px;
+      font-size: clamp(3.2rem, 6vw, 5.9rem);
+      line-height: .94;
+      letter-spacing: -.065em;
+    }
+    h1 span { color: var(--petrol-700); }
+    .hero-copy > p:not(.eyebrow) {
+      max-width: 620px;
+      margin-bottom: 32px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .hero-proof {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 24px;
+      margin-top: 32px;
+      color: #476166;
+      font-size: .86rem;
+    }
+    .hero-proof span { display: inline-flex; align-items: center; gap: 8px; }
+    .hero-proof svg { width: 17px; color: var(--orange); }
+
+    .visual-stage { position: relative; min-height: 560px; display: grid; place-items: center; }
+    .orbit {
+      position: absolute;
+      width: min(43vw, 540px);
+      aspect-ratio: 1;
+      border: 1px solid rgba(17, 113, 125, .13);
+      border-radius: 50%;
+      animation: spin 26s linear infinite;
+    }
+    .orbit::before, .orbit::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--orange);
+      box-shadow: 0 0 0 7px rgba(200, 102, 53, .1);
+    }
+    .orbit::before { top: 8%; left: 20%; }
+    .orbit::after { right: 4%; bottom: 30%; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .sim-window {
+      position: relative;
+      width: min(100%, 610px);
+      min-height: 414px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, .8);
+      border-radius: 30px;
+      background: rgba(255, 255, 255, .86);
+      box-shadow: var(--shadow-lg), inset 0 1px 0 #fff;
+      transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
+      backdrop-filter: blur(12px);
+    }
+    .cardio-window { width: min(100%, 940px); height: min(72vh, 720px); min-height: 560px; transform: none; background: #f2f7fb; }
+    .cardio-scene { position: absolute; inset: 0; display: grid; place-items: center; overflow: hidden; }
+    .cardio-scene > svg { width: 100%; height: 100%; display: block; }
+    .cardio-window::after { content: ""; position: absolute; z-index: 2; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(255,255,255,.12), transparent 22%, transparent 78%, rgba(3,29,33,.08)); }
+    .cardio-caption { position: absolute; z-index: 3; left: 18px; bottom: 16px; display: flex; align-items: center; gap: 9px; padding: 9px 13px; border: 1px solid rgba(255,255,255,.78); border-radius: 999px; color: var(--petrol-950); background: rgba(255,255,255,.88); box-shadow: var(--shadow-sm); backdrop-filter: blur(12px); font-size: .72rem; font-weight: 800; }
+    .cardio-caption i { width: 8px; aspect-ratio: 1; border-radius: 50%; background: #28a96b; box-shadow: 0 0 0 5px rgba(40,169,107,.13); animation: livePulse 1.8s ease-in-out infinite; }
+    @keyframes livePulse { 50% { transform: scale(1.35); opacity: .68; } }
+
+    .hero { min-height: auto; padding: 24px 0 8px; overflow: visible; }
+    .intro-banner {
+      min-height: 190px;
+      display: grid;
+      grid-template-columns: 136px minmax(0, 1fr) 150px;
+      gap: 28px;
+      align-items: center;
+      padding: 28px 32px;
+      border: 1px solid #d7e2ec;
+      border-radius: 30px;
+      background: linear-gradient(145deg, #fff 0%, #fff 68%, #edf5fb 100%);
+      box-shadow: 0 20px 54px rgba(44, 75, 107, .12);
+    }
+    .heart-badge, .avatar-badge { display: grid; place-items: center; background: transparent; }
+    .heart-badge { width: 128px; aspect-ratio: 1; }
+    .heart-badge svg { width: 86px; overflow: visible; filter: drop-shadow(0 8px 9px rgba(137,21,43,.25)); animation: poeticHeartbeat 1.55s ease-in-out infinite; transform-origin: center; }
+    @keyframes poeticHeartbeat { 0%, 34%, 100% { transform: scale(1); } 10% { transform: scale(1.1); } 18% { transform: scale(.98); } 25% { transform: scale(1.055); } }
+    .hero-message h1 { max-width: none; margin: 0 0 8px; color: #0c2040; font-size: clamp(2.35rem, 4.2vw, 4.3rem); line-height: 1; letter-spacing: -.055em; }
+    .hero-message p { max-width: 950px; margin: 0; color: #56708e; font-size: clamp(1rem, 1.55vw, 1.3rem); line-height: 1.52; }
+    .avatar-badge { width: 146px; height: 132px; overflow: visible; justify-self: end; }
+    .avatar-badge img { width: 96px; height: 126px; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 10px 13px rgba(30,75,104,.24)); }
+
+    .ambient-layer { position: fixed; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
+    .ambient { position: absolute; left: var(--x); top: var(--y); width: var(--s); aspect-ratio: 1; opacity: var(--o, .18); animation: ambientFloat var(--d, 18s) ease-in-out var(--delay, 0s) infinite alternate; }
+    .ambient-cell { border: 1px solid rgba(42,169,137,.35); border-radius: 50%; background: radial-gradient(circle at 36% 34%, rgba(255,255,255,.9) 0 12%, transparent 13%), radial-gradient(circle at 52% 54%, #8c55ca 0 13%, #af7bdc 14% 21%, transparent 22%), radial-gradient(circle, rgba(142,226,202,.82), rgba(62,177,147,.46)); box-shadow: 0 10px 24px rgba(19,126,112,.12); }
+    .ambient-molecule { border-radius: 50%; background: radial-gradient(circle at 34% 30%, #fff 0 11%, transparent 12%), linear-gradient(145deg, #ffb56f, #d75c33); box-shadow: calc(var(--s) * .72) calc(var(--s) * .28) 0 calc(var(--s) * -.22) #5d9eea, calc(var(--s) * -.48) calc(var(--s) * .72) 0 calc(var(--s) * -.3) #7dd6bd; }
+    @keyframes ambientFloat { to { transform: translate3d(var(--dx, 18px), var(--dy, -28px), 0) rotate(10deg); } }
+    .window-top { height: 48px; display: flex; align-items: center; gap: 7px; padding: 0 18px; border-bottom: 1px solid var(--line); }
+    .window-top i { width: 9px; aspect-ratio: 1; border-radius: 50%; background: #c5d4d6; }
+    .window-top i:first-child { background: var(--orange); }
+    .window-top span { margin-left: auto; color: #789095; font-size: .72rem; }
+    .sim-body { padding: 22px; display: grid; gap: 18px; }
+    .sim-label { display: flex; align-items: center; justify-content: space-between; color: var(--petrol-900); font-size: .82rem; font-weight: 750; }
+    .sim-label small { color: var(--muted); font-weight: 550; }
+    .physio-scene { min-height: 236px; display: grid; grid-template-columns: 1fr 1.18fr; gap: 20px; align-items: center; }
+    .lung-map { position: relative; width: 190px; aspect-ratio: 1; margin: auto; }
+    .lung {
+      position: absolute;
+      top: 22px;
+      width: 76px;
+      height: 178px;
+      border: 2px solid rgba(17,113,125,.6);
+      background: linear-gradient(150deg, #f3fbfb, #ccebed);
+      box-shadow: inset 0 -18px 30px rgba(17,113,125,.1);
+    }
+    .lung.left { left: 13px; border-radius: 60% 38% 54% 42%; transform: rotate(4deg); }
+    .lung.right { right: 13px; border-radius: 38% 60% 42% 54%; transform: rotate(-4deg); }
+    .trachea { position: absolute; z-index: 2; top: 5px; left: calc(50% - 7px); width: 14px; height: 93px; border-radius: 10px; background: var(--petrol-700); }
+    .bronchus { position: absolute; z-index: 3; top: 78px; left: calc(50% - 40px); width: 80px; height: 9px; border-radius: 9px; background: var(--petrol-700); }
+    .bronchus::before { content: ""; position: absolute; left: -2px; top: 13px; width: 48px; height: 7px; border-radius: 7px; background: var(--petrol-700); transform: rotate(36deg); }
+    .bronchus::after { content: ""; position: absolute; right: -2px; top: 13px; width: 48px; height: 7px; border-radius: 7px; background: var(--petrol-700); transform: rotate(-36deg); }
+    .pressure-card { display: grid; gap: 12px; }
+    .mini-readout { padding: 12px 14px; border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+    .mini-readout span { display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: .72rem; }
+    .mini-readout b { color: var(--ink); font-size: 1.1rem; }
+    .wave { width: 100%; height: 34px; margin-top: 6px; }
+    .wave path { fill: none; stroke: var(--orange); stroke-width: 3; stroke-linecap: round; }
+    .sim-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .sim-controls span { padding: 9px 6px; border-radius: 12px; color: var(--petrol-900); background: var(--petrol-50); text-align: center; font-size: .7rem; font-weight: 750; }
+    .sim-controls span:first-child { color: #fff; background: var(--petrol-800); }
+
+    .float-card {
+      position: absolute;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 16px;
+      border: 1px solid rgba(219,231,232,.85);
+      border-radius: 18px;
+      background: rgba(255,255,255,.92);
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(12px);
+    }
+    .float-card b { display: block; font-size: .85rem; }
+    .float-card span { color: var(--muted); font-size: .7rem; }
+    .float-card svg { width: 22px; color: var(--orange); }
+    .float-one { top: 18px; right: -12px; }
+    .float-two { left: -28px; bottom: 28px; }
+
+    section { scroll-margin-top: 88px; }
+    .modules { padding: 18px 0 100px; }
+    .section-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, .52fr); gap: 60px; align-items: end; margin-bottom: 36px; }
+    .section-heading h2 { max-width: 760px; margin-bottom: 0; font-size: clamp(2.4rem, 4vw, 4.3rem); line-height: 1; letter-spacing: -.05em; }
+    .section-heading p { margin-bottom: 3px; color: var(--muted); }
+    .tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 26px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter {
+      min-height: 40px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #496469;
+      background: #fff;
+      font-size: .83rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .filter[aria-pressed="true"] { border-color: var(--petrol-800); color: #fff; background: var(--petrol-800); }
+    .search { position: relative; min-width: min(100%, 270px); }
+    .search svg { position: absolute; top: 50%; left: 14px; width: 18px; color: #7c9296; transform: translateY(-50%); }
+    .search input { width: 100%; height: 44px; padding: 0 14px 0 42px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); background: #fff; }
+    .search input::placeholder { color: #809397; }
+
+    .curriculum-list { display: grid; gap: 68px; }
+    .curriculum-block { min-width: 0; }
+    .curriculum-head { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: 18px; align-items: start; margin-bottom: 22px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+    .curriculum-number { width: 50px; aspect-ratio: 1; display: grid; place-items: center; border-radius: 16px; color: #fff; background: var(--group-color, var(--petrol-800)); font-size: .88rem; font-weight: 850; }
+    .curriculum-kicker { margin: 1px 0 5px; color: var(--group-color, var(--orange)); font-size: .68rem; font-weight: 850; letter-spacing: .11em; text-transform: uppercase; }
+    .mindmap-links { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 12px; margin: 0 0 7px; }
+    .mindmap-links > span { color: var(--group-color, var(--petrol-800)); font-size: .72rem; font-weight: 760; }
+    .mindmap-trigger { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 7px; padding: 0; border: 0; color: var(--group-color, var(--petrol-800)); background: transparent; font-size: .72rem; font-weight: 760; cursor: pointer; }
+    .mindmap-links .mindmap-trigger { margin: 0; }
+    .mindmap-trigger.is-featured { padding: 5px 10px; border-radius: 999px; color: #fff; background: var(--group-color, var(--petrol-800)); box-shadow: 0 7px 18px color-mix(in srgb, var(--group-color) 34%, transparent); }
+    .mindmap-trigger.is-featured::after { color: var(--group-color, var(--petrol-800)); background: #fff; box-shadow: none; }
+    .mindmap-trigger strong { font-weight: 900; }
+    .mindmap-trigger::after { content: "↗"; width: 21px; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; color: #fff; background: var(--group-color, var(--petrol-800)); font-size: .67rem; box-shadow: 0 5px 13px color-mix(in srgb, var(--group-color) 24%, transparent); transition: transform .2s ease; }
+    .mindmap-trigger:hover::after { transform: translate(2px, -2px); }
+    .mindmap-trigger:focus-visible { outline: 3px solid color-mix(in srgb, var(--group-color) 30%, transparent); outline-offset: 4px; border-radius: 6px; }
+    .curriculum-head h3 { margin: 0; font-size: clamp(1.45rem, 2.2vw, 2rem); letter-spacing: -.035em; }
+    .curriculum-head p:last-child { max-width: 780px; margin: 7px 0 0; color: var(--muted); font-size: .88rem; }
+    .curriculum-count { padding: 7px 10px; border-radius: 999px; color: var(--group-color, var(--petrol-800)); background: #f2f7f8; font-size: .7rem; font-weight: 800; white-space: nowrap; }
+    .module-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+    .module-card {
+      min-width: 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 168px;
+      padding: 17px 21px 16px 27px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      color: var(--ink);
+      background: linear-gradient(145deg, #fff 0%, #fff 64%, #f2f7fb 100%);
+      box-shadow: var(--shadow-sm);
+      text-decoration: none;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .module-card:hover { border-color: rgba(17,113,125,.28); transform: translateY(-6px); box-shadow: 0 20px 44px rgba(8,73,83,.13); }
+    .module-card::before { content: ""; position: absolute; z-index: 0; inset: 0 auto 0 0; width: 7px; background: var(--group-color, var(--petrol-800)); }
+    .module-card::after { content: ""; position: absolute; z-index: 0; right: -68px; bottom: -96px; width: 200px; aspect-ratio: 1; border: 1px solid color-mix(in srgb, var(--group-color) 28%, transparent); border-radius: 50%; background: radial-gradient(circle at 46% 42%, color-mix(in srgb, var(--group-color) 25%, white) 0%, color-mix(in srgb, var(--group-color) 13%, transparent) 42%, transparent 72%); box-shadow: 0 0 42px color-mix(in srgb, var(--group-color) 23%, transparent), inset 0 0 30px color-mix(in srgb, var(--group-color) 12%, transparent); }
+    .module-card > * { position: relative; z-index: 1; }
+    .module-category { margin-bottom: 6px; color: var(--group-color, var(--petrol-800)); font-size: .62rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+    .module-card h3 { display: -webkit-box; overflow: hidden; margin-bottom: 8px; font-size: 1.1rem; line-height: 1.08; letter-spacing: -.025em; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
+    .module-card p { flex: 1; display: -webkit-box; overflow: hidden; margin-bottom: 10px; color: var(--muted); font-size: .77rem; line-height: 1.4; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
+    .open-link { align-self: flex-start; color: var(--group-color, var(--petrol-800)); font-size: .74rem; font-weight: 850; text-decoration: none; }
+    .open-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+    .empty { grid-column: 1 / -1; padding: 52px 20px; border: 1px dashed #b9cdcf; border-radius: var(--radius-md); color: var(--muted); text-align: center; }
+
+    .use { padding: 96px 0; background: var(--petrol-950); color: #fff; }
+    .use-grid { display: grid; grid-template-columns: minmax(0, .72fr) minmax(520px, 1.28fr); gap: clamp(48px, 8vw, 110px); align-items: center; }
+    .use .eyebrow { color: #8ad6dc; }
+    .use h2 { margin-bottom: 24px; font-size: clamp(2.5rem, 4.7vw, 4.7rem); line-height: 1; letter-spacing: -.055em; }
+    .use-copy > p:not(.eyebrow) { color: #b8d0d3; font-size: 1.06rem; }
+    .access-note { margin-top: 28px; padding: 17px 18px; border: 1px solid rgba(255,255,255,.12); border-radius: 17px; color: #d9e7e8; background: rgba(255,255,255,.06); font-size: .85rem; }
+    .steps { display: grid; gap: 12px; }
+    .step { display: grid; grid-template-columns: 54px 1fr auto; gap: 18px; align-items: center; padding: 21px; border: 1px solid rgba(255,255,255,.13); border-radius: 20px; background: rgba(255,255,255,.06); }
+    .step-number { width: 48px; aspect-ratio: 1; display: grid; place-items: center; border-radius: 16px; color: #fff; background: linear-gradient(145deg, var(--orange), #9f4920); font-weight: 850; }
+    .step h3 { margin: 0 0 4px; font-size: 1rem; }
+    .step p { margin: 0; color: #aac4c7; font-size: .82rem; }
+    .step svg { width: 22px; color: #65bcc4; }
+
+    footer { padding: 34px 0; border-top: 1px solid var(--line); background: #fff; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+    .signature { display: flex; align-items: center; gap: 14px; }
+    .signature img { width: 68px; aspect-ratio: 1; object-fit: contain; border: 1px solid var(--line); border-radius: 18px; background: #fff; box-shadow: var(--shadow-sm); }
+    .signature strong { display: block; font-size: .92rem; }
+    .signature span { color: var(--muted); font-size: .78rem; }
+    .footer-links { display: flex; gap: 20px; color: var(--muted); font-size: .8rem; }
+    .footer-links a { text-decoration: none; }
+    .footer-links a:hover { color: var(--petrol-800); }
+
+    .modal {
+      position: fixed;
+      z-index: 60;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(3, 29, 33, .72);
+      backdrop-filter: blur(10px);
+    }
+    .modal-card { width: min(100%, 1000px); max-height: 90vh; overflow: auto; border-radius: 28px; background: #fff; box-shadow: 0 34px 90px rgba(0,0,0,.3); }
+    .modal-head { position: sticky; z-index: 2; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 22px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.94); backdrop-filter: blur(12px); }
+    .modal-head div { min-width: 0; }
+    .modal-head h2 { margin: 0; font-size: 1.25rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .modal-head p { margin: 3px 0 0; color: var(--muted); font-size: .75rem; }
+    .icon-btn { width: 42px; aspect-ratio: 1; flex: 0 0 auto; display: grid; place-items: center; border: 0; border-radius: 50%; color: var(--petrol-900); background: var(--petrol-50); cursor: pointer; }
+    .icon-btn svg { width: 20px; }
+    .modal-body { padding: 24px; }
+    .modal-visual { aspect-ratio: 16 / 9; overflow: hidden; border: 1px solid var(--line); border-radius: 22px; background: #e8f0f2; }
+    .modal-visual img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: top center; }
+    .modal-copy { display: grid; grid-template-columns: 1.1fr .9fr; gap: 32px; padding: 25px 4px 4px; }
+    .modal-copy h3 { margin-bottom: 9px; }
+    .modal-copy p { margin-bottom: 0; color: var(--muted); }
+    .mindmap-card { width: min(96vw, 1480px); }
+    .mindmap-body { padding: 16px; }
+    .mindmap-visual { overflow: hidden; border: 1px solid var(--line); border-radius: 20px; background: #f6f3ee; }
+    .mindmap-visual img { width: 100%; height: auto; display: block; }
+    body.modal-open { overflow: hidden; }
+
+    .welcome-modal { position: fixed; z-index: 100; inset: 0; display: grid; place-items: center; padding: 24px; background: rgba(3,29,33,.76); backdrop-filter: blur(16px); }
+    .welcome-card { position: relative; width: min(100%, 760px); max-height: 92vh; overflow: auto; padding: clamp(28px, 5vw, 52px); border: 1px solid rgba(255,255,255,.8); border-radius: 32px; background: linear-gradient(145deg, #fff 0%, #fff 68%, #edf7f8 100%); box-shadow: 0 38px 100px rgba(0,0,0,.34); }
+    .welcome-card::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 9px; border-radius: 32px 0 0 32px; background: linear-gradient(180deg, var(--petrol-700), var(--orange)); }
+    .welcome-card::after { content: ""; position: absolute; right: -110px; bottom: -150px; width: 330px; aspect-ratio: 1; border: 1px solid rgba(17,113,125,.13); border-radius: 50%; background: rgba(217,239,240,.32); }
+    .welcome-content { position: relative; z-index: 1; }
+    .welcome-brand { display: flex; align-items: center; gap: 13px; margin-bottom: 25px; }
+    .welcome-brand .brand-mark { flex: 0 0 auto; }
+    .welcome-brand strong { display: block; font-size: .98rem; }
+    .welcome-brand span { color: var(--muted); font-size: .76rem; }
+    .welcome-eyebrow { margin: 0 0 8px; color: var(--orange); font-size: .7rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .welcome-card h2 { margin-bottom: 14px; font-size: clamp(2.2rem, 5vw, 4rem); line-height: .98; letter-spacing: -.055em; }
+    .welcome-card h2 span { color: var(--petrol-700); }
+    .welcome-intro { max-width: 650px; margin-bottom: 24px; color: var(--muted); font-size: 1rem; }
+    .welcome-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 0 0 18px; padding: 0; list-style: none; }
+    .welcome-steps li { min-height: 108px; padding: 15px; border: 1px solid var(--line); border-radius: 17px; background: rgba(255,255,255,.78); }
+    .welcome-steps b { width: 28px; aspect-ratio: 1; display: grid; place-items: center; margin-bottom: 9px; border-radius: 9px; color: #fff; background: var(--petrol-800); font-size: .7rem; }
+    .welcome-steps span { color: #355257; font-size: .82rem; font-weight: 700; }
+    .didactic-warning { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 24px; padding: 15px 17px; border: 1px solid #efc9b4; border-radius: 17px; color: #793b20; background: #fff5ef; }
+    .didactic-warning svg { width: 21px; flex: 0 0 auto; margin-top: 1px; color: var(--orange); }
+    .didactic-warning p { margin: 0; font-size: .86rem; }
+    .didactic-warning strong { display: block; margin-bottom: 2px; }
+    .welcome-action { width: 100%; min-height: 52px; }
+    body.welcome-open { overflow: hidden; }
+
+    @media (max-width: 1050px) {
+      .hero { min-height: auto; }
+      .visual-stage { min-height: 520px; }
+      .orbit { width: 520px; }
+      .sim-window { width: min(88vw, 650px); transform: none; }
+      .module-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .use-grid { grid-template-columns: 1fr; }
+      .use-copy { max-width: 760px; }
+    }
+
+    @media (max-width: 720px) {
+      .shell { width: min(calc(100% - 28px), var(--max)); }
+      .nav { min-height: 66px; }
+      .brand-copy span, .nav-links > a:not(.btn) { display: none; }
+      .nav-links { gap: 8px; }
+      .nav .btn { min-height: 40px; padding-inline: 13px; font-size: .78rem; }
+      .hero { min-height: auto; padding: 14px 0 5px; }
+      .intro-banner { grid-template-columns: 84px minmax(0, 1fr) 88px; gap: 14px; min-height: 150px; padding: 20px; border-radius: 24px; }
+      .heart-badge { width: 78px; }
+      .heart-badge svg { width: 54px; }
+      .avatar-badge { width: 84px; height: 94px; }
+      .avatar-badge img { width: 62px; height: 90px; object-fit: contain; object-position: center bottom; }
+      .hero-message h1 { font-size: clamp(1.65rem, 6vw, 2.35rem); }
+      .hero-message p { font-size: .84rem; line-height: 1.42; }
+      h1 { font-size: clamp(3rem, 15vw, 4.5rem); }
+      .hero-actions { align-items: stretch; }
+      .hero-actions .btn { flex: 1 1 190px; }
+      .visual-stage { min-height: 400px; }
+      .sim-window { width: 100%; min-height: 370px; border-radius: 23px; }
+      .cardio-window { min-height: 400px; }
+      .physio-scene { grid-template-columns: .9fr 1.1fr; gap: 8px; }
+      .lung-map { width: 148px; transform: scale(.8); }
+      .sim-body { padding: 16px; }
+      .float-one { top: -16px; right: 2px; }
+      .float-two { display: none; }
+      .section-heading { grid-template-columns: 1fr; gap: 18px; }
+      .modules { padding: 14px 0 70px; }
+      .tools { align-items: stretch; }
+      .filters { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+      .filter { flex: 0 0 auto; }
+      .search { width: 100%; }
+      .module-grid { grid-template-columns: 1fr; }
+      .curriculum-list { gap: 52px; }
+      .curriculum-head { grid-template-columns: 48px minmax(0, 1fr); gap: 14px; }
+      .curriculum-number { width: 44px; border-radius: 14px; }
+      .curriculum-count { grid-column: 2; justify-self: start; }
+      .module-card { min-height: 164px; }
+      .module-content h3, .module-content p { min-height: auto; }
+      .use { padding: 74px 0; }
+      .step { grid-template-columns: 48px 1fr; }
+      .step > svg { display: none; }
+      .footer-inner { align-items: flex-start; flex-direction: column; }
+      .footer-links { flex-wrap: wrap; }
+      .modal { padding: 10px; }
+      .modal-card { max-height: 96vh; border-radius: 20px; }
+      .modal-body { padding: 14px; }
+      .modal-visual { border-radius: 14px; }
+      .modal-copy { grid-template-columns: 1fr; gap: 18px; }
+      .welcome-modal { padding: 10px; }
+      .welcome-card { padding: 27px 22px 24px 28px; border-radius: 22px; }
+      .welcome-card::before { width: 7px; border-radius: 22px 0 0 22px; }
+      .welcome-steps { grid-template-columns: 1fr; }
+      .welcome-steps li { min-height: auto; display: grid; grid-template-columns: 28px 1fr; gap: 11px; align-items: center; }
+      .welcome-steps b { margin: 0; }
+      .ambient:nth-child(n+5) { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Ir para o conteúdo</a>
+
+  <header class="site-header">
+    <div class="shell nav">
+      <a class="brand" href="#inicio" aria-label="Fisiologia Interativa — início">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 14c3.2-7.8 4.7 3.2 8-5s4.5 4.7 8-2"/><path d="M4 19h16"/></svg>
+        </span>
+        <span class="brand-copy"><strong>Fisiologia Interativa</strong><span>Explore mecanismos. Conecte sistemas.</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="#simuladores">Simuladores</a>
+        <a class="btn btn-primary" href="#como-usar">Como usar</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="ambient-layer" aria-hidden="true">
+    <span class="ambient ambient-cell" style="--x:3%;--y:18%;--s:54px;--o:.25;--d:17s;--dx:20px;--dy:-34px"></span>
+    <span class="ambient ambient-molecule" style="--x:91%;--y:13%;--s:21px;--o:.32;--d:14s;--delay:-4s;--dx:-24px;--dy:30px"></span>
+    <span class="ambient ambient-cell" style="--x:94%;--y:47%;--s:78px;--o:.21;--d:22s;--delay:-8s;--dx:-31px;--dy:-22px"></span>
+    <span class="ambient ambient-molecule" style="--x:5%;--y:70%;--s:17px;--o:.30;--d:13s;--delay:-6s;--dx:26px;--dy:-36px"></span>
+    <span class="ambient ambient-cell" style="--x:78%;--y:82%;--s:43px;--o:.22;--d:19s;--delay:-2s;--dx:18px;--dy:-30px"></span>
+    <span class="ambient ambient-molecule" style="--x:22%;--y:89%;--s:14px;--o:.28;--d:16s;--delay:-10s;--dx:-22px;--dy:27px"></span>
+    <span class="ambient ambient-cell" style="--x:48%;--y:7%;--s:32px;--o:.18;--d:20s;--delay:-5s;--dx:28px;--dy:20px"></span>
+    <span class="ambient ambient-molecule" style="--x:68%;--y:38%;--s:12px;--o:.25;--d:12s;--delay:-3s;--dx:-18px;--dy:-25px"></span>
+  </div>
+
+  <main id="conteudo" tabindex="-1">
+    <section class="hero" id="inicio">
+      <div class="shell">
+        <div class="intro-banner">
+          <div class="heart-badge" aria-hidden="true">
+            <svg viewBox="0 0 120 110" role="presentation">
+              <defs>
+                <radialGradient id="poeticHeart" cx="32%" cy="22%" r="82%">
+                  <stop offset="0%" stop-color="#ff9aa6"/>
+                  <stop offset="38%" stop-color="#ef4055"/>
+                  <stop offset="74%" stop-color="#bd1632"/>
+                  <stop offset="100%" stop-color="#750a22"/>
+                </radialGradient>
+                <linearGradient id="heartShine" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity=".72"/>
+                  <stop offset="58%" stop-color="#ffffff" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <path d="M60 102C43 88 14 67 8 42 2 17 21 5 39 9c10 2 17 9 21 18 5-9 12-16 22-18 18-4 37 8 31 33-6 25-35 46-53 60Z" fill="url(#poeticHeart)" stroke="#7d0b23" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M25 25c9-8 20-6 27 3" fill="none" stroke="url(#heartShine)" stroke-width="7" stroke-linecap="round" opacity=".72"/>
+            </svg>
+          </div>
+          <div class="hero-message">
+            <h1>Fisiologia Interativa</h1>
+            <p>Viver não é apenas existir; é compreender os processos que nos sustentam. Fisiologia não é só conteúdo de prova — é vida, é ferramenta, é cultura em nossos próprios corpos.</p>
+          </div>
+          <div class="avatar-badge">
+            <img src="../assets/avatar-prof-mario.webp" alt="Avatar do Prof. Mário César Nascimento">
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+    <section class="modules" id="simuladores">
+      <div class="shell">
+        <div class="section-heading">
+          <div><p class="eyebrow">Percurso da Fisioterapia</p><h2>Do detalhe celular à integração cardiorrespiratória.</h2></div>
+          <p>Os mesmos simuladores, organizados para explorar relações fisiológicas relevantes à funcionalidade, à recuperação e ao raciocínio clínico-funcional.</p>
+        </div>
+
+        <div class="tools">
+          <div class="filters" role="group" aria-label="Filtrar simuladores por sistema">
+            <button class="filter" type="button" data-filter="todos" aria-pressed="true">Todos</button>
+            <button class="filter" type="button" data-filter="celular" aria-pressed="false">Celular e transporte</button>
+            <button class="filter" type="button" data-filter="muscular" aria-pressed="false">Músculos</button>
+            <button class="filter" type="button" data-filter="cardiovascular" aria-pressed="false">Cardiovascular</button>
+            <button class="filter" type="button" data-filter="respiratorio" aria-pressed="false">Respiratório</button>
+            <button class="filter" type="button" data-filter="integracao" aria-pressed="false">Integração</button>
+          </div>
+          <label class="search">
+            <span class="sr-only" hidden>Buscar simulador</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <input id="search" type="search" placeholder="Buscar simulador" autocomplete="off">
+          </label>
+        </div>
+
+        <div class="curriculum-list" id="moduleGrid"></div>
+        <p class="empty" id="empty" hidden>Nenhum simulador encontrado com esse filtro.</p>
+      </div>
+    </section>
+
+    <section class="use" id="como-usar">
+      <div class="shell use-grid">
+        <div class="use-copy">
+          <p class="eyebrow">Objetivo didático</p>
+          <h2>Visualizar. Manipular. Compreender.</h2>
+          <p>Cada simulador transforma relações abstratas em experiências observáveis. O estudante modifica variáveis, acompanha respostas e constrói explicações fisiológicas com base no que acontece na tela.</p>
+          <div class="access-note"><strong>Formas de acesso:</strong> navegador no computador, tablet ou smartphone. Não exige instalação para uso da versão web.</div>
+        </div>
+        <div class="steps">
+          <article class="step"><span class="step-number">01</span><div><h3>Relembre o conteúdo no mapa mental</h3><p>Retome os conceitos essenciais antes de iniciar a exploração do simulador.</p></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></article>
+          <article class="step"><span class="step-number">02</span><div><h3>Selecione um estado fisiológico</h3><p>Comece pelo normal e compare exercício, repouso ou condições específicas.</p></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></article>
+          <article class="step"><span class="step-number">03</span><div><h3>Modifique uma variável</h3><p>Ajuste pressões, volumes, frequência, resistência, complacência ou ativação.</p></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></article>
+          <article class="step"><span class="step-number">04</span><div><h3>Interprete a resposta integrada</h3><p>Observe gráficos e indicadores para explicar o encadeamento de causa e efeito.</p></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <div class="signature"><img src="../assets/MCN.png" alt="Avatar do Prof. Mário diante do computador"><div><strong>Prof. Mário César Nascimento. PhD ©</strong><span>Fisiologia Humana • UDESC</span></div></div>
+      <div class="footer-links"><a href="#inicio">Voltar ao topo</a></div>
+    </div>
+  </footer>
+
+  <div class="welcome-modal" id="welcomeModal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+    <div class="welcome-card">
+      <div class="welcome-content">
+        <div class="welcome-brand">
+          <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 14c3.2-7.8 4.7 3.2 8-5s4.5 4.7 8-2"/><path d="M4 19h16"/></svg></span>
+          <div><strong>Fisiologia Interativa</strong><span>Orientação para a experiência didática</span></div>
+        </div>
+        <p class="welcome-eyebrow">Antes de explorar</p>
+        <h2 id="welcomeTitle">Visualizar. Manipular. <span>Compreender.</span></h2>
+        <p class="welcome-intro">Cada simulador transforma relações fisiológicas abstratas em experiências observáveis. Modifique variáveis, acompanhe as respostas e construa explicações com base no que acontece na tela.</p>
+        <ol class="welcome-steps">
+          <li><b>01</b><span>Relembre o conteúdo no mapa mental.</span></li>
+          <li><b>02</b><span>Selecione um estado fisiológico.</span></li>
+          <li><b>03</b><span>Modifique uma variável.</span></li>
+          <li><b>04</b><span>Interprete a resposta integrada.</span></li>
+        </ol>
+        <div class="didactic-warning">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 2.8 19h18.4L12 3Z"/><path d="M12 9v4M12 17h.01"/></svg>
+          <p><strong>Aviso importante</strong>Simuladores para fins didáticos de aprendizagem. Não recomendados para prescrição a alunos ou pacientes.</p>
+        </div>
+        <button class="btn btn-primary welcome-action" id="welcomeAccept" type="button">Entendi — explorar os simuladores</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="mindmapModal" role="dialog" aria-modal="true" aria-labelledby="mindmapTitle" hidden>
+    <div class="modal-card mindmap-card">
+      <div class="modal-head"><div><h2 id="mindmapTitle">Mapa mental</h2><p>Relembre o conteúdo antes de explorar os simuladores</p></div><button class="icon-btn" id="closeMindmap" type="button" aria-label="Fechar mapa mental"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+      <div class="mindmap-body"><div class="mindmap-visual"><img id="mindmapImage" src="" alt=""></div></div>
+    </div>
+  </div>
+
+  <script>
+    const curriculum = [
+      {id:'celular', number:'01', color:'#6A3D9A', title:'Fisiologia celular, transporte de substâncias e potenciais de ação', description:'Membrana plasmática, gradientes eletroquímicos, transporte ativo e geração de sinais elétricos.', mindmap:'../assets/maps/organizacao-funcional-membranas.webp', mindmapTitle:'Organização funcional e membranas'},
+      {id:'muscular', number:'02', color:'#E87513', title:'Excitabilidade e Sistema Muscular', description:'Da excitabilidade e condução à placa motora, ao sarcômero, à força, ao controle motor e aos tipos de contração.', mindmap:'../assets/maps/excitabilidade-sistema-muscular.webp', mindmapTitle:'Excitabilidade e Sistema Muscular'},
+      {id:'cardiovascular', number:'03', color:'#D8393E', title:'Sistema cardiovascular', description:'Sangue, circulação, hemodinâmica, microcirculação, controle da pressão arterial e adaptações cardiovasculares.', mindmaps:[
+        {src:'../assets/maps/cardiovascular-01-sangue.webp', title:'Sistema Cardiovascular — Sangue'},
+        {src:'../assets/maps/cardiovascular-02-circulacao-hemodinamica.webp', title:'Sistema Cardiovascular — Circulação e Hemodinâmica'},
+        {src:'../assets/maps/cardiovascular-03-regulacao-adaptacoes.webp', title:'Sistema Cardiovascular — Regulação e Adaptações'}
+      ]},
+      {id:'respiratorio', number:'04', color:'#1976B9', title:'Sistema respiratório', description:'Estrutura e mecânica ventilatória, trocas gasosas, controle da ventilação e biofeedback respiratório.', mindmaps:[
+        {src:'../assets/maps/respiratorio-01-estrutura-mecanica-ventilacao.webp', title:'Sistema Respiratório — Estrutura, Mecânica e Ventilação'},
+        {src:'../assets/maps/respiratorio-02-trocas-gasosas-controle.webp', title:'Sistema Respiratório — Trocas Gasosas e Controle'},
+        {src:'../assets/maps/respiratorio-03-biofeedback.webp', title:'Biofeedback Respiratório', label:'Biofeedback', featured:true}
+      ]},
+      {id:'integracao', number:'05', color:'#0B7C82', title:'Integração cardiorrespiratória', description:'Respostas integradas do coração, pulmões, circulação e metabolismo em diferentes estados fisiológicos.', mindmap:'../assets/maps/integracao-cardiorrespiratoria.webp', mindmapTitle:'Integração Cardiorrespiratória'}
+    ];
+
+    const modules = [
+      {group:'celular', title:'Potencial de ação na membrana', tags:['Fisiologia celular','Membrana'], shot:'assets/screenshots/potencial-acao-membrana.jpg', objective:'Acompanhar em sete etapas as mudanças de permeabilidade, os fluxos de Na⁺ e K⁺ e a variação do potencial de membrana.', use:'Introdução guiada ao potencial de repouso, despolarização, repolarização e hiperpolarização.', meta:'7 etapas'},
+      {group:'celular', title:'Potencial de ação do neurônio', tags:['Fisiologia celular','Neurônio'], shot:'assets/screenshots/neuronio-interativo.jpg', objective:'Visualizar o impulso nervoso, a membrana ampliada e a abertura sequencial dos canais dependentes de voltagem.', use:'Demonstração contínua ou por etapas dos eventos elétricos que constituem o potencial de ação.', meta:'Fluxos iônicos'},
+      {group:'celular', title:'Transporte ativo secundário — SGLT', tags:['Transporte','Na⁺–glicose'], shot:'assets/screenshots/sglt-transporte.jpg', objective:'Relacionar o gradiente de Na⁺, a Na⁺/K⁺ ATPase e o cotransporte de glicose através da membrana.', use:'Discussão de energia potencial, transporte primário e secundário e efeitos de condições fisiopatológicas.', meta:'Modelo 3D'},
+
+      {group:'muscular', title:'Contração muscular esquelética', tags:['Músculo','Linha temporal'], shot:'assets/screenshots/contracao-muscular.jpg', objective:'Acompanhar do potencial de ação ao relaxamento: ACh, placa motora, Ca²⁺, pontes cruzadas, ATP e sarcômero.', use:'Revisão sequencial da junção neuromuscular e do acoplamento excitação–contração.', meta:'7 etapas'},
+      {group:'muscular', title:'Acoplamento excitação–contração', tags:['Placa motora','Acoplamento'], shot:'assets/screenshots/acoplamento-excitacao-contracao.jpg', objective:'Conectar a chegada do impulso nervoso à liberação de Ca²⁺ e à exposição dos sítios de ligação da actina.', use:'Exploração integrada da placa motora, túbulos T, retículo sarcoplasmático e sarcômero.', meta:'Sequência completa'},
+      {group:'muscular', title:'Contração muscular e sarcômero', tags:['Músculo','Sarcômero'], shot:'assets/screenshots/contracao-sarcomero.jpg', objective:'Explorar o ciclo das pontes cruzadas, o consumo de ATP e as alterações da zona H durante a contração.', use:'Aprofundamento do mecanismo molecular com foco ampliado no sarcômero.', meta:'Pontes cruzadas'},
+      {group:'muscular', title:'Contrações musculares interativas', tags:['Músculo','Tipos de contração'], shot:'assets/screenshots/contracoes-musculares.jpg', objective:'Comparar contrações estática, dinâmica e isocinética, relacionando carga, movimento e produção de força.', use:'Aplicação em Educação Física e Fisioterapia para análise de diferentes ações musculares.', meta:'Comparação funcional'},
+      {group:'muscular', title:'Hill × Isocinético', tags:['Músculo','Desempenho'], shot:'assets/screenshots/hill-isocinetico.jpg', objective:'Integrar força, velocidade, ativação neural, torque e potência em diferentes condições de contração.', use:'Comparação dos modelos de Hill e isocinético em situações aplicadas ao movimento humano.', meta:'Força × velocidade'},
+
+      {group:'osteoarticular', title:'Homeostase do cálcio', tags:['Osteoarticular','Cálcio'], shot:'assets/screenshots/homeostase-calcio.jpg', objective:'Integrar vitamina D, PTH, calcitonina, intestino, rim, osso e concentração plasmática de cálcio.', use:'Análise da regulação mineral e das respostas compensatórias em diferentes cenários.', meta:'Regulação hormonal'},
+
+      {group:'celular', title:'Potencial de ação cardíaco', tags:['Fisiologia celular','Cardiomiócito'], shot:'assets/screenshots/potencial-acao-cardiaco.jpg', objective:'Reconhecer as fases do potencial de ação do cardiomiócito e relacioná-las aos fluxos iônicos e ao período refratário.', use:'Introdução à eletrofisiologia cardíaca e análise orientada das fases 0 a 4.', meta:'Fases 0–4'},
+      {group:'cardiovascular', title:'Pressão arterial, DC e RPT', tags:['Cardiovascular','Hemodinâmica'], shot:'assets/screenshots/hemodinamica.jpg', objective:'Relacionar pressão arterial, débito cardíaco, resistência periférica total, PAM e pressão de pulso.', use:'Comparação entre exercício, hemorragia, hipertensão, insuficiência cardíaca e alterações vasculares.', meta:'Variáveis integradas'},
+      {group:'cardiovascular', title:'Retorno venoso', tags:['Cardiovascular','Hemodinâmica'], shot:'assets/screenshots/retorno-venoso.jpg', objective:'Compreender como pressão atrial direita, volume, tônus, complacência, resistência e bombas periféricas determinam o retorno venoso.', use:'Construção da curva de retorno venoso e discussão de ortostatismo, exercício e hemorragia.', meta:'Curvas ajustáveis'},
+      {group:'cardiovascular', title:'Loop cardíaco funcional', tags:['Cardiovascular','Ciclo cardíaco'], shot:'assets/screenshots/loop-cardiaco.jpg', objective:'Integrar enchimento, ejeção, volumes ventriculares e abertura e fechamento das válvulas ao longo do ciclo cardíaco.', use:'Leitura orientada das fases do ciclo e das relações entre eventos mecânicos e hemodinâmicos.', meta:'Ciclo completo'},
+      {group:'cardiovascular', title:'Lei de Poiseuille', tags:['Cardiovascular','Fluxo'], shot:'assets/screenshots/poiseuille.jpg', objective:'Relacionar fluxo, gradiente de pressão, raio, viscosidade e comprimento do vaso.', use:'Demonstração do forte efeito do raio vascular sobre a resistência e o fluxo sanguíneo.', meta:'Fluxo × resistência'},
+
+      {group:'respiratorio', title:'Mecânica ventilatória', tags:['Respiratório','Pressões'], shot:'assets/screenshots/ventilacao-pulmonar.jpg', objective:'Visualizar as relações entre pressão pleural, pressão alveolar, volume, complacência, resistência e ventilação minuto.', use:'Comparação entre eupneia, asma, enfisema, fibrose, exercício e ventilação mecânica.', meta:'Gráficos sincronizados'},
+      {group:'respiratorio', title:'Biofeedback respiratório — PC', tags:['Respiratório','Versão PC'], shot:'assets/screenshots/biofeedback-respiratorio.jpg', objective:'Guiar ciclos respiratórios no computador com tempos ajustáveis de inspiração, expiração e pausa, favorecendo percepção e autorregulação.', use:'Prática individual ou coletiva em tela ampla, com protocolos respiratórios em modo progressivo ou regressivo.', meta:'Versão PC'},
+      {group:'respiratorio', title:'Biofeedback respiratório — Smartphone', tags:['Respiratório','Versão Smartphone'], shot:'assets/screenshots/biofeedback-respiratorio.jpg', objective:'Guiar ciclos respiratórios em uma interface adaptada ao smartphone, com tempos ajustáveis de inspiração, expiração e pausa.', use:'Prática móvel individual com protocolos respiratórios em modo progressivo ou regressivo.', meta:'Versão Smartphone'},
+      {group:'respiratorio', title:'Curva de dissociação da hemoglobina', tags:['Respiratório','Transporte de O₂'], shot:'assets/screenshots/curva-hemoglobina.jpg', objective:'Relacionar PO₂, saturação da hemoglobina e deslocamentos da curva provocados por pH, temperatura e 2,3-BPG.', use:'Análise do carregamento pulmonar e da liberação de oxigênio nos tecidos.', meta:'Curva ajustável'},
+
+      {group:'integracao', title:'Cardiopulmonar integrado', tags:['Integração','Cardiorrespiratório'], shot:'assets/screenshots/cardiopulmonar.jpg', objective:'Relacionar retorno venoso, débito cardíaco, consumo de oxigênio, pressões e saturações em diferentes estados fisiológicos.', use:'Aula de integração e comparação entre exercício, hemorragia, insuficiência cardíaca e alterações ventilatórias.', meta:'Múltiplos estados'},
+      {group:'integracao', title:'Fick integrado', tags:['Integração','Princípio de Fick'], shot:'assets/screenshots/fick-integrado.jpg', objective:'Conectar débito cardíaco, conteúdos arterial e venoso de oxigênio, extração tecidual e consumo de O₂.', use:'Resolução visual do princípio de Fick e interpretação das adaptações ao exercício.', meta:'VO₂ e extração'},
+      {group:'integracao', title:'Consumo de O₂ e diferença a–vO₂', tags:['Integração','Bioenergética'], shot:'assets/screenshots/consumo-o2.jpg', objective:'Integrar consumo de oxigênio, débito cardíaco, diferença arteriovenosa e valor relativo por massa corporal.', use:'Comparação entre repouso, exercício e diferentes combinações de oferta e extração de oxigênio.', meta:'Equação de Fick'}
+    ];
+
+    const simulatorBase = '../';
+    const simulatorFiles = [
+      'potencial_acao_membrana_2_Pato.html',
+      'neuronio_interativo.html',
+      'transporte_ativo_secundario_sglt_com_Pato.html',
+      'contracao_muscular_google.html',
+      'acoplamento_excitacao_contracao.html',
+      'contracao_muscular_Pato.html',
+      'Contracoes_Musculares_Interativas.html',
+      'Modelos_Hill_Isocinetico.html',
+      'Calcio_homestase.html',
+      'potencial_acao_cardiaco.html',
+      'Hemodinamica_PA_DC_RPT.html',
+      'Retorno_Venoso.html',
+      'Loop_Cardiaco_Funcional.html',
+      'Lei_de_Poiseuille_interativa.html',
+      'VentilacaoPulmonar.html',
+      'BiofeedBack_Respiratorio.html',
+      'BiofeedBack_Respiratorio_Mobile.html',
+      'Curva_hemoglobina.html',
+      'CardioPulmonar.html',
+      'fick_integrado_cardiorrespiratorio.html',
+      'Consumo_de_O2_Q_e_dif_a-v_Avancado.html'
+    ];
+
+    const automaticGroups = {
+      celular: 'celular',
+      'fisiologia celular': 'celular',
+      muscular: 'muscular',
+      osteoarticular: 'osteoarticular',
+      cardiovascular: 'cardiovascular',
+      respiratorio: 'respiratorio',
+      'respiratório': 'respiratorio',
+      integracao: 'integracao',
+      'integração': 'integracao'
+    };
+    // O simulador osteoarticular permanece no catálogo comum do projeto,
+    // mas não integra a rota pedagógica específica da Fisioterapia.
+    const hiddenGroups = new Set(['osteoarticular']);
+
+    function normaliseText(value = '') {
+      return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+    }
+
+    function titleFromFileName(fileName) {
+      return fileName.replace(/\.html$/i, '').replace(/[_-]+/g, ' ').replace(/\b\w/g, letter => letter.toUpperCase());
+    }
+
+    function automaticGroup(fileName, title, description, declaredCategory) {
+      const declared = automaticGroups[normaliseText(declaredCategory)];
+      if (declared) return declared;
+      const text = normaliseText(`${fileName} ${title} ${description}`);
+      if (/(contracao|sarcomero|actina|miosina|troponina|muscul)/.test(text)) return 'muscular';
+      if (/(calcio|osso|oste|articul|vitamina d|pth|calcitonina)/.test(text)) return 'osteoarticular';
+      if (/(cardio|coracao|pressao arterial|hemodinam|venos|circul|poiseuille)/.test(text)) return 'cardiovascular';
+      if (/(pulmon|ventila|respira|alveol|hemoglobina|pleura)/.test(text)) return 'respiratorio';
+      if (/(fick|consumo de o2|vo2|cardiopulmonar|integracao cardiorrespiratoria)/.test(text)) return 'integracao';
+      return 'celular';
+    }
+
+    function textFromHtml(html, selector) {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      return (doc.querySelector(selector)?.textContent || '').replace(/\s+/g, ' ').trim();
+    }
+
+    async function discoverNewSimulators() {
+      try {
+        const response = await fetch('https://api.github.com/repos/DrMarioNascimento/fisiologia-interativa/contents', {
+          headers: { Accept: 'application/vnd.github+json' }
+        });
+        if (!response.ok) throw new Error('Não foi possível consultar o repositório.');
+        const entries = await response.json();
+        const knownFiles = new Set(simulatorFiles.map(file => decodeURIComponent(file).toLowerCase()));
+
+        const newFiles = entries.filter(entry =>
+          entry.type === 'file' &&
+          entry.name.toLowerCase().endsWith('.html') &&
+          entry.name.toLowerCase() !== 'index.html' &&
+          !knownFiles.has(entry.name.toLowerCase())
+        );
+
+        const discovered = await Promise.all(newFiles.map(async entry => {
+          try {
+            const fileResponse = await fetch(entry.download_url, { cache: 'no-cache' });
+            if (!fileResponse.ok) throw new Error('Arquivo indisponível.');
+            const html = await fileResponse.text();
+            const doc = new DOMParser().parseFromString(html, 'text/html');
+            const title = textFromHtml(html, 'h1') || doc.querySelector('title')?.textContent?.trim() || titleFromFileName(entry.name);
+            const description = doc.querySelector('meta[name="description"]')?.content?.trim() || textFromHtml(html, '.subtitle') || `Simulador interativo: ${title}.`;
+            const declaredCategory = doc.querySelector('meta[name="sim-category"]')?.content || '';
+            return {
+              file: entry.name,
+              module: {
+                group: automaticGroup(entry.name, title, description, declaredCategory),
+                title,
+                tags: [declaredCategory || 'Fisiologia celular'],
+                objective: description,
+                meta: 'Novo simulador'
+              }
+            };
+          } catch (error) {
+            return null;
+          }
+        }));
+
+        discovered.filter(Boolean).forEach(({ file, module }) => {
+          simulatorFiles.push(file);
+          modules.push(module);
+        });
+      } catch (error) {
+        console.warn('Não foi possível atualizar automaticamente a lista de simuladores.', error);
+      }
+    }
+
+    const grid = document.querySelector('#moduleGrid');
+    const empty = document.querySelector('#empty');
+    const search = document.querySelector('#search');
+    const filters = [...document.querySelectorAll('.filter')];
+    const welcomeModal = document.querySelector('#welcomeModal');
+    const welcomeAccept = document.querySelector('#welcomeAccept');
+    const mindmapModal = document.querySelector('#mindmapModal');
+    const mindmapImage = document.querySelector('#mindmapImage');
+    const mindmapTitle = document.querySelector('#mindmapTitle');
+    const closeMindmap = document.querySelector('#closeMindmap');
+    const pageSurfaces = [...document.querySelectorAll('.site-header, main, footer')];
+    let activeFilter = 'todos';
+    let lastMindmapTrigger = null;
+
+    function lockPage(locked) {
+      pageSurfaces.forEach(element => { element.inert = locked; });
+      document.body.classList.toggle('welcome-open', locked);
+    }
+
+    let welcomeSeen = false;
+    try { welcomeSeen = sessionStorage.getItem('fisiologia-didactic-orientation') === 'acknowledged'; } catch (error) {}
+    if (welcomeSeen) {
+      welcomeModal.hidden = true;
+    } else {
+      lockPage(true);
+      requestAnimationFrame(() => welcomeAccept.focus());
+    }
+
+    welcomeAccept.addEventListener('click', () => {
+      try { sessionStorage.setItem('fisiologia-didactic-orientation', 'acknowledged'); } catch (error) {}
+      welcomeModal.hidden = true;
+      lockPage(false);
+      document.querySelector('#conteudo').focus();
+    });
+
+    function sectionMindmaps(section) {
+      if (section.mindmaps) return section.mindmaps;
+      return section.mindmap ? [{src:section.mindmap, title:section.mindmapTitle}] : [];
+    }
+
+    function mindmapButtons(section) {
+      const maps = sectionMindmaps(section);
+      if (!maps.length) return '';
+      if (maps.length === 1) return `<button class="mindmap-trigger" type="button" data-mindmap="${section.id}" data-mindmap-index="0">Relembre o conteúdo: <strong>Mapa mental</strong></button>`;
+      return `<div class="mindmap-links"><span>Relembre o conteúdo:</span>${maps.map((map,index) => `<button class="mindmap-trigger${map.featured ? ' is-featured' : ''}" type="button" data-mindmap="${section.id}" data-mindmap-index="${index}" aria-label="Abrir ${map.label || `mapa mental ${index + 1}`}: ${map.title}"><strong>${map.label || `Mapa ${String(index + 1).padStart(2,'0')}`}</strong></button>`).join('')}</div>`;
+    }
+
+    function openMindmap(section, index, trigger) {
+      const map = sectionMindmaps(section)[index];
+      if (!map) return;
+      lastMindmapTrigger = trigger;
+      mindmapTitle.textContent = map.title;
+      mindmapImage.src = map.src;
+      mindmapImage.alt = `Mapa mental: ${map.title}`;
+      mindmapModal.hidden = false;
+      document.body.classList.add('modal-open');
+      closeMindmap.focus();
+    }
+
+    function closeMindmapWindow() {
+      mindmapModal.hidden = true;
+      document.body.classList.remove('modal-open');
+      mindmapImage.src = '';
+      lastMindmapTrigger?.focus();
+    }
+
+
+    function cardTemplate(item, index) {
+      return `<a class="module-card" data-group="${item.group}" data-title="${item.title.toLowerCase()}" href="${simulatorBase}${simulatorFiles[index]}" target="_blank" rel="noopener" aria-label="Abrir simulador ${item.title}">
+        <span class="module-category">${item.tags[0]}</span><h3>${item.title}</h3><p>${item.objective}</p><span class="open-link">Abrir simulador →</span>
+      </a>`;
+    }
+
+    function render() {
+      const term = search.value.trim().toLowerCase();
+      const visible = modules.map((item, index) => ({item,index})).filter(({item}) => !hiddenGroups.has(item.group) && (activeFilter === 'todos' || item.group === activeFilter) && (!term || `${item.title} ${item.tags.join(' ')} ${item.objective}`.toLowerCase().includes(term)));
+      const visibleGroups = activeFilter === 'todos' ? curriculum : curriculum.filter(section => section.id === activeFilter);
+      grid.innerHTML = visibleGroups.map(section => {
+        const items = visible.filter(({item}) => item.group === section.id);
+        if (!items.length) return '';
+        const countLabel = `${items.length} ${items.length === 1 ? 'simulador' : 'simuladores'}`;
+        return `<section class="curriculum-block" aria-labelledby="section-${section.id}" style="--group-color:${section.color}">
+          <div class="curriculum-head"><span class="curriculum-number">${section.number}</span><div>${mindmapButtons(section)}<h3 id="section-${section.id}">${section.title}</h3><p>${section.description}</p></div><span class="curriculum-count">${countLabel}</span></div>
+          <div class="module-grid">${items.map(({item,index}) => cardTemplate(item,index)).join('')}</div>
+        </section>`;
+      }).join('');
+      empty.hidden = visible.length > 0;
+      grid.hidden = visible.length === 0;
+      grid.querySelectorAll('.mindmap-trigger').forEach(button => button.addEventListener('click', () => openMindmap(curriculum.find(section => section.id === button.dataset.mindmap), Number(button.dataset.mindmapIndex), button)));
+    }
+
+    filters.forEach(button => button.addEventListener('click', () => {
+      activeFilter = button.dataset.filter;
+      filters.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      render();
+    }));
+    search.addEventListener('input', render);
+    closeMindmap.addEventListener('click', closeMindmapWindow);
+    mindmapModal.addEventListener('click', event => { if (event.target === mindmapModal) closeMindmapWindow(); });
+    document.addEventListener('keydown', event => {
+      if (!welcomeModal.hidden) {
+        if (event.key === 'Tab' || event.key === 'Escape') event.preventDefault();
+        welcomeAccept.focus();
+        return;
+      }
+      if (event.key === 'Escape' && !mindmapModal.hidden) closeMindmapWindow();
+    });
+    document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', event => {
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) { event.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
+    }));
+    discoverNewSimulators().finally(render);
+  </script>
+</body>
+</html>
