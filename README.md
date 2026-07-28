@@ -8,7 +8,8 @@ O projeto complementa aulas, estudos dirigidos e atividades acadêmicas por meio
 
 ## Acesso
 
-- **Publicação atual:** [drmarionascimento.github.io/fisiologia-interativa](https://drmarionascimento.github.io/fisiologia-interativa/)
+- **Educação Física:** [drmarionascimento.github.io/fisiologia-interativa](https://drmarionascimento.github.io/fisiologia-interativa/)
+- **Fisioterapia:** [drmarionascimento.github.io/fisiologia-interativa/fisioterapia/](https://drmarionascimento.github.io/fisiologia-interativa/fisioterapia/)
 - **Hospedagem institucional:** em processo de implantação na infraestrutura da UDESC
 - **Endereço institucional sugerido:** `fisiologia-interativa-sites.cefid.udesc.br`
 
@@ -34,7 +35,11 @@ O material foi desenvolvido principalmente para estudantes e professores de:
 
 ## Organização curricular
 
-O conteúdo está organizado em seis eixos:
+A plataforma utiliza os mesmos simuladores compartilhados, mas apresenta percursos pedagógicos próprios para cada formação. A diferença está na organização, nos textos de orientação e na ordem dos cards — não na duplicação de arquivos ou de modelos.
+
+### Educação Física
+
+O índice principal é organizado em seis eixos:
 
 1. **Fisiologia celular, transporte de substâncias e potenciais de ação**
 2. **Excitabilidade e sistema muscular**
@@ -43,7 +48,17 @@ O conteúdo está organizado em seis eixos:
 5. **Sistema respiratório**
 6. **Integração cardiorrespiratória**
 
-Cada eixo pode incluir simuladores e mapas mentais para revisão dos conceitos essenciais.
+### Fisioterapia
+
+O índice específico da Fisioterapia reúne os simuladores em cinco Unidades:
+
+1. **Fisiologia celular, transporte de substâncias e potenciais de ação**
+2. **Excitabilidade e Sistema Muscular**
+3. **Sistema cardiovascular**
+4. **Sistema respiratório**
+5. **Integração cardiorrespiratória**
+
+O simulador de homeostase do cálcio e o tópico osteoarticular permanecem disponíveis no projeto e no percurso da Educação Física, mas não são exibidos no índice específico da Fisioterapia.
 
 ## Simuladores disponíveis
 
@@ -93,7 +108,7 @@ Este projeto tem finalidade exclusivamente **didática e educacional**. Os simul
 - não utiliza banco de dados;
 - não requer instalação de dependências;
 - não requer compilação ou processo de build;
-- arquivo inicial: `index.html`;
+- índices de acesso: `index.html` (Educação Física) e `fisioterapia/index.html` (Fisioterapia);
 - simuladores distribuídos em arquivos HTML independentes;
 - recursos visuais organizados na pasta `assets/`;
 - links internos e recursos configurados com caminhos relativos;
@@ -103,8 +118,10 @@ Este projeto tem finalidade exclusivamente **didática e educacional**. Os simul
 
 ```text
 fisiologia-interativa/
-├── index.html                 # página inicial e catálogo
+├── index.html                 # índice da Educação Física
 ├── *.html                     # simuladores independentes
+├── fisioterapia/
+│   └── index.html             # índice da Fisioterapia
 └── assets/
     ├── maps/                  # mapas mentais
     ├── screenshots/           # prévias dos simuladores
@@ -114,6 +131,8 @@ fisiologia-interativa/
 ## Publicação e manutenção
 
 A versão pública atual é publicada pelo GitHub Pages a partir deste repositório. O projeto também está sendo preparado para hospedagem institucional na UDESC por meio do OpenShift.
+
+Os simuladores permanecem na pasta principal e são compartilhados pelos dois índices. Dessa forma, uma correção ou melhoria em qualquer modelo é refletida automaticamente nos percursos de Educação Física e Fisioterapia; somente a organização curricular de cada página inicial é mantida separadamente.
 
 A SETIC/CINF será responsável pela infraestrutura e pelo fluxo institucional de publicação. A revisão científica, a manutenção e a atualização do conteúdo permanecem sob responsabilidade do autor.
 
