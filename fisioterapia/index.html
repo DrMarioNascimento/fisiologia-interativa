@@ -544,6 +544,23 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
     }
+  
+    /* Identidade visual — Fisioterapia: verde-esmeralda profundo, sóbrio e clínico. */
+    .btn-primary { background: linear-gradient(135deg, #167151, #0F5B42); box-shadow: 0 12px 26px rgba(15,91,66,.25); }
+    .btn-quiet { background: #eef8f3; color: #0F5B42; }
+    .btn:focus-visible { outline-color: rgba(15,91,66,.32); }
+    .welcome-card::before { background: linear-gradient(180deg, #167151, #0F5B42); }
+    .welcome-steps b {
+      border-color: rgba(255,255,255,.36); background: linear-gradient(145deg, #278363, #0F5B42 58%, #083F2D);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.42), inset 0 -3px 5px rgba(0,0,0,.23), 0 5px 9px rgba(15,91,66,.24);
+    }
+    .step-number {
+      border-color: rgba(255,255,255,.3); background: linear-gradient(145deg, #278363, #0F5B42 58%, #083F2D);
+      box-shadow: inset 0 1px 1px rgba(255,255,255,.42), inset 0 -5px 8px rgba(0,0,0,.28), 0 8px 15px rgba(0,0,0,.2);
+      text-shadow: 0 1px 1px rgba(0,0,0,.3);
+    }
+    .step svg { color: #5AB78C; }
+
   </style>
 </head>
 <body>
