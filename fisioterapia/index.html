@@ -349,15 +349,15 @@
     .mindmap-links .mindmap-trigger { margin: 0; }
     .mindmap-trigger:hover { transform: translateY(-2px); background: #fff; box-shadow: inset 0 1px 0 #fff, 0 8px 14px color-mix(in srgb, var(--group-color, var(--petrol-800)) 20%, transparent); }
     .mindmap-trigger.is-featured { color: #fff; background: linear-gradient(145deg, color-mix(in srgb, var(--group-color, var(--petrol-800)) 76%, #fff), var(--group-color, var(--petrol-800))); }
-    .mindmap-trigger.is-featured::after { color: var(--group-color, var(--petrol-800)); background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,.12); }
+    .mindmap-trigger.is-featured .mindmap-icon { color: var(--group-color, var(--petrol-800)); background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,.12); }
     .mindmap-trigger strong { font-weight: 900; }
-    .mindmap-trigger::after {
-      content: "↗"; width: 21px; aspect-ratio: 1; display: grid; place-items: center; border-radius: 50%; color: #fff;
+    .mindmap-icon {
+      width: 21px; aspect-ratio: 1; flex: 0 0 auto; padding: 3px; border-radius: 50%; color: #fff;
       background: linear-gradient(145deg, color-mix(in srgb, var(--group-color, var(--petrol-800)) 74%, #fff), var(--group-color, var(--petrol-800)));
       box-shadow: inset 0 1px 1px rgba(255,255,255,.42), inset 0 -2px 4px rgba(0,0,0,.16), 0 3px 7px color-mix(in srgb, var(--group-color, var(--petrol-800)) 24%, transparent);
-      font-size: .67rem; transition: transform .2s ease;
+      transition: transform .2s ease;
     }
-    .mindmap-trigger:hover::after { transform: translate(2px, -2px); }
+    .mindmap-trigger:hover .mindmap-icon { transform: translate(2px, -2px); }
     .mindmap-trigger:focus-visible { outline: 3px solid color-mix(in srgb, var(--group-color, var(--petrol-800)) 30%, transparent); outline-offset: 4px; }
     .curriculum-head h3 { margin: 0; font-size: clamp(1.45rem, 2.2vw, 2rem); letter-spacing: -.035em; }
     .curriculum-head p:last-child { max-width: 780px; margin: 7px 0 0; color: var(--muted); font-size: .88rem; }
@@ -398,7 +398,11 @@
     .access-note { margin-top: 28px; padding: 17px 18px; border: 1px solid rgba(255,255,255,.12); border-radius: 17px; color: #d9e7e8; background: rgba(255,255,255,.06); font-size: .85rem; }
     .steps { display: grid; gap: 12px; }
     .step { display: grid; grid-template-columns: 54px 1fr auto; gap: 18px; align-items: center; padding: 21px; border: 1px solid rgba(255,255,255,.13); border-radius: 20px; background: rgba(255,255,255,.06); }
-    .step-number { width: 48px; aspect-ratio: 1; display: grid; place-items: center; border-radius: 16px; color: #fff; background: linear-gradient(145deg, var(--orange), #9f4920); font-weight: 850; }
+    .step-number {
+      width: 48px; aspect-ratio: 1; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.28); border-radius: 16px; color: #fff;
+      background: linear-gradient(145deg, #e78954, var(--orange) 54%, #9f4920); box-shadow: inset 0 1px 1px rgba(255,255,255,.42), inset 0 -5px 8px rgba(67,24,7,.3), 0 8px 15px rgba(0,0,0,.2);
+      font-weight: 850; text-shadow: 0 1px 1px rgba(66,25,8,.42);
+    }
     .step h3 { margin: 0 0 4px; font-size: 1rem; }
     .step p { margin: 0; color: #aac4c7; font-size: .82rem; }
     .step svg { width: 22px; color: #65bcc4; }
@@ -457,7 +461,11 @@
     .welcome-intro { max-width: 650px; margin-bottom: 24px; color: var(--muted); font-size: 1rem; }
     .welcome-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 0 0 18px; padding: 0; list-style: none; }
     .welcome-steps li { min-height: 108px; padding: 15px; border: 1px solid var(--line); border-radius: 17px; background: rgba(255,255,255,.78); }
-    .welcome-steps b { width: 28px; aspect-ratio: 1; display: grid; place-items: center; margin-bottom: 9px; border-radius: 9px; color: #fff; background: var(--petrol-800); font-size: .7rem; }
+    .welcome-steps b {
+      width: 28px; aspect-ratio: 1; display: grid; place-items: center; margin-bottom: 9px; border: 1px solid rgba(255,255,255,.34); border-radius: 9px; color: #fff;
+      background: linear-gradient(145deg, #26818e, var(--petrol-800) 56%, var(--petrol-950)); box-shadow: inset 0 1px 1px rgba(255,255,255,.42), inset 0 -3px 5px rgba(0,0,0,.2), 0 5px 9px rgba(8,73,83,.2);
+      font-size: .7rem; text-shadow: 0 1px 1px rgba(0,0,0,.25);
+    }
     .welcome-steps span { color: #355257; font-size: .82rem; font-weight: 700; }
     .didactic-warning { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 24px; padding: 15px 17px; border: 1px solid #efc9b4; border-radius: 17px; color: #793b20; background: #fff5ef; }
     .didactic-warning svg { width: 21px; flex: 0 0 auto; margin-top: 1px; color: var(--orange); }
@@ -890,8 +898,8 @@
     function mindmapButtons(section) {
       const maps = sectionMindmaps(section);
       if (!maps.length) return '';
-      if (maps.length === 1) return `<div class="mindmap-links"><span>Relembre o conteúdo:</span><button class="mindmap-trigger" type="button" data-mindmap="${section.id}" data-mindmap-index="0"><strong>Mapa mental</strong></button></div>`;
-      return `<div class="mindmap-links"><span>Relembre o conteúdo:</span>${maps.map((map,index) => `<button class="mindmap-trigger${map.featured ? ' is-featured' : ''}" type="button" data-mindmap="${section.id}" data-mindmap-index="${index}" aria-label="Abrir ${map.label || `mapa mental ${index + 1}`}: ${map.title}"><strong>${map.label || `Mapa ${String(index + 1).padStart(2,'0')}`}</strong></button>`).join('')}</div>`;
+      if (maps.length === 1) return `<div class="mindmap-links"><span>Relembre o conteúdo:</span><button class="mindmap-trigger" type="button" data-mindmap="${section.id}" data-mindmap-index="0"><strong>Mapa mental</strong><svg class="mindmap-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5 9 3l6 2.5 6-2.5v14L15 20l-6-2.5-6 2.5z"/><path d="M9 3v14.5M15 5.5V20"/><path d="M18 7.1c0 1.85-2.2 3.75-2.2 3.75s-2.2-1.9-2.2-3.75a2.2 2.2 0 1 1 4.4 0Z"/><circle cx="15.8" cy="7.1" r=".4" fill="currentColor" stroke="none"/></svg></button></div>`;
+      return `<div class="mindmap-links"><span>Relembre o conteúdo:</span>${maps.map((map,index) => `<button class="mindmap-trigger${map.featured ? ' is-featured' : ''}" type="button" data-mindmap="${section.id}" data-mindmap-index="${index}" aria-label="Abrir ${map.label || `mapa mental ${index + 1}`}: ${map.title}"><strong>${map.label || `Mapa ${String(index + 1).padStart(2,'0')}`}</strong><svg class="mindmap-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.15" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5 9 3l6 2.5 6-2.5v14L15 20l-6-2.5-6 2.5z"/><path d="M9 3v14.5M15 5.5V20"/><path d="M18 7.1c0 1.85-2.2 3.75-2.2 3.75s-2.2-1.9-2.2-3.75a2.2 2.2 0 1 1 4.4 0Z"/><circle cx="15.8" cy="7.1" r=".4" fill="currentColor" stroke="none"/></svg></button>`).join('')}</div>`;
     }
 
     function openMindmap(section, index, trigger) {
