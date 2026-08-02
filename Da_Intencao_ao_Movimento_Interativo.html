@@ -49,6 +49,18 @@
     align-items: center;
   }
   .dim-ribbon svg { width: 100%; height: 54px; overflow: visible; }
+  .dim-ribbon-submarine {
+    position: absolute;
+    z-index: 2;
+    top: -9px;
+    left: 25px;
+    width: 50px;
+    height: auto;
+    transform: translateX(-50%);
+    pointer-events: none;
+    filter: drop-shadow(0 4px 3px rgba(0,0,0,.7)) drop-shadow(0 -1px 1px rgba(255,255,255,.3));
+    transition: left .28s ease;
+  }
   .dim-ribbon-label {
     position: absolute;
     top: -18px;
@@ -556,6 +568,10 @@
     .dim-ribbon { margin-bottom: 28px; }
   }
 
+  @media (max-width: 600px) {
+    .dim-ribbon-submarine { top: 4px; width: 48px; }
+  }
+
   @media (max-width: 430px) {
     .dim-h1 { font-size: 29px; }
     .dim-lede { font-size: 16px; }
@@ -571,6 +587,7 @@
     <div class="dim-ribbon dim-hidden" id="dim-ribbon-wrap">
       <span class="dim-ribbon-label">Trajeto</span>
       <svg viewBox="0 0 800 54" preserveAspectRatio="none" id="dim-ribbon-svg"></svg>
+      <img class="dim-ribbon-submarine" id="dim-ribbon-submarine" alt="" aria-hidden="true" hidden>
     </div>
 
     <!-- SCREEN: INTRO -->
@@ -973,7 +990,6 @@
       <linearGradient id="dim-progress-3d" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c6fff1"/><stop offset=".35" stop-color="#57e8cc"/><stop offset="1" stop-color="#087353"/></linearGradient>
       <radialGradient id="dim-node-3d" cx="32%" cy="25%"><stop offset="0" stop-color="#ffffff"/><stop offset=".15" stop-color="#8ff8df"/><stop offset=".6" stop-color="#25b992"/><stop offset="1" stop-color="#07533e"/></radialGradient>
       <radialGradient id="dim-node-idle" cx="32%" cy="25%"><stop offset="0" stop-color="#72819d"/><stop offset=".3" stop-color="#354763"/><stop offset="1" stop-color="#111a2b"/></radialGradient>
-      <filter id="dim-sub-shadow" x="-50%" y="-60%" width="200%" height="220%"><feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000" flood-opacity=".7"/><feDropShadow dx="0" dy="-1" stdDeviation="1" flood-color="#fff" flood-opacity=".3"/></filter>
     </defs>
     <path d="${path}" stroke="#050b14" stroke-width="10" stroke-linecap="round" fill="none" opacity=".95"/>
     <path d="${path}" stroke="url(#dim-track-3d)" stroke-width="7" stroke-linecap="round" fill="none"/>
@@ -994,13 +1010,15 @@
       const ribbonLabel = isMobileRibbon ? String(i + 1) : s.label;
       svgHtml += `<text x="${x}" y="48" font-family="IBM Plex Mono, monospace" font-size="${ribbonFontSize}" fill="${i===idx?'#EAEEF6':'#8C96AE'}" text-anchor="middle">${ribbonLabel}</text>`;
     });
+    const submarineMarker = document.getElementById('dim-ribbon-submarine');
     if (idx >= 0) {
       const sx = xFor(idx);
       const subW = isMobileRibbon ? 48 : 50;
-      const subH = isMobileRibbon ? 39 : 41;
-      const subX = Math.min(795-subW, Math.max(5, sx-subW/2));
-      const subY = isMobileRibbon ? 4 : -9;
-      svgHtml += `<image href="${TIMELINE_SUBMARINE}" x="${subX}" y="${subY}" width="${subW}" height="${subH}" preserveAspectRatio="xMidYMid meet" filter="url(#dim-sub-shadow)" aria-hidden="true"/>`;
+      submarineMarker.src = TIMELINE_SUBMARINE;
+      submarineMarker.style.left = `clamp(${subW/2}px, ${sx/8}%, calc(100% - ${subW/2}px))`;
+      submarineMarker.hidden = false;
+    } else {
+      submarineMarker.hidden = true;
     }
     svg.innerHTML = svgHtml;
   }
