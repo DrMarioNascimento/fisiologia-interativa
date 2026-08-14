@@ -18,9 +18,10 @@
               inset 0 1px 0 rgba(255, 255, 255, .98);
   --fi-depth-soft: 0 7px 16px rgba(28, 67, 100, .10),
                    inset 0 1px 0 rgba(255, 255, 255, .96);
-  --fi-control-depth: 0 6px 0 #9aa8b4,
-                      0 10px 18px rgba(22, 50, 75, .16),
-                      inset 0 1px 0 rgba(255, 255, 255, .90);
+  --fi-control-depth: 0 5px 0 var(--btn-base),
+                      0 9px 15px rgba(22, 50, 75, .15),
+                      inset 0 1px 0 rgba(255, 255, 255, .98),
+                      inset 0 0 0 2px rgba(255, 255, 255, .40);
 }
 
 html { background: #edf4fb; }
@@ -64,18 +65,25 @@ canvas {
 
 /* Botões existentes: mesma altura e profundidade, largura adaptada ao texto */
 button {
+  --btn-top: #ffffff;
+  --btn-bottom: #e8eef3;
+  --btn-border: #8799a8;
+  --btn-base: #8798a5;
+  --btn-text: #17324d;
   min-width: 118px;
   min-height: 46px;
   padding: 10px 16px !important;
-  border: 1px solid rgba(43, 69, 91, .42) !important;
+  border: 1px solid var(--btn-border) !important;
   border-radius: 14px !important;
-  color: #fff !important;
+  color: var(--btn-text) !important;
   font-family: inherit;
   font-size: 14px !important;
   font-weight: 800 !important;
   line-height: 1.15;
   white-space: nowrap;
-  background: linear-gradient(180deg, var(--fi-slate-light), var(--fi-slate)) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.78) 0 10%, transparent 11%),
+    linear-gradient(180deg, var(--btn-top) 0%, var(--btn-bottom) 100%) !important;
   box-shadow: var(--fi-control-depth) !important;
   transform: translateY(-2px);
   transition: transform .14s ease, box-shadow .14s ease, filter .14s ease !important;
@@ -83,40 +91,57 @@ button {
 
 button:hover {
   transform: translateY(-3px) !important;
-  filter: brightness(1.06);
-  box-shadow: 0 7px 0 #8d9ba7, 0 12px 20px rgba(22, 50, 75, .18), inset 0 1px 0 rgba(255,255,255,.92) !important;
+  filter: brightness(1.025) saturate(1.03);
+  box-shadow:
+    0 6px 0 var(--btn-base),
+    0 11px 19px rgba(22, 50, 75, .17),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 0 0 2px rgba(255,255,255,.46) !important;
 }
 
 button:active {
   transform: translateY(3px) !important;
-  box-shadow: 0 1px 0 #8d9ba7, 0 4px 8px rgba(22, 50, 75, .15), inset 0 1px 2px rgba(0,0,0,.10) !important;
+  box-shadow:
+    0 1px 0 var(--btn-base),
+    0 3px 6px rgba(22, 50, 75, .13),
+    inset 0 2px 4px rgba(23,50,77,.12),
+    inset 0 0 0 2px rgba(255,255,255,.32) !important;
 }
 
 button:focus-visible { outline: 3px solid rgba(47,128,237,.28); outline-offset: 3px; }
 button:disabled { opacity: .48; filter: grayscale(.25); cursor: not-allowed; }
 
 #btnStart, #playBtn, button.primary {
-  background: linear-gradient(180deg, var(--fi-blue-light), var(--fi-blue)) !important;
-  border-color: #2670bd !important;
-  box-shadow: 0 6px 0 #1d5f9e, 0 10px 18px rgba(31, 120, 180, .22), inset 0 1px 0 rgba(255,255,255,.90) !important;
+  --btn-top: #68bdff;
+  --btn-bottom: #2787dc;
+  --btn-border: #1d6fae;
+  --btn-base: #165b91;
+  --btn-text: #ffffff;
 }
 
 #btnPause, #pauseBtn {
-  background: linear-gradient(180deg, var(--fi-slate-light), var(--fi-slate)) !important;
-  box-shadow: 0 6px 0 #293f53, 0 10px 18px rgba(22, 50, 75, .18), inset 0 1px 0 rgba(255,255,255,.90) !important;
+  --btn-top: #ffffff;
+  --btn-bottom: #e6edf3;
+  --btn-border: #7f93a5;
+  --btn-base: #778895;
+  --btn-text: #17324d;
 }
 
 #btnStep {
   min-width: 150px;
-  background: linear-gradient(180deg, var(--fi-green-light), var(--fi-green)) !important;
-  border-color: #148251 !important;
-  box-shadow: 0 6px 0 #0f7045, 0 10px 18px rgba(22, 155, 98, .20), inset 0 1px 0 rgba(255,255,255,.90) !important;
+  --btn-top: #f8fffb;
+  --btn-bottom: #d9f3e5;
+  --btn-border: #4e9a73;
+  --btn-base: #3f805f;
+  --btn-text: #145c3b;
 }
 
 #btnReset, #resetBtn {
-  background: linear-gradient(180deg, var(--fi-red-light), var(--fi-red)) !important;
-  border-color: #bd3e3e !important;
-  box-shadow: 0 6px 0 #a73434, 0 10px 18px rgba(217, 74, 74, .20), inset 0 1px 0 rgba(255,255,255,.90) !important;
+  --btn-top: #fffafa;
+  --btn-bottom: #f7dede;
+  --btn-border: #b96868;
+  --btn-base: #9d5555;
+  --btn-text: #8a3030;
 }
 
 /* Sliders já existentes */

@@ -1,0 +1,93 @@
+/* Tema 01 — acabamento visual para simuladores de estrutura flexível.
+   Não fixa alturas nem reorganiza componentes. */
+:root{
+  --fi-ink:#17324d;
+  --fi-muted:#5c7086;
+  --fi-line:#bfd5e8;
+  --fi-shadow:0 12px 26px rgba(28,67,100,.12),0 2px 5px rgba(28,67,100,.07),inset 0 1px 0 rgba(255,255,255,.98);
+  --fi-shadow-soft:0 7px 16px rgba(28,67,100,.10),inset 0 1px 0 rgba(255,255,255,.96);
+}
+
+html,body{background:#edf4fb!important}
+body{
+  color:var(--fi-ink)!important;
+  background:radial-gradient(circle at 8% 2%,rgba(101,179,240,.11),transparent 30%),linear-gradient(180deg,#f9fcff,#edf4fb)!important;
+}
+
+body>header,.app,header{
+  border-color:var(--fi-line)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(235,244,252,.94))!important;
+  box-shadow:var(--fi-shadow)!important;
+}
+
+h1,.title h1{color:var(--fi-ink)!important;text-shadow:0 1px 0 #fff}
+.subtitle,.mini-note{color:var(--fi-muted)!important}
+
+.card,.top-control-card,.stage,.science,.intervention-console,.membrane-strip,.status,.scenario-row{
+  color:var(--fi-ink)!important;
+  border-color:var(--fi-line)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(235,244,252,.92))!important;
+  box-shadow:var(--fi-shadow)!important;
+}
+
+.comp,.eq,.perm-section,.status-banner,.state-panel,.boundary-card,.system-reading,.equation-card{
+  color:var(--fi-ink)!important;
+  border-color:#c9d9e7!important;
+  background:linear-gradient(145deg,#fff,#eef5fb)!important;
+  box-shadow:var(--fi-shadow-soft)!important;
+}
+
+.states-wrap,details.control-accordion,.science-sub{border-color:#c9d9e7!important}
+.states-title{color:#147554!important;background:#eef6fb!important}
+.field label,.perm-intro,table.readout th:first-child,table.readout td:first-child,.eq,.signature{color:var(--fi-muted)!important}
+.field label span.val,.speed b{color:var(--fi-ink)!important}
+.eq code,.status-banner b,details.help summary,details.control-accordion summary{color:#176e8a!important}
+
+/* Preserva o tamanho próprio de cada botão e melhora apenas acabamento. */
+button{
+  --btn-top:#fff;
+  --btn-bottom:#e8eef3;
+  --btn-border:#8799a8;
+  --btn-base:#8798a5;
+  --btn-text:#17324d;
+  border:1px solid var(--btn-border)!important;
+  color:var(--btn-text)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.78) 0 10%,transparent 11%),linear-gradient(180deg,var(--btn-top),var(--btn-bottom))!important;
+  box-shadow:0 4px 0 var(--btn-base),0 8px 14px rgba(22,50,75,.15),inset 0 1px 0 rgba(255,255,255,.98),inset 0 0 0 2px rgba(255,255,255,.40)!important;
+  transform:translateY(-1px);
+  transition:transform .14s ease,box-shadow .14s ease,filter .14s ease!important;
+}
+button:hover{transform:translateY(-2px)!important;filter:brightness(1.025);box-shadow:0 5px 0 var(--btn-base),0 10px 17px rgba(22,50,75,.17),inset 0 1px 0 #fff,inset 0 0 0 2px rgba(255,255,255,.46)!important}
+button:active{transform:translateY(3px)!important;box-shadow:0 1px 0 var(--btn-base),0 3px 6px rgba(22,50,75,.13),inset 0 2px 4px rgba(23,50,77,.12)!important}
+button:focus-visible{outline:3px solid rgba(47,128,237,.28);outline-offset:3px}
+
+#playBtn,.btn.start,.run{
+  --btn-top:#67bdff;--btn-bottom:#2787dc;--btn-border:#1d6fae;--btn-base:#165b91;--btn-text:#fff;
+}
+#resetBtn,.btn.reset,.action.reset{
+  --btn-top:#fffafa;--btn-bottom:#f7dede;--btn-border:#b96868;--btn-base:#9d5555;--btn-text:#8a3030;
+}
+#fullscreenBtn,.btn.fullscreen{
+  --btn-top:#f9f5ff;--btn-bottom:#e8def8;--btn-border:#9478b8;--btn-base:#725892;--btn-text:#533b73;
+}
+.modes button.active,.scenarios button.active,.scenario.active{
+  --btn-top:#eaf9f2;--btn-bottom:#cdebdc;--btn-border:#438b69;--btn-base:#347254;--btn-text:#145c3b;
+}
+
+.scenarios button,.scenario-grid button,.actions button,.modes button{border-radius:12px!important}
+
+/* Controles de seleção existentes */
+.time-speed,.substance-rail,.dose-rail,.membrane-control,.mode-row,.perm-toggles label{
+  border-color:#c9d9e7!important;
+  background:linear-gradient(145deg,#fff,#eef5fb)!important;
+  box-shadow:var(--fi-shadow-soft)!important;
+}
+
+input[type="range"]{filter:drop-shadow(0 2px 2px rgba(23,50,77,.14))}
+
+@media(max-width:620px){
+  body>header{padding:14px 12px!important}
+  .layout{padding:12px!important;gap:12px!important}
+  .controls-top .control-btn{flex:1 1 135px}
+  .speed{flex:1 1 100%;justify-content:center}
+}
