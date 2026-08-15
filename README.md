@@ -2,7 +2,7 @@
 
 **Simuladores educacionais para explorar mecanismos, testar cenários e integrar variáveis da Fisiologia Humana.**
 
-A **Fisiologia Interativa** é uma plataforma didática desenvolvida pelo **Prof. Mário César Nascimento, PhD**, do Centro de Ciências da Saúde e do Esporte da Universidade do Estado de Santa Catarina (**CEFID/UDESC**).
+A **Fisiologia Interativa** é um projeto intelectual pessoal, desenvolvido, organizado e mantido por **Mário César Nascimento, PhD**. A vinculação profissional do autor ao CEFID/UDESC é indicada apenas como informação acadêmica e não representa atribuição automática de autoria ou titularidade institucional sobre este repositório.
 
 O projeto complementa aulas, estudos dirigidos e atividades acadêmicas por meio de modelos interativos que permitem modificar parâmetros, comparar estados fisiológicos e observar, em tempo real, as relações entre diferentes variáveis.
 
@@ -138,12 +138,16 @@ A SETIC/CINF será responsável pela infraestrutura e pelo fluxo institucional d
 
 Como o projeto utiliza caminhos relativos e não depende de processamento no servidor, pode ser publicado em um subdiretório ou domínio institucional destinado a conteúdo estático.
 
-## Autoria
+## Autoria e titularidade declarada
 
-**Prof. Mário César Nascimento, PhD**  
-Centro de Ciências da Saúde e do Esporte — CEFID  
-Universidade do Estado de Santa Catarina — UDESC
+**Autor e titular declarado:** Mário César Nascimento, PhD  
+**Projeto pessoal:** Fisiologia Interativa  
+**Perfil responsável:** [DrMarioNascimento](https://github.com/DrMarioNascimento)
 
-## Direitos autorais
+A vinculação profissional do autor ao CEFID/UDESC não transfere, por si só, a autoria declarada neste repositório nem identifica a Universidade como licenciadora deste projeto.
 
-© Prof. Mário César Nascimento. Conteúdo educacional. Todos os direitos reservados.
+## Direitos autorais e condições de uso
+
+Copyright © 2026 Mário César Nascimento. Todos os direitos reservados.
+
+O uso educacional funcional dos simuladores é permitido nos termos descritos em [LICENSE.md](LICENSE.md). A disponibilização pública do código não autoriza sua cópia, adaptação, republicação ou exploração comercial.
