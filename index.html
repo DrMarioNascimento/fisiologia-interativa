@@ -767,9 +767,9 @@
       'potencial-acao-membrana.html',
       'neuronio-interativo.html',
       'transporte-ativo-secundario-sglt.html',
-      'contracao-muscular-sarcomero.html',
+      'contracao-muscular-esqueletica-sequencial.html',
       'acoplamento-excitacao-contracao.html',
-      'contracao-muscular-esqueletica.html',
+      'ciclo-pontes-cruzadas-sarcomero.html',
       'contracoes-musculares-interativas.html',
       'modelos-hill-isocinetico.html',
       'da-intencao-ao-movimento.html',
@@ -833,12 +833,15 @@
         if (!response.ok) throw new Error('Não foi possível consultar o repositório.');
         const entries = await response.json();
         const knownFiles = new Set(simulatorFiles.map(file => decodeURIComponent(file).toLowerCase()));
+        // Endereços antigos mantidos apenas para redirecionamento; não criar cards duplicados.
+        const legacyFiles = new Set(['contracao-muscular-sarcomero.html', 'contracao-muscular-esqueletica.html']);
 
         const newFiles = entries.filter(entry =>
           entry.type === 'file' &&
           entry.name.toLowerCase().endsWith('.html') &&
           entry.name.toLowerCase() !== 'index.html' &&
-          !knownFiles.has(entry.name.toLowerCase())
+          !knownFiles.has(entry.name.toLowerCase()) &&
+          !legacyFiles.has(entry.name.toLowerCase())
         );
 
         const discovered = await Promise.all(newFiles.map(async entry => {
