@@ -953,6 +953,9 @@
       const visibleGroups = activeFilter === 'todos' ? curriculum : curriculum.filter(section => section.id === activeFilter);
       grid.innerHTML = visibleGroups.map(section => {
         const items = visible.filter(({item}) => item.group === section.id);
+        if (section.id === 'muscular') {
+          items.sort((a, b) => Number(a.item.title === 'Da intenção ao movimento') - Number(b.item.title === 'Da intenção ao movimento'));
+        }
         if (!items.length) return '';
         const countLabel = `${items.length} ${items.length === 1 ? 'simulador' : 'simuladores'}`;
         return `<section class="curriculum-block" aria-labelledby="section-${section.id}" style="--group-color:${section.color}">
