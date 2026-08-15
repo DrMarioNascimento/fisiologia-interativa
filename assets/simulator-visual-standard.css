@@ -1,0 +1,100 @@
+/* Identidade visual compartilhada — Fisiologia Interativa
+   Camada estritamente visual: não altera estrutura, estado ou lógica dos simuladores. */
+:root {
+  --fi-accent: var(--accent, var(--primary, #2563eb));
+  --fi-ink: #172f49;
+  --fi-line: #d7e1ec;
+  --fi-surface: #ffffff;
+  --fi-radius: 20px;
+  --fi-shadow: 0 14px 30px rgba(18, 42, 66, .11), inset 0 1px 0 rgba(255, 255, 255, .94);
+  --fi-shadow-raised: 0 20px 42px rgba(18, 42, 66, .15), inset 0 1px 0 rgba(255, 255, 255, .98);
+  --fi-control-shadow: 0 8px 17px rgba(18, 42, 66, .13), inset 0 1px 0 rgba(255, 255, 255, .38), inset 0 -2px 4px rgba(15, 23, 42, .12);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Superfícies principais: borda nítida, brilho superior e sombra profunda. */
+:where(.card, .panel, .controls, .quick, .status-grid, .legend, .figureWrap,
+  .graph-card, .chart-card, .control-card, .info-card, .visual-card,
+  .sim-card, .metric-card, .stage-card, .accordion, details) {
+  border-color: var(--fi-line);
+  box-shadow: var(--fi-shadow);
+}
+
+:where(.card, .panel, .graph-card, .chart-card, .control-card, .info-card,
+  .visual-card, .sim-card, .metric-card, .stage-card) {
+  border-radius: max(var(--fi-radius), 16px);
+}
+
+/* Cards interativos ganham elevação discreta, sem deslocar o layout em repouso. */
+:where(.card, .panel, .graph-card, .chart-card, .control-card, .info-card,
+  .visual-card, .sim-card, .metric-card, .stage-card):hover {
+  box-shadow: var(--fi-shadow-raised);
+}
+
+/* Botões com molde e altura consistentes em toda a unidade. */
+:where(button, .btn, [role="button"]) {
+  min-height: 44px;
+  border-radius: 14px;
+  font-weight: 800;
+  box-shadow: var(--fi-control-shadow);
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+}
+
+:where(button, .btn, [role="button"]):not(:disabled):hover {
+  transform: translateY(-2px);
+  filter: brightness(1.035) saturate(1.04);
+  box-shadow: 0 12px 23px rgba(18, 42, 66, .17), inset 0 1px 0 rgba(255, 255, 255, .45), inset 0 -2px 4px rgba(15, 23, 42, .12);
+}
+
+:where(button, .btn, [role="button"]):not(:disabled):active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 9px rgba(18, 42, 66, .13), inset 0 2px 5px rgba(15, 23, 42, .14);
+}
+
+:where(button, .btn, [role="button"]):focus-visible,
+:where(input, select, summary):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--fi-accent) 28%, transparent);
+  outline-offset: 3px;
+}
+
+/* Campos e seletores seguem a mesma linguagem de relevo. */
+:where(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select) {
+  min-height: 42px;
+  border-radius: 12px;
+  border-color: var(--fi-line);
+  background-color: rgba(255, 255, 255, .96);
+  box-shadow: inset 0 2px 5px rgba(18, 42, 66, .08), 0 1px 0 rgba(255, 255, 255, .9);
+}
+
+:where(input[type="range"]) {
+  accent-color: var(--fi-accent);
+}
+
+/* Acordeões e cabeçalhos mantêm cor própria, com profundidade coerente. */
+:where(summary, .accordion-header, .section-header, .panel-header) {
+  border-radius: 14px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .45);
+}
+
+/* Gráficos/SVG recebem enquadramento sutil sem interferir no desenho. */
+:where(canvas, .plot, .chart, .graph, svg.graph, svg.chart) {
+  filter: drop-shadow(0 5px 10px rgba(18, 42, 66, .055));
+}
+
+@media (max-width: 700px) {
+  :where(button, .btn, [role="button"]) {
+    min-height: 44px;
+  }
+  :where(.card, .panel, .graph-card, .chart-card, .control-card, .info-card,
+    .visual-card, .sim-card, .metric-card, .stage-card) {
+    border-radius: 17px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(button, .btn, [role="button"], .card, .panel) { transition: none !important; }
+}
