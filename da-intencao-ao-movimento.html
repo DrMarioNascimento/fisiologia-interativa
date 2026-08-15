@@ -603,9 +603,21 @@ body{background:radial-gradient(circle at 8% 2%,rgba(232,117,19,.08),transparent
 .dim-task-card:hover,.dim-task-card.selected{background:linear-gradient(145deg,#1c3049,#14263a)!important;border-color:#57e8cc!important}
 .dim-task-name{color:#f4f7fb;font-weight:700}
 
-.dim-selected-task{border-left:7px solid #20a888!important;padding:15px 18px!important;margin-bottom:28px!important}
-.dim-selected-task b{color:#17324d!important;font-weight:850!important}
-.dim-selected-task span{color:#5c7086!important;font-weight:600!important}
+.dim-selected-task{
+  width:min(100%,820px)!important;min-height:88px!important;
+  display:grid!important;grid-template-columns:66px minmax(0,1fr)!important;gap:16px!important;align-items:center!important;
+  border:1px solid #304662!important;border-left:7px solid #35d0ad!important;border-radius:18px!important;
+  padding:12px 18px 12px 14px!important;margin:-4px 0 30px!important;
+  background:linear-gradient(145deg,#192740 0%,#111b2e 100%)!important;
+  box-shadow:0 12px 26px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.07)!important;
+}
+.dim-selected-mini{width:66px!important;height:62px!important;border:1px solid rgba(87,232,204,.20)!important;border-radius:12px!important;background:#f5f8fb!important;box-shadow:inset 0 1px 0 #fff,0 5px 12px rgba(0,0,0,.20)!important}
+.dim-selected-mini.dark{background:#05070d!important}
+.dim-selected-task b{
+  color:#64e6ca!important;font-family:var(--mono)!important;font-size:12px!important;font-weight:800!important;
+  letter-spacing:.10em!important;text-transform:uppercase!important;margin-bottom:7px!important;
+}
+.dim-selected-task span{color:#f3f7fb!important;font-size:16px!important;font-weight:750!important;line-height:1.35!important}
 
 .dim-parallel-grid{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;gap:16px!important}
 .dim-parallel-card{border:1px solid #304362!important;border-radius:18px!important;background:linear-gradient(145deg,#17233a,#111a2c)!important;box-shadow:0 12px 24px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.06)!important}
@@ -626,7 +638,7 @@ body{background:radial-gradient(circle at 8% 2%,rgba(232,117,19,.08),transparent
 .dim-neural-readout b{color:#0b9e7e!important}
 .dim-muscle-card h3{color:#0f766e!important}.dim-muscle-card p,.dim-threshold-state{color:#5c7086!important}
 
-@media(max-width:760px){.dim-hero{padding:26px 22px!important}.dim-hero .dim-intro-mark{margin-bottom:28px}.dim-control-block{padding:22px 18px!important}}
+@media(max-width:760px){.dim-hero{padding:26px 22px!important}.dim-hero .dim-intro-mark{margin-bottom:28px}.dim-control-block{padding:22px 18px!important}.dim-selected-task{width:100%!important;grid-template-columns:56px minmax(0,1fr)!important;gap:13px!important;padding:11px 14px 11px 11px!important}.dim-selected-mini{width:56px!important;height:54px!important}.dim-selected-task span{font-size:15px!important}}
 </style>
 
 <div id="dim-root">
