@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Contrações Musculares Interativas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#ffffff;
@@ -775,9 +778,62 @@ body{background:radial-gradient(circle at 8% 2%,rgba(232,117,19,.08),transparent
 .actions,.controls,.quick,.selector-line,.mechanics-line,.activation-panel-clean,.panel,.eq-box,.interpret-block,.graph-box{border-color:#e5d8cd!important;border-radius:20px!important;background:linear-gradient(145deg,#fff,#fff8f2)!important;box-shadow:0 16px 34px rgba(76,39,17,.13),0 4px 10px rgba(76,39,17,.07),inset 0 1px 0 rgba(255,255,255,.96)!important}
 .control,.result-pill,.activation-chip{box-shadow:0 9px 18px rgba(76,39,17,.10),inset 0 1px 0 rgba(255,255,255,.96)!important}.actions button,.quick-btn,.tab,.mech-btn,.analysis-btn{box-shadow:0 6px 0 #b6a08f,0 12px 21px rgba(76,39,17,.18),inset 0 1px 0 rgba(255,255,255,.38)!important}.actions button:hover,.quick-btn:hover,.tab:hover,.mech-btn:hover,.analysis-btn:hover{transform:translateY(-2px)!important}.actions button:active,.quick-btn:active,.tab:active,.mech-btn:active,.analysis-btn:active{transform:translateY(4px)!important;box-shadow:0 2px 0 #a58d7b,0 5px 9px rgba(76,39,17,.14)!important}.tab.active,.mech-btn.active,.analysis-btn.active{box-shadow:0 5px 0 #b24b13,0 0 0 4px rgba(232,117,19,.18),0 12px 23px rgba(178,75,19,.20)!important}
 input[type=range]{appearance:none;height:10px;border-radius:999px;background:linear-gradient(#d9c9bc,#fff6ed);box-shadow:inset 0 2px 4px rgba(76,39,17,.24),0 1px 0 #fff}input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#ffd4b0,#E87513 48%,#9a4008);box-shadow:0 3px 8px rgba(76,39,17,.30),0 0 0 1px #E87513}
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
 </style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>Contrações Musculares Interativas</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
 <h1>Contrações Musculares Interativas</h1>
 <p class="subtitle">Versão inicial para explorar contração estática, dinâmica e isocinética, com ênfase na contração dinâmica.</p>
 
@@ -849,7 +905,7 @@ input[type=range]{appearance:none;height:10px;border-radius:999px;background:lin
 </div>
 
 
-<div class="quick top-ui" id="quickBar">
+<div class="quick top-ui" id="quickBar" data-tab="controles">
   <strong>Estados rápidos:</strong>
   <div class="quick-row">
     <button class="quick-btn" data-preset="alongamento">Alongamento excessivo</button>
@@ -890,14 +946,14 @@ input[type=range]{appearance:none;height:10px;border-radius:999px;background:lin
 </div>
 
 <div class="main-layout">
-  <div class="panel">
+  <div class="panel" data-tab="animacao">
     <div class="panel-title">Animação integrada</div>
     <div class="canvas-wrap"><canvas id="sceneCanvas" width="980" height="840"></canvas></div>
 
 
   </div>
 
-  <div class="panel">
+  <div class="panel" data-tab="graficos">
     <div class="eq-box">
       <div class="panel-title" style="font-size:16px;margin-bottom:8px">Equação / leitura ativa</div>
 
@@ -3205,9 +3261,36 @@ render();
   .mechanics-dashboard .condition-pill.card-wide{grid-column:span 1!important;}
 }
 </style>
-</body>
-</html>
 
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
+})();
+</script>
 <style>.blue-val{color:#2563eb !important;}
 /* === PADRONIZAÇÃO FINAL — BOTÕES, ESTADOS RÁPIDOS E FLASH CARDS === */
 :root{
@@ -3671,3 +3754,5 @@ button.action{
 @media(max-width:700px){.mechanics-dashboard{grid-template-columns:1fr!important;}}
 
 </style>
+</body>
+</html>
