@@ -240,6 +240,31 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--fi-blue); }
 
 .signature { color: var(--fi-muted) !important; font-weight: 700; }
 
+/* Potencial de ação do neurônio: reforço visual sem alterar sua estrutura. */
+.fi-neuronio .controls{
+  border-color:#9fc7e7!important;
+  background:linear-gradient(145deg,#ffffff,#e6f2fb)!important;
+  box-shadow:0 14px 28px rgba(30,86,128,.15),0 3px 6px rgba(28,67,100,.10),inset 0 1px 0 #fff!important;
+}
+.fi-neuronio .card.colorized{
+  border-color:color-mix(in srgb,var(--phase-color,#2f80ed) 34%,#c9d9e7)!important;
+  background:linear-gradient(145deg,#fff,color-mix(in srgb,var(--phase-color,#2f80ed) 8%,#edf5fb))!important;
+  box-shadow:0 14px 28px color-mix(in srgb,var(--phase-color,#2f80ed) 13%,transparent),0 3px 6px rgba(28,67,100,.08),inset 0 1px 0 #fff!important;
+}
+.fi-neuronio .card.colorized::before{
+  width:10px!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--phase-color,#2f80ed) 68%,#fff),var(--phase-color,#2f80ed))!important;
+  box-shadow:0 0 13px color-mix(in srgb,var(--phase-color,#2f80ed) 43%,transparent)!important;
+}
+.fi-neuronio .card.colorized::after{
+  opacity:.68!important;
+  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--phase-color,#2f80ed) 24%,transparent),0 0 18px color-mix(in srgb,var(--phase-color,#2f80ed) 18%,transparent)!important;
+}
+.fi-neuronio .panel{
+  border-color:#a8c9e2!important;
+  box-shadow:0 15px 30px rgba(28,75,111,.14),0 3px 6px rgba(28,67,100,.08),inset 0 1px 0 #fff!important;
+}
+
 @media (max-width: 760px) {
   body { padding: 12px !important; }
   .app { padding: 12px !important; gap: 12px !important; }
