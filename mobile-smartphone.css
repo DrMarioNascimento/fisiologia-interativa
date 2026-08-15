@@ -1,0 +1,308 @@
+/* Otimização responsiva comum dos simuladores — Prof. Mário César Nascimento */
+@media (max-width: 760px) {
+  :root {
+    --mobile-page-gutter: 10px;
+    --mobile-touch-target: 44px;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  *,
+  *::before,
+  *::after {
+    min-width: 0;
+  }
+
+  body {
+    max-width: 100%;
+    overflow-x: hidden;
+    width: 100% !important;
+    padding-left: max(var(--mobile-page-gutter), env(safe-area-inset-left)) !important;
+    padding-right: max(var(--mobile-page-gutter), env(safe-area-inset-right)) !important;
+    padding-bottom: max(24px, env(safe-area-inset-bottom)) !important;
+    font-size: 16px;
+    line-height: 1.45;
+    overscroll-behavior-x: none;
+  }
+
+  body > .mobile-topbar,
+  body > .mobile-tabnav {
+    width: calc(100% + (2 * var(--mobile-page-gutter))) !important;
+    margin-left: calc(-1 * var(--mobile-page-gutter)) !important;
+    margin-right: calc(-1 * var(--mobile-page-gutter)) !important;
+  }
+
+  .mobile-topbar {
+    min-height: 60px;
+    padding: 8px 10px !important;
+    padding-left: max(10px, env(safe-area-inset-left)) !important;
+    padding-right: max(10px, env(safe-area-inset-right)) !important;
+  }
+
+  .mobile-topbar h2 {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: clamp(14px, 4vw, 16px) !important;
+    line-height: 1.2 !important;
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .mobile-playtoggle {
+    flex: 0 0 auto;
+    min-width: 88px !important;
+    min-height: var(--mobile-touch-target) !important;
+    padding: 9px 11px !important;
+    white-space: nowrap;
+  }
+
+  .mobile-tabnav {
+    top: 60px !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    padding: 7px 8px !important;
+  }
+
+  .mobile-tabnav button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: var(--mobile-touch-target) !important;
+    padding: 8px 4px !important;
+    overflow: hidden;
+    font-size: clamp(11px, 3.35vw, 13px) !important;
+    line-height: 1.15 !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  button,
+  [role="button"],
+  select,
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"] {
+    min-height: var(--mobile-touch-target) !important;
+    touch-action: manipulation;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    flex: 0 0 auto;
+    width: 22px !important;
+    height: 22px !important;
+  }
+
+  input[type="range"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 32px !important;
+    margin: 4px 0;
+  }
+
+  label {
+    max-width: 100%;
+    min-height: var(--mobile-touch-target);
+    white-space: normal !important;
+  }
+
+  canvas,
+  svg,
+  img,
+  video {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100% !important;
+  }
+
+  canvas {
+    width: 100% !important;
+    object-fit: contain;
+  }
+
+  .canvas-wrap,
+  .scene-wrap,
+  .graph-wrap,
+  .chart-wrap,
+  .svg-wrap,
+  .animation-wrap {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .container,
+  .wrapper,
+  .app,
+  .simulator,
+  .simulation,
+  .panel,
+  .card,
+  .controls,
+  .actions,
+  .quick,
+  .legend,
+  .eq-box,
+  .graph-box,
+  .interpret-block {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .layout,
+  .main-layout,
+  .content-grid,
+  .status-grid,
+  .dashboard,
+  .mechanics-dashboard,
+  .panels,
+  .panel-grid,
+  .cards-grid,
+  .grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .controls,
+  .actions,
+  .quick,
+  .quick-row,
+  .selector-line,
+  .mechanics-line,
+  .button-row,
+  .toolbar {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .controls > *,
+  .actions > *,
+  .quick > *,
+  .quick-row > *,
+  .selector-line > *,
+  .mechanics-line > * {
+    max-width: 100% !important;
+  }
+
+  table {
+    width: max-content;
+    min-width: 100%;
+  }
+
+  .table-responsive,
+  .table-wrap,
+  .table-container,
+  .learning-panel,
+  details {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  h2,
+  h3,
+  h4,
+  p,
+  small,
+  span,
+  .subtitle,
+  .phase,
+  .card-title,
+  .panel-title {
+    overflow-wrap: anywhere;
+  }
+
+  .signature,
+  footer {
+    max-width: 100%;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 430px) {
+  .panel,
+  .card,
+  .controls,
+  .actions,
+  .quick,
+  .legend,
+  .eq-box,
+  .graph-box,
+  .interpret-block {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    border-radius: 14px !important;
+  }
+
+  .controls > label,
+  .actions > label,
+  .quick > label,
+  .quick-row > label {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 375px) {
+  :root {
+    --mobile-page-gutter: 8px;
+  }
+
+  .mobile-playtoggle {
+    min-width: 78px !important;
+    padding-inline: 8px !important;
+    font-size: 14px !important;
+  }
+
+  .mobile-tabnav {
+    gap: 4px !important;
+    padding-inline: 5px !important;
+  }
+
+  .mobile-tabnav button {
+    padding-inline: 2px !important;
+  }
+}
+
+@media (max-width: 340px) {
+  .mobile-topbar h2 {
+    font-size: 13px !important;
+  }
+
+  .mobile-playtoggle {
+    min-width: 70px !important;
+    font-size: 13px !important;
+  }
+
+  .actions > button,
+  .quick-row > button,
+  .button-row > button,
+  .controls > button {
+    width: 100% !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
