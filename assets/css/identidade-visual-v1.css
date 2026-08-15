@@ -1,0 +1,289 @@
+/* Identidade visual compartilhada — Fisiologia Interativa
+   Camada exclusivamente visual: não altera estrutura, cálculos ou eventos. */
+:root {
+  --fi-ink: #17324d;
+  --fi-muted: #5c7086;
+  --fi-line: #bfd5e8;
+  --fi-blue: #2f80ed;
+  --fi-blue-light: #62b5ff;
+  --fi-green: #169b62;
+  --fi-green-light: #39c987;
+  --fi-red: #d94a4a;
+  --fi-red-light: #f07171;
+  --fi-slate: #36536d;
+  --fi-slate-light: #6d8ba5;
+  --fi-surface: rgba(255, 255, 255, .94);
+  --fi-depth: 0 12px 26px rgba(28, 67, 100, .12),
+              0 2px 5px rgba(28, 67, 100, .08),
+              inset 0 1px 0 rgba(255, 255, 255, .98);
+  --fi-depth-soft: 0 7px 16px rgba(28, 67, 100, .10),
+                   inset 0 1px 0 rgba(255, 255, 255, .96);
+  --fi-control-depth: 0 5px 0 var(--btn-base),
+                      0 9px 15px rgba(22, 50, 75, .15),
+                      inset 0 1px 0 rgba(255, 255, 255, .98),
+                      inset 0 0 0 2px rgba(255, 255, 255, .40);
+}
+
+html { background: #edf4fb; }
+
+body {
+  color: var(--fi-ink) !important;
+  background:
+    radial-gradient(circle at 8% 2%, rgba(101, 179, 240, .11), transparent 30%),
+    linear-gradient(180deg, #f9fcff 0%, #edf4fb 100%) !important;
+}
+
+h1 { color: var(--fi-ink) !important; text-shadow: 0 1px 0 #fff; }
+.subtitle, .mini-note, .pro-graph-note { color: var(--fi-muted) !important; }
+
+/* Superfícies existentes */
+.controls,
+.topbar,
+.scenario-row,
+.stage-map,
+.timeline,
+.panel,
+.legend,
+.card {
+  border: 1px solid var(--fi-line) !important;
+  background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(235,244,252,.92)) !important;
+  box-shadow: var(--fi-depth) !important;
+}
+
+.controls, .topbar, .scenario-row { border-radius: 20px !important; }
+.stage-map, .timeline, .panel, .legend { border-radius: 19px !important; }
+.panel { overflow: hidden; }
+
+canvas {
+  border: 1px solid #c9d9e7 !important;
+  border-radius: 16px !important;
+  box-shadow:
+    inset 0 2px 4px rgba(23, 50, 77, .08),
+    inset 0 1px 0 rgba(255, 255, 255, .96),
+    0 5px 12px rgba(28, 67, 100, .07) !important;
+}
+
+/* Botões existentes: mesma altura e profundidade, largura adaptada ao texto */
+button {
+  --btn-top: #ffffff;
+  --btn-bottom: #e8eef3;
+  --btn-border: #8799a8;
+  --btn-base: #8798a5;
+  --btn-text: #17324d;
+  min-width: 118px;
+  min-height: 46px;
+  padding: 10px 16px !important;
+  border: 1px solid var(--btn-border) !important;
+  border-radius: 14px !important;
+  color: var(--btn-text) !important;
+  font-family: inherit;
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  line-height: 1.15;
+  white-space: nowrap;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.78) 0 10%, transparent 11%),
+    linear-gradient(180deg, var(--btn-top) 0%, var(--btn-bottom) 100%) !important;
+  box-shadow: var(--fi-control-depth) !important;
+  transform: translateY(-2px);
+  transition: transform .14s ease, box-shadow .14s ease, filter .14s ease !important;
+}
+
+button:hover {
+  transform: translateY(-3px) !important;
+  filter: brightness(1.025) saturate(1.03);
+  box-shadow:
+    0 6px 0 var(--btn-base),
+    0 11px 19px rgba(22, 50, 75, .17),
+    inset 0 1px 0 rgba(255,255,255,.98),
+    inset 0 0 0 2px rgba(255,255,255,.46) !important;
+}
+
+button:active {
+  transform: translateY(3px) !important;
+  box-shadow:
+    0 1px 0 var(--btn-base),
+    0 3px 6px rgba(22, 50, 75, .13),
+    inset 0 2px 4px rgba(23,50,77,.12),
+    inset 0 0 0 2px rgba(255,255,255,.32) !important;
+}
+
+button:focus-visible { outline: 3px solid rgba(47,128,237,.28); outline-offset: 3px; }
+button:disabled { opacity: .48; filter: grayscale(.25); cursor: not-allowed; }
+
+#btnStart, #playBtn, button.primary {
+  --btn-top: #68bdff;
+  --btn-bottom: #2787dc;
+  --btn-border: #1d6fae;
+  --btn-base: #165b91;
+  --btn-text: #ffffff;
+}
+
+#btnPause, #pauseBtn {
+  --btn-top: #ffffff;
+  --btn-bottom: #e6edf3;
+  --btn-border: #7f93a5;
+  --btn-base: #778895;
+  --btn-text: #17324d;
+}
+
+#btnStep {
+  min-width: 150px;
+  --btn-top: #f8fffb;
+  --btn-bottom: #d9f3e5;
+  --btn-border: #4e9a73;
+  --btn-base: #3f805f;
+  --btn-text: #145c3b;
+}
+
+#btnReset, #resetBtn {
+  --btn-top: #fffafa;
+  --btn-bottom: #f7dede;
+  --btn-border: #b96868;
+  --btn-base: #9d5555;
+  --btn-text: #8a3030;
+}
+
+/* Sliders já existentes */
+input[type="range"] {
+  height: 24px;
+  accent-color: var(--fi-blue);
+  cursor: pointer;
+  filter: drop-shadow(0 2px 2px rgba(23, 50, 77, .16));
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 8px;
+  border: 1px solid #70869a;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #b8c8d6 0%, #eef5fa 46%, #7890a4 100%);
+  box-shadow: inset 0 2px 3px rgba(23, 50, 77, .30), 0 1px 0 #fff;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  margin-top: -9px;
+  border: 1px solid #1762a3;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #eefaff 0 9%, #75c7ff 18%, #2f91e9 52%, #1762a3 100%);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,.9), 0 4px 8px rgba(23, 50, 77, .30);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 8px;
+  border: 1px solid #70869a;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #b8c8d6 0%, #eef5fa 46%, #7890a4 100%);
+  box-shadow: inset 0 2px 3px rgba(23, 50, 77, .30), 0 1px 0 #fff;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border: 1px solid #1762a3;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #eefaff 0 9%, #75c7ff 18%, #2f91e9 52%, #1762a3 100%);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,.9), 0 4px 8px rgba(23, 50, 77, .30);
+}
+
+/* Campos de seleção que já existem */
+label, .pill, .scenario-label, .mode-badge {
+  color: var(--fi-ink) !important;
+  border: 1px solid #c9d9e7 !important;
+  background: linear-gradient(180deg, #fff, #f2f7fb) !important;
+  box-shadow: var(--fi-depth-soft) !important;
+}
+
+label:has(input:checked), .scenario-label:has(input:checked) {
+  border-color: #68abe3 !important;
+  background: linear-gradient(180deg, #fff, #e7f3fd) !important;
+  box-shadow: 0 0 0 3px rgba(47,128,237,.13), 0 8px 16px rgba(28,67,100,.12) !important;
+}
+
+input[type="checkbox"], input[type="radio"] { accent-color: var(--fi-blue); }
+
+/* Cards e etapas existentes */
+.status-grid { align-items: stretch; }
+.card {
+  height: 142px !important;
+  min-height: 142px !important;
+  border-radius: 18px !important;
+  isolation: isolate;
+}
+
+.card::before {
+  width: 8px !important;
+  top: 11px !important;
+  bottom: 11px !important;
+  left: -3px !important;
+  border-radius: 999px !important;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--phase, var(--phaseColor, var(--fi-blue))) 35%, transparent) !important;
+}
+
+.card::after {
+  opacity: .52 !important;
+  filter: saturate(1.12);
+}
+
+.card-title { color: var(--fi-muted) !important; font-weight: 900 !important; }
+.phase { position: relative; z-index: 1; }
+.phase small { color: var(--fi-muted) !important; }
+
+.stage-node, .timeline-step {
+  border-color: #c9d9e7 !important;
+  background: linear-gradient(145deg, #fff, #eef5fb) !important;
+  box-shadow: var(--fi-depth-soft) !important;
+}
+
+.signature { color: var(--fi-muted) !important; font-weight: 700; }
+
+/* Potencial de ação do neurônio: reforço visual sem alterar sua estrutura. */
+.fi-neuronio .controls{
+  border-color:#9fc7e7!important;
+  background:linear-gradient(145deg,#ffffff,#e6f2fb)!important;
+  box-shadow:0 14px 28px rgba(30,86,128,.15),0 3px 6px rgba(28,67,100,.10),inset 0 1px 0 #fff!important;
+}
+.fi-neuronio .card.colorized{
+  border-color:color-mix(in srgb,var(--phase-color,#2f80ed) 34%,#c9d9e7)!important;
+  background:linear-gradient(145deg,#fff,color-mix(in srgb,var(--phase-color,#2f80ed) 8%,#edf5fb))!important;
+  box-shadow:0 14px 28px color-mix(in srgb,var(--phase-color,#2f80ed) 13%,transparent),0 3px 6px rgba(28,67,100,.08),inset 0 1px 0 #fff!important;
+}
+.fi-neuronio .card.colorized::before{
+  width:10px!important;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--phase-color,#2f80ed) 68%,#fff),var(--phase-color,#2f80ed))!important;
+  box-shadow:0 0 13px color-mix(in srgb,var(--phase-color,#2f80ed) 43%,transparent)!important;
+}
+.fi-neuronio .card.colorized::after{
+  opacity:.68!important;
+  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--phase-color,#2f80ed) 24%,transparent),0 0 18px color-mix(in srgb,var(--phase-color,#2f80ed) 18%,transparent)!important;
+}
+.fi-neuronio .panel{
+  border-color:#a8c9e2!important;
+  box-shadow:0 15px 30px rgba(28,75,111,.14),0 3px 6px rgba(28,67,100,.08),inset 0 1px 0 #fff!important;
+}
+
+@media (max-width: 760px) {
+  body { padding: 12px !important; }
+  .app { padding: 12px !important; gap: 12px !important; }
+  h1 { font-size: clamp(24px, 7vw, 30px) !important; }
+  .subtitle { font-size: 14px !important; }
+  .controls { gap: 12px 8px !important; padding: 12px 10px 16px !important; }
+  .controls button { flex: 1 1 135px; }
+  #btnStep { flex-basis: 160px; }
+  .controls label, .controls .pill { flex: 1 1 100%; justify-content: center; }
+  .controls input[type="range"] { width: min(48vw, 180px) !important; }
+  .status-grid { grid-template-columns: 1fr !important; }
+  .card { height: auto !important; min-height: 132px !important; }
+  .stage-track, .timeline-row { grid-template-columns: 1fr !important; }
+  .timeline-step::after { display: none !important; }
+}
+
+@media (max-width: 420px) {
+  body, .app { padding-left: 8px !important; padding-right: 8px !important; }
+  .controls button { width: 100%; flex-basis: 100%; }
+  button, #btnStep { min-width: 0; width: 100%; }
+  .scenario-label { flex: 1 1 100%; justify-content: center; }
+}
