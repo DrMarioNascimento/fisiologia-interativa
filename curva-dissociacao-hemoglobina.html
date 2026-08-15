@@ -212,6 +212,34 @@
       font:600 13px/1.4 Arial,Helvetica,sans-serif;
     }
 
+    /* === PADRÃO VISUAL CONSOLIDADO — PROF. MÁRIO | BLOCO 5 === */
+    :root{--grid-depth:0 16px 34px rgba(18,42,66,.13),0 4px 10px rgba(18,42,66,.07),inset 0 1px 0 rgba(255,255,255,.94)}
+    body{background:radial-gradient(circle at 10% 3%,rgba(47,102,220,.06),transparent 29%),radial-gradient(circle at 90% 8%,rgba(15,118,110,.055),transparent 28%),linear-gradient(180deg,#fbfdff 0%,#eef4fb 100%)!important}
+    .controls,.panel,.co2-card,.vo2-card,.interpret-left{
+      border:1px solid #d3dfeb!important;border-radius:20px!important;
+      background:linear-gradient(145deg,#fff 0%,#f5faff 100%)!important;box-shadow:var(--grid-depth)!important;
+    }
+    .action-controls button{min-width:112px;box-shadow:0 5px 0 rgba(38,63,91,.25),0 10px 18px rgba(18,42,66,.16),inset 0 1px 0 rgba(255,255,255,.32)!important}
+    .action-controls button:hover{transform:translateY(-2px)!important;box-shadow:0 6px 0 rgba(38,63,91,.23),0 14px 22px rgba(18,42,66,.18)!important}
+    .action-controls button:active{transform:translateY(3px)!important;box-shadow:0 2px 0 rgba(38,63,91,.25),0 5px 9px rgba(18,42,66,.13)!important}
+    .controls input[type=range]{appearance:none;height:10px!important;border-radius:999px;background:linear-gradient(180deg,#c8d6e5,#edf4fb);box-shadow:inset 0 2px 4px rgba(18,42,66,.24),0 1px 0 #fff}
+    .controls input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#c3d7ff 0%,#2f66dc 48%,#1e4599 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #2f66dc;cursor:pointer}
+    .controls input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#c3d7ff 0%,#2f66dc 48%,#1e4599 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #2f66dc;cursor:pointer}
+    .stats>div,.legend-item{box-shadow:0 8px 17px rgba(18,42,66,.09),inset 0 1px 0 rgba(255,255,255,.94)!important}
+    canvas{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.07)!important}
+    /* Correção de especificidade: profundidade física dos botões */
+    #btnStart{box-shadow:0 6px 0 #1f5d9f,0 12px 22px rgba(47,128,237,.28),inset 0 1px 0 rgba(255,255,255,.38)!important}
+    #btnPause{box-shadow:0 6px 0 #263e55,0 12px 22px rgba(54,83,109,.26),inset 0 1px 0 rgba(255,255,255,.36)!important}
+    #btnStep{box-shadow:0 6px 0 #5424aa,0 12px 22px rgba(124,58,237,.28),inset 0 1px 0 rgba(255,255,255,.38)!important}
+    #btnReset{box-shadow:0 6px 0 #922c2c,0 12px 22px rgba(213,70,70,.28),inset 0 1px 0 rgba(255,255,255,.38)!important}
+    #btnStart:hover,#btnPause:hover,#btnStep:hover,#btnReset:hover{transform:translateY(-2px)!important;filter:brightness(1.04)!important}
+    #btnStart:active,#btnPause:active,#btnStep:active,#btnReset:active{transform:translateY(4px)!important;box-shadow:0 2px 0 rgba(38,63,91,.38),0 5px 9px rgba(18,42,66,.16)!important}
+    .state-controls button{box-shadow:0 5px 0 #bed0e1,0 10px 18px rgba(18,42,66,.13),inset 0 1px 0 rgba(255,255,255,.96)!important}
+    .state-controls button:hover{transform:translateY(-2px)!important;box-shadow:0 6px 0 #b4c8dc,0 14px 22px rgba(18,42,66,.16)!important}
+    .state-controls button:active{transform:translateY(3px)!important;box-shadow:0 2px 0 #b4c8dc,0 5px 9px rgba(18,42,66,.12)!important}
+    .state-controls button.preset.active{box-shadow:0 5px 0 #b52e50,0 0 0 4px rgba(239,71,111,.18),0 12px 24px rgba(185,28,28,.19),inset 0 1px 0 rgba(255,255,255,.96)!important}
+    @media(max-width:760px){body{padding:14px}.action-controls button{min-width:0;flex:1 1 132px}}
+
   </style>
 </head>
 <body>

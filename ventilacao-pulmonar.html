@@ -576,6 +576,83 @@
 
     @media (max-width:720px){.mode-title{min-width:0;text-align:center}.vent-segment{width:100%}.vent-seg-btn{min-height:46px!important;font-size:14px!important}}
 
+    /* === PADRÃO VISUAL CONSOLIDADO — PROF. MÁRIO | BLOCO 5 === */
+    :root{--grid-depth:0 16px 34px rgba(18,42,66,.13),0 4px 10px rgba(18,42,66,.07),inset 0 1px 0 rgba(255,255,255,.94)}
+    body{background:radial-gradient(circle at 10% 3%,rgba(25,118,185,.06),transparent 29%),radial-gradient(circle at 90% 8%,rgba(231,154,174,.07),transparent 28%),linear-gradient(180deg,#fbfdff 0%,#eef4fb 100%)}
+    .controls,.mode-panel,.settings-panel,.state-row,.panel,.legend{
+      border:1px solid #d3dfeb!important;border-radius:20px!important;
+      background:linear-gradient(145deg,#fff 0%,#f5faff 100%)!important;box-shadow:var(--grid-depth)!important;
+    }
+    .settings-grid label{box-shadow:0 9px 18px rgba(18,42,66,.10),inset 0 1px 0 rgba(255,255,255,.94)!important}
+    .controls:first-of-type button{min-width:112px;box-shadow:0 5px 0 rgba(38,63,91,.25),0 10px 18px rgba(18,42,66,.16),inset 0 1px 0 rgba(255,255,255,.32)!important}
+    .controls:first-of-type button:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(38,63,91,.23),0 14px 22px rgba(18,42,66,.18)!important}
+    .controls:first-of-type button:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(38,63,91,.25),0 5px 9px rgba(18,42,66,.13)!important}
+    input[type=range]{appearance:none;height:10px;border-radius:999px;background:linear-gradient(180deg,#c8d6e5,#edf4fb);box-shadow:inset 0 2px 4px rgba(18,42,66,.24),0 1px 0 #fff}
+    input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b9e3ff 0%,#1976B9 48%,#11558a 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1976B9;cursor:pointer}
+    input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b9e3ff 0%,#1976B9 48%,#11558a 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1976B9;cursor:pointer}
+    .card{border:1px solid #d3dfeb!important;border-left:0!important;background:linear-gradient(145deg,#fff,#f3f8fc)!important;box-shadow:0 12px 24px rgba(18,42,66,.12),inset 0 1px 0 rgba(255,255,255,.94)!important}
+    .card::before{content:""!important;display:block!important;position:absolute;inset:10px auto 10px -4px!important;width:10px!important;border-radius:999px!important;background:linear-gradient(180deg,var(--card-color),color-mix(in srgb,var(--card-color) 65%,#fff 35%))!important;box-shadow:0 0 11px color-mix(in srgb,var(--card-color) 42%,transparent)!important}
+    canvas{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.07)!important}
+    /* Correção de especificidade: profundidade física dos botões */
+    #btnStart{box-shadow:0 6px 0 #08784e,0 12px 22px rgba(16,185,129,.28),inset 0 1px 0 rgba(255,255,255,.38)!important}
+    #btnPause{box-shadow:0 6px 0 #ac6208,0 12px 22px rgba(245,158,11,.28),inset 0 1px 0 rgba(255,255,255,.38)!important}
+    #btnStep{box-shadow:0 6px 0 #174ba8,0 12px 22px rgba(37,99,235,.28),inset 0 1px 0 rgba(255,255,255,.38)!important}
+    #btnReset{box-shadow:0 6px 0 #8d2020,0 12px 22px rgba(220,38,38,.28),inset 0 1px 0 rgba(255,255,255,.38)!important}
+    #btnStart:hover,#btnPause:hover,#btnStep:hover,#btnReset:hover{transform:translateY(-2px)!important;filter:brightness(1.04);}
+    #btnStart:active,#btnPause:active,#btnStep:active,#btnReset:active{transform:translateY(4px)!important;box-shadow:0 2px 0 rgba(38,63,91,.38),0 5px 9px rgba(18,42,66,.16)!important}
+    .state-btn{box-shadow:0 5px 0 #bed0e1,0 10px 18px rgba(18,42,66,.13),inset 0 1px 0 rgba(255,255,255,.96)!important}
+    .state-btn:hover{transform:translateY(-2px)!important;box-shadow:0 6px 0 #b4c8dc,0 14px 22px rgba(18,42,66,.16)!important}
+    .state-btn:active{transform:translateY(3px)!important;box-shadow:0 2px 0 #b4c8dc,0 5px 9px rgba(18,42,66,.12)!important}
+    .state-btn.active{box-shadow:0 5px 0 #bb2832,0 0 0 4px rgba(239,68,68,.20),0 12px 24px rgba(185,28,28,.20),inset 0 1px 0 rgba(255,255,255,.96)!important}
+
+    /* Seletor de modo: distribuição ampla, relevo físico e ícone de ventilador */
+    .mode-panel{
+      display:grid!important;
+      grid-template-columns:minmax(145px,auto) minmax(0,1fr)!important;
+      align-items:center!important;
+      gap:clamp(20px,3vw,44px)!important;
+    }
+    .vent-segment{
+      width:100%!important;
+      max-width:none!important;
+      display:grid!important;
+      grid-template-columns:repeat(2,minmax(180px,1fr))!important;
+      gap:clamp(28px,5vw,76px)!important;
+      padding:10px 12px 15px!important;
+      background:linear-gradient(180deg,#e6eef7 0%,#f7fbff 100%)!important;
+      box-shadow:inset 0 2px 5px rgba(18,42,66,.18),0 1px 0 #fff!important;
+    }
+    .vent-seg-btn{
+      min-height:62px!important;
+      gap:12px!important;
+      border:1px solid rgba(18,42,66,.16)!important;
+      font-size:16px!important;
+      box-shadow:0 7px 0 #aebfd0,0 14px 23px rgba(18,42,66,.18),inset 0 1px 0 rgba(255,255,255,.96)!important;
+      transition:transform .16s ease,box-shadow .16s ease,filter .16s ease!important;
+    }
+    .vent-seg-btn[data-mode="spont"]{box-shadow:0 7px 0 #72b4d3,0 14px 23px rgba(31,120,180,.20),inset 0 1px 0 rgba(255,255,255,.96)!important}
+    .vent-seg-btn[data-mode="mech"]{box-shadow:0 7px 0 #7292c9,0 14px 23px rgba(37,99,235,.20),inset 0 1px 0 rgba(255,255,255,.96)!important}
+    .vent-seg-btn:hover{transform:translateY(-2px)!important;filter:brightness(1.025)}
+    .vent-seg-btn:active{transform:translateY(5px)!important;box-shadow:0 2px 0 #8299b0,0 5px 9px rgba(18,42,66,.15)!important}
+    .vent-seg-btn[data-mode="spont"].active{box-shadow:0 7px 0 #176891,0 0 0 4px rgba(31,120,180,.16),0 15px 25px rgba(31,120,180,.24),inset 0 1px 0 rgba(255,255,255,.35)!important}
+    .vent-seg-btn[data-mode="mech"].active{box-shadow:0 7px 0 #174ba8,0 0 0 4px rgba(37,99,235,.16),0 15px 25px rgba(37,99,235,.24),inset 0 1px 0 rgba(255,255,255,.35)!important}
+    .vent-seg-icon{width:38px;height:38px;display:grid!important;place-items:center;flex:0 0 38px;font-size:29px!important;line-height:1}
+    .vent-mech-icon svg{width:42px;height:42px;overflow:visible;filter:drop-shadow(0 2px 2px rgba(18,42,66,.18))}
+    .vent-mech-icon .machine{fill:#eaf2fb;stroke:#28527a;stroke-width:2}
+    .vent-mech-icon .screen{fill:#14324d;stroke:#4c89b8;stroke-width:1.5}
+    .vent-mech-icon .wave{fill:none;stroke:#42d3ff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .vent-mech-icon .control-a{fill:#34d399;stroke:#08784e;stroke-width:1}
+    .vent-mech-icon .control-b{fill:#f59e0b;stroke:#ac6208;stroke-width:1}
+    .vent-mech-icon .tube{fill:none;stroke:#3182ce;stroke-width:2.5;stroke-linecap:round}
+    .vent-mech-icon .lung{fill:#f7a8ba;stroke:#bf496a;stroke-width:1.3}
+    .vent-mech-icon .stand{fill:none;stroke:#526b83;stroke-width:2;stroke-linecap:round}
+    @media(max-width:620px){body{padding:14px}.controls:first-of-type button{min-width:0;flex:1 1 132px}}
+    @media(max-width:720px){
+      .mode-panel{grid-template-columns:1fr!important;gap:14px!important}
+      .vent-segment{grid-template-columns:repeat(2,minmax(135px,1fr))!important;gap:18px!important}
+    }
+    @media(max-width:460px){.vent-segment{grid-template-columns:1fr!important;gap:18px!important}}
+
   </style>
 </head>
 <body>
@@ -603,8 +680,23 @@
       <option value="mech">Ventilação mecânica</option>
     </select>
     <div class="vent-segment" role="group" aria-label="Modo ventilatório">
-      <button type="button" class="vent-seg-btn active" data-mode="spont"><span class="vent-seg-icon">🫁</span> Espontânea</button>
-      <button type="button" class="vent-seg-btn" data-mode="mech"><span class="vent-seg-icon">▣</span> Mecânica</button>
+      <button type="button" class="vent-seg-btn active" data-mode="spont"><span class="vent-seg-icon vent-spont-icon" aria-hidden="true">🫁</span> Espontânea</button>
+      <button type="button" class="vent-seg-btn" data-mode="mech">
+        <span class="vent-seg-icon vent-mech-icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" role="img">
+            <rect class="machine" x="6" y="4" width="23" height="29" rx="4"/>
+            <rect class="screen" x="10" y="8" width="15" height="10" rx="2"/>
+            <path class="wave" d="M12 13h3l2-3 2 6 2-3h2"/>
+            <circle class="control-a" cx="13" cy="24" r="2.2"/>
+            <circle class="control-b" cx="21" cy="24" r="2.2"/>
+            <path class="tube" d="M29 14c8 0 8 7 8 12"/>
+            <path class="lung" d="M37 26c-4 1-6 5-5 10 4 0 6-2 6-6z"/>
+            <path class="lung" d="M39 26c4 1 6 5 5 10-4 0-6-2-6-6z"/>
+            <path class="stand" d="M17.5 33v7m-6 3h12m-6-3-6 3m6-3 6 3"/>
+          </svg>
+        </span>
+        Mecânica
+      </button>
     </div>
   </div>
 
