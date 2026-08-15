@@ -331,6 +331,19 @@ input[type="range"]{accent-color:#2f80ed;}
 }
 @media (max-width:760px){.graph-metric-grid{grid-template-columns:1fr}}
 </style>
+<style>
+/* ETAPA 02 — acabamento individual: contração muscular esquelética */
+.controls{box-shadow:0 16px 30px rgba(47,128,237,.13),0 5px 10px rgba(18,42,66,.10),inset 0 2px 0 #fff,inset 0 -2px 4px rgba(18,42,66,.04)}
+.controls>button{min-height:44px;height:44px;margin-bottom:5px;padding:0 17px}
+#btnStart,#btnPause,#btnReset{min-width:92px}#btnStep{min-width:142px}
+.states{box-shadow:0 14px 26px rgba(18,42,66,.10),inset 0 2px 0 #fff}
+.state-btn{min-height:40px;padding:8px 14px;box-shadow:0 4px 0 rgba(18,42,66,.18),0 8px 14px rgba(18,42,66,.10),inset 0 1px 0 #fff}
+.state-btn:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(18,42,66,.18),0 3px 7px rgba(18,42,66,.09)}
+.card,.panel{box-shadow:0 13px 25px color-mix(in srgb,var(--cardColor,#2f80ed) 15%,transparent),0 5px 9px rgba(18,42,66,.09),inset 0 2px 0 #fff,inset 0 -2px 4px rgba(18,42,66,.035)}
+.panel canvas{border-radius:13px;background:linear-gradient(145deg,#fbfdff,#f4f8fc);box-shadow:inset 0 5px 12px rgba(18,42,66,.055),inset 0 -2px 4px #fff}
+.signature{margin-top:14px;padding-top:12px;border-top:1px solid #d7e1ec}
+@media(max-width:760px){.controls>button,.state-btn{min-height:44px}.controls>button{flex:1 1 112px}.card,.panel{box-shadow:0 9px 18px rgba(18,42,66,.10),inset 0 1px 0 #fff}}
+</style>
 </head>
 <body>
   <h1>Simulador Interativo da Contração Muscular</h1>
