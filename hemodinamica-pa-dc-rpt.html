@@ -257,6 +257,74 @@ canvas{
 @media(max-width:1180px){.status-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.status-grid{grid-template-columns:1fr}}
 
+/* === PADRÃO VISUAL CONSOLIDADO — PROF. MÁRIO | BLOCO 4 === */
+:root{
+  --grid-depth:0 16px 34px rgba(18,42,66,.13),0 4px 10px rgba(18,42,66,.07),inset 0 1px 0 rgba(255,255,255,.94);
+  --grid-depth-hover:0 20px 40px rgba(18,42,66,.16),0 6px 14px rgba(18,42,66,.08),inset 0 1px 0 rgba(255,255,255,.95);
+}
+body{
+  background:
+    radial-gradient(circle at 10% 3%,rgba(216,57,62,.055),transparent 28%),
+    radial-gradient(circle at 90% 8%,rgba(37,99,235,.055),transparent 30%),
+    linear-gradient(180deg,#fbfdff 0%,#eef4fb 100%);
+  color:#17324d;
+}
+.controls,.selector,.panel,.legend{
+  background:linear-gradient(145deg,#ffffff 0%,#f6faff 100%)!important;
+  border:1px solid #d3dfeb!important;
+  border-radius:20px!important;
+  box-shadow:var(--grid-depth)!important;
+}
+.controls,.selector{margin-bottom:14px!important;padding:14px 16px!important}
+.panel{padding:14px!important}
+button{
+  min-width:112px;min-height:44px;
+  box-shadow:0 5px 0 rgba(38,63,91,.28),0 10px 18px rgba(18,42,66,.16),inset 0 1px 0 rgba(255,255,255,.32)!important;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(38,63,91,.26),0 14px 22px rgba(18,42,66,.18),inset 0 1px 0 rgba(255,255,255,.35)!important}
+button:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(38,63,91,.28),0 5px 9px rgba(18,42,66,.13)!important}
+#quickStates button{min-width:auto;min-height:40px}
+label.control,label.pick{
+  background:linear-gradient(180deg,#fff,#f7faff)!important;
+  border:1px solid #d5e0eb!important;
+  box-shadow:0 5px 12px rgba(18,42,66,.08),inset 0 1px 0 #fff!important;
+}
+input[type=range]{
+  appearance:none;width:125px;height:10px;border-radius:999px;
+  background:linear-gradient(180deg,#c8d6e5,#edf4fb);
+  box-shadow:inset 0 2px 4px rgba(18,42,66,.24),0 1px 0 #fff;
+}
+input[type=range]::-webkit-slider-thumb{
+  appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;
+  background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#2563eb 48%,#174f9d 100%);
+  box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #245fae;cursor:pointer;
+}
+input[type=range]::-moz-range-thumb{
+  width:18px;height:18px;border-radius:50%;border:2px solid #fff;
+  background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#2563eb 48%,#174f9d 100%);
+  box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #245fae;cursor:pointer;
+}
+.card{
+  border:1px solid #d3dfeb!important;border-radius:18px!important;
+  background:linear-gradient(145deg,#fff 0%,#f3f8fc 100%)!important;
+  box-shadow:0 12px 24px rgba(18,42,66,.12),inset 0 1px 0 rgba(255,255,255,.94)!important;
+  isolation:isolate;
+}
+.card::before{
+  inset:10px auto 10px -4px!important;width:10px!important;border-radius:999px!important;
+  background:linear-gradient(180deg,var(--card-color,#2563eb),color-mix(in srgb,var(--card-color,#2563eb) 68%,#fff 32%))!important;
+  box-shadow:0 0 11px color-mix(in srgb,var(--card-color,#2563eb) 42%,transparent)!important;
+}
+.card::after{right:-54px;bottom:-54px;width:138px;height:138px;opacity:.66}
+canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.07)!important}
+.mode-badge{font-weight:800;border-color:#d3dfeb;box-shadow:0 6px 14px rgba(18,42,66,.09)}
+@media(max-width:760px){
+  body{padding:14px}
+  button{min-width:0;flex:1 1 132px}
+  .selector-block{flex-wrap:wrap}
+  .checks{flex-wrap:wrap;justify-content:flex-start}
+}
+
 
 /* === Transições suaves de estados rápidos === */
 .card .phase-value,
