@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>VO2, débito cardíaco e diferença arterio-venosa – fisiologia interativa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#ffffff;
@@ -581,15 +584,68 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 .card{box-shadow:0 12px 24px rgba(18,42,66,.12),inset 0 1px 0 rgba(255,255,255,.96)!important}
 .canvas-wrap canvas{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 12px 25px rgba(18,42,66,.10)!important}
 
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
 </style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>VO2, débito cardíaco e diferença arterio-venosa – fisiologia interativa</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
 <h1>Consumo de oxigênio, débito cardíaco e diferença arterio-venosa de O₂</h1>
 <p class="subtitle">Simulador interativo da equação de Fick para integrar VO2, débito cardíaco, extração tecidual e valor relativo por quilograma.</p>
 
 
 
-<div class="controls controls-actions">
+<div class="controls controls-actions" data-tab="controles">
   <button id="btnStart" class="primary btn-start">▶ Iniciar</button>
   <button id="btnPause" class="btn-pause">⏸ Pausar</button>
   <button id="btnReset" class="btn-reset">↻ Resetar</button>
@@ -600,7 +656,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
   </label>
 </div>
 
-<div class="quick" id="quickStates">
+<div class="quick" id="quickStates" data-tab="controles">
   <strong style="margin-right:4px">Estados rápidos:</strong>
   <button data-preset="rest">Repouso</button>
   <button data-preset="light">Exercício leve</button>
@@ -630,7 +686,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
 <div id="notice" class="notice"></div>
 
-<div class="controls controls-sliders section-card variables-controls">
+<div class="controls controls-sliders section-card variables-controls" data-tab="controles">
   <div class="section-label">Variáveis principais</div>
   <label class="control var-vo2"><span class="control-name">VO2</span>
     <input id="vo2Range" type="range" min="100" max="5000" step="10" value="250">
@@ -653,7 +709,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
   </label>
 </div>
 
-<div class="controls" id="advancedToggleBar">
+<div class="controls" id="advancedToggleBar" data-tab="controles">
   <div class="ios-toggle-wrap">
     <label class="ios-toggle" aria-label="Modo avançado">
       <input id="advancedModeToggle" type="checkbox">
@@ -666,7 +722,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
   </div>
 </div>
 
-<div class="controls controls-sliders section-card advanced-sliders" id="advancedControls"  style="display:none">
+<div class="controls controls-sliders section-card advanced-sliders" id="advancedControls"  style="display:none" data-tab="controles">
   <div class="section-label">Modo avançado</div>
   <label class="control var-hb"><span class="control-name">Hb</span>
     <input id="hbRange" type="range" min="8" max="18" step="0.1" value="15">
@@ -689,11 +745,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
   </label>
 </div>
 
-<div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: calcular VO2</div></div>
+<div class="mode-line" data-tab="animacao"><div id="modeBadge" class="mode-badge">Modo: calcular VO2</div></div>
 
 <div class="main-layout">
 
-  <div class="panel">
+  <div class="panel" data-tab="animacao">
     <div class="panel-title">Animação integrada</div>
     <div class="canvas-wrap"><canvas id="sceneCanvas" width="980" height="680"></canvas></div>
 <div class="readout-box" style="margin-top:10px">
@@ -704,7 +760,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
     </div>
   </div>
 
-  <div class="panel">
+  <div class="panel" data-tab="graficos">
     <div class="eq-box">
       <div class="panel-title" style="font-size:16px;margin-bottom:8px">Equação ativa</div>
       <div id="equationMain" class="eq-main">VO2 = Q × Δ a-v O₂ × 10</div>
@@ -745,7 +801,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
       </div>
     </div>
 
-    
+
 
     <div class="eq-box" style="margin-top:10px">
       <div class="panel-title" style="font-size:16px;margin-bottom:8px">Equação alternativa (conteúdo de O₂)</div>
@@ -1548,6 +1604,36 @@ pao2Range.addEventListener('input', e=>{ PaO2=Number(e.target.value); render(); 
 applyDashboardKeys();
 updateActiveButtons();
 render();
+})();
+</script>
+
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
 })();
 </script>
 </body>

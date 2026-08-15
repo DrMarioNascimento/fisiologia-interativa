@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Retorno Venoso — Fisiologia Interativa (V3)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#ffffff;
@@ -162,10 +165,10 @@
     .equation strong,.text-box strong{color:#0f172a}
 
     .interpret-colored strong{
-      
+
     }
     .interpret-colored{
-      
+
     }
 
     .footer-block{
@@ -182,18 +185,18 @@
       margin:0 0 12px 0;
       min-height:132px;
     }
-    
+
     .reading-title{
       font-size:22px;
       font-weight:800;
-      
+
       margin:0 0 10px 0;
       line-height:1.1;
     }
     .reading-text{
       font-size:16px;
       line-height:1.6;
-      
+
       text-align:justify;
       min-height:44px;
     }
@@ -219,7 +222,50 @@
     #readingText .warn{color:#f59e0b;font-weight:700}
     #readingText .bad{color:#dc2626;font-weight:700}
 
-  </style>
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
+</style>
 
 <style>
 
@@ -509,10 +555,20 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>Retorno Venoso — Fisiologia Interativa (V3)</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
   <h1>Retorno Venoso</h1>
   <p class="subtitle">Simulador interativo com retorno venoso, válvulas venosas, bomba muscular, bomba respiratória, curva de retorno venoso e ponto de equilíbrio hemodinâmico.</p>
 
-  <div class="toolbar">
+  <div class="toolbar" data-tab="controles">
     <button id="btnStart" class="primary">Iniciar</button>
     <button id="btnPause">Pausar</button>
     <button id="btnReset">Resetar</button>
@@ -526,25 +582,25 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
     </label>
   </div>
 
-  <div class="mode-line"><span id="modeBadge" class="mode-badge">Modo: animação contínua</span></div>
+  <div class="mode-line" data-tab="animacao"><span id="modeBadge" class="mode-badge">Modo: animação contínua</span></div>
 
   <div class="top-grid">
-    <div class="top-col">
+    <div class="top-col" data-tab="controles">
       <div class="top-title">Controle hemodinâmico</div>
       <div class="actions-col" style="margin-bottom:8px">
         <div style="font-size:13px;line-height:1.45">
-          
+
         </div>
       </div>
-      <div class="control-stack" id="col-left"></div>
+      <div class="control-stack" id="col-left" data-tab="controles"></div>
     </div>
-    <div class="top-col">
+    <div class="top-col" data-tab="controles">
       <div class="top-title">Determinantes do retorno venoso</div>
-      <div class="control-stack" id="col-mid"></div>
+      <div class="control-stack" id="col-mid" data-tab="controles"></div>
     </div>
-    <div class="top-col">
+    <div class="top-col" data-tab="controles">
       <div class="top-title">Acoplamento cardiopulmonar</div>
-      <div class="control-stack" id="col-right"></div>
+      <div class="control-stack" id="col-right" data-tab="controles"></div>
     </div>
   </div>
 
@@ -560,7 +616,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
 
   <div class="main-layout">
-    <div class="panel">
+    <div class="panel" data-tab="animacao">
       <div class="panel-title">Animação integrada</div>
       <div class="panel-sub">Modelo visual combinando bomba muscular, pulmão/bomba respiratória e coração para representar o retorno venoso periférico até o átrio direito.</div>
       <svg class="scene" viewBox="0 0 980 560" id="sceneSvg" aria-label="Simulação integrada do retorno venoso">
@@ -629,8 +685,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <path d="M60,150 C155,173 250,197 350,222 C415,239 487,249 620,258" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="28" stroke-linecap="round"/>
             <path d="M188,96 C230,88 274,108 322,143 C389,191 455,238 620,258" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="30" stroke-linecap="round"/>
             <path d="M154,277 C180,313 243,313 315,301 C413,286 492,268 620,258" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="18" stroke-linecap="round"/>
-            
-            
+
+
           </clipPath>
           <filter id="softShadow" x="-25%" y="-25%" width="150%" height="150%">
             <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#84a3c6" flood-opacity="0.25"/>
@@ -643,7 +699,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <feGaussianBlur stdDeviation="1.6" result="blur"/>
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
-        
+
           <!-- === Órgãos premium do template cardiopulmonar === -->
           <radialGradient id="rvTplLungFill3D" cx="30%" cy="22%" r="82%">
             <stop offset="0%" stop-color="#fff2f6"/>
@@ -699,7 +755,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
         <rect x="0" y="0" width="980" height="560" fill="#ffffff"/>
         <text id="labelTitleLeft" x="80" y="16" fill="#0f172a" font-size="28" font-weight="500">Rede Venosa</text>
-        
+
 
         <!-- pump muscle -->
         <g id="muscleGroup" filter="url(#softShadow)">
@@ -740,13 +796,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
           <path id="armVein" d="M60,150 C155,173 250,197 350,222 C415,239 487,249 620,258" fill="none" stroke="url(#veinGrad)" stroke-width="16" stroke-linecap="round" opacity="0.96"/>
           <path id="legVeinL" d="M188,96 C230,88 274,108 322,143 C389,191 455,238 620,258" fill="none" stroke="url(#veinGrad)" stroke-width="18" stroke-linecap="round"/>
           <path id="legVeinR" d="M154,277 C180,313 243,313 315,301 C413,286 492,268 620,258" fill="none" stroke="url(#veinGrad)" stroke-width="14" stroke-linecap="round" opacity="0.96"/>
-          
-          
+
+
           <path id="armVeinInner" d="M60,150 C155,173 250,197 350,222 C415,239 487,249 620,258" fill="none" stroke="url(#veinLumen)" stroke-width="15.5" stroke-linecap="round" opacity="0.99" filter="url(#innerSoftGlow)"/>
           <path id="legVeinLInner" d="M188,96 C230,88 274,108 322,143 C389,191 455,238 620,258" fill="none" stroke="url(#veinLumen)" stroke-width="17.5" stroke-linecap="round" opacity="0.99" filter="url(#innerSoftGlow)"/>
           <path id="legVeinRInner" d="M154,277 C180,313 243,313 315,301 C413,286 492,268 620,258" fill="none" stroke="url(#veinLumen)" stroke-width="15.5" stroke-linecap="round" opacity="0.99" filter="url(#innerSoftGlow)"/>
-          
-          
+
+
         </g>
 
         <g id="flowRibbons" clip-path="url(#veinClip)"></g>
@@ -775,7 +831,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <path class="leaflet-left" d="M-10 -9 Q-1 -2 -1 0 Q-1 2 -10 9" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="4.8" stroke-linecap="round"/>
             <path class="leaflet-right" d="M1 -9 Q10 -2 10 0 Q10 2 1 9" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="4.8" stroke-linecap="round"/>
           </g>
-          
+
         </g>
 
 <!-- thorax and lungs -->
@@ -842,13 +898,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
         </g>
 
-        
+
         <text id="labelVV" x="100" y="372" fill="#42586e" font-size="15" font-weight="700">Veias periféricas</text>
         <text id="labelValves" x="292" y="372" fill="#42586e" font-size="15" font-weight="700">Válvulas venosas</text>
-        
 
-        
-        
+
+
+
 
       </svg>
 
@@ -859,8 +915,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
     </div>
 
-    
-<div class="panel">
+
+<div class="panel" data-tab="graficos">
   <div class="panel-title">Gráfico principal</div>
   <div class="panel-sub">Curva de retorno venoso em função da pressão atrial direita, com curva de função cardíaca opcional e ponto de equilíbrio destacado.</div>
   <canvas id="graph" width="720" height="560" style="display:block"></canvas>
@@ -1715,5 +1771,35 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
     last = performance.now();
     requestAnimationFrame(loop);
   </script>
+
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
+})();
+</script>
 </body>
 </html>

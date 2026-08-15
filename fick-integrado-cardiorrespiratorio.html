@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fick Integrado — Fisiologia Interativa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#fff;--panel:#fbfbfd;--line:#d9dce3;--text:#1f2937;--muted:#6b7280;--blue:#2563eb;--red:#dc2626;--green:#16a34a;--amber:#d97706;--shadow:0 10px 24px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.92)}
     *{box-sizing:border-box} body{margin:0;padding:22px;font-family:Arial,Helvetica,sans-serif;background:#fff;color:var(--text)}
@@ -28,7 +31,7 @@
     .reading-banner{background:linear-gradient(180deg,#f7f9fc 0%, #eef2f7 100%);border:1px solid #d3dae4;border-radius:0 0 28px 28px;padding:26px 24px 26px 52px;margin:10px 0 12px;min-height:132px}.reading-title{font-size:22px;font-weight:800;margin:0 0 10px 0}.reading-text{font-size:16px;line-height:1.6;color:#475569;text-align:justify;min-height:44px}
     .good{color:var(--green);font-weight:700}.warn{color:var(--amber);font-weight:700}.bad{color:var(--red);font-weight:700}
     @media (max-width:1220px){.top-grid,.main-layout{grid-template-columns:1fr}.panel-grid{grid-template-columns:1fr 1fr 1fr 1fr}} @media (max-width:760px){.panel-grid{grid-template-columns:1fr 1fr}.scene,#barGraph{height:420px}}
-  
+
     .scene-wrap{position:relative;width:100%;height:100%;overflow:hidden;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%)}
     .scene-wrap svg{width:100%;height:100%;display:block}
     .pulse-heart{transform-box:fill-box;transform-origin:center;animation:heartPulse 1.12s ease-in-out infinite}
@@ -220,12 +223,65 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 .metric{box-shadow:0 10px 20px rgba(18,42,66,.11),inset 0 1px 0 rgba(255,255,255,.96)!important}
 #barGraph,.scene{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 12px 25px rgba(18,42,66,.10)!important}
 
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
 </style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>Fick Integrado — Fisiologia Interativa</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
   <h1>Fick Integrado</h1>
   <p class="subtitle">Simulador interativo do princípio de Fick conectando débito cardíaco, conteúdos arterial e venoso de oxigênio, extração tecidual e consumo de O₂.</p>
-  <div class="toolbar action-controls">
+  <div class="toolbar action-controls" data-tab="controles">
     <button id="btnStart" class="tool-btn btn-start">Iniciar</button>
     <button id="btnPause" class="tool-btn btn-pause">Pausar</button>
     <button id="btnReset" class="tool-btn btn-reset">Resetar</button>
@@ -237,19 +293,19 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
     <input type="checkbox" id="toggleMito" checked hidden>
     <label class="speed-wrap"><strong>Velocidade</strong><input type="range" id="speed" min="0.5" max="2" step="0.1" value="1"><span id="speedLabel">1,0×</span></label>
   </div>
-  <div class="mode-line"><span id="modeBadge" class="mode-badge">Modo: animação contínua</span></div>
+  <div class="mode-line" data-tab="animacao"><span id="modeBadge" class="mode-badge">Modo: animação contínua</span></div>
   <div class="top-grid">
-    <div class="top-col"><div class="top-title">Transporte arterial de O₂</div><div class="control-stack" id="col-left"></div></div>
-    <div class="top-col"><div class="top-title">Pós-carga e demanda metabólica</div><div class="control-stack" id="col-mid"></div></div>
-    <div class="top-col"><div class="top-title">Pré-carga e extração</div><div class="control-stack" id="col-right"></div></div>
+    <div class="top-col" data-tab="controles"><div class="top-title">Transporte arterial de O₂</div><div class="control-stack" id="col-left" data-tab="controles"></div></div>
+    <div class="top-col" data-tab="controles"><div class="top-title">Pós-carga e demanda metabólica</div><div class="control-stack" id="col-mid" data-tab="controles"></div></div>
+    <div class="top-col" data-tab="controles"><div class="top-title">Pré-carga e extração</div><div class="control-stack" id="col-right" data-tab="controles"></div></div>
   </div>
   <div class="states"><strong>Estados rápidos:</strong><div id="states" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
   <div class="metrics-wide"><div class="panel-title" style="font-size:16px;margin:0 0 6px">Painel de variáveis</div><div class="panel-grid" id="metrics"></div></div>
   <div class="main-layout">
-    <div class="panel">
+    <div class="panel" data-tab="animacao">
       <div class="panel-title">Animação integrada</div>
       <div class="panel-sub">O sangue arterial chega ao tecido com alto conteúdo de O₂, sofre extração periférica e retorna com menor conteúdo venoso, enquanto o débito cardíaco modula a oferta global.</div>
-      
+
 
 <div class="scene" id="sceneSvg">
   <div class="scene-wrap">
@@ -332,7 +388,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
         </marker>
         <marker id="arrowGreen" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#10b981"/>
         </marker>
-      
+
         <radialGradient id="o2Sphere" cx="34%" cy="28%" r="72%">
           <stop offset="0%" stop-color="#fff6f7"/>
           <stop offset="18%" stop-color="#ffb8c1"/>
@@ -351,7 +407,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
               <filter id="gasSphereShadow" x="-60%" y="-60%" width="220%" height="220%">
           <feDropShadow dx="0" dy="1.4" stdDeviation="1.8" flood-color="rgba(0,0,0,0.28)" flood-opacity="0.55"/>
         </filter>
-      
+
         <filter id="tubeShadow" x="-30%" y="-50%" width="170%" height="220%">
           <feDropShadow dx="0" dy="10" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.18"/>
         </filter>
@@ -401,7 +457,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
           <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#0f172a" flood-opacity="0.20"/>
         </filter>
 
-      
+
         <filter id="tissueGlow" x="-60%" y="-60%" width="240%" height="240%">
           <feGaussianBlur stdDeviation="12" result="blur"/>
           <feColorMatrix type="matrix" values="
@@ -414,7 +470,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <feMergeNode in="SourceGraphic"/>
           </feMerge>
         </filter>
-      
+
         <filter id="heartGlow" x="-60%" y="-60%" width="240%" height="240%">
           <feGaussianBlur stdDeviation="10" result="blur"/>
           <feColorMatrix type="matrix" values="
@@ -427,7 +483,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <feMergeNode in="SourceGraphic"/>
           </feMerge>
         </filter>
-      
+
         <radialGradient id="tissueO2Sphere" cx="34%" cy="28%" r="72%">
           <stop offset="0%" stop-color="#fff8f9"/>
           <stop offset="18%" stop-color="#ffc7ce"/>
@@ -451,7 +507,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <feMergeNode in="SourceGraphic"/>
           </feMerge>
         </filter>
-      
+
         <filter id="cellShadowGlow" x="-70%" y="-70%" width="260%" height="260%">
           <feDropShadow dx="0" dy="3" stdDeviation="2.3" flood-color="#064e3b" flood-opacity="0.28"/>
           <feGaussianBlur in="SourceGraphic" stdDeviation="1.3" result="blur"/>
@@ -460,7 +516,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <feMergeNode in="SourceGraphic"/>
           </feMerge>
         </filter>
-      
+
         <linearGradient id="arrowBlue3D" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="#bcd3ff"/>
           <stop offset="42%" stop-color="#3b82f6"/>
@@ -479,7 +535,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
         <filter id="arrow3DShadow" x="-60%" y="-60%" width="240%" height="240%">
           <feDropShadow dx="0" dy="2.4" stdDeviation="2.2" flood-color="#0f172a" flood-opacity="0.28"/>
         </filter>
-      
+
         <radialGradient id="cellShell3D" cx="35%" cy="30%" r="70%">
   <stop offset="0%" stop-color="#f4fff9" stop-opacity="0.96"/>
   <stop offset="28%" stop-color="#c9f8e2" stop-opacity="0.88"/>
@@ -492,7 +548,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
   <stop offset="70%" stop-color="#7e22ce"/>
   <stop offset="100%" stop-color="#3b0764"/>
 </radialGradient>
-      
+
 <radialGradient id="mito3D" cx="35%" cy="30%" r="70%">
   <stop offset="0%" stop-color="#fff7cc"/>
   <stop offset="40%" stop-color="#fbbf24"/>
@@ -815,7 +871,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
       <div class="reading-banner"><div class="reading-title">Leitura fisiológica imediata</div><div class="reading-text" id="readingText"></div></div>
     </div>
-    <div class="panel">
+    <div class="panel" data-tab="graficos">
       <div class="panel-title">Gráfico principal</div>
       <div class="panel-sub">Comparação entre conteúdo arterial de O₂, conteúdo venoso de O₂, diferença arterio-venosa e VO₂.</div>
       <canvas id="barGraph" width="720" height="560"></canvas>
@@ -886,7 +942,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
       document.getElementById('modeBadge').textContent=playing?'Modo: animação contínua':'Modo: pausado';
     }
     function pointOnHorizontalPath(x1,x2,t,y){return{x:x1+(x2-x1)*t,y}}
-    
+
     function updateScene(){
       const labelsOn = document.getElementById('toggleLabels').checked;
       const particlesOn = document.getElementById('toggleParticles').checked;
@@ -1176,5 +1232,35 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
     document.getElementById('btnStart').addEventListener('click',()=>{playing=true; updateUI()}); document.getElementById('btnPause').addEventListener('click',()=>{playing=false; updateUI()}); document.getElementById('btnReset').addEventListener('click',()=>{applyState(activeState||'repouso'); updateUI()}); document.getElementById('speed').addEventListener('input',updateUI); document.getElementById('toggleLabels').addEventListener('change',updateScene); document.getElementById('toggleParticles').addEventListener('change',updateScene); document.getElementById('toggleMito').addEventListener('change',updateScene);
     function tick(now){const dt=Math.min(.033,(now-last)/1000); last=now; if(playing){elapsed+=dt; updateScene(); drawGraph(); updateTexts()} requestAnimationFrame(tick)} requestAnimationFrame(tick);
   </script>
+
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
+})();
+</script>
 </body>
 </html>

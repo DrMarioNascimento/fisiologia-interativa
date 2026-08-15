@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Curva de Dissociação da Hemoglobina (O₂) — troca O₂/CO₂ corrigida</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#ffffff;--panel:#fbfbfd;--line:#d9dce3;--text:#183153;--muted:#5a7597;--blue:#2f66dc;--red:#ef476f;--green:#0f766e;--purple:#7c3aed;--gray:#bcc7d6;--card:#f6f8fb}
     *{box-sizing:border-box}
@@ -44,7 +47,7 @@
     .vo2-note{margin-top:10px;font-size:13px;line-height:1.35;color:#5d728d}
     @media (max-width:1200px){.layout{max-width:1460px;margin:0 auto;display:grid;grid-template-columns:1.05fr 1.25fr;gap:18px;align-items:start}.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;padding:8px 12px 8px;justify-content:start}}
     @media (max-width:760px){.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px;padding:8px 12px 8px;justify-content:start}.stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:10px 12px 2px}}
-  
+
     .co2-box{border:1px solid #dfe6f0;border-radius:16px;background:linear-gradient(180deg,#fcfdff 0%,#f4f8fc 100%);padding:12px 14px;box-shadow:0 10px 24px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.85)}
     .co2-title{margin:0 0 10px 0;color:#183153;font:700 16px Arial,Helvetica,sans-serif}
     .co2-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:stretch}
@@ -240,12 +243,65 @@
     .state-controls button.preset.active{box-shadow:0 5px 0 #b52e50,0 0 0 4px rgba(239,71,111,.18),0 12px 24px rgba(185,28,28,.19),inset 0 1px 0 rgba(255,255,255,.96)!important}
     @media(max-width:760px){body{padding:14px}.action-controls button{min-width:0;flex:1 1 132px}}
 
-  </style>
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
+</style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>Curva de Dissociação da Hemoglobina (O₂) — troca O₂/CO₂ corrigida</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
   <h1>Curva de Dissociação da Hemoglobina (O₂)</h1>
-  
-  <div class="controls action-controls">
+
+  <div class="controls action-controls" data-tab="controles">
     <button id="btnStart" class="primary">Iniciar</button>
     <button id="btnPause">Pausar</button>
     <button id="btnStep">Próxima etapa</button>
@@ -256,7 +312,7 @@
     <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
   </div>
 
-  <div class="controls state-controls">
+  <div class="controls state-controls" data-tab="controles">
     <strong>Estados rápidos:</strong>
     <button class="preset active" data-preset="normal">Normal</button>
     <button class="preset" data-preset="exercise">Exercício</button>
@@ -269,7 +325,7 @@
     <button class="preset" data-preset="fibrosis">Fibrose</button>
   </div>
 
-  <div class="controls param-controls">
+  <div class="controls param-controls" data-tab="controles">
     <label>pH <input id="phRange" type="range" min="7.00" max="7.60" step="0.01" value="7.40"><span id="phLabel">7,40</span></label>
     <label>PCO₂ <input id="pco2Range" type="range" min="20" max="80" step="1" value="40"><span id="pco2Label">40 mmHg</span></label>
     <label>Temperatura <input id="tempRange" type="range" min="35" max="41" step="0.1" value="37.0"><span id="tempLabel">37,0 °C</span></label>
@@ -279,7 +335,7 @@
   <div class="badge-line"><span id="modeBadge" class="badge">Modo: pausado | Estado: Normal</span></div>
 
   <div class="layout">
-    <div class="panel">
+    <div class="panel" data-tab="animacao">
       <div class="molecule-head" style="font-size:22px; white-space:nowrap;">Representação molecular didática da hemoglobina</div>
       <canvas id="sceneCanvas" width="1180" height="920"></canvas>
 <div id="co2TransportBox" style="display:block;margin-top:12px;">
@@ -295,7 +351,7 @@
                 <div class="co2-dot dot3"></div>
               </div>
 
-      
+
               <div class="co2-card-text">Pequena fração transportada diretamente dissolvida no plasma.</div>
             </div>
             <div class="co2-card co2-blue">
@@ -320,20 +376,20 @@
         </div>
       </div>
 
-      
+
       <div class="pillbar" style="display:none">
         <span class="pill" id="pillShift">Estado R favorecido</span>
         <span class="pill" id="pillO2">O₂ afastando-se do Fe</span>
         <span class="pill" id="pillCO2">CO₂ aproximando-se do Fe</span>
       </div>
-      
+
       <div class="interpret-left" id="interpretation">
         <b>Como interpretar:</b> <span class="red">Pulmão (captação):</span> em altas pressões de O₂ (~100 mmHg), a hemoglobina apresenta alta afinidade, promovendo saturação quase completa. <span class="blue">Hemoglobina (transporte):</span> o O₂ liga-se ao ferro (Fe²⁺) nos grupos heme, permitindo transporte eficiente até os tecidos. <span class="green">Tecidos (liberação):</span> em pressões menores (~40 mmHg ou menos), ocorre liberação progressiva de O₂ conforme a demanda metabólica. <span class="purple">CO₂ (retorno):</span> o CO₂ produzido pelos tecidos é transportado dissolvido, ligado à hemoglobina (carbamino-Hb) ou principalmente como bicarbonato (HCO₃⁻) no plasma. <b>Curva de dissociação (regulação):</b> deslocamentos para a direita (↑CO₂, ↓pH, ↑temperatura, ↑2,3-BPG) facilitam a liberação de O₂; deslocamentos para a esquerda aumentam a afinidade e dificultam a liberação. <b>Em repouso:</b> a extração tecidual mantém o sangue venoso por volta de 40 mmHg; a diferença arterio-venosa de O₂ é menor. <b>Estados clínicos:</b> exercício e acidose favorecem a entrega de O₂ aos tecidos; intoxicação por CO reduz drasticamente o transporte de O₂; enfisema associa-se à retenção de CO₂ e dificuldade de troca gasosa; fibrose pulmonar reduz a difusão de O₂, limitando a oxigenação.
       </div>
-      
+
     </div>
 
-    <div class="panel">
+    <div class="panel" data-tab="graficos">
       <div class="panel-title" style="font-size:22px;">Curva sigmoide</div>
       <canvas id="graphCanvas" width="860" height="560"></canvas>
       <div class="legend-grid">
@@ -927,5 +983,35 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
+
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
+})();
+</script>
 </body>
 </html>

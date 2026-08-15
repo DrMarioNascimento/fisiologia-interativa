@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simulador de Ventilação Pulmonar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#ffffff;
@@ -495,7 +498,7 @@
     body.mech-mode .settings-grid label.mech-only.control-select .setting-name{white-space:normal!important;}
     .state-btn{min-height:76px!important;}
 
-  
+
 
     /* === Seletor Apple premium para modo ventilatório + cores de ecossistema === */
     .mode-panel{
@@ -653,13 +656,66 @@
     }
     @media(max-width:460px){.vent-segment{grid-template-columns:1fr!important;gap:18px!important}}
 
-  </style>
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
+</style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>Simulador de Ventilação Pulmonar</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
   <h1>Ventilação Pulmonar</h1>
   <p class="subtitle">Simulador didático com mecânica ventilatória e curvas de pressão intrapulmonar e intrapleural.</p>
 
-  <div class="controls">
+  <div class="controls" data-tab="controles">
     <button id="btnStart" class="primary">Iniciar</button>
     <button id="btnPause">Pausar</button>
     <button id="btnStep">Próxima etapa</button>
@@ -761,9 +817,9 @@
     </div>
   </div>
 
-  <div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+  <div class="mode-line" data-tab="animacao"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
 
-  <div class="status-grid">
+  <div class="status-grid" data-tab="animacao">
     <div class="card" id="phaseCard">
       <div class="card-title">Fase atual</div>
       <div class="phase" id="phaseText">Inspiração<small id="phaseDesc">Entrada de ar e expansão pulmonar.</small></div>
@@ -815,11 +871,11 @@
   </div>
 
   <div class="layout">
-    <div class="panel"><canvas id="sceneCanvas" width="860" height="540"></canvas></div>
-    <div class="panel"><canvas id="graphCanvas" width="860" height="540"></canvas></div>
+    <div class="panel" data-tab="animacao"><canvas id="sceneCanvas" width="860" height="540"></canvas></div>
+    <div class="panel" data-tab="graficos"><canvas id="graphCanvas" width="860" height="540"></canvas></div>
   </div>
 
-  <div class="legend">
+  <div class="legend" data-tab="graficos">
     <b>Como interpretar:</b> o simulador separa o <b>modo ventilatório</b> do <b>cenário clínico</b>. <span class="var-fr">FR (frequência respiratória)</span> e <span class="var-vt">Vt (volume corrente)</span> determinam a <b><span class="var-ve">VE (ventilação minuto)</span></b> pela relação <b><span class="var-ve">VE</span> = <span class="var-fr">FR</span> × <span class="var-vt">Vt</span></b>. A massa corporal estima o <b><span class="var-vd">VDa (espaço morto anatômico)</span></b> em aproximadamente 2,2 mL/kg. O <b><span class="var-vdf">VDf (espaço morto fisiológico)</span></b> representa o espaço morto anatômico somado ao espaço morto alveolar/patológico. A <b><span class="var-va">VA (ventilação alveolar)</span></b> é a porção efetiva para trocas gasosas: <b><span class="var-va">VA</span> = <span class="var-fr">FR</span> × [<span class="var-vt">Vt</span> − <span class="var-vdf">VDf</span>]</b>, repercutindo na <span class="var-sao2">SaO₂ (saturação arterial de oxigênio)</span>. Na ventilação espontânea, o diafragma torna a <span class="var-ppl">Ppl (pressão pleural)</span> mais negativa e a <span class="var-palv">Palv (pressão alveolar)</span> oscila pouco. Na ventilação mecânica, <span class="var-peep">PEEP (pressão expiratória final positiva)</span> e <span class="var-pinsp">Pinsp (pressão inspiratória)</span> elevam a <span class="var-palv">Palv</span>, deslocam a <span class="var-ppl">Ppl</span> para valores menos negativos e podem reduzir o <span class="var-rv">RV (retorno venoso)</span>.
     <span class="pill">ventilação</span>
     <span class="pill">mecânica respiratória</span>
@@ -2138,7 +2194,7 @@
     sctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--pleuraVisceral').trim();
     sctx.fillText('■ Pleura visceral', 636, 504);
 
-    
+
   }
 
   function pressureToY(v){
@@ -2522,6 +2578,36 @@
   syncVentSegment();
   updateControlLabels();
   applyState('eupneia');
+})();
+</script>
+
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
 })();
 </script>
 </body>

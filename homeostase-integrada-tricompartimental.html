@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Homeostase Integrada Tricompartimentada</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <meta name="description" content="Simulador interativo de homeostase dos compartimentos corporais, água, eletrólitos e equilíbrio entre plasma, líquido extracelular e líquido intracelular.">
 <meta name="sim-category" content="celular">
 <meta name="sim-author" content="Prof. Mário César Nascimento. PhD">
@@ -463,9 +466,62 @@ input[type="range"]::-moz-range-thumb{
   .ambient-context .context-molecule-c{width:27px}
   .ambient-context .context-molecule-d{width:25px}
 }
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
 </style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>Homeostase Integrada Tricompartimentada</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
 <main class="app">
   <header><div><h1>Homeostase integrada</h1><p class="subtitle">Modelo Dinâmico Autocompensatório Tri-Compartimental</p></div><div class="header-tools"><label class="time-speed" id="adaptive-clock" data-scale="electric"><span class="clock-main"><span id="clock-process">Resposta elétrica</span><b id="clock">0 ms</b></span><span class="time-line"><span id="total-clock">Tempo fisiológico: 00 h 00 min</span><output id="speed-out">1× · ms</output></span><input id="sim-speed" type="range" min="0.25" max="4" step="0.25" value="1" aria-label="Velocidade de reprodução do tempo fisiológico"></label><nav class="modes" aria-label="Níveis de complexidade"><button class="active">1 · Potencial de membrana</button><button>2 · Osmose e Donnan</button><button>3 · Homeostase integrada</button></nav></div></header>
   <section class="layout"><section class="stage"><div class="stage-head"><div><b>Vaso ⇄ LEC ⇄ LIC</b><br><span>Observe a redistribuição de água, íons, cargas e volume.</span></div></div>
@@ -999,6 +1055,36 @@ input[type="range"]::-moz-range-thumb{
   $("run").onclick=()=>{if(s.lysis){reset(s.mode);return}running=!running;render()};
   document.querySelectorAll(".modes button").forEach((b,i)=>b.onclick=()=>{const mode=i+1;reset(mode);setPhase(mode===1?"electric":mode===2?"osmotic":"capillary",mode===1?"Nível 1: potencial, canais e bomba na membrana plasmática.":mode===2?"Nível 2: osmose, Donnan e volume entre LEC e LIC.":"Nível 3: vaso, interstício e célula acoplados.");render()});
   configureLevel(1);particlePool("plasma-particles","p");particlePool("lec-particles","e");particlePool("lic-particles","i");render();setInterval(tick,100);
+})();
+</script>
+
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
 })();
 </script>
 </body></html>

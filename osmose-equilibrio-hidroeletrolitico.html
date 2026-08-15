@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Osmose e Equilíbrio Hidroeletrolítico — Fisiologia Interativa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <meta name="description" content="Simulador interativo de osmose, osmolaridade, tonicidade, permeabilidade de membrana e pressão osmótica." />
 <meta name="sim-category" content="celular" />
 <meta name="sim-author" content="Prof. Mário César Nascimento. PhD" />
@@ -235,9 +238,62 @@
   details.control-accordion summary { cursor:pointer; color:var(--accent); font-size:14px; font-weight:700; letter-spacing:.3px; }
   details.control-accordion > div { margin-top: 12px; }
   .signature { max-width:1700px; margin: 0 auto; padding: 18px 24px 28px; border-top:1px solid var(--border); text-align:center; color:var(--muted); font-size:12px; }
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
 </style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>Osmose e Equilíbrio Hidroeletrolítico — Fisiologia Interativa</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
 <header>
   <h1>Osmose e Equilíbrio Hidroeletrolítico</h1>
   <p class="subtitle">Fisiologia Interativa — modelo quantitativo de osmolaridade, tonicidade e permeabilidade de membrana</p>
@@ -295,7 +351,7 @@
         <div class="perm-toggles" id="permToggles"></div>
       </section>
 
-      <div class="legend">
+      <div class="legend" data-tab="graficos">
         <span><i class="dot" style="--dot-color:var(--na)"></i> Na⁺</span>
         <span><i class="dot" style="--dot-color:var(--cl)"></i> Cl⁻</span>
         <span><i class="dot" style="--dot-color:var(--k)"></i> K⁺</span>
@@ -310,9 +366,9 @@
         <summary>Como interpretar</summary>
         <div>
 <p style="text-align: justify;">
-    <b style="color: #2563eb;">1. Observe a osmolaridade:</b> ela conta todas as partículas dissolvidas. A água se move do meio com menor Osm para o de maior Osm. 
-    <b style="color: #16a34a;">2. Compare a tonicidade:</b> ela considera somente os solutos <i>impermeantes</i>. Solutos que atravessam a membrana se equilibram e deixam de sustentar movimento líquido de água. 
-    <b style="color: #7c3aed;">3. Teste a permeabilidade:</b> marque a glicose como “atravessa” e compare o resultado com o mesmo cenário em que ela fica impermeante. 
+    <b style="color: #2563eb;">1. Observe a osmolaridade:</b> ela conta todas as partículas dissolvidas. A água se move do meio com menor Osm para o de maior Osm.
+    <b style="color: #16a34a;">2. Compare a tonicidade:</b> ela considera somente os solutos <i>impermeantes</i>. Solutos que atravessam a membrana se equilibram e deixam de sustentar movimento líquido de água.
+    <b style="color: #7c3aed;">3. Teste a permeabilidade:</b> marque a glicose como “atravessa” e compare o resultado com o mesmo cenário em que ela fica impermeante.
     <b style="color: #d97706;">4. Use paredes rígidas:</b> o volume não muda; em seu lugar, surge a diferença de pressão osmótica (Δπ), útil para discutir osmose e pressão oncótica das proteínas.
 </p>
         </div>
@@ -929,6 +985,36 @@ render = function(){ _origRender(); if(running) refreshControlValues(); };
    ============================================================ */
 buildScenarioButtons();
 loadScenario("iso");
+</script>
+
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
+})();
 </script>
 </body>
 </html>

@@ -5,6 +5,9 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Simulador Cardiopulmonar Integrado</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
     :root{
       --bg:#f6f8fc;
@@ -117,7 +120,7 @@
       font-size:18px;
     }
     .panel-header span{ color:var(--muted); font-size:13px; }
-    
+
 .scene-wrap{
   padding:12px;
   flex:1;
@@ -471,7 +474,7 @@
       .metric-grid,.equations,.states,.slider-grid{ grid-template-columns:1fr; }
       .title h1{font-size:22px}
     }
-  
+
 .left-col .panel,
 .right-col .panel{
   height:100%;
@@ -853,22 +856,75 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 .metric{position:relative;overflow:hidden;border-left:6px solid var(--line)!important}
 canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgba(18,42,66,.09)!important}
 
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
 </style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>Simulador Cardiopulmonar Integrado</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
 <div id="uxFeedback" class="ux-feedback">Atualizado em tempo real</div>
 <div class="app">
-<div class="topbar">
+<div class="topbar" data-tab="controles">
 <div class="title">
 <h1>Simulador Cardiopulmonar Integrado</h1>
 <p>Respiração → retorno venoso → loop cardíaco → débito cardíaco → VO₂ → saturação → fechamento sistêmico</p>
 </div>
-<div class="toolbar">
+<div class="toolbar" data-tab="controles">
 <button class="primary" id="startBtn">Iniciar</button>
 <button class="dark" id="pauseBtn">Pausar</button>
 <button class="danger" id="resetBtn">Resetar</button>
 </div>
-<div class="toolbar">
+<div class="toolbar" data-tab="controles">
 <button class="success" id="labelsBtn">Mostrar rótulos</button>
 <button class="primary" id="stepBtn">Executar por etapas</button>
 <div class="speed-box">
@@ -877,13 +933,13 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <span id="animSpeedVal">1.0×</span>
 </div>
 </div>
-</div><div class="hero-grid"><div class="hero-left"><div class="panel global-controls-panel">
+</div><div class="hero-grid"><div class="hero-left"><div class="panel global-controls-panel" data-tab="animacao">
 <div class="panel-header"><h2>Controles globais</h2><span>Ajuste fisiologia e integração</span></div>
 <div class="slider-grid" id="sliders"></div>
-</div><div class="panel quick-states-panel">
+</div><div class="panel quick-states-panel" data-tab="graficos">
 <div class="panel-header"><h2>Estados rápidos</h2><span>Aplicações automáticas</span></div>
 <div class="states" id="states"></div>
-</div></div><div class="hero-right"><div class="panel animation-panel">
+</div></div><div class="hero-right"><div class="panel animation-panel" data-tab="animacao">
 <div class="panel-header">
 <h2>Animação integrada</h2>
 <span id="phaseLabel">Fase respiratória: Inspiração | Batimento: Diástole</span>
@@ -1793,7 +1849,7 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <g id="oxygenParticles"></g>
 </svg>
 </div>
-</div></div></div><div class="panel dashboard-panel">
+</div></div></div><div class="panel dashboard-panel" data-tab="graficos">
 <div class="panel-header"><h2>Gráficos e variáveis centrais</h2><span></span></div>
 
 
@@ -1837,7 +1893,7 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
   <div class="interpret-inline-title">Como interpretar</div>
   <p><strong>Respiração:</strong> a inspiração torna a pressão intratorácica mais favorável ao retorno venoso, aumentando o enchimento cardíaco; <strong>loop cardíaco:</strong> maior RV tende a elevar o EDV e, com a contratilidade preservada, o ESV cai relativamente, aumentando o VS e a FE; <strong>débito cardíaco:</strong> o DC resulta da combinação entre frequência cardíaca e volume sistólico, embora FC muito alta possa reduzir o enchimento; <strong>VO₂ e saturação:</strong> quando a demanda metabólica sobe, a extração aumenta e a SvO₂ cai, enquanto a SaO₂ permanece alta se a oxigenação pulmonar estiver preservada; <strong>equações ativas:</strong> VS resume a diferença entre EDV e ESV; FE expressa a proporção ejetada; DC integra FC e VS dividido por 1000; PAM é recalculada por PAD + 1/3(PAS−PAD); RVS é estimada por PAM/DC; e VO₂ conecta fluxo sistêmico com Δa-vO₂. <strong>Fechamento do sistema:</strong> o sangue venoso retorna ao pulmão, é reoxigenado e volta ao coração esquerdo, completando o circuito cardiopulmonar integrado.</p>
 </div>
-</div><div class="panel graph-summary-panel">
+</div><div class="panel graph-summary-panel" data-tab="animacao">
 <div class="panel-header"><h2>Variáveis centrais</h2><span>Resumo final do sistema</span></div>
 <div class="metric-grid">
 <div class="metric c-rv"><small>RV</small><strong id="rvVal">5.0</strong><em>L/min</em></div>
@@ -3085,5 +3141,35 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
     updateUI(); renderScene(); renderCharts();
     requestAnimationFrame(tick);
   </script>
+
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
+})();
+</script>
 </body>
 </html>

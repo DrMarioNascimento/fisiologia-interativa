@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Potencial de Ação na Membrana</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root{
       --bg:#ffffff; --panel:#fbfbfd; --line:#d9dce3; --text:#1f2937; --muted:#6b7280;
@@ -39,7 +42,89 @@
     .signature{text-align:right;color:#4b5563;font-size:14px;margin-top:18px;border-top:1px solid #e5e7eb;padding-top:10px}
     .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);margin-left:6px;color:var(--muted);background:#fff}
     @media (max-width:1180px){.layout{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr}.stage-track{grid-template-columns:1fr 1fr}}
-  
+
+    /* === Padrão mobile: cabeçalho sticky + abas === */
+    .mobile-topbar{ display:none; }
+    .mobile-tabnav{ display:none; }
+    @media (max-width:760px){
+      body{ padding:0 0 20px; }
+      h1, .subtitle{ display:none; }
+
+      .mobile-topbar{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        position:sticky;
+        top:0;
+        z-index:50;
+        padding:12px 14px;
+        background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+        border-bottom:1px solid var(--line);
+        box-shadow:0 6px 16px rgba(18,42,66,.10);
+      }
+      .mobile-topbar h2{
+        margin:0;
+        font-size:16px;
+        line-height:1.2;
+        color:#17324d;
+      }
+      .mobile-playtoggle{
+        border:none;
+        border-radius:12px;
+        padding:10px 16px;
+        font-size:14px;
+        font-weight:800;
+        color:#fff;
+        background:linear-gradient(135deg,#2f80ed,#57a7ff);
+        min-height:44px;
+        min-width:44px;
+        cursor:pointer;
+      }
+
+      .mobile-tabnav{
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:6px;
+        position:sticky;
+        top:64px;
+        z-index:49;
+        padding:8px 10px;
+        background:#eef4fb;
+        border-bottom:1px solid var(--line);
+      }
+      .mobile-tabnav button{
+        border:none;
+        border-radius:10px;
+        padding:10px 6px;
+        font-size:13px;
+        font-weight:700;
+        color:#36536d;
+        background:#fff;
+        min-height:44px;
+        cursor:pointer;
+      }
+      .mobile-tabnav button.active{
+        color:#fff;
+        background:linear-gradient(135deg,#2f80ed,#57a7ff);
+      }
+
+      [data-tab]{ display:none !important; margin-left:14px; margin-right:14px; }
+      [data-tab].tab-active{ display:block !important; }
+      .status-grid[data-tab].tab-active{ display:grid !important; }
+      .layout{ margin-left:0; margin-right:0; padding:0 14px; gap:0; }
+      .layout .panel[data-tab]{ margin-left:0; margin-right:0; }
+
+      /* Alvos de toque maiores */
+      button{ min-height:44px; padding:11px 16px; font-size:15px; }
+      label{ min-height:44px; padding:10px 14px; }
+      input[type="range"]{ width:100%; height:28px; }
+      input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+      input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+
+      .mode-line{ margin:10px 14px; }
+    }
+
 .graph-dot{
   filter: drop-shadow(0 0 6px rgba(37,99,235,.6));
   animation: dotPulse 1.6s ease-in-out infinite;
@@ -206,10 +291,20 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
 </style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>Potencial de Ação na Membrana</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
   <h1>Potencial de Ação na Membrana</h1>
   <p class="subtitle">Simulador didático neuronal da bicamada lipídica com canais de Na⁺, K⁺ e leitura temporal em 7 etapas.</p>
 
-  <div class="controls">
+  <div class="controls" data-tab="controles">
     <button id="btnStart" class="primary">Iniciar</button>
     <button id="btnPause">Pausar</button>
     <button id="btnStep">Próxima etapa</button>
@@ -226,7 +321,7 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
     <label><input id="subthresholdToggle" type="checkbox"> Potencial sub-limiar</label>
   </div>
 
-  <div class="controls" id="pharmControls" style="margin-top:6px">
+  <div class="controls" id="pharmControls" data-tab="controles" style="margin-top:6px">
     <strong style="margin-right:4px">Modulação farmacológica:</strong>
     <label class="pharm-label" data-pharm="normal"><input type="radio" name="pharm" value="normal" checked> Normal</label>
     <label class="pharm-label" data-pharm="ttx"><input type="radio" name="pharm" value="ttx"> Tetrodotoxina (TTX - Baiacu)</label>
@@ -235,10 +330,10 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
   </div>
 
 
-  <div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
-  <div class="stage-map"><div id="stageTrack" class="stage-track"></div></div>
+  <div class="mode-line" data-tab="animacao"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+  <div class="stage-map" data-tab="animacao"><div id="stageTrack" class="stage-track"></div></div>
 
-  <div class="status-grid">
+  <div class="status-grid" data-tab="animacao">
     <div class="card" id="phaseCard">
       <div class="card-title">Fase atual</div>
       <div class="phase" id="phaseText">Repouso<small id="phaseDesc">Membrana polarizada, com interior negativo e canais dependentes de voltagem fechados.</small></div>
@@ -253,14 +348,14 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
     </div>
   </div>
 
-  <div class="pro-graph-note">Gráfico com contraste ampliado e leitura otimizada para projeção em sala.</div>
+  <div class="pro-graph-note" data-tab="graficos">Gráfico com contraste ampliado e leitura otimizada para projeção em sala.</div>
 
   <div class="layout">
-    <div class="panel"><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
-    <div class="panel"><canvas id="graphCanvas" width="920" height="660"></canvas></div>
+    <div class="panel" data-tab="animacao"><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
+    <div class="panel" data-tab="graficos"><canvas id="graphCanvas" width="920" height="660"></canvas></div>
   </div>
 
-  <div class="legend">
+  <div class="legend" data-tab="graficos">
     <b>Como interpretar:</b> a cena à esquerda mostra a <b>bicamada lipídica</b> com proteínas integrais, canais e movimento iônico ao longo das <b>7 etapas didáticas</b>. O gráfico à direita acompanha o <b>potencial de membrana</b> em eixo fixo ao longo do tempo, com contraste reforçado para projeção em sala. Quando <b>Potencial sub-limiar</b> está ativo, o estímulo não alcança o limiar e o gráfico mostra uma despolarização local discreta, sem disparo do potencial de ação. Em <b>Tetrodotoxina (TTX - Baiacu)</b> e <b>Lidocaína</b>, os canais de Na⁺ dependentes de voltagem são bloqueados e o pico do potencial de ação desaparece ou fica fortemente reduzido. <b>TEA (tetraetilamônio)</b> é um bloqueador experimental de canais de K⁺ usado para estudar a repolarização da membrana. A saída de K⁺ fica prejudicada e a repolarização torna-se mais lenta.
     <span class="pill">eletrofisiologia</span>
     <span class="pill">potencial de ação</span>
@@ -375,7 +470,7 @@ function isTEA(){ return pharmMode === 'tea'; }
     if (f <= 274) return lerp(-72, -82, ease((f - 206) / 68));
     return lerp(-82, -70, ease((f - 274) / 126));
   }
-  
+
 function getVm(f){
     let v = getVmBase(f);
     if (isSub()) v = Math.min(v, -52);
@@ -802,6 +897,32 @@ function getVm(f){
   subthresholdToggle.addEventListener('change', () => { renderStageMap(); render(); });
   speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x';
   render();
+})();
+</script>
+
+<script>
+(() => {
+  // Navegação por abas (mobile)
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  setTab('animacao');
+
+  // Botão play/pause do cabeçalho sticky (espelha os botões originais)
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const originalStart = document.getElementById('btnStart');
+  const originalPause = document.getElementById('btnPause');
+  let mobileIsPlaying = false;
+  mobileToggle.addEventListener('click', () => {
+    if (mobileIsPlaying) { originalPause.click(); mobileToggle.textContent = '▶ Iniciar'; }
+    else { originalStart.click(); mobileToggle.textContent = '⏸ Pausar'; }
+    mobileIsPlaying = !mobileIsPlaying;
+  });
 })();
 </script>
 </body>

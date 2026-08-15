@@ -4,6 +4,9 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PA, DC e RPT – fisiologia interativa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#ffffff;
@@ -348,9 +351,62 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
   opacity:1;
 }
 
+
+/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
+@media (max-width:760px){
+  button{ min-height:44px; padding:11px 16px; font-size:15px; }
+  label{ min-height:40px; padding:8px 10px; }
+  input[type="range"]{ width:100%; height:28px; }
+  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
+  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
+  select{ min-height:44px; font-size:15px; }
+  a{ min-height:44px; display:inline-flex; align-items:center; }
+}
+
+/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
+.mobile-topbar{ display:none; }
+.mobile-tabnav{ display:none; }
+@media (max-width:760px){
+  h1{ display:none; }
+  .mobile-topbar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    position:sticky; top:0; z-index:50; padding:12px 14px;
+    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
+    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
+  }
+  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
+  .mobile-playtoggle{
+    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
+    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
+    min-height:44px; min-width:44px; cursor:pointer;
+  }
+  .mobile-tabnav{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
+    position:sticky; top:64px; z-index:49; padding:8px 10px;
+    background:#eef4fb; border-bottom:1px solid #d7e1ec;
+  }
+  .mobile-tabnav button{
+    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
+    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
+  }
+  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
+  [data-tab]{ display:none !important; }
+  [data-tab].tab-active{ display:block !important; }
+  .status-grid[data-tab].tab-active{ display:grid !important; }
+}
 </style>
 </head>
 <body>
+  <div class="mobile-topbar">
+    <h2>PA, DC e RPT – fisiologia interativa</h2>
+    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
+  </div>
+  <div class="mobile-tabnav">
+    <button data-tabnav="animacao" class="active">Animação</button>
+    <button data-tabnav="controles">Controles</button>
+    <button data-tabnav="graficos">Gráficos</button>
+  </div>
+
 <h1>Pressão arterial, débito cardíaco e resistência periférica total</h1>
 <p class="subtitle">Simulador interativo da relação entre PAS, PAD, DC, RPT, PAM e pressão de pulso.</p>
 
@@ -368,7 +424,7 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
     </div>
   </div>
 </div>
-<div class="controls" style="margin-top:0; justify-content:flex-start;">
+<div class="controls" style="margin-top:0; justify-content:flex-start;" data-tab="controles">
   <button id="btnStart" class="primary">Iniciar</button>
   <button id="btnPause">Pausar</button>
   <button id="btnReset">Resetar</button>
@@ -383,7 +439,7 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
 
 <div id="notice" class="notice"></div>
 
-<div class="controls">
+<div class="controls" data-tab="controles">
   <label class="control"><span class="control-name">PAS</span>
     <input id="pasRange" type="range" min="80" max="220" step="1" value="120">
     <span id="pasLabel" class="control-value">120 mmHg</span>
@@ -405,9 +461,9 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
   </label>
 </div>
 
-<div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: coerente</div></div>
+<div class="mode-line" data-tab="animacao"><div id="modeBadge" class="mode-badge">Modo: coerente</div></div>
 
-<div class="controls" id="quickStates" style="justify-content:flex-start;">
+<div class="controls" id="quickStates" style="justify-content:flex-start;" data-tab="controles">
   <strong style="margin-right:4px">Estados rápidos:</strong>
   <button id="presetShock">Choque</button>
   <button id="presetExercise">Exercício</button>
@@ -420,7 +476,7 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
 
 
 
-<div class="status-grid">
+<div class="status-grid" data-tab="animacao">
   <div class="card" id="cardPAS">
     <div class="card-title">PAS <span id="badgePAS" class="auto-badge" style="display:none">auto</span></div>
     <div class="phase" id="pasText">
@@ -464,11 +520,11 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
 </div>
 
 <div class="layout">
-  <div class="panel"><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
-  <div class="panel"><canvas id="graphCanvas" width="980" height="860"></canvas></div>
+  <div class="panel" data-tab="animacao"><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
+  <div class="panel" data-tab="graficos"><canvas id="graphCanvas" width="980" height="860"></canvas></div>
 </div>
 
-<div class="legend">
+<div class="legend" data-tab="graficos">
   <b style="color:#0f172a; font-weight:600;">Como interpretar:</b>
   <div style="text-align: justify; color:#475569; font-weight:400;">
     <b style="color:#0f172a; font-weight:600;">PAS e PAD:</b> representam a pressão arterial sistólica e diastólica.
@@ -1044,7 +1100,7 @@ function drawGraph(){
 
   // painel superior
   const left=110, right=900, top=132, bottom=418, width=right-left, height=bottom-top, barW=122;
-  
+
 
   for(let i=0;i<=11;i++){
     const y = bottom - (i/11)*height;
@@ -1058,7 +1114,7 @@ function drawGraph(){
     gctx.fillStyle='#475569';
     gctx.font='bold 12px Arial';
     gctx.textAlign='right';
-    
+
   }
 
     gctx.fillStyle='#475569';
@@ -1091,7 +1147,7 @@ function drawGraph(){
 
   // painel inferior
   const top2=500, bottom2=706, height2=bottom2-top2;
-  
+
 
   for(let i=0;i<=10;i++){
     const y = bottom2 - (i/10)*height2;
@@ -1206,6 +1262,36 @@ presetShock.addEventListener('click', ()=>applyPreset('shock'));
 
 syncSliderState();
 applyPreset('rest', false);
+})();
+</script>
+
+<script>
+(() => {
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
+  if (tabButtons.length) setTab('animacao');
+
+  const mobileToggle = document.getElementById('mobilePlayToggle');
+  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
+  const pauseCandidates = ['btnPause','pauseBtn'];
+  let startBtn = null, pauseBtn = null;
+  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
+  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
+  if (mobileToggle && startBtn){
+    let playing = false;
+    mobileToggle.addEventListener('click', () => {
+      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
+      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
+      playing = !playing;
+    });
+  } else if (mobileToggle){
+    mobileToggle.style.display = 'none';
+  }
 })();
 </script>
 </body>
