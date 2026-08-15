@@ -1,0 +1,114 @@
+/* Tema 02 — identidade visual muscular.
+   Camada visual compartilhada, sem alterações funcionais ou estruturais. */
+:root{
+  --fi-ink:#17324d;
+  --fi-muted:#5c7086;
+  --fi-line:#bfd5e8;
+  --fi-blue:#2f80ed;
+  --fi-depth:0 12px 26px rgba(28,67,100,.12),0 2px 5px rgba(28,67,100,.08),inset 0 1px 0 rgba(255,255,255,.98);
+  --fi-depth-soft:0 7px 16px rgba(28,67,100,.10),inset 0 1px 0 rgba(255,255,255,.96);
+}
+html{background:#edf4fb}
+body{
+  color:var(--fi-ink)!important;
+  background:radial-gradient(circle at 8% 2%,rgba(101,179,240,.11),transparent 30%),linear-gradient(180deg,#f9fcff,#edf4fb)!important;
+}
+h1{color:var(--fi-ink)!important;text-shadow:0 1px 0 #fff}
+.subtitle,.panel-sub,.mini-note{color:var(--fi-muted)!important}
+
+/* Grids, cards e superfícies que já existem. */
+.controls,.quick,.states,.selector-line,.activation-panel-clean,.mechanics-line,
+.mode-tabs,.model-selector,.figureWrap,.stage,.panel,.legend,.status-grid>.card,
+.result-pill,.eq-box,.graph-box,.interpret-block,.dashboard-cards>div{
+  border-color:var(--fi-line)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(235,244,252,.92))!important;
+  box-shadow:var(--fi-depth)!important;
+}
+.controls,.quick,.states,.selector-line,.activation-panel-clean,.mechanics-line,.mode-tabs,.model-selector{border-radius:20px!important}
+.panel,.legend,.figureWrap,.stage,.interpret-block{border-radius:19px!important}
+.panel,.figureWrap{overflow:hidden}
+.status-grid{align-items:stretch}
+.status-grid>.card{height:142px!important;min-height:142px!important;border-radius:18px!important;isolation:isolate}
+.result-pill,.dashboard-cards>div{border-radius:17px!important}
+canvas{
+  border:1px solid #c9d9e7!important;
+  border-radius:16px!important;
+  box-shadow:inset 0 2px 4px rgba(23,50,77,.08),inset 0 1px 0 #fff,0 5px 12px rgba(28,67,100,.07)!important;
+}
+
+/* Volume dos botões, preservando a largura natural dos seletores. */
+button{
+  --btn-top:#fff;--btn-bottom:#e8eef3;--btn-border:#8799a8;--btn-base:#8798a5;--btn-text:#17324d;
+  border:1px solid var(--btn-border)!important;
+  color:var(--btn-text)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.78) 0 10%,transparent 11%),linear-gradient(180deg,var(--btn-top),var(--btn-bottom))!important;
+  box-shadow:0 4px 0 var(--btn-base),0 8px 14px rgba(22,50,75,.15),inset 0 1px 0 #fff,inset 0 0 0 2px rgba(255,255,255,.40)!important;
+  transform:translateY(-1px);
+  transition:transform .14s ease,box-shadow .14s ease,filter .14s ease!important;
+}
+button:hover{transform:translateY(-2px)!important;filter:brightness(1.025);box-shadow:0 5px 0 var(--btn-base),0 10px 17px rgba(22,50,75,.17),inset 0 1px 0 #fff,inset 0 0 0 2px rgba(255,255,255,.46)!important}
+button:active{transform:translateY(3px)!important;box-shadow:0 1px 0 var(--btn-base),0 3px 6px rgba(22,50,75,.13),inset 0 2px 4px rgba(23,50,77,.12)!important}
+button:focus-visible{outline:3px solid rgba(47,128,237,.28);outline-offset:3px}
+button:disabled{opacity:.48;filter:grayscale(.25);cursor:not-allowed}
+
+#btnStart{
+  --btn-top:#68bdff;--btn-bottom:#2787dc;--btn-border:#1d6fae;--btn-base:#165b91;--btn-text:#fff;
+}
+#btnPause{
+  --btn-top:#fff;--btn-bottom:#e6edf3;--btn-border:#7f93a5;--btn-base:#778895;--btn-text:#17324d;
+}
+#btnStep,#btnNextStep{
+  --btn-top:#f8fffb;--btn-bottom:#d9f3e5;--btn-border:#4e9a73;--btn-base:#3f805f;--btn-text:#145c3b;
+}
+#btnReset{
+  --btn-top:#fffafa;--btn-bottom:#f7dede;--btn-border:#b96868;--btn-base:#9d5555;--btn-text:#8a3030;
+}
+#btnStart,#btnPause,#btnStep,#btnNextStep,#btnReset{
+  min-width:118px!important;min-height:46px!important;padding:10px 16px!important;border-radius:14px!important;font-size:14px!important;font-weight:800!important;line-height:1.15;white-space:nowrap;
+}
+#btnStep,#btnNextStep{min-width:150px!important}
+#btnLoop,#btnCapture{
+  --btn-top:#f9f5ff;--btn-bottom:#e8def8;--btn-border:#9478b8;--btn-base:#725892;--btn-text:#533b73;
+}
+button.active,button.is-selected,button[aria-pressed="true"]{
+  --btn-top:#68bdff;--btn-bottom:#2787dc;--btn-border:#1d6fae;--btn-base:#165b91;--btn-text:#fff;
+}
+
+/* Sliders existentes com trilho e marcador esférico. */
+input[type="range"]{height:24px;accent-color:var(--fi-blue);cursor:pointer;filter:drop-shadow(0 2px 2px rgba(23,50,77,.16))}
+input[type="range"]::-webkit-slider-runnable-track{height:8px;border:1px solid #70869a;border-radius:999px;background:linear-gradient(180deg,#b8c8d6,#eef5fa 46%,#7890a4);box-shadow:inset 0 2px 3px rgba(23,50,77,.30),0 1px 0 #fff}
+input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:25px;height:25px;margin-top:-9px;border:1px solid #1762a3;border-radius:50%;background:radial-gradient(circle at 35% 28%,#eefaff 0 9%,#75c7ff 18%,#2f91e9 52%,#1762a3 100%);box-shadow:inset 0 1px 2px rgba(255,255,255,.9),0 4px 8px rgba(23,50,77,.30)}
+input[type="range"]::-moz-range-track{height:8px;border:1px solid #70869a;border-radius:999px;background:linear-gradient(180deg,#b8c8d6,#eef5fa 46%,#7890a4);box-shadow:inset 0 2px 3px rgba(23,50,77,.30),0 1px 0 #fff}
+input[type="range"]::-moz-range-thumb{width:25px;height:25px;border:1px solid #1762a3;border-radius:50%;background:radial-gradient(circle at 35% 28%,#eefaff 0 9%,#75c7ff 18%,#2f91e9 52%,#1762a3 100%);box-shadow:inset 0 1px 2px rgba(255,255,255,.9),0 4px 8px rgba(23,50,77,.30)}
+
+label,.control,.pill,.badge,.mode-badge,.stageBadge,.activation-chip,.graph-unit-chip{
+  border-color:#c9d9e7!important;
+  background:linear-gradient(180deg,#fff,#f2f7fb)!important;
+  box-shadow:var(--fi-depth-soft)!important;
+}
+label:has(input:checked){border-color:#68abe3!important;background:linear-gradient(180deg,#fff,#e7f3fd)!important;box-shadow:0 0 0 3px rgba(47,128,237,.13),0 8px 16px rgba(28,67,100,.12)!important}
+input[type="checkbox"],input[type="radio"]{accent-color:var(--fi-blue)}
+.card-title,.panel-title{color:var(--fi-ink)!important;font-weight:900!important}
+.signature,.interpret-footer{color:var(--fi-muted)!important;font-weight:700}
+
+/* O laboratório Da intenção ao movimento já possui identidade própria;
+   reforça-se apenas profundidade e controles dentro de seu escopo. */
+#dim-root .dim-hero,#dim-root .dim-task-card,#dim-root .dim-parallel-card,
+#dim-root .dim-control-block,#dim-root .dim-pedbox,#dim-root .dim-muscle-card,
+#dim-root .dim-guide,#dim-root .dim-return-banner{
+  border-color:var(--fi-line)!important;
+  box-shadow:var(--fi-depth-soft)!important;
+}
+#dim-root button{border-radius:13px!important}
+
+@media(max-width:760px){
+  body{padding:12px!important}
+  h1{font-size:clamp(24px,7vw,30px)!important}
+  .controls,.actions{gap:12px 8px!important}
+  #btnStart,#btnPause,#btnStep,#btnNextStep,#btnReset{flex:1 1 135px}
+  .status-grid{grid-template-columns:1fr!important}
+  .status-grid>.card{height:auto!important;min-height:132px!important}
+}
+@media(max-width:420px){
+  #btnStart,#btnPause,#btnStep,#btnNextStep,#btnReset{width:100%;min-width:0!important;flex-basis:100%}
+}
