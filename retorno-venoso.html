@@ -487,6 +487,24 @@ button.state-btn.active{
 .dot--rv{--c1:#60a5fa;--c2:var(--c-rv)}
 .dot--cardiac{--c1:#f87171;--c2:var(--c-cardiac)}
 .dot--eq{--c1:#4ade80;--c2:var(--c-eq)}
+
+/* === PADRÃO VISUAL CONSOLIDADO — PROF. MÁRIO | BLOCO 4 === */
+:root{--grid-depth:0 16px 34px rgba(18,42,66,.13),0 4px 10px rgba(18,42,66,.07),inset 0 1px 0 rgba(255,255,255,.94)}
+body{background:radial-gradient(circle at 10% 3%,rgba(31,120,180,.06),transparent 29%),radial-gradient(circle at 90% 8%,rgba(227,26,28,.045),transparent 28%),linear-gradient(180deg,#fbfdff 0%,#eef4fb 100%)}
+.toolbar,.top-grid,.states,.metrics-wide,.panel,.footer-box,.reading-banner{
+  border:1px solid #d3dfeb!important;border-radius:20px!important;
+  background:linear-gradient(145deg,#fff 0%,#f5faff 100%)!important;box-shadow:var(--grid-depth)!important;
+}
+.top-col{box-shadow:0 9px 19px rgba(18,42,66,.10),inset 0 1px 0 rgba(255,255,255,.92)!important}
+#btnStart,#btnPause,#btnReset{min-width:108px;min-height:43px;box-shadow:0 5px 0 rgba(38,63,91,.25),0 10px 18px rgba(18,42,66,.16),inset 0 1px 0 rgba(255,255,255,.32)!important}
+#btnStart:hover,#btnPause:hover,#btnReset:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(38,63,91,.23),0 14px 22px rgba(18,42,66,.18)!important}
+#btnStart:active,#btnPause:active,#btnReset:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(38,63,91,.25),0 5px 9px rgba(18,42,66,.13)!important}
+input[type=range]{appearance:none;height:10px;border-radius:999px;background:linear-gradient(180deg,#c8d6e5,#edf4fb);box-shadow:inset 0 2px 4px rgba(18,42,66,.24),0 1px 0 #fff}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#1F78B4 48%,#174f85 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1F78B4;cursor:pointer}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#1F78B4 48%,#174f85 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1F78B4;cursor:pointer}
+.metric{border-color:#d3dfeb;box-shadow:0 9px 18px rgba(18,42,66,.10),inset 0 1px 0 rgba(255,255,255,.94)}
+.metric::before{left:-5px;width:10px;background:linear-gradient(180deg,var(--metric-color),color-mix(in srgb,var(--metric-color) 58%,#fff 42%));opacity:1}
+.scene,#graph{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.07)!important}
 </style>
 
 </head>
