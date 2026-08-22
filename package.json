@@ -1,0 +1,11 @@
+{
+  "name": "fisiologia-interativa-visual-tests",
+  "private": true,
+  "scripts": {
+    "test:visual": "playwright test",
+    "test:intencao": "playwright test tests/visual/da-intencao-ao-movimento.spec.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0"
+  }
+}
