@@ -10,6 +10,7 @@ on:
       - 'tests/visual/**'
       - 'playwright.config.js'
       - 'package.json'
+      - 'package-lock.json'
       - '.github/workflows/playwright-visual.yml'
 
 jobs:
@@ -21,11 +22,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-      - name: Instalar dependências
+      - name: Instalar dependências e gerar lockfile
         run: npm install
-      - name: Instalar Chromium/WebKit
-        run: npx playwright install --with-deps chromium webkit
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
       - name: Aguardar GitHub Pages refletir o commit
         run: sleep 20
       - name: Executar auditoria Playwright
@@ -38,4 +38,5 @@ jobs:
           path: |
             playwright-report/
             test-results/
+          if-no-files-found: warn
           retention-days: 14
