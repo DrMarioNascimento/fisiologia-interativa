@@ -1,0 +1,41 @@
+name: Auditoria visual dos simuladores
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'da-intencao-ao-movimento*.html'
+      - 'da-intencao-visual-fix.css'
+      - 'tests/visual/**'
+      - 'playwright.config.js'
+      - 'package.json'
+      - '.github/workflows/playwright-visual.yml'
+
+jobs:
+  visual-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependências
+        run: npm install
+      - name: Instalar Chromium/WebKit
+        run: npx playwright install --with-deps chromium webkit
+      - name: Aguardar GitHub Pages refletir o commit
+        run: sleep 20
+      - name: Executar auditoria Playwright
+        run: npm run test:intencao
+      - name: Publicar relatório e screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-visual-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
