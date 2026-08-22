@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Leitura complementar do módulo Sangue: hematopoiese, transporte de oxigênio e integração hemodinâmica.">
+  <title>Sangue — Leitura complementar</title>
+  <style>
+    :root{--red:#b91f2c;--red-dark:#76131b;--navy:#12365d;--ink:#17283c;--muted:#60748b;--line:#d8e2ec;--paper:#fff;--bg:#eef4f9;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:linear-gradient(180deg,#f9fbfd,var(--bg));line-height:1.65}
+    .shell{width:min(calc(100% - 32px),1120px);margin-inline:auto}.hero{padding:56px 0 36px;background:radial-gradient(circle at 90% 5%,rgba(185,31,44,.12),transparent 26rem),linear-gradient(145deg,#fff,#edf4fa);border-bottom:1px solid var(--line)}
+    .eyebrow{margin:0 0 10px;color:var(--red);font-size:.76rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.hero h1{max-width:880px;margin:0;font-size:clamp(2.4rem,5vw,4.8rem);line-height:.98;letter-spacing:-.055em;color:var(--navy)}
+    .hero p:last-child{max-width:790px;margin:20px 0 0;color:var(--muted);font-size:1.08rem}.content{padding:34px 0 64px}.map{overflow:hidden;margin-bottom:28px;border:1px solid var(--line);border-radius:24px;background:#f7f2e9;box-shadow:0 18px 42px rgba(30,55,85,.10)}.map img{display:block;width:100%;height:auto}
+    .grid{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:26px;align-items:start}.article,.aside-card{border:1px solid var(--line);border-radius:22px;background:var(--paper);box-shadow:0 14px 34px rgba(30,55,85,.08)}.article{padding:clamp(24px,4vw,46px)}.article h2{margin:34px 0 10px;color:var(--navy);font-size:1.45rem;line-height:1.18}.article h2:first-child{margin-top:0}.article p{margin:0 0 14px}.article strong{color:var(--navy)}
+    .callout{margin:22px 0;padding:18px 20px;border-left:6px solid var(--red);border-radius:14px;background:#fff4f4}.callout b{display:block;margin-bottom:4px;color:var(--red-dark)}
+    .sequence{display:grid;gap:9px;margin:18px 0}.step{display:grid;grid-template-columns:38px 1fr;gap:12px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#f8fbfe}.step span{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;color:#fff;background:linear-gradient(145deg,var(--red),var(--red-dark));font-weight:900}.step p{margin:3px 0 0}
+    aside{position:sticky;top:18px;display:grid;gap:16px}.aside-card{padding:20px}.aside-card h3{margin:0 0 10px;color:var(--navy);font-size:1rem}.aside-card ul{margin:0;padding-left:19px}.aside-card li{margin:7px 0;color:var(--muted)}.actions{display:grid;gap:10px}.btn{min-height:46px;display:flex;align-items:center;justify-content:center;padding:0 16px;border-radius:999px;font-weight:850;text-decoration:none}.primary{color:#fff;background:linear-gradient(135deg,var(--red),var(--red-dark));box-shadow:0 10px 22px rgba(145,24,34,.22)}.secondary{color:var(--navy);border:1px solid var(--line);background:#f7fafc}
+    footer{padding:28px 0;border-top:1px solid var(--line);color:var(--muted);background:#fff;font-size:.82rem}.footer-row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.footer-row strong{color:var(--navy)}
+    @media(max-width:820px){.grid{grid-template-columns:1fr}aside{position:static}.hero{padding-top:40px}.map{border-radius:18px}}
+    @media print{body{background:#fff}.hero{padding:25px 0}.map,aside{display:none}.grid{display:block}.article{border:0;box-shadow:none;padding:0}footer{margin-top:28px}}
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="shell">
+      <p class="eyebrow">Cardiovascular — módulo de aprofundamento</p>
+      <h1>Sangue: produção celular, transporte de O₂ e integração hemodinâmica</h1>
+      <p>Leitura complementar para orientar a exploração do simulador e distinguir respostas imediatas, adaptações hematopoéticas e consequências sistêmicas.</p>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="shell">
+      <figure class="map"><img src="../maps/cardiovascular-01-sangue.webp" alt="Mapa mental do sistema cardiovascular com ênfase no sangue"></figure>
+      <div class="grid">
+        <article class="article">
+          <h2>O sangue é um tecido dinâmico</h2>
+          <p>O sangue não é apenas um fluido que percorre os vasos. Ele reúne células com funções distintas, proteínas plasmáticas, eletrólitos, nutrientes, hormônios, gases e produtos do metabolismo. Sua composição muda de acordo com a demanda do organismo, mas essas mudanças não ocorrem todas na mesma escala de tempo.</p>
+          <p>Frequência cardíaca, pressão arterial, débito cardíaco, distribuição de fluxo e extração de oxigênio podem mudar em segundos ou minutos. A produção de novas células sanguíneas exige proliferação, diferenciação e maturação na medula óssea, portanto aparece em dias ou semanas.</p>
+
+          <div class="callout"><b>Ideia central</b>Nem todo aumento de células no sangue periférico significa produção medular imediata. Desmarginação e mobilização de reservas redistribuem células que já existiam; hematopoiese produz novas células.</div>
+
+          <h2>Uma célula-tronco, quatro grandes linhagens</h2>
+          <p>A célula-tronco hematopoética origina progenitores que se comprometem progressivamente com diferentes destinos. O simulador organiza essa diferenciação em quatro séries:</p>
+          <p><strong>Eritroide:</strong> culmina nos eritrócitos, responsáveis pelo transporte de oxigênio por meio da hemoglobina. A eritropoetina, produzida predominantemente pelos rins, é o principal estímulo regulador.</p>
+          <p><strong>Granulocítica:</strong> inclui os estágios que levam principalmente aos neutrófilos. Infecções bacterianas mobilizam o pool de reserva e, depois, aumentam a produção mediada por fatores como G-CSF.</p>
+          <p><strong>Megacariocítica:</strong> origina megacariócitos e plaquetas. A trombopoetina participa da manutenção da produção plaquetária, especialmente em situações de consumo ou perda.</p>
+          <p><strong>Linfoide:</strong> origina linfócitos B, T e células NK, articulando defesa adaptativa e resposta a agentes intracelulares, como muitos vírus.</p>
+
+          <h2>A alça eritropoética é um feedback negativo</h2>
+          <div class="sequence">
+            <div class="step"><span>1</span><p>A oferta tecidual de oxigênio diminui por hipóxia, altitude, hemorragia ou redução da massa eritrocitária.</p></div>
+            <div class="step"><span>2</span><p>O rim detecta o desequilíbrio e aumenta o estímulo eritropoético.</p></div>
+            <div class="step"><span>3</span><p>A medula amplia a produção eritroide; reticulócitos aparecem antes do aumento pleno de hemoglobina e hematócrito.</p></div>
+            <div class="step"><span>4</span><p>A maior massa de hemácias eleva a oferta de O₂ e reduz o estímulo inicial, produzindo um novo equilíbrio.</p></div>
+          </div>
+          <p>A resposta depende de dois requisitos: <strong>estímulo adequado</strong> e <strong>substrato disponível</strong>. Na doença renal crônica, a capacidade de produzir eritropoetina está reduzida. Na anemia ferropriva, o estímulo pode estar elevado, mas falta ferro para sintetizar hemoglobina de modo eficiente.</p>
+
+          <h2>Saturação não é conteúdo de oxigênio</h2>
+          <p>A SpO₂ e a SaO₂ indicam a proporção de sítios da hemoglobina ocupados por oxigênio. Já o conteúdo arterial de O₂ depende principalmente de <strong>quanto de hemoglobina existe</strong> e de sua saturação. Por isso, uma pessoa com anemia pode apresentar SpO₂ normal e, ainda assim, transportar pouco oxigênio por decilitro de sangue.</p>
+          <p>O princípio de Fick conecta consumo de O₂, débito cardíaco e diferença arteriovenosa:</p>
+          <div class="callout"><b>VO₂ = DC × (CaO₂ − CvO₂)</b>Quando a oferta diminui, os tecidos podem compensar extraindo uma fração maior do oxigênio disponível. A SvO₂ cai. Quando a extração necessária ultrapassa a capacidade fisiológica, aumenta a contribuição anaeróbia e o lactato se eleva.</div>
+
+          <h2>Hematócrito, viscosidade e circulação</h2>
+          <p>Mais hemácias aumentam a capacidade de transportar O₂, mas também elevam a viscosidade. Pela relação de Poiseuille, maior viscosidade aumenta a resistência ao fluxo. Assim, policitemia não representa benefício ilimitado: a melhora no conteúdo de oxigênio pode vir acompanhada de maior carga hemodinâmica.</p>
+          <p>Na direção oposta, a anemia reduz a viscosidade, mas a compensação clínica relevante envolve ativação simpática e elevação do débito cardíaco. Modelos didáticos sem controle autonômico mostram apenas parte dessa resposta; por isso, seus resultados devem ser interpretados dentro das limitações declaradas.</p>
+
+          <h2>Como explorar o simulador</h2>
+          <p>Comece no cenário basal e observe os sinais vitais. Em seguida, selecione um estímulo e compare quais linhagens respondem, em que velocidade e com qual consequência sistêmica. No Monitor Virtual, localize a cadeia:</p>
+          <p><strong>oxigenação → conteúdo arterial → débito cardíaco → oferta de O₂ → extração → SvO₂/lactato → estímulo eritropoético → hemoglobina/hematócrito → viscosidade.</strong></p>
+          <p>Use o acordeão <strong>Como interpretar</strong> ao final do simulador para relacionar as cores das variáveis às fórmulas, aos gráficos e aos mecanismos fisiológicos.</p>
+        </article>
+
+        <aside>
+          <section class="aside-card">
+            <h3>Antes de abrir</h3>
+            <ul>
+              <li>Diferencie saturação de conteúdo de O₂.</li>
+              <li>Separe resposta aguda de adaptação hematopoética.</li>
+              <li>Identifique estímulo, substrato e produto final.</li>
+              <li>Observe custos hemodinâmicos da viscosidade.</li>
+            </ul>
+          </section>
+          <section class="aside-card actions">
+            <h3>Continuar o módulo</h3>
+            <a class="btn primary" href="../../sangue.html" target="_blank" rel="noopener">Abrir simulador</a>
+            <a class="btn secondary" href="../../index.html#simuladores">Voltar à página de Educação Física</a>
+            <a class="btn secondary" href="../../fisioterapia/index.html#simuladores">Abrir página de Fisioterapia</a>
+          </section>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer><div class="shell footer-row"><strong>Prof. Mário César Nascimento, PhD ©</strong><span>Leitura complementar — Fisiologia Humana</span></div></footer>
+</body>
+</html>
