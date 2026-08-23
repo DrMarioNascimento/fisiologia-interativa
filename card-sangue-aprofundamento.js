@@ -30,7 +30,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     if(!target) return;
 
     const term=norm(document.querySelector('#search')?.value);
-    const existing=target.querySelector('[data-sangue-card="1"]');
+    const bloodCards=[...root.querySelectorAll('.module-card')].filter(item=>norm(item.querySelector('h3')?.textContent)==='sangue');
+    const existing=target.querySelector('[data-sangue-card="1"]')||bloodCards[0];
+    bloodCards.filter(item=>item!==existing).forEach(item=>item.remove());
     if(term && !cardText.includes(term)){
       existing?.remove();
       return;
@@ -54,6 +56,8 @@ document.addEventListener('DOMContentLoaded',()=>{
         </div>`;
     }
     if(card.parentElement!==target||card!==target.lastElementChild) target.appendChild(card);
+    const count=target.closest('.curriculum-block')?.querySelector('.curriculum-count');
+    if(count){const n=target.querySelectorAll('.module-card').length;count.textContent=`${n} ${n===1?'simulador':'simuladores'}`;}
   };
 
   let queued=false;

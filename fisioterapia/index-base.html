@@ -752,7 +752,7 @@
       {group:'muscular', title:'Acoplamento excitação–contração', tags:['Placa motora','Acoplamento'], shot:'assets/screenshots/acoplamento-excitacao-contracao.jpg', objective:'Conectar a chegada do impulso nervoso à liberação de Ca²⁺ e à exposição dos sítios de ligação da actina.', use:'Exploração integrada da placa motora, túbulos T, retículo sarcoplasmático e sarcômero.', meta:'Sequência completa'},
       {group:'muscular', title:'Contração muscular e sarcômero', tags:['Músculo','Sarcômero'], shot:'assets/screenshots/contracao-sarcomero.jpg', objective:'Explorar o ciclo das pontes cruzadas, o consumo de ATP e as alterações da zona H durante a contração.', use:'Aprofundamento do mecanismo molecular com foco ampliado no sarcômero.', meta:'Pontes cruzadas'},
       {group:'muscular', title:'Contrações musculares interativas', tags:['Músculo','Tipos de contração'], shot:'assets/screenshots/contracoes-musculares.jpg', objective:'Comparar contrações estática, dinâmica e isocinética, relacionando carga, movimento e produção de força.', use:'Aplicação em Educação Física e Fisioterapia para análise de diferentes ações musculares.', meta:'Comparação funcional'},
-      {group:'muscular', title:'Hill × Isocinético', tags:['Músculo','Desempenho'], shot:'assets/screenshots/hill-isocinetico.jpg', objective:'Integrar força, velocidade, ativação neural, torque e potência em diferentes condições de contração.', use:'Comparação dos modelos de Hill e isocinético em situações aplicadas ao movimento humano.', meta:'Força × velocidade'},
+      {group:'muscular', title:'Hill × Isocinético', tags:['Músculo','Desempenho'], shot:'assets/screenshots/hill-isocinetico.jpg', objective:'Integrar força, velocidade, ativação neural, torque e potência em diferentes condições de contração.', use:'Comparação dos modelos de Hill e isocinético em situações aplicadas ao movimento humano.', meta:'Força × velocidade'},\n      {group:'muscular', title:'Da intenção ao movimento', tags:['Músculo','Controle neuromuscular'], objective:'Integrar drive motivacional e atenção, giro do cíngulo, relé talâmico, vias motoras, recrutamento, frequência de disparo e acoplamento excitação–contração.', use:'Viagem interativa da intenção ao gesto, com tarefas funcionais, feedback seletivo e resposta conceitual progressiva.', meta:'Integração neuromuscular'},
 
       {group:'osteoarticular', title:'Homeostase do cálcio', tags:['Osteoarticular','Cálcio'], shot:'assets/screenshots/homeostase-calcio.jpg', objective:'Integrar vitamina D, PTH, calcitonina, intestino, rim, osso e concentração plasmática de cálcio.', use:'Análise da regulação mineral e das respostas compensatórias em diferentes cenários.', meta:'Regulação hormonal'},
 
@@ -781,7 +781,7 @@
       'acoplamento-excitacao-contracao.html',
       'contracao-muscular-esqueletica.html',
       'contracoes-musculares-interativas.html',
-      'modelos-hill-isocinetico.html',
+      'modelos-hill-isocinetico.html',\n      'da-intencao-ao-movimento.html',
       'homeostase-do-calcio.html',
       'potencial-acao-cardiaco.html',
       'hemodinamica-pa-dc-rpt.html',
@@ -997,7 +997,7 @@
       const target = document.querySelector(link.getAttribute('href'));
       if (target) { event.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
     }));
-    discoverNewSimulators().finally(render);
+    // Catálogo controlado: arquivos auxiliares e carregadores não viram cards.\n    render();
   </script>
 </body>
 </html>

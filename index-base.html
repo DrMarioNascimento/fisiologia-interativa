@@ -758,7 +758,7 @@
       {group:'muscular', title:'Hill × Isocinético', tags:['Músculo','Desempenho'], shot:'assets/screenshots/hill-isocinetico.jpg', objective:'Integrar força, velocidade, ativação neural, torque e potência em diferentes condições de contração.', use:'Comparação dos modelos de Hill e isocinético em situações aplicadas ao movimento humano.', meta:'Força × velocidade'},
       {group:'muscular', title:'Da intenção ao movimento', tags:['Músculo','Controle neuromuscular'], objective:'Integrar drive motivacional e atenção, giro do cíngulo, relé talâmico, vias motoras, recrutamento, frequência de disparo e acoplamento excitação–contração.', use:'Viagem interativa da intenção ao gesto, com tarefas funcionais, feedback seletivo e resposta conceitual progressiva.', meta:'Integração neuromuscular'},
 
-      {group:'osteoarticular', title:'Homeostase do cálcio', tags:['Osteoarticular','Cálcio'], shot:'assets/screenshots/homeostase-calcio.jpg', objective:'Integrar vitamina D, PTH, calcitonina, intestino, rim, osso e concentração plasmática de cálcio.', use:'Análise da regulação mineral e das respostas compensatórias em diferentes cenários.', meta:'Regulação hormonal'},
+      {group:'osteoarticular', title:'Homeostase do cálcio', tags:['Osteoarticular','Cálcio'], shot:'assets/screenshots/homeostase-calcio.jpg', objective:'Integrar vitamina D, PTH, calcitonina, intestino, rim, osso e concentração plasmática de cálcio.', use:'Análise da regulação mineral e das respostas compensatórias em diferentes cenários.', meta:'Regulação hormonal'},\n      {group:'osteoarticular', title:'Mecanotransdução Óssea e Lei de Wolff', tags:['Osteoarticular','Mecanotransdução'], objective:'Relacionar carga mecânica, resposta celular, remodelação óssea e adaptação estrutural segundo a Lei de Wolff.', use:'Exploração da resposta do tecido ósseo a diferentes estímulos mecânicos e condições de carga.', meta:'Remodelação óssea'},
 
       {group:'celular', title:'Potencial de ação cardíaco', tags:['Fisiologia celular','Cardiomiócito'], shot:'assets/screenshots/potencial-acao-cardiaco.jpg', objective:'Reconhecer as fases do potencial de ação do cardiomiócito e relacioná-las aos fluxos iônicos e ao período refratário.', use:'Introdução à eletrofisiologia cardíaca e análise orientada das fases 0 a 4.', meta:'Fases 0–4'},
       {group:'cardiovascular', title:'Pressão arterial, DC e RPT', tags:['Cardiovascular','Hemodinâmica'], shot:'assets/screenshots/hemodinamica.jpg', objective:'Relacionar pressão arterial, débito cardíaco, resistência periférica total, PAM e pressão de pulso.', use:'Comparação entre exercício, hemorragia, hipertensão, insuficiência cardíaca e alterações vasculares.', meta:'Variáveis integradas'},
@@ -787,7 +787,7 @@
       'contracoes-musculares-interativas.html',
       'modelos-hill-isocinetico.html',
       'da-intencao-ao-movimento.html',
-      'homeostase-do-calcio.html',
+      'homeostase-do-calcio.html',\n      'mecanotransducao-lei-de-wolff.html',
       'potencial-acao-cardiaco.html',
       'hemodinamica-pa-dc-rpt.html',
       'retorno-venoso.html',
@@ -1002,7 +1002,7 @@
       const target = document.querySelector(link.getAttribute('href'));
       if (target) { event.preventDefault(); target.scrollIntoView({behavior:'smooth'}); }
     }));
-    discoverNewSimulators().finally(render);
+    // Catálogo controlado: arquivos auxiliares e carregadores não viram cards.\n    render();
   </script>
 </body>
 </html>
