@@ -40,11 +40,11 @@
       for(let i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
       if(!('DecompressionStream' in window)) throw new Error('Este navegador não oferece descompactação nativa. Atualize o navegador.');
       const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-      const html=await new Response(stream).text();
+      let html=await new Response(stream).text();
       if(!html.toLowerCase().includes('<!doctype html')) throw new Error('O pacote do simulador não pôde ser validado.');
-      document.open();
+      html=html.replace('</head>','<link rel="stylesheet" href="./tutor-widget.css?v=4"></head>');html=html.replace('</body>','<script src="./tutor-ef-data.js?v=9"></scr'+'ipt><script src="./tutor-widget.js?v=8"></scr'+'ipt></body>');document.open();
       document.write(html);
-      document.close();const tutorStyle=document.createElement('link');tutorStyle.rel='stylesheet';tutorStyle.href='./tutor-widget.css?v=4';document.head.appendChild(tutorStyle);const tutorData=document.createElement('script');tutorData.src='./tutor-ef-data.js?v=9';tutorData.onload=()=>{const tutorWidget=document.createElement('script');tutorWidget.src='./tutor-widget.js?v=8';document.body.appendChild(tutorWidget)};document.body.appendChild(tutorData);
+      document.close();
     })().catch(error=>{
       console.error(error);
       const status=document.getElementById('status');
