@@ -27,7 +27,7 @@
 .tutor-launcher:active { cursor: grabbing; }
 .tutor-launcher.is-dragging { transition: none; transform: scale(1.04); }
 .tutor-portrait { position: absolute; inset: 4px; overflow: hidden; border-radius: 50%; background: radial-gradient(circle at 50% 35%,#eefaf4,#b9e4ce); }
-.tutor-portrait img { position: absolute; width: 116px; height: auto; left: 50%; top: -2px; transform: translateX(-50%); pointer-events: none; user-select: none; }
+.tutor-portrait img { position: absolute; width: 88px; height: auto; left: 50%; top: -15px; transform: translateX(-50%); pointer-events: none; user-select: none; }
 .tutor-launcher .tutor-badge {
   position: absolute; right: -4px; top: -5px; min-width: 28px; height: 28px;
   display: grid; place-items: center; padding: 0 7px; border: 3px solid #fff;
@@ -77,7 +77,7 @@
 
 @media (max-width: 640px) {
   .tutor-launcher { width: 68px; height: 68px; right: 14px; bottom: 14px; }
-  .tutor-portrait img { width: 102px; top: -1px; }
+  .tutor-portrait img { width: 80px; top: -13px; }
   .tutor-panel { inset: auto 8px 8px; width: auto; height: min(76vh, 650px); border-radius: 22px; transform-origin: bottom center; }
   .tutor-panel.is-open + .tutor-launcher { visibility: hidden; }
   .tutor-hint { right: 12px; bottom: 92px; }
