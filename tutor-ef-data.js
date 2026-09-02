@@ -57,7 +57,7 @@ function renderCards(){const list=modules.filter(m=>m.group===active);cardsEl.in
 if(axesEl&&cardsEl){renderAxes();renderCards();}
 
 
-const fisioterapiaTutor = {
+window.fisioterapiaTutor = {
   courseLabel: 'Fisioterapia',
   defaultAxis: 'celular',
   axisNames: {
