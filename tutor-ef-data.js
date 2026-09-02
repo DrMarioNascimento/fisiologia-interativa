@@ -8,12 +8,12 @@ const maps = {
 };
 
 const axes = [
-  {id:'celular', label:'01 Celular'},
-  {id:'muscular', label:'02 Muscular'},
-  {id:'osteoarticular', label:'03 Osteoarticular'},
-  {id:'cardiovascular', label:'04 Cardiovascular'},
-  {id:'respiratorio', label:'05 Respiratório'},
-  {id:'integracao', label:'06 Integração'}
+  {id:'celular', label:'Celular'},
+  {id:'muscular', label:'Muscular'},
+  {id:'osteoarticular', label:'Osteoarticular'},
+  {id:'cardiovascular', label:'Cardiovascular'},
+  {id:'respiratorio', label:'Respiratório'},
+  {id:'integracao', label:'Integração'}
 ];
 
 const modules = [
