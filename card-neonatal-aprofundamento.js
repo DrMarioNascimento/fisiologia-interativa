@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded',()=>{
   const ROOT=location.pathname.includes('/fisioterapia/')?'../':'./';
   const SIM=`${ROOT}ventilacao-pulmonar-neonatal.html?percurso=fisioterapia`;
-  const READING=`${ROOT}assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260902`;
+  const READING=`${ROOT}assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260902-2`;
   const norm=value=>(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
 
   const ensureStyle=()=>{
