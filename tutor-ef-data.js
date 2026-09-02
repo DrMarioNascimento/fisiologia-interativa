@@ -55,3 +55,59 @@ document.addEventListener('keydown',ev=>{if(mapModal&&ev.key==='Escape'&&!mapMod
 function renderAxes(){axesEl.innerHTML=axes.map(a=>'<button class="axis" type="button" data-id="'+a.id+'" aria-pressed="'+(a.id===active)+'">'+a.label+'</button>').join('');axesEl.querySelectorAll('.axis').forEach(btn=>btn.addEventListener('click',()=>{active=btn.dataset.id;renderAxes();renderCards();}));}
 function renderCards(){const list=modules.filter(m=>m.group===active);cardsEl.innerHTML=list.map((m,i)=>{const qs=m.qs.map((item,qi)=>'<div class="q"><b>'+(qi+1)+'. '+item.q+'</b><div class="opts">'+item.opts.map((opt,oi)=>'<button type="button" data-m="'+i+'" data-q="'+qi+'" data-o="'+oi+'">'+opt+'</button>').join('')+'</div><p class="feedback">'+item.why+'</p></div>').join('');return '<article class="card"><span class="meta">'+m.group+'</span><h2>'+m.title+'</h2><p>'+m.goal+'</p><ol class="steps">'+m.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="actions"><button class="btn btn-ghost" type="button" data-map>Ver mapa</button><a class="btn btn-primary" href="'+m.href+'">Abrir simulador</a><button class="btn btn-ghost" type="button" data-open>Questões</button></div><div class="panel">'+qs+'</div></article>';}).join('');cardsEl.querySelectorAll('[data-map]').forEach(btn=>btn.addEventListener('click',openMap));cardsEl.querySelectorAll('[data-open]').forEach(btn=>btn.addEventListener('click',()=>{btn.closest('.card').classList.toggle('is-open');}));cardsEl.querySelectorAll('.opts button').forEach(btn=>btn.addEventListener('click',()=>{const m=list[Number(btn.dataset.m)];const item=m.qs[Number(btn.dataset.q)];const ok=Number(btn.dataset.o)===item.a;btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('ok','bad'));btn.classList.add(ok?'ok':'bad');const fb=btn.closest('.q').querySelector('.feedback');fb.classList.add('show');fb.textContent=(ok?'Certo. ':'Ainda não. ')+item.why;}));}
 if(axesEl&&cardsEl){renderAxes();renderCards();}
+
+
+const fisioterapiaTutor = {
+  courseLabel: 'Fisioterapia',
+  defaultAxis: 'celular',
+  axisNames: {
+    celular: '01 Fisiologia celular, transporte e potenciais de ação',
+    muscular: '02 Excitabilidade e sistema muscular',
+    cardiovascular: '03 Sistema cardiovascular',
+    respiratorio: '04 Sistema respiratório',
+    integracao: '05 Integração cardiorrespiratória'
+  },
+  maps: {
+    celular: [
+      {src:'assets/maps/organizacao-funcional-membranas.webp', title:'Organização funcional e membranas'}
+    ],
+    muscular: [
+      {src:'assets/maps/excitabilidade-sistema-muscular.webp', title:'Excitabilidade e sistema muscular'}
+    ],
+    cardiovascular: [
+      {src:'assets/maps/cardiovascular-01-sangue.webp', title:'Sistema Cardiovascular — Sangue'},
+      {src:'assets/maps/cardiovascular-02-circulacao-hemodinamica.webp', title:'Sistema Cardiovascular — Circulação e Hemodinâmica'},
+      {src:'assets/maps/cardiovascular-03-regulacao-adaptacoes.webp', title:'Sistema Cardiovascular — Regulação e Adaptações'}
+    ],
+    respiratorio: [
+      {src:'assets/maps/respiratorio-01-estrutura-mecanica-ventilacao.webp', title:'Sistema Respiratório — Estrutura, Mecânica e Ventilação'},
+      {src:'assets/maps/respiratorio-02-trocas-gasosas-controle.webp', title:'Sistema Respiratório — Trocas Gasosas e Controle'},
+      {src:'assets/maps/respiratorio-03-biofeedback.webp', title:'Biofeedback Respiratório'}
+    ],
+    integracao: [
+      {src:'assets/maps/integracao-cardiorrespiratoria.webp', title:'Integração cardiorrespiratória'}
+    ]
+  },
+  modules: modules.filter(item => item.group !== 'osteoarticular').concat([
+    {
+      group:'celular', title:'Potencial de ação cardíaco', href:'potencial-acao-cardiaco.html',
+      goal:'Relacionar as fases 0 a 4 aos fluxos iônicos, à contração e ao período refratário.',
+      steps:['Identifique o tipo celular e o estado inicial.','Modifique uma variável iônica.','Relacione a fase alterada à excitabilidade e à função cardíaca.'],
+      qs:[
+        {q:'No cardiomiócito contrátil, a fase 0 ocorre principalmente por:',opts:['Entrada rápida de Na⁺','Saída de Ca²⁺','Entrada de K⁺'],a:0,why:'A abertura rápida dos canais de Na⁺ produz a despolarização da fase 0.'},
+        {q:'O platô da fase 2 depende especialmente do equilíbrio entre:',opts:['Entrada de Ca²⁺ e saída de K⁺','Entrada de Cl⁻ e saída de Na⁺','Entrada e saída de glicose'],a:0,why:'A entrada de Ca²⁺ por canais tipo L se contrapõe à saída de K⁺.'},
+        {q:'O período refratário prolongado ajuda a impedir:',opts:['Tetania cardíaca','Enchimento ventricular','Condução elétrica'],a:0,why:'A refratariedade longa impede somação e tetania do miocárdio.'}
+      ]
+    },
+    {
+      group:'respiratorio', title:'Biofeedback respiratório — PC', href:'biofeedback-respiratorio.html',
+      goal:'Explorar ritmos respiratórios e percepção ventilatória em tela ampla.',
+      steps:['Escolha um padrão respiratório.','Modifique apenas um tempo do ciclo.','Observe como a mudança altera frequência e duração total.'],
+      qs:[
+        {q:'Ao aumentar apenas o tempo expiratório, mantendo os demais tempos, o ciclo tende a:',opts:['Ficar mais longo','Ficar mais curto','Não se alterar'],a:0,why:'O tempo total do ciclo aumenta quando apenas a expiração é prolongada.'},
+        {q:'Reduzir a frequência respiratória exige, em geral:',opts:['Aumentar a duração do ciclo','Reduzir todo o ciclo','Eliminar a expiração'],a:0,why:'Frequência e duração do ciclo apresentam relação inversa.'},
+        {q:'No método de exploração, deve-se modificar:',opts:['Uma variável por vez','Todas as variáveis juntas','Somente a cor da interface'],a:0,why:'Alterar uma variável permite interpretar melhor a relação de causa e efeito.'}
+      ]
+    }
+  ])
+};
