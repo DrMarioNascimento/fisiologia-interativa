@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded',()=>{
   const ROOT=location.pathname.includes('/fisioterapia/')?'../':'./';
-  const SIM=`${ROOT}sangue.html`;
+  const SIM=`${ROOT}sangue.html?percurso=fisioterapia`;
   const READING=`${ROOT}assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260823`;
   const norm=value=>(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
   const cardText='sangue cardiovascular hematopoiese hemacias leucocitos plaquetas oxigenio hemodinamica';
