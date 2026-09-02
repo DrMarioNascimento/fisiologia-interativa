@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  const isFisioterapia = location.pathname.includes('/fisioterapia/') || new URLSearchParams(location.search).get('percurso') === 'fisioterapia';
+  const isFisioterapia = location.pathname.includes('/fisioterapia/') || location.pathname.endsWith('/tutor-fisio.html') || new URLSearchParams(location.search).get('percurso') === 'fisioterapia';
   const courseConfig = isFisioterapia && window.fisioterapiaTutor ? window.fisioterapiaTutor : null;
   const axisNames = courseConfig?.axisNames || {
     celular: '01 Celular e potenciais de ação', muscular: '02 Excitabilidade e sistema muscular',
