@@ -956,7 +956,7 @@
 
 
     function cardTemplate(item, index) {
-      return `<a class="module-card" data-group="${item.group}" data-title="${item.title.toLowerCase()}" href="${simulatorBase}${simulatorFiles[index]}" target="_blank" rel="noopener" aria-label="Abrir simulador ${item.title}">
+      return `<a class="module-card" data-group="${item.group}" data-title="${item.title.toLowerCase()}" href="${simulatorBase}${simulatorFiles[index]}?percurso=fisioterapia" target="_blank" rel="noopener" aria-label="Abrir simulador ${item.title}">
         <span class="module-category">${item.tags[0]}</span><h3>${item.title}</h3><p>${item.objective}</p><span class="open-link">Abrir simulador →</span>
       </a>`;
     }
