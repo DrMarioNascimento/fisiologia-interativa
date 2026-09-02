@@ -68,6 +68,14 @@
 .tutor-result:first-of-type { margin-top: 4px; }
 .tutor-result b { display: block; margin-bottom: 3px; }
 .tutor-link { display: inline-flex; align-items: center; min-height: 36px; margin-top: 7px; padding: 0 12px; border-radius: 999px; color: #fff; background: var(--tutor-green); text-decoration: none; font-size: .76rem; font-weight: 800; }
+.tutor-options { display: grid; gap: 6px; margin-top: 9px; }
+.tutor-option, .tutor-next { min-height: 38px; padding: 7px 11px; border: 1px solid var(--tutor-line); border-radius: 11px; color: var(--tutor-ink); background: #f7fbfb; cursor: pointer; text-align: left; font-size: .78rem; }
+.tutor-option.correct { border-color: var(--tutor-green); background: #e4f5ec; color: var(--tutor-green); font-weight: 800; }
+.tutor-option.wrong { border-color: #c86635; background: #fff1e9; color: #7a3518; }
+.tutor-option:disabled { cursor: default; opacity: .72; }
+.tutor-feedback { margin-top: 8px!important; padding: 8px 10px; border-radius: 10px; background: #eef7f3; }
+.tutor-next { margin-top: 8px; color: #fff; background: var(--tutor-green); text-align: center; font-weight: 800; }
+.tutor-next[hidden] { display: none; }
 .tutor-chips { display: flex; gap: 6px; overflow-x: auto; padding: 9px 12px; border-top: 1px solid var(--tutor-line); background: #fff; }
 .tutor-chip { flex: 0 0 auto; min-height: 34px; padding: 0 11px; border: 1px solid rgba(22,113,81,.25); border-radius: 999px; color: var(--tutor-green); background: #edf8f2; cursor: pointer; font-size: .72rem; font-weight: 750; }
 .tutor-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; padding: 10px; border-top: 1px solid var(--tutor-line); background: #fff; }
