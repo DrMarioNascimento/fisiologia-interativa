@@ -92,13 +92,20 @@
     const closeMap = document.querySelector('#closeMap');
     const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
     const axisOrder = ['celular','muscular','cardiovascular','respiratorio','integracao'];
+    const shortAxisNames = {
+      celular:'Celular',
+      muscular:'Muscular',
+      cardiovascular:'Cardiovascular',
+      respiratorio:'Respiratório',
+      integracao:'Integração'
+    };
 
     function groupMaps(group) {
       const value=config.maps[group];
       return !value ? [] : (Array.isArray(value) ? value : [value]);
     }
     function renderAxes() {
-      axesEl.innerHTML=axisOrder.map(id => `<button class="axis" type="button" data-axis="${id}" aria-pressed="${id===active}">${esc(config.axisNames[id])}</button>`).join('');
+      axesEl.innerHTML=axisOrder.map(id => `<button class="axis" type="button" data-axis="${id}" aria-pressed="${id===active}">${esc(shortAxisNames[id])}</button>`).join('');
     }
     function renderCards() {
       const list=config.modules.filter(item=>item.group===active);
