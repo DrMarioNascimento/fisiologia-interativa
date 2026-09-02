@@ -120,8 +120,24 @@
     const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
     btn.addEventListener('pointerdown', e => { start={x:e.clientX,y:e.clientY,left:btn.offsetLeft,top:btn.offsetTop}; moved=false; btn.setPointerCapture(e.pointerId); btn.classList.add('is-dragging'); });
     btn.addEventListener('pointermove', e => { if(!start)return; const dx=e.clientX-start.x,dy=e.clientY-start.y; if(Math.hypot(dx,dy)>5)moved=true; if(!moved)return; btn.style.left=clamp(start.left+dx,6,innerWidth-btn.offsetWidth-6)+'px'; btn.style.top=clamp(start.top+dy,6,innerHeight-btn.offsetHeight-6)+'px'; btn.style.right='auto'; btn.style.bottom='auto'; });
-    btn.addEventListener('pointerup', () => { btn.classList.remove('is-dragging'); if(moved){ const left=btn.offsetLeft < innerWidth/2 ? 10 : innerWidth-btn.offsetWidth-10; btn.style.left=left+'px'; localStorage.setItem('tutorEFPosition',JSON.stringify({side:left<innerWidth/2?'left':'right',top:btn.offsetTop})); } else openTutor(); start=null; });
-    try { const p=JSON.parse(localStorage.getItem('tutorEFPosition')); if(p){ btn.style.left=(p.side==='left'?10:innerWidth-btn.offsetWidth-10)+'px'; btn.style.top=clamp(p.top,6,innerHeight-btn.offsetHeight-6)+'px'; btn.style.right='auto'; btn.style.bottom='auto'; }} catch(_){}
+    btn.addEventListener('pointerup', () => {
+      btn.classList.remove('is-dragging');
+      if (moved) {
+        const left = clamp(btn.offsetLeft, 6, innerWidth - btn.offsetWidth - 6);
+        const top = clamp(btn.offsetTop, 6, innerHeight - btn.offsetHeight - 6);
+        btn.style.left = left + 'px'; btn.style.top = top + 'px';
+        localStorage.setItem('tutorEFPosition', JSON.stringify({left, top}));
+      } else openTutor();
+      start = null;
+    });
+    try {
+      const p = JSON.parse(localStorage.getItem('tutorEFPosition'));
+      if (p && Number.isFinite(p.left) && Number.isFinite(p.top)) {
+        btn.style.left = clamp(p.left, 6, innerWidth - btn.offsetWidth - 6) + 'px';
+        btn.style.top = clamp(p.top, 6, innerHeight - btn.offsetHeight - 6) + 'px';
+        btn.style.right = 'auto'; btn.style.bottom = 'auto';
+      }
+    } catch(_){}
   }
 
   createUI(); updateContext(); enableDrag();
