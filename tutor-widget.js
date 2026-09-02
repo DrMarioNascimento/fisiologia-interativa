@@ -190,7 +190,7 @@
         btn.style.left = left + 'px'; btn.style.top = top + 'px';
         localStorage.setItem('tutorEFPosition', JSON.stringify({left, top}));
         placePanel();
-      } else openTutor();
+      } else if (panel().hidden) openTutor(); else closeTutor();
       start = null;
     });
     try {
