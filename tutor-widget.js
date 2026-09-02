@@ -2,7 +2,7 @@
   'use strict';
 
   const isFisioterapia = location.pathname.includes('/fisioterapia/') || new URLSearchParams(location.search).get('percurso') === 'fisioterapia';
-  const courseConfig = isFisioterapia && typeof fisioterapiaTutor !== 'undefined' ? fisioterapiaTutor : null;
+  const courseConfig = isFisioterapia && window.fisioterapiaTutor ? window.fisioterapiaTutor : null;
   const axisNames = courseConfig?.axisNames || {
     celular: '01 Celular e potenciais de ação', muscular: '02 Excitabilidade e sistema muscular',
     osteoarticular: '03 Osteoarticular', cardiovascular: '04 Cardiovascular',
