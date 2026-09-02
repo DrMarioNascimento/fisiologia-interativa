@@ -167,7 +167,7 @@
     if (/mapa/.test(q)) return mapReply(m, query);
     if (/explica|explique|como funciona|o que e/.test(q) && m) return explain(m);
     if (/explor|orient|passo|comec/.test(q) && m) return guide(m);
-    if (/teste|questao|pergunta/.test(q) && m) return quiz(m);
+    if (/teste|questao|questoes|pergunta|perguntas|exercicio|exercicios|quiz/.test(q) && m) return quiz(m);
     if (/resposta da prova|gabarito|so a resposta/.test(q)) return '<p>Não forneço gabarito puro. Escreva o seu raciocínio, mesmo que esteja incompleto; depois eu ajudo a localizar o ponto que precisa ser revisto.</p>';
     if (/diagnost|prescrev|tratamento|dose|paciente/.test(q)) return '<p>Este tutor é exclusivamente educacional e não realiza diagnóstico, prescrição ou orientação clínica. Posso ajudar a compreender o mecanismo fisiológico relacionado.</p>';
     return searchReply(query);
