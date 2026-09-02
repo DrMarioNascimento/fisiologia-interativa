@@ -25,8 +25,8 @@
   const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9+]+/g, ' ').trim();
   const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const allModules = () => (typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : [];
-  const currentAxis = () => (typeof active !== 'undefined' ? active : 'muscular');
   let selectedModule = null;
+  const currentAxis = () => selectedModule?.group || (typeof active !== 'undefined' ? active : 'muscular');
 
   function createUI() {
     const wrap = document.createElement('div');
@@ -160,12 +160,15 @@
     } catch(_){}
   }
 
+  selectedModule = allModules().find(m => location.pathname.endsWith('/' + m.href) || location.pathname.endsWith(m.href)) || null;
   createUI(); updateContext(); enableDrag();
   document.querySelector('.tutor-close').addEventListener('click',closeTutor);
   document.querySelector('#tutorForm').addEventListener('submit',e=>{e.preventDefault();submit(document.querySelector('#tutorInput').value);});
   document.querySelectorAll('.tutor-chip').forEach(b=>b.addEventListener('click',()=>submit(b.dataset.prompt)));
-  document.querySelector('#axes').addEventListener('click',e=>{if(e.target.closest('.axis')){selectedModule=null;setTimeout(updateContext);}});
-  document.querySelector('#cards').addEventListener('click',e=>{const card=e.target.closest('.card');if(!card)return;const title=card.querySelector('h2')?.textContent;selectedModule=allModules().find(m=>m.title===title)||null;updateContext();});
+  const axesNode = document.querySelector('#axes');
+  const cardsNode = document.querySelector('#cards');
+  if (axesNode) axesNode.addEventListener('click',e=>{if(e.target.closest('.axis')){selectedModule=null;setTimeout(updateContext);}});
+  if (cardsNode) cardsNode.addEventListener('click',e=>{const card=e.target.closest('.card');if(!card)return;const title=card.querySelector('h2')?.textContent;selectedModule=allModules().find(m=>m.title===title)||null;updateContext();});
   window.addEventListener('resize', () => { placePanel(); });
   setTimeout(()=>{document.querySelector('#tutorHint').hidden=true;},7000);
 })();
