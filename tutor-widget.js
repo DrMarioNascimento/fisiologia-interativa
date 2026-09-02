@@ -148,6 +148,12 @@
     const steps = (m.steps||[]).map(s=>`<li>${escapeHtml(s)}</li>`).join('');
     return `<p>Use o método da disciplina:</p><ol><li>Relembre o conceito no mapa mental.</li><li>Escolha um estado fisiológico.</li><li>Faça uma previsão.</li><li>Modifique <b>uma variável</b>.</li><li>Interprete a resposta.</li></ol><p>Para este módulo:</p><ol>${steps}</ol>${linkFor(m)} ${resourceLinks(m)}`;
   }
+  function quizMenu() {
+    const group = currentAxis();
+    const available = allModules().filter(item => item.group === group && Array.isArray(item.qs) && item.qs.length);
+    if (!available.length) return '<p>Não há questões cadastradas para este eixo nesta etapa.</p>';
+    return `<p>Escolha um simulador para responder às questões:</p>${available.map(item => `<div class="tutor-result"><b>${escapeHtml(item.title)}</b><span>${item.qs.length} questões disponíveis</span><br>${linkFor(item)}</div>`).join('')}<p>Ao abrir o simulador, escreva <b>“questões”</b> ou use o botão <b>Teste meu entendimento</b>.</p>`;
+  }
   function quiz(m) {
     const list = m.qs || [];
     const qi = quizProgress.get(m.href) || 0;
@@ -167,7 +173,7 @@
     if (/mapa/.test(q)) return mapReply(m, query);
     if (/explica|explique|como funciona|o que e/.test(q) && m) return explain(m);
     if (/explor|orient|passo|comec/.test(q) && m) return guide(m);
-    if (/teste|questao|questoes|pergunta|perguntas|exercicio|exercicios|quiz/.test(q) && m) return quiz(m);
+    if (/teste|questao|questoes|pergunta|perguntas|exercicio|exercicios|quiz/.test(q)) return m ? quiz(m) : quizMenu();
     if (/resposta da prova|gabarito|so a resposta/.test(q)) return '<p>Não forneço gabarito puro. Escreva o seu raciocínio, mesmo que esteja incompleto; depois eu ajudo a localizar o ponto que precisa ser revisto.</p>';
     if (/diagnost|prescrev|tratamento|dose|paciente/.test(q)) return '<p>Este tutor é exclusivamente educacional e não realiza diagnóstico, prescrição ou orientação clínica. Posso ajudar a compreender o mecanismo fisiológico relacionado.</p>';
     return searchReply(query);
