@@ -27,6 +27,7 @@
   const allModules = () => (typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : [];
   const allMaps = () => (typeof maps !== 'undefined' && maps) ? maps : {};
   let selectedModule = null;
+  const quizProgress = new Map();
   const currentAxis = () => selectedModule?.group || (typeof active !== 'undefined' ? active : 'muscular');
 
   function createUI() {
@@ -125,9 +126,12 @@
     return `<p>Use o método da disciplina:</p><ol><li>Relembre o conceito no mapa mental.</li><li>Escolha um estado fisiológico.</li><li>Faça uma previsão.</li><li>Modifique <b>uma variável</b>.</li><li>Interprete a resposta.</li></ol><p>Para este módulo:</p><ol>${steps}</ol>${linkFor(m)} ${resourceLinks(m)}`;
   }
   function quiz(m) {
-    const q = (m.qs||[])[Math.floor(Math.random() * Math.max(1,(m.qs||[]).length))];
+    const list = m.qs || [];
+    const qi = quizProgress.get(m.href) || 0;
+    const q = list[qi % Math.max(1,list.length)];
     if (!q) return 'Abra o simulador, modifique uma variável e descreva o que mudou. Depois tente justificar o mecanismo.';
-    return `<p><b>${escapeHtml(q.q)}</b></p><p>${q.opts.map((o,i)=>`${String.fromCharCode(65+i)}) ${escapeHtml(o)}`).join('<br>')}</p><p>Explique primeiro seu raciocínio; não responda apenas com a letra.</p>`;
+    const options=q.opts.map((o,i)=>`<button class="tutor-option" type="button" data-choice="${i}">${String.fromCharCode(65+i)}) ${escapeHtml(o)}</button>`).join('');
+    return `<div class="tutor-quiz" data-module="${escapeHtml(m.href)}" data-correct="${q.a}" data-next="${(qi+1)%list.length}" data-why="${escapeHtml(q.why)}"><p><b>Questão ${qi+1} de ${list.length}</b></p><p>${escapeHtml(q.q)}</p><div class="tutor-options">${options}</div><p class="tutor-feedback" hidden></p><button class="tutor-next" type="button" hidden>Próxima questão</button></div>`;
   }
   function searchReply(query) {
     const found = findModules(query);
@@ -181,6 +185,26 @@
   document.querySelector('.tutor-close').addEventListener('click',closeTutor);
   document.querySelector('#tutorForm').addEventListener('submit',e=>{e.preventDefault();submit(document.querySelector('#tutorInput').value);});
   document.querySelectorAll('.tutor-chip').forEach(b=>b.addEventListener('click',()=>submit(b.dataset.prompt)));
+  messages().addEventListener('click', e => {
+    const option = e.target.closest('.tutor-option');
+    if (option) {
+      const quizBox = option.closest('.tutor-quiz');
+      const chosen = Number(option.dataset.choice), correct = Number(quizBox.dataset.correct);
+      quizBox.querySelectorAll('.tutor-option').forEach((button,index)=>{button.disabled=true;if(index===correct)button.classList.add('correct');});
+      if(chosen!==correct) option.classList.add('wrong');
+      const feedback=quizBox.querySelector('.tutor-feedback');
+      feedback.hidden=false; feedback.textContent=(chosen===correct?'Certo. ':'Ainda não. ')+quizBox.dataset.why;
+      quizBox.querySelector('.tutor-next').hidden=false;
+      messages().scrollTop=messages().scrollHeight;
+      return;
+    }
+    const next = e.target.closest('.tutor-next');
+    if (next) {
+      const quizBox=next.closest('.tutor-quiz');
+      const m=allModules().find(item=>item.href===quizBox.dataset.module);
+      if(m){quizProgress.set(m.href,Number(quizBox.dataset.next));addMessage(quiz(m),'bot',true);}
+    }
+  });
   const axesNode = document.querySelector('#axes');
   const cardsNode = document.querySelector('#cards');
   if (axesNode) axesNode.addEventListener('click',e=>{if(e.target.closest('.axis')){selectedModule=null;setTimeout(updateContext);}});
