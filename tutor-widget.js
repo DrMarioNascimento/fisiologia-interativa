@@ -112,11 +112,34 @@
     if (m.href === 'sangue.html') links.push('<a class="tutor-link" href="assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260823" target="_blank" rel="noopener">Guia visual de Sangue</a>');
     return links.join(' ');
   }
-  function mapReply(m) {
-    const group = m?.group || currentAxis();
-    const map = m?.href === 'sangue.html' ? {src:'assets/maps/cardiovascular-01-sangue.webp',title:'Sangue'} : allMaps()[group];
-    if (!map) return '<p>Não encontrei um mapa mental cadastrado para este contexto.</p>';
-    return `<p>Relembre primeiro os conceitos no mapa <b>${escapeHtml(map.title)}</b>. Depois retorne ao simulador, escolha um estado e modifique apenas uma variável.</p><a class="tutor-link" href="${escapeHtml(map.src)}" target="_blank" rel="noopener">Abrir mapa mental</a>`;
+  function mapReply(m, query) {
+    const raw = normalize(query);
+    const bloodMap = {src:'assets/maps/cardiovascular-01-sangue.webp',title:'Sangue'};
+    const requestedGroup = [
+      ['celular', /celular|membrana|potencial/],
+      ['muscular', /muscular|musculo|excitabilidade|contracao|sarcomero/],
+      ['osteoarticular', /osteo|osso|articular|articulacao/],
+      ['respiratorio', /respiratorio|pulmao|ventilacao/],
+      ['integracao', /integracao|cardiorrespiratoria|exercicio/],
+      ['cardiovascular', /cardiovascular|circulacao|hemodinamica|coracao/]
+    ].find(([, pattern]) => pattern.test(raw))?.[0];
+
+    let map = null;
+    if (/sangue|hemacia|hemoglobina|hematopo/.test(raw)) map = bloodMap;
+    else if (requestedGroup) map = allMaps()[requestedGroup];
+    else if (m?.href === 'sangue.html') map = bloodMap;
+    else if (m) map = allMaps()[m.group];
+
+    if (map) {
+      return `<p>Relembre primeiro os conceitos no mapa <b>${escapeHtml(map.title)}</b>. Depois retorne ao simulador, escolha um estado e modifique apenas uma variável.</p><a class="tutor-link" href="${escapeHtml(map.src)}" target="_blank" rel="noopener">Abrir mapa mental — ${escapeHtml(map.title)}</a>`;
+    }
+
+    const available = [
+      ...Object.values(allMaps()),
+      bloodMap
+    ];
+    if (!available.length) return '<p>Não encontrei mapas mentais cadastrados.</p>';
+    return `<p>Qual mapa mental você quer abrir?</p><div class="tutor-map-list">${available.map(item => `<a class="tutor-link" href="${escapeHtml(item.src)}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a>`).join(' ')}</div><p>Você também pode escrever, por exemplo, <b>“mapa de Sangue”</b> ou <b>“mapa respiratório”</b>.</p>`;
   }
   function explain(m) {
     return `<p><b>1. Ideia:</b> ${escapeHtml(m.goal)}</p><p><b>2. Mecanismo:</b> siga a sequência do módulo e observe como uma alteração produz respostas nas demais variáveis.</p><p><b>3. Aplicação:</b> relacione o resultado à produção e ao controle do movimento ou exercício.</p>${linkFor(m)} ${resourceLinks(m)}<p><b>Para pensar:</b> qual resultado você prevê antes de modificar uma variável?</p>`;
@@ -141,7 +164,7 @@
   }
   function answer(query) {
     const q = normalize(query); const m = selectedModule;
-    if (/mapa/.test(q)) return mapReply(m);
+    if (/mapa/.test(q)) return mapReply(m, query);
     if (/explica|explique|como funciona|o que e/.test(q) && m) return explain(m);
     if (/explor|orient|passo|comec/.test(q) && m) return guide(m);
     if (/teste|questao|pergunta/.test(q) && m) return quiz(m);
