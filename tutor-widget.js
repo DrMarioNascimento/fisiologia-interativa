@@ -25,6 +25,7 @@
   const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9+]+/g, ' ').trim();
   const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const allModules = () => (typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : [];
+  const allMaps = () => (typeof maps !== 'undefined' && maps) ? maps : {};
   let selectedModule = null;
   const currentAxis = () => selectedModule?.group || (typeof active !== 'undefined' ? active : 'muscular');
 
@@ -36,7 +37,7 @@
         <header class="tutor-head"><div><strong>Tutor de Fisiologia</strong><span>Educação Física • estudo guiado</span></div><button class="tutor-close" type="button" aria-label="Minimizar tutor">×</button></header>
         <div class="tutor-context" id="tutorContext"></div>
         <div class="tutor-messages" id="tutorMessages" aria-live="polite"></div>
-        <div><div class="tutor-chips"><button class="tutor-chip" data-prompt="Explique este simulador">Explique este simulador</button><button class="tutor-chip" data-prompt="Ajude-me a explorar">Ajude-me a explorar</button><button class="tutor-chip" data-prompt="Quero encontrar um conteúdo">Encontrar conteúdo</button><button class="tutor-chip" data-prompt="Teste meu entendimento">Teste meu entendimento</button></div><form class="tutor-form" id="tutorForm"><input class="tutor-input" id="tutorInput" maxlength="240" autocomplete="off" placeholder="Ex.: onde estudo extração de O₂?" aria-label="Pergunta ao tutor"><button class="tutor-send" aria-label="Enviar pergunta">➜</button></form></div>
+        <div><div class="tutor-chips"><button class="tutor-chip" data-prompt="Explique este simulador">Explique este simulador</button><button class="tutor-chip" data-prompt="Ajude-me a explorar">Ajude-me a explorar</button><button class="tutor-chip" data-prompt="Abra o mapa mental">Mapa mental</button><button class="tutor-chip" data-prompt="Quero encontrar um conteúdo">Encontrar conteúdo</button><button class="tutor-chip" data-prompt="Teste meu entendimento">Teste meu entendimento</button></div><form class="tutor-form" id="tutorForm"><input class="tutor-input" id="tutorInput" maxlength="240" autocomplete="off" placeholder="Ex.: onde estudo extração de O₂?" aria-label="Pergunta ao tutor"><button class="tutor-send" aria-label="Enviar pergunta">➜</button></form></div>
       </section>
       <button class="tutor-launcher" id="tutorLauncher" type="button" aria-label="Abrir Tutor de Fisiologia" aria-expanded="false">
         <span class="tutor-portrait"><img src="assets/tutor-prof-mario.png" alt="" draggable="false"></span>
@@ -102,12 +103,26 @@
     }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.m);
   }
   function linkFor(m) { return `<a class="tutor-link" href="${escapeHtml(m.href)}">Abrir ${escapeHtml(m.title)}</a>`; }
+  function resourceLinks(m) {
+    const map = m.href === 'sangue.html' ? {src:'assets/maps/cardiovascular-01-sangue.webp',title:'Sangue'} : allMaps()[m.group];
+    const links = [];
+    if (map) links.push(`<a class="tutor-link" href="${escapeHtml(map.src)}" target="_blank" rel="noopener">Abrir mapa mental</a>`);
+    if (m.href === 'da-intencao-ao-movimento.html') links.push('<a class="tutor-link" href="assets/leituras/da-intencao-ao-movimento-guia-visual.pdf?v=20260821" target="_blank" rel="noopener">Leitura de aprofundamento</a>');
+    if (m.href === 'sangue.html') links.push('<a class="tutor-link" href="assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260823" target="_blank" rel="noopener">Guia visual de Sangue</a>');
+    return links.join(' ');
+  }
+  function mapReply(m) {
+    const group = m?.group || currentAxis();
+    const map = m?.href === 'sangue.html' ? {src:'assets/maps/cardiovascular-01-sangue.webp',title:'Sangue'} : allMaps()[group];
+    if (!map) return '<p>Não encontrei um mapa mental cadastrado para este contexto.</p>';
+    return `<p>Relembre primeiro os conceitos no mapa <b>${escapeHtml(map.title)}</b>. Depois retorne ao simulador, escolha um estado e modifique apenas uma variável.</p><a class="tutor-link" href="${escapeHtml(map.src)}" target="_blank" rel="noopener">Abrir mapa mental</a>`;
+  }
   function explain(m) {
-    return `<p><b>1. Ideia:</b> ${escapeHtml(m.goal)}</p><p><b>2. Mecanismo:</b> siga a sequência do módulo e observe como uma alteração produz respostas nas demais variáveis.</p><p><b>3. Aplicação:</b> relacione o resultado à produção e ao controle do movimento ou exercício.</p>${linkFor(m)}<p><b>Para pensar:</b> qual resultado você prevê antes de modificar uma variável?</p>`;
+    return `<p><b>1. Ideia:</b> ${escapeHtml(m.goal)}</p><p><b>2. Mecanismo:</b> siga a sequência do módulo e observe como uma alteração produz respostas nas demais variáveis.</p><p><b>3. Aplicação:</b> relacione o resultado à produção e ao controle do movimento ou exercício.</p>${linkFor(m)} ${resourceLinks(m)}<p><b>Para pensar:</b> qual resultado você prevê antes de modificar uma variável?</p>`;
   }
   function guide(m) {
     const steps = (m.steps||[]).map(s=>`<li>${escapeHtml(s)}</li>`).join('');
-    return `<p>Use o método da disciplina:</p><ol><li>Relembre o conceito no mapa mental.</li><li>Escolha um estado fisiológico.</li><li>Faça uma previsão.</li><li>Modifique <b>uma variável</b>.</li><li>Interprete a resposta.</li></ol><p>Para este módulo:</p><ol>${steps}</ol>${linkFor(m)}`;
+    return `<p>Use o método da disciplina:</p><ol><li>Relembre o conceito no mapa mental.</li><li>Escolha um estado fisiológico.</li><li>Faça uma previsão.</li><li>Modifique <b>uma variável</b>.</li><li>Interprete a resposta.</li></ol><p>Para este módulo:</p><ol>${steps}</ol>${linkFor(m)} ${resourceLinks(m)}`;
   }
   function quiz(m) {
     const q = (m.qs||[])[Math.floor(Math.random() * Math.max(1,(m.qs||[]).length))];
@@ -122,6 +137,7 @@
   }
   function answer(query) {
     const q = normalize(query); const m = selectedModule;
+    if (/mapa/.test(q)) return mapReply(m);
     if (/explica|explique|como funciona|o que e/.test(q) && m) return explain(m);
     if (/explor|orient|passo|comec/.test(q) && m) return guide(m);
     if (/teste|questao|pergunta/.test(q) && m) return quiz(m);
