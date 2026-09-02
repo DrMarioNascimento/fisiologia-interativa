@@ -76,6 +76,19 @@ window.fisioterapiaTutor = {
         {q:'Reduzir a frequência respiratória exige, em geral:',opts:['Aumentar a duração do ciclo','Reduzir todo o ciclo','Eliminar a expiração'],a:0,why:'Frequência e duração do ciclo apresentam relação inversa.'},
         {q:'No método de exploração, deve-se modificar:',opts:['Uma variável por vez','Todas as variáveis juntas','Somente a cor da interface'],a:0,why:'Alterar uma variável permite interpretar melhor a relação de causa e efeito.'}
       ]
+    },
+    {
+      group:'respiratorio', title:'Ventilação Pulmonar Neonatal', href:'ventilacao-pulmonar-neonatal.html',
+      goal:'Relacionar idade gestacional, desenvolvimento extrauterino, surfactante e mecânica neonatal à ventilação e ao suporte respiratório.',
+      steps:['Defina IG ao nascimento, idade pós-natal e massa.','Compare VDa, VDalv e VDf antes de alterar o suporte.','Mude uma variável e explique recrutamento, ventilação alveolar e trabalho respiratório.'],
+      qs:[
+        {q:'A idade pós-menstrual corresponde a:',opts:['IG ao nascimento + idade pós-natal','Somente à idade pós-natal','Peso atual + IG'],a:0,why:'Ela organiza a cronologia, mas não apaga a trajetória intrauterina ou extrauterina.'},
+        {q:'Dois bebês com 36 semanas de idade pós-menstrual são sempre equivalentes?',opts:['Sim, porque a soma é igual','Não, porque IG ao nascimento e exposição extrauterina podem ser diferentes','Sim, se tiverem a mesma FR'],a:1,why:'Nascer com 28 semanas e viver 8 semanas fora do útero não equivale a nascer com 36 semanas.'},
+        {q:'A deficiência de surfactante tende a:',opts:['Reduzir tensão superficial e trabalho','Aumentar tensão superficial, reduzir complacência e favorecer colapso','Aumentar apenas o VDa'],a:1,why:'Menor estabilização alveolar exige maior pressão para recrutamento e eleva o trabalho.'},
+        {q:'O espaço morto fisiológico é:',opts:['VDf = VDa + VDalv','VDf = Vt + FR','Somente o volume da traqueia'],a:0,why:'VDa corresponde às vias condutoras; VDalv, a unidades ventiladas com pouca ou nenhuma perfusão.'},
+        {q:'Um alvéolo fechado representa diretamente espaço morto alveolar?',opts:['Sim, sempre','Não; isoladamente se aproxima de shunt, pois há perfusão sem ventilação','Somente quando a FR é alta'],a:1,why:'Espaço morto alveolar requer ventilação com perfusão ausente ou muito reduzida.'},
+        {q:'Em unidade recrutável e perfundida, PEEP adequada pode:',opts:['Reduzir VDalv e melhorar VA','Aumentar obrigatoriamente o VDalv','Eliminar o VDa anatômico'],a:0,why:'Recrutamento efetivo melhora a participação nas trocas; PEEP excessiva pode sobredistender e aumentar VDalv.'}
+      ]
     }
   ])
 };

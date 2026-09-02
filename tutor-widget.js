@@ -29,7 +29,8 @@
     'contracao-muscular-sarcomero.html': 'sarcômero actina miosina ponte cruzada zona h filamento deslizamento',
     'potencial-acao-membrana.html': 'potencial de ação membrana sodio na potassio k despolarizacao repolarizacao repouso',
     'neuronio-interativo.html': 'potencial de ação neuronio axonio impulso condução sodio potassio',
-    'cardiopulmonar-integrado.html': 'caminho oxigenio ar pulmão coração circulação musculo exercício integração'
+    'cardiopulmonar-integrado.html': 'caminho oxigenio ar pulmão coração circulação musculo exercício integração',
+    'ventilacao-pulmonar-neonatal.html': 'neonatal recém nascido prematuro prematuridade idade gestacional pós natal pós menstrual surfactante sdr dbp cpap peep fio2 ventilação mecânica complacência resistência traqueia calibre vias aéreas espaço morto vda vdalv vdf shunt recrutamento alveolar'
   };
   const stop = new Set('a ao aos as com como da das de do dos e em entre eu isso me meu minha na nas no nos o os ou para por qual que quero se sem sobre um uma onde'.split(' '));
 
@@ -117,6 +118,7 @@
       if (/extracao|arterioven|av ?o2/.test(raw) && /fick|consumo-o2/.test(m.href)) score += 9;
       if (/curva|hemoglobin|saturacao/.test(raw) && /curva-dissociacao/.test(m.href)) score += 10;
       if (/forca.*velocidade|velocidade.*forca|potencia/.test(raw) && /hill/.test(m.href)) score += 8;
+      if (/neonat|recem nascid|prematur|surfact|gestacional|pos menstrual|sdr|dbp|vdalv/.test(raw) && /ventilacao-pulmonar-neonatal/.test(m.href)) score += 14;
       return {m,score};
     }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.m);
   }
@@ -128,6 +130,7 @@
     const links = moduleMaps.map(item=>`<a class="tutor-link" href="${escapeHtml(item.src)}" target="_blank" rel="noopener">Mapa — ${escapeHtml(item.title)}</a>`);
     if (m.href === 'da-intencao-ao-movimento.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/da-intencao-ao-movimento-guia-visual.pdf?v=20260821'))}" target="_blank" rel="noopener">Leitura de aprofundamento</a>`);
     if (m.href === 'sangue.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260823'))}" target="_blank" rel="noopener">Guia visual de Sangue</a>`);
+    if (m.href === 'ventilacao-pulmonar-neonatal.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260902-2'))}" target="_blank" rel="noopener">Guia visual neonatal</a>`);
     return links.join(' ');
   }
   function renderMapLinks(items, intro) {
