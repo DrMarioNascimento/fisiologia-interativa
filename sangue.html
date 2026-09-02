@@ -42,7 +42,7 @@
       const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
       let html=await new Response(stream).text();
       if(!html.toLowerCase().includes('<!doctype html')) throw new Error('O pacote do simulador não pôde ser validado.');
-      const tutorCss='<link rel="stylesheet" href="./tutor-widget.css?v=4">';html=/<\/head>/i.test(html)?html.replace(/<\/head>/i,tutorCss+'</head>'):tutorCss+html;const tutorTags='<script src="./tutor-ef-data.js?v=9"></scr'+'ipt><script src="./tutor-widget.js?v=13"></scr'+'ipt>';html=/<\/body>/i.test(html)?html.replace(/<\/body>/i,tutorTags+'</body>'):html+tutorTags;document.open();
+      const tutorCss='<link rel="stylesheet" href="./tutor-widget.css?v=4">';html=/<\/head>/i.test(html)?html.replace(/<\/head>/i,tutorCss+'</head>'):tutorCss+html;const tutorTags='<script src="./tutor-ef-data.js?v=10"></scr'+'ipt><script src="./tutor-widget.js?v=14"></scr'+'ipt>';html=/<\/body>/i.test(html)?html.replace(/<\/body>/i,tutorTags+'</body>'):html+tutorTags;document.open();
       document.write(html);
       document.close();
     })().catch(error=>{
