@@ -216,9 +216,9 @@
     if (/diagnost|prescrev|tratamento|dose|paciente/.test(q)) return '<p>Este tutor é exclusivamente educacional e não realiza diagnóstico, prescrição ou orientação clínica. Posso ajudar a compreender o mecanismo fisiológico relacionado.</p>';
     if (wantsMap && wantsQuiz) return `<p>Você mencionou mapa e questões. Por onde deseja começar?</p><div class="tutor-action-row">${actionButton('Mapa mental','map-current')} ${actionButton('Questões','quiz-current')}</div>`;
     if (wantsExplainAnswer && lastQuiz) return `<p><b>Mecanismo:</b> ${escapeHtml(lastQuiz.question.why)}</p><p>Agora tente explicar com suas palavras: o que causou essa resposta?</p>`;
-    if (wantsNext && m) return nextQuiz(m);
     if (wantsQuiz && /deste ou|desse ou|ou outro|outra materia|outro conteudo/.test(q)) return clarifyQuiz(m);
     if (wantsMap && /deste ou|desse ou|ou outro|outro mapa/.test(q)) return clarifyMap(m);
+    if (wantsNext && m) return nextQuiz(m);
     if (wantsMap) return mapReply(m, query);
     if (wantsQuiz) return m ? quiz(m) : quizMenu();
     if (/explica|explique|como funciona|o que e/.test(q) && m) return explain(m);
