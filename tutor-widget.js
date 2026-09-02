@@ -39,7 +39,7 @@
         <div><div class="tutor-chips"><button class="tutor-chip" data-prompt="Explique este simulador">Explique este simulador</button><button class="tutor-chip" data-prompt="Ajude-me a explorar">Ajude-me a explorar</button><button class="tutor-chip" data-prompt="Quero encontrar um conteúdo">Encontrar conteúdo</button><button class="tutor-chip" data-prompt="Teste meu entendimento">Teste meu entendimento</button></div><form class="tutor-form" id="tutorForm"><input class="tutor-input" id="tutorInput" maxlength="240" autocomplete="off" placeholder="Ex.: onde estudo extração de O₂?" aria-label="Pergunta ao tutor"><button class="tutor-send" aria-label="Enviar pergunta">➜</button></form></div>
       </section>
       <button class="tutor-launcher" id="tutorLauncher" type="button" aria-label="Abrir Tutor de Fisiologia" aria-expanded="false">
-        <svg viewBox="0 0 64 64" role="img" aria-label="Tutor"><circle cx="32" cy="25" r="17" fill="#f3c8a7"/><path d="M16 23c1-14 9-18 17-18 11 0 17 8 16 20-3-7-9-10-18-10-6 0-11 3-15 8z" fill="#183d3a"/><path d="M14 61c1-15 8-23 18-23s17 8 18 23" fill="#fff"/><path d="M29 39h6l2 22H27z" fill="#bce8d2"/><g fill="none" stroke="#173b39" stroke-width="2"><rect x="19" y="22" width="11" height="8" rx="4"/><rect x="34" y="22" width="11" height="8" rx="4"/><path d="M30 25h4M26 34c4 3 8 3 12 0"/></g></svg>
+        <span class="tutor-portrait"><img src="assets/tutor-prof-mario.png" alt="" draggable="false"></span>
         <span class="tutor-badge">?</span>
       </button>`;
     document.body.appendChild(wrap);
