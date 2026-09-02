@@ -53,6 +53,25 @@
     const label = axisNames[currentAxis()] || 'Educação Física';
     document.querySelector('#tutorContext').textContent = selectedModule ? `${label} • ${selectedModule.title}` : `${label} • percurso geral`;
   }
+  function placePanel() {
+    const box = panel();
+    if (box.hidden) return;
+    if (innerWidth <= 640) {
+      box.style.left = ''; box.style.top = ''; box.style.right = ''; box.style.bottom = '';
+      return;
+    }
+    const avatar = launcher().getBoundingClientRect();
+    const width = box.offsetWidth, height = box.offsetHeight, gap = 12;
+    const left = avatar.left + avatar.width / 2 > innerWidth / 2
+      ? avatar.left - width - gap
+      : avatar.right + gap;
+    const top = avatar.top + avatar.height / 2 > innerHeight / 2
+      ? avatar.bottom - height
+      : avatar.top;
+    box.style.left = Math.max(8, Math.min(innerWidth - width - 8, left)) + 'px';
+    box.style.top = Math.max(8, Math.min(innerHeight - height - 8, top)) + 'px';
+    box.style.right = 'auto'; box.style.bottom = 'auto';
+  }
   function addMessage(text, who, html) {
     const el = document.createElement('div');
     el.className = `tutor-message ${who}`;
@@ -61,7 +80,7 @@
   }
   function openTutor() {
     panel().hidden = false; panel().classList.add('is-open'); launcher().setAttribute('aria-expanded','true');
-    document.querySelector('#tutorHint').hidden = true; updateContext();
+    document.querySelector('#tutorHint').hidden = true; updateContext(); placePanel();
     if (!messages().children.length) addMessage('Olá! Diga o que deseja estudar ou selecione um card. Eu indicarei um percurso usando os mapas e simuladores da disciplina.', 'bot');
     setTimeout(() => document.querySelector('#tutorInput').focus(), 50);
   }
@@ -119,7 +138,7 @@
     const btn = launcher(); let start=null, moved=false;
     const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
     btn.addEventListener('pointerdown', e => { start={x:e.clientX,y:e.clientY,left:btn.offsetLeft,top:btn.offsetTop}; moved=false; btn.setPointerCapture(e.pointerId); btn.classList.add('is-dragging'); });
-    btn.addEventListener('pointermove', e => { if(!start)return; const dx=e.clientX-start.x,dy=e.clientY-start.y; if(Math.hypot(dx,dy)>5)moved=true; if(!moved)return; btn.style.left=clamp(start.left+dx,6,innerWidth-btn.offsetWidth-6)+'px'; btn.style.top=clamp(start.top+dy,6,innerHeight-btn.offsetHeight-6)+'px'; btn.style.right='auto'; btn.style.bottom='auto'; });
+    btn.addEventListener('pointermove', e => { if(!start)return; const dx=e.clientX-start.x,dy=e.clientY-start.y; if(Math.hypot(dx,dy)>5)moved=true; if(!moved)return; btn.style.left=clamp(start.left+dx,6,innerWidth-btn.offsetWidth-6)+'px'; btn.style.top=clamp(start.top+dy,6,innerHeight-btn.offsetHeight-6)+'px'; btn.style.right='auto'; btn.style.bottom='auto'; placePanel(); });
     btn.addEventListener('pointerup', () => {
       btn.classList.remove('is-dragging');
       if (moved) {
@@ -127,6 +146,7 @@
         const top = clamp(btn.offsetTop, 6, innerHeight - btn.offsetHeight - 6);
         btn.style.left = left + 'px'; btn.style.top = top + 'px';
         localStorage.setItem('tutorEFPosition', JSON.stringify({left, top}));
+        placePanel();
       } else openTutor();
       start = null;
     });
@@ -146,5 +166,6 @@
   document.querySelectorAll('.tutor-chip').forEach(b=>b.addEventListener('click',()=>submit(b.dataset.prompt)));
   document.querySelector('#axes').addEventListener('click',e=>{if(e.target.closest('.axis')){selectedModule=null;setTimeout(updateContext);}});
   document.querySelector('#cards').addEventListener('click',e=>{const card=e.target.closest('.card');if(!card)return;const title=card.querySelector('h2')?.textContent;selectedModule=allModules().find(m=>m.title===title)||null;updateContext();});
+  window.addEventListener('resize', () => { placePanel(); });
   setTimeout(()=>{document.querySelector('#tutorHint').hidden=true;},7000);
 })();
