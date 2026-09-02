@@ -1,0 +1,101 @@
+const maps = {
+  celular: {src:'assets/maps/organizacao-funcional-membranas.webp', title:'Organização funcional e membranas'},
+  muscular: {src:'assets/maps/excitabilidade-sistema-muscular.webp', title:'Excitabilidade e sistema muscular'},
+  osteoarticular: {src:'assets/maps/sistema-osteoarticular.webp', title:'Sistema osteoarticular'},
+  cardiovascular: {src:'assets/maps/cardiovascular-02-circulacao-hemodinamica.webp', title:'Circulação e hemodinâmica'},
+  respiratorio: {src:'assets/maps/respiratorio-01-estrutura-mecanica-ventilacao.webp', title:'Estrutura, mecânica e ventilação'},
+  integracao: {src:'assets/maps/integracao-cardiorrespiratoria.webp', title:'Integração cardiorrespiratória'}
+};
+
+const axes = [
+  {id:'celular', label:'01 Celular'},
+  {id:'muscular', label:'02 Muscular'},
+  {id:'osteoarticular', label:'03 Osteoarticular'},
+  {id:'cardiovascular', label:'04 Cardiovascular'},
+  {id:'respiratorio', label:'05 Respiratório'},
+  {id:'integracao', label:'06 Integração'}
+];
+
+const modules = [
+  {group:'celular', title:'Potencial de ação na membrana', href:'potencial-acao-membrana.html', goal:'Acompanhar permeabilidade, fluxos de Na⁺ e K⁺ e o potencial.', steps:['Abra o mapa de membranas.','Percorra as 7 etapas sem pular.','Pause na despolarização e nomeie o íon dominante.'], qs:[{q:'Na despolarização rápida, o fluxo principal é:', opts:['K⁺ saindo','Na⁺ entrando','Cl⁻ entrando'], a:1, why:'A abertura dos canais de Na⁺ dependentes de voltagem deixa o potencial menos negativo.'},{q:'O potencial de repouso depende sobretudo de:', opts:['Alta permeabilidade ao K⁺','Bomba de Ca²⁺','Lactato'], a:0, why:'Em repouso a membrana é mais permeável ao K⁺; a Na⁺/K⁺-ATPase mantém os gradientes.'}]},
+  {group:'celular', title:'Potencial de ação do neurônio', href:'neuronio-interativo.html', goal:'Ver o impulso e a abertura sequencial dos canais.', steps:['Siga o impulso ao longo do axônio.','Marque quando Na⁺ abre e quando K⁺ abre.','Relacione isso com a chegada à placa motora.'], qs:[{q:'Depois do pico, a repolarização ocorre porque:', opts:['Na⁺ continua entrando','K⁺ sai e Na⁺ inativa','ACh aumenta'], a:1, why:'Canais de Na⁺ inativam e a saída de K⁺ devolve o potencial negativo.'}]},
+  {group:'celular', title:'Transporte ativo secundário — SGLT', href:'transporte-ativo-secundario-sglt.html', goal:'Ligar o gradiente de Na⁺ ao cotransporte de glicose.', steps:['Identifique a Na⁺/K⁺-ATPase.','Veja por que a glicose entra sem hidrolisar ATP no SGLT.','Compare com transporte primário.'], qs:[{q:'O SGLT é secundário porque:', opts:['Usa ATP direto na glicose','Aproveita o gradiente de Na⁺ criado pela bomba','Não move íons'], a:1, why:'A energia vem do Na⁺; a bomba primária gastou ATP antes.'}]},
+  {group:'muscular', title:'Contração muscular esquelética', href:'contracao-muscular-esqueletica.html', goal:'Do potencial de ação ao relaxamento: ACh, Ca²⁺, ATP e sarcômero.', steps:['Relembre o mapa de excitabilidade.','Percorra as 7 etapas.','Pare no Ca²⁺ e no ATP e diga o papel de cada um.'], qs:[{q:'Sem Ca²⁺ citosólico, a ponte cruzada:', opts:['Cicla mais rápido','Não encontra o sítio da actina','Gasta mais ATP'], a:1, why:'Sem Ca²⁺ a tropomiosina cobre o sítio de ligação. No simulador, acompanhe o passo do cálcio antes das pontes.'},{q:'O relaxamento exige ATP para:', opts:['Só formar ponte','Recaptar Ca²⁺ e desligar miosina da actina','Produzir ACh'], a:1, why:'ATP separa actina-miosina e alimenta a bomba de Ca²⁺ do retículo. Sem ATP a fibra não relaxa de fato.'},{q:'A acetilcolina atua principalmente na:', opts:['Mitocôndria','Placa motora','Zona H'], a:1, why:'A ACh liga-se ao receptor nicotínico da placa e inicia a despolarização da fibra.'},{q:'Erro comum: se não há encurtamento, não há contração. O que está errado?', opts:['Contração exige sempre encurtamento visível','Pode haver tensão sem mudança de comprimento','ATP some na isometria'], a:1, why:'Contração é produção de tensão. No agachamento parado no meio do movimento ainda há contração.'},{q:'No agachamento, a ordem correta ainda é:', opts:['Pontes → Ca²⁺ → potencial de ação','Potencial de ação → Ca²⁺ → pontes cruzadas','ATP → ACh → mapa ósseo'], a:1, why:'O gesto muda a carga; a sequência molecular permanece. Percorra as 7 etapas e marque cada elo.'}]},
+  {group:'muscular', title:'Acoplamento excitação–contração', href:'acoplamento-excitacao-contracao.html', goal:'Do impulso à liberação de Ca²⁺ e à exposição da actina.', steps:['Siga placa motora → túbulos T → retículo → sarcômero.','Nomeie ACh, receptor nicotínico e RyR.','Pergunte o que quebra o acoplamento na fadiga.'], qs:[{q:'O potencial de ação penetra a fibra principalmente pelos:', opts:['Núcleos','Túbulos T','Mitocôndrias'], a:1, why:'Os túbulos T levam a despolarização até as cisternas. Siga esse caminho no simulador.'},{q:'O Ca²⁺ que dispara as pontes sai sobretudo do:', opts:['Sangue arterial','Retículo sarcoplasmático','Túbulo renal'], a:1, why:'O RyR do retículo libera Ca²⁺ para o citosol. Sem esse passo a actina permanece coberta.'},{q:'Se a ACh não chegar à fenda sináptica:', opts:['O sarcômero encurta sozinho','A placa não despolariza e o acoplamento falha','O ATP aumenta'], a:1, why:'Sem placa ativada não há PA na fibra. O simulador começa exatamente nesse elo.'},{q:'Na fadiga, um ponto frágil do acoplamento é:', opts:['A cor do músculo','A recaptação e a disponibilidade de Ca²⁺','A Lei de Wolff'], a:1, why:'O sinal elétrico pode chegar e a ligação excitação–Ca²⁺–ponte ficar menos eficaz.'},{q:'Para estudar este módulo, a melhor manobra é:', opts:['Mudar três variáveis ao mesmo tempo','Seguir um único caminho e nomear cada estrutura','Pular direto para Hill'], a:1, why:'Acoplamento é sequência. Se um elo ficar sem nome, a explicação do exercício fica furada.'}]},
+  {group:'muscular', title:'Contração muscular e sarcômero', href:'contracao-muscular-sarcomero.html', goal:'Ciclo das pontes, ATP e mudança da zona H.', steps:['Observe actina, miosina e zona H.','Acompanhe um ciclo completo da ponte.','Relacione encurtamento com deslizamento.'], qs:[{q:'Na contração, os filamentos:', opts:['Encolhem','Deslizam e a zona H reduz','Somem'], a:1, why:'O comprimento dos filamentos permanece; a sobreposição aumenta. Veja a zona H no simulador.'},{q:'O ATP no ciclo da ponte serve para:', opts:['Colar a miosina para sempre','Desligar a miosina da actina e recarregar a cabeça','Produzir ACh'], a:1, why:'Sem ATP novo a cabeça não solta. Por isso o relaxamento também depende de energia.'},{q:'Erro comum: o filamento de actina diminui de tamanho. O correto é:', opts:['Os filamentos deslizam uns sobre os outros','A actina evapora','Só a miosina some'], a:0, why:'Teoria do deslizamento: há mais sobreposição, não encolhimento das proteínas.'},{q:'Se o sarcômero parte muito alongado, a força tende a:', opts:['Subir sempre','Cair por menor sobreposição','Ficar igual em qualquer comprimento'], a:1, why:'Pouca sobreposição, poucas pontes possíveis. Relacione com amplitude do gesto.'},{q:'No ensino do agachamento, este módulo ajuda a explicar:', opts:['Por que a força muda com o ângulo articular','A cor da barra','A saturação da hemoglobina'], a:0, why:'O comprimento do sarcômero muda com a posição. Abra o simulador e acompanhe a zona H.'}]},
+  {group:'muscular', title:'Contrações musculares interativas', href:'contracoes-musculares-interativas.html', goal:'Comparar estática, dinâmica e isocinética.', steps:['Defina se há mudança de comprimento.','Compare carga e movimento.','Traga um gesto de aula: agachar, prancha, isocinético.'], qs:[{q:'Na contração isométrica há:', opts:['Tensão sem mudança de comprimento','Ausência de tensão','Só encurtamento'], a:0, why:'Isométrica produz tensão. A prancha é o exemplo clássico da aula.'},{q:'Na ação concêntrica o músculo:', opts:['Alonga sob tensão','Encurta produzindo tensão','Fica sem ATP'], a:1, why:'Concêntrica = encurtamento com tensão. Subida do agachamento.'},{q:'Na ação excêntrica o músculo:', opts:['Não produz força','Alonga enquanto produz tensão','Só existe no cardíaco'], a:1, why:'Descida controlada do agachamento: o músculo freia e alonga sob carga.'},{q:'A contração isocinética se caracteriza por:', opts:['Velocidade angular controlada','Ausência total de torque','Ser igual à isometria'], a:0, why:'O equipamento impõe a velocidade; o torque varia. Compare no simulador.'},{q:'Erro comum: isometria não treina porque não há movimento. O ponto certo é:', opts:['Há tensão e demanda metabólica mesmo sem deslocar a carga','Não há unidades motoras','O mapa mental some'], a:0, why:'Movimento visível não define contração. Mude o tipo no simulador e compare a força.'}]},
+  {group:'muscular', title:'Hill × Isocinético', href:'modelos-hill-isocinetico.html', goal:'Força, velocidade, torque e potência.', steps:['Comece com velocidade baixa e veja a força.','Aumente só a velocidade.','Ache a potência máxima — não é no extremo da força.'], qs:[{q:'No modelo de Hill, se a velocidade de encurtamento sobe:', opts:['A força sobe','A força cai','A força fica igual'], a:1, why:'Relação inversa força–velocidade. Mude só a velocidade no simulador.'},{q:'A potência máxima costuma ocorrer:', opts:['Na força máxima e velocidade zero','Em uma combinação intermediária de força e velocidade','Só com carga nula'], a:1, why:'Potência = força × velocidade. O pico não está nos extremos. Localize o ponto no gráfico.'},{q:'Carga muito alta, próxima da isometria, implica:', opts:['Velocidade alta','Velocidade próxima de zero','VO₂ nulo por definição'], a:1, why:'Quase não há encurtamento. Útil para discutir 1RM versus gesto rápido.'},{q:'Erro comum: mais força sempre gera mais potência. O certo é:', opts:['Potência depende também da velocidade','Potência é só a carga da barra','Hill não vale no esporte'], a:0, why:'Um agachamento lento e pesado pode ter muita força e pouca potência.'},{q:'No arremesso, em comparação com um agachamento lento, você espera:', opts:['Menor velocidade e maior tempo sob tensão máxima','Maior velocidade e menor força instantânea segundo Hill','Ausência de unidades motoras'], a:1, why:'Gesto balístico vive a parte rápida da curva. Compare Hill e isocinético no módulo.'}]},
+  {group:'muscular', title:'Da intenção ao movimento', href:'da-intencao-ao-movimento.html', goal:'Drive, vias motoras, recrutamento e frequência de disparo.', steps:['Não pule do córtex para o sarcômero.','Separe recrutamento e taxa de disparo.','Abra a leitura complementar se quiser aprofundar.'], qs:[{q:'Recrutamento e frequência de disparo:', opts:['São a mesma coisa','São dois modos de graduar força','Só existem no cardíaco'], a:1, why:'Mais unidades ou mais disparos por unidade. No simulador, não trate os dois como um só.'},{q:'Erro comum: ir da intenção direto ao sarcômero. Falta o quê?', opts:['Nada, o músculo decide sozinho','Vias motoras, motoneurônio e placa','Só o mapa ósseo'], a:1, why:'Intenção → circuitos → motoneurônio → placa → acoplamento. Percorra a viagem do módulo.'},{q:'Em geral, unidades motoras menores são recrutadas:', opts:['Por último','Primeiro','Nunca no exercício'], a:1, why:'Princípio do tamanho: começa pelas menores. A força sobe ao recrutar as maiores.'},{q:'Drive motivacional e atenção importam porque:', opts:['Não alteram o comando motor','Modulam o comando que chega às unidades motoras','Substituem o ATP'], a:1, why:'Sem drive o encadeamento até a fibra enfraquece. O módulo começa exatamente aí.'},{q:'Ao ensinar um gesto novo na aula, este simulador ajuda a lembrar que:', opts:['Só o sarcômero precisa ser explicado','Atenção, via motora e graduação da força entram antes da técnica isolada','Hill anula o sistema nervoso'], a:1, why:'Técnica não nasce no filamento. Abra o módulo e siga da intenção até a ponte cruzada.'}]},
+  {group:'osteoarticular', title:'Homeostase do cálcio', href:'homeostase-do-calcio.html', goal:'PTH, vitamina D, calcitonina, intestino, rim e osso.', steps:['Abra o mapa osteoarticular.','Altere um hormônio de cada vez.','Explique o que acontece no plasma.'], qs:[{q:'Queda do Ca²⁺ plasmático tende a elevar:', opts:['Calcitonina','PTH','Insulina'], a:1, why:'O PTH responde à hipocalcemia e mobiliza vias para restaurar o Ca²⁺.'}]},
+  {group:'osteoarticular', title:'Mecanotransdução e Lei de Wolff', href:'mecanotransducao-lei-de-wolff.html', goal:'Carga mecânica, células ósseas e remodelação.', steps:['Relacione estímulo mecânico e adaptação.','Compare carga habitual vs. desuso.','Pense no treino de força como estímulo ósseo, não só muscular.'], qs:[{q:'A Lei de Wolff descreve:', opts:['Adaptação óssea à carga','Só fratura por estresse','Apenas cartilagem'], a:0, why:'O osso remodela segundo as demandas mecânicas habituais.'}]},
+  {group:'cardiovascular', title:'Pressão arterial, DC e RPT', href:'hemodinamica-pa-dc-rpt.html', goal:'PA ≈ DC × RPT, PAM e pressão de pulso.', steps:['Comece no estado de repouso.','Mude só o DC, depois só a RPT.','Compare exercício e hemorragia.'], qs:[{q:'Se o DC sobe e a RPT cai no exercício dinâmico, a PAM:', opts:['Dispara na mesma proporção do DC','Depende do balanço entre os dois','Depende só da viscosidade'], a:1, why:'A pressão é o produto. Vasodilatação muscular limita a alta da PAM.'}]},
+  {group:'cardiovascular', title:'Retorno venoso', href:'retorno-venoso.html', goal:'PAD, volume, tônus, complacência e bombas periféricas.', steps:['Monte a curva.','Simule ortostatismo.','Ligue retorno e pré-carga.'], qs:[{q:'A bomba muscular no exercício:', opts:['Reduz retorno','Favorece o retorno venoso','Elimina o DC'], a:1, why:'A compressão rítmica das veias ajuda o sangue a voltar ao coração.'}]},
+  {group:'cardiovascular', title:'Loop cardíaco funcional', href:'loop-cardiaco-funcional.html', goal:'Enchimento, ejeção, volumes e válvulas.', steps:['Nomeie sístole e diástole.','Acompanhe abertura e fechamento valvar.','Relacione volume ejetado com DC.'], qs:[{q:'O volume sistólico é:', opts:['Volume diastólico final − volume sistólico final','Só a FC','A RPT'], a:0, why:'VS = VDF − VSF.'}]},
+  {group:'cardiovascular', title:'Lei de Poiseuille', href:'lei-de-poiseuille.html', goal:'Fluxo, ΔP, raio, viscosidade e comprimento.', steps:['Mude só o raio.','Veja o efeito desproporcional na resistência.','Traga um exemplo de vasodilatação no exercício.'], qs:[{q:'O fluxo é mais sensível a mudanças de:', opts:['Comprimento','Raio','Temperatura ambiente'], a:1, why:'O raio entra elevado à quarta potência na relação de Poiseuille.'}]},
+  {group:'respiratorio', title:'Mecânica ventilatória', href:'ventilacao-pulmonar.html', goal:'Pressões, volume, complacência, resistência e ventilação minuto.', steps:['Comece na eupneia.','Altere complacência ou resistência.','Compare com exercício.'], qs:[{q:'Ventilação minuto é:', opts:['VC × frequência','Só PaO₂','Só complacência'], a:0, why:'VE = volume corrente × frequência respiratória.'}]},
+  {group:'respiratorio', title:'Curva de dissociação da hemoglobina', href:'curva-dissociacao-hemoglobina.html', goal:'PO₂, saturação e deslocamentos (pH, temperatura, 2,3-BPG).', steps:['Marque o ponto pulmonar e o tecidual.','Desloque a curva com temperatura.','Não confunda saturação com conteúdo de O₂.'], qs:[{q:'No exercício, temperatura e queda de pH local:', opts:['Seguram o O₂ na Hb','Facilitam a cessão de O₂ aos tecidos','Zeram a saturação arterial'], a:1, why:'Desvio à direita favorece a descarga de O₂ no músculo ativo.'}]},
+  {group:'respiratorio', title:'Biofeedback respiratório — smartphone', href:'biofeedback-respiratorio-smartphone.html', goal:'Praticar ciclos com tempos ajustáveis.', steps:['Use no celular.','Comece com um protocolo confortável.','Perceba inspiração, pausa e expiração sem forçar.'], qs:[{q:'Este módulo serve para:', opts:['Diagnosticar asma','Treinar percepção e ritmo respiratório','Prescrever FIOs'], a:1, why:'É prática didática de percepção, não instrumento clínico.'}]},
+  {group:'integracao', title:'Cardiopulmonar integrado', href:'cardiopulmonar-integrado.html', goal:'Retorno, DC, VO₂, pressões e saturações juntos.', steps:['Compare repouso e exercício.','Mude uma variável só.','Conte a história: O₂ do ar ao músculo.'], qs:[{q:'No exercício dinâmico, o VO₂ sobe porque:', opts:['Só a saturação arterial explode','DC e extração tecidual aumentam','O pulmão para de ventilar'], a:1, why:'Oferta e extração sobem juntos.'}]},
+  {group:'integracao', title:'Fick integrado', href:'fick-integrado-cardiorrespiratorio.html', goal:'VO₂ = DC × (CaO₂ − CvO₂).', steps:['Escreva a equação antes de mexer.','Altere DC e depois a diferença a–v.','Veja que há mais de um caminho para o mesmo VO₂.'], qs:[{q:'Se o DC cai e o VO₂ se mantém, a diferença a–vO₂:', opts:['Cai','Sobe','Zera'], a:1, why:'Para o produto permanecer, a extração precisa compensar.'}]},
+  {group:'integracao', title:'Consumo de O₂ e diferença a–vO₂', href:'consumo-o2-debito-cardiaco-diferenca-av.html', goal:'VO₂ absoluto, relativo e oferta vs. extração.', steps:['Separe ml/min e ml·kg⁻¹·min⁻¹.','Compare duas massas corporais.','Ligue com o Fick.'], qs:[{q:'VO₂ relativo serve para:', opts:['Ignorar a massa corporal','Comparar pessoas de massas diferentes','Substituir a FC'], a:1, why:'Normalizar pela massa permite comparar o consumo entre indivíduos.'}]}
+];
+
+let active = 'muscular';
+const axesEl = document.querySelector('#axes');
+const cardsEl = document.querySelector('#cards');
+const mapModal = document.querySelector('#mapModal');
+const mapImage = document.querySelector('#mapImage');
+const mapTitle = document.querySelector('#mapTitle');
+
+function openMap() {
+  const map = maps[active];
+  if (!map) return;
+  mapTitle.textContent = map.title;
+  mapImage.src = map.src;
+  mapImage.alt = 'Mapa mental: ' + map.title;
+  mapModal.hidden = false;
+  document.body.classList.add('modal-open');
+}
+function closeMap() {
+  mapModal.hidden = true;
+  document.body.classList.remove('modal-open');
+  mapImage.src = '';
+}
+document.querySelector('#closeMap').addEventListener('click', closeMap);
+mapModal.addEventListener('click', ev => { if (ev.target === mapModal) closeMap(); });
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape' && !mapModal.hidden) closeMap(); });
+
+function renderAxes() {
+  axesEl.innerHTML = axes.map(a => '<button class="axis" type="button" data-id="'+a.id+'" aria-pressed="'+(a.id===active)+'">'+a.label+'</button>').join('');
+  axesEl.querySelectorAll('.axis').forEach(btn => btn.addEventListener('click', () => {
+    active = btn.dataset.id;
+    renderAxes();
+    renderCards();
+  }));
+}
+
+function renderCards() {
+  const list = modules.filter(m => m.group === active);
+  cardsEl.innerHTML = list.map((m, i) => {
+    const qs = m.qs.map((item, qi) => '<div class="q"><b>'+(qi+1)+'. '+item.q+'</b><div class="opts">'+item.opts.map((opt, oi) => '<button type="button" data-m="'+i+'" data-q="'+qi+'" data-o="'+oi+'">'+opt+'</button>').join('')+'</div><p class="feedback">'+item.why+'</p></div>').join('');
+    return '<article class="card"><span class="meta">'+m.group+'</span><h2>'+m.title+'</h2><p>'+m.goal+'</p><ol class="steps">'+m.steps.map(s => '<li>'+s+'</li>').join('')+'</ol><div class="actions"><button class="btn btn-ghost" type="button" data-map>Ver mapa</button><a class="btn btn-primary" href="'+m.href+'">Abrir simulador</a><button class="btn btn-ghost" type="button" data-open>Questões</button></div><div class="panel">'+qs+'</div></article>';
+  }).join('');
+
+  cardsEl.querySelectorAll('[data-map]').forEach(btn => btn.addEventListener('click', openMap));
+  cardsEl.querySelectorAll('[data-open]').forEach(btn => btn.addEventListener('click', () => {
+    btn.closest('.card').classList.toggle('is-open');
+  }));
+  cardsEl.querySelectorAll('.opts button').forEach(btn => btn.addEventListener('click', () => {
+    const m = list[Number(btn.dataset.m)];
+    const item = m.qs[Number(btn.dataset.q)];
+    const ok = Number(btn.dataset.o) === item.a;
+    btn.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('ok','bad'));
+    btn.classList.add(ok ? 'ok' : 'bad');
+    const fb = btn.closest('.q').querySelector('.feedback');
+    fb.classList.add('show');
+    fb.textContent = (ok ? 'Certo. ' : 'Ainda não. ') + item.why;
+  }));
+}
+
+renderAxes();
+renderCards();
