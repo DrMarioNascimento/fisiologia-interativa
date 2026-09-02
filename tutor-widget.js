@@ -28,6 +28,7 @@
   const allMaps = () => (typeof maps !== 'undefined' && maps) ? maps : {};
   let selectedModule = null;
   const quizProgress = new Map();
+  let lastQuiz = null;
   const currentAxis = () => selectedModule?.group || (typeof active !== 'undefined' ? active : 'muscular');
 
   function createUI() {
@@ -158,6 +159,7 @@
     const list = m.qs || [];
     const qi = quizProgress.get(m.href) || 0;
     const q = list[qi % Math.max(1,list.length)];
+    if (q) lastQuiz = {module:m, question:q};
     if (!q) return 'Abra o simulador, modifique uma variável e descreva o que mudou. Depois tente justificar o mecanismo.';
     const options=q.opts.map((o,i)=>`<button class="tutor-option" type="button" data-choice="${i}">${String.fromCharCode(65+i)}) ${escapeHtml(o)}</button>`).join('');
     return `<div class="tutor-quiz" data-module="${escapeHtml(m.href)}" data-correct="${q.a}" data-next="${(qi+1)%list.length}" data-why="${escapeHtml(q.why)}"><p><b>Questão ${qi+1} de ${list.length}</b></p><p>${escapeHtml(q.q)}</p><div class="tutor-options">${options}</div><p class="tutor-feedback" hidden></p><button class="tutor-next" type="button" hidden>Próxima questão</button></div>`;
@@ -168,14 +170,59 @@
     const intro = found.length > 1 ? 'Encontrei um percurso relacionado:' : 'Encontrei este módulo relacionado:';
     return `<p>${intro}</p>${found.map((m,i)=>`<div class="tutor-result"><b>${found.length>1 ? `${i+1}. ` : ''}${escapeHtml(m.title)}</b><span>${escapeHtml(m.goal)}</span><br>${linkFor(m)}</div>`).join('')}<p><b>Para pensar:</b> qual variável você pretende modificar primeiro?</p>`;
   }
+  function editDistance(a,b) {
+    const row = Array.from({length:b.length+1},(_,i)=>i);
+    for (let i=1;i<=a.length;i++) {
+      let previous=row[0]; row[0]=i;
+      for (let j=1;j<=b.length;j++) {
+        const saved=row[j];
+        row[j]=Math.min(row[j]+1,row[j-1]+1,previous+(a[i-1]===b[j-1]?0:1));
+        previous=saved;
+      }
+    }
+    return row[b.length];
+  }
+  function recognizes(q, phrases, words) {
+    if (phrases.some(item => q.includes(item))) return true;
+    const tokens=q.split(' ').filter(Boolean);
+    return tokens.some(token => words.some(word => word.length>=5 && token.length>=4 && editDistance(token,word)<=2));
+  }
+  function actionButton(label, action) {
+    return `<button class="tutor-chip tutor-inline-action" type="button" data-tutor-action="${action}">${label}</button>`;
+  }
+  function clarifyQuiz(m) {
+    if (!m) return quizMenu();
+    return `<p>Você quer questões deste simulador ou de outro conteúdo?</p><div class="tutor-action-row">${actionButton('Deste simulador','quiz-current')} ${actionButton('Escolher outro','quiz-other')}</div>`;
+  }
+  function clarifyMap(m) {
+    return `<p>Você quer o mapa deste simulador ou escolher outro mapa?</p><div class="tutor-action-row">${actionButton('Deste simulador','map-current')} ${actionButton('Escolher outro','map-list')}</div>`;
+  }
+  function nextQuiz(m) {
+    if (!m) return quizMenu();
+    const list=m.qs||[];
+    if (!list.length) return quiz(m);
+    const current=quizProgress.get(m.href)||0;
+    quizProgress.set(m.href,(current+1)%list.length);
+    return quiz(m);
+  }
   function answer(query) {
     const q = normalize(query); const m = selectedModule;
-    if (/mapa/.test(q)) return mapReply(m, query);
-    if (/explica|explique|como funciona|o que e/.test(q) && m) return explain(m);
-    if (/explor|orient|passo|comec/.test(q) && m) return guide(m);
-    if (/teste|questao|questoes|pergunta|perguntas|exercicio|exercicios|quiz/.test(q)) return m ? quiz(m) : quizMenu();
+    const wantsMap = recognizes(q,['mapa','map mental','voltar ao mapa'],['mapa']);
+    const wantsQuiz = recognizes(q,['teste','quiz','questao','questoes','pergunta','perguntas','exercicio','exercicios','me pergunte','quero treinar','qst','qsts','perg','exerc'],['questao','questoes','pergunta','exercicio']);
+    const wantsNext = recognizes(q,['outra','outro','proxima','proximo','mais uma','seguinte','manda outra'],['outra','proxima','seguinte']);
+    const wantsExplainAnswer = /nao entendi|explique a resposta|explica a resposta|por que|porque errei/.test(q);
+
     if (/resposta da prova|gabarito|so a resposta/.test(q)) return '<p>Não forneço gabarito puro. Escreva o seu raciocínio, mesmo que esteja incompleto; depois eu ajudo a localizar o ponto que precisa ser revisto.</p>';
     if (/diagnost|prescrev|tratamento|dose|paciente/.test(q)) return '<p>Este tutor é exclusivamente educacional e não realiza diagnóstico, prescrição ou orientação clínica. Posso ajudar a compreender o mecanismo fisiológico relacionado.</p>';
+    if (wantsMap && wantsQuiz) return `<p>Você mencionou mapa e questões. Por onde deseja começar?</p><div class="tutor-action-row">${actionButton('Mapa mental','map-current')} ${actionButton('Questões','quiz-current')}</div>`;
+    if (wantsExplainAnswer && lastQuiz) return `<p><b>Mecanismo:</b> ${escapeHtml(lastQuiz.question.why)}</p><p>Agora tente explicar com suas palavras: o que causou essa resposta?</p>`;
+    if (wantsNext && m) return nextQuiz(m);
+    if (wantsQuiz && /deste ou|desse ou|ou outro|outra materia|outro conteudo/.test(q)) return clarifyQuiz(m);
+    if (wantsMap && /deste ou|desse ou|ou outro|outro mapa/.test(q)) return clarifyMap(m);
+    if (wantsMap) return mapReply(m, query);
+    if (wantsQuiz) return m ? quiz(m) : quizMenu();
+    if (/explica|explique|como funciona|o que e/.test(q) && m) return explain(m);
+    if (/explor|orient|passo|comec/.test(q) && m) return guide(m);
     return searchReply(query);
   }
   function submit(value) {
@@ -215,6 +262,15 @@
   document.querySelector('#tutorForm').addEventListener('submit',e=>{e.preventDefault();submit(document.querySelector('#tutorInput').value);});
   document.querySelectorAll('.tutor-chip').forEach(b=>b.addEventListener('click',()=>submit(b.dataset.prompt)));
   messages().addEventListener('click', e => {
+    const action = e.target.closest('[data-tutor-action]');
+    if (action) {
+      const type=action.dataset.tutorAction;
+      if(type==='quiz-current') addMessage(selectedModule ? quiz(selectedModule) : quizMenu(),'bot',true);
+      if(type==='quiz-other') addMessage(quizMenu(),'bot',true);
+      if(type==='map-current') addMessage(mapReply(selectedModule,''),'bot',true);
+      if(type==='map-list') addMessage(mapReply(null,''),'bot',true);
+      return;
+    }
     const option = e.target.closest('.tutor-option');
     if (option) {
       const quizBox = option.closest('.tutor-quiz');
