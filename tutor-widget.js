@@ -1,10 +1,21 @@
 (function () {
   'use strict';
 
-  const axisNames = {
+  const isFisioterapia = location.pathname.includes('/fisioterapia/') || new URLSearchParams(location.search).get('percurso') === 'fisioterapia';
+  const courseConfig = isFisioterapia && typeof fisioterapiaTutor !== 'undefined' ? fisioterapiaTutor : null;
+  const axisNames = courseConfig?.axisNames || {
     celular: '01 Celular e potenciais de ação', muscular: '02 Excitabilidade e sistema muscular',
     osteoarticular: '03 Osteoarticular', cardiovascular: '04 Cardiovascular',
     respiratorio: '05 Respiratório', integracao: '06 Integração cardiorrespiratória'
+  };
+  const courseLabel = courseConfig?.courseLabel || 'Educação Física';
+  const assetHref = src => {
+    const clean=String(src||'').replace(/^(\.\.\/|\.\/)+/,'');
+    return (location.pathname.includes('/fisioterapia/') ? '../' : '') + clean;
+  };
+  const moduleHref = href => {
+    const base=location.pathname.includes('/fisioterapia/') ? '../' : '';
+    return base + href + (isFisioterapia ? '?percurso=fisioterapia' : '');
   };
   const aliases = {
     'curva-dissociacao-hemoglobina.html': 'curva de o2 oxigenio hemoglobina hb afinidade saturacao efeito bohr ph temperatura 2 3 bpg desvio direita esquerda liberacao tecidos',
@@ -24,25 +35,30 @@
 
   const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9+]+/g, ' ').trim();
   const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const allModules = () => (typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : [];
-  const allMaps = () => (typeof maps !== 'undefined' && maps) ? maps : {};
+  const allModules = () => courseConfig?.modules || ((typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : []);
+  const allMaps = () => courseConfig?.maps || ((typeof maps !== 'undefined' && maps) ? maps : {});
+  const mapsForGroup = group => {
+    const value=allMaps()[group];
+    if (!value) return [];
+    return (Array.isArray(value) ? value : [value]).map(item=>({...item,src:assetHref(item.src)}));
+  };
   let selectedModule = null;
   const quizProgress = new Map();
   let lastQuiz = null;
-  const currentAxis = () => selectedModule?.group || (typeof active !== 'undefined' ? active : 'muscular');
+  const currentAxis = () => selectedModule?.group || (typeof active !== 'undefined' ? active : (courseConfig?.defaultAxis || 'muscular'));
 
   function createUI() {
     const wrap = document.createElement('div');
     wrap.innerHTML = `
       <div class="tutor-hint" id="tutorHint">Olá! Posso ajudar a encontrar e explorar os simuladores.</div>
       <section class="tutor-panel" id="tutorPanel" aria-label="Tutor de Fisiologia" hidden>
-        <header class="tutor-head"><div><strong>Tutor de Fisiologia</strong><span>Educação Física • estudo guiado</span></div><button class="tutor-close" type="button" aria-label="Minimizar tutor">×</button></header>
+        <header class="tutor-head"><div><strong>Tutor de Fisiologia</strong><span>${escapeHtml(courseLabel)} • estudo guiado</span></div><button class="tutor-close" type="button" aria-label="Minimizar tutor">×</button></header>
         <div class="tutor-context" id="tutorContext"></div>
         <div class="tutor-messages" id="tutorMessages" aria-live="polite"></div>
         <div><div class="tutor-chips"><button class="tutor-chip" data-prompt="Explique este simulador">Explique este simulador</button><button class="tutor-chip" data-prompt="Ajude-me a explorar">Ajude-me a explorar</button><button class="tutor-chip" data-prompt="Abra o mapa mental">Mapa mental</button><button class="tutor-chip" data-prompt="Quero encontrar um conteúdo">Encontrar conteúdo</button><button class="tutor-chip" data-prompt="Teste meu entendimento">Teste meu entendimento</button></div><form class="tutor-form" id="tutorForm"><input class="tutor-input" id="tutorInput" maxlength="240" autocomplete="off" placeholder="Ex.: onde estudo extração de O₂?" aria-label="Pergunta ao tutor"><button class="tutor-send" aria-label="Enviar pergunta">➜</button></form></div>
       </section>
       <button class="tutor-launcher" id="tutorLauncher" type="button" aria-label="Abrir Tutor de Fisiologia" aria-expanded="false">
-        <span class="tutor-portrait"><img src="assets/tutor-prof-mario.png" alt="" draggable="false"></span>
+        <span class="tutor-portrait"><img src="${escapeHtml(assetHref('assets/tutor-prof-mario.png'))}" alt="" draggable="false"></span>
         <span class="tutor-badge">?</span>
       </button>`;
     document.body.appendChild(wrap);
@@ -104,18 +120,23 @@
       return {m,score};
     }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.m);
   }
-  function linkFor(m) { return `<a class="tutor-link" href="${escapeHtml(m.href)}">Abrir ${escapeHtml(m.title)}</a>`; }
+  function linkFor(m) { return `<a class="tutor-link" href="${escapeHtml(moduleHref(m.href))}">Abrir ${escapeHtml(m.title)}</a>`; }
   function resourceLinks(m) {
-    const map = m.href === 'sangue.html' ? {src:'assets/maps/cardiovascular-01-sangue.webp',title:'Sangue'} : allMaps()[m.group];
-    const links = [];
-    if (map) links.push(`<a class="tutor-link" href="${escapeHtml(map.src)}" target="_blank" rel="noopener">Abrir mapa mental</a>`);
-    if (m.href === 'da-intencao-ao-movimento.html') links.push('<a class="tutor-link" href="assets/leituras/da-intencao-ao-movimento-guia-visual.pdf?v=20260821" target="_blank" rel="noopener">Leitura de aprofundamento</a>');
-    if (m.href === 'sangue.html') links.push('<a class="tutor-link" href="assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260823" target="_blank" rel="noopener">Guia visual de Sangue</a>');
+    let moduleMaps = m.href === 'sangue.html'
+      ? [{src:assetHref('assets/maps/cardiovascular-01-sangue.webp'),title:'Sangue'}]
+      : mapsForGroup(m.group);
+    const links = moduleMaps.map(item=>`<a class="tutor-link" href="${escapeHtml(item.src)}" target="_blank" rel="noopener">Mapa — ${escapeHtml(item.title)}</a>`);
+    if (m.href === 'da-intencao-ao-movimento.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/da-intencao-ao-movimento-guia-visual.pdf?v=20260821'))}" target="_blank" rel="noopener">Leitura de aprofundamento</a>`);
+    if (m.href === 'sangue.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260823'))}" target="_blank" rel="noopener">Guia visual de Sangue</a>`);
     return links.join(' ');
+  }
+  function renderMapLinks(items, intro) {
+    if (!items.length) return '<p>Não encontrei mapas mentais cadastrados.</p>';
+    return `<p>${intro}</p><div class="tutor-map-list">${items.map(item => `<a class="tutor-link" href="${escapeHtml(item.src)}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a>`).join(' ')}</div>`;
   }
   function mapReply(m, query) {
     const raw = normalize(query);
-    const bloodMap = {src:'assets/maps/cardiovascular-01-sangue.webp',title:'Sangue'};
+    const bloodMap = {src:assetHref('assets/maps/cardiovascular-01-sangue.webp'),title:'Sangue'};
     const requestedGroup = [
       ['celular', /celular|membrana|potencial/],
       ['muscular', /muscular|musculo|excitabilidade|contracao|sarcomero/],
@@ -125,25 +146,30 @@
       ['cardiovascular', /cardiovascular|circulacao|hemodinamica|coracao/]
     ].find(([, pattern]) => pattern.test(raw))?.[0];
 
-    let map = null;
-    if (/sangue|hemacia|hemoglobina|hematopo/.test(raw)) map = bloodMap;
-    else if (requestedGroup) map = allMaps()[requestedGroup];
-    else if (m?.href === 'sangue.html') map = bloodMap;
-    else if (m) map = allMaps()[m.group];
+    let selectedMaps = [];
+    if (/sangue|hemacia|hematopo/.test(raw)) selectedMaps = [bloodMap];
+    else if (requestedGroup) selectedMaps = mapsForGroup(requestedGroup);
+    else if (/hemoglobina/.test(raw) && isFisioterapia) selectedMaps = mapsForGroup('respiratorio');
+    else if (m?.href === 'sangue.html') selectedMaps = [bloodMap];
+    else if (m) selectedMaps = mapsForGroup(m.group);
 
-    if (map) {
-      return `<p>Relembre primeiro os conceitos no mapa <b>${escapeHtml(map.title)}</b>. Depois retorne ao simulador, escolha um estado e modifique apenas uma variável.</p><a class="tutor-link" href="${escapeHtml(map.src)}" target="_blank" rel="noopener">Abrir mapa mental — ${escapeHtml(map.title)}</a>`;
+    if (selectedMaps.length) {
+      const intro=selectedMaps.length===1
+        ? `Relembre primeiro os conceitos no mapa <b>${escapeHtml(selectedMaps[0].title)}</b>. Depois retorne ao simulador, escolha um estado e modifique apenas uma variável.`
+        : 'Este eixo possui mais de um mapa. Escolha o que corresponde ao mecanismo que deseja revisar:';
+      return renderMapLinks(selectedMaps,intro);
     }
 
-    const available = [
-      ...Object.values(allMaps()),
-      bloodMap
-    ];
-    if (!available.length) return '<p>Não encontrei mapas mentais cadastrados.</p>';
-    return `<p>Qual mapa mental você quer abrir?</p><div class="tutor-map-list">${available.map(item => `<a class="tutor-link" href="${escapeHtml(item.src)}" target="_blank" rel="noopener">${escapeHtml(item.title)}</a>`).join(' ')}</div><p>Você também pode escrever, por exemplo, <b>“mapa de Sangue”</b> ou <b>“mapa respiratório”</b>.</p>`;
+    const available = Object.values(allMaps()).flatMap(value => Array.isArray(value) ? value : [value])
+      .map(item=>({...item,src:assetHref(item.src)}));
+    if (!isFisioterapia) available.push(bloodMap);
+    return renderMapLinks(available,'Qual mapa mental você quer abrir?') + '<p>Você também pode escrever, por exemplo, <b>“mapa de Sangue”</b> ou <b>“mapa respiratório”</b>.</p>';
   }
   function explain(m) {
-    return `<p><b>1. Ideia:</b> ${escapeHtml(m.goal)}</p><p><b>2. Mecanismo:</b> siga a sequência do módulo e observe como uma alteração produz respostas nas demais variáveis.</p><p><b>3. Aplicação:</b> relacione o resultado à produção e ao controle do movimento ou exercício.</p>${linkFor(m)} ${resourceLinks(m)}<p><b>Para pensar:</b> qual resultado você prevê antes de modificar uma variável?</p>`;
+    const application=isFisioterapia
+      ? 'relacione o resultado à avaliação funcional, à reabilitação e às respostas ao esforço, sem transformá-lo em orientação clínica.'
+      : 'relacione o resultado à produção e ao controle do movimento ou exercício.';
+    return `<p><b>1. Ideia:</b> ${escapeHtml(m.goal)}</p><p><b>2. Mecanismo:</b> siga a sequência do módulo e observe como uma alteração produz respostas nas demais variáveis.</p><p><b>3. Aplicação:</b> ${application}</p>${linkFor(m)} ${resourceLinks(m)}<p><b>Para pensar:</b> qual resultado você prevê antes de modificar uma variável?</p>`;
   }
   function guide(m) {
     const steps = (m.steps||[]).map(s=>`<li>${escapeHtml(s)}</li>`).join('');
