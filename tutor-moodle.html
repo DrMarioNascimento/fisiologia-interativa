@@ -11,9 +11,8 @@
     html,body{margin:0;background:transparent;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
     body{padding:2px}
     .chat{width:min(100%,500px);height:min(300px,62vh);min-height:260px;margin:0 auto;display:grid;grid-template-rows:auto 1fr auto;border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#fff;box-shadow:0 6px 18px rgba(3,29,33,.10)}
-    .head{position:relative;min-height:54px;padding:9px 66px 7px 13px;color:#fff;background:linear-gradient(135deg,var(--g2),var(--g))}
+    .head{min-height:54px;padding:9px 13px 7px;color:#fff;background:linear-gradient(135deg,var(--g2),var(--g))}
     .head strong{display:block;font-size:.88rem}.head span{display:block;margin-top:2px;font-size:.66rem;opacity:.85}
-    .head-avatar{position:absolute;right:7px;bottom:0;width:50px;height:54px;background:url('assets/tutor-prof-mario.png') center 1px/56px auto no-repeat}
     .messages{overflow:auto;padding:9px;background:linear-gradient(180deg,#fff,#f6faf9)}
     .msg{max-width:95%;margin:0 0 7px;padding:8px 9px;border-radius:12px;font-size:.76rem;line-height:1.36}
     .bot{border:1px solid var(--line);border-bottom-left-radius:5px;background:#fff}.user{margin-left:auto;color:#fff;background:var(--g);border-bottom-right-radius:5px}
@@ -25,12 +24,12 @@
     .send{min-width:38px;border:0;border-radius:10px;color:#fff;background:var(--g);font-weight:900;cursor:pointer}
     .links{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.link{display:inline-flex;align-items:center;min-height:28px;padding:0 8px;color:#fff;background:var(--g);text-decoration:none;font-size:.68rem}
     p{margin:0 0 6px}p:last-child{margin-bottom:0}
-    @media(max-width:640px){.chat{width:min(100%,96vw);height:min(320px,68vh);min-height:250px}.head{min-height:52px;padding-right:62px}.head-avatar{width:48px;height:52px;background-size:54px auto}}
+    @media(max-width:640px){.chat{width:min(100%,96vw);height:min(320px,68vh);min-height:250px}.head{min-height:52px}}
   </style>
 </head>
 <body>
   <section class="chat" aria-label="Chat do Tutor de Fisiologia">
-    <header class="head"><strong>Tutor de Fisiologia</strong><span>Educação Física • estudo guiado</span><div class="head-avatar" aria-hidden="true"></div></header>
+    <header class="head"><strong>Tutor de Fisiologia</strong><span>Educação Física • estudo guiado</span></header>
     <div class="messages" id="messages"><div class="msg bot">Olá! O que você quer estudar? Posso localizar simuladores, mapas mentais e aprofundamentos da disciplina.</div></div>
     <div>
       <div class="chips">
