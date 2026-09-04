@@ -9,35 +9,35 @@
     :root{--g:#0f5b42;--g2:#167151;--ink:#10262b;--muted:#5e7175;--line:#dbe7e8}
     *{box-sizing:border-box}
     html,body{margin:0;background:transparent;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
-    body{padding:6px}
-    details{width:min(100%,620px);margin:0 auto}
+    body{padding:4px}
+    details{width:min(100%,520px);margin:0 auto}
     summary{list-style:none}
     summary::-webkit-details-marker{display:none}
 
-    .avatar-summary{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;user-select:none;outline:none}
-    .avatar-shell{width:86px;height:86px;border-radius:50%;position:relative;overflow:hidden;background:linear-gradient(145deg,#2a8a66,var(--g));box-shadow:0 10px 24px rgba(15,91,66,.26),inset 0 1px 0 rgba(255,255,255,.4)}
+    .avatar-summary{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;user-select:none;outline:none;padding:2px 0 4px}
+    .avatar-shell{width:72px;height:72px;border-radius:50%;position:relative;overflow:hidden;background:linear-gradient(145deg,#2a8a66,var(--g));box-shadow:0 8px 18px rgba(15,91,66,.22),inset 0 1px 0 rgba(255,255,255,.4)}
     .avatar-shell::after{content:"";position:absolute;inset:4px;border-radius:50%;background:radial-gradient(circle at 50% 35%,#eefaf4,#b9e4ce)}
-    .avatar-shell img{position:absolute;z-index:2;width:96px;height:auto;left:50%;top:-16px;transform:translateX(-50%);pointer-events:none}
-    .avatar-label{font-size:.82rem;font-weight:800;color:var(--g)}
-    .avatar-help{font-size:.72rem;color:var(--muted)}
+    .avatar-shell img{position:absolute;z-index:2;width:82px;height:auto;left:50%;top:-13px;transform:translateX(-50%);pointer-events:none}
+    .avatar-label{font-size:.78rem;font-weight:800;color:var(--g)}
+    .avatar-help{font-size:.68rem;color:var(--muted)}
 
-    .chat-wrap{margin-top:10px}
-    .chat{width:100%;height:min(360px,68vh);min-height:300px;display:grid;grid-template-rows:auto 1fr auto;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(3,29,33,.12)}
-    .head{position:relative;min-height:64px;padding:12px 88px 10px 16px;color:#fff;background:linear-gradient(135deg,var(--g2),var(--g))}
-    .head strong{display:block;font-size:.98rem}.head span{display:block;margin-top:3px;font-size:.74rem;opacity:.85}
-    .head-avatar{position:absolute;right:10px;bottom:0;width:64px;height:64px;background:url('assets/tutor-prof-mario.png') center 1px/70px auto no-repeat}
-    .messages{overflow:auto;padding:12px;background:linear-gradient(180deg,#fff,#f6faf9)}
-    .msg{max-width:94%;margin:0 0 9px;padding:10px 12px;border-radius:15px;font-size:.84rem;line-height:1.42}
+    .chat-wrap{margin-top:8px}
+    .chat{width:100%;height:min(310px,62vh);min-height:270px;display:grid;grid-template-rows:auto 1fr auto;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 6px 18px rgba(3,29,33,.10)}
+    .head{position:relative;min-height:56px;padding:10px 72px 8px 14px;color:#fff;background:linear-gradient(135deg,var(--g2),var(--g))}
+    .head strong{display:block;font-size:.9rem}.head span{display:block;margin-top:2px;font-size:.68rem;opacity:.85}
+    .head-avatar{position:absolute;right:8px;bottom:0;width:54px;height:56px;background:url('assets/tutor-prof-mario.png') center 1px/60px auto no-repeat}
+    .messages{overflow:auto;padding:10px;background:linear-gradient(180deg,#fff,#f6faf9)}
+    .msg{max-width:95%;margin:0 0 8px;padding:9px 10px;border-radius:13px;font-size:.78rem;line-height:1.38}
     .bot{border:1px solid var(--line);border-bottom-left-radius:5px;background:#fff}.user{margin-left:auto;color:#fff;background:var(--g);border-bottom-right-radius:5px}
-    .chips{display:flex;gap:6px;overflow:auto;padding:8px 10px;border-top:1px solid var(--line);background:#fff}
+    .chips{display:flex;gap:5px;overflow:auto;padding:6px 8px;border-top:1px solid var(--line);background:#fff}
     .chip,.link{border:1px solid rgba(22,113,81,.25);border-radius:999px;font-weight:750;cursor:pointer}
-    .chip{flex:0 0 auto;min-height:34px;padding:0 11px;color:var(--g);background:#edf8f2}
-    .composer{display:grid;grid-template-columns:1fr auto;gap:8px;padding:9px 10px;border-top:1px solid var(--line);background:#fff}
-    input{min-width:0;min-height:42px;padding:9px 12px;border:1px solid #bfd1d2;border-radius:13px;outline:none}input:focus{border-color:var(--g2);box-shadow:0 0 0 3px rgba(22,113,81,.12)}
-    .send{min-width:44px;border:0;border-radius:13px;color:#fff;background:var(--g);font-weight:900;cursor:pointer}
-    .links{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.link{display:inline-flex;align-items:center;min-height:34px;padding:0 11px;color:#fff;background:var(--g);text-decoration:none;font-size:.76rem}
-    p{margin:0 0 8px}p:last-child{margin-bottom:0}
-    @media(max-width:640px){body{padding:4px}.avatar-shell{width:78px;height:78px}.avatar-shell img{width:88px;top:-14px}.chat{height:min(390px,72vh);min-height:290px;border-radius:15px}.head{min-height:60px;padding-right:78px}.head-avatar{right:7px;width:58px;height:60px;background-size:64px auto}}
+    .chip{flex:0 0 auto;min-height:30px;padding:0 9px;color:var(--g);background:#edf8f2;font-size:.72rem}
+    .composer{display:grid;grid-template-columns:1fr auto;gap:6px;padding:7px 8px;border-top:1px solid var(--line);background:#fff}
+    input{min-width:0;min-height:38px;padding:8px 10px;border:1px solid #bfd1d2;border-radius:11px;outline:none;font-size:.78rem}input:focus{border-color:var(--g2);box-shadow:0 0 0 3px rgba(22,113,81,.12)}
+    .send{min-width:40px;border:0;border-radius:11px;color:#fff;background:var(--g);font-weight:900;cursor:pointer}
+    .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.link{display:inline-flex;align-items:center;min-height:30px;padding:0 9px;color:#fff;background:var(--g);text-decoration:none;font-size:.7rem}
+    p{margin:0 0 7px}p:last-child{margin-bottom:0}
+    @media(max-width:640px){body{padding:2px}details{width:min(100%,94vw)}.avatar-shell{width:68px;height:68px}.avatar-shell img{width:78px;top:-12px}.chat{height:min(330px,68vh);min-height:260px;border-radius:14px}.head{min-height:54px;padding-right:68px}.head-avatar{right:6px;width:50px;height:54px;background-size:56px auto}}
   </style>
 </head>
 <body>
