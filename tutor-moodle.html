@@ -2,88 +2,79 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Tutor de Fisiologia — Moodle</title>
   <base target="_blank">
-  <link rel="stylesheet" href="tutor-widget.css?v=4">
   <style>
-    html,body{
-      width:100%;height:100%;margin:0;overflow:hidden;background:transparent;
-      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
-    }
-
-    /* No Moodle o botão externo já abre diretamente o chat. */
-    .tutor-launcher,.tutor-hint,.tutor-badge{display:none!important}
-
-    .tutor-panel{
-      position:absolute!important;
-      inset:4px!important;
-      width:auto!important;
-      height:auto!important;
-      max-width:620px;
-      margin:0 auto;
-      border-radius:18px!important;
-      box-shadow:0 8px 24px rgba(3,29,33,.14)!important;
-    }
-
-    /* Boneco incorporado ao cabeçalho, sem interrogação. */
-    .tutor-head{
-      position:relative;
-      min-height:74px;
-      padding-right:92px!important;
-    }
-    .tutor-head::after{
-      content:"";
-      position:absolute;
-      right:14px;
-      bottom:0;
-      width:70px;
-      height:70px;
-      background:url('assets/tutor-prof-mario.png') center 2px / 76px auto no-repeat;
-      pointer-events:none;
-    }
-
-    .tutor-close{display:none!important}
-
-    @media (max-width:640px){
-      .tutor-panel{inset:3px!important;border-radius:16px!important}
-      .tutor-head{min-height:68px;padding-right:82px!important}
-      .tutor-head::after{right:10px;width:62px;height:66px;background-size:69px auto}
-    }
+    :root{--g:#0f5b42;--g2:#167151;--ink:#10262b;--muted:#5e7175;--line:#dbe7e8}
+    *{box-sizing:border-box}
+    html,body{margin:0;background:transparent;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink)}
+    body{padding:4px}
+    .chat{width:min(100%,620px);height:min(390px,72vh);min-height:320px;margin:0 auto;display:grid;grid-template-rows:auto 1fr auto;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 8px 24px rgba(3,29,33,.12)}
+    .head{position:relative;min-height:72px;padding:14px 96px 12px 16px;color:#fff;background:linear-gradient(135deg,var(--g2),var(--g))}
+    .head strong{display:block;font-size:1rem}.head span{display:block;margin-top:3px;font-size:.75rem;opacity:.85}
+    .avatar{position:absolute;right:12px;bottom:0;width:72px;height:72px;background:url('assets/tutor-prof-mario.png') center 1px/78px auto no-repeat}
+    .messages{overflow:auto;padding:14px;background:linear-gradient(180deg,#fff,#f6faf9)}
+    .msg{max-width:94%;margin:0 0 10px;padding:10px 12px;border-radius:15px;font-size:.86rem;line-height:1.42}
+    .bot{border:1px solid var(--line);border-bottom-left-radius:5px;background:#fff}.user{margin-left:auto;color:#fff;background:var(--g);border-bottom-right-radius:5px}
+    .chips{display:flex;gap:6px;overflow:auto;padding:8px 10px;border-top:1px solid var(--line);background:#fff}
+    .chip,.link{border:1px solid rgba(22,113,81,.25);border-radius:999px;font-weight:750;cursor:pointer}
+    .chip{flex:0 0 auto;min-height:34px;padding:0 11px;color:var(--g);background:#edf8f2}
+    .composer{display:grid;grid-template-columns:1fr auto;gap:8px;padding:9px 10px;border-top:1px solid var(--line);background:#fff}
+    input{min-width:0;min-height:42px;padding:9px 12px;border:1px solid #bfd1d2;border-radius:13px;outline:none} input:focus{border-color:var(--g2);box-shadow:0 0 0 3px rgba(22,113,81,.12)}
+    .send{min-width:44px;border:0;border-radius:13px;color:#fff;background:var(--g);font-weight:900;cursor:pointer}
+    .links{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}.link{display:inline-flex;align-items:center;min-height:34px;padding:0 11px;color:#fff;background:var(--g);text-decoration:none;font-size:.76rem}
+    p{margin:0 0 8px}p:last-child{margin-bottom:0}
+    @media(max-width:640px){body{padding:2px}.chat{height:min(430px,76vh);min-height:300px;border-radius:15px}.head{min-height:66px;padding-right:84px}.avatar{right:8px;width:64px;height:66px;background-size:70px auto}}
   </style>
 </head>
 <body>
+  <section class="chat" aria-label="Tutor de Fisiologia">
+    <header class="head"><strong>Tutor de Fisiologia</strong><span>Educação Física • estudo guiado</span><div class="avatar" aria-hidden="true"></div></header>
+    <div class="messages" id="messages"><div class="msg bot">Olá! O que você quer estudar? Posso localizar simuladores, mapas mentais e aprofundamentos da disciplina.</div></div>
+    <div>
+      <div class="chips">
+        <button class="chip" data-action="simuladores">Simuladores</button>
+        <button class="chip" data-action="mapas">Mapas mentais</button>
+        <button class="chip" data-action="aprofundamentos">Aprofundamentos</button>
+        <button class="chip" data-action="questoes">Questões</button>
+      </div>
+      <form class="composer" id="form"><input id="input" maxlength="240" placeholder="Ex.: potencial de ação, retorno venoso, sangue..." aria-label="Pergunta ao tutor"><button class="send" aria-label="Enviar">➜</button></form>
+    </div>
+  </section>
   <script src="tutor-ef-data.js?v=12"></script>
-  <script src="tutor-widget.js?v=16"></script>
   <script>
     (function(){
-      function abrirDireto(){
-        var panel=document.querySelector('#tutorPanel');
-        var messages=document.querySelector('#tutorMessages');
-        var context=document.querySelector('#tutorContext');
-        if(!panel||!messages){setTimeout(abrirDireto,40);return;}
-
-        panel.hidden=false;
-        panel.classList.add('is-open');
-        if(context && !context.textContent.trim()) context.textContent='Educação Física • percurso geral';
-
-        if(!messages.children.length){
-          var el=document.createElement('div');
-          el.className='tutor-message bot';
-          el.textContent='Olá! Diga o que deseja estudar. Posso indicar mapas mentais, simuladores, aprofundamentos e questões da disciplina.';
-          messages.appendChild(el);
-        }
-
-        var input=document.querySelector('#tutorInput');
-        if(input) setTimeout(function(){input.focus();},80);
+      const box=document.getElementById('messages'), input=document.getElementById('input');
+      const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').trim();
+      const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const base='https://drmarionascimento.github.io/fisiologia-interativa/';
+      const add=(html,who='bot')=>{const d=document.createElement('div');d.className='msg '+who;d.innerHTML=html;box.appendChild(d);box.scrollTop=box.scrollHeight};
+      const linkList=items=>'<div class="links">'+items.map(x=>`<a class="link" href="${esc(base+x.href)}">${esc(x.title)}</a>`).join('')+'</div>';
+      const mapItems=()=>Object.values(typeof maps==='object'?maps:{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(Boolean).map(x=>({title:x.title,href:x.src}));
+      const moduleItems=()=>Array.isArray(modules)?modules:[];
+      const profundos=()=>moduleItems().filter(m=>['da-intencao-ao-movimento.html','sangue.html','ventilacao-pulmonar-neonatal.html'].includes(m.href)||/aprofund|integr|sangue|neonatal|intencao/i.test(`${m.title||''} ${m.goal||''} ${m.href||''}`));
+      function find(q){
+        const terms=norm(q).split(' ').filter(t=>t.length>2);
+        return moduleItems().map(m=>{const hay=norm(`${m.title} ${m.goal} ${(m.steps||[]).join(' ')}`);let score=0;terms.forEach(t=>{if(hay.includes(t))score+=norm(m.title).includes(t)?5:1});return {m,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6).map(x=>x.m);
       }
-
-      if(document.readyState==='loading'){
-        document.addEventListener('DOMContentLoaded',function(){setTimeout(abrirDireto,80);},{once:true});
-      }else{
-        setTimeout(abrirDireto,80);
+      function act(type){
+        if(type==='simuladores') return add('<p><b>Qual simulador você quer explorar?</b></p>'+linkList(moduleItems().map(m=>({title:m.title,href:m.href}))));
+        if(type==='mapas') return add('<p><b>Escolha um mapa mental:</b></p>'+linkList(mapItems()));
+        if(type==='aprofundamentos') return add('<p><b>Aprofundamentos disponíveis:</b></p>'+linkList(profundos().map(m=>({title:m.title,href:m.href}))));
+        if(type==='questoes') return add('<p>Digite o tema que deseja revisar. Eu localizo os módulos correspondentes; dentro deles, use o Tutor para testar seu entendimento.</p>');
       }
+      function submit(text){
+        const q=String(text||'').trim();if(!q)return;add(esc(q),'user');input.value='';const n=norm(q);
+        if(/mapa/.test(n))return act('mapas');
+        if(/aprofund/.test(n))return act('aprofundamentos');
+        if(/simulador|simuladores/.test(n))return act('simuladores');
+        const found=find(q);
+        if(!found.length)return add('<p>Não encontrei uma correspondência segura. Tente o nome de uma estrutura, sistema ou mecanismo, como <b>cálcio</b>, <b>retorno venoso</b>, <b>hemoglobina</b> ou <b>recrutamento</b>.</p>');
+        add('<p><b>Encontrei estes conteúdos relacionados:</b></p>'+linkList(found.map(m=>({title:m.title,href:m.href}))));
+      }
+      document.querySelectorAll('[data-action]').forEach(b=>b.addEventListener('click',()=>act(b.dataset.action)));
+      document.getElementById('form').addEventListener('submit',e=>{e.preventDefault();submit(input.value)});
     })();
   </script>
 </body>
