@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Tutor de Fisiologia — Moodle</title>
+  <base target="_blank">
+  <link rel="stylesheet" href="tutor-widget.css?v=4">
+  <style>
+    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{min-height:460px}
+    .tutor-launcher{right:18px;bottom:18px}
+    .tutor-hint{right:18px;bottom:108px;max-width:290px}
+    .tutor-panel{right:18px;bottom:106px;width:min(430px,calc(100vw - 36px));height:min(520px,calc(100vh - 124px))}
+    @media (max-width:640px){
+      body{min-height:420px}
+      .tutor-launcher{right:12px;bottom:12px}
+      .tutor-hint{right:12px;bottom:90px;max-width:calc(100vw - 30px)}
+      .tutor-panel{inset:auto 8px 8px;width:auto;height:min(88vh,520px)}
+    }
+  </style>
+</head>
+<body>
+  <script src="tutor-ef-data.js?v=12"></script>
+  <script src="tutor-widget.js?v=16"></script>
+</body>
+</html>
