@@ -8,71 +8,67 @@
   <base target="_blank">
   <link rel="stylesheet" href="tutor-widget.css?v=4">
   <style>
-    html,body{width:100%;height:100%;margin:0;overflow:hidden;background:transparent;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    body{min-height:340px}
-
-    /* No Moodle o avatar fica no alto: evita uma grande área vazia. */
-    .tutor-launcher{
-      position:fixed;
-      left:50%;
-      right:auto;
-      top:18px;
-      bottom:auto;
-      width:76px;
-      height:76px;
-      transform:translateX(-50%);
-    }
-    .tutor-launcher:hover{transform:translateX(-50%) translateY(-2px)}
-    .tutor-launcher.is-dragging{transform:scale(1.04)}
-
-    /* Badge deslocado para fora do rosto. */
-    .tutor-launcher .tutor-badge{
-      right:-16px;
-      top:-8px;
+    html,body{
+      width:100%;height:100%;margin:0;overflow:hidden;background:transparent;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif
     }
 
-    .tutor-hint{
-      position:fixed;
-      left:50%;
-      right:auto;
-      top:104px;
-      bottom:auto;
-      transform:translateX(-50%);
-      width:max-content;
-      max-width:min(330px,calc(100vw - 28px));
-      text-align:center;
-    }
+    /* No Moodle o clique no botão externo já abre diretamente o chat. */
+    .tutor-launcher,.tutor-hint{display:none!important}
 
-    /* Ao abrir, o chat usa praticamente toda a área do iframe. */
     .tutor-panel{
-      position:fixed;
-      inset:8px;
-      width:auto;
-      height:auto;
-      max-width:520px;
+      position:absolute!important;
+      inset:4px!important;
+      width:auto!important;
+      height:auto!important;
+      max-width:620px;
       margin:0 auto;
-      border-radius:20px;
+      border-radius:18px!important;
+      box-shadow:0 8px 24px rgba(3,29,33,.14)!important;
     }
-    .tutor-panel.is-open + .tutor-launcher{visibility:hidden}
+
+    /* Boneco incorporado ao cabeçalho, sem o balão ? sobre o rosto. */
+    .tutor-head{
+      position:relative;
+      min-height:74px;
+      padding-right:92px!important;
+    }
+    .tutor-head::after{
+      content:"";
+      position:absolute;
+      right:14px;
+      bottom:0;
+      width:70px;
+      height:70px;
+      background:url('assets/tutor-prof-mario.png') center 2px / 76px auto no-repeat;
+      pointer-events:none;
+    }
+
+    /* No iframe Moodle o X não deve fechar e deixar uma área vazia. */
+    .tutor-close{display:none!important}
 
     @media (max-width:640px){
-      body{min-height:320px}
-      .tutor-launcher{
-        left:50%;
-        right:auto;
-        top:14px;
-        bottom:auto;
-        width:70px;
-        height:70px;
-      }
-      .tutor-hint{left:50%;right:auto;top:96px;bottom:auto;max-width:calc(100vw - 24px)}
-      .tutor-panel{inset:6px;width:auto;height:auto;border-radius:18px}
+      .tutor-panel{inset:3px!important;border-radius:16px!important}
+      .tutor-head{min-height:68px;padding-right:82px!important}
+      .tutor-head::after{right:10px;width:62px;height:66px;background-size:69px auto}
     }
   </style>
 </head>
 <body>
-  <!-- Usa exatamente a mesma base de dados e a mesma lógica do Tutor principal. -->
+  <!-- Mesma base de dados e mesma lógica do Tutor principal. -->
   <script src="tutor-ef-data.js?v=12"></script>
   <script src="tutor-widget.js?v=16"></script>
+  <script>
+    (function(){
+      function abrir(){
+        var launcher=document.querySelector('#tutorLauncher');
+        var panel=document.querySelector('#tutorPanel');
+        if(!launcher||!panel){setTimeout(abrir,30);return;}
+        if(panel.hidden) launcher.click();
+      }
+      if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(abrir,0);});
+      else setTimeout(abrir,0);
+    })();
+  </script>
 </body>
 </html>
