@@ -1,4 +1,4 @@
-# Tutor com respostas personalizadas — versão de teste
+# Tutor com respostas personalizadas — Gemini
 
 O tutor de Educação Física e de Fisioterapia pode explicar dúvidas livres, adaptar uma explicação e comentar o raciocínio numa questão respondida. O servidor fornece ao Gemini o objetivo e o roteiro do módulo, a questão e a alternativa escolhida. Mapas e questões originais continuam locais, inclusive quando a IA está desligada ou indisponível.
 
@@ -25,13 +25,17 @@ Há limite local de 6 chamadas por minuto por IP, duas simultâneas e 100 por di
 
 ## Servidor Google e publicação
 
-Esta alteração ainda não publica o site nem altera a VM do bot Telegram. O tutor usa uma pasta e um processo separados. Não copie arquivos para a pasta `bot`.
+Publicado em 05/09/2026. O GitHub Pages serve as páginas e a VM `convite-rasgado-bot`, zona `us-central1-a`, serve a API em `https://tutor-fisiologia.35.208.107.43.sslip.io/api/tutor`. A opção **Respostas personalizadas com IA** precisa ser marcada pelo aluno. O serviço `convite-bot` permanece independente.
 
 Para testar na VM: transfira o projeto para uma pasta própria, instale Node.js 22.9+ e configure a chave nessa pasta. Inicie com `npm run start:tutor`; o padrão escuta apenas em `127.0.0.1:8787`. Para abrir no seu computador, use um túnel SSH: `gcloud compute ssh convite-rasgado-bot --project=convite-rasgado-bot --zone=us-central1-a -- -L 8787:127.0.0.1:8787`, mantendo a conexão aberta. Depois visite o endereço local do passo 3. O gcloud precisa estar instalado e autenticado no computador.
 
-Para disponibilizar aos alunos, ainda é necessário um endereço HTTPS para o servidor. Se continuar com GitHub Pages, configure o proxy HTTPS da API, acrescente a origem exata do Pages a `TUTOR_ALLOWED_ORIGINS` e defina `window.TUTOR_AI_CONFIG = { endpoint: 'https://SEU-ENDERECO/api/tutor' }` **antes** de carregar `tutor-widget.js` nas páginas em que desejar a IA. Não coloque uma chave nessa configuração pública. O servidor local já injeta o endpoint automaticamente para a prévia. Em produção, use `TUTOR_SERVE_SITE=0` se o site continuar no Pages; sirva somente a API atrás de HTTPS.
+Na VM, o código fica em `/opt/tutor-fisiologia`, o Node 24 em `/opt/tutor-node` e a chave em `/etc/tutor-fisiologia/gemini.env`, acessível somente por root e carregada pelo systemd. O processo `tutor-fisiologia` executa com usuário próprio, limite de memória de 256 MB e escuta apenas `127.0.0.1:8787`. O Caddy publica somente `/api/tutor` e `/api/tutor/status` por HTTPS; o site está desativado no servidor (`TUTOR_SERVE_SITE=0`). A origem permitida é `https://drmarionascimento.github.io`.
 
-O processo pode ser gerenciado por um serviço systemd independente do `convite-bot`. Não abra a porta 8787 diretamente à Internet. Esta etapa de hospedagem depende do endereço escolhido e não foi executada por esta alteração.
+O script `server/deploy-vm.sh` registra a instalação e atualização do serviço; requer Caddy, curl, git e xz-utils instalados. A regra `tutor-fisiologia-web` libera somente TCP 80/443 para a tag de mesmo nome na VM. Nunca publique a porta 8787 ou a chave. A configuração pública do endpoint está em `tutor-widget.js` e `tutor-moodle.html`; `window.TUTOR_AI_CONFIG` continua disponível para substituir o endpoint em outra instalação.
+
+O endereço sslip.io depende do IP externo atual, que ainda é efêmero. Se a VM for parada e receber outro IP, será necessário atualizar o hostname no Caddy e nas duas páginas/configurações, ou migrar para um domínio com IP reservado. O limite de 100 chamadas por dia e 6 por minuto é compartilhado por todos os alunos atrás deste proxy; os contadores reiniciam com o serviço. Não equivale a uma implantação dimensionada para uma turma grande.
+
+Verificação: `systemctl is-active tutor-fisiologia caddy convite-bot` e `curl -fsS https://tutor-fisiologia.35.208.107.43.sslip.io/api/tutor/status`. O status verifica a presença da chave, não a qualidade ou disponibilidade de uma resposta do provedor. As cópias temporárias da configuração transferidas pelo Cloud Shell foram removidas após a instalação.
 
 ## Limites didáticos
 
