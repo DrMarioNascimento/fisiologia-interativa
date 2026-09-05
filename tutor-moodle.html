@@ -75,7 +75,7 @@
       const linkList=items=>'<div class="links">'+items.map(x=>`<a class="link" href="${esc(base+x.href+(isFisio&&x.href.endsWith('.html')?'?percurso=fisioterapia':''))}">${esc(x.title)}</a>`).join('')+'</div>';
       const mapItems=()=>Object.values(isFisio?(courseConfig?.maps||{}):(typeof maps==='object'?maps:{})).flatMap(v=>Array.isArray(v)?v:[v]).filter(Boolean).map(x=>({title:x.title,href:x.src}));
       const moduleItems=()=>isFisio?(courseConfig?.modules||[]):(Array.isArray(modules)?modules:[]);
-      const endpoint=window.TUTOR_AI_CONFIG?.endpoint || '';
+      const endpoint=window.TUTOR_AI_CONFIG?.endpoint || (location.hostname === 'drmarionascimento.github.io' ? 'https://tutor-fisiologia.35.208.107.43.sslip.io/api/tutor' : '');
       const enabled=document.getElementById('aiEnabled'),moduleSelect=document.getElementById('aiModule');
       let history=[],currentModule=null,request=null;
       const plain=(text)=>{const d=document.createElement('div');d.className='msg bot ai-response';d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;};
