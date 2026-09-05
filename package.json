@@ -2,6 +2,9 @@
   "name": "fisiologia-interativa-visual-tests",
   "private": true,
   "scripts": {
+    "start:tutor": "node --env-file-if-exists=server/.env server/tutor.cjs",
+    "test:tutor": "node --test tests/tutor/server.test.cjs",
+    "test:tutor:browser": "playwright test --config=tests/tutor/playwright.config.cjs",
     "test:visual": "playwright test",
     "test:intencao": "playwright test tests/visual/da-intencao-ao-movimento.spec.js"
   },

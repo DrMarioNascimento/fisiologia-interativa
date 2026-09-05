@@ -24,13 +24,31 @@
     .send{min-width:38px;border:0;border-radius:10px;color:#fff;background:var(--g);font-weight:900;cursor:pointer}
     .links{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.link{display:inline-flex;align-items:center;min-height:28px;padding:0 8px;color:#fff;background:var(--g);text-decoration:none;font-size:.68rem}
     p{margin:0 0 6px}p:last-child{margin-bottom:0}
+    .chat{grid-template-columns:minmax(0,1fr)}.chat>*{min-width:0}.msg{overflow-wrap:anywhere}
+    .chat:has(.ai:not([hidden])){grid-template-rows:auto auto minmax(60px,1fr) auto;height:min(540px,96vh)}
+    .ai{padding:6px 9px;background:#eff8f3;border-bottom:1px solid var(--line);font-size:.72rem}
+    .ai label{display:flex;align-items:center;gap:5px}.ai input{min-height:0}
+    .ai details{margin-top:4px}.ai details>div{max-height:95px;overflow:auto;padding-top:5px}
+    .ai select{max-width:100%;width:100%;margin:5px 0;min-height:30px}
+    .ai button{min-height:28px;background:white;border:1px solid var(--line);border-radius:7px;color:var(--g)}
+    .ai-response{white-space:pre-wrap}.send:disabled{opacity:.5;cursor:wait}
     @media(max-width:640px){.chat{width:min(100%,96vw);height:min(320px,68vh);min-height:250px}.head{min-height:52px}}
+    @media(max-height:420px){.chat:has(.ai:not([hidden])){height:calc(100vh - 4px);min-height:0;overflow:auto}.head{min-height:40px;padding:6px 10px}.ai details>div{max-height:70px}}
   </style>
 </head>
 <body>
   <section class="chat" aria-label="Chat do Tutor de Fisiologia">
     <header class="head"><strong>Tutor de Fisiologia</strong><span>Educação Física • estudo guiado</span></header>
-    <div class="messages" id="messages"><div class="msg bot">Olá! O que você quer estudar? Posso localizar simuladores, mapas mentais e aprofundamentos da disciplina.</div></div>
+    <div class="ai" id="ai" hidden>
+      <label><input type="checkbox" id="aiEnabled" disabled> Respostas personalizadas com IA</label>
+      <details><summary>Sobre a IA e o assunto da conversa</summary><div>
+        <p id="aiNotice">Verificando disponibilidade…</p>
+        <label for="aiModule">Assunto</label><select id="aiModule"><option value="">Escolher pelo tema da pergunta</option></select>
+      </div></details>
+      <button type="button" id="aiClear">Limpar conversa</button>
+      <button type="button" id="aiCancel" hidden>Cancelar resposta</button>
+    </div>
+    <div class="messages" id="messages" aria-live="polite"><div class="msg bot">Olá! O que você quer estudar? Posso localizar simuladores, mapas mentais e aprofundamentos da disciplina.</div></div>
     <div>
       <div class="chips">
         <button class="chip" type="button" data-action="simuladores">Simuladores</button>
@@ -42,16 +60,65 @@
     </div>
   </section>
   <script src="tutor-ef-data.js?v=12"></script>
+  <script src="tutor-fisio-data.js"></script>
   <script>
     (function(){
       const box=document.getElementById('messages'),input=document.getElementById('input');
       const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').trim();
       const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       const base='https://drmarionascimento.github.io/fisiologia-interativa/';
+      const isFisio=new URLSearchParams(location.search).get('percurso')==='fisioterapia';
+      const course=isFisio?'fisio':'ef';
+      const courseConfig=isFisio?window.fisioterapiaTutor:null;
+      document.querySelector('.head span').textContent=(isFisio?'Fisioterapia':'Educação Física')+' • estudo guiado';
       const add=(html,who='bot')=>{const d=document.createElement('div');d.className='msg '+who;d.innerHTML=html;box.appendChild(d);box.scrollTop=box.scrollHeight};
-      const linkList=items=>'<div class="links">'+items.map(x=>`<a class="link" href="${esc(base+x.href)}">${esc(x.title)}</a>`).join('')+'</div>';
-      const mapItems=()=>Object.values(typeof maps==='object'?maps:{}).flatMap(v=>Array.isArray(v)?v:[v]).filter(Boolean).map(x=>({title:x.title,href:x.src}));
-      const moduleItems=()=>Array.isArray(modules)?modules:[];
+      const linkList=items=>'<div class="links">'+items.map(x=>`<a class="link" href="${esc(base+x.href+(isFisio&&x.href.endsWith('.html')?'?percurso=fisioterapia':''))}">${esc(x.title)}</a>`).join('')+'</div>';
+      const mapItems=()=>Object.values(isFisio?(courseConfig?.maps||{}):(typeof maps==='object'?maps:{})).flatMap(v=>Array.isArray(v)?v:[v]).filter(Boolean).map(x=>({title:x.title,href:x.src}));
+      const moduleItems=()=>isFisio?(courseConfig?.modules||[]):(Array.isArray(modules)?modules:[]);
+      const endpoint=window.TUTOR_AI_CONFIG?.endpoint || '';
+      const enabled=document.getElementById('aiEnabled'),moduleSelect=document.getElementById('aiModule');
+      let history=[],currentModule=null,request=null;
+      const plain=(text)=>{const d=document.createElement('div');d.className='msg bot ai-response';d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;};
+      const cancel=()=>request?.abort();
+      async function askAI(q){
+        const module=moduleItems().find(m=>m.href===moduleSelect.value)||currentModule||find(q)[0]||null;
+        currentModule=module;
+        const controller=new AbortController();request=controller;
+        const send=document.querySelector('.send');send.disabled=true;document.getElementById('aiCancel').hidden=false;
+        const pending=plain('Preparando a explicação…');
+        const timer=setTimeout(()=>{controller.timedOut=true;controller.abort();},30000);
+        try{
+          const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},credentials:'omit',signal:controller.signal,
+            body:JSON.stringify({course,module:module?.href||null,message:q,history})});
+          const data=await response.json();controller.signal.throwIfAborted();
+          if(!response.ok||typeof data.text!=='string'||!data.text.trim())throw new Error(response.status===429?'limit':'unavailable');
+          pending.textContent=data.text+(data.truncated?'\n\nA resposta atingiu o limite. Peça uma explicação mais curta.':'');
+          history=[...history,{role:'user',text:q},{role:'model',text:data.text.slice(0,6000)}].slice(-6);
+        }catch(error){
+          if(controller.signal.aborted&&!controller.timedOut)pending.textContent='Resposta cancelada.';
+          else{
+            pending.textContent=error.message==='limit'?'A IA atingiu o limite de uso. Os conteúdos continuam disponíveis.':'A IA está indisponível agora. Os conteúdos continuam disponíveis.';
+            localReply(q);
+          }
+        }finally{clearTimeout(timer);request=null;send.disabled=false;document.getElementById('aiCancel').hidden=true;box.scrollTop=box.scrollHeight;}
+      }
+      async function setupAI(){
+        if(!endpoint)return;
+        document.getElementById('ai').hidden=false;input.maxLength=1200;
+        for(const m of moduleItems()){const option=document.createElement('option');option.value=m.href;option.textContent=m.title;moduleSelect.appendChild(option);}
+        moduleSelect.addEventListener('change',()=>{cancel();history=[];currentModule=null;});
+        document.getElementById('aiCancel').addEventListener('click',cancel);
+        document.getElementById('aiClear').addEventListener('click',()=>{cancel();history=[];currentModule=null;box.replaceChildren();plain('Conversa limpa. Qual mecanismo você quer estudar?');});
+        enabled.addEventListener('change',()=>{cancel();history=[];input.placeholder=enabled.checked?'Descreva sua dúvida ou seu raciocínio…':'Ex.: potencial de ação, retorno venoso, sangue...';});
+        window.addEventListener('pagehide',()=>{cancel();history=[];currentModule=null;box.replaceChildren();enabled.checked=false;});
+        try{
+          const response=await fetch(endpoint.replace(/\/$/,'')+'/status',{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(5000)});
+          const data=await response.json();if(!response.ok||!data.enabled)throw new Error();
+          enabled.disabled=false;
+          document.getElementById('aiNotice').textContent='Ao ativar, suas perguntas e as últimas mensagens são enviadas ao Gemini. Não envie dados pessoais. No nível gratuito, o Google pode usar esse conteúdo para melhorar seus produtos. Este tutor não salva conversas entre visitas. A IA pode errar; confira no material da disciplina.';
+          document.querySelector('.ai details').open=innerHeight>=480;
+        }catch{document.getElementById('aiNotice').textContent='IA ainda não disponível. Simuladores, mapas e aprofundamentos continuam funcionando.';document.querySelector('.ai details').open=true;}
+      }
       const profundos=()=>moduleItems().filter(m=>['da-intencao-ao-movimento.html','sangue.html','ventilacao-pulmonar-neonatal.html'].includes(m.href)||/aprofund|integr|sangue|neonatal|intencao/i.test(`${m.title||''} ${m.goal||''} ${m.href||''}`));
       function find(q){const terms=norm(q).split(' ').filter(t=>t.length>2);return moduleItems().map(m=>{const hay=norm(`${m.title} ${m.goal} ${(m.steps||[]).join(' ')}`);let score=0;terms.forEach(t=>{if(hay.includes(t))score+=norm(m.title).includes(t)?5:1});return{m,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6).map(x=>x.m)}
       function act(type){
@@ -61,16 +128,21 @@
         if(type==='questoes')return add('<p>Digite o tema que deseja revisar. Eu localizo os módulos correspondentes; dentro deles, use o Tutor para testar seu entendimento.</p>');
       }
       function submit(text){
-        const q=String(text||'').trim();if(!q)return;add(esc(q),'user');input.value='';const n=norm(q);
+        const q=String(text||'').trim().slice(0,1200);if(!q||request)return;add(esc(q),'user');input.value='';const n=norm(q);
         if(/mapa/.test(n))return act('mapas');
         if(/aprofund/.test(n))return act('aprofundamentos');
-        if(/simulador|simuladores/.test(n))return act('simuladores');
+        if(/^(simulador|simuladores|abrir simuladores)$/.test(n))return act('simuladores');
+        if(enabled.checked)return askAI(q);
+        localReply(q);
+      }
+      function localReply(q){
         const found=find(q);
         if(!found.length)return add('<p>Não encontrei uma correspondência segura. Tente o nome de uma estrutura, sistema ou mecanismo, como <b>cálcio</b>, <b>retorno venoso</b>, <b>hemoglobina</b> ou <b>recrutamento</b>.</p>');
         add('<p><b>Encontrei estes conteúdos relacionados:</b></p>'+linkList(found.map(m=>({title:m.title,href:m.href}))));
       }
       document.querySelectorAll('[data-action]').forEach(b=>b.addEventListener('click',()=>act(b.dataset.action)));
       document.getElementById('form').addEventListener('submit',e=>{e.preventDefault();submit(input.value)});
+      setupAI();
     })();
   </script>
 </body>

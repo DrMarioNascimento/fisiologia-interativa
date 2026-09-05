@@ -46,6 +46,8 @@
   let selectedModule = null;
   const quizProgress = new Map();
   let lastQuiz = null;
+  const aiEndpoint = window.TUTOR_AI_CONFIG?.endpoint || '';
+  let aiHistory = [], aiModule = null, aiRequest = null;
   const currentAxis = () => selectedModule?.group || (typeof active !== 'undefined' ? active : (courseConfig?.defaultAxis || 'muscular'));
 
   function createUI() {
@@ -55,6 +57,7 @@
       <section class="tutor-panel" id="tutorPanel" aria-label="Tutor de Fisiologia" hidden>
         <header class="tutor-head"><div><strong>Tutor de Fisiologia</strong><span>${escapeHtml(courseLabel)} • estudo guiado</span></div><button class="tutor-close" type="button" aria-label="Minimizar tutor">×</button></header>
         <div class="tutor-context" id="tutorContext"></div>
+        ${aiEndpoint ? '<div class="tutor-ai"><label><input type="checkbox" id="tutorAiEnabled" disabled> Respostas personalizadas com IA</label><p id="tutorAiNotice">Verificando disponibilidade…</p><button type="button" id="tutorAiClear">Limpar conversa</button><button type="button" id="tutorAiCancel" hidden>Cancelar resposta</button></div>' : ''}
         <div class="tutor-messages" id="tutorMessages" aria-live="polite"></div>
         <div><div class="tutor-chips"><button class="tutor-chip" data-prompt="Explique este simulador">Explique este simulador</button><button class="tutor-chip" data-prompt="Ajude-me a explorar">Ajude-me a explorar</button><button class="tutor-chip" data-prompt="Abra o mapa mental">Mapa mental</button><button class="tutor-chip" data-prompt="Quero encontrar um conteúdo">Encontrar conteúdo</button><button class="tutor-chip" data-prompt="Teste meu entendimento">Teste meu entendimento</button></div><form class="tutor-form" id="tutorForm"><input class="tutor-input" id="tutorInput" maxlength="240" autocomplete="off" placeholder="Ex.: onde estudo extração de O₂?" aria-label="Pergunta ao tutor"><button class="tutor-send" aria-label="Enviar pergunta">➜</button></form></div>
       </section>
@@ -97,6 +100,7 @@
     el.className = `tutor-message ${who}`;
     if (html) el.innerHTML = text; else el.textContent = text;
     messages().appendChild(el); messages().scrollTop = messages().scrollHeight;
+    return el;
   }
   function openTutor() {
     panel().hidden = false; panel().classList.add('is-open'); launcher().setAttribute('aria-expanded','true');
@@ -188,10 +192,10 @@
     const list = m.qs || [];
     const qi = quizProgress.get(m.href) || 0;
     const q = list[qi % Math.max(1,list.length)];
-    if (q) lastQuiz = {module:m, question:q};
+    if (q) lastQuiz = {module:m, question:q, index:qi % list.length, choice:null};
     if (!q) return 'Abra o simulador, modifique uma variável e descreva o que mudou. Depois tente justificar o mecanismo.';
     const options=q.opts.map((o,i)=>`<button class="tutor-option" type="button" data-choice="${i}">${String.fromCharCode(65+i)}) ${escapeHtml(o)}</button>`).join('');
-    return `<div class="tutor-quiz" data-module="${escapeHtml(m.href)}" data-correct="${q.a}" data-next="${(qi+1)%list.length}" data-why="${escapeHtml(q.why)}"><p><b>Questão ${qi+1} de ${list.length}</b></p><p>${escapeHtml(q.q)}</p><div class="tutor-options">${options}</div><p class="tutor-feedback" hidden></p><button class="tutor-next" type="button" hidden>Próxima questão</button></div>`;
+    return `<div class="tutor-quiz" data-module="${escapeHtml(m.href)}" data-question="${qi % list.length}" data-correct="${q.a}" data-next="${(qi+1)%list.length}" data-why="${escapeHtml(q.why)}"><p><b>Questão ${qi+1} de ${list.length}</b></p><p>${escapeHtml(q.q)}</p><div class="tutor-options">${options}</div><p class="tutor-feedback" hidden></p><button class="tutor-next" type="button" hidden>Próxima questão</button></div>`;
   }
   function searchReply(query) {
     const found = findModules(query);
@@ -254,9 +258,70 @@
     if (/explor|orient|passo|comec/.test(q) && m) return guide(m);
     return searchReply(query);
   }
-  function submit(value) {
-    const text = String(value||'').trim(); if (!text) return;
-    addMessage(text,'user'); addMessage(answer(text),'bot',true); document.querySelector('#tutorInput').value='';
+  function localAction(text) {
+    const q = normalize(text);
+    return /mapa|encontrar|onde estudo|onde fica|abrir simulador/.test(q) ||
+      /^(teste meu entendimento|questoes|questao|quiz|quero treinar|proxima|proxima questao|outra|mais uma|ajude me a explorar)$/.test(q);
+  }
+  function cancelAI() {
+    if (aiRequest) aiRequest.abort();
+  }
+  async function submit(value) {
+    const text = String(value||'').trim().slice(0,1200); if (!text || aiRequest) return;
+    addMessage(text,'user'); document.querySelector('#tutorInput').value='';
+    if (!document.querySelector('#tutorAiEnabled')?.checked || localAction(text)) {
+      addMessage(answer(text),'bot',true); return;
+    }
+    const module = selectedModule || allModules().find(m=>m.href===aiModule) || findModules(text)[0] || null;
+    if (aiModule !== module?.href) { aiHistory = []; aiModule = module?.href; }
+    const question = lastQuiz?.module.href === module?.href ? {index:lastQuiz.index, choice:lastQuiz.choice} : null;
+    const pending = addMessage('Preparando a explicação…','bot');
+    const controller = new AbortController(); aiRequest = controller;
+    const send = document.querySelector('.tutor-send'); send.disabled = true;
+    document.querySelector('#tutorAiCancel').hidden = false;
+    const timeout = setTimeout(() => { controller.timedOut = true; controller.abort(); }, 30000);
+    try {
+      const response = await fetch(aiEndpoint, { method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({course:isFisioterapia?'fisio':'ef',module:module?.href || null,question,message:text,history:aiHistory}),
+        signal:controller.signal, credentials:'omit' });
+      const data = await response.json();
+      controller.signal.throwIfAborted();
+      if (!response.ok || typeof data.text !== 'string' || !data.text.trim()) throw new Error(response.status === 429 ? 'limit' : 'unavailable');
+      pending.classList.add('tutor-ai-answer');
+      pending.textContent = data.text + (data.truncated ? '\n\nA resposta atingiu o limite. Peça uma explicação mais curta de um ponto específico.' : '');
+      aiHistory = [...aiHistory, {role:'user',text}, {role:'model',text:data.text.slice(0,6000)}].slice(-6);
+    } catch (error) {
+      if (controller.signal.aborted && !controller.timedOut) pending.textContent = 'Resposta cancelada.';
+      else {
+        pending.textContent = error.message === 'limit' ? 'A IA atingiu o limite de uso. Você pode continuar com mapas e questões e tentar novamente mais tarde.' : 'A IA está indisponível agora. O tutor guiado continua funcionando.';
+        addMessage(answer(text),'bot',true);
+      }
+    } finally {
+      clearTimeout(timeout); aiRequest = null; send.disabled = false;
+      document.querySelector('#tutorAiCancel').hidden = true;
+      messages().scrollTop = messages().scrollHeight;
+    }
+  }
+  async function setupAI() {
+    if (!aiEndpoint) return;
+    document.querySelector('#tutorInput').maxLength = 1200;
+    const enabled = document.querySelector('#tutorAiEnabled');
+    document.querySelector('#tutorAiCancel').addEventListener('click',cancelAI);
+    document.querySelector('#tutorAiClear').addEventListener('click',()=>{
+      cancelAI(); aiHistory = []; aiModule = null; lastQuiz = null; quizProgress.clear(); messages().replaceChildren();
+      addMessage('Conversa limpa. Qual mecanismo você quer estudar?','bot');
+    });
+    enabled.addEventListener('change',()=>{ cancelAI(); aiHistory = []; document.querySelector('#tutorInput').placeholder = enabled.checked ? 'Descreva sua dúvida ou seu raciocínio…' : 'Ex.: onde estudo extração de O₂?'; });
+    window.addEventListener('pagehide',()=>{ cancelAI(); aiHistory = []; lastQuiz = null; messages().replaceChildren(); enabled.checked = false; });
+    try {
+      const response = await fetch(aiEndpoint.replace(/\/$/,'') + '/status', { signal:AbortSignal.timeout(5000), credentials:'omit',cache:'no-store' });
+      const data = await response.json();
+      if (!response.ok || !data.enabled) throw new Error();
+      enabled.disabled = false;
+      document.querySelector('#tutorAiNotice').textContent = 'Ao ativar, suas perguntas e as últimas mensagens desta conversa são enviadas ao Gemini. Não envie dados pessoais. Na modalidade gratuita, o Google pode usar esse conteúdo para melhorar seus produtos. Este tutor não salva a conversa para outra visita. A IA pode errar; confira no material da disciplina.';
+    } catch {
+      document.querySelector('#tutorAiNotice').textContent = 'IA ainda não disponível nesta instalação. Mapas, questões e estudo guiado continuam disponíveis.';
+    }
   }
 
   function enableDrag() {
@@ -287,6 +352,7 @@
 
   selectedModule = allModules().find(m => location.pathname.endsWith('/' + m.href) || location.pathname.endsWith(m.href)) || null;
   createUI(); updateContext(); enableDrag();
+  setupAI();
   document.querySelector('.tutor-close').addEventListener('click',closeTutor);
   document.querySelector('#tutorForm').addEventListener('submit',e=>{e.preventDefault();submit(document.querySelector('#tutorInput').value);});
   document.querySelectorAll('.tutor-chip').forEach(b=>b.addEventListener('click',()=>submit(b.dataset.prompt)));
@@ -304,6 +370,9 @@
     if (option) {
       const quizBox = option.closest('.tutor-quiz');
       const chosen = Number(option.dataset.choice), correct = Number(quizBox.dataset.correct);
+      const questionModule = allModules().find(m=>m.href===quizBox.dataset.module);
+      const index = Number(quizBox.dataset.question);
+      if (questionModule?.qs[index]) lastQuiz = {module:questionModule, question:questionModule.qs[index], index, choice:chosen};
       quizBox.querySelectorAll('.tutor-option').forEach((button,index)=>{button.disabled=true;if(index===correct)button.classList.add('correct');});
       if(chosen!==correct) option.classList.add('wrong');
       const feedback=quizBox.querySelector('.tutor-feedback');
@@ -321,8 +390,20 @@
   });
   const axesNode = document.querySelector('#axes');
   const cardsNode = document.querySelector('#cards');
-  if (axesNode) axesNode.addEventListener('click',e=>{if(e.target.closest('.axis')){selectedModule=null;setTimeout(updateContext);}});
-  if (cardsNode) cardsNode.addEventListener('click',e=>{const card=e.target.closest('.card');if(!card)return;const title=card.querySelector('h2')?.textContent;selectedModule=allModules().find(m=>m.title===title)||null;updateContext();});
+  if (axesNode) axesNode.addEventListener('click',e=>{if(e.target.closest('.axis')){cancelAI();aiHistory=[];aiModule=null;lastQuiz=null;selectedModule=null;setTimeout(updateContext);}});
+  if (cardsNode) cardsNode.addEventListener('click',e=>{
+    const card=e.target.closest('.card');if(!card)return;
+    const title=card.querySelector('h2')?.textContent;
+    const module=allModules().find(m=>m.title===title)||null;
+    if (module?.href !== selectedModule?.href) {cancelAI();aiHistory=[];aiModule=null;lastQuiz=null;}
+    selectedModule=module;updateContext();
+    const option=e.target.closest('.opts button');
+    if (option && module) {
+      const index=Array.from(card.querySelectorAll('.q')).indexOf(option.closest('.q'));
+      const choice=Number(option.dataset.o ?? option.dataset.option);
+      if (module.qs?.[index] && Number.isInteger(choice)) lastQuiz={module,question:module.qs[index],index,choice};
+    }
+  });
   window.addEventListener('resize', () => { placePanel(); });
   setTimeout(()=>{document.querySelector('#tutorHint').hidden=true;},7000);
 })();
