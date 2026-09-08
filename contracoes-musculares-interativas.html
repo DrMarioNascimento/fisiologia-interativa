@@ -2362,11 +2362,6 @@ function drawHandSculpted(wrist,handEnd,angle,gripping){
   skin.addColorStop(0,'#ffe4c5');skin.addColorStop(.4,'#e9bd93');skin.addColorStop(1,'#a37455');
   ctx.fillStyle=skin;ctx.strokeStyle='#986b50';
   const finish=()=>{ctx.fill();ctx.stroke();};
-  // Far-side thumb, partly concealed by the palm rather than splayed toward the viewer.
-  ctx.beginPath();ctx.moveTo(10,-3);
-  ctx.bezierCurveTo(14,-12,19,-12,24,-7);
-  ctx.quadraticCurveTo(29,-4,32,-5);ctx.quadraticCurveTo(34,-2,29,0);
-  ctx.lineTo(17,2);ctx.closePath();finish();
   // Fingers overlap in depth in a profile view; fingertips curve gently upward.
   const fingers=[{tip:44,y:-2},{tip:48,y:-.5},{tip:45,y:1},{tip:40,y:2.5}];
   fingers.forEach(({tip,y},i)=>{
