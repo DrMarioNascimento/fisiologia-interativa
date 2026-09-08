@@ -214,7 +214,7 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
 .ion-na{color:#70bcff;font-weight:650}.ion-k{color:#ff8990;font-weight:650}.ion-ca{color:#f4e76a;font-weight:650}.ion-glucose{color:#87d29e;font-weight:650}.ion-atp{color:#c4a2f6;font-weight:650}.ion-adp{color:#a6c5ee;font-weight:650}.ion-pi{color:#d8cb9a;font-weight:650}.ion-sglt{color:#60d2c5;font-weight:650}.ion-pump{color:#ff9b42;font-weight:650}.ion-vm{color:#e0edf5;font-weight:650}.ion-gradient{color:#b3d6ef;font-weight:650}.ion-flux{color:#a9e1c0;font-weight:650}.ion-activity{color:#d4c095;font-weight:650}</style></head>
 <body>
   <h1>Potencial de Ação na Membrana</h1>
-  <p class="subtitle">Simulador didático neuronal da bicamada lipídica com canais de Na⁺, K⁺ e leitura temporal em 7 etapas.</p>
+  <p class="subtitle">Simulador didático neuronal da bicamada lipídica com canais de Na⁺, K⁺ e leitura temporal em etapas sincronizadas.</p>
 
   <div class="controls">
     <button id="btnStart" class="primary">Iniciar</button>
@@ -268,7 +268,7 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
   </div>
 
   <div class="legend">
-    <b>Como interpretar:</b> a cena à esquerda mostra a <b>bicamada lipídica</b> com proteínas integrais, canais e movimento iônico ao longo das <b>7 etapas didáticas</b>. O gráfico à direita acompanha o <b>potencial de membrana</b> em eixo fixo ao longo do tempo, com contraste reforçado para projeção em sala. Quando <b>Potencial sub-limiar</b> está ativo, o estímulo não alcança o limiar e o gráfico mostra uma despolarização local discreta, sem disparo do potencial de ação. Em <b>Tetrodotoxina (TTX - Baiacu)</b> e <b>Lidocaína</b>, os canais de <span class="ion-na">Na⁺</span> dependentes de voltagem são bloqueados e o pico do potencial de ação desaparece ou fica fortemente reduzido. <b>TEA (tetraetilamônio)</b> é um bloqueador experimental de canais de <span class="ion-k">K⁺</span> usado para estudar a repolarização da membrana. A saída de <span class="ion-k">K⁺</span> fica prejudicada e a repolarização torna-se mais lenta.
+    <b>Como interpretar:</b> a cena à esquerda mostra a <b>bicamada lipídica</b> com proteínas integrais, canais e movimento iônico ao longo das <b>etapas didáticas sincronizadas</b>. O gráfico à direita acompanha o <b>potencial de membrana</b> em eixo fixo ao longo do tempo, com contraste reforçado para projeção em sala. Quando <b>Potencial sub-limiar</b> está ativo, o estímulo não alcança o limiar e o gráfico mostra uma despolarização local discreta, sem disparo do potencial de ação. Em <b>Tetrodotoxina (TTX - Baiacu)</b> e <b>Lidocaína</b>, os canais de <span class="ion-na">Na⁺</span> dependentes de voltagem são bloqueados e, neste modelo didático, resta apenas uma resposta local sem potencial de ação. <b>TEA (tetraetilamônio)</b> é um bloqueador experimental de canais de <span class="ion-k">K⁺</span> usado para estudar a repolarização da membrana. A saída de <span class="ion-k">K⁺</span> fica prejudicada e a repolarização torna-se mais lenta. O eixo usa tempo relativo: a velocidade controla apenas a reprodução. As aberturas dos canais são esquemáticas, sem calibração quantitativa. O limiar e o pico são eventos pontuais; a hiperpolarização corresponde ao trecho abaixo do repouso, incluindo a recuperação.
     <span class="pill">eletrofisiologia</span>
     <span class="pill">potencial de ação</span>
     <span class="pill">membrana plasmática</span>
@@ -332,24 +332,27 @@ function isTTX(){ return pharmMode === 'ttx'; }
 function isLido(){ return pharmMode === 'lido'; }
 function isTEA(){ return pharmMode === 'tea'; }
 
+  // One timeline drives the curve, channels, stage cards and teaching pauses.
+  const TIME = Object.freeze({stimulus:58, threshold:108, peak:154, repolarized:206, trough:274, end:TOTAL});
+  const GRAPH = Object.freeze({left:75, top:82, right:845, bottom:500});
+  const timeToX = f => GRAPH.left + f / TOTAL * (GRAPH.right - GRAPH.left);
+  const stage = (name, short, start, end, color, desc, event, eventDesc) => ({name, short, start, end, color, desc, event, eventDesc});
+  const restStage = stage('Repouso','Repouso',0,TIME.stimulus,'#70bcff','Membrana polarizada em torno de -70 mV.','Gradientes mantidos','Canais de vazamento e bomba Na⁺/K⁺ mantêm os gradientes.');
   const actionStages = [
-    { name:'1. Repouso', short:'Repouso', start:0, end:48, color:'#70bcff', desc:'Membrana polarizada em torno de -70 mV.', event:'Gradientes mantidos', eventDesc:'Bomba Na⁺/K⁺ e canais de vazamento sustentam a polarização.' },
-    { name:'2. Estímulo inicial', short:'Estímulo', start:49, end:92, color:'#0ea5e9', desc:'Pequena perturbação local com discreta entrada de cargas positivas.', event:'Despolarização local', eventDesc:'O potencial começa a subir, mas ainda pode ser insuficiente.' },
-    { name:'3. Limiar', short:'Limiar', start:93, end:118, color:'#f59e0b', desc:'A membrana atinge a faixa limiar em torno de -55 mV.', event:'Disparo recrutado', eventDesc:'Abertura regenerativa dos canais de Na⁺ dependentes de voltagem.' },
-    { name:'4. Despolarização rápida', short:'Despolarização', start:119, end:178, color:'#ff8990', desc:'Abertura maciça de canais de Na⁺ e rápida ascensão do potencial.', event:'Entrada intensa de Na⁺', eventDesc:'O interior torna-se progressivamente menos negativo e depois positivo.' },
-    { name:'5. Pico / overshoot', short:'Pico', start:179, end:214, color:'#be123c', desc:'Potencial positivo máximo com início da inativação do Na⁺.', event:'Na⁺ inativando', eventDesc:'O influxo de Na⁺ diminui e a saída de K⁺ começa a predominar.' },
-    { name:'6. Repolarização', short:'Repolarização', start:215, end:302, color:'#7c3aed', desc:'Saída de K⁺ repolariza a membrana.', event:'Saída de K⁺', eventDesc:'O potencial retorna para valores negativos.' },
-    { name:'7. Hiperpolarização / retorno', short:'Retorno', start:303, end:400, color:'#6b7280', desc:'Persistência transitória do K⁺ aberto antes do retorno ao repouso.', event:'Recuperação', eventDesc:'A excitabilidade volta gradualmente ao basal.' }
+    restStage,
+    stage('Estímulo inicial','Estímulo',TIME.stimulus,TIME.threshold,'#0ea5e9','Despolarização local até o limiar de -55 mV.','Entrada local de cargas','O estímulo aproxima a membrana do limiar.'),
+    stage('Despolarização rápida','Despolarização',TIME.threshold,TIME.peak,'#ff8990','Ascensão rápida até o pico de +32 mV.','Entrada de Na⁺','Os canais de Na⁺ abrem e depois começam a inativar.'),
+    stage('Pico','Pico',TIME.peak,TIME.peak,'#f4a4be','Máximo de +32 mV; transição para a repolarização.','Na⁺ inativado; K⁺ aberto','A saída de K⁺ passa a predominar.'),
+    stage('Repolarização','Repolarização',TIME.peak,TIME.repolarized,'#b69aff','Descida do pico até -70 mV.','Saída de K⁺','Canais de Na⁺ inativados e canais de K⁺ abertos.'),
+    stage('Hiperpolarização','Hiperpolarização',TIME.repolarized,TIME.trough,'#60d2c5','O potencial cai abaixo de -70 mV, até -82 mV.','K⁺ ainda aberto','A condutância ao K⁺ permanece elevada transitoriamente.'),
+    stage('Retorno ao repouso','Retorno',TIME.trough,TOTAL,'#a0b8c9','Recuperação de -82 mV até -70 mV.','Fechamento gradual de K⁺','A permeabilidade retorna ao nível basal.')
   ];
-  const subStages = [
-    { name:'1. Repouso', short:'Repouso', start:0, end:56, color:'#70bcff', desc:'Membrana estável em torno de -70 mV.', event:'Gradientes mantidos', eventDesc:'Distribuição iônica desigual em repouso.' },
-    { name:'2. Estímulo inicial', short:'Estímulo', start:57, end:126, color:'#0ea5e9', desc:'Estímulo local produz discreta entrada de cargas positivas.', event:'Perturbação local', eventDesc:'A despolarização é pequena e gradativa.' },
-    { name:'3. Aproximação do limiar', short:'Quase limiar', start:127, end:185, color:'#f59e0b', desc:'O potencial sobe, mas permanece abaixo do limiar.', event:'Sub-limiar', eventDesc:'Não há recrutamento regenerativo suficiente.' },
-    { name:'4. Potencial sub-limiar máximo', short:'Máximo sub-limiar', start:186, end:228, color:'#fb923c', desc:'Pico sub-limiar sem disparo de potencial de ação.', event:'Sem disparo', eventDesc:'A membrana não entra em despolarização rápida.' },
-    { name:'5. Dissipação', short:'Dissipação', start:229, end:286, color:'#94a3b8', desc:'O sinal local começa a se dissipar.', event:'Decaimento passivo', eventDesc:'A energia eletrotônica diminui com o tempo.' },
-    { name:'6. Retorno progressivo', short:'Retorno', start:287, end:348, color:'#64748b', desc:'A membrana volta gradualmente ao repouso.', event:'Fechamento progressivo', eventDesc:'Os poucos canais abertos retornam ao basal.' },
-    { name:'7. Repouso restabelecido', short:'Repouso final', start:349, end:400, color:'#70bcff', desc:'Retorno completo ao nível de repouso.', event:'Homeostase', eventDesc:'A membrana recupera seu estado basal.' }
+  const localStages = [
+    restStage,
+    stage('Resposta local','Resposta local',TIME.stimulus,228,'#0ea5e9','Despolarização sem potencial de ação.','Sem disparo','Não ocorre abertura regenerativa suficiente de canais de Na⁺.'),
+    stage('Dissipação','Dissipação',228,TOTAL,'#a0b8c9','O potencial retorna passivamente ao repouso.','Retorno ao repouso','A resposta local se dissipa.')
   ];
+  const teaStages = [...actionStages.slice(0,4), stage('Repolarização prolongada','Repolarização prolongada',TIME.peak,TOTAL,'#b69aff','Retorno lento ao repouso, sem hiperpolarização neste modelo.','Saída reduzida de K⁺','O bloqueio de K⁺ prolonga a repolarização.')];
 
   const sceneCanvas = document.getElementById('sceneCanvas');
   const graphCanvas = document.getElementById('graphCanvas');
@@ -395,80 +398,52 @@ function isTEA(){ return pharmMode === 'tea'; }
   const ease = t => { t = clamp(t,0,1); return 0.5 - 0.5*Math.cos(Math.PI*t); };
   const getSpeed = ()=>parseFloat(speedRange.value);
   const isSub = ()=>subthresholdToggle.checked;
-  const getStages = ()=> isSub() ? subStages : actionStages;
-  const getStage = f => getStages().find(s => f >= s.start && f <= s.end) || getStages()[0];
-  const getPauseFrames = ()=> getStages().map(s => s.end);
+  const isLocal = () => isSub() || isTTX() || isLido();
+  const getStages = () => isLocal() ? localStages : isTEA() ? teaStages : actionStages;
+  const getStage = f => {
+    const stages = getStages();
+    return stages.find(s => s.start === f && s.end === f) || stages.find(s => f >= s.start && f <= s.end) || stages[stages.length-1];
+  };
+  const getPauseFrames = () => [...new Set(getStages().map(s => s.end))];
   const setCardsColor = color => { phaseCard.style.setProperty('--phase', color); valueCard.style.setProperty('--phase', color); flowCard.style.setProperty('--phase', color); };
   const pressureToY = v => 492 - ((v + 92) / 130) * 350;
 
-  function getVmBase(f){
-    if (isSub()) {
-      if (f <= 56) return -70;
-      if (f <= 228) return lerp(-70, -52, ease((f - 56) / 172));
-      return lerp(-52, -70, ease((f - 228) / 172));
+  function getVm(f){
+    const t = TIME;
+    if (isLocal()) {
+      const amplitude = isTTX() ? 2 : isLido() ? 8 : 10;
+      if (f <= t.stimulus) return -70;
+      if (f <= 228) return lerp(-70, -70 + amplitude, ease((f-t.stimulus)/(228-t.stimulus)));
+      return lerp(-70 + amplitude, -70, ease((f-228)/(TOTAL-228)));
     }
-    if (f <= 58) return -70;
-    if (f <= 108) return lerp(-70, -55, ease((f - 58) / 50));
-    if (f <= 154) return lerp(-55, 32, ease((f - 108) / 46));
-    if (f <= 206) return lerp(32, -72, ease((f - 154) / 52));
-    if (f <= 274) return lerp(-72, -82, ease((f - 206) / 68));
-    return lerp(-82, -70, ease((f - 274) / 126));
+    if (f <= t.stimulus) return -70;
+    if (f <= t.threshold) return lerp(-70,-55,ease((f-t.stimulus)/(t.threshold-t.stimulus)));
+    if (f <= t.peak) return lerp(-55,32,ease((f-t.threshold)/(t.peak-t.threshold)));
+    if (isTEA()) return lerp(32,-70,ease((f-t.peak)/(TOTAL-t.peak)));
+    if (f <= t.repolarized) return lerp(32,-70,ease((f-t.peak)/(t.repolarized-t.peak)));
+    if (f <= t.trough) return lerp(-70,-82,ease((f-t.repolarized)/(t.trough-t.repolarized)));
+    return lerp(-82,-70,ease((f-t.trough)/(TOTAL-t.trough)));
   }
-  
-function getVm(f){
-    let v = getVmBase(f);
-    if (isSub()) v = Math.min(v, -52);
-
-    if (isTTX()) {
-      return -70 + (v + 70) * 0.03;
-    }
-    if (isLido()) {
-      return -70 + (v + 70) * 0.18;
-    }
-    if (isTEA()) {
-      if (f <= 58) return -70;
-      if (f <= 108) return lerp(-70, -55, ease((f - 58) / 50));
-      if (f <= 154) return lerp(-55, 32, ease((f - 108) / 46));
-      if (f <= 300) return lerp(32, -62, ease((f - 154) / 146));
-      return lerp(-62, -70, ease((f - 300) / 100));
-    }
-    return v;
-  }
-
-
-  function getNaOpenBase(f){
-    if (isSub()) {
-      if (f < 56) return 0.08;
-      if (f <= 228) return lerp(0.08, 0.34, ease((f - 56) / 172));
-      return lerp(0.34, 0.08, ease((f - 228) / 172));
-    }
-    if (f <= 108) return lerp(0.08, 0.18, ease(f / 108));
-    if (f <= 154) return lerp(0.18, 1.0, ease((f - 108) / 46));
-    if (f <= 196) return lerp(1.0, 0.18, ease((f - 154) / 42));
-    return 0.08;
-  }
+  // Relative gate opening is schematic, not a fitted conductance model.
   function getNaOpen(f){
-    if (isTTX()) return 0;
-    if (isLido()) return getNaOpenBase ? getNaOpenBase(f) * 0.18 : 0.12;
-    return getNaOpenBase ? getNaOpenBase(f) : 0;
-  }
-  function getKOpenBase(f){
-    if (isSub()) {
-      if (f < 186) return 0.10;
-      return lerp(0.10, 0.22, ease((f - 186) / 214));
-    }
-    if (f <= 150) return 0.10;
-    if (f <= 274) return lerp(0.10, 0.95, ease((f - 150) / 124));
-    return lerp(0.95, 0.18, ease((f - 274) / 126));
+    const t=TIME, maxAt=(t.threshold+t.peak)/2;
+    if (isLocal() || f <= t.threshold || f >= t.peak) return 0;
+    if (f <= maxAt) return ease((f-t.threshold)/(maxAt-t.threshold));
+    return 1-ease((f-maxAt)/(t.peak-maxAt));
   }
   function getKOpen(f){
-    if (isTEA()) return (getKOpenBase ? getKOpenBase(f) : 0) * 0.22;
-    return getKOpenBase ? getKOpenBase(f) : 0;
+    const t=TIME;
+    if (isLocal() || f <= t.threshold) return 0;
+    const max=isTEA() ? 0.22 : 1;
+    if (f <= t.peak) return max*ease((f-t.threshold)/(t.peak-t.threshold));
+    if (isTEA()) return max*(1-ease((f-t.peak)/(TOTAL-t.peak)));
+    if (f <= t.repolarized) return max;
+    return max*(1-ease((f-t.repolarized)/(TOTAL-t.repolarized)));
   }
   function getLigandOpen(f){
-    if (f < 60) return 0.14;
-    if (f <= 120) return lerp(0.14, 0.3, ease((f - 60) / 60));
-    return lerp(0.3, 0.08, ease((Math.min(f, 220) - 120) / 100));
+    if (f <= TIME.stimulus || f >= TIME.peak) return 0;
+    if (f <= TIME.threshold) return 0.6*ease((f-TIME.stimulus)/(TIME.threshold-TIME.stimulus));
+    return 0.6*(1-ease((f-TIME.threshold)/(TIME.peak-TIME.threshold)));
   }
 
   function updateStatus(){
@@ -480,13 +455,14 @@ function getVm(f){
     semanticLead(flowText,st.event);
     flowDesc.textContent = st.eventDesc;
     setCardsColor(st.color);
-    const bits = [stepModeToggle.checked ? (stepAwaitPlay ? 'Modo: etapas (pausado)' : 'Modo: etapas') : 'Modo: contínuo', isSub() ? 'Sub-limiar ON' : 'PA completo'];
+    const bits = [stepModeToggle.checked ? (stepAwaitPlay ? 'Modo: etapas (pausado)' : 'Modo: etapas') : 'Modo: contínuo', isLocal() ? 'Sem potencial de ação' : 'PA completo', 'Farmacologia: ' + ({normal:'Normal',ttx:'TTX',lido:'Lidocaína',tea:'TEA'})[pharmMode]];
     modeBadge.textContent = bits.join(' · ');
   }
 
   function renderStageMap(){
     const stages = getStages();
-    const currentStageIndex = stages.findIndex(s => frame >= s.start && frame <= s.end);
+    const currentStageIndex = stages.indexOf(getStage(frame));
+    stageTrack.style.gridTemplateColumns = `repeat(${matchMedia('(max-width:1180px)').matches ? 2 : stages.length},minmax(0,1fr))`;
     stageTrack.innerHTML = stages.map((s, idx) => {
       const active = idx === currentStageIndex;
       return `
@@ -581,7 +557,7 @@ function getVm(f){
     sctx.clearRect(0, 0, sceneCanvas.width, sceneCanvas.height);
 sceneCanvas.getContext('2d').fillStyle='#0d2030';sceneCanvas.getContext('2d').fillRect(0,0,sceneCanvas.width,sceneCanvas.height);
     const vm = getVm(frame), naOpen = getNaOpen(frame), kOpen = getKOpen(frame), ligOpen = getLigandOpen(frame), showLabels = labelsToggle.checked;
-    const stages = getStages(), currentStageIndex = stages.findIndex(s => frame >= s.start && frame <= s.end);
+    const stages = getStages(), currentStageIndex = stages.indexOf(getStage(frame));
     sctx.fillStyle = '#c4d8e6'; sctx.font = 'bold 21px Arial'; sctx.fillText('Membrana plasmática', 18, 30);
 
     const topMem = 226, bottomMem = 408, headR = 12, phosphoSpacing = 32;
@@ -630,7 +606,7 @@ sceneCanvas.getContext('2d').fillStyle='#0d2030';sceneCanvas.getContext('2d').fi
   function drawGraphBase(){
     gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
 graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fillRect(0,0,graphCanvas.width,graphCanvas.height);
-    const left=75, top=82, right=845, bottom=500, width=right-left, height=bottom-top;
+    const {left,top,right,bottom}=GRAPH, width=right-left, height=bottom-top;
 
     const bg = gctx.createLinearGradient(0, 12, 0, 638);
     bg.addColorStop(0, '#193344');
@@ -648,7 +624,7 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
     gctx.fillText('Gráfico do potencial de membrana', 460, 38);
     gctx.fillStyle = '#64748b';
     gctx.font = '15px Arial';
-    gctx.fillText('Traçado neuronal clássico', 460, 62);
+    gctx.fillText('Traçado didático · canais e curva sincronizados', 460, 62);
     gctx.textAlign = 'left';
 
     gctx.fillStyle = '#193344';
@@ -674,21 +650,22 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
     gctx.beginPath(); gctx.moveTo(left,top); gctx.lineTo(left,bottom); gctx.lineTo(right,bottom); gctx.stroke();
 
     gctx.fillStyle='#b45309'; gctx.font='bold 14px Arial'; gctx.fillText('Limiar', 854, pressureToY(-55)+5);
-    gctx.fillStyle='#475569'; gctx.font='bold 15px Arial'; gctx.textAlign = 'center'; gctx.fillText('Tempo', (left+right)/2, 548); gctx.textAlign = 'left';
+    gctx.fillStyle='#475569'; gctx.font='bold 15px Arial'; gctx.textAlign = 'center'; gctx.fillText('Tempo relativo (esquema didático)', (left+right)/2, 548); gctx.textAlign = 'left';
 
-    getStages().forEach((st)=>{
-      const sx=left+(st.start/TOTAL)*width, ex=left+(st.end/TOTAL)*width;
-      gctx.fillStyle = st.color+'20'; roundedBox(gctx, sx, 566, Math.max(18, ex-sx), 16, 7); gctx.fill();
-      if(labelsToggle.checked){ gctx.fillStyle=st.color; gctx.font='bold 13px Arial'; gctx.fillText(st.short, sx+2, 604); }
+    getStages().forEach((st, index)=>{
+      if (st.start === st.end) return; // The peak is an event, not a time band.
+      const sx=timeToX(st.start), ex=timeToX(st.end);
+      gctx.fillStyle=st.color+'30'; roundedBox(gctx,sx,566,ex-sx,16,5);gctx.fill();
+      if(labelsToggle.checked){gctx.fillStyle=st.color;gctx.font='bold 12px Arial';gctx.textAlign='center';gctx.fillText(st.short,(sx+ex)/2,index%2 ? 620 : 600);gctx.textAlign='left';}
     });
   }
 
   function drawCurve(){
 
-    const left=90, top=82, right=860, bottom=500, width=right-left, st = getStage(frame);
+    const {left,top,right,bottom}=GRAPH, width=right-left, st = getStage(frame);
     const currentStart = left + (st.start / TOTAL) * width, currentEnd = left + (st.end / TOTAL) * width;
     gctx.fillStyle = '#e0edf5' + '10';
-    roundedBox(gctx, currentStart, top+2, Math.max(16, currentEnd - currentStart), bottom - top - 4, 10);
+    roundedBox(gctx, currentStart, top+2, Math.max(1, currentEnd - currentStart), bottom - top - 4, 10);
     gctx.fill();
 
     gctx.save();
@@ -724,7 +701,13 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
     getPauseFrames().forEach(f=>{ const px = left + (f / TOTAL) * width; gctx.beginPath(); gctx.moveTo(px, top+4); gctx.lineTo(px, bottom - 4); gctx.stroke(); });
     gctx.setLineDash([]);
 
-    const px = left + (frame / TOTAL) * width;
+    if (!isLocal() && labelsToggle.checked) {
+      gctx.fillStyle='#f4a4be'; gctx.font='bold 13px Arial'; gctx.textAlign='center';
+      gctx.fillText('Pico +32 mV',timeToX(TIME.peak),pressureToY(32)-18);
+      gctx.fillStyle='#f59e0b';gctx.beginPath();gctx.arc(timeToX(TIME.threshold),pressureToY(-55),4,0,Math.PI*2);gctx.fill();
+      gctx.textAlign='left';
+    }
+    const px = timeToX(frame);
     const py = pressureToY(getVm(frame));
 
     MembraneArt.marker(gctx,px,py,9,'#e0edf5');
@@ -734,7 +717,7 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
     if (typeof updateModeBadge === 'function') updateModeBadge(); updateStatus(); renderStageMap(); drawScene(); drawGraphBase(); drawCurve(); }
   function pauseNow(markAwait){ running = false; if (raf) cancelAnimationFrame(raf); if (markAwait) stepAwaitPlay = true; render(); }
   function play(){ if (running) return; running = true; stepAwaitPlay = false; lastTs = 0; raf = requestAnimationFrame(loop); render(); }
-  function nextStage(){ const pauseFrames = getPauseFrames(); if (frame >= TOTAL) { if (loopToggle.checked) frame = 0; else { render(); return; } } const next = pauseFrames.find(p => p > frame); if (next == null) { frame = loopToggle.checked ? 0 : TOTAL; render(); return; } frame = next; stepAwaitPlay = true; render(); }
+  function nextStage(){ running = false; if (raf) cancelAnimationFrame(raf); const pauseFrames = getPauseFrames(); if (frame >= TOTAL) { if (loopToggle.checked) frame = 0; else { render(); return; } } const next = pauseFrames.find(p => p > frame); if (next == null) { frame = loopToggle.checked ? 0 : TOTAL; render(); return; } frame = next; stepAwaitPlay = true; render(); }
   function resetAll(){ running = false; if (raf) cancelAnimationFrame(raf); frame = 0; stepAwaitPlay = false; render(); }
 
   function loop(ts){
