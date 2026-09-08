@@ -47,7 +47,7 @@
       html=html.replaceAll('Prof. Mário César Nascimento, PhD ©','Prof. Dr. Mário César Nascimento ©');
       // Colors shared by SVG paths, labels and dynamically generated legends.
       html=html.replace(/<(style|script)\b[^>]*>[\s\S]*?<\/\1>/gi,block=>block.replace(/#e07a00|#1f78c1|#7a1f1f/gi,c=>({'#e07a00':'var(--series-neutrophil)','#1f78c1':'var(--series-rbc)','#7a1f1f':'var(--series-blast)'}[c.toLowerCase()])));
-      html+='<link rel="stylesheet" href="./aprofundamento-visual.css?v=20260908"><link rel="stylesheet" href="./sangue-visual.css?v=20260908">';
+      html+='<link rel="stylesheet" href="./aprofundamento-visual.css?v=20260908"><link rel="stylesheet" href="./sangue-visual.css?v=20260908-volume">';
       const icone='<link rel="icon" href="./brand/orientador.webp">';const tutorCss=icone+'<link rel="stylesheet" href="./tutor-widget.css?v=4">';html=/<\/head>/i.test(html)?html.replace(/<\/head>/i,tutorCss+'</head>'):tutorCss+html;const tutorTags='<script src="./tutor-ef-data.js?v=11"></scr'+'ipt><script src="./tutor-widget.js?v=16"></scr'+'ipt>';html=/<\/body>/i.test(html)?html.replace(/<\/body>/i,tutorTags+'</body>'):html+tutorTags;document.open();
       document.write(html);
       document.close();
@@ -59,3 +59,4 @@
     });
   </script></body>
 </html>
+
