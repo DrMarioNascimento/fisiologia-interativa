@@ -889,6 +889,7 @@ button.action{
 <div class="main-layout">
   <div class="panel">
     <div class="scene-heading"><h2>Animação integrada</h2><button data-expand="sceneCanvas">Tela cheia</button></div>
+    <p class="arm-view-note" style="margin:6px 0 10px;color:#b4cad8;font-size:13px;line-height:1.4">Braço direito da pessoa · à esquerda do observador · mão em vista palmar. Movimento representado em projeção esquemática.</p>
     <div class="canvas-wrap"><canvas id="sceneCanvas" width="980" height="840"></canvas></div>
 
 
@@ -2354,6 +2355,10 @@ function drawBodySilhouette(){
 }
 function drawHandSculpted(wrist,handEnd,angle,gripping){
   ctx.save();ctx.translate(wrist.x,wrist.y);ctx.rotate(angle);
+  // Right hand seen from the front, palm facing the observer.
+  // Reflect across the hand's longitudinal axis, before rotating with the forearm.
+  // At elbow extension the thumb is on the observer's left (the person's right).
+  ctx.scale(1,-1);
   ctx.lineCap='round';ctx.lineJoin='round';
   const skin=ctx.createLinearGradient(0,-12,0,12);
   skin.addColorStop(0,'#ffe2bb');skin.addColorStop(.35,'#e5b88e');skin.addColorStop(1,'#9b694d');
@@ -2375,7 +2380,11 @@ function drawHandSculpted(wrist,handEnd,angle,gripping){
   ctx.bezierCurveTo(16,-17,20,-18,25,-15);
   ctx.quadraticCurveTo(gripping?37:30,gripping?-9:-17,gripping?33:30,gripping?-5:-12);
   ctx.quadraticCurveTo(27,-9,23,-9);ctx.lineTo(19,-3);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.beginPath();ctx.moveTo(14,0);ctx.quadraticCurveTo(20,4,25,2);ctx.strokeStyle='#865b454a';ctx.stroke();
+  // Palmar creases distinguish this view from the back of the opposite hand.
+  ctx.strokeStyle='#865b4570';ctx.lineWidth=.7;
+  ctx.beginPath();ctx.moveTo(12,-5);ctx.quadraticCurveTo(20,-1,18,6);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(22,-5);ctx.quadraticCurveTo(19,0,24,6);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(6,-4);ctx.lineTo(6,4);ctx.stroke();
   ctx.restore();
 }
 function drawLimbSculpted(x1,y1,x2,y2,width){
@@ -2499,7 +2508,7 @@ function drawIntegratedAnimation(s){
     x:elbow.x + foreLen*Math.cos(foreAngle),
     y:elbow.y + foreLen*Math.sin(foreAngle)
   };
-  const handAngle = foreAngle - (visualAngle/150) * (Math.PI/10);
+  const handAngle = foreAngle; // Neutral wrist; elbow flexion does not rotate the forearm about its axis.
   const handEnd = {
     x:wrist.x + handLen*Math.cos(handAngle),
     y:wrist.y + handLen*Math.sin(handAngle)
