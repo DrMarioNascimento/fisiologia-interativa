@@ -1,0 +1,97 @@
+/* Sangue: apresentação. As equações permanecem no pacote original. */
+body.sangue-aprovado{--bone:#102733;--bone-deep:#0b202b;--ink:#dcebf3;--muted:#aec6d5;--card:#152e3a;--border:#365563;--blue:#70bcff;--blue-deep:#70bcff;--rust:#ffadb7;--rust-deep:#ffadb7;--teal:#93cfab;--teal-deep:#93cfab;--purple:#c3a4ed;--purple-deep:#c3a4ed;--amber:#f2d77c;--font-body:Inter,"Segoe UI",sans-serif;--font-display:Inter,"Segoe UI",sans-serif;--series-neutrophil:#ffb45f;--series-rbc:#ffadb7;--series-blast:#d7a2e9;--var-pao2:#84abff;--var-sao2:#e2b6fa;--var-cao2:#f0a7aa;--var-vo2:#e7a3d0;--var-cvo2:#b4bada;--var-svo2:#a69cf1;--var-extr:#65d5cc;--var-lactate:#ff9a74;--var-hb:#70bcff;--var-ht:#93cfab;--var-visc:#e6cf8c;--var-dc:#ff8990;--var-pam:#f8c16b;--var-pad:#c5afd8;--var-pms:#9bc7c2;--var-epo:#ef9fc5;--var-retic:#eeb784;padding:0 14px!important}
+body.sangue-aprovado :is(.mobile-topbar,.scenario-panel,.current-scenario-card,.card,.epo-mini,.interpret-card,.modal-box,.formula-box){background:linear-gradient(140deg,#1b3645,#112833)!important;color:#dcebf3!important;border:1px solid #365563!important;border-radius:18px!important;box-shadow:inset 0 2px 1px #ffffff13,0 4px 8px #0004!important}
+body.sangue-aprovado :is(.mobile-topbar,.scenario-panel,.wrap,.sim-signature){max-width:1452px!important;margin-left:auto!important;margin-right:auto!important;width:100%!important;box-sizing:border-box}
+body.sangue-aprovado :is(.mobile-topbar,.scenario-panel){padding:12px 16px!important;margin-top:12px!important;margin-bottom:14px!important}
+body.sangue-aprovado .mobile-topbar{position:relative!important;top:auto!important;gap:16px!important}
+body.sangue-aprovado .wrap{padding:0!important;gap:16px!important}
+body.sangue-aprovado :is(.brand-copy h2,.brand-copy::before,.scenario-panel-title,.current-scenario-card strong,.card h3,.stage-name,.interpret-card summary,.interpret-subtitle,.epo-mini h4,.hgb-slider-row .top,.topbar-head h2){color:#dcebf3!important;font-family:var(--font-body)!important}
+body.sangue-aprovado :is(.brand-sub,.current-scenario-card small,.subtle,.stage-note,.scroll-hint,.timeline-legend,.chart-legend,.interpret-body,.interpret-all-body,.model-limit-note,.vitals-legend,.gauge-scale,.epo-mini p,.sub-label){color:#aec6d5!important}
+body.sangue-aprovado :is(.card p,.card li,.card td,.card th){color:inherit}
+body.sangue-aprovado .top-actions{background:transparent!important;border:0!important;box-shadow:none!important;gap:8px!important;overflow:visible!important}
+body.sangue-aprovado .top-actions button{font-size:12px!important;min-width:70px!important}
+body.sangue-aprovado .stimulus-row{gap:9px!important;display:flex!important;flex-wrap:wrap!important}
+body.sangue-aprovado .stimulus-row button{flex:1 1 110px!important;font-size:12px!important}
+body.sangue-aprovado .mobile-tabnav{gap:9px!important;background:transparent!important;border:0!important;box-shadow:none!important}
+body.sangue-aprovado .mobile-tabnav button{font-size:12px!important;padding:12px 7px!important;min-width:0!important}
+body.sangue-aprovado .mobile-tabnav button[data-tabnav=eritroide]{border-left:5px solid var(--rust)!important}
+body.sangue-aprovado .mobile-tabnav button[data-tabnav=granulocitica]{border-left:5px solid var(--blue)!important}
+body.sangue-aprovado .mobile-tabnav button[data-tabnav=megacariocitica]{border-left:5px solid var(--purple)!important}
+body.sangue-aprovado .mobile-tabnav button[data-tabnav=linfoide]{border-left:5px solid var(--teal)!important}
+body.sangue-aprovado .card{padding:16px 18px!important;margin:0!important;min-width:0!important}
+body.sangue-aprovado .card::after{display:none!important}
+body.sangue-aprovado .top-clinical-stack-v25{background:transparent!important;border:0!important;box-shadow:none!important;gap:16px!important}
+body.sangue-aprovado #physioEngineCard{padding:16px 18px!important;background:linear-gradient(140deg,#183441,#112733)!important}
+body.sangue-aprovado #physioEngineCard .monitor-section{padding:8px 0!important;gap:9px!important}
+body.sangue-aprovado #physioEngineCard .monitor-section-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(112px,1fr))!important;gap:12px!important}
+body.sangue-aprovado #physioEngineCard .monitor-section-title{font-size:11px!important;color:#aec6d5!important;letter-spacing:.07em!important;margin:0 0 8px!important}
+body.sangue-aprovado :is(.vital-chip,.monitor-chip,.hgb-readout,.hemo-readout,.epo-readout){padding:12px 12px 13px 16px!important;border-radius:17px!important;border:1px solid #476576;min-height:0!important;text-align:left!important;min-width:0}
+body.sangue-aprovado #physioEngineCard .monitor-chip{padding:12px 10px 13px 15px!important;min-height:78px!important}
+body.sangue-aprovado :is(.vital-chip,.monitor-chip,.hgb-readout,.hemo-readout,.epo-readout) :is(.vlabel,.lbl){display:block!important;font-size:11px!important;line-height:1.3!important;color:var(--var-color,#aec6d5)!important;letter-spacing:.02em!important;margin-bottom:5px!important;white-space:normal!important}
+body.sangue-aprovado :is(.vital-chip,.monitor-chip,.hgb-readout,.hemo-readout,.epo-readout) :is(.vvalue,.val){display:inline!important;font-size:22px!important;line-height:1.2!important;font-family:var(--font-body)!important;color:var(--var-color,#dcebf3)!important;text-shadow:0 2px 2px #0006!important;animation:none!important}
+body.sangue-aprovado :is(.vital-chip,.monitor-chip) .vunit{display:inline!important;margin-left:5px!important;font-size:11px!important;color:#aec6d5!important;white-space:nowrap}
+body.sangue-aprovado .monitor-chip.warn{outline:1px dashed #ffb18c;outline-offset:2px}
+body.sangue-aprovado #chipFC{--var-color:#9ce4ed}body.sangue-aprovado #chipSpo2{--var-color:#e2b6fa}body.sangue-aprovado #chipPA{--var-color:#84abff}
+body.sangue-aprovado .hgb-slider-row:has(#hgbSlider){--ui-accent:var(--var-hb)}
+body.sangue-aprovado .hgb-slider-row:has(#altSlider){--ui-accent:#b1d4f4}body.sangue-aprovado .hgb-slider-row:has(#exSlider){--ui-accent:#ffb45f}body.sangue-aprovado .hgb-slider-row:has(#rekSlider){--ui-accent:#93cfab}
+body.sangue-aprovado #physioEngineCard .monitor-controls-v10 .hgb-slider-row .top{font-size:12px!important;line-height:1.4!important;white-space:normal!important}
+body.sangue-aprovado #physioEngineCard .monitor-controls-v10 .hgb-slider-row output,body.sangue-aprovado .hgb-slider-row .top output{color:var(--ui-accent)!important;font-size:13px!important}
+body.sangue-aprovado .hgb-slider-row .top span{color:var(--ui-accent)!important}
+body.sangue-aprovado :is(#comparativeChart,#epoChart,#hemoChart,#anemiaChart,[id^=kchart-]){background:#0e2633!important;border:1px solid #34515f!important;border-radius:16px!important;box-shadow:inset 0 2px 5px #0006!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;padding:10px!important;aspect-ratio:auto!important}
+body.sangue-aprovado .sim-chart-3d text{stroke:#0e2633!important;stroke-width:1px!important}
+body.sangue-aprovado .chart-legend{font-size:11px!important;gap:8px!important;line-height:1.4!important}
+body.sangue-aprovado :is(.cascade-card-v25,.timeline-card-v25,.kinetics-card-v25,#comparativeCard,#globalEpoCard,#hemoEngineCard,#anemiaCard){height:auto!important;min-height:0!important;max-height:none!important}
+body.sangue-aprovado .cascade-card-v25 .stage-table{height:auto!important;gap:10px!important}
+body.sangue-aprovado .stage-row{min-height:48px!important;padding:3px 0!important}
+body.sangue-aprovado .stage-name{font-size:14px!important}body.sangue-aprovado .stage-note{font-size:12px!important;line-height:1.4!important}
+body.sangue-aprovado .timeline-bar{margin:12px 0!important}body.sangue-aprovado .timeline-seg{color:#081d27!important;font-weight:800!important}
+body.sangue-aprovado :is(.modal-box,.interpret-all-body,.formula-box,.stim-note-block,details[open],.status-badge){background:#142f3c!important;color:#dcebf3!important}
+body.sangue-aprovado .sim-signature{background:transparent!important;border-top:1px solid #365563!important;color:#aec6d5!important;font:12px/1.5 var(--font-body)!important;padding:16px 0!important;margin-top:18px!important}
+body.sangue-aprovado .vital-gauge{background:#2e4b5a!important}body.sangue-aprovado .vital-gauge .needle{background:var(--var-color)!important}
+@media(max-width:1180px){body.sangue-aprovado .wrap{display:flex!important;flex-direction:column!important}body.sangue-aprovado .wrap>*,body.sangue-aprovado .top-clinical-stack-v25{width:100%!important}body.sangue-aprovado .wrap>section[data-tab].tab-active{display:flex!important;flex-direction:column!important;gap:16px!important}body.sangue-aprovado .top-clinical-stack-v25{display:flex!important;flex-direction:column!important}body.sangue-aprovado .mobile-tabnav{position:relative!important;top:auto!important}body.sangue-aprovado .mobile-topbar{flex-wrap:wrap!important}body.sangue-aprovado .current-scenario-card{flex:1!important}body.sangue-aprovado .top-actions{flex:1 1 100%!important;display:flex!important;flex-wrap:wrap!important}body.sangue-aprovado .top-actions button{flex:1 1 70px!important}body.sangue-aprovado .lineage-lower{display:grid!important;gap:12px!important}}
+@media(max-width:600px){body.sangue-aprovado{padding:0 10px!important}body.sangue-aprovado .mobile-topbar,body.sangue-aprovado .scenario-panel{padding:12px!important}body.sangue-aprovado .card,body.sangue-aprovado #physioEngineCard{padding:14px!important}body.sangue-aprovado .mobile-tabnav{grid-template-columns:repeat(2,minmax(0,1fr))!important}body.sangue-aprovado .vitals-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}body.sangue-aprovado #physioEngineCard .monitor-section-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}body.sangue-aprovado #physioEngineCard .monitor-controls-v10{display:grid!important;grid-template-columns:1fr!important;gap:8px!important}body.sangue-aprovado .brand-block{flex:1 1 100%!important}body.sangue-aprovado .stage-row{gap:8px!important}body.sangue-aprovado .lineage-lower{grid-template-columns:1fr!important}}
+body.sangue-aprovado svg text[fill="#53657a"]{fill:#aec6d5!important}
+body.sangue-aprovado svg text[fill="#334e68"]{fill:#aec6d5!important}
+body.sangue-aprovado svg text[fill="#8a8272"]{fill:#aec6d5!important}
+body.sangue-aprovado svg text[fill="#7d93ad"]{fill:#aec6d5!important}
+body.sangue-aprovado svg text[fill="#6b6558"]{fill:#aec6d5!important}
+body.sangue-aprovado svg line[stroke="#e4d9c5"]{stroke:#34515f!important}
+body.sangue-aprovado svg line[stroke="#dbe4ee"]{stroke:#34515f!important}
+body.sangue-aprovado svg line[stroke="#edf2f7"]{stroke:#34515f!important}
+body.sangue-aprovado svg line[stroke="#b9ab8c"]{stroke:#34515f!important}
+body.sangue-aprovado #hgbReadoutDC{--var-color:var(--var-dc)}
+body.sangue-aprovado #hgbReadoutLac{--var-color:var(--var-lactate)}
+body.sangue-aprovado #hgbReadoutExtr{--var-color:var(--var-extr)}
+
+body.sangue-aprovado #physioEngineCard .monitor-section .monitor-section-grid{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))!important;gap:12px!important}
+body.sangue-aprovado #physioEngineCard .monitor-chip .vlabel{font-size:11px!important;color:var(--var-color)!important;line-height:1.3!important;text-align:left!important}
+body.sangue-aprovado #physioEngineCard .monitor-chip .vvalue{display:inline!important;font-size:22px!important;text-align:left!important;color:var(--var-color)!important;text-shadow:0 2px 2px #0006!important}
+body.sangue-aprovado #physioEngineCard .monitor-chip .vunit{display:inline!important;font-size:11px!important;color:#aec6d5!important}
+body.sangue-aprovado :is(#interpretationRow>details,#interpretAll,#interpretAll>summary){background:linear-gradient(140deg,#1b3645,#112833)!important;color:#dcebf3!important;border:1px solid #365563!important;border-radius:18px!important;box-shadow:inset 0 2px 1px #ffffff13,0 4px 8px #0004!important;padding:14px!important}
+body.sangue-aprovado #interpretationRow summary{color:#dcebf3!important;font-size:14px!important}
+body.sangue-aprovado .stage-dur{color:#09202c!important;font-weight:800!important}
+body.sangue-aprovado .stage-dur.anchor{color:#dcebf3!important}
+body.sangue-aprovado button:is([aria-pressed="true"],.active){outline:2px solid #65d5cc!important;outline-offset:2px!important;background:linear-gradient(#518f82,#28685d 48%,#153c37)!important}
+body.sangue-aprovado .brand-copy::before{color:#aec6d5!important}
+body.sangue-aprovado :is(#interpretAll h4,#interpretAll summary){color:#dcebf3!important}
+body.sangue-aprovado :is(#interpretAll details,#interpretAll .model-limit-note,#interpretAll .formula-box){background:#102a36!important;color:#aec6d5!important;border-color:#365563!important}
+body.sangue-aprovado :is(details,summary,.modal-tag,.cd-tag,.modal-close,.model-limit-note,[style*="#fdf6e8"]){background:#142f3c!important;border-color:#365563!important;box-shadow:none!important}
+body.sangue-aprovado :is(.modal-desc,.modal-box h3,.modal-box summary){color:#dcebf3!important}
+body.sangue-aprovado .current-scenario-card{display:block!important}
+body.sangue-aprovado #vitalsCard{height:auto!important;min-height:0!important;max-height:none!important}
+body.sangue-aprovado .wrap>#topClinicalStackV25{height:auto!important;min-height:0!important;max-height:none!important;align-self:start!important}
+body.sangue-aprovado #topClinicalStackV25>#physioEngineCard{display:block!important;flex:none!important;height:auto!important;min-height:0!important;max-height:none!important;overflow:visible!important}
+body.sangue-aprovado #physioEngineCard>.monitor-section{display:block!important;flex:none!important;height:auto!important;min-height:0!important;max-height:none!important;margin:10px 0!important;padding:5px 0!important}
+body.sangue-aprovado #physioEngineCard .monitor-chip{display:block!important;text-align:left!important}
+body.sangue-aprovado #physioEngineCard .monitor-chip .vlabel{min-height:0!important}
+@media(max-width:1180px){body.sangue-aprovado .wrap>.top-clinical-stack-v25{order:0!important}body.sangue-aprovado .wrap>.mobile-tabnav{order:1!important}body.sangue-aprovado .wrap>section[data-tab].tab-active{order:2!important}body.sangue-aprovado .wrap>#comparativeCard{order:3!important}body.sangue-aprovado .wrap>#globalEpoCard{order:4!important}body.sangue-aprovado .wrap>#hemoEngineCard{order:5!important}body.sangue-aprovado .wrap>#anemiaCard{order:6!important}body.sangue-aprovado .wrap>#interpretationRow{order:7!important}}
+@media(max-width:600px){body.sangue-aprovado #physioEngineCard .monitor-section .monitor-section-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(body.sangue-aprovado .vital-chip,body.sangue-aprovado .monitor-chip,body.sangue-aprovado .hemo-readout,body.sangue-aprovado .hgb-readout,body.sangue-aprovado .epo-readout):not(#cards-reference-reserved){--reference-accent:var(--var-color,var(--card-accent,#aec6d5));position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(body.sangue-aprovado .vital-chip,body.sangue-aprovado .monitor-chip,body.sangue-aprovado .hemo-readout,body.sangue-aprovado .hgb-readout,body.sangue-aprovado .epo-readout):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(body.sangue-aprovado .vital-chip,body.sangue-aprovado .monitor-chip,body.sangue-aprovado .hemo-readout,body.sangue-aprovado .hgb-readout,body.sangue-aprovado .epo-readout):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(body.sangue-aprovado .vital-chip,body.sangue-aprovado .monitor-chip,body.sangue-aprovado .hemo-readout,body.sangue-aprovado .hgb-readout,body.sangue-aprovado .epo-readout):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
