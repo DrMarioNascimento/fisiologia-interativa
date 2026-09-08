@@ -1,0 +1,14 @@
+/* Acabamento compartilhado dos catálogos EF e Fisioterapia. */
+#moduleGrid .module-grid{align-items:stretch}
+#moduleGrid .module-card{height:100%;box-sizing:border-box}
+#moduleGrid .module-card h3{display:block;overflow:visible;-webkit-line-clamp:unset;overflow-wrap:anywhere;line-height:1.2}
+#moduleGrid .module-card > .open-link{margin-top:auto;min-height:44px;display:inline-flex;align-items:center}
+#moduleGrid :is(.deep-actions,.sangue-actions,.neonatal-actions){flex-wrap:wrap!important;gap:4px 16px!important;min-height:44px;align-content:center;margin-top:auto!important}
+#moduleGrid :is(.deep-actions,.sangue-actions,.neonatal-actions) a{min-height:32px!important;align-items:center}
+#moduleGrid .module-card:hover{transform:none}
+#moduleGrid .module-card:focus-visible,#moduleGrid .module-card a:focus-visible{outline:3px solid var(--group-color,var(--petrol-800));outline-offset:3px}
+@media(hover:hover) and (pointer:fine){#moduleGrid .module-card:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(8,73,83,.14)}}
+@media(max-width:540px){#moduleGrid .module-card p{display:block;overflow:visible;-webkit-line-clamp:unset}#moduleGrid :is(.deep-actions,.sangue-actions,.neonatal-actions) a{min-height:44px!important}}
+@media(prefers-reduced-motion:reduce){#moduleGrid .module-card{transition:none}#moduleGrid .module-card:hover{transform:none}}
+@media(max-width:540px){.nav-links{min-width:0;max-width:100%;flex-wrap:wrap;justify-content:flex-end}.nav-links>a.btn{max-width:100%;box-sizing:border-box}}
+@media(max-width:540px){.section-heading{grid-template-columns:minmax(0,1fr)}.section-heading>div{min-width:0}.section-heading h2{overflow-wrap:anywhere}}
