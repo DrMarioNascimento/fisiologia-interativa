@@ -346,7 +346,30 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
 .graph-metric{background:#142b3b;border-color:#385264;color:var(--gcolor)}
 .sarcomere-legend span{font-weight:700}
 .legend-text [style*="--c-"]{font-weight:700}
-</style></head>
+</style>
+<style id="playback-button-depth">
+#btnStart{--button-top:#73b8ff;--button-mid:#337fd0;--button-bottom:#174c83;--button-rim:#a4d2ff}
+#btnPause{--button-top:#fbd56d;--button-mid:#a87113;--button-bottom:#684408;--button-rim:#ffe3a1}
+#btnStep{--button-top:#c5a6eb;--button-mid:#8255ad;--button-bottom:#4c2e70;--button-rim:#dfc4ff}
+#btnReset{--button-top:#9bafc7;--button-mid:#536b86;--button-bottom:#2d4059;--button-rim:#c1d1e2}
+:is(#btnStart,#btnPause,#btnStep,#btnReset){
+  border:1px solid var(--button-rim)!important;
+  border-bottom-color:var(--button-bottom)!important;
+  color:#fff;
+  background:linear-gradient(165deg,var(--button-top),var(--button-mid) 48%,var(--button-bottom));
+  text-shadow:0 1px 2px #0009;
+  box-shadow:inset 0 2px 1px #ffffff80,inset 1px 0 1px #ffffff30,inset 0 -3px 2px #0007,0 5px 0 #06121e,0 8px 12px #0007;
+}
+:is(#btnStart,#btnPause,#btnStep,#btnReset):hover{
+  transform:translateY(-1px);filter:brightness(1.08);
+  box-shadow:inset 0 2px 1px #ffffff90,inset 1px 0 1px #ffffff30,inset 0 -3px 2px #0007,0 6px 0 #06121e,0 10px 14px #0008;
+}
+:is(#btnStart,#btnPause,#btnStep,#btnReset):active{
+  transform:translateY(4px);filter:brightness(.97);
+  box-shadow:inset 0 2px 4px #0006,inset 0 1px 1px #ffffff40,0 1px 0 #06121e,0 3px 5px #0006;
+}
+</style>
+</head>
 <body>
   <h1>Simulador Interativo da Contração Muscular</h1>
   <p class="subtitle">Acoplamento excitação–contração, Ca²⁺, ATP e ciclo completo das pontes cruzadas com foco ampliado no sarcômero e na zona H.</p>
