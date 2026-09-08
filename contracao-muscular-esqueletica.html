@@ -755,7 +755,7 @@ function getContraction(f){
     const bracket=(x1,x2,y,label,color)=>{line(x1,y,x2,y,color,2);line(x1,y-4,x1,y+4,color,2);line(x2,y-4,x2,y+4,color,2);ctx.font='12px Segoe UI';text(label,(x1+x2)/2-ctx.measureText(label).width/2,y+18,color,12);};
     bracket(zL,240,229,'I',STD_COLORS.actina);bracket(240,680,229,'Banda A · comprimento constante',STD_COLORS.miosina);bracket(680,zR,229,'I',STD_COLORS.actina);
     if(labelsToggle.checked){text('Z',zL-5,76,'#b9a2ee',12);text('M',mid-5,76,'#90a7bb',12);text('Z',zR-5,76,'#b9a2ee',12);}
-    text('DETALHE MOLECULAR · LADO ESQUERDO',24,312,'#dcebf5',18);
+    text('DETALHE MOLECULAR',24,312,'#dcebf5',18);
     box(20,328,880,265);
     // Material coordinates: the same actin site moves with the thin filament during the stroke.
     const recovery=rigorMode()?0:clamp((m.localFrame-550)/90,0,1);
