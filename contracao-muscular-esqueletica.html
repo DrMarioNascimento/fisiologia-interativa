@@ -463,6 +463,8 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
 
   <div class="legend">
     <div class="legend-text">
+      <p><b>Leitura do gráfico:</b> as linhas são construídas durante a reprodução. O Ca²⁺ sobe antes da força e retorna ao seu nível basal; a força cai com a redução das pontes ligadas. Cada série usa sua própria referência relativa: 100 não significa a mesma grandeza física. O encurtamento mostrado na animação é uma variável separada da força.</p>
+      <p>Modelo esquemático em tempo relativo, com etapas ampliadas para ensino, sem calibração experimental. As etapas moleculares se sobrepõem em um músculo real; o desenho destaca uma sequência representativa. Nos cenários de doença, as curvas representam tendências simplificadas. No rigor, a ausência de ATP também compromete a remoção do Ca²⁺.</p>
       <b>Repouso:</b> <span style="color:var(--c-tropomiosina)">tropomiosina</span> cobre os sítios da <span style="color:var(--c-actina)">actina</span>. 
       <b>Liberação de <span style="color:var(--c-ca)">Ca²⁺</span>:</b> o retículo sarcoplasmático aumenta o <span style="color:var(--c-ca)">Ca²⁺</span> citosólico. 
       <b><span style="color:var(--c-troponina)">Troponina</span>:</b> o <span style="color:var(--c-ca)">Ca²⁺</span> liga-se à <span style="color:var(--c-troponina)">troponina</span> e desloca a <span style="color:var(--c-tropomiosina)">tropomiosina</span>. 
@@ -523,10 +525,10 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
     {name:"Acoplamento elétrico",start:81,end:140,color:"#64748b",timeline:1,desc:"O potencial de ação percorre sarcolema e túbulos T.",ca:"Ca²⁺ ainda baixo · ATP disponível",caDesc:"O estímulo elétrico precede a resposta mecânica.",event:"Ativação dos túbulos T",eventDesc:"A despolarização chega ao sistema tubular e prepara a liberação de Ca²⁺."},
     {name:"Liberação de Ca²⁺",start:141,end:220,color:STD_COLORS.calcio,timeline:2,desc:"O retículo sarcoplasmático libera Ca²⁺ para o sarcoplasma.",ca:"Ca²⁺ em ascensão · ATP disponível",caDesc:"A troponina começa a ser ocupada pelo cálcio.",event:"Aumento do Ca²⁺ citosólico",eventDesc:"O Ca²⁺ aproxima o sistema regulatório do estado ativo."},
     {name:"Troponina ativada",start:221,end:300,color:STD_COLORS.troponina,timeline:3,desc:"Ca²⁺ liga-se à troponina e desloca a tropomiosina.",ca:"Ca²⁺ alto · ATP disponível",caDesc:"Os sítios ativos da actina tornam-se acessíveis.",event:"Desbloqueio da actina",eventDesc:"A barreira estérica é removida e a miosina pode ligar-se."},
-    {name:"Ponte cruzada",start:301,end:380,color:"#14b8a6",timeline:4,desc:"As cabeças de miosina ligam-se à actina.",ca:"Ca²⁺ alto · ATP disponível",caDesc:"A ponte actina-miosina está formada.",event:"Ligação actina-miosina",eventDesc:"Início efetivo do ciclo das pontes cruzadas."},
-    {name:"Golpe de força",start:381,end:470,color:STD_COLORS.miosina,timeline:5,desc:"A miosina gira e puxa o filamento fino.",ca:"Ca²⁺ alto · ATP sendo utilizado",caDesc:"A energia química é convertida em trabalho mecânico.",event:"Deslizamento do sarcômero",eventDesc:"Os discos Z aproximam-se e a banda I diminui."},
+    {name:"Ponte cruzada",start:301,end:380,color:"#14b8a6",timeline:4,desc:"As cabeças de miosina ligam-se à actina.",ca:"Ca²⁺ em queda · ATP disponível",caDesc:"A resposta mecânica persiste enquanto o Ca²⁺ livre diminui.",event:"Ligação actina-miosina",eventDesc:"Início efetivo do ciclo das pontes cruzadas."},
+    {name:"Golpe de força",start:381,end:470,color:STD_COLORS.miosina,timeline:5,desc:"A miosina gira e puxa o filamento fino.",ca:"Ca²⁺ em queda · ATP sendo utilizado",caDesc:"A energia química é convertida em trabalho mecânico.",event:"Deslizamento do sarcômero",eventDesc:"Os discos Z aproximam-se e a banda I diminui."},
     {name:"Ligação do ATP",start:471,end:550,color:STD_COLORS.atp,timeline:6,desc:"O ATP liga-se à miosina e dissocia a ponte cruzada.",ca:"Ca²⁺ em queda · ATP necessário",caDesc:"Sem ATP, a dissociação da ponte não ocorre adequadamente.",event:"Separação actina-miosina",eventDesc:"A miosina se desprende da actina pela ligação do ATP."},
-    {name:"Recarga e relaxamento",start:551,end:900,color:STD_COLORS.actina,timeline:6,desc:"A hidrólise do ATP recarrega a cabeça de miosina e o Ca²⁺ retorna ao retículo.",ca:"Ca²⁺ baixo novamente · ATP disponível",caDesc:"O sarcômero retorna progressivamente ao estado basal.",event:"Pronto para novo ciclo",eventDesc:"A cabeça de miosina fica recarregada e a tropomiosina volta a cobrir a actina."}
+    {name:"Recarga e relaxamento",start:551,end:900,color:STD_COLORS.actina,timeline:6,desc:"A hidrólise do ATP recarrega a cabeça de miosina e o Ca²⁺ retorna ao retículo.",ca:"Ca²⁺ retornando ao basal · ATP disponível",caDesc:"O sarcômero retorna progressivamente ao estado basal.",event:"Pronto para novo ciclo",eventDesc:"A cabeça de miosina fica recarregada e a tropomiosina volta a cobrir a actina."}
   ];
 
   let frame = 0, running = false, lastTs = 0, raf = null, pulse = 0, stepAwaitPlay = false;
@@ -534,7 +536,7 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
   function getSpeed(){ return parseFloat(speedRange.value); }
   function clamp(v,a,b){ return Math.max(a, Math.min(b,v)); }
   function lerp(a,b,t){ return a + (b-a)*t; }
-  function getStage(f){ return stages.find(s => f >= s.start && f <= s.end) || stages[0]; }
+  function getStage(f){ return stages.find(s => f <= s.end) || stages[stages.length-1]; }
   function rigorMode(){ return pathologyState === 'rigor'; }
   function caBlockMode(){ return pathologyState === 'cablock'; }
   function myastheniaMode(){ return pathologyState === 'myasthenia'; }
@@ -542,67 +544,39 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
   function tetanoMode(){ return pathologyState === 'tetano'; }
   function curareMode(){ return pathologyState === 'curare'; }
 
+  // Schematic timing, in animation units. These are not fitted physiological measurements.
+  const CALCIUM_BASELINE = 10;
+  const smooth = t => { t=clamp(t,0,1); return t*t*(3-2*t); };
   function getCalcium(f){
-    if (caBlockMode() || curareMode()) return 2;
-    if (botulismoMode()) return 4;
-    let base;
-    if (f <= 140) base = 10;
-    else if (f <= 220) base = lerp(10,72,(f-140)/80);
-    else if (f <= 300) base = lerp(72,96,(f-220)/80);
-    else if (f <= 470) base = 96;
-    else if (f <= 550) base = lerp(96,38,(f-470)/80);
-    else base = lerp(38,12,(f-550)/90);
-    if (myastheniaMode()) base *= 0.45;
-    if (tetanoMode()) {
-      if (f < 180) base = Math.max(base, lerp(18, 88, clamp((f-70)/110,0,1)));
-      else base = Math.max(base, 88);
-    }
-    return clamp(base,0,100);
+    if (caBlockMode() || curareMode() || botulismoMode()) return CALCIUM_BASELINE;
+    const rise=smooth((f-140)/120);
+    const recovery=smooth((f-260)/320);
+    const amplitude=myastheniaMode()?0.45:1;
+    if (tetanoMode() || rigorMode()) return CALCIUM_BASELINE+86*rise;
+    return CALCIUM_BASELINE+86*amplitude*rise*(1-recovery);
   }
 
   function getCrossBridges(f){
     if (caBlockMode() || curareMode() || botulismoMode()) return 0;
-    let base;
-    if (f <= 300) base = 0;
-    else if (f <= 380) base = lerp(0,52,(f-300)/80);
-    else if (f <= 470) base = lerp(52,100,(f-380)/90);
-    else if (f <= 550) base = rigorMode() ? 100 : lerp(100,24,(f-470)/80);
-    else base = rigorMode() ? 100 : lerp(24,0,(f-550)/90);
-    if (myastheniaMode()) base *= 0.30;
-    if (tetanoMode()) {
-      if (f <= 260) base = lerp(8, 72, clamp((f-90)/170,0,1));
-      else base = 92;
-    }
-    return clamp(base,0,100);
+    const recruitment=smooth((f-300)/170);
+    const detachment=rigorMode()||tetanoMode()?0:smooth((f-470)/170);
+    return 100*recruitment*(1-detachment)*(myastheniaMode()?0.30:1);
   }
 
-  
-function getContraction(f){
-    // Banda I mais lenta: alongamos a janela de deslocamento da actina
-    if (caBlockMode() || curareMode() || botulismoMode()) return 0;
-    let base;
-    if (rigorMode()) {
-      if (f <= 320) base = 0;
-      else if (f <= 430) base = lerp(0, 16, (f - 320) / 110);
-      else if (f <= 520) base = lerp(16, 30, (f - 430) / 90);
-      else base = 30;
-      return clamp(base,0,100);
-    }
-    if (tetanoMode()) {
-      if (f <= 180) base = lerp(0, 54, clamp((f - 70) / 110, 0, 1));
-      else if (f <= 340) base = lerp(54, 96, (f - 180) / 160);
-      else base = 96;
-      return clamp(base,0,100);
-    }
-    if(f<=381)base=0;
-    else if(f<=470)base=lerp(0,100,(f-381)/89);
-    else if(f<=550)base=100;
-    else if(f<=640)base=lerp(100,0,(f-550)/90);
-    else base=0;
-    if (myastheniaMode()) base *= 0.28;
-    return clamp(base,0,100);
-}
+  function getForce(f){
+    // Force depends on attached bridges and their progression into force-bearing states.
+    // It is not the percentage shortening used to draw the sarcomere.
+    const forceBearing=smooth((f-381)/89);
+    return getCrossBridges(f)*forceBearing;
+  }
 
+function getShortening(f){
+    // Illustrative displacement under an unspecified load, not a force measurement.
+    if (caBlockMode() || curareMode() || botulismoMode()) return 0;
+    const extent=rigorMode()?30:tetanoMode()?96:myastheniaMode()?28:100;
+    const recovery=rigorMode()||tetanoMode()?0:smooth((f-550)/140);
+    return extent*smooth((f-400)/150)*(1-recovery);
+  }
 
   function getIBandWidth(contraction){ return lerp(142,18,contraction/100); }
   function getABandWidth(){ return 220; }
@@ -640,7 +614,7 @@ function getContraction(f){
   function updateStatus(){
     syncPathology();
     const st = getStage(frame);
-    const contraction = getContraction(frame);
+    const contraction = getForce(frame);
     const calcium = getCalcium(frame);
     const bridges = getCrossBridges(frame);
 
@@ -676,7 +650,7 @@ function getContraction(f){
       eventDescription = 'A fibra não recebe comando suficiente para formar pontes cruzadas e gerar força.';
     } else if (tetanoMode()) {
       phaseDescription = 'A toxina tetânica reduz a inibição neural e mantém descarga motora excessiva, favorecendo contração sustentada.';
-      caLine = 'Ca²⁺ alto sustentado · ATP consumido continuamente';
+      caLine = `Ca²⁺ ${calcium < 30 ? 'basal' : 'em elevação ou sustentado'} · ATP disponível`;
       caDescription = 'A ativação persistente mantém o sarcômero em estado contrátil, com relaxamento prejudicado.';
       eventName = 'Espasmo / contração sustentada';
       eventDescription = 'Pontes cruzadas e força permanecem elevadas, simulando rigidez espástica.';
@@ -737,7 +711,7 @@ function getContraction(f){
   function molecularState(f){
     if(tetanoMode()&&f>301)f=301+(f-301)%249;
     const blocked=caBlockMode()||curareMode()||botulismoMode();
-    const activation=blocked?0:clamp((getCalcium(f)-18)/65,0,1);
+    const activation=blocked?0:clamp((getCalcium(frame)-CALCIUM_BASELINE)/65,0,1);
     const bind=blocked?0:clamp((f-301)/45,0,1);
     const stroke=blocked?0:clamp((f-381)/89,0,1)*(myastheniaMode()?.28:1);
     const release=rigorMode()?0:clamp((f-471)/42,0,1);
@@ -747,7 +721,7 @@ function getContraction(f){
   function drawScene(){
     const ctx=sctx,W=sceneCanvas.width,H=sceneCanvas.height;
     ctx.clearRect(0,0,W,H);ctx.fillStyle='#0b1926';ctx.fillRect(0,0,W,H);
-    const m=molecularState(frame),c=getContraction(frame)/100;
+    const m=molecularState(frame),c=getShortening(frame)/100;
     const shade=(color,f)=>'#'+color.slice(1).match(/../g).map(v=>Math.round(parseInt(v,16)*f).toString(16).padStart(2,'0')).join('');
     const sphere=(x,y,r,color)=>{const g=ctx.createRadialGradient(x-r*.3,y-r*.4,r*.1,x,y,r);g.addColorStop(0,'#e5f4fa');g.addColorStop(.3,color);g.addColorStop(1,shade(color,.38));ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();};
     const line=(x,y,xx,yy,color,w)=>{ctx.strokeStyle=color;ctx.lineWidth=w;ctx.lineCap='round';ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(xx,yy);ctx.stroke();};
@@ -888,7 +862,7 @@ function getContraction(f){
 
     if (labelsToggle.checked){
       gctx.fillStyle = '#b4c8d6'; gctx.font = '14px Inter, Arial';
-      gctx.fillText('Intensidade relativa', 18, 74); gctx.fillText('Tempo', 790, 548);
+      gctx.fillText('Valores relativos (0–100; referência própria por série)', 18, 74); gctx.fillText('Tempo relativo', 740, 548);
     }
 
     for(let i=0;i<=5;i++){
@@ -925,17 +899,24 @@ function getContraction(f){
     const forcePoints = [];
     const calciumPoints = [];
     const bridgePoints = [];
-    for(let i=0;i<=TOTAL;i++){
+    for(let i=0;i<=Math.floor(frame);i++){
       const x = x0 + (i/TOTAL)*w;
-      forcePoints.push({x, y:y0 - getContraction(i)*(h/100)});
+      forcePoints.push({x, y:y0 - getForce(i)*(h/100)});
       calciumPoints.push({x, y:y0 - getCalcium(i)*(h/100)});
       bridgePoints.push({x, y:y0 - getCrossBridges(i)*(h/100)});
+    }
+    // Include the fractional endpoint so all three curves end exactly at the cursor.
+    if(frame % 1){
+      const x=x0+(frame/TOTAL)*w;
+      forcePoints.push({x,y:y0-getForce(frame)*(h/100)});
+      calciumPoints.push({x,y:y0-getCalcium(frame)*(h/100)});
+      bridgePoints.push({x,y:y0-getCrossBridges(frame)*(h/100)});
     }
     drawGraphLine3D(gctx, forcePoints, STD_COLORS.forca, 4.4, false);
     drawGraphLine3D(gctx, calciumPoints, STD_COLORS.calcio, 3.0, true);
     drawGraphLine3D(gctx, bridgePoints, STD_COLORS.pontes, 3.8, false);
 
-    // The complete curves stay visible; the cursor follows the animation.
+    // Only the elapsed trajectory is drawn; all markers follow the same animation time.
     const px = x0 + (frame/TOTAL)*w;
     gctx.save();
     gctx.strokeStyle = '#dcebf599'; gctx.lineWidth = 1.2;
@@ -943,7 +924,7 @@ function getContraction(f){
     gctx.restore();
     drawGraphSphere(gctx, px, y0-getCalcium(frame)*(h/100), 6, STD_COLORS.calcio);
     drawGraphSphere(gctx, px, y0-getCrossBridges(frame)*(h/100), 6, STD_COLORS.pontes);
-    drawGraphSphere(gctx, px, y0-getContraction(frame)*(h/100), 7, STD_COLORS.forca);
+    drawGraphSphere(gctx, px, y0-getForce(frame)*(h/100), 7, STD_COLORS.forca);
 
     gctx.strokeStyle = '#9ca3af'; gctx.setLineDash([4,4]);
     pauseFrames.forEach(f => {
@@ -1010,6 +991,7 @@ function getContraction(f){
   }
 
   function nextStage(){
+    running=false; if(raf) cancelAnimationFrame(raf);
     if (frame >= TOTAL){ if (loopToggle.checked) frame = 0; else { render(); return; } }
     const next = pauseFrames.find(p => p > frame);
     if (next == null){ frame = loopToggle.checked ? 0 : TOTAL; render(); return; }
