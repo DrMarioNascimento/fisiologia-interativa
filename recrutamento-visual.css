@@ -61,7 +61,6 @@ html[data-visualize-standalone]{background:#0b202b!important;background-color:#0
 @media(min-width:761px) and (max-width:1050px){#rum-sim .quad{grid-template-columns:1fr!important}}
 #rum-sim .unit-controls{display:flex!important;flex-wrap:nowrap!important}
 @media(max-width:760px){#rum-sim .unit-controls{gap:4px!important}#rum-sim .unit-controls button{font-size:11px!important;padding:7px 5px!important;white-space:nowrap!important}}
-#rum-sim .units-stage{background:transparent!important;border:0!important;box-shadow:none!important}
 
 #rum-sim #sphere-i stop:nth-child(2){stop-color:color-mix(in srgb,var(--i),white 60%)}#rum-sim #sphere-i stop:nth-child(3){stop-color:var(--i)}#rum-sim #sphere-i stop:last-child{stop-color:color-mix(in srgb,var(--i),#081c28 60%)}
 #rum-sim #sphere-iia stop:nth-child(2){stop-color:color-mix(in srgb,var(--iia),white 60%)}#rum-sim #sphere-iia stop:nth-child(3){stop-color:var(--iia)}#rum-sim #sphere-iia stop:last-child{stop-color:color-mix(in srgb,var(--iia),#081c28 60%)}
