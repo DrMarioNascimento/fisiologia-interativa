@@ -241,6 +241,13 @@ dialog{color:var(--text);background:#102633;border:1px solid var(--line);border-
 @media(max-width:1100px){.main-layout{grid-template-columns:minmax(0,1fr)}.panel-sub{min-height:0}.top-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.panel-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:760px){body{padding:10px}.top-grid{grid-template-columns:minmax(0,1fr)}.panel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric{min-height:78px;padding:11px}.metric .value{font-size:23px}.toolbar.action-controls .speed-wrap{width:100%}.toolbar.action-controls .tool-btn{flex:1 1 auto;font-size:13px;padding:10px}.toolbar.action-controls .mode-badge{margin-left:0}.states{align-items:flex-start}.states #states{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}button.state-btn{font-size:12px;padding:9px 7px}.panel{padding:10px}.figure-heading h2{font-size:17px}.scene,#barGraph{height:auto}.reading-banner{padding:12px}.subtitle{font-size:14px}}
 .toolbar.action-controls .speed-wrap strong,.toolbar.action-controls .speed-wrap span{color:var(--text);font-size:13px}.top-col,.reading-banner{border:1px solid var(--line)}.graph-legend .item:has(.delta) .dot{background:radial-gradient(circle at 30% 25%,#fff,var(--c-delta) 48%,#655374)}
+/* Native range fallback plus both browser engines: the rail remains visible. */
+input[type=range]{-webkit-appearance:none;appearance:none;height:24px;min-height:24px;padding:0;border:0;border-radius:0;background:linear-gradient(#628195,#344e60) center / 100% 6px no-repeat;box-shadow:none}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:9px;background:linear-gradient(#628195,#344e60);box-shadow:inset 0 1px 2px #0009}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;margin-top:-8px;border-radius:50%;border:1px solid #c5deeb;background:radial-gradient(circle at 28% 24%,#fff 0%,var(--control-color,#87d5c6) 42%,#314f62 100%);box-shadow:0 2px 3px #0008}
+input[type=range]::-moz-range-track{height:6px;border:0;border-radius:9px;background:linear-gradient(#628195,#344e60);box-shadow:inset 0 1px 2px #0009}
+input[type=range]::-moz-range-progress{height:6px;border-radius:9px;background:var(--control-color,#87d5c6)}
+input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;border:1px solid #c5deeb;background:radial-gradient(circle at 28% 24%,#fff 0%,var(--control-color,#87d5c6) 42%,#314f62 100%);box-shadow:0 2px 3px #0008}
 .var-vo2{color:var(--c-vo2)}.var-rel{color:var(--c-rel)}.var-q{color:var(--c-q)}.var-delta{color:var(--c-delta)}.var-cao2{color:var(--c-cao2)}.var-cvo2{color:var(--c-cvo2)}.var-sao2{color:var(--c-sao2)}.var-svo2{color:var(--c-svo2)}.var-hb{color:var(--c-hb)}.var-pao2{color:var(--c-pao2)}.var-pvo2{color:var(--c-pvo2)}.var-mass{color:var(--c-mass)}.var-extraction{color:var(--c-extraction)}.var-demand{color:var(--c-demand)}.var-o2{color:var(--c-o2)}.var-co2{color:var(--c-co2)}.metric-vo2Abs{--metric-accent:var(--c-vo2)}.metric-vo2Rel{--metric-accent:var(--c-rel)}.metric-q{--metric-accent:var(--c-q)}.metric-delta{--metric-accent:var(--c-delta)}.metric-cao2{--metric-accent:var(--c-cao2)}.metric-cvo2{--metric-accent:var(--c-cvo2)}.metric-sao2{--metric-accent:var(--c-sao2)}.metric-svo2{--metric-accent:var(--c-svo2)}label.control:has(#slider-debitoCardiaco){--control-color:var(--c-q);color:var(--control-color)}label.control:has(#slider-hemoglobina){--control-color:var(--c-hb);color:var(--control-color)}label.control:has(#slider-sao2){--control-color:var(--c-sao2);color:var(--control-color)}label.control:has(#slider-pao2){--control-color:var(--c-pao2);color:var(--control-color)}label.control:has(#slider-svo2){--control-color:var(--c-svo2);color:var(--control-color)}label.control:has(#slider-pvo2){--control-color:var(--c-pvo2);color:var(--control-color)}label.control:has(#slider-massa){--control-color:var(--c-mass);color:var(--control-color)}label.control:has(#slider-extracao){--control-color:var(--c-extraction);color:var(--control-color)}label.control:has(#slider-demanda){--control-color:var(--c-demand);color:var(--control-color)}</style>
 </head>
 <body>
@@ -549,7 +556,7 @@ dialog{color:var(--text);background:#102633;border:1px solid var(--line);border-
         <rect x="266" y="415" width="532" height="6" rx="3" fill="rgba(45,5,10,.22)"/>
       </g>
 
-      <g id="heartPosition"><g id="heartGroup" class="pulse-heart"><foreignObject x="20" y="125" width="290" height="320"><canvas xmlns="http://www.w3.org/1999/xhtml" id="approvedHeart" width="580" height="640" style="width:290px;height:320px"></canvas></foreignObject></g></g>
+      <g id="heartPosition"><g id="heartGroup" class="pulse-heart"><foreignObject x="0" y="65" width="390" height="435"><canvas xmlns="http://www.w3.org/1999/xhtml" id="approvedHeart" width="780" height="870" style="width:390px;height:435px"></canvas></foreignObject></g></g>
 
 
 
@@ -1000,6 +1007,8 @@ for(const [id,key] of Object.entries({o2Dot:'o2',o2Sphere:'o2',tissueO2Sphere:'o
  g.innerHTML='<stop offset="0%" stop-color="#ffffff"/><stop offset="42%" stop-color="'+FICK_COLORS[key]+'"/><stop offset="100%" stop-color="'+FICK_COLORS[key]+'" stop-opacity=".55"/>';
 }
 for(const [id,key]of Object.entries({labelArt:'cao2',labelVen:'cvo2'}))document.querySelectorAll('#'+id+' text').forEach(e=>e.setAttribute('fill',FICK_COLORS[key]));
+// The heart is the foreground layer: vessels and traveling spheres enter behind it.
+const heartLayer=document.getElementById('heartPosition');heartLayer.parentNode.appendChild(heartLayer);
 
     function tick(now){const dt=Math.min(.033,(now-last)/1000); last=now; if(playing){elapsed+=dt; updateScene(); drawGraph(); updateTexts()} requestAnimationFrame(tick)} requestAnimationFrame(tick);
   </script>
@@ -1011,16 +1020,19 @@ for(const [id,key]of Object.entries({labelArt:'cao2',labelVen:'cvo2'}))document.
  tube(()=>{c.moveTo(w*.24,h*.40);c.lineTo(w*.19,h*.03)},'#688db2',w*.12);
  tube(()=>{c.moveTo(w*.44,h*.39);c.quadraticCurveTo(w*.65,h*.08,w*.98,h*.16)},'#89a5c3',w*.11);
  c.beginPath();c.moveTo(w*.39,h*.18);c.bezierCurveTo(w*.12,h*.10,-w*.03,h*.38,w*.14,h*.65);c.bezierCurveTo(w*.25,h*.84,w*.55,h*.94,w*.68,h*.99);c.bezierCurveTo(w*.93,h*.79,w*1.02,h*.49,w*.84,h*.29);c.bezierCurveTo(w*.75,h*.15,w*.56,h*.14,w*.39,h*.18);c.closePath();
- const muscle=c.createRadialGradient(w*.38,h*.32,3,w*.63,h*.63,w*.68);muscle.addColorStop(0,'#f3a0ad');muscle.addColorStop(.36,'#c4546e');muscle.addColorStop(.72,'#882e49');muscle.addColorStop(1,'#3f192c');
+ const muscle=c.createRadialGradient(w*.30,h*.31,w*.015,w*.38,h*.45,w*.65);muscle.addColorStop(0,'#ffc3cf');muscle.addColorStop(.24,'#e18199');muscle.addColorStop(.52,'#b34465');muscle.addColorStop(.76,'#70263f');muscle.addColorStop(1,'#291522');
  c.shadowColor='#0008';c.shadowBlur=12;c.shadowOffsetY=6;c.fillStyle=muscle;c.fill();c.shadowBlur=0;c.shadowOffsetY=0;c.strokeStyle='#e598a7';c.lineWidth=1.6;c.stroke();
  c.save();c.clip();
+ const rim=c.createLinearGradient(0,0,w,0);rim.addColorStop(0,'#210b26aa');rim.addColorStop(.24,'#ffffff00');rim.addColorStop(.55,'#ffffff00');rim.addColorStop(.82,'#1c082650');rim.addColorStop(1,'#110919dc');c.fillStyle=rim;c.fillRect(0,0,w,h);
+ const glow=c.createRadialGradient(w*.39,h*.40,0,w*.39,h*.40,w*.34);glow.addColorStop(0,'#ffe4ed50');glow.addColorStop(.55,'#ffd4e721');glow.addColorStop(1,'#ffffff00');c.fillStyle=glow;c.fillRect(0,0,w,h);
+
  tube(()=>{c.moveTo(w*.63,h*.21);c.bezierCurveTo(w*.44,h*.41,w*.68,h*.66,w*.68,h*.94)},'#913b52',w*.045);
  for(let i=0;i<4;i++){const yy=h*(.38+i*.11);tube(()=>{c.moveTo(w*.57,yy);c.quadraticCurveTo(w*.39,yy+h*.06,w*(.17+i*.08),yy+h*.08)},'#bd697b',w*.014);}
  c.restore();
  c.beginPath();c.ellipse(w*.26,h*.31,w*.16,h*.11,-.55,0,Math.PI*2);const atrium=c.createRadialGradient(w*.21,h*.27,1,w*.28,h*.33,w*.20);atrium.addColorStop(0,'#f3b2bc');atrium.addColorStop(1,'#91364e');c.fillStyle=atrium;c.fill();
  c.restore();
 }
-;drawHeart(10,5,265,300,1);})();</script></body>
+;drawHeart(15,15,350,400,1);})();</script></body>
 </html>
 <style id="cards-referencia-aprovada">
 /* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
