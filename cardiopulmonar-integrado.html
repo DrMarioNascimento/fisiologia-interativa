@@ -2,12 +2,11 @@
 
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/><link rel="icon" href="brand/orientador.webp">
+<meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Simulador Cardiopulmonar Integrado</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
 <style>
     :root{
       --bg:#f6f8fc;
@@ -120,7 +119,7 @@
       font-size:18px;
     }
     .panel-header span{ color:var(--muted); font-size:13px; }
-
+    
 .scene-wrap{
   padding:12px;
   flex:1;
@@ -474,7 +473,7 @@
       .metric-grid,.equations,.states,.slider-grid{ grid-template-columns:1fr; }
       .title h1{font-size:22px}
     }
-
+  
 .left-col .panel,
 .right-col .panel{
   height:100%;
@@ -796,12 +795,7 @@ button, .state-btn, .slider-card, .metric, canvas{
 canvas.ux-pulse{
   box-shadow:0 0 0 3px rgba(47,128,237,.08), inset 0 1px 0 rgba(255,255,255,.75), 0 12px 24px rgba(18,42,66,.08)!important;
 }
-.state-btn.active{
-  color:#1f4e7a;
-  border-color:rgba(47,128,237,.42)!important;
-  background:linear-gradient(180deg,#ffffff 0%,#eaf4ff 100%)!important;
-  box-shadow:0 0 0 3px rgba(47,128,237,.12), 0 10px 22px rgba(18,42,66,.10)!important;
-}
+
 .ux-feedback{
   position:fixed;
   top:14px;
@@ -837,96 +831,127 @@ footer.signature-final{
   font-weight:700;
 }
 
-/* === PADRÃO VISUAL CONSOLIDADO — BLOCO 6 === */
-:root{--depth-panel:0 16px 34px rgba(18,42,66,.13),0 4px 10px rgba(18,42,66,.07),inset 0 1px 0 rgba(255,255,255,.96)}
-body{background:radial-gradient(circle at 8% 2%,rgba(11,124,130,.08),transparent 28%),radial-gradient(circle at 94% 6%,rgba(216,57,62,.06),transparent 25%),linear-gradient(180deg,#fbfdff 0%,#edf4f8 100%)}
-.topbar,.panel,.metric,.slider-card,.eq-card,.legend-pill{
-  border-color:#d3dfeb!important;
-  background:linear-gradient(145deg,#fff 0%,#f4f9fd 100%)!important;
-  box-shadow:var(--depth-panel)!important;
-}
-.panel{border-radius:20px!important}.slider-card{border-radius:16px!important;box-shadow:0 9px 18px rgba(18,42,66,.10),inset 0 1px 0 rgba(255,255,255,.96)!important}
-button,.state-btn{border-width:1px!important;box-shadow:0 5px 0 #aebfd0,0 10px 18px rgba(18,42,66,.16),inset 0 1px 0 rgba(255,255,255,.36)!important}
-button:hover,.state-btn:hover{transform:translateY(-2px)!important;box-shadow:0 6px 0 #9fb4c9,0 14px 22px rgba(18,42,66,.18)!important}
-button:active,.state-btn:active{transform:translateY(4px)!important;box-shadow:0 2px 0 #9fb4c9,0 5px 9px rgba(18,42,66,.14)!important}
-.state-btn.active{box-shadow:0 5px 0 #2168a8,0 0 0 4px rgba(47,128,237,.17),0 12px 24px rgba(31,120,180,.20)!important}
-input[type=range]{appearance:none;height:10px;border-radius:999px;background:linear-gradient(180deg,#c8d6e5,#edf4fb);box-shadow:inset 0 2px 4px rgba(18,42,66,.24),0 1px 0 #fff}
-input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b9e3ff 0%,#0b7c82 48%,#07565b 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #0b7c82;cursor:pointer}
-input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b9e3ff 0%,#0b7c82 48%,#07565b 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #0b7c82;cursor:pointer}
-.metric{position:relative;overflow:hidden;border-left:6px solid var(--line)!important}
-canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgba(18,42,66,.09)!important}
-
-
-/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
-@media (max-width:760px){
-  button{ min-height:44px; padding:11px 16px; font-size:15px; }
-  label{ min-height:40px; padding:8px 10px; }
-  input[type="range"]{ width:100%; height:28px; }
-  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
-  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
-  select{ min-height:44px; font-size:15px; }
-  a{ min-height:44px; display:inline-flex; align-items:center; }
-}
-
-/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
-.mobile-topbar{ display:none; }
-.mobile-tabnav{ display:none; }
-@media (max-width:760px){
-  h1{ display:none; }
-  .mobile-topbar{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    position:sticky; top:0; z-index:50; padding:12px 14px;
-    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
-    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
-  }
-  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
-  .mobile-playtoggle{
-    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
-    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
-    min-height:44px; min-width:44px; cursor:pointer;
-  }
-  .mobile-tabnav{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
-    position:sticky; top:64px; z-index:49; padding:8px 10px;
-    background:#eef4fb; border-bottom:1px solid #d7e1ec;
-  }
-  .mobile-tabnav button{
-    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
-    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
-  }
-  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
-  [data-tab]{ display:none !important; }
-  [data-tab].tab-active{ display:block !important; }
-  .status-grid[data-tab].tab-active{ display:grid !important; }
-}
 </style>
-  <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-  <link rel="stylesheet" href="tutor-widget.css?v=4">
-</head>
-<body>
-  <div class="mobile-topbar">
-    <h2>Simulador Cardiopulmonar Integrado</h2>
-    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
-  </div>
-  <div class="mobile-tabnav">
-    <button data-tabnav="animacao" class="active">Animação</button>
-    <button data-tabnav="controles">Controles</button>
-    <button data-tabnav="graficos">Gráficos</button>
-  </div>
+<style>:root{color-scheme:dark;--bg:#08121c;--panel:#142432;--ink:#e0edf5;--muted:#94acbd;--line:#30495b;--c-fc:#d7e6f0;--c-edv:#70bcff;--c-esv:#87d29e;--c-vs:#ffb45f;--c-ef:#c4a0f6;--c-dc:#ff8990;--shadow:inset 0 1px 0 #ffffff12,0 12px 26px #0005;--radius:22px}
+body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121c}.app{max-width:1560px;padding:24px;gap:20px}.topbar{background:linear-gradient(140deg,#243b4c,#10202d);padding:23px;grid-template-columns:1fr;gap:20px}.title h1{font-size:28px;letter-spacing:-.04em}.title p{line-height:1.6;max-width:780px}.top-actions{justify-content:flex-start;gap:12px}.panel{background:linear-gradient(145deg,#1b2f3f,#101e2b)}.panel-header{background:linear-gradient(#233949,#192b3a);padding:16px}.panel-header h2{font-size:16px}.panel-header span{font-size:11px}.tool-btn,.state-btn{min-height:44px;border:1px solid #577184;box-shadow:inset 0 2px 1px #ffffff38,inset 0 -2px 1px #0006,0 5px 0 #050e17,0 8px 10px #0006;background:linear-gradient(155deg,#476076,#263d50 55%,#172b3c);font-weight:600}.tool-btn.primary{background:linear-gradient(#568bac,#284c69)}.tool-btn.success{background:linear-gradient(#58a38e,#24574f)}.tool-btn.danger{background:linear-gradient(#9b5861,#542d3e)}.tool-btn.dark{background:linear-gradient(#4a6177,#253749)}.tool-btn:active,.state-btn:active{transform:translateY(4px);box-shadow:inset 0 2px 6px #0006,0 1px 0 #050e17}button:focus-visible,input:focus-visible{outline:3px solid #92dded;outline-offset:5px}.speed-box,.stage-status{background:#0b1925;box-shadow:inset 0 3px 6px #0006}.speed-box{padding:10px}.main-grid{grid-template-columns:minmax(350px,.75fr) minmax(0,1.25fr);gap:20px}.animation-panel{min-height:0}.scene-wrap{padding:18px;background:radial-gradient(ellipse at 50% 45%,#23465355,transparent 65%),#0a1823;align-items:start}.scene-wrap>svg{height:auto;max-height:1000px}.slider-card{background:linear-gradient(145deg,#1c3243,#102331);box-shadow:inset 0 1px 0 #ffffff14,0 3px 7px #0005;padding:16px}.slider-card label{font-weight:600;margin-bottom:16px}.slider-card span{color:#a8d9ed;background:#081724;border:1px solid #355064;border-radius:7px;padding:4px 7px;box-shadow:inset 0 2px 4px #0007}input[type=range]{appearance:none;height:10px;border-radius:9px;border:1px solid #466175;background:#07131e;box-shadow:inset 0 3px 5px #000b,0 1px 0 #ffffff22;cursor:pointer;margin:10px 0}input[type=range]::-webkit-slider-thumb{appearance:none;width:27px;height:27px;border:1px solid #c6dfea;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bcd8e6 30%,#597b93 66%,#193449);box-shadow:inset 0 1px 2px #fff,0 4px 0 #06101a,0 7px 9px #0009}input[type=range]::-moz-range-thumb{width:25px;height:25px;border:1px solid #c6dfea;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bcd8e6 30%,#597b93 66%,#193449);box-shadow:0 4px 0 #06101a,0 7px 9px #0009}.metric{background:linear-gradient(140deg,#0a1824,#1a3040);box-shadow:inset 0 3px 7px #0005,0 1px 0 #fff1}.metric strong{font-weight:600;font-variant-numeric:tabular-nums;text-shadow:0 0 20px #ffffff13}.formula-card,.flow .node,.note{background:linear-gradient(140deg,#0d1d2a,#172b3b)}.formula-card code{font-size:17px}.flow-strip{background:#0e1e2b}.flow .node{font-size:13px}.note{font-size:13px;text-align:left}.badge{color:#acd5f0;background:#17374b}.states{gap:12px;padding-bottom:18px}.metric small{font-size:10px}.scene-wrap svg text{font-family:Segoe UI,Arial,sans-serif}.scene-wrap svg text[fill="#5f6f86"],.scene-wrap svg text[fill="#8f7a63"],.scene-wrap svg text[fill="#1f2d3d"]{fill:#b6ccd9}.scene-wrap svg text[fill="#2f80ed"]{fill:#8ac7ff}.scene-wrap svg text[fill="#e34d4d"]{fill:#ffa0a7}.scene-wrap svg text[fill="#d87a2c"]{fill:#ffd09a}
+@media(max-width:1100px){.main-grid{grid-template-columns:1fr}.animation-panel{grid-row:1}.scene-wrap>svg{max-height:850px}.left-stack{grid-template-columns:1fr 1fr}.metric-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.app{padding:12px}.title h1{font-size:23px}.topbar{padding:18px}.left-stack{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}.top-actions{gap:10px}.tool-btn{flex:1 1 auto}.scene-wrap{padding:4px}.panel-header span{display:none}.flow{grid-template-columns:1fr auto 1fr auto 1fr}.flow .arrow{display:block}.note{font-size:12px}}@media(prefers-reduced-motion:reduce){button{transition:none!important}}
 
+:root{--blue:#80baff;--blue2:#a0d2ff;--red:#ff8c97;--green:#80d7a4;--amber:#f6c16d;--violet:#cba6fa;--teal:#7ad6ce;--c-rv:#dce9f3;--c-o2:#c4a2f6;--c-co2:#ecb48e;--c-press:#75cfc9;--c-pas:#84abff;--c-pad:#f892c1;--c-papm:#6cd8f3;--c-pam:#f8c16b;--c-pv:#93cfab}
+.topbar{display:flex;flex-wrap:wrap;align-items:center}.topbar .title{flex:1 1 100%}.toolbar{display:flex;flex-wrap:wrap;gap:12px}.toolbar button{min-height:46px;border:1px solid #577184;border-radius:13px;padding:10px 16px;color:#eef7fa;font-weight:600;background:linear-gradient(#47677e,#253c50);box-shadow:inset 0 2px 1px #ffffff38,inset 0 -2px 1px #0006,0 5px 0 #050e17,0 8px 10px #0006}.toolbar .success{background:linear-gradient(#58a38e,#24574f)}.toolbar .danger{background:linear-gradient(#9b5861,#542d3e)}.toolbar button:active{transform:translateY(4px);box-shadow:inset 0 2px 6px #0006,0 1px 0 #050e17}.hero-grid{display:grid;grid-template-columns:minmax(380px,.8fr) minmax(0,1.2fr);gap:20px;align-items:start}.hero-left,.hero-right{min-width:0}.hero-left{display:grid;gap:20px}.hero-right .animation-panel{min-height:0}.scene-wrap>svg{width:100%;height:auto;max-height:none}.scene-wrap{padding:12px}.slider-grid{grid-template-columns:1fr 1fr;padding:14px;gap:12px}.slider-card{padding:14px;min-width:0}.slider-card label{font-size:12px;line-height:1.5;flex-wrap:wrap}.slider-card input{width:100%}.slider-card input::-webkit-slider-runnable-track{background:transparent}.states{display:grid;grid-template-columns:1fr 1fr;gap:12px}.state-group-title{grid-column:1/-1;color:#adcadb;background:linear-gradient(90deg,#224052,#132633);border:1px solid #345366;border-radius:10px;padding:10px 12px;font-size:12px;letter-spacing:.03em}.state-btn{font-size:12px;line-height:1.4;min-height:48px}.state-btn.active{border-color:#98d7c8;background:linear-gradient(#346d68,#20433f);color:#dcfff6}.dashboard-grid{gap:16px;padding:16px}.graph-block,.eq-card,.equations-inline,.eq-mini,.interpret-inline,.legend-pill{background:linear-gradient(145deg,#1b3040,#101f2c);border:1px solid #324b5e;box-shadow:inset 0 1px 0 #ffffff14,0 6px 14px #0004}.graph-block{border-radius:18px;padding:14px;min-width:0}.graph-label,.stage-word,.interpret-inline,.eq-mini .op,.eq-mini .num{color:#b9cfdd}.graph-label{font-size:12px;line-height:1.6}.graph-block canvas{display:block;width:100%;background:#0c1c29;border:1px solid #2c4659;border-radius:12px;box-shadow:inset 0 3px 7px #0006}.eq-mini h3,.equations-inline-title,.interpret-inline-title{color:#b4cddb}.eq-mini code{font-size:15px}.graph-summary-panel .metric{background:linear-gradient(145deg,#0b1926,#1a3040)}.metric strong{color:inherit}.metric small,.metric em{color:#9cb5c7}.ux-feedback{background:#1b3e49;color:#d2f4eb;border:1px solid #578c8b}.scene-wrap svg text[fill="#17324d"]{fill:#c5dbea}.scene-wrap svg text[fill="#20b26b"]{fill:#8cdbab}
+@media(max-width:1100px){.hero-grid{grid-template-columns:1fr}.hero-right{grid-row:1}.hero-right .scene-wrap>svg{max-height:900px}.hero-left{grid-template-columns:1fr 1fr}.slider-grid{grid-template-columns:1fr}.dashboard-grid{grid-template-columns:1fr 1fr}.state-btn{min-height:48px}}@media(max-width:700px){.hero-left,.dashboard-grid{grid-template-columns:1fr}.slider-grid{grid-template-columns:1fr 1fr}.graph-block{padding:10px}.scene-wrap{padding:2px}.toolbar button{flex:1}.hero-grid{gap:14px}.hero-right .scene-wrap>svg{max-height:none}.panel-header{flex-wrap:wrap}.graph-summary-panel{grid-column:1!important}}@media(max-width:380px){.slider-grid{grid-template-columns:1fr}}
+/* Unified panel geometry: override legacy placements and intrinsic minimum sizes. */
+.app .hero-grid{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);grid-template-rows:auto auto;gap:20px;align-items:stretch}
+.app .hero-left{display:contents}
+.app .global-controls-panel{grid-column:1/-1;grid-row:1;height:auto;min-width:0}
+.app .quick-states-panel{grid-column:1;grid-row:2;height:auto;min-width:0;align-self:stretch}
+.app .hero-right{grid-column:2;grid-row:2;min-width:0;min-height:0;display:flex}
+.app .hero-right .animation-panel{width:100%;height:auto;min-height:0;display:flex;flex-direction:column}
+.app .global-controls-panel .slider-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:16px;gap:14px}
+.app .global-controls-panel .slider-card{min-width:0;height:auto}
+.app .quick-states-panel .states{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-columns:auto;padding:16px;gap:12px}
+.app .animation-panel .scene-wrap{min-height:0;flex:1;display:flex;align-items:center;justify-content:center;padding:14px}
+.app .animation-panel .scene-wrap>svg{display:block;width:100%;height:auto;max-height:1100px;min-width:0;flex:none}
+.app .dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch;padding:16px}
+.app .dashboard-grid>.graph-block{display:flex;flex-direction:column;gap:12px;grid-column:auto;grid-row:auto;min-width:0;min-height:0}
+.app .dashboard-grid .graph-label{min-height:40px;margin:0;display:block}
+.app .dashboard-grid canvas{width:100%;max-width:100%;height:auto;min-height:0;aspect-ratio:640/260;flex:none}
+.app .graph-summary-panel{grid-column:auto;grid-row:auto;height:auto;min-height:0;min-width:0;align-self:stretch}
+.app .graph-summary-panel .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:14px}
+.app .graph-summary-panel .metric{min-width:0;height:auto}
+.app .graph-summary-panel .metric strong{font-size:clamp(17px,1.65vw,24px);overflow-wrap:anywhere}
+.app .equations-inline-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.app .eq-mini{min-width:0}.app .eq-mini code{white-space:normal;overflow-wrap:anywhere}
+.app .dashboard-panel>.panel-header{background:linear-gradient(#233949,#192b3a)}
+.app .dashboard-panel>.panel-header h2{color:var(--ink)}
+@media(max-width:1100px){
+ .app .global-controls-panel .slider-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .app .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.3fr)}
+ .app .quick-states-panel .states{grid-template-columns:minmax(0,1fr)}
+}
+@media(max-width:760px){
+ .app .hero-grid{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto;gap:14px}
+ .app .global-controls-panel{grid-column:1;grid-row:1}
+ .app .hero-right{grid-column:1;grid-row:2}
+ .app .quick-states-panel{grid-column:1;grid-row:3}
+ .app .global-controls-panel .slider-grid,.app .quick-states-panel .states{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .app .dashboard-grid{grid-template-columns:minmax(0,1fr);padding:12px}
+ .app .animation-panel .scene-wrap{padding:6px}
+ .app .graph-summary-panel .metric strong{font-size:21px}
+}
+@media(max-width:380px){.app .global-controls-panel .slider-grid,.app .equations-inline-grid{grid-template-columns:minmax(0,1fr)}}
+/* Selection remains dark and readable, with an inset marker instead of a glow. */
+.app .quick-states-panel .state-btn.active,
+.app .quick-states-panel .state-btn.active:hover{
+ background:linear-gradient(155deg,#28594f,#173e39);
+ color:#f0fff9;
+ border:2px solid #85d5b8;
+ box-shadow:inset 5px 0 0 #85d5b8,inset 0 1px 0 #ffffff25,0 4px 0 #071b18,0 6px 9px #0005;
+ text-shadow:none;
+ filter:none;
+}
+.app #statusBox text[fill="#17324d"],
+.app #statusBox tspan[fill="#17324d"]{fill:#e3eef5}
+/* Reading text uses the available space more comfortably. */
+.app .interpret-inline p{font-size:15px;line-height:1.7}
+.app .interpret-inline-title{font-size:15px}
+</style><style>:root{--c-rv:#dce9f3;--c-dc:#ff8990;--c-edv:#70bcff;--c-esv:#87d29e;--c-vs:#ffb45f;--c-ef:#f2d77c;--c-fc:#9ce4ed;--c-fr:#b1d4f4;--c-o2:#c4a2f6;--c-co2:#ecb48e;--c-pas:#84abff;--c-pad:#f892c1;--c-papm:#6cd8f3;--c-pam:#f8c16b;--c-pv:#93cfab;--c-po2:#52e0b5;--c-vo2:#e7a3d0;--c-vco2:#d2ce91;--c-avo2:#d6a9ff}
+.app .c-rv{color:var(--c-rv)}.app .graph-summary-panel .metric.c-rv{border-left-color:var(--c-rv);--metric-color:color-mix(in srgb,var(--c-rv) 25%,transparent)}.app .metric.c-rv strong,.app .metric.c-rv small{color:var(--c-rv)}
+.app .c-dc{color:var(--c-dc)}.app .graph-summary-panel .metric.c-dc{border-left-color:var(--c-dc);--metric-color:color-mix(in srgb,var(--c-dc) 25%,transparent)}.app .metric.c-dc strong,.app .metric.c-dc small{color:var(--c-dc)}
+.app .c-edv{color:var(--c-edv)}.app .graph-summary-panel .metric.c-edv{border-left-color:var(--c-edv);--metric-color:color-mix(in srgb,var(--c-edv) 25%,transparent)}.app .metric.c-edv strong,.app .metric.c-edv small{color:var(--c-edv)}
+.app .c-esv{color:var(--c-esv)}.app .graph-summary-panel .metric.c-esv{border-left-color:var(--c-esv);--metric-color:color-mix(in srgb,var(--c-esv) 25%,transparent)}.app .metric.c-esv strong,.app .metric.c-esv small{color:var(--c-esv)}
+.app .c-vs{color:var(--c-vs)}.app .graph-summary-panel .metric.c-vs{border-left-color:var(--c-vs);--metric-color:color-mix(in srgb,var(--c-vs) 25%,transparent)}.app .metric.c-vs strong,.app .metric.c-vs small{color:var(--c-vs)}
+.app .c-ef{color:var(--c-ef)}.app .graph-summary-panel .metric.c-ef{border-left-color:var(--c-ef);--metric-color:color-mix(in srgb,var(--c-ef) 25%,transparent)}.app .metric.c-ef strong,.app .metric.c-ef small{color:var(--c-ef)}
+.app .c-fc{color:var(--c-fc)}.app .graph-summary-panel .metric.c-fc{border-left-color:var(--c-fc);--metric-color:color-mix(in srgb,var(--c-fc) 25%,transparent)}.app .metric.c-fc strong,.app .metric.c-fc small{color:var(--c-fc)}
+.app .c-fr{color:var(--c-fr)}.app .graph-summary-panel .metric.c-fr{border-left-color:var(--c-fr);--metric-color:color-mix(in srgb,var(--c-fr) 25%,transparent)}.app .metric.c-fr strong,.app .metric.c-fr small{color:var(--c-fr)}
+.app .c-o2{color:var(--c-o2)}.app .graph-summary-panel .metric.c-o2{border-left-color:var(--c-o2);--metric-color:color-mix(in srgb,var(--c-o2) 25%,transparent)}.app .metric.c-o2 strong,.app .metric.c-o2 small{color:var(--c-o2)}
+.app .c-co2{color:var(--c-co2)}.app .graph-summary-panel .metric.c-co2{border-left-color:var(--c-co2);--metric-color:color-mix(in srgb,var(--c-co2) 25%,transparent)}.app .metric.c-co2 strong,.app .metric.c-co2 small{color:var(--c-co2)}
+.app .c-pas{color:var(--c-pas)}.app .graph-summary-panel .metric.c-pas{border-left-color:var(--c-pas);--metric-color:color-mix(in srgb,var(--c-pas) 25%,transparent)}.app .metric.c-pas strong,.app .metric.c-pas small{color:var(--c-pas)}
+.app .c-pad{color:var(--c-pad)}.app .graph-summary-panel .metric.c-pad{border-left-color:var(--c-pad);--metric-color:color-mix(in srgb,var(--c-pad) 25%,transparent)}.app .metric.c-pad strong,.app .metric.c-pad small{color:var(--c-pad)}
+.app .c-papm{color:var(--c-papm)}.app .graph-summary-panel .metric.c-papm{border-left-color:var(--c-papm);--metric-color:color-mix(in srgb,var(--c-papm) 25%,transparent)}.app .metric.c-papm strong,.app .metric.c-papm small{color:var(--c-papm)}
+.app .c-pam{color:var(--c-pam)}.app .graph-summary-panel .metric.c-pam{border-left-color:var(--c-pam);--metric-color:color-mix(in srgb,var(--c-pam) 25%,transparent)}.app .metric.c-pam strong,.app .metric.c-pam small{color:var(--c-pam)}
+.app .c-pv{color:var(--c-pv)}.app .graph-summary-panel .metric.c-pv{border-left-color:var(--c-pv);--metric-color:color-mix(in srgb,var(--c-pv) 25%,transparent)}.app .metric.c-pv strong,.app .metric.c-pv small{color:var(--c-pv)}
+.app .c-po2{color:var(--c-po2)}.app .graph-summary-panel .metric.c-po2{border-left-color:var(--c-po2);--metric-color:color-mix(in srgb,var(--c-po2) 25%,transparent)}.app .metric.c-po2 strong,.app .metric.c-po2 small{color:var(--c-po2)}
+.app .c-vo2{color:var(--c-vo2)}.app .graph-summary-panel .metric.c-vo2{border-left-color:var(--c-vo2);--metric-color:color-mix(in srgb,var(--c-vo2) 25%,transparent)}.app .metric.c-vo2 strong,.app .metric.c-vo2 small{color:var(--c-vo2)}
+.app .c-vco2{color:var(--c-vco2)}.app .graph-summary-panel .metric.c-vco2{border-left-color:var(--c-vco2);--metric-color:color-mix(in srgb,var(--c-vco2) 25%,transparent)}.app .metric.c-vco2 strong,.app .metric.c-vco2 small{color:var(--c-vco2)}
+.app .c-avo2{color:var(--c-avo2)}.app .graph-summary-panel .metric.c-avo2{border-left-color:var(--c-avo2);--metric-color:color-mix(in srgb,var(--c-avo2) 25%,transparent)}.app .metric.c-avo2 strong,.app .metric.c-avo2 small{color:var(--c-avo2)}</style><style>.app #hrLabel{color:var(--c-fc)}.app #frLabel{color:var(--c-fr)}</style><style>/* Shared teaching palette. Identical quantities retain identical colors across simulators. */
+:root{--c-rv:#dce9f3;--c-dc:#ff8990;--c-edv:#70bcff;--c-esv:#87d29e;--c-vs:#ffb45f;--c-ef:#f2d77c;--c-fc:#9ce4ed;--c-fr:#b1d4f4;--c-o2:#c4a2f6;--c-co2:#ecb48e;--c-pas:#84abff;--c-pad:#f892c1;--c-papm:#6cd8f3;--c-pam:#f8c16b;--c-pv:#93cfab;--c-palv:#f2c986;--c-ppl:#79bcff}
+.app #rpm,.app #freqLabel,.app #frLabel{color:var(--c-fr);text-shadow:none}
+.app #hrLabel{color:var(--c-fc)}
+.app .metric.fc,.app .metric.edv,.app .metric.esv,.app .metric.vs,.app .metric.ef,.app .metric.dc{border-left-color:var(--metric-strong)}
+.app .metric.fc{--metric-strong:var(--c-fc)}.app .metric.edv{--metric-strong:var(--c-edv)}.app .metric.esv{--metric-strong:var(--c-esv)}.app .metric.vs{--metric-strong:var(--c-vs)}.app .metric.ef{--metric-strong:var(--c-ef)}.app .metric.dc{--metric-strong:var(--c-dc)}
+.app .metric.fc small,.app .metric.edv small,.app .metric.esv small,.app .metric.vs small,.app .metric.ef small,.app .metric.dc small{color:var(--metric-strong)}
+/* Keep semantic variable colors visible in explanatory prose and summary cards. */
+:root{--c-rvs:#d8b8a0}
+.app .c-rvs{color:var(--c-rvs)}
+.app .interpret-inline p [class^="c-"]{font-weight:700}
+.app .graph-summary-panel .metric[class*="c-"] em{color:inherit}
+</style><style>:root{--c-satp:#c4a2f6}.app .c-satp,.app .metric.c-satp small,.app .metric.c-satp strong{color:var(--c-satp)}.app .metric.c-satp{border-left-color:var(--c-satp)}
+:root{--c-sata:#e2b6fa}.app .c-sata,.app .metric.c-sata small,.app .metric.c-sata strong{color:var(--c-sata)}.app .metric.c-sata{border-left-color:var(--c-sata)}
+:root{--c-satv:#a69cf1}.app .c-satv,.app .metric.c-satv small,.app .metric.c-satv strong{color:var(--c-satv)}.app .metric.c-satv{border-left-color:var(--c-satv)}
+:root{--c-po2p:#52e0b5}.app .c-po2p,.app .metric.c-po2p small,.app .metric.c-po2p strong{color:var(--c-po2p)}.app .metric.c-po2p{border-left-color:var(--c-po2p)}
+:root{--c-pao2:#9cdf72}.app .c-pao2,.app .metric.c-pao2 small,.app .metric.c-pao2 strong{color:var(--c-pao2)}.app .metric.c-pao2{border-left-color:var(--c-pao2)}
+:root{--c-pvo2:#37bdd0}.app .c-pvo2,.app .metric.c-pvo2 small,.app .metric.c-pvo2 strong{color:var(--c-pvo2)}.app .metric.c-pvo2{border-left-color:var(--c-pvo2)}
+:root{--c-pco2p:#ecb48e}.app .c-pco2p,.app .metric.c-pco2p small,.app .metric.c-pco2p strong{color:var(--c-pco2p)}.app .metric.c-pco2p{border-left-color:var(--c-pco2p)}
+:root{--c-paco2:#e58a65}.app .c-paco2,.app .metric.c-paco2 small,.app .metric.c-paco2 strong{color:var(--c-paco2)}.app .metric.c-paco2{border-left-color:var(--c-paco2)}
+:root{--c-pvco2:#e9d0aa}.app .c-pvco2,.app .metric.c-pvco2 small,.app .metric.c-pvco2 strong{color:var(--c-pvco2)}.app .metric.c-pvco2{border-left-color:var(--c-pvco2)}
+:root{--c-vo2:#e7a3d0}.app .c-vo2,.app .metric.c-vo2 small,.app .metric.c-vo2 strong{color:var(--c-vo2)}.app .metric.c-vo2{border-left-color:var(--c-vo2)}
+:root{--c-vco2:#d2ce91}.app .c-vco2,.app .metric.c-vco2 small,.app .metric.c-vco2 strong{color:var(--c-vco2)}.app .metric.c-vco2{border-left-color:var(--c-vco2)}
+:root{--c-avo2:#d6a9ff}.app .c-avo2,.app .metric.c-avo2 small,.app .metric.c-avo2 strong{color:var(--c-avo2)}.app .metric.c-avo2{border-left-color:var(--c-avo2)}
+:root{--c-rvs:#d8b8a0}.app .c-rvs,.app .metric.c-rvs small,.app .metric.c-rvs strong{color:var(--c-rvs)}.app .metric.c-rvs{border-left-color:var(--c-rvs)}</style></head>
+<body>
 <div id="uxFeedback" class="ux-feedback">Atualizado em tempo real</div>
 <div class="app">
-<div class="topbar" data-tab="controles">
+<div class="topbar">
 <div class="title">
 <h1>Simulador Cardiopulmonar Integrado</h1>
 <p>Respiração → retorno venoso → loop cardíaco → débito cardíaco → VO₂ → saturação → fechamento sistêmico</p>
 </div>
-<div class="toolbar" data-tab="controles">
+<div class="toolbar">
 <button class="primary" id="startBtn">Iniciar</button>
 <button class="dark" id="pauseBtn">Pausar</button>
 <button class="danger" id="resetBtn">Resetar</button>
 </div>
-<div class="toolbar" data-tab="controles">
+<div class="toolbar">
 <button class="success" id="labelsBtn">Mostrar rótulos</button>
 <button class="primary" id="stepBtn">Executar por etapas</button>
 <div class="speed-box">
@@ -935,13 +960,13 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <span id="animSpeedVal">1.0×</span>
 </div>
 </div>
-</div><div class="hero-grid"><div class="hero-left"><div class="panel global-controls-panel" data-tab="animacao">
+</div><div class="hero-grid"><div class="hero-left"><div class="panel global-controls-panel">
 <div class="panel-header"><h2>Controles globais</h2><span>Ajuste fisiologia e integração</span></div>
 <div class="slider-grid" id="sliders"></div>
-</div><div class="panel quick-states-panel" data-tab="graficos">
+</div><div class="panel quick-states-panel">
 <div class="panel-header"><h2>Estados rápidos</h2><span>Aplicações automáticas</span></div>
 <div class="states" id="states"></div>
-</div></div><div class="hero-right"><div class="panel animation-panel" data-tab="animacao">
+</div></div><div class="hero-right"><div class="panel animation-panel">
 <div class="panel-header">
 <h2>Animação integrada</h2>
 <span id="phaseLabel">Fase respiratória: Inspiração | Batimento: Diástole</span>
@@ -949,8 +974,8 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <div class="scene-wrap">
 <svg aria-label="Circuito cardiopulmonar simplificado" preserveAspectRatio="xMidYMin meet" viewBox="0 0 980 1140"><defs>
 <lineargradient id="bgGlow" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#fbfdff"></stop>
-<stop offset="100%" stop-color="#eef5fd"></stop>
+<stop offset="0%" stop-color="#0d2030"></stop>
+<stop offset="100%" stop-color="#091722"></stop>
 </lineargradient>
 <lineargradient id="lungGrad" x1="0" x2="1">
 <stop offset="0%" stop-color="#ffd6e2"></stop>
@@ -994,11 +1019,11 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <fedropshadow dx="0" dy="6" flood-color="#7a3850" flood-opacity="0.20" stdDeviation="5.5"></fedropshadow>
 </filter>
 <radialgradient cx="30%" cy="22%" id="lungFill3DDeep" r="82%">
-<stop offset="0%" stop-color="#fff2f6"></stop>
-<stop offset="24%" stop-color="#ffd4de"></stop>
-<stop offset="52%" stop-color="#ed9bad"></stop>
-<stop offset="78%" stop-color="#d47790"></stop>
-<stop offset="100%" stop-color="#b95774"></stop>
+<stop offset="0%" stop-color="#d8eee5"></stop>
+<stop offset="24%" stop-color="#92cbbd"></stop>
+<stop offset="52%" stop-color="#5c9c96"></stop>
+<stop offset="78%" stop-color="#33656d"></stop>
+<stop offset="100%" stop-color="#183948"></stop>
 </radialgradient>
 <lineargradient id="lungEdgeShade" x1="0" x2="1" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"></stop>
@@ -1006,10 +1031,10 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <stop offset="100%" stop-color="#7d2c49" stop-opacity="0.28"></stop>
 </lineargradient>
 <lineargradient id="airway3D" x1="0" x2="1" y1="0" y2="1">
-<stop offset="0%" stop-color="#f1d0c7"></stop>
-<stop offset="35%" stop-color="#c99a8f"></stop>
-<stop offset="70%" stop-color="#a96f67"></stop>
-<stop offset="100%" stop-color="#7f4e4c"></stop>
+<stop offset="0%" stop-color="#e6eee7"></stop>
+<stop offset="35%" stop-color="#adcac7"></stop>
+<stop offset="70%" stop-color="#6d929a"></stop>
+<stop offset="100%" stop-color="#354e5d"></stop>
 </lineargradient>
 <lineargradient id="airwayHighlight" x1="0" x2="1" y1="0" y2="0">
 <stop offset="0%" stop-color="#ffffff" stop-opacity="0.52"></stop>
@@ -1041,29 +1066,29 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <fedropshadow dx="0" dy="2" flood-color="#ff8a4d" flood-opacity="0.45" stdDeviation="3"></fedropshadow>
 </filter>
 <lineargradient id="labelCapsuleBlue" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#ffffff"></stop>
-<stop offset="55%" stop-color="#f4f9ff"></stop>
-<stop offset="100%" stop-color="#e6f2ff"></stop>
+<stop offset="0%" stop-color="#243f53"></stop>
+<stop offset="55%" stop-color="#1b3041"></stop>
+<stop offset="100%" stop-color="#112333"></stop>
 </lineargradient>
 <lineargradient id="labelCapsuleRed" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#ffffff"></stop>
-<stop offset="55%" stop-color="#fff6f6"></stop>
-<stop offset="100%" stop-color="#ffe7e7"></stop>
+<stop offset="0%" stop-color="#43303e"></stop>
+<stop offset="55%" stop-color="#302435"></stop>
+<stop offset="100%" stop-color="#1c2030"></stop>
 </lineargradient>
 <lineargradient id="labelCapsuleOrange" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#ffffff"></stop>
-<stop offset="55%" stop-color="#fff9f0"></stop>
-<stop offset="100%" stop-color="#fff0dc"></stop>
+<stop offset="0%" stop-color="#423c35"></stop>
+<stop offset="55%" stop-color="#302d30"></stop>
+<stop offset="100%" stop-color="#1b2530"></stop>
 </lineargradient>
 <lineargradient id="venousBox3D" x1="0" x2="1" y1="0" y2="1">
-<stop offset="0%" stop-color="#f8fcff"></stop>
-<stop offset="48%" stop-color="#e2f1ff"></stop>
-<stop offset="100%" stop-color="#b8dcff"></stop>
+<stop offset="0%" stop-color="#203e55"></stop>
+<stop offset="48%" stop-color="#142c40"></stop>
+<stop offset="100%" stop-color="#0c1d2c"></stop>
 </lineargradient>
 <lineargradient id="tissueBox3D" x1="0" x2="1" y1="0" y2="1">
-<stop offset="0%" stop-color="#fffdf8"></stop>
-<stop offset="48%" stop-color="#fff0d8"></stop>
-<stop offset="100%" stop-color="#ffd39a"></stop>
+<stop offset="0%" stop-color="#443d39"></stop>
+<stop offset="48%" stop-color="#302b32"></stop>
+<stop offset="100%" stop-color="#1a2230"></stop>
 </lineargradient>
 <filter height="150%" id="box3DShadow" width="150%" x="-25%" y="-25%">
 <fedropshadow dx="0" dy="7" flood-color="#17324d" flood-opacity="0.18" stdDeviation="5"></fedropshadow>
@@ -1201,6 +1226,8 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <fegaussianblur stdDeviation="3"></fegaussianblur>
 </filter>
 
+<clipPath id="venousBlockClip"><rect x="16" y="905" width="212" height="145" rx="24" ry="24"/></clipPath>
+<clipPath id="tissueBlockClip"><rect x="752" y="905" width="212" height="145" rx="24" ry="24"/></clipPath>
 </defs>
 <rect fill="url(#bgGlow)" height="1140" rx="28" width="980" x="0" y="0"></rect>
 <g aria-label="Faixa de células 3D no padrão Fick" id="cellBand">
@@ -1744,52 +1771,57 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 </g>
 <!-- Pulmões anatômicos adaptados de pulmao4.svg -->
 <g filter="url(#lungInnerDepth)" id="lungLeft" transform="translate(302 40) scale(0.72 0.62)">
-<path d="M155.838989,436.912048 C137.876068,447.431946 119.394066,455.565704 99.031670,458.943451 C86.275085,461.059479 80.278084,458.314545 74.096382,446.875702 C56.350201,414.037567 46.095200,379.060120 43.531498,341.762299 C39.818996,287.751251 50.661430,237.046021 78.278641,190.386551 C101.794876,150.655716 134.000961,120.097321 176.540421,101.122147 C182.354477,98.528717 188.363113,96.656059 194.836044,96.638443 C202.778824,96.616829 207.106720,99.860565 209.296097,107.614952 C210.839828,113.082596 211.497284,118.718674 211.970245,124.332596 C212.947617,135.933578 213.200394,147.603378 214.417664,159.174774 C217.204086,185.662888 216.159439,212.315125 217.906601,238.766464 C219.192856,258.239929 219.418442,277.639313 219.101715,297.018860 C218.710785,320.940704 216.363434,344.793304 212.474518,368.488525 C209.209961,388.379578 198.414505,403.414215 183.908630,416.341858 C175.315430,424.000092 166.041473,430.797211 155.838989,436.912048 Z" fill="url(#lungFill3DDeep)" stroke="#a94a64" stroke-width="3"></path>
+<path d="M155.838989,436.912048 C137.876068,447.431946 119.394066,455.565704 99.031670,458.943451 C86.275085,461.059479 80.278084,458.314545 74.096382,446.875702 C56.350201,414.037567 46.095200,379.060120 43.531498,341.762299 C39.818996,287.751251 50.661430,237.046021 78.278641,190.386551 C101.794876,150.655716 134.000961,120.097321 176.540421,101.122147 C182.354477,98.528717 188.363113,96.656059 194.836044,96.638443 C202.778824,96.616829 207.106720,99.860565 209.296097,107.614952 C210.839828,113.082596 211.497284,118.718674 211.970245,124.332596 C212.947617,135.933578 213.200394,147.603378 214.417664,159.174774 C217.204086,185.662888 216.159439,212.315125 217.906601,238.766464 C219.192856,258.239929 219.418442,277.639313 219.101715,297.018860 C218.710785,320.940704 216.363434,344.793304 212.474518,368.488525 C209.209961,388.379578 198.414505,403.414215 183.908630,416.341858 C175.315430,424.000092 166.041473,430.797211 155.838989,436.912048 Z" fill="url(#lungFill3DDeep)" stroke="#608f92" stroke-width="3"></path>
 <path d="M92 286 C122 278 162 278 200 288" fill="none" opacity=".24" stroke="#ffffff" stroke-width="4"></path>
 <path d="M88 214 C118 160 168 128 205 118 C190 168 197 250 187 318 C166 295 121 274 88 214Z" fill="#ffffff" opacity=".10"></path>
 <path d="M82 388 C126 412 178 405 207 366" fill="none" opacity=".16" stroke="#7f2f4a" stroke-linecap="round" stroke-width="8"></path>
 <path d="M106 332 C136 324 172 324 204 333" fill="none" opacity=".17" stroke="#ffffff" stroke-width="4"></path>
 <ellipse cx="150" cy="170" fill="#ffffff" opacity=".12" rx="54" ry="26"></ellipse>
-</g>
+<path d="M205 165 L170 220 L125 255 M170 220 L174 285 L138 337 M174 285 L197 343 M125 255 L98 304 M170 220 L127 210" fill="none" stroke="#1e414a" stroke-width="10" stroke-linecap="round" opacity=".45"/><path d="M205 165 L170 220 L125 255 M170 220 L174 285 L138 337 M174 285 L197 343 M125 255 L98 304 M170 220 L127 210" fill="none" stroke="#b4dbcd" stroke-width="5" stroke-linecap="round" opacity=".7"/></g>
 <g filter="url(#lungInnerDepth)" id="lungRight" transform="translate(312 40) scale(0.72 0.62)">
-<path d="M411.887573,163.138962 C441.820221,200.964310 458.824554,243.702667 464.407227,291.141296 C470.867249,346.035217 461.098663,397.865295 435.277771,446.705963 C429.424377,457.777679 422.762451,460.911469 410.332886,458.973236 C391.273529,456.001251 373.920319,448.550598 357.257568,439.239105 C344.106049,431.889771 332.267487,422.776917 321.137848,412.611786 C304.448242,397.368439 296.926422,378.072327 294.669006,356.104523 C291.913635,329.290527 289.485657,302.473053 288.420929,275.514801 C288.086823,267.055634 287.959290,258.589264 287.642639,250.129822 C286.892395,230.086060 290.286560,210.503220 293.992920,190.932236 C294.944031,185.910034 295.458832,180.749054 295.586700,175.637131 C296.059204,156.746048 295.493866,137.818695 297.700317,118.994499 C298.222595,114.538795 298.779755,110.066406 300.347626,105.822899 C302.720947,99.399452 306.758392,96.707146 313.631531,96.619308 C324.602692,96.479111 333.986633,101.406258 343.273926,106.211853 C370.149017,120.117981 392.837555,139.183334 411.887573,163.138962 Z" fill="url(#lungFill3DDeep)" stroke="#a94a64" stroke-width="3"></path>
+<path d="M411.887573,163.138962 C441.820221,200.964310 458.824554,243.702667 464.407227,291.141296 C470.867249,346.035217 461.098663,397.865295 435.277771,446.705963 C429.424377,457.777679 422.762451,460.911469 410.332886,458.973236 C391.273529,456.001251 373.920319,448.550598 357.257568,439.239105 C344.106049,431.889771 332.267487,422.776917 321.137848,412.611786 C304.448242,397.368439 296.926422,378.072327 294.669006,356.104523 C291.913635,329.290527 289.485657,302.473053 288.420929,275.514801 C288.086823,267.055634 287.959290,258.589264 287.642639,250.129822 C286.892395,230.086060 290.286560,210.503220 293.992920,190.932236 C294.944031,185.910034 295.458832,180.749054 295.586700,175.637131 C296.059204,156.746048 295.493866,137.818695 297.700317,118.994499 C298.222595,114.538795 298.779755,110.066406 300.347626,105.822899 C302.720947,99.399452 306.758392,96.707146 313.631531,96.619308 C324.602692,96.479111 333.986633,101.406258 343.273926,106.211853 C370.149017,120.117981 392.837555,139.183334 411.887573,163.138962 Z" fill="url(#lungFill3DDeep)" stroke="#608f92" stroke-width="3"></path>
 <path d="M302 288 C340 278 382 278 414 286" fill="none" opacity=".24" stroke="#ffffff" stroke-width="4"></path>
 <path d="M408 214 C378 160 328 128 291 118 C306 168 299 250 309 318 C330 295 375 274 408 214Z" fill="#ffffff" opacity=".10"></path>
 <path d="M398 372 C364 390 324 386 302 354" fill="none" opacity=".16" stroke="#7f2f4a" stroke-linecap="round" stroke-width="8"></path>
 <path d="M292 333 C326 324 364 324 394 332" fill="none" opacity=".17" stroke="#ffffff" stroke-width="4"></path>
 <ellipse cx="350" cy="170" fill="#ffffff" opacity=".12" rx="54" ry="26"></ellipse>
-</g>
+<path d="M295 165 L330 220 L375 255 M330 220 L326 285 L362 337 M326 285 L303 343 M375 255 L402 304 M330 220 L373 210" fill="none" stroke="#1e414a" stroke-width="10" stroke-linecap="round" opacity=".45"/><path d="M295 165 L330 220 L375 255 M330 220 L326 285 L362 337 M326 285 L303 343 M375 255 L402 304 M330 220 L373 210" fill="none" stroke="#b4dbcd" stroke-width="5" stroke-linecap="round" opacity=".7"/></g>
 <!-- Vias aéreas mantidas por cima dos pulmões --></g>
 <!-- Leitura -->
 <g filter="url(#softShadow)" id="statusBox" transform="translate(40,78)">
-<rect fill="#ffffff" height="250" rx="20" stroke="#d7e1ec" stroke-width="2" width="225"></rect>
+<rect fill="#142c3d" height="250" rx="20" stroke="#d7e1ec" stroke-width="2" width="225"></rect>
 <text fill="#17324d" font-size="18" font-weight="800" x="18" y="28">Leitura do circuito</text>
 <text fill="#2f80ed" font-size="15" font-weight="700" id="statusText1" x="18" y="58">Respiração modula RV</text>
 <text fill="#e34d4d" font-size="14" font-weight="700" id="statusText2" x="18" y="90"></text>
 <text fill="#20b26b" font-size="14" font-weight="700" id="statusText3" x="18" y="168"></text>
 </g>
 <!-- Coração centralizado -->
-<g filter="url(#newHeartPremiumShadow)" id="heartGroup">
-<g id="heartMain">
-<g transform="translate(337 425) scale(0.27 0.25)">
-<defs>
-<clippath id="newHeartClipLocal">
-<path d="M566.2643,993.9062C425.9142,881.6787,270.1297,749.9875,164.7595,617.5243 C53.9621,478.241,12.7985,355.8564,38.9136,243.3774c15.0878-64.9847,45.8376-116.6956,91.3927-153.6974 c41.8641-34.0031,95.4034-54.0473,154.8294-57.9639c8.0587-0.5319,16.1029-0.8009,23.907-0.8009 c108.3699,0,192.3093,52.25,242.7412,151.1022l14.1638,27.7656l14.1555-27.7708 C630.1004,83.9103,712.5994,29.8836,812.3974,29.8836c10.5193,0,21.3781,0.5971,32.274,1.7746 c128.8912,13.9299,219.4241,86.5945,248.3848,199.3632c28.193,109.7772-11.2189,236.7831-117.1384,377.4871 C886.1879,727.7071,748.3957,857.333,566.2643,993.9062z"></path>
-</clippath>
-</defs>
-<path d="M566.2643,993.9062C425.9142,881.6787,270.1297,749.9875,164.7595,617.5243 C53.9621,478.241,12.7985,355.8564,38.9136,243.3774c15.0878-64.9847,45.8376-116.6956,91.3927-153.6974 c41.8641-34.0031,95.4034-54.0473,154.8294-57.9639c8.0587-0.5319,16.1029-0.8009,23.907-0.8009 c108.3699,0,192.3093,52.25,242.7412,151.1022l14.1638,27.7656l14.1555-27.7708 C630.1004,83.9103,712.5994,29.8836,812.3974,29.8836c10.5193,0,21.3781,0.5971,32.274,1.7746 c128.8912,13.9299,219.4241,86.5945,248.3848,199.3632c28.193,109.7772-11.2189,236.7831-117.1384,377.4871 C886.1879,727.7071,748.3957,857.333,566.2643,993.9062z" fill="url(#newHeartDense3D)" opacity="0.98" stroke="#720817" stroke-width="18"></path>
-<g clip-path="url(#newHeartClipLocal)">
-<path d="M566.2643,993.9062C425.9142,881.6787,270.1297,749.9875,164.7595,617.5243 C53.9621,478.241,12.7985,355.8564,38.9136,243.3774c15.0878-64.9847,45.8376-116.6956,91.3927-153.6974 c41.8641-34.0031,95.4034-54.0473,154.8294-57.9639c8.0587-0.5319,16.1029-0.8009,23.907-0.8009 c108.3699,0,192.3093,52.25,242.7412,151.1022l14.1638,27.7656l14.1555-27.7708 C630.1004,83.9103,712.5994,29.8836,812.3974,29.8836c10.5193,0,21.3781,0.5971,32.274,1.7746 c128.8912,13.9299,219.4241,86.5945,248.3848,199.3632c28.193,109.7772-11.2189,236.7831-117.1384,377.4871 C886.1879,727.7071,748.3957,857.333,566.2643,993.9062z" fill="url(#newHeartShade3D)" opacity="0.88"></path>
-<ellipse cx="330" cy="295" fill="url(#newHeartDenseHighlight)" filter="url(#newHeartSoftBlur)" opacity="0.58" rx="235" ry="92"></ellipse>
-<ellipse cx="270" cy="245" fill="#ff9aa8" filter="url(#newHeartSoftBlur)" opacity="0.24" rx="115" ry="46"></ellipse>
-<path d="M175 515 C315 440 540 445 690 525" fill="none" filter="url(#newHeartSoftBlur)" opacity="0.24" stroke="#ff7989" stroke-linecap="round" stroke-width="34"></path>
-<path d="M150 760 C310 905 650 938 884 700" fill="none" filter="url(#newHeartSoftBlur)" opacity="0.18" stroke="#3f0410" stroke-linecap="round" stroke-width="46"></path>
+<g id="heartGroup" filter="url(#heartShadow3D)">
+ <defs>
+  <radialGradient id="myocardium" cx="28%" cy="20%" r="85%"><stop stop-color="#ffb5b0"/><stop offset=".3" stop-color="#d55d70"/><stop offset=".65" stop-color="#923348"/><stop offset="1" stop-color="#330f29"/></radialGradient>
+  <radialGradient id="cavity" cx="36%" cy="28%" r="75%"><stop stop-color="#e97586"/><stop offset=".45" stop-color="#992c47"/><stop offset="1" stop-color="#260b21"/></radialGradient>
+  <linearGradient id="coronary" x2="1" y2="0"><stop stop-color="#522638"/><stop offset=".45" stop-color="#f6a4a0"/><stop offset="1" stop-color="#89374b"/></linearGradient>
+ </defs>
+ <!-- Fixed vessel roots and atrial region frame the contracting ventricular muscle. -->
+ <path d="M485 490 C480 458 475 420 491 416 C525 403 547 436 531 472" fill="none" stroke="#270f25" stroke-width="29"/>
+ <path d="M485 490 C480 458 475 420 491 416 C525 403 547 436 531 472" fill="none" stroke="url(#arterialVessel3D)" stroke-width="22"/>
+ <path d="M495 490 C516 462 511 445 519 432" fill="none" stroke="url(#venousVessel3D)" stroke-width="21" stroke-linecap="round"/>
+ <path d="M434 534 C411 516 411 485 433 475 C452 463 477 478 480 500 L471 545Z" fill="url(#myocardium)" stroke="#9d5a6a" stroke-width="2"/>
+ <path d="M509 490 C530 467 568 475 575 505 C580 524 565 543 550 551 L502 541Z" fill="url(#myocardium)" stroke="#9d5a6a" stroke-width="2"/>
+ <g id="heartMain">
+  <path d="M453 505 C411 509 393 550 406 590 C418 631 461 670 510 692 C536 704 559 662 580 617 C599 575 580 532 546 515 C519 502 480 496 453 505Z" fill="url(#myocardium)" stroke="#8b4c62" stroke-width="2"/>
+  <path d="M452 520 C418 542 424 591 451 622 C469 642 491 657 510 668" fill="none" stroke="#ffc3b9" stroke-width="7" stroke-linecap="round" opacity=".16"/>
+  <path d="M486 522 C503 548 488 579 500 617 C506 638 522 656 514 682" fill="none" stroke="#391324" stroke-width="12" opacity=".6"/>
+  <path d="M487 523 C503 550 490 579 503 616 C510 640 522 655 516 677 M501 575 C468 568 455 552 443 544 M503 615 C533 601 549 580 559 559" fill="none" stroke="url(#coronary)" stroke-width="5" stroke-linecap="round"/>
+  <!-- Schematic ventricular window: its area follows the selected EDV and ESV. -->
+  <ellipse cx="543" cy="580" rx="29" ry="48" transform="rotate(19 543 580)" fill="#310e26" stroke="#f8aba7" stroke-width="9"/>
+  <ellipse id="ventricleVolume" cx="543" cy="580" rx="24" ry="42" transform="rotate(19 543 580)" fill="#9f3b56" stroke="#ffb0ab" stroke-width="2"/>
+  <path d="M427 557 Q451 567 462 592 M433 579 Q452 586 470 607 M443 604 Q461 609 481 633" fill="none" stroke="#ffd0bb" opacity=".12" stroke-width="2"/>
+ </g>
+ <text id="heartPhaseLabel" x="490" y="733" text-anchor="middle" fill="#aac2d4" font-size="15" letter-spacing="2">ENCHIMENTO</text>
+ <text x="490" y="754" text-anchor="middle" fill="#829bad" font-size="11">Cavidade ventricular · representação esquemática</text>
 </g>
-</g>
-</g>
-<!-- Mantido apenas para compatibilidade com a lógica de volume; invisível no novo coração -->
-<ellipse cx="490" cy="560" fill="transparent" id="ventricleVolume" opacity="0" rx="52" ry="66" stroke="transparent"></ellipse>
-</g>
+
 <!-- Retorno venoso bem mais baixo / extremo esquerdo -->
 <g filter="url(#box3DShadow)" id="venousBlock">
 <defs>
@@ -1829,7 +1861,7 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <!-- Conectores ajustados -->
 <g id="labelsLayer">
 <g id="labelPulmoes" style="pointer-events:none" transform="translate(490,25)">
-<rect fill="#ffffff" filter="url(#softShadow)" height="36" rx="18" stroke="#bfcfe0" stroke-width="2" width="140" x="-70" y="-20"></rect>
+<rect fill="#1c3346" filter="url(#softShadow)" height="36" rx="18" stroke="#bfcfe0" stroke-width="2" width="140" x="-70" y="-20"></rect>
 <text dominant-baseline="middle" fill="#1f2d3d" font-size="16" font-weight="800" text-anchor="middle">Pulmões</text>
 </g>
 <g id="labelEntradaVenosa" style="pointer-events:none" transform="translate(230,760)">
@@ -1849,7 +1881,7 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <g id="oxygenParticles"></g>
 </svg>
 </div>
-</div></div></div><div class="panel dashboard-panel" data-tab="graficos">
+</div></div></div><div class="panel dashboard-panel">
 <div class="panel-header"><h2>Gráficos e variáveis centrais</h2><span></span></div>
 
 
@@ -1860,10 +1892,10 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
 <div class="graph-label">Volumes cardíacos · <span class="c-edv">EDV</span>, <span class="c-esv">ESV</span> e <span class="c-vs">VS</span></div>
 <canvas height="220" id="volumeChart" width="640"></canvas>
 </div><div class="graph-block">
-<div class="graph-label stage-title"><span class="c-o2">Saturação de O₂ (%)</span> · <span class="stage-word">pulmonar</span>, <span class="stage-word">arterial</span> e <span class="stage-word">venosa</span></div>
+<div class="graph-label stage-title">Saturação de O₂ (%) · <span class="c-satp">SatO₂ pulm</span> / <span class="c-sata">SaO₂</span> / <span class="c-satv">SvO₂</span></div>
 <canvas height="300" id="percentCombinedChart" width="640"></canvas>
 </div><div class="graph-block">
-<div class="graph-label">Pressões parciais dos gases (mmHg) · <span class="c-o2">PO₂</span> e <span class="c-co2">PCO₂</span></div>
+<div class="graph-label">Pressões parciais dos gases (mmHg)<br><span class="c-po2p">PO₂ pulm</span> / <span class="c-pao2">PaO₂</span> / <span class="c-pvo2">PvO₂</span><br><span class="c-pco2p">PCO₂ pulm</span> / <span class="c-paco2">PaCO₂</span> / <span class="c-pvco2">PvCO₂</span></div>
 <canvas height="300" id="gasPressureCombinedChart" width="640"></canvas>
 </div><div class="graph-block pressure-eq-block">
 <div class="graph-label">Pressões hemodinâmicas (mmHg)<span class="legend-line"><span class="c-papm">PAPm</span> · <span class="c-pas">PAS</span> · <span class="c-pad">PAD</span> · <span class="c-pam">PAM</span> · <span class="c-pv">PV</span></span></div>
@@ -1877,42 +1909,42 @@ canvas,.scene-wrap{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 10px 22px rgb
     </div>
     <div class="eq-mini">
       <h3>Fração de ejeção</h3>
-      <code><span class="c-vs">FE</span> <span class="op">=</span> <span class="c-vs">VS</span> <span class="op">/</span> <span class="c-edv">EDV</span> <span class="op">×</span> <span class="num">100</span></code>
+      <code><span class="c-ef">FE</span> <span class="op">=</span> <span class="c-vs">VS</span> <span class="op">/</span> <span class="c-edv">EDV</span> <span class="op">×</span> <span class="num">100</span></code>
     </div>
     <div class="eq-mini">
       <h3>Débito cardíaco</h3>
-      <code><span class="c-dc">DC</span> <span class="op">=</span> <span class="c-rv">FC</span> <span class="op">×</span> <span class="c-vs">VS</span> <span class="op">/</span> <span class="num">1000</span></code>
+      <code><span class="c-dc">DC</span> <span class="op">=</span> <span class="c-fc">FC</span> <span class="op">×</span> <span class="c-vs">VS</span> <span class="op">/</span> <span class="num">1000</span></code>
     </div>
     <div class="eq-mini">
       <h3>Consumo de O₂</h3>
-      <code><span class="c-o2">VO₂</span> <span class="op">=</span> <span class="c-dc">DC</span> <span class="op">×</span> <span class="c-o2">Δa-vO₂</span></code>
+      <code><span class="c-vo2">VO₂</span> <span class="op">=</span> <span class="c-dc">DC</span> <span class="op">×</span> <span class="c-avo2">Δa-vO₂</span></code>
     </div>
   </div>
 </div>
 <div class="interpret-inline">
   <div class="interpret-inline-title">Como interpretar</div>
-  <p><strong>Respiração:</strong> a inspiração torna a pressão intratorácica mais favorável ao retorno venoso, aumentando o enchimento cardíaco; <strong>loop cardíaco:</strong> maior RV tende a elevar o EDV e, com a contratilidade preservada, o ESV cai relativamente, aumentando o VS e a FE; <strong>débito cardíaco:</strong> o DC resulta da combinação entre frequência cardíaca e volume sistólico, embora FC muito alta possa reduzir o enchimento; <strong>VO₂ e saturação:</strong> quando a demanda metabólica sobe, a extração aumenta e a SvO₂ cai, enquanto a SaO₂ permanece alta se a oxigenação pulmonar estiver preservada; <strong>equações ativas:</strong> VS resume a diferença entre EDV e ESV; FE expressa a proporção ejetada; DC integra FC e VS dividido por 1000; PAM é recalculada por PAD + 1/3(PAS−PAD); RVS é estimada por PAM/DC; e VO₂ conecta fluxo sistêmico com Δa-vO₂. <strong>Fechamento do sistema:</strong> o sangue venoso retorna ao pulmão, é reoxigenado e volta ao coração esquerdo, completando o circuito cardiopulmonar integrado.</p>
+  <p><strong>Respiração:</strong> a inspiração torna a pressão intratorácica mais favorável ao retorno venoso, aumentando o enchimento cardíaco; <strong>loop cardíaco:</strong> maior <span class="c-rv">RV</span> tende a elevar o <span class="c-edv">EDV</span> e, com a contratilidade preservada, o <span class="c-esv">ESV</span> cai relativamente, aumentando o <span class="c-vs">VS</span> e a <span class="c-ef">FE</span>; <strong>débito cardíaco:</strong> o <span class="c-dc">DC</span> resulta da combinação entre frequência cardíaca e volume sistólico, embora <span class="c-fc">FC</span> muito alta possa reduzir o enchimento; <strong><span class="c-vo2">VO₂</span> e saturação:</strong> quando a demanda metabólica sobe, a extração aumenta e a <span class="c-satv">SvO₂</span> cai, enquanto a <span class="c-sata">SaO₂</span> permanece alta se a oxigenação pulmonar estiver preservada; <strong>equações ativas:</strong> <span class="c-vs">VS</span> resume a diferença entre <span class="c-edv">EDV</span> e <span class="c-esv">ESV</span>; <span class="c-ef">FE</span> expressa a proporção ejetada; <span class="c-dc">DC</span> integra <span class="c-fc">FC</span> e <span class="c-vs">VS</span> dividido por 1000; <span class="c-pam">PAM</span> é recalculada por <span class="c-pad">PAD</span> + 1/3(<span class="c-pas">PAS</span>−<span class="c-pad">PAD</span>); <span class="c-rvs">RVS</span> é estimada por <span class="c-pam">PAM</span>/<span class="c-dc">DC</span>; e <span class="c-vo2">VO₂</span> conecta fluxo sistêmico com <span class="c-avo2">Δa-vO₂</span>. <strong>Fechamento do sistema:</strong> o sangue venoso retorna ao pulmão, é reoxigenado e volta ao coração esquerdo, completando o circuito cardiopulmonar integrado.</p>
 </div>
-</div><div class="panel graph-summary-panel" data-tab="animacao">
+</div><div class="panel graph-summary-panel">
 <div class="panel-header"><h2>Variáveis centrais</h2><span>Resumo final do sistema</span></div>
 <div class="metric-grid">
 <div class="metric c-rv"><small>RV</small><strong id="rvVal">5.0</strong><em>L/min</em></div>
 <div class="metric c-dc"><small>DC</small><strong id="coVal">4.9</strong><em>L/min</em></div>
-<div class="metric c-eq" id="eqMetric"><small>Equilíbrio RV/DC</small><strong id="eqVal">OK</strong><em id="eqDelta">Δ 0.0 L/min</em></div>
+<div class="metric c-eq" id="eqMetric"><small>Equilíbrio <span class="c-rv">RV</span>/<span class="c-dc">DC</span></small><strong id="eqVal">OK</strong><em id="eqDelta">Δ 0.0 L/min</em></div>
 <div class="metric c-edv"><small>EDV</small><strong id="edvVal">120</strong><em>mL</em></div>
 <div class="metric c-esv"><small>ESV</small><strong id="esvVal">50</strong><em>mL</em></div>
 <div class="metric c-vs"><small>VS</small><strong id="svVal">70</strong><em>mL</em></div>
-<div class="metric c-vs"><small>Fração de ejeção</small><strong id="efVal">58</strong><em>%</em></div>
-<div class="metric c-o2"><small>SatO₂ Pulm / Art / Ven</small><strong id="o2SatVal">99 / 98 / 75</strong><em>%</em></div>
-<div class="metric c-o2"><small>PO₂ pulm / PaO₂ / PvO₂</small><strong id="o2MmHgVal">104 / 98 / 40</strong><em>mmHg</em></div>
-<div class="metric c-co2"><small>PCO₂ pulm / PaCO₂ / PvCO₂</small><strong id="co2Val">38 / 40 / 46</strong><em>mmHg</em></div>
+<div class="metric c-ef"><small>Fração de ejeção</small><strong id="efVal">58</strong><em>%</em></div>
+<div class="metric gas-metric"><small><span class="c-satp">SatO₂ pulm</span> / <span class="c-sata">SaO₂</span> / <span class="c-satv">SvO₂</span></small><strong id="o2SatVal"></strong><em>%</em></div>
+<div class="metric gas-metric"><small><span class="c-po2p">PO₂ pulm</span> / <span class="c-pao2">PaO₂</span> / <span class="c-pvo2">PvO₂</span></small><strong id="o2MmHgVal"></strong><em>mmHg</em></div>
+<div class="metric gas-metric"><small><span class="c-pco2p">PCO₂ pulm</span> / <span class="c-paco2">PaCO₂</span> / <span class="c-pvco2">PvCO₂</span></small><strong id="co2Val"></strong><em>mmHg</em></div>
 <div class="metric c-papm"><small>PAPm</small><strong id="papmVal">15</strong><em>mmHg</em></div>
 <div class="metric c-pam"><small>PAM</small><strong id="pamVal">93</strong><em>mmHg</em></div>
 <div class="metric c-pv"><small>PV</small><strong id="pvVal">5</strong><em>mmHg</em></div>
 <div class="metric c-pas"><small>PAS</small><strong id="pasVal">120</strong><em>mmHg</em></div>
 <div class="metric c-pad"><small>PAD</small><strong id="padVal">80</strong><em>mmHg</em></div>
-<div class="metric c-co2"><small>VCO₂</small><strong id="vco2Val">200</strong><em>mL/min</em></div>
-<div class="metric c-o2"><small>VO₂</small><strong id="vo2Val">250</strong><em>mL/min</em></div>
+<div class="metric c-vco2"><small>VCO₂</small><strong id="vco2Val">200</strong><em>mL/min</em></div>
+<div class="metric c-vo2"><small>VO₂</small><strong id="vo2Val">250</strong><em>mL/min</em></div>
 </div>
 </div></div></div>
 
@@ -2164,7 +2196,8 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       statesWrap.appendChild(title);
 
       group.items.forEach(([name])=>{
-        const div=document.createElement('div');
+        const div=document.createElement('button');
+        div.type='button';
         div.className='state-btn';
         div.textContent=name;
         div.onclick=()=>applyPreset(name);
@@ -2473,26 +2506,26 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       ui.papm.textContent=Math.round(v.ppulm);
       ui.pam.textContent=Math.round(v.pam);
       ui.pv.textContent=Math.round(v.pven);
-      ui.o2Sat.textContent=`${Math.round(v.pulmO2Sat)} / ${Math.round(v.saO2)} / ${Math.round(v.svO2)}`;
-      ui.o2MmHg.textContent=`${Math.round(v.po2Pulm)} / ${Math.round(v.paO2)} / ${Math.round(v.pvO2)}`;
-      ui.co2.textContent=`${Math.round(v.pco2Pulm)} / ${Math.round(v.paCO2)} / ${Math.round(v.pvCO2)}`;
+      ui.o2Sat.innerHTML=`<span class="c-satp">${Math.round(v.pulmO2Sat)}</span> / <span class="c-sata">${Math.round(v.saO2)}</span> / <span class="c-satv">${Math.round(v.svO2)}</span>`;
+      ui.o2MmHg.innerHTML=`<span class="c-po2p">${Math.round(v.po2Pulm)}</span> / <span class="c-pao2">${Math.round(v.paO2)}</span> / <span class="c-pvo2">${Math.round(v.pvO2)}</span>`;
+      ui.co2.innerHTML=`<span class="c-pco2p">${Math.round(v.pco2Pulm)}</span> / <span class="c-paco2">${Math.round(v.paCO2)}</span> / <span class="c-pvco2">${Math.round(v.pvCO2)}</span>`;
       ui.vco2.textContent=Math.round(v.vco2);
       ui.phaseLabel.textContent=v.phaseText;
       setSvgRichLines(ui.status1, [[
-        {text:`${Math.sin(model.breathPhase)>=0?'Inspiração':'Expiração'} ${Math.sin(model.breathPhase)>=0?'favorece':'reduz'} o `, fill:'#2f80ed', weight:700},
+        {text:`${Math.sin(model.breathPhase)>=0?'Inspiração':'Expiração'} ${Math.sin(model.breathPhase)>=0?'favorece':'reduz'} o `, fill:'#8ccaff', weight:700},
         {text:'RV', fill:cssVar('--c-rv'), weight:900}
       ]], 18, 20);
       setSvgRichLines(ui.status2, [
-        [{text:'EDV', fill:cssVar('--c-edv'), weight:900},{text:`: ${Math.round(v.edv)} mL`, fill:'#17324d', weight:700}],
-        [{text:'ESV', fill:cssVar('--c-esv'), weight:900},{text:`: ${Math.round(v.esv)} mL`, fill:'#17324d', weight:700}],
-        [{text:'VS', fill:cssVar('--c-vs'), weight:900},{text:`: ${Math.round(v.sv)} mL`, fill:'#17324d', weight:700}],
-        [{text:'VO₂', fill:cssVar('--c-o2'), weight:900},{text:`: ${Math.round(v.vo2)} mL/min`, fill:'#17324d', weight:700}]
+        [{text:'EDV', fill:cssVar('--c-edv'), weight:900},{text:`: ${Math.round(v.edv)} mL`, fill:cssVar('--c-edv'), weight:700}],
+        [{text:'ESV', fill:cssVar('--c-esv'), weight:900},{text:`: ${Math.round(v.esv)} mL`, fill:cssVar('--c-esv'), weight:700}],
+        [{text:'VS', fill:cssVar('--c-vs'), weight:900},{text:`: ${Math.round(v.sv)} mL`, fill:cssVar('--c-vs'), weight:700}],
+        [{text:'VO₂', fill:cssVar('--c-vo2'), weight:900},{text:`: ${Math.round(v.vo2)} mL/min`, fill:cssVar('--c-vo2'), weight:700}]
       ]);
       setSvgRichLines(ui.status3, [
-        [{text:'PAS', fill:cssVar('--c-pas'), weight:900},{text:`: ${Math.round(v.pas)} mmHg`, fill:'#17324d', weight:700}],
-        [{text:'PAD', fill:cssVar('--c-pad'), weight:900},{text:`: ${Math.round(v.pad)} mmHg`, fill:'#17324d', weight:700}],
-        [{text:'O₂', fill:cssVar('--c-o2'), weight:900},{text:`: ${Math.round(v.saO2)}/${Math.round(v.svO2)}%`, fill:'#17324d', weight:700}],
-        [{text:'CO₂', fill:cssVar('--c-co2'), weight:900},{text:`: ${Math.round(v.paCO2)}/${Math.round(v.pvCO2)} mmHg`, fill:'#17324d', weight:700}]
+        [{text:'PAS', fill:cssVar('--c-pas'), weight:900},{text:`: ${Math.round(v.pas)} mmHg`, fill:cssVar('--c-pas'), weight:700}],
+        [{text:'PAD', fill:cssVar('--c-pad'), weight:900},{text:`: ${Math.round(v.pad)} mmHg`, fill:cssVar('--c-pad'), weight:700}],
+        [{text:`SaO₂: ${Math.round(v.saO2)} / `,fill:cssVar('--c-sata'),weight:700},{text:`SvO₂: ${Math.round(v.svO2)}`,fill:cssVar('--c-satv'),weight:700}],
+        [{text:`PaCO₂: ${Math.round(v.paCO2)} / `,fill:cssVar('--c-paco2'),weight:700},{text:`PvCO₂: ${Math.round(v.pvCO2)}`,fill:cssVar('--c-pvco2'),weight:700}]
       ]);
       ui.labelsLayer.style.display = model.showLabels ? 'block' : 'none';
     }
@@ -2541,10 +2574,14 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
 
       // micro deslocamento fisiológico: desce no enchimento e sobe no esvaziamento.
       const heartLift = -systole*(2.2 + contractNorm*3.6) + diastole*(1.0 + compNorm*1.4);
-      ui.heartMain.setAttribute('transform',`translate(490 ${560+heartLift}) scale(${heartScaleX} ${heartScaleY}) translate(-490 ${-560-heartLift})`);
+      ui.heartMain.setAttribute('transform',`translate(490 505) scale(${heartScaleX} ${heartScaleY}) translate(-490 -505)`);
 
-      // compatibilidade: o novo coração não usa volume ventricular visível
-      ui.ventricleVolume.setAttribute('opacity', 0);
+      // Visible schematic cavity follows the current EDV/ESV without changing the model.
+      const cavityVolume=lerp(model.values.edv,model.values.esv,systole);
+      const cavitySize=Math.sqrt(Math.max(1,cavityVolume)/120);
+      ui.ventricleVolume.setAttribute('rx',(24*cavitySize).toFixed(2));
+      ui.ventricleVolume.setAttribute('ry',(42*cavitySize).toFixed(2));
+      document.getElementById('heartPhaseLabel').textContent=systole>.1?'CONTRAÇÃO / EJEÇÃO':'RELAXAMENTO / ENCHIMENTO';
 
       renderParticles();
     }
@@ -2681,7 +2718,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const ctx=canvas.getContext('2d');
       const w=canvas.width,h=canvas.height;
       ctx.clearRect(0,0,w,h);
-      ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,w,h);
+      ctx.fillStyle='#0c1c29'; ctx.fillRect(0,0,w,h);
 
       const liveValues = Array.isArray(options.liveValues) ? options.liveValues : [];
       series = (series || []).map((arr, idx) => seriesWithCurrent(arr, liveValues[idx], 80));
@@ -2713,7 +2750,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const chartH = chartBottom - chartTop;
 
       // Grade + 5 valores do eixo Y (4 intervalos), alinhados às linhas.
-      ctx.strokeStyle='#e1e9f2';
+      ctx.strokeStyle='#2c4354';
       ctx.lineWidth=1;
       ctx.font='700 11px Inter, Arial';
       ctx.textAlign='right';
@@ -2726,7 +2763,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         ctx.moveTo(chartLeft,y);
         ctx.lineTo(chartRight,y);
         ctx.stroke();
-        ctx.fillStyle='#6c8094';
+        ctx.fillStyle='#a2b9ca';
         ctx.fillText(val.toFixed(decimals), chartLeft - 8, y);
       }
       ctx.textAlign='start';
@@ -2802,7 +2839,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const ctx = canvas.getContext('2d');
       const w = canvas.width, h = canvas.height;
       ctx.clearRect(0,0,w,h);
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle='#0c1c29';
       ctx.fillRect(0,0,w,h);
 
       const left = 52, right = w - 16, top = 30, bottom = h - 28;
@@ -2810,7 +2847,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const minV = options.min ?? 0;
       let maxV = options.max ?? 100;
 
-      ctx.strokeStyle = '#e1e9f2';
+      ctx.strokeStyle='#2c4354';
       ctx.lineWidth = 1;
       for(let i=0;i<5;i++){
         const y = top + i * (chartH/4);
@@ -2819,7 +2856,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         ctx.lineTo(right, y);
         ctx.stroke();
         const val = (maxV - (maxV-minV)*(i/4));
-        ctx.fillStyle = '#6c8094';
+        ctx.fillStyle='#a2b9ca';
         ctx.font = '12px Inter, Arial';
         ctx.fillText(String(Math.round(val)), 10, y + 4);
       }
@@ -2853,7 +2890,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
 
       // Títulos das fases com fonte mais natural, sem aspecto esticado.
       ctx.save();
-      ctx.fillStyle = '#465e76';
+      ctx.fillStyle='#c1d3df';
       ctx.font = '800 12.4px Segoe UI, Inter, Arial, sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -2870,6 +2907,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         let moved = false;
         vdef.stages.forEach((arr, stageIdx)=>{
           if(!arr || !arr.length) return;
+          ctx.beginPath();moved=false;ctx.strokeStyle=vdef.stageColors?.[stageIdx]||vdef.color;
           const innerL = stageStarts[stageIdx] + 10;
           const innerR = stageEnds[stageIdx] - 10;
           const innerW = innerR - innerL;
@@ -2883,8 +2921,8 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
               ctx.lineTo(x,y);
             }
           });
+          ctx.stroke();
         });
-        ctx.stroke();
 
         const wrapProg = ((model.t * 0.18) + vidx * 0.13) % 1;
         const stageFloat = wrapProg * 3;
@@ -2905,10 +2943,10 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
 
           const markerSphere = ctx.createRadialGradient(x-3, y-3, 1, x, y, 8);
           markerSphere.addColorStop(0, '#ffffff');
-          markerSphere.addColorStop(0.28, vdef.color);
-          markerSphere.addColorStop(1, vdef.color);
+          markerSphere.addColorStop(0.28, vdef.stageColors?.[stageIdx]||vdef.color);
+          markerSphere.addColorStop(1, vdef.stageColors?.[stageIdx]||vdef.color);
           ctx.save();
-          ctx.shadowColor = vdef.color;
+          ctx.shadowColor = vdef.stageColors?.[stageIdx]||vdef.color;
           ctx.shadowBlur = 7;
           ctx.fillStyle = markerSphere;
           ctx.beginPath();
@@ -2939,7 +2977,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const allSeries = [rvSeries, dcSeries];
 
       ctx.clearRect(0,0,w,h);
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle='#0c1c29';
       ctx.fillRect(0,0,w,h);
 
       let maxV = Math.max(2, currentRV, currentDC);
@@ -2950,7 +2988,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const chartW = right - left, chartH = bottom - top;
       const ticks = 5;
 
-      ctx.strokeStyle = '#e1e9f2';
+      ctx.strokeStyle='#2c4354';
       ctx.lineWidth = 1;
       ctx.font = '700 11px Inter, Arial';
       ctx.textAlign = 'right';
@@ -2960,7 +2998,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         const y = top + frac * chartH;
         const val = maxV - (maxV - minV) * frac;
         ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(right,y); ctx.stroke();
-        ctx.fillStyle = '#6c8094';
+        ctx.fillStyle='#a2b9ca';
         ctx.fillText(val.toFixed(1), left - 8, y);
       }
 
@@ -3063,6 +3101,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
           variables: [
             {
               color: C_O2,
+              stageColors:[cssVar('--c-satp'),cssVar('--c-sata'),cssVar('--c-satv')],
               stages: [model.history.pulmO2Sat, model.history.sa, model.history.svO2]
             }
           ]
@@ -3079,11 +3118,13 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
           venousTitle: 'Venoso',
           variables: [
             {
-              color: C_O2,
+              color: cssVar('--c-po2'),
+              stageColors:[cssVar('--c-po2p'),cssVar('--c-pao2'),cssVar('--c-pvo2')],
               stages: [model.history.po2Pulm, model.history.paO2, model.history.pvO2]
             },
             {
               color: C_CO2,
+              stageColors:[cssVar('--c-pco2p'),cssVar('--c-paco2'),cssVar('--c-pvco2')],
               stages: [model.history.pco2Pulm, model.history.paCO2, model.history.pvCO2]
             }
           ]
@@ -3141,37 +3182,19 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
     updateUI(); renderScene(); renderCharts();
     requestAnimationFrame(tick);
   </script>
-
-<script>
-(() => {
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  if (tabButtons.length) setTab('animacao');
-
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
-  const pauseCandidates = ['btnPause','pauseBtn'];
-  let startBtn = null, pauseBtn = null;
-  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
-  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
-  if (mobileToggle && startBtn){
-    let playing = false;
-    mobileToggle.addEventListener('click', () => {
-      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
-      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
-      playing = !playing;
-    });
-  } else if (mobileToggle){
-    mobileToggle.style.display = 'none';
-  }
-})();
-</script>
-  <script src="tutor-ef-data.js?v=11"></script>
-  <script src="tutor-widget.js?v=16"></script>
 </body>
 </html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.metric):not(#cards-reference-reserved){--reference-accent:currentColor;position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.metric):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.metric):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.metric):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+
+</style>
+
+<script src="tutor-ef-data.js?v=11"></script>
+<script src="tutor-widget.js?v=16"></script>

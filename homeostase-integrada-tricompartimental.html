@@ -1,12 +1,10 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"><link rel="icon" href="brand/orientador.webp">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Homeostase Integrada Tricompartimentada</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/orientador.webp">
 <meta name="description" content="Simulador interativo de homeostase dos compartimentos corporais, água, eletrólitos e equilíbrio entre plasma, líquido extracelular e líquido intracelular.">
 <meta name="sim-category" content="celular">
 <meta name="sim-author" content="Prof. Mário César Nascimento. PhD">
@@ -466,76 +464,127 @@ input[type="range"]::-moz-range-thumb{
   .ambient-context .context-molecule-c{width:27px}
   .ambient-context .context-molecule-d{width:25px}
 }
-
-/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
-@media (max-width:760px){
-  button{ min-height:44px; padding:11px 16px; font-size:15px; }
-  label{ min-height:40px; padding:8px 10px; }
-  input[type="range"]{ width:100%; height:28px; }
-  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
-  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
-  select{ min-height:44px; font-size:15px; }
-  a{ min-height:44px; display:inline-flex; align-items:center; }
-}
-
-/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
-.mobile-topbar{ display:none; }
-.mobile-tabnav{ display:none; }
-@media (max-width:760px){
-  h1{ display:none; }
-  .mobile-topbar{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    position:sticky; top:0; z-index:50; padding:12px 14px;
-    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
-    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
-  }
-  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
-  .mobile-playtoggle{
-    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
-    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
-    min-height:44px; min-width:44px; cursor:pointer;
-  }
-  .mobile-tabnav{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
-    position:sticky; top:64px; z-index:49; padding:8px 10px;
-    background:#eef4fb; border-bottom:1px solid #d7e1ec;
-  }
-  .mobile-tabnav button{
-    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
-    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
-  }
-  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
-  [data-tab]{ display:none !important; }
-  [data-tab].tab-active{ display:block !important; }
-  .status-grid[data-tab].tab-active{ display:grid !important; }
-}
 </style>
-  <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-</head>
-<body>
-  <div class="mobile-topbar">
-    <h2>Homeostase Integrada Tricompartimentada</h2>
-    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
-  </div>
-  <div class="mobile-tabnav">
-    <button data-tabnav="animacao" class="active">Animação</button>
-    <button data-tabnav="controles">Controles</button>
-    <button data-tabnav="graficos">Gráficos</button>
-  </div>
+<style id="homeostase-3d">:root{--na:#70bcff;--k:#ff8990;--cl:#f2d77c;--a:#d5adbb;--water:#6cd8f3;--plasma:#a2bff4;--lec:#60d2c5;--lic:#b9db88;--pump:#ff9b42;--vm:#e0edf5;--osm:#c4a2f6;--vol:#87d29e;--starling:#ecb48e;--salt:#d8cb9a}
+:root{--ink:#dce9f3;--muted:#b1c6d5;--line:#365364;--card:#142b39;--green:#87d29e;color-scheme:dark}
+body{background:radial-gradient(ellipse at 20% 0,#203e50,#08151e 72%);color:var(--ink)}
+.app{max-width:1640px;background:transparent;box-shadow:none;margin:20px auto;padding:20px}
+header{gap:24px;align-items:flex-start}h1{font-size:clamp(26px,3vw,40px);color:#e7f3fc}.subtitle{font-size:15px;line-height:1.5}
+.header-tools{grid-template-columns:1fr;min-width:0}.modes{background:#081b27;overflow:visible;flex-wrap:wrap}.modes button{flex:1;white-space:normal;font-size:13px}
+button,.scenario,.action,.run,.modes button{min-height:44px;border:1px solid #608195;border-radius:14px;background:linear-gradient(#49687c,#263f50);color:#edf6fc;box-shadow:inset 0 2px 1px #ffffff45,inset 0 -2px 2px #0008,0 4px 0 #06121b,0 7px 12px #0006;cursor:pointer}
+button:hover{filter:brightness(1.12)}button:active{transform:translateY(2px);box-shadow:inset 0 2px 5px #0008}.modes button.active,.run{background:linear-gradient(#427e71,#194a43);color:#eafff7}.action.reset{background:linear-gradient(#9e515d,#63313d)}
+:focus-visible{outline:3px solid #bde7ff;outline-offset:4px}
+.layout{grid-template-columns:minmax(0,1fr) 360px;align-items:start}.layout>*{min-width:0}
+.stage,.card,.science{background:linear-gradient(140deg,#203b4c,#112532);border:1px solid var(--line);box-shadow:inset 0 2px 1px #ffffff16,0 14px 30px #0003;border-radius:24px}
+.stage-head{align-items:center}.stage-head b{font-size:20px}.stage-head span{font-size:13px}
+.compartments{padding:30px 22px 28px;grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr) 42px minmax(0,1fr);background:radial-gradient(ellipse at center,#183d4b55,transparent 70%)}
+.tank-title{font-size:14px}.tank-sub{color:inherit;min-height:32px;line-height:1.4;font-size:12px}
+.tank{height:390px;--glass:#9bb8c8;background:linear-gradient(95deg,#ecf9ff20,transparent 15% 75%,#0005);box-shadow:inset 3px 0 4px #c4e9ff60,inset -4px 0 8px #0008,10px 20px 22px #0005}
+.tank:before,.glass-bottom{border-color:#90b2c4;box-shadow:inset 0 2px 2px #e7f8ff80,0 3px 5px #0008;background:#bddff515}.tank:after{box-shadow:none;opacity:.45}
+.ion{font-style:normal;text-shadow:none!important;box-shadow:inset -3px -4px 5px #0006,0 4px 5px #0006!important}.mover{box-shadow:0 3px 4px #0008}
+.barrier-cell{inset:0 8px;background:repeating-radial-gradient(circle at 4px 6px,#d5e2e9 0 2px,#7795a6 3px 5px,transparent 6px 12px);border-inline:2px solid #a8c0ce;border-radius:12px;box-shadow:0 4px 8px #0008}
+.channel-gate{width:30px;border-width:6px;border-radius:12px;background:linear-gradient(90deg,#030b12,#183444,#030b12);box-shadow:inset 2px 0 3px #000,2px 3px 4px #0009;opacity:1}
+.barrier:not(.cell):before{content:'';position:absolute;inset:0 13px;border-radius:12px;background:repeating-linear-gradient(#678699 0 27px,#182f40 28px 34px);box-shadow:inset 3px 0 4px #c9eaff70,3px 4px 6px #0008}
+.flow{opacity:.6;box-shadow:none}.charge-band{text-shadow:none}.charge-band.outside,.charge-band.inside{color:var(--vm)}
+.intervention-console,.compartment-meter,.boundary-card,.system-reading,.equation-card,.time-speed{background:#102633;border-color:var(--line);box-shadow:inset 0 1px #ffffff15,0 5px 12px #0002}
+.time-speed{padding:12px;gap:8px}.clock-main span,.time-line,.clock-main b{color:#dce9f3;font-size:12px}.clock-main b{font-size:20px}.time-line output{background:#284e61;color:#fff;font-size:12px}
+.card h2,.card summary{font-size:17px}.card p,.boundary-card span,.sidebar-boundaries .boundary-card span{font-size:14px;color:var(--muted);line-height:1.55}.sidebar-boundaries .boundary-card b,.boundary-card.cell b{font-size:14px;color:#dce9f3}
+.intervention-head span,.flux-note,.signature,.substitution,.interpretation,.matrix-units{color:var(--muted)}
+.intervention-head h3,.membrane-strip h3{font-size:16px}.intervention-head span{font-size:13px}
+.substance-rail{grid-template-columns:48px minmax(0,1fr) 125px}.substance-rail.active{background:#234352;border-color:#608398}.substance-rail b,.substance-rail output{font-size:13px}.substance-rail input{--slider:inherit}
+.membrane-control label{font-size:13px}.membrane-control .flux-note{font-size:11px;white-space:normal;flex-wrap:wrap;gap:4px}
+input[type=range]{--slider:#accddb;min-width:0;height:36px;touch-action:pan-y}
+input[type=range]::-webkit-slider-runnable-track{height:9px;background:#061722;border:1px solid #607b8b;box-shadow:inset 0 3px 4px #000b,0 1px #ffffff25}
+input[type=range]::-webkit-slider-thumb{width:27px;height:27px;margin-top:-10px;border-color:#b6d4e4;box-shadow:inset -3px -4px 5px #0006,0 4px 4px #0009}
+input[type=range]::-moz-range-track{height:9px;background:#061722;border-color:#607b8b}input[type=range]::-moz-range-thumb{width:27px;height:27px}
+.compartment-meters{grid-template-columns:minmax(0,1fr) 42px minmax(0,1fr) 42px minmax(0,1fr);padding:0 22px 14px}.compartment-meter .state-panel{grid-template-columns:1fr}.meter-head,.meter-head b{font-size:11px;color:var(--vol)}.osm .meter-head,.osm .meter-head b{color:var(--osm)}.meter-ends{color:var(--muted)}
+.phase-banner,.status{background:#102b38;color:#dce9f3;border-color:var(--line);line-height:1.5;min-height:76px;font-size:14px}.status{flex-wrap:wrap}.status b{color:#dce9f3}
+.particle-legend{display:flex;flex-wrap:wrap;gap:10px 20px;padding:4px 22px 18px;font-size:14px;font-weight:700}
+.model-matrix td:not(:first-child){background:#0c202e;color:var(--row);border-color:#3b5668;border-left-color:var(--row);font-size:18px;height:78px}.model-matrix td:not(:first-child):before{color:var(--row);font-size:10px}.model-matrix td:not(:first-child):after{color:var(--muted)}.model-matrix th{color:var(--ink);font-size:12px}.system-reading{font-size:12px}.system-reading b{font-size:14px}.system-reading:nth-child(1){--sys:var(--vm)}.system-reading:nth-child(2){--sys:var(--water)}.system-reading:nth-child(3){--sys:var(--starling)}.system-reading:nth-child(4){--sys:var(--pump)}
+.science>summary{background:#1a3848;color:#e4f3fb;font-size:18px}.science-content{font-size:16px;color:#cadce8;line-height:1.75}.science-content h3,.equation-title,.variables th{color:#e5f1fa;font-size:16px}.science-sub>summary{font-size:16px}.formula{background:#081d29;color:#deedf7;font-size:17px}.substitution{font-size:14px}.live-result{color:#dce9f3}.legend-chip{background:#0b202d;font-size:13px}.science-note,.model-tag{background:#293c43;color:#f2d77c}.references a{color:#8ad4fa}.variables{table-layout:fixed;overflow-wrap:anywhere}
+[hidden]{display:none!important}
+@media(max-width:1200px){.layout{grid-template-columns:1fr}aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.matrix-card{grid-column:1/-1}.header-tools{width:100%}header{flex-direction:column}}
+@media(max-width:650px){.app{padding:10px;margin:0}.stage-head{padding:16px 12px}.stage-head b{font-size:17px}.compartments{padding:22px 8px;grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr) 22px minmax(0,1fr)}.tank{height:300px}.tank-title{font-size:10px;letter-spacing:0}.tank-sub{font-size:10px;min-height:42px}.barrier{height:260px}.barrier-cell{inset:0 4px}.barrier:not(.cell):before{inset:0 7px}.channel-gate{width:22px;border-width:4px}.compartment-meters{padding:0 8px 12px;grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr) 22px minmax(0,1fr)}.meter-head{flex-wrap:wrap}.meter-head,.meter-head b{font-size:9px}.compartment-meter{padding:7px 4px}.membrane-controls,.membrane-strip[data-mode="1"] .membrane-controls{grid-template-columns:1fr}.intervention-console{padding:12px;margin-inline:8px}.substance-rail{grid-template-columns:40px minmax(0,1fr);gap:4px 8px}.substance-rail output{grid-column:2;text-align:center;font-size:12px}.tri-rail-labels{margin-left:48px;margin-right:0}.modes{display:grid;grid-template-columns:1fr}.modes button{font-size:14px}.phase-banner,.status{margin-inline:8px;min-height:96px}aside{display:flex}.science-body{padding:12px}.science-content{font-size:15px}.equation-card{padding:12px}.particle-legend{font-size:12px;padding-inline:12px}.ion{width:22px;height:22px;font-size:9px}.tank:after{height:70%}.dose-rail{grid-template-columns:64px minmax(0,1fr) 42px}.science>summary{font-size:16px}}
 
+/* Cabeçalho compacto e contraste de leitura, inclusive nos níveis parciais. */
+header{display:grid;grid-template-columns:330px minmax(0,1fr);align-items:center;gap:18px;padding-bottom:12px}
+header h1{font-size:28px;line-height:1.15;white-space:nowrap;letter-spacing:-.8px}
+header .subtitle{font-size:12px;line-height:1.4;margin-top:6px}
+.header-tools{grid-template-columns:250px minmax(0,1fr);align-items:center;gap:12px;width:auto}
+header>div:first-child:not(.header-tools){min-width:0}
+.header-tools .time-speed{padding:8px 10px;gap:2px;min-width:0}
+.header-tools .time-speed input{height:28px;margin:0}
+.header-tools .clock-main b{font-size:18px}
+.header-tools .time-line{font-size:11px}
+.header-tools .modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));min-width:0;align-items:stretch;gap:6px}
+.header-tools .modes button{min-width:0;white-space:normal;padding:8px 7px;font-size:13px;line-height:1.3;text-wrap:balance}
+.time-line{flex-wrap:wrap;line-height:1.4}
+.clock-main span{max-width:none;line-height:1.25}
+.tri-rail-labels{font-size:13px;color:var(--ink)}
+.tri-rail-labels span:nth-child(1){color:var(--plasma)}
+.tri-rail-labels span:nth-child(2){color:var(--lec)}
+.tri-rail-labels span:nth-child(3){color:var(--lic)}
+.intervention-console[data-mode="1"] .tri-rail-labels span:first-child,
+.intervention-console[data-mode="2"] .tri-rail-labels span:first-child{opacity:1}
+.dose-rail output{color:var(--ink)}
+.system-reading{color:var(--ink)}
+.model-matrix .matrix-units,.meter-ends,.flux-note{color:var(--muted)}
+.card summary::after,.science>summary::after,.science-sub>summary::after{color:#b5dccd}
+.stage[data-mode="1"] .vascular-focus,.stage[data-mode="2"] .vascular-focus{opacity:1;filter:none}
+.stage[data-mode="1"] .vascular-focus .tank,.stage[data-mode="2"] .vascular-focus .tank{opacity:.55}
+@media(max-width:1250px){header{grid-template-columns:minmax(0,1fr);gap:10px}header>div:first-child:not(.header-tools){display:flex;align-items:baseline;gap:16px}header .subtitle{margin:0}.header-tools{width:100%;grid-template-columns:250px minmax(0,1fr)}}
+@media(max-width:650px){header>div:first-child:not(.header-tools){display:block}header h1{font-size:clamp(22px,6vw,28px);white-space:normal}header .subtitle{margin-top:4px}.header-tools{grid-template-columns:1fr;gap:8px}.header-tools .modes{gap:5px}.header-tools .modes button{font-size:11px;padding:9px 4px}.tri-rail-labels{font-size:12px}}
+
+.c-na{color:#70bcff!important}
+.c-k{color:#ff8990!important}
+.c-cl{color:#f2d77c!important}
+.c-a{color:#d5adbb!important}
+.c-water{color:#6cd8f3!important}
+.c-plasma{color:#a2bff4!important}
+.c-lec{color:#60d2c5!important}
+.c-lic{color:#b9db88!important}
+.c-pump{color:#ff9b42!important}
+.c-vm{color:#e0edf5!important}
+.c-osm{color:#c4a2f6!important}
+.c-vol{color:#87d29e!important}
+.c-starling{color:#ecb48e!important}
+.c-salt{color:#d8cb9a!important}
+.ion.na,.mover.na{--particle:var(--na);color:#071722!important;border-color:var(--na)!important;background:radial-gradient(circle at 29% 22%,#fff 0, color-mix(in srgb,var(--na) 50%,white) 15%,var(--na) 48%,color-mix(in srgb,var(--na) 48%,#071722) 100%)!important}
+.ion.k,.mover.k{--particle:var(--k);color:#071722!important;border-color:var(--k)!important;background:radial-gradient(circle at 29% 22%,#fff 0, color-mix(in srgb,var(--k) 50%,white) 15%,var(--k) 48%,color-mix(in srgb,var(--k) 48%,#071722) 100%)!important}
+.ion.cl,.mover.cl{--particle:var(--cl);color:#071722!important;border-color:var(--cl)!important;background:radial-gradient(circle at 29% 22%,#fff 0, color-mix(in srgb,var(--cl) 50%,white) 15%,var(--cl) 48%,color-mix(in srgb,var(--cl) 48%,#071722) 100%)!important}
+.ion.a,.mover.a{--particle:var(--a);color:#071722!important;border-color:var(--a)!important;background:radial-gradient(circle at 29% 22%,#fff 0, color-mix(in srgb,var(--a) 50%,white) 15%,var(--a) 48%,color-mix(in srgb,var(--a) 48%,#071722) 100%)!important}
+.ion.water,.mover.water{--particle:var(--water);color:#071722!important;border-color:var(--water)!important;background:radial-gradient(circle at 29% 22%,#fff 0, color-mix(in srgb,var(--water) 50%,white) 15%,var(--water) 48%,color-mix(in srgb,var(--water) 48%,#071722) 100%)!important}
+.substance-rail:has([data-substance-rail="Na"]){--slider:var(--na);color:var(--na)}.substance-rail:has([data-substance-rail="Na"]) output{color:var(--na)}
+.substance-rail:has([data-substance-rail="K"]){--slider:var(--k);color:var(--k)}.substance-rail:has([data-substance-rail="K"]) output{color:var(--k)}
+.substance-rail:has([data-substance-rail="Cl"]){--slider:var(--cl);color:var(--cl)}.substance-rail:has([data-substance-rail="Cl"]) output{color:var(--cl)}
+.substance-rail:has([data-substance-rail="water"]){--slider:var(--water);color:var(--water)}.substance-rail:has([data-substance-rail="water"]) output{color:var(--water)}
+.substance-rail:has([data-substance-rail="NaCl"]){--slider:var(--salt);color:var(--salt)}.substance-rail:has([data-substance-rail="NaCl"]) output{color:var(--salt)}
+.membrane-control:has(#na-perm){color:var(--na);--slider:var(--na)}.membrane-control:has(#na-perm) b{color:var(--na)}.channel-gate.na{color:var(--na)}.action.na{color:var(--na)}
+.membrane-control:has(#k-perm){color:var(--k);--slider:var(--k)}.membrane-control:has(#k-perm) b{color:var(--k)}.channel-gate.k{color:var(--k)}.action.k{color:var(--k)}
+.membrane-control:has(#water-perm){color:var(--water);--slider:var(--water)}.membrane-control:has(#water-perm) b{color:var(--water)}.channel-gate.water{color:var(--water)}.action.water{color:var(--water)}
+.model-matrix tr.row-na{--row:var(--na)}
+.model-matrix tr.row-k{--row:var(--k)}
+.model-matrix tr.row-cl{--row:var(--cl)}
+.model-matrix tr.row-osm{--row:var(--osm)}
+.model-matrix tr.row-vol{--row:var(--vol)}
+#vm{color:var(--vm)}.equation-card:has(#vm){--eq:var(--vm)!important}
+#water-flow{color:var(--water)}.equation-card:has(#water-flow){--eq:var(--water)!important}
+#starling-read{color:var(--starling)}.equation-card:has(#starling-read){--eq:var(--starling)!important}
+#pump-read{color:var(--pump)}.equation-card:has(#pump-read){--eq:var(--pump)!important}
+#sci-nernst-k{color:var(--k)}.equation-card:has(#sci-nernst-k){--eq:var(--k)!important}
+#sci-nernst-na{color:var(--na)}.equation-card:has(#sci-nernst-na){--eq:var(--na)!important}
+#sci-ghk{color:var(--vm)}.equation-card:has(#sci-ghk){--eq:var(--vm)!important}
+#sci-cap{color:var(--vm)}.equation-card:has(#sci-cap){--eq:var(--vm)!important}
+#sci-osm{color:var(--water)}.equation-card:has(#sci-osm){--eq:var(--water)!important}
+#sci-starling{color:var(--starling)}.equation-card:has(#sci-starling){--eq:var(--starling)!important}
+.tank-wrap:nth-child(1){color:var(--plasma)}.tank.plasma{--rim:var(--plasma)}.tank.plasma .fluid{background:linear-gradient(90deg,color-mix(in srgb,var(--plasma) 30%,#071722),color-mix(in srgb,var(--plasma) 70%,#071722) 32%,color-mix(in srgb,var(--plasma) 44%,#071722) 74%,#071722)}.tank.plasma .fluid:before{background:radial-gradient(ellipse at 35% 30%,color-mix(in srgb,var(--plasma) 70%,white),var(--plasma));border-color:var(--plasma)}
+.tank-wrap:nth-child(3){color:var(--lec)}.tank.lec{--rim:var(--lec)}.tank.lec .fluid{background:linear-gradient(90deg,color-mix(in srgb,var(--lec) 30%,#071722),color-mix(in srgb,var(--lec) 70%,#071722) 32%,color-mix(in srgb,var(--lec) 44%,#071722) 74%,#071722)}.tank.lec .fluid:before{background:radial-gradient(ellipse at 35% 30%,color-mix(in srgb,var(--lec) 70%,white),var(--lec));border-color:var(--lec)}
+.tank-wrap:nth-child(5){color:var(--lic)}.tank.lic{--rim:var(--lic)}.tank.lic .fluid{background:linear-gradient(90deg,color-mix(in srgb,var(--lic) 30%,#071722),color-mix(in srgb,var(--lic) 70%,#071722) 32%,color-mix(in srgb,var(--lic) 44%,#071722) 74%,#071722)}.tank.lic .fluid:before{background:radial-gradient(ellipse at 35% 30%,color-mix(in srgb,var(--lic) 70%,white),var(--lic));border-color:var(--lic)}</style></head>
+<body>
 <main class="app">
   <header><div><h1>Homeostase integrada</h1><p class="subtitle">Modelo Dinâmico Autocompensatório Tri-Compartimental</p></div><div class="header-tools"><label class="time-speed" id="adaptive-clock" data-scale="electric"><span class="clock-main"><span id="clock-process">Resposta elétrica</span><b id="clock">0 ms</b></span><span class="time-line"><span id="total-clock">Tempo fisiológico: 00 h 00 min</span><output id="speed-out">1× · ms</output></span><input id="sim-speed" type="range" min="0.25" max="4" step="0.25" value="1" aria-label="Velocidade de reprodução do tempo fisiológico"></label><nav class="modes" aria-label="Níveis de complexidade"><button class="active">1 · Potencial de membrana</button><button>2 · Osmose e Donnan</button><button>3 · Homeostase integrada</button></nav></div></header>
   <section class="layout"><section class="stage"><div class="stage-head"><div><b>Vaso ⇄ LEC ⇄ LIC</b><br><span>Observe a redistribuição de água, íons, cargas e volume.</span></div></div>
-    <div class="ambient-context" aria-hidden="true">
-      <img class="context-cell-a" alt="" src="data:image/webp;base64,UklGRiABAABXRUJQVlA4IBQBAABwDgCdASpvAIcAPpFGnEslp6MiopZrCPASCWkA06SpcByM7rcVorKTGWofxHq1P1yjqhYXVycoAW2xC/Egq/JWBPFZvEoc2TsKnqaeBOvSUR03h9Elrob5+ejt7u2sz67g6YZOeZrEOq4IgBlwUsOSAM4Xe7wsageotugAAP738nNI1pKtAHV9H+J10Vn+irpZ12SoKnJ3uNGly4L7IC5hs7hh+kuk0JeamTU4Gomuo3LhM8rRwhBuj8frVaGi2A4RQ2ZcSJs1MzplqWdxh0FMz2mpXnPeduUVbXdRIZqFRs7OoM7WGGaQzKcgSc02r2kE9LfZgo6yiKep++A7zDr8pR7Z5K/2RAh4gRwqHWIN0ygAAAA=">
-      <img class="context-molecule-a" alt="" src="data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABwBgCdASo0ACsAPpE8m0gloyKhMBgJWLASCWcA0HVOwYGs21DMaHZzloi0n4npkvcNJC8CfSmf4+tPbAAA/vsoIDtxg0shpczIyUCNfxln/Cosn8L9rAAjNfc6aztdLSjX570wi4soxKtvNzlRQwD+MCmk1kr6fCz2CJYBJ9MWvcAAAAA=">
-      <img class="context-cell-b" alt="" src="data:image/webp;base64,UklGRiABAABXRUJQVlA4IBQBAABwDgCdASpvAIcAPpFGnEslp6MiopZrCPASCWkA06SpcByM7rcVorKTGWofxHq1P1yjqhYXVycoAW2xC/Egq/JWBPFZvEoc2TsKnqaeBOvSUR03h9Elrob5+ejt7u2sz67g6YZOeZrEOq4IgBlwUsOSAM4Xe7wsageotugAAP738nNI1pKtAHV9H+J10Vn+irpZ12SoKnJ3uNGly4L7IC5hs7hh+kuk0JeamTU4Gomuo3LhM8rRwhBuj8frVaGi2A4RQ2ZcSJs1MzplqWdxh0FMz2mpXnPeduUVbXdRIZqFRs7OoM7WGGaQzKcgSc02r2kE9LfZgo6yiKep++A7zDr8pR7Z5K/2RAh4gRwqHWIN0ygAAAA=">
-      <img class="context-molecule-b" alt="" src="data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABwBgCdASo0ACsAPpE8m0gloyKhMBgJWLASCWcA0HVOwYGs21DMaHZzloi0n4npkvcNJC8CfSmf4+tPbAAA/vsoIDtxg0shpczIyUCNfxln/Cosn8L9rAAjNfc6aztdLSjX570wi4soxKtvNzlRQwD+MCmk1kr6fCz2CJYBJ9MWvcAAAAA=">
-      <img class="context-cell-c" alt="" src="data:image/webp;base64,UklGRiABAABXRUJQVlA4IBQBAABwDgCdASpvAIcAPpFGnEslp6MiopZrCPASCWkA06SpcByM7rcVorKTGWofxHq1P1yjqhYXVycoAW2xC/Egq/JWBPFZvEoc2TsKnqaeBOvSUR03h9Elrob5+ejt7u2sz67g6YZOeZrEOq4IgBlwUsOSAM4Xe7wsageotugAAP738nNI1pKtAHV9H+J10Vn+irpZ12SoKnJ3uNGly4L7IC5hs7hh+kuk0JeamTU4Gomuo3LhM8rRwhBuj8frVaGi2A4RQ2ZcSJs1MzplqWdxh0FMz2mpXnPeduUVbXdRIZqFRs7OoM7WGGaQzKcgSc02r2kE9LfZgo6yiKep++A7zDr8pR7Z5K/2RAh4gRwqHWIN0ygAAAA=">
-      <img class="context-molecule-c" alt="" src="data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABwBgCdASo0ACsAPpE8m0gloyKhMBgJWLASCWcA0HVOwYGs21DMaHZzloi0n4npkvcNJC8CfSmf4+tPbAAA/vsoIDtxg0shpczIyUCNfxln/Cosn8L9rAAjNfc6aztdLSjX570wi4soxKtvNzlRQwD+MCmk1kr6fCz2CJYBJ9MWvcAAAAA=">
-      <img class="context-cell-d" alt="" src="data:image/webp;base64,UklGRiABAABXRUJQVlA4IBQBAABwDgCdASpvAIcAPpFGnEslp6MiopZrCPASCWkA06SpcByM7rcVorKTGWofxHq1P1yjqhYXVycoAW2xC/Egq/JWBPFZvEoc2TsKnqaeBOvSUR03h9Elrob5+ejt7u2sz67g6YZOeZrEOq4IgBlwUsOSAM4Xe7wsageotugAAP738nNI1pKtAHV9H+J10Vn+irpZ12SoKnJ3uNGly4L7IC5hs7hh+kuk0JeamTU4Gomuo3LhM8rRwhBuj8frVaGi2A4RQ2ZcSJs1MzplqWdxh0FMz2mpXnPeduUVbXdRIZqFRs7OoM7WGGaQzKcgSc02r2kE9LfZgo6yiKep++A7zDr8pR7Z5K/2RAh4gRwqHWIN0ygAAAA=">
-      <img class="context-molecule-d" alt="" src="data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAABwBgCdASo0ACsAPpE8m0gloyKhMBgJWLASCWcA0HVOwYGs21DMaHZzloi0n4npkvcNJC8CfSmf4+tPbAAA/vsoIDtxg0shpczIyUCNfxln/Cosn8L9rAAjNfc6aztdLSjX570wi4soxKtvNzlRQwD+MCmk1kr6fCz2CJYBJ9MWvcAAAAA=">
-    </div>
+    
     <div class="compartments">
       <div class="tank-wrap level-focus vascular-focus"><p class="tank-title">VASO SANGUÍNEO</p><p class="tank-sub">Plasma</p><div class="tank plasma"><div class="fluid" id="plasma-fluid"></div><div class="particles" id="plasma-particles"></div><div class="glass-bottom" aria-hidden="true"></div></div></div>
       <div class="barrier level-focus vascular-focus"><span class="barrier-note">MEMBRANA CAPILAR<br>ENDOTÉLIO</span><span class="barrier-line"></span><span class="mover na to-right" id="cap-na" style="top:105px">Na⁺</span><span class="mover cl to-right slow" id="cap-cl" style="top:165px">Cl⁻</span><span class="mover water to-right slow" id="cap-water" style="top:220px"></span><span class="mover water to-left slow" id="cap-water-back" style="top:260px"></span><span class="flow f1"></span><span class="flow f2 back"></span><span class="flow f3 negative"></span></div>
@@ -548,7 +597,7 @@ input[type="range"]::-moz-range-thumb{
       <div class="compartment-meter level-focus"><div class="state-panel"><div class="state-meter"><div class="meter-head"><span>Volume</span><b id="e-vol-state">Equilibrado</b></div><div class="battery-scale" id="e-vol-meter" aria-label="Volume intersticial equilibrado"><i id="e-vol-marker"></i></div><div class="meter-ends"><span>baixo</span><span>alto</span></div></div><div class="state-meter osm"><div class="meter-head"><span>Osmolaridade</span><b id="e-osm-state">Equilibrada</b></div><div class="battery-scale" id="e-osm-meter" aria-label="Osmolaridade intersticial equilibrada"><i id="e-osm-marker"></i></div><div class="meter-ends"><span>diluída</span><span>concentrada</span></div></div></div></div>
       <div class="compartment-meter level-focus"><div class="state-panel"><div class="state-meter"><div class="meter-head"><span>Volume</span><b id="i-vol-state">Equilibrado</b></div><div class="battery-scale" id="i-vol-meter" aria-label="Volume intracelular equilibrado"><i id="i-vol-marker"></i></div><div class="meter-ends"><span>baixo</span><span>alto</span></div></div><div class="state-meter osm"><div class="meter-head"><span>Osmolaridade</span><b id="i-osm-state">Equilibrada</b></div><div class="battery-scale" id="i-osm-meter" aria-label="Osmolaridade intracelular equilibrada"><i id="i-osm-marker"></i></div><div class="meter-ends"><span>diluída</span><span>concentrada</span></div></div></div></div>
     </div>
-    <div class="phase-banner" id="phase-banner">Estado basal: fluxos bidirecionais em equilíbrio dinâmico.</div>
+    <div class="particle-legend"><span class="c-na">● Na⁺</span><span class="c-k">● K⁺</span><span class="c-cl">● Cl⁻</span><span class="c-a">● Ânions fixos A⁻</span><span class="c-water">● Água</span></div><div class="phase-banner" id="phase-banner">Estado basal: fluxos bidirecionais em equilíbrio dinâmico.</div>
     <section class="intervention-console">
       <div class="intervention-head"><h3>Intervenção tri-compartimental</h3><span>Escolha a substância, o compartimento e a dose.</span></div>
       <div class="tri-rail-labels"><span>VASO</span><span>LEC</span><span>LIC</span></div>
@@ -618,7 +667,7 @@ input[type="range"]::-moz-range-thumb{
       </details>
     </div>
   </details>
-  <footer class="signature">Prof. Mário César Nascimento. PhD ©</footer>
+  <footer class="signature"><strong>Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</strong></footer>
 </main>
 <script>
 (() => {
@@ -1058,34 +1107,15 @@ input[type="range"]::-moz-range-thumb{
   configureLevel(1);particlePool("plasma-particles","p");particlePool("lec-particles","e");particlePool("lic-particles","i");render();setInterval(tick,100);
 })();
 </script>
-
-<script>
-(() => {
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  if (tabButtons.length) setTab('animacao');
-
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
-  const pauseCandidates = ['btnPause','pauseBtn'];
-  let startBtn = null, pauseBtn = null;
-  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
-  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
-  if (mobileToggle && startBtn){
-    let playing = false;
-    mobileToggle.addEventListener('click', () => {
-      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
-      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
-      playing = !playing;
-    });
-  } else if (mobileToggle){
-    mobileToggle.style.display = 'none';
-  }
-})();
-</script>
 </body></html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.compartment-meter,.boundary-card,.equation-card):not(#cards-reference-reserved){--reference-accent:#b6cad9;position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.compartment-meter,.boundary-card,.equation-card):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.compartment-meter,.boundary-card,.equation-card):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.compartment-meter,.boundary-card,.equation-card):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+.compartment-meter:nth-child(1){--reference-accent:var(--plasma)!important}.compartment-meter:nth-child(2){--reference-accent:var(--lec)!important}.compartment-meter:nth-child(3){--reference-accent:var(--lic)!important}.equation-card{--reference-accent:var(--eq,#b6cad9)!important}
+</style>

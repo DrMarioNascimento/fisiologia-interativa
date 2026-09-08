@@ -2,12 +2,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" /><link rel="icon" href="brand/orientador.webp">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simulador Interativo do Potencial de Ação — Padronizado</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
   <style>
     :root{
       --bg:#ffffff;
@@ -15,11 +14,11 @@
       --line:#d9dce3;
       --text:#1f2937;
       --muted:#6b7280;
-      --blue:#2563eb;
+      --blue:#70bcff;
       --cyan:#0891b2;
       --green:#059669;
       --amber:#d97706;
-      --red:#dc2626;
+      --red:#ff8990;
       --violet:#7c3aed;
       --gray:#6b7280;
       --shadow:0 10px 24px rgba(15,23,42,.06), inset 0 1px 0 rgba(255,255,255,.92);
@@ -252,68 +251,18 @@
       box-shadow:0 1px 4px rgba(15,23,42,.05);
     }
 
-
-/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
-@media (max-width:760px){
-  button{ min-height:44px; padding:11px 16px; font-size:15px; }
-  label{ min-height:40px; padding:8px 10px; }
-  input[type="range"]{ width:100%; height:28px; }
-  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
-  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
-  select{ min-height:44px; font-size:15px; }
-  a{ min-height:44px; display:inline-flex; align-items:center; }
-}
-
-/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
-.mobile-topbar{ display:none; }
-.mobile-tabnav{ display:none; }
-@media (max-width:760px){
-  h1{ display:none; }
-  .mobile-topbar{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    position:sticky; top:0; z-index:50; padding:12px 14px;
-    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
-    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
-  }
-  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
-  .mobile-playtoggle{
-    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
-    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
-    min-height:44px; min-width:44px; cursor:pointer;
-  }
-  .mobile-tabnav{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
-    position:sticky; top:64px; z-index:49; padding:8px 10px;
-    background:#eef4fb; border-bottom:1px solid #d7e1ec;
-  }
-  .mobile-tabnav button{
-    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
-    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
-  }
-  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
-  [data-tab]{ display:none !important; }
-  [data-tab].tab-active{ display:block !important; }
-  .status-grid[data-tab].tab-active{ display:grid !important; }
-}
-</style>
-  <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-  <link rel="stylesheet" href="tutor-widget.css?v=4">
-</head>
+  </style>
+<style>:root{color-scheme:dark;--bg:#0a1722;--panel:#142a3a;--line:#385466;--text:#dcebf5;--ink:#dcebf5;--muted:#a0b8c9;--na:#70bcff;--k:#ff8990;--ca:#f4e76a;--curve-primary:#e0edf5}
+*{box-sizing:border-box}body{margin:0;padding:24px;background:radial-gradient(ellipse at 15% 0,#1c3b4c,transparent 60%),#091620;color:var(--text);font-family:Segoe UI,Arial,sans-serif}h1{color:#e5f2fa;font-size:clamp(24px,3vw,34px);letter-spacing:-.035em;line-height:1.2}.subtitle,.title p{color:var(--muted);line-height:1.6}.app{padding:0;max-width:1400px;margin:auto}.controls,.scenario-row,.timeline,.card,.panel,.legend,.stage-map,.topbar{background:linear-gradient(145deg,#223b4d,#112432);border:1px solid #385466;box-shadow:inset 0 1px 0 #ffffff20,0 10px 25px #0005;border-radius:19px}.controls,.status-grid,.layout,.legend,.timeline,.stage-map,.mode-line,.scenario-row,.pro-graph-note{max-width:1400px;margin-left:auto;margin-right:auto}.controls{padding:15px;gap:12px;display:flex;flex-wrap:wrap}.controls label,.controls .pill,.scenario-label{min-height:46px;padding:10px 12px;border:1px solid #3b576b;background:#102635;color:#c7dce9;border-radius:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.controls button,button{min-height:46px;border:1px solid #638398;border-radius:12px;padding:11px 16px;color:#eaf8ff;background:linear-gradient(165deg,#55778e,#2d4a60 50%,#193345);box-shadow:inset 0 2px 1px #ffffff50,inset 0 -2px 1px #0006,0 4px 0 #06111a,0 7px 10px #0006;cursor:pointer;font-size:14px}button.primary,#playBtn{background:linear-gradient(#559886,#255c53);border-color:#8fbfb1}button:active{transform:translateY(3px);box-shadow:inset 0 2px 4px #0006,0 1px 0 #06111a}button:focus-visible,input:focus-visible,.figure-scroll:focus-visible{outline:3px solid #8de0d3;outline-offset:4px}input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:#75c9b4;flex:none}input[type=range]{appearance:none;width:140px;max-width:100%;height:12px;border-radius:20px;background:#061521;border:1px solid #58798d;box-shadow:inset 0 3px 5px #0009,0 1px 0 #fff2;margin:12px 0}input[type=range]::-webkit-slider-thumb{appearance:none;width:29px;height:29px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:inset 0 1px 2px #fff,0 3px 0 #07111b,0 6px 9px #0008}input[type=range]::-moz-range-thumb{width:27px;height:27px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:0 4px 7px #0008}.status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.status-grid .card{height:auto;min-height:155px;overflow:visible;padding:17px 20px}.card .phase{font-size:23px;min-height:0;color:#dcebf5;line-height:1.3}.card .phase small,.card-title{color:#a5bdce;line-height:1.5}.card-title{font-size:11px}.mode-badge,.pill{background:#112a3a;border-color:#385466;color:#b9cedc}.layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.layout .panel{min-width:0;overflow:hidden;padding:12px;height:auto}.panel canvas{display:block;max-width:100%;width:100%;height:auto;background:#0d2030;border:1px solid #37566a;border-radius:12px}.legend{color:#c4d7e4;line-height:1.75;text-align:left;padding:22px;font-size:15px}.signature,.mini-note,.pro-graph-note{color:#9eb7c8}.timeline-step,.stage-chip,.stage-item{background:#142c3c;color:#a9c4d7;border-color:#3b596e}.timeline-step.active,.stage-chip.active,.stage-item.active,.pharm-label.active{background:#20483f!important;color:#eafff7!important;border-color:#7dc5ad!important;box-shadow:inset 4px 0 #80c5af!important}.scenario-label:has(input:checked),.controls label:has(input[type=radio]:checked){background:#20483f;border-color:#7dc5ad}.ion-key{max-width:1400px;margin:16px auto;display:flex;gap:10px;flex-wrap:wrap}.ion-key span{padding:7px 10px;border:1px solid #385466;border-radius:8px;background:#102838;font-size:13px}.figure-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap;color:#bfd7e5;font-size:13px}.figure-toolbar button{font-size:12px;min-height:44px}.figure-scroll{max-width:100%;overflow:auto;overscroll-behavior-x:contain;border-radius:12px}.figure-hint{display:none;color:#a4c0d1;font-size:12px;line-height:1.5;margin:8px 0}.figure-scroll.detail canvas{width:var(--figure-width);max-width:none}.card#valueCard .phase,.card#mvCard .phase{color:#e0edf5}.card#valueCard,.card#mvCard{--phase:#e0edf5!important}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:650px){body{padding:12px;padding-bottom:max(16px,env(safe-area-inset-bottom))}.topbar{display:block;padding:16px}.controls{gap:12px;padding:12px}.controls button{flex:1 1 40%}.controls label,.controls .pill{flex:1 1 100%;font-size:14px;justify-content:space-between}.status-grid{grid-template-columns:minmax(0,1fr)}.status-grid .card{min-height:0}.scenario-row{display:grid;grid-template-columns:minmax(0,1fr);padding:12px}.scenario-label{margin:0;white-space:normal}.timeline-row,.stage-track{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.timeline-step:after{display:none}.timeline-step{min-width:0}.figure-scroll canvas{width:var(--figure-width);max-width:none}.figure-scroll.overview canvas{width:100%;max-width:100%}.figure-hint{display:block}.legend{padding:17px}.layout .panel{padding:10px}.figure-scroll{max-height:70svh}.phase small{font-size:14px}.ion-key{gap:7px}.mode-line{text-align:left}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.ion-na{color:#70bcff;font-weight:650}.ion-k{color:#ff8990;font-weight:650}.ion-ca{color:#f4e76a;font-weight:650}.ion-glucose{color:#87d29e;font-weight:650}.ion-atp{color:#c4a2f6;font-weight:650}.ion-adp{color:#a6c5ee;font-weight:650}.ion-pi{color:#d8cb9a;font-weight:650}.ion-sglt{color:#60d2c5;font-weight:650}.ion-pump{color:#ff9b42;font-weight:650}.ion-vm{color:#e0edf5;font-weight:650}.ion-gradient{color:#b3d6ef;font-weight:650}.ion-flux{color:#a9e1c0;font-weight:650}.ion-activity{color:#d4c095;font-weight:650}.legend{background:linear-gradient(145deg,#223b4d,#112432)!important;color:#dcebf5!important;font-size:16px;line-height:1.8}.legend b{color:#e5f2fa}.legend .signature{color:#adc6d7;border-top-color:#40596b}.status-grid .card{background:linear-gradient(145deg,#223b4d,#112432)!important}</style></head>
 <body>
-  <div class="mobile-topbar">
-    <h2>Simulador Interativo do Potencial de Ação — Padronizado</h2>
-    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
-  </div>
-  <div class="mobile-tabnav">
-    <button data-tabnav="animacao" class="active">Animação</button>
-    <button data-tabnav="controles">Controles</button>
-    <button data-tabnav="graficos">Gráficos</button>
-  </div>
-
   <h1>Simulador Interativo do Potencial de Ação</h1>
   <p class="subtitle">Neurônio colorido, membrana ampliada, canais dependentes de voltagem e execução contínua ou por etapas.</p>
 
-  <div class="controls" data-tab="controles">
+  <div class="controls">
     <button id="btnStart" class="primary">Iniciar</button>
     <button id="btnPause">Pausar</button>
     <button id="btnStep">Próxima etapa</button>
@@ -329,11 +278,11 @@
     <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
   </div>
 
-  <div class="mode-line" data-tab="animacao">
+  <div class="mode-line">
     <div id="modeBadge" class="mode-badge">Modo: contínuo</div>
   </div>
 
-  <div class="status-grid" data-tab="animacao">
+  <div class="status-grid">
     <div class="card colorized" id="phaseCard">
       <div class="card-title">Fase atual</div>
       <div class="phase" id="phaseText">Repouso
@@ -354,27 +303,112 @@
     </div>
   </div>
 
-  <div class="layout">
-    <div class="panel" data-tab="animacao">
-      <canvas id="neuronCanvas" width="860" height="540"></canvas>
+  <div class="ion-key" aria-label="Cores dos componentes"><span class="ion-na">Na⁺</span><span class="ion-k">K⁺</span><span class="ion-vm">Potencial de membrana</span></div><div class="layout">
+    <div class="panel">
+      <div class="figure-toolbar"><strong>Animação</strong><button type="button" data-figure="view-neuronCanvas" aria-controls="view-neuronCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-neuronCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Animação ampliável" style="--figure-width:860px"><canvas id="neuronCanvas" width="860" height="540"></canvas></div>
     </div>
-    <div class="panel" data-tab="graficos">
-      <canvas id="graphCanvas" width="860" height="540"></canvas>
+    <div class="panel">
+      <div class="figure-toolbar"><strong>Gráfico</strong><button type="button" data-figure="view-graphCanvas" aria-controls="view-graphCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-graphCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Gráfico ampliável" style="--figure-width:860px"><canvas id="graphCanvas" width="860" height="540"></canvas></div>
     </div>
   </div>
 
-  <div class="legend" data-tab="graficos">
+  <div class="legend">
     <b>Repouso:</b> cerca de -70 mV.
-    <b>Limiar:</b> por volta de -55 mV, quando a abertura regenerativa dos canais rápidos de Na<sup>+</sup> se torna evidente.
-    <b>Despolarização:</b> entrada predominante de Na<sup>+</sup>.
-    <b>Repolarização:</b> saída predominante de K<sup>+</sup>.
-    <b>Hiperpolarização:</b> canais de K<sup>+</sup> ainda permanecem abertos por algum tempo.
+    <b>Limiar:</b> por volta de -55 mV, quando a abertura regenerativa dos canais rápidos de <span class="ion-na">Na⁺</span> se torna evidente.
+    <b>Despolarização:</b> entrada predominante de <span class="ion-na">Na⁺</span>.
+    <b>Repolarização:</b> saída predominante de <span class="ion-k">K⁺</span>.
+    <b>Hiperpolarização:</b> canais de <span class="ion-k">K⁺</span> ainda permanecem abertos por algum tempo.
     <span class="pill">potencial de ação</span><span class="pill">neurônio</span><span class="pill">membrana excitável</span>
 
     <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
   </div>
 
-<script>
+<script>function semanticHTML(value){const names={'Na⁺':'na','Na+':'na','K⁺':'k','K+':'k','Ca²⁺':'ca','Ca2+':'ca','ATP':'atp','ADP':'adp','Pi':'pi','glicose':'glucose','SGLT':'sglt'};return String(value).split(/(<[^>]*>)/).map(s=>s.startsWith('<')?s:s.replace(/Na⁺\/K⁺[- ]ATPase|Na⁺|Na\+|K⁺|K\+|Ca²⁺|Ca2\+|\bATP\b|\bADP\b|\bPi\b|glicose|SGLT/g,t=>'<span class="ion-'+(names[t]||'pump')+'">'+t+'</span>')).join('');}function semanticLead(el,text){if(el.firstChild.nodeType===3){const lead=document.createElement('span');el.replaceChild(lead,el.firstChild);}el.firstChild.innerHTML=semanticHTML(text);}(()=>{const P={"na":"#70bcff","k":"#ff8990","ca":"#f4e76a","glucose":"#87d29e","atp":"#c4a2f6","adp":"#a6c5ee","pi":"#d8cb9a","sglt":"#60d2c5","pump":"#ff9b42","vm":"#e0edf5","gradient":"#b3d6ef","flux":"#a9e1c0","activity":"#d4c095"};document.querySelectorAll('canvas').forEach(canvas=>{const ctx=canvas.getContext('2d'),original=ctx.fillText.bind(ctx);ctx.fillText=function(value,x,y,maxWidth){const s=String(value),old=this.fillStyle;let col;if(s.length>48)col='#bfd3e2';else if(/Na.*ATPase|Bomba primária/.test(s))col=P.pump;else if(/SGLT|Transportador secundário/.test(s))col=P.sglt;else if(/gradiente de Na/i.test(s))col=P.gradient;else if(/(fluxo|entrada) de glicose/i.test(s))col=P.flux;else if(/ATPase ativa/.test(s))col=P.activity;else if(/^ATP$/.test(s))col=P.atp;else if(/^ADP$/.test(s))col=P.adp;else if(/^Pi$/.test(s))col=P.pi;else if(/Na[⁺+]|^Na$/.test(s)&&!/[KC]a|K[⁺+]/.test(s))col=P.na;else if(/Ca[²+]|^Ca$/.test(s))col=P.ca;else if(/K[⁺+]|^K$/.test(s))col=P.k;else if(/glicose/i.test(s))col=P.glucose;else if(/mV/.test(s))col=P.vm;else if(typeof old==='string'&&/^#[0-9a-f]{6}$/i.test(old)){const n=parseInt(old.slice(1),16);if(((n>>16)*.2126+((n>>8)&255)*.7152+(n&255)*.0722)<130)col='#bfd3e2';}if(col)this.fillStyle=col;if(/^(Na|K|Ca|ATP|ADP|Pi|Glicose)[⁺²+]*$/.test(s)){this.save();this.strokeStyle='#102838';this.lineWidth=3;this.lineJoin='round';this.strokeText(s,x,y);this.restore();}if(maxWidth===undefined)original(s,x,y);else original(s,x,y,maxWidth);this.fillStyle=old;};});})();</script><script>// Shared schematic materials: bilayer, transmembrane bundles and gates.
+const MembraneArt=(()=>{
+ const lipid='#9cb4c5';
+ function tint(hex,f){const n=parseInt(hex.slice(1),16);return '#'+[n>>16,(n>>8)&255,n&255].map(v=>Math.round(f<1?v*f:v+(255-v)*(f-1)).toString(16).padStart(2,'0')).join('');}
+ function ball(c,x,y,r,color){const g=c.createRadialGradient(x-r*.35,y-r*.4,r*.03,x,y,r);g.addColorStop(0,tint(color,1.8));g.addColorStop(.32,tint(color,1.25));g.addColorStop(.67,color);g.addColorStop(1,tint(color,.3));c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();}
+ function strand(c,pts,w,color){c.lineCap='round';c.lineJoin='round';for(const [d,col]of [[0,tint(color,.28)],[-w*.18,color],[-w*.3,tint(color,1.4)]]){c.strokeStyle=col;c.lineWidth=d===0?w:d===-w*.18?w*.56:w*.15;c.beginPath();pts.forEach(([x,y],i)=>i?c.lineTo(x+d,y):c.moveTo(x+d,y));c.stroke();}}
+ function bilayer(c,x,top,w,h){c.save();const step=h<100?18:23,r=step*.39;
+ const bg=c.createLinearGradient(0,top,0,top+h);bg.addColorStop(0,'#314f61');bg.addColorStop(.2,'#172d3b');bg.addColorStop(.5,'#071621');bg.addColorStop(.8,'#172d3b');bg.addColorStop(1,'#314f61');c.fillStyle=bg;c.fillRect(x,top,w,h);
+ // A rear row supplies depth; every leaflet has inward-facing paired tails.
+ for(const rear of [true,false]){c.globalAlpha=rear?.38:1;const shift=rear?step*.48:0,dy=rear?-r*.6:0;
+ for(let px=x+r+shift;px<x+w-r;px+=step){for(const side of [1,-1]){const yy=(side===1?top:top+h)+dy;const len=h*.42-r;
+ for(const branch of [-1,1]){const bx=px+branch*r*.32;strand(c,[[bx,yy+side*r*.7],[bx+branch*2,yy+side*(r+len*.32)],[bx-branch*1.5,yy+side*(r+len*.57)],[bx+branch*3,yy+side*(r+len*.8)],[bx+branch*2,yy+side*(r+len)]],Math.max(2.2,r*.37),lipid);}
+ ball(c,px,yy,r,lipid);}}
+ }c.restore();}
+ function protein(c,x,y,w,h,color,opening=.65,carrier=false,showGate=true){c.save();c.translate(x,y);
+ // Subunits surround a recessed aqueous vestibule; the silhouette is lobulated.
+ c.shadowColor='#000b';c.shadowBlur=w*.16;c.shadowOffsetY=5;
+ c.fillStyle='#071721';c.beginPath();c.ellipse(w*.5,h*.51,w*.39,h*.49,0,0,Math.PI*2);c.fill();c.shadowBlur=0;c.shadowOffsetY=0;
+ for(const rear of [true,false]){for(const side of [-1,1]){const bx=w*.5+side*w*(rear?.15:.27),bw=w*(rear?.3:.36);
+ const g=c.createLinearGradient(bx-bw*.6,0,bx+bw*.6,0);g.addColorStop(0,tint(color,.28));g.addColorStop(.28,color);g.addColorStop(.43,tint(color,1.6));g.addColorStop(.65,color);g.addColorStop(1,tint(color,.32));c.fillStyle=g;
+ c.beginPath();c.moveTo(bx,y*0+h*.02);c.bezierCurveTo(bx-bw,h*-.02,bx-bw*.6,h*.24,bx-bw*.38,h*.42);c.bezierCurveTo(bx-bw*.5,h*.7,bx-bw*.8,h*.95,bx,h*.98);c.bezierCurveTo(bx+bw*.75,h*1.02,bx+bw*.53,h*.74,bx+bw*.4,h*.56);c.bezierCurveTo(bx+bw*.46,h*.3,bx+bw*.8,h*.04,bx,h*.02);c.fill();
+ c.save();c.clip();for(let i=0;i<13;i++){const yy=h*.08+i*h*.068;c.strokeStyle=tint(color,.5);c.lineWidth=2;c.beginPath();c.moveTo(bx-bw,yy);c.bezierCurveTo(bx-bw*.4,yy+h*.035,bx+bw*.4,yy+h*.045,bx+bw,yy+h*.008);c.stroke();c.strokeStyle=tint(color,1.25);c.lineWidth=.7;c.stroke();}c.restore();
+ }}
+ if(carrier){ // Alternating-access transporter: a solid central occlusion, not an open tube.
+ ball(c,w*.5,h*(.42+.15*opening),w*.21,color);
+ }else if(showGate)gate(c,w*.5,h*.45,opening,color,w*.45);
+ c.restore();}
+ function gate(c,x,y,open,color,w=42){c.save();const gap=Math.max(.035,Math.min(1,open))*w*.34;for(const s of [-1,1]){strand(c,[[x+s*w*.5,y-12],[x+s*(gap+3),y],[x+s*w*.5,y+12]],Math.max(4,w*.17),color);}c.restore();}
+ function curve(c){c.save();const color=c.strokeStyle,w=c.lineWidth;c.lineCap='round';c.lineJoin='round';c.strokeStyle='#06121c';c.lineWidth=w+4;c.stroke();c.strokeStyle=color;c.lineWidth=w;c.stroke();c.strokeStyle='#ffffff55';c.lineWidth=Math.max(.8,w*.22);c.stroke();c.restore();}
+ function marker(c,x,y,r,color){c.save();c.shadowColor='#000b';c.shadowBlur=5;c.shadowOffsetY=2;ball(c,x,y,r,color);c.shadowBlur=0;c.shadowOffsetY=0;c.strokeStyle='#06121c';c.lineWidth=1.6;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.stroke();c.strokeStyle=color;c.lineWidth=.9;c.beginPath();c.arc(x,y,r+1.8,0,Math.PI*2);c.stroke();c.restore();}
+ return {bilayer,protein,gate,curve,marker};
+})();
+function drawMotorNeuronAnatomy(c,showLabels){
+ const tissue='#65c9a0',axon='#ddb979',terminal='#b59be4';
+ function tube(p,w,color){c.save();c.lineCap='round';c.lineJoin='round';
+ const path=()=>{c.beginPath();c.moveTo(p[0],p[1]);c.bezierCurveTo(...p.slice(2));};
+ c.shadowColor='#000b';c.shadowBlur=7;c.shadowOffsetY=4;c.strokeStyle='#142c2c';c.lineWidth=w+2;path();c.stroke();c.shadowBlur=0;c.shadowOffsetY=0;
+ for(const [size,col,offset]of [[1,'#294b4b',0],[.82,color,-.5],[.48,color,-w*.13],[.16,'#ffffff70',-w*.24]]){c.save();c.translate(0,offset);c.strokeStyle=col;c.lineWidth=w*size;path();c.stroke();c.restore();}c.restore();}
+ function orb(x,y,rx,ry,color){c.save();c.translate(x,y);c.scale(1,ry/rx);const g=c.createRadialGradient(-rx*.32,-rx*.4,1,0,0,rx);g.addColorStop(0,'#ecfff5');g.addColorStop(.28,color);g.addColorStop(.62,color);g.addColorStop(1,'#173b40');c.shadowColor='#0009';c.shadowBlur=9;c.shadowOffsetY=4;c.fillStyle=g;c.beginPath();c.arc(0,0,rx,0,Math.PI*2);c.fill();c.shadowBlur=0;c.shadowOffsetY=0;c.lineWidth=1.3;c.strokeStyle=color;c.stroke();c.restore();}
+ // Curved, tapering dendritic arbor, with thin secondary branches.
+ const branches=[
+ [[185,155,149,146,128,113,110,99],17],[[176,171,140,178,110,155,77,165],18],[[185,195,149,199,125,223,99,235],17],
+ [[137,129,115,117,84,123,64,112],8],[[113,101,111,83,94,84,87,79],6],[[111,100,95,98,76,94,69,86],5],
+ [[114,163,91,149,82,144,67,146],7],[[93,164,77,169,64,179,51,177],5],
+ [[128,219,112,209,91,207,77,213],7],[[100,234,86,237,75,250,62,249],6],[[104,232,105,246,97,254,92,259],5]];
+ branches.forEach(([p,w])=>tube(p,w,tissue));
+ // Axon remains on y=175 so travelling particles stay aligned.
+ tube([260,175,285,175,310,175,330,175],24,axon);
+ const endings=[[[604,175,639,170,642,124,682,126],12],[[606,175,640,173,669,170,714,178],13],[[607,179,642,186,647,224,687,230],12],[[648,149,656,133,641,110,656,101],6],[[661,218,676,213,699,214,715,223],6]];
+ 
+ orb(220,175,62,61,tissue);orb(213,170,23,25,'#57bfce');orb(207,165,7,8,'#3598a7');
+ // Ordem espacial: bainha, face com lamelas, axônio emergente; só então a próxima bainha.
+ for(const x of [320,395,470,545]){
+   c.save();
+   const g=c.createLinearGradient(0,145,0,205);
+   for(const [stop,color]of [[0,'#405d71'],[.23,'#e0ecf4'],[.42,'#a7bece'],[.72,'#6e8a9e'],[1,'#243e52']])g.addColorStop(stop,color);
+   c.shadowColor='#000b';c.shadowBlur=8;c.shadowOffsetY=5;
+   c.fillStyle=g;c.beginPath();c.moveTo(x,145);c.lineTo(x+45,145);
+   c.bezierCurveTo(x+61,147,x+61,201,x+45,205);c.lineTo(x,205);
+   c.bezierCurveTo(x-10,200,x-10,150,x,145);c.fill();
+   c.shadowColor='transparent';c.shadowOffsetY=0;
+   c.fillStyle='#101f2a';c.beginPath();c.ellipse(x+45,175,9,19,0,0,Math.PI*2);c.fill();
+   for(let r=0;r<3;r++){
+     c.strokeStyle=r%2?'#bacfdc':'#48687b';c.lineWidth=1.8;
+     c.beginPath();c.ellipse(x+45,175,11-r*2,29-r*5,0,0,Math.PI*2);c.stroke();
+   }
+   c.strokeStyle='#edf8ff77';c.lineWidth=2;c.beginPath();c.moveTo(x+1,154);c.lineTo(x+43,154);c.stroke();
+   // Este trecho é pintado DEPOIS da face: sobrepõe a metade anterior da abertura.
+   const start=x+45,end=x+87,r=11;
+   const core=c.createLinearGradient(0,175-r,0,175+r);
+   core.addColorStop(0,'#9b7846');core.addColorStop(.24,'#f3dfb4');
+   core.addColorStop(.53,axon);core.addColorStop(1,'#896638');
+   c.fillStyle=core;c.beginPath();c.moveTo(start,175-r);c.lineTo(end,175-r);
+   c.bezierCurveTo(end+7,175-r,end+7,175+r,end,175+r);c.lineTo(start,175+r);
+   c.bezierCurveTo(start-7,175+r,start-7,175-r,start,175-r);c.closePath();c.fill();
+   c.strokeStyle='#f8e6bf70';c.lineWidth=1;c.stroke();
+   c.restore();
+ }
+ // As ramificações à direita também são pintadas sobre o último segmento.
+ endings.forEach(([p,w])=>tube(p,w,axon));
+
+ for(const [x,y,r]of [[682,126,14],[714,178,15],[687,230,14],[656,101,9],[715,223,9]])orb(x,y,r,r*.86,terminal);
+ if(showLabels){c.font='14px Arial';for(const [t,x,y,color]of [['Dendritos',52,66,tissue],['Corpo celular',172,96,tissue],['Axônio',437,117,axon],['Terminais sinápticos',633, 73,terminal]]){c.fillStyle=color;c.fillText(t,x,y);}}
+}
+function drawNeuronAnatomy(c,showLabels){drawMotorNeuronAnatomy(c,showLabels);}
+</script><script>
 (() => {
   const neuronCanvas = document.getElementById("neuronCanvas");
   const graphCanvas = document.getElementById("graphCanvas");
@@ -408,8 +442,8 @@
   const phases = [
     { name:"Repouso", start:0, end:70, desc:"Membrana em torno de -70 mV.", color:"#6b7280", flow:"Sem fluxo predominante", flowDesc:"Predomínio de correntes de repouso." },
     { name:"Limiar", start:71, end:125, desc:"Atinge aproximadamente -55 mV.", color:"#d97706", flow:"Entrada inicial de Na+", flowDesc:"Abertura crescente dos canais rápidos de Na+." },
-    { name:"Despolarização", start:126, end:210, desc:"Entrada predominante de Na+.", color:"#2563eb", flow:"Entrada de Na+", flowDesc:"Grande influxo de sódio para o interior da célula." },
-    { name:"Repolarização", start:211, end:315, desc:"Saída predominante de K+.", color:"#dc2626", flow:"Saída de K+", flowDesc:"Efluxo de potássio reduzindo o potencial de membrana." },
+    { name:"Despolarização", start:126, end:210, desc:"Entrada predominante de Na+.", color:"#70bcff", flow:"Entrada de Na+", flowDesc:"Grande influxo de sódio para o interior da célula." },
+    { name:"Repolarização", start:211, end:315, desc:"Saída predominante de K+.", color:"#ff8990", flow:"Saída de K+", flowDesc:"Efluxo de potássio reduzindo o potencial de membrana." },
     { name:"Hiperpolarização", start:316, end:390, desc:"K+ ainda permanece aberto por algum tempo.", color:"#7c3aed", flow:"Saída residual de K+", flowDesc:"Os canais de K+ ainda permanecem abertos além do necessário." },
     { name:"Retorno ao repouso", start:391, end:460, desc:"Volta gradual ao potencial basal.", color:"#059669", flow:"Redução do efluxo de K+", flowDesc:"A membrana retorna progressivamente ao estado basal." }
   ];
@@ -455,10 +489,10 @@
     const p = getPhase(frame);
     const mv = getPotential(frame);
 
-    phaseText.firstChild.textContent = p.name;
+    semanticLead(phaseText,p.name);
     phaseDesc.textContent = p.desc;
-    mvText.firstChild.textContent = formatMV(mv);
-    flowText.firstChild.textContent = p.flow;
+    semanticLead(mvText,formatMV(mv));
+    semanticLead(flowText,p.flow);
     flowDesc.textContent = p.flowDesc;
     setCardsColor(p.color);
 
@@ -526,188 +560,33 @@
 
   function drawNeuronBase(){
     nctx.clearRect(0,0,neuronCanvas.width, neuronCanvas.height);
+neuronCanvas.getContext('2d').fillStyle='#0d2030';neuronCanvas.getContext('2d').fillRect(0,0,neuronCanvas.width,neuronCanvas.height);
 
     nctx.font = "bold 20px Arial";
-    nctx.fillStyle = "#111827";
+    nctx.fillStyle = '#c4d8e6';
     nctx.fillText("Neurônio + detalhe ampliado da membrana", 18, 28);
 
-    // Dendritos com relevo 3D mais marcado
-    nctx.save();
-    nctx.lineCap = "round";
-    nctx.shadowColor = "rgba(15,23,42,0.22)";
-    nctx.shadowBlur = 10;
-    nctx.shadowOffsetX = 5;
-    nctx.shadowOffsetY = 6;
-    nctx.lineWidth = 18;
-    drawGradientStrokeLine(nctx, 170, 175, 90, 110, [[0,"#86efac"], [0.45,"#22c55e"], [1,"#0f766e"]]);
-    drawGradientStrokeLine(nctx, 170, 175, 72, 170, [[0,"#86efac"], [0.45,"#22c55e"], [1,"#0f766e"]]);
-    drawGradientStrokeLine(nctx, 170, 175, 96, 236, [[0,"#86efac"], [0.45,"#22c55e"], [1,"#0f766e"]]);
-    nctx.shadowColor = "transparent";
-    nctx.lineWidth = 5;
-    drawGradientStrokeLine(nctx, 164, 166, 94, 112, [[0,"rgba(255,255,255,.88)"], [1,"rgba(255,255,255,.18)"]]);
-    drawGradientStrokeLine(nctx, 160, 171, 78, 169, [[0,"rgba(255,255,255,.86)"], [1,"rgba(255,255,255,.16)"]]);
-    drawGradientStrokeLine(nctx, 162, 184, 101, 231, [[0,"rgba(255,255,255,.82)"], [1,"rgba(255,255,255,.14)"]]);
-
-    nctx.shadowColor = "rgba(15,23,42,0.18)";
-    nctx.shadowBlur = 8;
-    nctx.shadowOffsetX = 3;
-    nctx.shadowOffsetY = 4;
-    nctx.lineWidth = 10;
-    drawGradientStrokeLine(nctx, 118, 127, 78, 88, [[0,"#bbf7d0"], [0.55,"#4ade80"], [1,"#115e59"]]);
-    drawGradientStrokeLine(nctx, 111, 214, 69, 252, [[0,"#bbf7d0"], [0.55,"#4ade80"], [1,"#115e59"]]);
-    nctx.restore();
-
-    // Soma gradient
-    const somaGrad = nctx.createRadialGradient(198, 148, 10, 220, 170, 78);
-    somaGrad.addColorStop(0, "#dcfce7");
-    somaGrad.addColorStop(0.55, "#4ade80");
-    somaGrad.addColorStop(1, "#0f766e");
-    nctx.fillStyle = somaGrad;
-    nctx.beginPath(); nctx.arc(220, 175, 62, 0, Math.PI*2); nctx.fill();
-
-    nctx.strokeStyle = "#0f766e";
-    nctx.lineWidth = 4;
-    nctx.stroke();
-
-    const nucleusGrad = nctx.createRadialGradient(212, 160, 3, 220, 175, 24);
-    nucleusGrad.addColorStop(0, "#ecfeff");
-    nucleusGrad.addColorStop(1, "#06b6d4");
-    nctx.fillStyle = nucleusGrad;
-    nctx.beginPath(); nctx.arc(220,175,21,0,Math.PI*2); nctx.fill();
-    nctx.strokeStyle = "#0e7490";
-    nctx.lineWidth = 2;
-    nctx.stroke();
-
-    // Axon pseudo-3D tube
-    const axonGrad = nctx.createLinearGradient(280, 145, 280, 205);
-    axonGrad.addColorStop(0, "#e0f2fe");
-    axonGrad.addColorStop(0.3, "#60a5fa");
-    axonGrad.addColorStop(0.7, "#2563eb");
-    axonGrad.addColorStop(1, "#1d4ed8");
-
-    nctx.save();
-    nctx.lineCap = "round";
-    nctx.shadowColor = "rgba(37,99,235,0.25)";
-    nctx.shadowBlur = 14;
-    nctx.shadowOffsetX = 5;
-    nctx.shadowOffsetY = 6;
-    nctx.lineWidth = 24;
-    nctx.strokeStyle = axonGrad;
-    nctx.beginPath(); nctx.moveTo(282,175); nctx.lineTo(605,175); nctx.stroke();
-    nctx.restore();
-
-    // brilho e sombra inferior do axônio para reforço 3D
-    nctx.strokeStyle = "rgba(255,255,255,0.78)";
-    nctx.lineWidth = 5;
-    nctx.beginPath(); nctx.moveTo(288,166); nctx.lineTo(600,166); nctx.stroke();
-    nctx.strokeStyle = "rgba(30,64,175,0.45)";
-    nctx.lineWidth = 4;
-    nctx.beginPath(); nctx.moveTo(288,186); nctx.lineTo(600,186); nctx.stroke();
-
-    // Myelin segments
-    const segs = [320, 395, 470, 545];
-    segs.forEach(sx => {
-      const segGrad = nctx.createLinearGradient(sx, 148, sx, 202);
-      segGrad.addColorStop(0, "#f8fafc");
-      segGrad.addColorStop(0.45, "#cbd5e1");
-      segGrad.addColorStop(1, "#94a3b8");
-      nctx.save();
-      nctx.shadowColor = "rgba(15,23,42,0.22)";
-      nctx.shadowBlur = 9;
-      nctx.shadowOffsetX = 4;
-      nctx.shadowOffsetY = 5;
-      nctx.fillStyle = segGrad;
-      nctx.strokeStyle = "#64748b";
-      nctx.lineWidth = 2.4;
-      drawRoundedRect(nctx, sx, 146, 50, 58, 13);
-      nctx.fill();
-      nctx.stroke();
-      nctx.restore();
-      nctx.strokeStyle = "rgba(255,255,255,0.82)";
-      nctx.lineWidth = 3;
-      nctx.beginPath();
-      nctx.moveTo(sx + 8, 156);
-      nctx.lineTo(sx + 42, 156);
-      nctx.stroke();
-      nctx.strokeStyle = "rgba(71,85,105,0.36)";
-      nctx.lineWidth = 2;
-      nctx.beginPath();
-      nctx.moveTo(sx + 8, 194);
-      nctx.lineTo(sx + 42, 194);
-      nctx.stroke();
-    });
-
-    // Terminações com volume e sombra 3D
-    nctx.save();
-    nctx.lineCap = "round";
-    nctx.shadowColor = "rgba(76,29,149,0.24)";
-    nctx.shadowBlur = 12;
-    nctx.shadowOffsetX = 4;
-    nctx.shadowOffsetY = 5;
-    nctx.lineWidth = 14;
-    drawGradientStrokeLine(nctx, 605, 175, 675, 122, [[0,"#93c5fd"], [0.55,"#60a5fa"], [1,"#7c3aed"]]);
-    drawGradientStrokeLine(nctx, 605, 175, 690, 175, [[0,"#93c5fd"], [0.55,"#60a5fa"], [1,"#7c3aed"]]);
-    drawGradientStrokeLine(nctx, 605, 175, 675, 228, [[0,"#93c5fd"], [0.55,"#60a5fa"], [1,"#7c3aed"]]);
-    nctx.restore();
-
-    // bulbos sinápticos com gradiente radial
-    [[675,122],[690,175],[675,228]].forEach((pts, i) => {
-      const bulbGrad = nctx.createRadialGradient(pts[0]-4, pts[1]-5, 2, pts[0], pts[1], 13);
-      bulbGrad.addColorStop(0, "#f5f3ff");
-      bulbGrad.addColorStop(0.45, i === 1 ? "#c4b5fd" : "#a78bfa");
-      bulbGrad.addColorStop(1, "#6d28d9");
-      nctx.fillStyle = bulbGrad;
-      nctx.beginPath(); nctx.arc(pts[0], pts[1], 11, 0, Math.PI*2); nctx.fill();
-      nctx.strokeStyle = "rgba(255,255,255,0.82)";
-      nctx.lineWidth = 2;
-      nctx.stroke();
-    });
-
-    if (labelsToggle.checked){
-      nctx.fillStyle = "#4b5563";
-      nctx.font = "14px Arial";
-      nctx.fillText("Dendritos", 62, 74);
-      nctx.fillText("Corpo celular", 162, 96);
-      nctx.fillText("Axônio", 442, 118);
-      nctx.fillText("Terminações", 642, 105);
-    }
+    drawNeuronAnatomy(nctx,labelsToggle.checked);
 
     // membrane zoom box
     const zx = 44, zy = 286, zw = 772, zh = 238;
-    nctx.fillStyle = "#ffffff";
+    nctx.fillStyle = '#102838';
     nctx.strokeStyle = "#d1d5db";
     nctx.lineWidth = 2;
     drawRoundedRect(nctx, zx, zy, zw, zh, 16);
     nctx.fill(); nctx.stroke();
 
     nctx.font = "bold 16px Arial";
-    nctx.fillStyle = "#111827";
+    nctx.fillStyle = '#c4d8e6';
     nctx.fillText("Detalhe ampliado da membrana do axônio", zx + 16, zy + 24);
 
     // membrane bilayer
     const topY = zy + 74;
     const botY = zy + 144;
-    for(let i=0;i<29;i++){
-      const px = zx + 24 + i*26;
-      const lipidGradTop = nctx.createRadialGradient(px-2, topY-2, 1, px, topY, 7);
-      lipidGradTop.addColorStop(0, "#a7f3d0");
-      lipidGradTop.addColorStop(1, "#10b981");
-      nctx.fillStyle = lipidGradTop;
-      nctx.beginPath(); nctx.arc(px, topY, 6.5, 0, Math.PI*2); nctx.fill();
-      const lipidGradBot = nctx.createRadialGradient(px-2, botY-2, 1, px, botY, 7);
-      lipidGradBot.addColorStop(0, "#a7f3d0");
-      lipidGradBot.addColorStop(1, "#10b981");
-      nctx.fillStyle = lipidGradBot;
-      nctx.beginPath(); nctx.arc(px, botY, 6.5, 0, Math.PI*2); nctx.fill();
-
-      nctx.strokeStyle = "#34d399";
-      nctx.lineWidth = 2;
-      nctx.beginPath(); nctx.moveTo(px, topY+7); nctx.lineTo(px, topY+22); nctx.stroke();
-      nctx.beginPath(); nctx.moveTo(px, botY-7); nctx.lineTo(px, botY-22); nctx.stroke();
-    }
+    MembraneArt.bilayer(nctx,zx+17,topY,zw-34,botY-topY);
 
     nctx.font = "13px Arial";
-    nctx.fillStyle = "#6b7280";
+    nctx.fillStyle = '#c4d8e6';
     nctx.fillText("Meio extracelular", zx + 18, zy + 62);
     nctx.fillText("Meio intracelular", zx + 18, zy + 178);
 
@@ -717,56 +596,7 @@
   function phaseOpenNa(){ return frame >= 120 && frame <= 230; }
   function phaseOpenK(){ return frame >= 210 && frame <= 390; }
 
-  function drawChannelUnit(cx, zy, type, openAmt){
-    const yTop = zy + 72;
-    const yBot = zy + 144;
-    const mid = (yTop + yBot)/2;
-
-    const shell = type === "Na"
-      ? [["#eff6ff","#93c5fd","#2563eb"], ["#1d4ed8","#60a5fa","#dbeafe"]]
-      : [["#fef2f2","#fca5a5","#dc2626"], ["#b91c1c","#f87171","#fee2e2"]];
-
-    const bodyGrad = nctx.createLinearGradient(cx-18, yTop-10, cx+18, yBot+10);
-    bodyGrad.addColorStop(0, shell[0][0]);
-    bodyGrad.addColorStop(0.5, shell[0][1]);
-    bodyGrad.addColorStop(1, shell[0][2]);
-
-    nctx.fillStyle = bodyGrad;
-    nctx.strokeStyle = type === "Na" ? "#1d4ed8" : "#b91c1c";
-    nctx.lineWidth = 2.5;
-    drawRoundedRect(nctx, cx-18, yTop-12, 36, 96, 12);
-    nctx.fill();
-    nctx.stroke();
-
-    const gap = 5 + openAmt * 16;
-    nctx.lineWidth = 3.5;
-    nctx.strokeStyle = type === "Na" ? "#2563eb" : "#dc2626";
-
-    nctx.beginPath();
-    nctx.moveTo(cx - 14, yTop + 4);
-    nctx.lineTo(cx - gap, mid);
-    nctx.lineTo(cx - 14, yBot - 4);
-    nctx.stroke();
-
-    nctx.beginPath();
-    nctx.moveTo(cx + 14, yTop + 4);
-    nctx.lineTo(cx + gap, mid);
-    nctx.lineTo(cx + 14, yBot - 4);
-    nctx.stroke();
-
-    nctx.strokeStyle = "rgba(255,255,255,0.7)";
-    nctx.lineWidth = 1.6;
-    nctx.beginPath();
-    nctx.moveTo(cx - 10, yTop - 2);
-    nctx.lineTo(cx + 10, yTop - 2);
-    nctx.stroke();
-
-    if (labelsToggle.checked){
-      nctx.font = "bold 12px Arial";
-      nctx.fillStyle = type === "Na" ? "#1d4ed8" : "#b91c1c";
-      nctx.fillText(type + "+", cx - 9, yTop - 32);
-    }
-  }
+  function drawChannelUnit(cx,zy,type,openAmt){const color=type==='Na'?'#70bcff':'#ff8990';MembraneArt.protein(nctx,cx-26,zy+57,52,102,color,openAmt);if(labelsToggle.checked){nctx.font='bold 12px Arial';nctx.fillStyle=color;nctx.fillText(type+'+',cx-9,zy+40);}}
 
   function drawChannels(zx, zy){
     const naCenters = [zx + 260, zx + 342, zx + 424];
@@ -779,7 +609,7 @@
 
     if (labelsToggle.checked){
       nctx.font = "13px Arial";
-      nctx.fillStyle = "#6b7280";
+      nctx.fillStyle = '#c4d8e6';
       nctx.textAlign = "center";
       nctx.fillText("Canais rápidos de Na+", zx + 342, zy + 198);
       nctx.fillText("dependentes de voltagem", zx + 342, zy + 218);
@@ -794,10 +624,7 @@
     const waveX = 300 + ((frame * 2.0) % 320);
     const y = 175;
 
-    nctx.strokeStyle = "#cbd5e1";
-    nctx.lineWidth = 3;
-    nctx.beginPath(); nctx.moveTo(300, y); nctx.lineTo(605, y); nctx.stroke();
-
+    nctx.save();nctx.beginPath();for(const [a,b]of [[280,310],[377,390],[452,465],[527,540],[602,625]])nctx.rect(a,140,b-a,70);nctx.clip();
     if (frame >= 120 && frame <= 315){
       const glow = nctx.createRadialGradient(waveX, y, 5, waveX, y, 34);
       glow.addColorStop(0, p.name === "Despolarização" ? "rgba(59,130,246,0.95)" : "rgba(239,68,68,0.8)");
@@ -805,7 +632,7 @@
       nctx.fillStyle = glow;
       nctx.beginPath(); nctx.arc(waveX, y, 34, 0, Math.PI*2); nctx.fill();
 
-      nctx.strokeStyle = p.name === "Despolarização" ? "#2563eb" : "#dc2626";
+      nctx.strokeStyle = p.name === "Despolarização" ? "#70bcff" : "#ff8990";
       nctx.lineWidth = 5;
       nctx.beginPath();
       nctx.moveTo(Math.max(300, waveX - 36), y);
@@ -813,23 +640,24 @@
       nctx.quadraticCurveTo(waveX + 12, y + 27, Math.min(605, waveX + 36), y);
       nctx.stroke();
     }
+    nctx.restore();
   }
 
   function drawIonParticle(x, y, label, color){
     const grad = nctx.createRadialGradient(x-4, y-4, 2, x, y, 13);
-    if (color === "#2563eb"){
+    if (color === "#70bcff"){
       grad.addColorStop(0, "#dbeafe");
-      grad.addColorStop(1, "#2563eb");
+      grad.addColorStop(1, "#70bcff");
     } else {
       grad.addColorStop(0, "#fee2e2");
-      grad.addColorStop(1, "#dc2626");
+      grad.addColorStop(1, "#ff8990");
     }
     nctx.fillStyle = grad;
     nctx.beginPath(); nctx.arc(x, y, 12.5, 0, Math.PI*2); nctx.fill();
     nctx.strokeStyle = "rgba(255,255,255,0.9)";
     nctx.lineWidth = 2;
     nctx.stroke();
-    nctx.fillStyle = "#ffffff";
+    nctx.fillStyle = '#102838';
     nctx.font = "bold 11px Arial";
     nctx.fillText(label, x - 9, y + 4);
   }
@@ -842,28 +670,28 @@
     // Fluxo no detalhe ampliado: as setas passam pelo eixo central dos canais,
     // com rótulos deslocados para cima/lateral para não cobrir o trajeto iônico.
     if (frame >= 126 && frame <= 230){
-      if (labelsToggle.checked) drawBadge(nctx, "Na+ entra", zx + 116, zy + 118, "#2563eb");
+      if (labelsToggle.checked) drawBadge(nctx, "Na+ entra", zx + 116, zy + 118, "#70bcff");
 
       naCenters.forEach((cx, idx) => {
         const yStart = zy + 66;
         const yEnd = zy + 172;
         const yy = yStart + ((flowPhase + idx*24) % (yEnd - yStart - 10));
 
-        drawArrow(nctx, cx, yStart, cx, yEnd, "#2563eb");
-        drawIonParticle(cx, yy, "Na+", "#2563eb");
+        drawArrow(nctx, cx, yStart, cx, yEnd, "#70bcff");
+        drawIonParticle(cx, yy, "Na+", "#70bcff");
       });
     }
 
     if (frame >= 210 && frame <= 390){
-      if (labelsToggle.checked) drawBadge(nctx, "K+ sai", zx + 674, zy + 118, "#dc2626");
+      if (labelsToggle.checked) drawBadge(nctx, "K+ sai", zx + 674, zy + 118, "#ff8990");
 
       kCenters.forEach((cx, idx) => {
         const yStart = zy + 172;
         const yEnd = zy + 66;
         const yy = yStart - ((flowPhase + idx*34) % (yStart - yEnd - 10));
 
-        drawArrow(nctx, cx, yStart, cx, yEnd, "#dc2626");
-        drawIonParticle(cx, yy, "K+", "#dc2626");
+        drawArrow(nctx, cx, yStart, cx, yEnd, "#ff8990");
+        drawIonParticle(cx, yy, "K+", "#ff8990");
       });
     }
   }
@@ -873,8 +701,8 @@
       const xs = [308, 342, 376, 410];
       xs.forEach((x, i) => {
         const y = 126 + ((flowPhase + i*15) % 36);
-        drawIonParticle(x, y, "Na+", "#2563eb");
-        nctx.strokeStyle = "#2563eb";
+        drawIonParticle(x, y, "Na+", "#70bcff");
+        nctx.strokeStyle = "#70bcff";
         nctx.lineWidth = 2.5;
         nctx.beginPath();
         nctx.moveTo(x, 139); nctx.lineTo(x, 165); nctx.stroke();
@@ -885,8 +713,8 @@
       const xs = [468, 508, 548, 588];
       xs.forEach((x, i) => {
         const y = 220 - ((flowPhase + i*17) % 36);
-        drawIonParticle(x, y, "K+", "#dc2626");
-        nctx.strokeStyle = "#dc2626";
+        drawIonParticle(x, y, "K+", "#ff8990");
+        nctx.strokeStyle = "#ff8990";
         nctx.lineWidth = 2.5;
         nctx.beginPath();
         nctx.moveTo(x, 181); nctx.lineTo(x, 207); nctx.stroke();
@@ -896,7 +724,8 @@
 
   function drawGraphBase(){
     gctx.clearRect(0,0,graphCanvas.width, graphCanvas.height);
-    gctx.fillStyle = "#111827";
+graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fillRect(0,0,graphCanvas.width,graphCanvas.height);
+    gctx.fillStyle = '#c4d8e6';
     gctx.font = "bold 20px Arial";
     gctx.fillText("Curva do potencial de ação", 18, 24);
 
@@ -918,7 +747,7 @@
     gctx.fillStyle = "rgba(124,58,237,0.055)";
     gctx.fillRect(x0, yMinus70, graphRight - x0, Math.max(0, graphBottom - yMinus70));
 
-    gctx.strokeStyle = "#374151";
+    gctx.strokeStyle = '#c4d8e6';
     gctx.lineWidth = 1.8;
     gctx.beginPath();
     gctx.moveTo(x0, graphTop);
@@ -938,7 +767,7 @@
     }
 
     if (labelsToggle.checked){
-      gctx.fillStyle = "#4b5563";
+      gctx.fillStyle = '#c4d8e6';
       gctx.font = "14px Arial";
       gctx.fillText("mV", 34, 78);
       gctx.fillText("Tempo", 748, 490);
@@ -969,11 +798,11 @@
 
     const sx = x0 + (p.start / TOTAL) * xW;
     const ex = x0 + (p.end / TOTAL) * xW;
-    gctx.fillStyle = p.color + "18";
+    gctx.fillStyle = '#e0edf5' + "18";
     gctx.fillRect(sx, 92, ex - sx, 366);
 
     gctx.lineWidth = 4;
-    gctx.strokeStyle = "#111827";
+    gctx.strokeStyle='#e0edf5';
     gctx.beginPath();
     for (let i=0;i<=frame;i++){
       const x = x0 + (i / TOTAL) * xW;
@@ -981,12 +810,12 @@
       if (i === 0) gctx.moveTo(x,y);
       else gctx.lineTo(x,y);
     }
-    gctx.stroke();
+    MembraneArt.curve(gctx);
 
     const cx = x0 + (frame / TOTAL) * xW;
     const cy = mvToY(getPotential(frame));
-    gctx.fillStyle = p.color;
-    gctx.beginPath(); gctx.arc(cx, cy, 6, 0, Math.PI*2); gctx.fill();
+    gctx.fillStyle='#e0edf5';
+    MembraneArt.marker(gctx,cx,cy,9,'#e0edf5');
 
     gctx.strokeStyle = "#9ca3af";
     gctx.setLineDash([4,4]);
@@ -1117,37 +946,28 @@
   render();
 })();
 </script>
-
-<script>
-(() => {
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  if (tabButtons.length) setTab('animacao');
-
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
-  const pauseCandidates = ['btnPause','pauseBtn'];
-  let startBtn = null, pauseBtn = null;
-  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
-  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
-  if (mobileToggle && startBtn){
-    let playing = false;
-    mobileToggle.addEventListener('click', () => {
-      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
-      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
-      playing = !playing;
-    });
-  } else if (mobileToggle){
-    mobileToggle.style.display = 'none';
-  }
+<script>(()=>{
+ const mobile=matchMedia('(max-width:650px)');
+ document.querySelectorAll('.figure-scroll').forEach(view=>{
+   const button=document.querySelector('[data-figure="'+view.id+'"]');
+   let detail=mobile.matches;
+   const update=()=>{view.classList.toggle('detail',detail);view.classList.toggle('overview',!detail);button.textContent=detail?'Visão geral':'Ampliar detalhes';button.setAttribute('aria-pressed',String(detail));};
+   button.addEventListener('click',()=>{detail=!detail;update();});update();
+ });
 })();
-</script>
-  <script src="tutor-ef-data.js?v=11"></script>
-  <script src="tutor-widget.js?v=16"></script>
-</body>
+</script></body>
 </html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.status-grid .card):not(#cards-reference-reserved){--reference-accent:var(--phase,#b6cad9);position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+
+</style>
+
+<script src="tutor-ef-data.js?v=11"></script>
+<script src="tutor-widget.js?v=16"></script>

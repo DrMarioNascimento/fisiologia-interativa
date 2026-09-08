@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" /><link rel="icon" href="brand/orientador.webp">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Retorno Venoso — Fisiologia Interativa (V3)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
   <style>
     :root{
       --bg:#ffffff;
@@ -165,10 +164,10 @@
     .equation strong,.text-box strong{color:#0f172a}
 
     .interpret-colored strong{
-
+      
     }
     .interpret-colored{
-
+      
     }
 
     .footer-block{
@@ -185,18 +184,18 @@
       margin:0 0 12px 0;
       min-height:132px;
     }
-
+    
     .reading-title{
       font-size:22px;
       font-weight:800;
-
+      
       margin:0 0 10px 0;
       line-height:1.1;
     }
     .reading-text{
       font-size:16px;
       line-height:1.6;
-
+      
       text-align:justify;
       min-height:44px;
     }
@@ -222,50 +221,7 @@
     #readingText .warn{color:#f59e0b;font-weight:700}
     #readingText .bad{color:#dc2626;font-weight:700}
 
-
-/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
-@media (max-width:760px){
-  button{ min-height:44px; padding:11px 16px; font-size:15px; }
-  label{ min-height:40px; padding:8px 10px; }
-  input[type="range"]{ width:100%; height:28px; }
-  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
-  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
-  select{ min-height:44px; font-size:15px; }
-  a{ min-height:44px; display:inline-flex; align-items:center; }
-}
-
-/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
-.mobile-topbar{ display:none; }
-.mobile-tabnav{ display:none; }
-@media (max-width:760px){
-  h1{ display:none; }
-  .mobile-topbar{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    position:sticky; top:0; z-index:50; padding:12px 14px;
-    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
-    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
-  }
-  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
-  .mobile-playtoggle{
-    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
-    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
-    min-height:44px; min-width:44px; cursor:pointer;
-  }
-  .mobile-tabnav{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
-    position:sticky; top:64px; z-index:49; padding:8px 10px;
-    background:#eef4fb; border-bottom:1px solid #d7e1ec;
-  }
-  .mobile-tabnav button{
-    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
-    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
-  }
-  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
-  [data-tab]{ display:none !important; }
-  [data-tab].tab-active{ display:block !important; }
-  .status-grid[data-tab].tab-active{ display:grid !important; }
-}
-</style>
+  </style>
 
 <style>
 
@@ -533,44 +489,22 @@ button.state-btn.active{
 .dot--rv{--c1:#60a5fa;--c2:var(--c-rv)}
 .dot--cardiac{--c1:#f87171;--c2:var(--c-cardiac)}
 .dot--eq{--c1:#4ade80;--c2:var(--c-eq)}
-
-/* === PADRÃO VISUAL CONSOLIDADO — PROF. MÁRIO | BLOCO 4 === */
-:root{--grid-depth:0 16px 34px rgba(18,42,66,.13),0 4px 10px rgba(18,42,66,.07),inset 0 1px 0 rgba(255,255,255,.94)}
-body{background:radial-gradient(circle at 10% 3%,rgba(31,120,180,.06),transparent 29%),radial-gradient(circle at 90% 8%,rgba(227,26,28,.045),transparent 28%),linear-gradient(180deg,#fbfdff 0%,#eef4fb 100%)}
-.toolbar,.top-grid,.states,.metrics-wide,.panel,.footer-box,.reading-banner{
-  border:1px solid #d3dfeb!important;border-radius:20px!important;
-  background:linear-gradient(145deg,#fff 0%,#f5faff 100%)!important;box-shadow:var(--grid-depth)!important;
-}
-.top-col{box-shadow:0 9px 19px rgba(18,42,66,.10),inset 0 1px 0 rgba(255,255,255,.92)!important}
-#btnStart,#btnPause,#btnReset{min-width:108px;min-height:43px;box-shadow:0 5px 0 rgba(38,63,91,.25),0 10px 18px rgba(18,42,66,.16),inset 0 1px 0 rgba(255,255,255,.32)!important}
-#btnStart:hover,#btnPause:hover,#btnReset:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(38,63,91,.23),0 14px 22px rgba(18,42,66,.18)!important}
-#btnStart:active,#btnPause:active,#btnReset:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(38,63,91,.25),0 5px 9px rgba(18,42,66,.13)!important}
-input[type=range]{appearance:none;height:10px;border-radius:999px;background:linear-gradient(180deg,#c8d6e5,#edf4fb);box-shadow:inset 0 2px 4px rgba(18,42,66,.24),0 1px 0 #fff}
-input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#1F78B4 48%,#174f85 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1F78B4;cursor:pointer}
-input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#1F78B4 48%,#174f85 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1F78B4;cursor:pointer}
-.metric{border-color:#d3dfeb;box-shadow:0 9px 18px rgba(18,42,66,.10),inset 0 1px 0 rgba(255,255,255,.94)}
-.metric::before{left:-5px;width:10px;background:linear-gradient(180deg,var(--metric-color),color-mix(in srgb,var(--metric-color) 58%,#fff 42%));opacity:1}
-.scene,#graph{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.07)!important}
 </style>
 
-  <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-  <link rel="stylesheet" href="tutor-widget.css?v=4">
-</head>
+<style>:root{--bg:#091620;--panel:#142b3b;--text:#dfedf5;--muted:#a6bed0;--line:#385367}
+body{background:radial-gradient(ellipse at 15% 0,#213e50,transparent 65%),#091620;color:var(--text);font-family:Segoe UI,Arial,sans-serif;padding:24px}h1{font-size:clamp(28px,3vw,38px);letter-spacing:-.035em}.subtitle{line-height:1.6;max-width:1100px;margin:0 auto 22px}
+.toolbar,.top-grid,.panel,.footer-block,.states,.metrics-wide,.top-grid>.top-col,.metric,.footer-box,.reading-banner,.equation{background:linear-gradient(145deg,#203a4c,#102432)!important;border:1px solid #3a5669;border-radius:18px;box-shadow:inset 0 1px #ffffff24,0 9px 22px #0005;color:#dcebf5}.top-grid>.top-col:before,.metric:after{display:none}.top-grid{gap:16px;padding:16px}.top-col{padding:16px;min-width:0}.top-title,.panel-title,.reading-title{color:#dcebf5}.panel-sub,.signature,.mode-badge,.metric .unit,.states strong{color:#adc4d4}.panel-sub{font-size:14px;line-height:1.6}.main-layout{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:18px}.panel{min-width:0;padding:16px}.metrics-wide{padding:16px;margin:16px auto}.panel-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.metric{padding:14px;min-height:92px}.metric .name{font-size:12px;line-height:1.45}.metric .value{font-size:25px}.metric:before{left:0;width:3px;box-shadow:none;opacity:1;background:var(--metric-color)}
+label.control{display:grid;grid-template-columns:minmax(0,1fr) auto;background:#102635!important;gap:13px;padding:14px;border:1px solid #3a5669;box-shadow:inset 3px 0 var(--ctl-color);border-radius:12px}.control-name{font-size:14px;white-space:normal}.control-value{font-size:15px;min-width:0}.control input{grid-column:1/-1;grid-row:2}.control-stack{gap:12px}.toolbar label.toggle,.toolbar label.speed-wrap{background:#112a3a;color:#c8dce9;border-color:#385367;min-height:46px}input[type=range]{appearance:none;height:12px;background:#061621;border:1px solid #57768b;border-radius:20px;box-shadow:inset 0 3px 5px #000b,0 1px #fff2;margin:9px 0;width:100%;min-width:0}input[type=range]::-webkit-slider-thumb{appearance:none;width:28px;height:28px;border:1px solid #d8e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#c2dce9 28%,#6b93aa 57%,#1c394d);box-shadow:0 3px 0 #06141e,0 5px 8px #0008}input[type=range]::-moz-range-thumb{width:27px;height:27px;border:1px solid #d8e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#c2dce9 28%,#6b93aa 57%,#1c394d);box-shadow:0 4px 7px #0008}input[type=checkbox]{width:19px;height:19px;accent-color:#80bea9}button,button.state-btn,#btnStart,#btnPause,#btnReset{min-height:46px;padding:11px 15px;color:#eff8ff!important;background:linear-gradient(#52748a,#263f53)!important;border:1px solid #718d9f!important;border-radius:12px;box-shadow:inset 0 2px #ffffff40,inset 0 -2px #0005,0 4px 0 #06121c,0 7px 11px #0005!important}button.state-btn.active,#btnStart.active-glow,#btnPause.active-glow{background:linear-gradient(#367464,#1a473f)!important;color:#ecfff9!important;border-color:#8bd4bc!important;box-shadow:inset 4px 0 #9bddc6,0 4px #06121c!important}button:active{transform:translateY(2px)}button:focus-visible,input:focus-visible,.figure-scroll:focus-visible{outline:3px solid #a0dacb;outline-offset:4px}.states{padding:15px}.reading-text,.reading-text.good,.reading-text.warn,.reading-text.bad,.interpret-colored,.equation,.footer-box{color:#dcebf5!important;font-size:16px;line-height:1.8}.reading-banner{min-height:0}.reading-text{min-height:0}.footer-box{padding:18px}.equation{padding:18px;font-size:16px}.graph-legend{display:flex;flex-wrap:wrap;gap:16px;line-height:1.6;color:#dcebf5}.graph-legend .item{font-size:15px}.scene,#graph{background:#0c2030!important;border-color:#385367;box-shadow:inset 0 1px #fff2;width:100%;height:auto}.scene text{fill:#c8dce9}.scene #pumpLabel{fill:var(--c-bombaMuscular)}.figure-scroll{width:100%;overflow:auto;border-radius:15px}.figure-toolbar{display:flex;justify-content:space-between;align-items:center;margin:12px 0;color:#b9cddd}.figure-scroll.detail>svg,.figure-scroll.detail>canvas{width:var(--figure-width);max-width:none}.figure-hint{color:#a8c2d3;font-size:13px}.statusline{color:#bed0df;font-size:15px;line-height:1.7}
+@media(max-width:1150px){.top-grid{grid-template-columns:1fr}.main-layout{grid-template-columns:minmax(0,1fr)}.panel-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){body{padding:12px;padding-bottom:max(16px,env(safe-area-inset-bottom))}.toolbar{gap:12px}.toolbar>label{width:100%;flex-wrap:wrap}.toolbar>button{flex:1}.top-grid,.panel{padding:12px}.top-col{padding:12px}.panel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric .value{font-size:23px}.figure-scroll{max-height:70svh}.figure-scroll.overview>svg,.figure-scroll.overview>canvas{width:100%;max-width:100%}.states button{flex:1 1 45%}.actions-col{display:flex;flex-wrap:wrap;gap:10px}.control-name{font-size:14px}}
+.dot--rv{--c1:var(--c-rv);--c2:#637782}.dot--cardiac{--c1:var(--c-cardiac);--c2:#883a48}.dot--eq{--c1:var(--c-eq);--c2:#49612e}.metric .unit{font-size:12px}.scene text{font-family:Arial,sans-serif}.scene #pumpLabel{font-size:22px}
+.footer-block{display:block!important;width:100%;max-width:1460px;margin:18px auto;padding:0;grid-template-columns:minmax(0,1fr)}.footer-block>.footer-box{width:100%;max-width:none;min-width:0;margin:0;font-size:18px;line-height:1.85;transition:none!important}.footer-block #interpretText{display:block;overflow-wrap:break-word;text-align:left}.footer-block .signature{margin-top:18px;font-size:13px}.footer-block strong{font-size:21px}.reading-banner,.reading-text{transition:none!important}@media(max-width:650px){.footer-block>.footer-box{padding:16px;font-size:16px;line-height:1.75}.footer-block strong{font-size:19px}}
+:root{--c-rv:#dce9f3}[data-key="rv"]{--metric-color:#dce9f3!important;--ctl-color:#dce9f3!important}[data-key="rv"] .name,[data-key="rv"] .value,[data-key="rv"] .unit,[data-key="rv"] .control-name,[data-key="rv"] .control-value,.v-rv{color:#dce9f3!important}:root{--c-cardiac:#ff8990}[data-key="cardiac"]{--metric-color:#ff8990!important;--ctl-color:#ff8990!important}[data-key="cardiac"] .name,[data-key="cardiac"] .value,[data-key="cardiac"] .unit,[data-key="cardiac"] .control-name,[data-key="cardiac"] .control-value,.v-cardiac{color:#ff8990!important}:root{--c-pra:#e2b6fa}[data-key="pra"]{--metric-color:#e2b6fa!important;--ctl-color:#e2b6fa!important}[data-key="pra"] .name,[data-key="pra"] .value,[data-key="pra"] .unit,[data-key="pra"] .control-name,[data-key="pra"] .control-value,.v-pra{color:#e2b6fa!important}:root{--c-pvc:#93cfab}[data-key="pvc"]{--metric-color:#93cfab!important;--ctl-color:#93cfab!important}[data-key="pvc"] .name,[data-key="pvc"] .value,[data-key="pvc"] .unit,[data-key="pvc"] .control-name,[data-key="pvc"] .control-value,.v-pvc{color:#93cfab!important}:root{--c-volume:#87d29e}[data-key="volume"]{--metric-color:#87d29e!important;--ctl-color:#87d29e!important}[data-key="volume"] .name,[data-key="volume"] .value,[data-key="volume"] .unit,[data-key="volume"] .control-name,[data-key="volume"] .control-value,.v-volume{color:#87d29e!important}:root{--c-tono:#f2d77c}[data-key="tono"]{--metric-color:#f2d77c!important;--ctl-color:#f2d77c!important}[data-key="tono"] .name,[data-key="tono"] .value,[data-key="tono"] .unit,[data-key="tono"] .control-name,[data-key="tono"] .control-value,.v-tono{color:#f2d77c!important}:root{--c-complacencia:#6cd8f3}[data-key="complacencia"]{--metric-color:#6cd8f3!important;--ctl-color:#6cd8f3!important}[data-key="complacencia"] .name,[data-key="complacencia"] .value,[data-key="complacencia"] .unit,[data-key="complacencia"] .control-name,[data-key="complacencia"] .control-value,.v-complacencia{color:#6cd8f3!important}:root{--c-resistencia:#c4a2f6}[data-key="resistencia"]{--metric-color:#c4a2f6!important;--ctl-color:#c4a2f6!important}[data-key="resistencia"] .name,[data-key="resistencia"] .value,[data-key="resistencia"] .unit,[data-key="resistencia"] .control-name,[data-key="resistencia"] .control-value,.v-resistencia{color:#c4a2f6!important}:root{--c-freqResp:#b1d4f4}[data-key="freqResp"]{--metric-color:#b1d4f4!important;--ctl-color:#b1d4f4!important}[data-key="freqResp"] .name,[data-key="freqResp"] .value,[data-key="freqResp"] .unit,[data-key="freqResp"] .control-name,[data-key="freqResp"] .control-value,.v-freqResp{color:#b1d4f4!important}:root{--c-bombaMuscular:#ecb48e}[data-key="bombaMuscular"]{--metric-color:#ecb48e!important;--ctl-color:#ecb48e!important}[data-key="bombaMuscular"] .name,[data-key="bombaMuscular"] .value,[data-key="bombaMuscular"] .unit,[data-key="bombaMuscular"] .control-name,[data-key="bombaMuscular"] .control-value,.v-bombaMuscular{color:#ecb48e!important}:root{--c-cardiacStrength:#edb0c8}[data-key="cardiacStrength"]{--metric-color:#edb0c8!important;--ctl-color:#edb0c8!important}[data-key="cardiacStrength"] .name,[data-key="cardiacStrength"] .value,[data-key="cardiacStrength"] .unit,[data-key="cardiacStrength"] .control-name,[data-key="cardiacStrength"] .control-value,.v-cardiacStrength{color:#edb0c8!important}:root{--c-pmsf:#f8c16b}[data-key="pmsf"]{--metric-color:#f8c16b!important;--ctl-color:#f8c16b!important}[data-key="pmsf"] .name,[data-key="pmsf"] .value,[data-key="pmsf"] .unit,[data-key="pmsf"] .control-name,[data-key="pmsf"] .control-value,.v-pmsf{color:#f8c16b!important}:root{--c-eq:#b9df78}[data-key="eq"]{--metric-color:#b9df78!important;--ctl-color:#b9df78!important}[data-key="eq"] .name,[data-key="eq"] .value,[data-key="eq"] .unit,[data-key="eq"] .control-name,[data-key="eq"] .control-value,.v-eq{color:#b9df78!important}.graph-legend .item:nth-child(1){color:#dce9f3}.graph-legend .item:nth-child(2){color:#ff8990}.graph-legend .item:nth-child(3){color:#b9df78}</style></head>
 <body>
-  <div class="mobile-topbar">
-    <h2>Retorno Venoso — Fisiologia Interativa (V3)</h2>
-    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
-  </div>
-  <div class="mobile-tabnav">
-    <button data-tabnav="animacao" class="active">Animação</button>
-    <button data-tabnav="controles">Controles</button>
-    <button data-tabnav="graficos">Gráficos</button>
-  </div>
-
   <h1>Retorno Venoso</h1>
   <p class="subtitle">Simulador interativo com retorno venoso, válvulas venosas, bomba muscular, bomba respiratória, curva de retorno venoso e ponto de equilíbrio hemodinâmico.</p>
 
-  <div class="toolbar" data-tab="controles">
+  <div class="toolbar">
     <button id="btnStart" class="primary">Iniciar</button>
     <button id="btnPause">Pausar</button>
     <button id="btnReset">Resetar</button>
@@ -584,25 +518,25 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
     </label>
   </div>
 
-  <div class="mode-line" data-tab="animacao"><span id="modeBadge" class="mode-badge">Modo: animação contínua</span></div>
+  <div class="mode-line"><span id="modeBadge" class="mode-badge">Modo: animação contínua</span></div>
 
   <div class="top-grid">
-    <div class="top-col" data-tab="controles">
+    <div class="top-col">
       <div class="top-title">Controle hemodinâmico</div>
       <div class="actions-col" style="margin-bottom:8px">
         <div style="font-size:13px;line-height:1.45">
-
+          
         </div>
       </div>
-      <div class="control-stack" id="col-left" data-tab="controles"></div>
+      <div class="control-stack" id="col-left"></div>
     </div>
-    <div class="top-col" data-tab="controles">
+    <div class="top-col">
       <div class="top-title">Determinantes do retorno venoso</div>
-      <div class="control-stack" id="col-mid" data-tab="controles"></div>
+      <div class="control-stack" id="col-mid"></div>
     </div>
-    <div class="top-col" data-tab="controles">
+    <div class="top-col">
       <div class="top-title">Acoplamento cardiopulmonar</div>
-      <div class="control-stack" id="col-right" data-tab="controles"></div>
+      <div class="control-stack" id="col-right"></div>
     </div>
   </div>
 
@@ -618,11 +552,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
 
   <div class="main-layout">
-    <div class="panel" data-tab="animacao">
+    <div class="panel">
       <div class="panel-title">Animação integrada</div>
       <div class="panel-sub">Modelo visual combinando bomba muscular, pulmão/bomba respiratória e coração para representar o retorno venoso periférico até o átrio direito.</div>
-      <svg class="scene" viewBox="0 0 980 560" id="sceneSvg" aria-label="Simulação integrada do retorno venoso">
-        <defs>
+      <div class="figure-toolbar"><span>Animação integrada</span><button data-figure="view-sceneSvg" aria-controls="view-sceneSvg" type="button">Ampliar detalhes</button></div><div id="view-sceneSvg" class="figure-scroll" tabindex="0" style="--figure-width:980px"><svg class="scene" viewBox="0 0 980 560" id="sceneSvg" aria-label="Simulação integrada do retorno venoso">
+        <defs><radialGradient id="rvHeartNew" cx="30%" cy="23%" r="85%"><stop stop-color="#ffc0bd"/><stop offset=".25" stop-color="#e45e70"/><stop offset=".62" stop-color="#a92042"/><stop offset="1" stop-color="#3e0c27"/></radialGradient><linearGradient id="rvVesselNew"><stop stop-color="#254c73"/><stop offset=".35" stop-color="#b2d8ea"/><stop offset=".6" stop-color="#548aae"/><stop offset="1" stop-color="#203751"/></linearGradient><clipPath id="rvMuscleClip"><use href="#muscleBody"/></clipPath><clipPath id="rvDiaphragmClip"><use href="#diaphragmFill"/></clipPath>
           <linearGradient id="veinGrad" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stop-color="#143f79"/>
             <stop offset="22%" stop-color="#2b66af"/>
@@ -687,8 +621,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <path d="M60,150 C155,173 250,197 350,222 C415,239 487,249 620,258" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="28" stroke-linecap="round"/>
             <path d="M188,96 C230,88 274,108 322,143 C389,191 455,238 620,258" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="30" stroke-linecap="round"/>
             <path d="M154,277 C180,313 243,313 315,301 C413,286 492,268 620,258" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="18" stroke-linecap="round"/>
-
-
+            
+            
           </clipPath>
           <filter id="softShadow" x="-25%" y="-25%" width="150%" height="150%">
             <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#84a3c6" flood-opacity="0.25"/>
@@ -701,7 +635,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <feGaussianBlur stdDeviation="1.6" result="blur"/>
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
-
+        
           <!-- === Órgãos premium do template cardiopulmonar === -->
           <radialGradient id="rvTplLungFill3D" cx="30%" cy="22%" r="82%">
             <stop offset="0%" stop-color="#fff2f6"/>
@@ -755,9 +689,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
 </defs>
 
-        <rect x="0" y="0" width="980" height="560" fill="#ffffff"/>
-        <text id="labelTitleLeft" x="80" y="16" fill="#0f172a" font-size="28" font-weight="500">Rede Venosa</text>
-
+        <rect x="0" y="0" width="980" height="560" fill="#0c2030"/>
+        <text id="labelTitleLeft" x="80" y="38" fill="#c8dce9" font-size="22" font-weight="600">Rede Venosa</text>
+        
 
         <!-- pump muscle -->
         <g id="muscleGroup" filter="url(#softShadow)">
@@ -789,22 +723,22 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <path d="M304 520 C350 496, 384 482, 426 470" fill="none" stroke="rgba(160,37,62,.30)" stroke-width="1.66"/>
             <path d="M396 470 C378 451, 356 438, 326 426" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.4"/>
             <path d="M396 470 C378 489, 356 502, 326 514" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="1.35"/>
-          </g>
-          <text id="pumpLabel" x="80" y="438" text-anchor="start" fill="#0f172a" font-size="28" font-weight="500">Bomba Muscular</text>
+          <g clip-path="url(#rvMuscleClip)"><path d="M112 427 C205 409 324 434 425 470" fill="none" stroke="#8b2847" stroke-width="3.5" opacity=".42"/><path d="M112 432 C205 414 324 439 425 470" fill="none" stroke="#ffbdba" stroke-width="2" opacity=".42"/><path d="M112 437 C205 419 324 444 425 470" fill="none" stroke="#8b2847" stroke-width="3.5" opacity=".42"/><path d="M112 442 C205 424 324 449 425 470" fill="none" stroke="#ffbdba" stroke-width="2" opacity=".42"/><path d="M112 447 C205 429 324 454 425 470" fill="none" stroke="#8b2847" stroke-width="3.5" opacity=".42"/><path d="M112 452 C205 434 324 459 425 470" fill="none" stroke="#ffbdba" stroke-width="2" opacity=".42"/><path d="M112 457 C205 439 324 464 425 470" fill="none" stroke="#8b2847" stroke-width="3.5" opacity=".42"/><path d="M112 462 C205 444 324 469 425 470" fill="none" stroke="#ffbdba" stroke-width="2" opacity=".42"/><path d="M112 467 C205 449 324 474 425 470" fill="none" stroke="#8b2847" stroke-width="3.5" opacity=".42"/><path d="M112 472 C205 454 324 479 425 470" fill="none" stroke="#ffbdba" stroke-width="2" opacity=".42"/><path d="M112 477 C205 459 324 484 425 470" fill="none" stroke="#8b2847" stroke-width="3.5" opacity=".42"/><path d="M112 482 C205 464 324 489 425 470" fill="none" stroke="#ffbdba" stroke-width="2" opacity=".42"/><path d="M112 487 C205 469 324 494 425 470" fill="none" stroke="#8b2847" stroke-width="3.5" opacity=".42"/><path d="M112 492 C205 474 324 499 425 470" fill="none" stroke="#ffbdba" stroke-width="2" opacity=".42"/><path d="M112 497 C205 479 324 504 425 470" fill="none" stroke="#8b2847" stroke-width="3.5" opacity=".42"/><path d="M112 502 C205 484 324 509 425 470" fill="none" stroke="#ffbdba" stroke-width="2" opacity=".42"/><path d="M112 507 C205 489 324 514 425 470" fill="none" stroke="#8b2847" stroke-width="3.5" opacity=".42"/></g></g>
+          <text id="pumpLabel" x="80" y="402" text-anchor="start" fill="#c8dce9" font-size="22" font-weight="600">Bomba Muscular</text>
         </g>
 
 <!-- peripheral and central veins -->
         <g id="veinsGroup" filter="url(#softShadow)">
-          <path id="armVein" d="M60,150 C155,173 250,197 350,222 C415,239 487,249 620,258" fill="none" stroke="url(#veinGrad)" stroke-width="16" stroke-linecap="round" opacity="0.96"/>
-          <path id="legVeinL" d="M188,96 C230,88 274,108 322,143 C389,191 455,238 620,258" fill="none" stroke="url(#veinGrad)" stroke-width="18" stroke-linecap="round"/>
-          <path id="legVeinR" d="M154,277 C180,313 243,313 315,301 C413,286 492,268 620,258" fill="none" stroke="url(#veinGrad)" stroke-width="14" stroke-linecap="round" opacity="0.96"/>
-
-
-          <path id="armVeinInner" d="M60,150 C155,173 250,197 350,222 C415,239 487,249 620,258" fill="none" stroke="url(#veinLumen)" stroke-width="15.5" stroke-linecap="round" opacity="0.99" filter="url(#innerSoftGlow)"/>
-          <path id="legVeinLInner" d="M188,96 C230,88 274,108 322,143 C389,191 455,238 620,258" fill="none" stroke="url(#veinLumen)" stroke-width="17.5" stroke-linecap="round" opacity="0.99" filter="url(#innerSoftGlow)"/>
-          <path id="legVeinRInner" d="M154,277 C180,313 243,313 315,301 C413,286 492,268 620,258" fill="none" stroke="url(#veinLumen)" stroke-width="15.5" stroke-linecap="round" opacity="0.99" filter="url(#innerSoftGlow)"/>
-
-
+          <path id="armVein" d="M60,150 C155,173 250,197 350,222 C415,239 487,249 620,258" fill="none" stroke="url(#veinGrad)" stroke-width="16" stroke-linecap="round" opacity="0.96"/><path d="M60,150 C155,173 250,197 350,222 C415,239 487,249 620,258" fill="none" stroke="#dcf0ff" stroke-width="2.8" stroke-linecap="round" opacity="0.38" transform="translate(0 -3)"/>
+          <path id="legVeinL" d="M188,96 C230,88 274,108 322,143 C389,191 455,238 620,258" fill="none" stroke="url(#veinGrad)" stroke-width="18" stroke-linecap="round"/><path d="M188,96 C230,88 274,108 322,143 C389,191 455,238 620,258" fill="none" stroke="#dcf0ff" stroke-width="2.8" stroke-linecap="round" transform="translate(0 -3)"/>
+          <path id="legVeinR" d="M154,277 C180,313 243,313 315,301 C413,286 492,268 620,258" fill="none" stroke="url(#veinGrad)" stroke-width="14" stroke-linecap="round" opacity="0.96"/><path d="M154,277 C180,313 243,313 315,301 C413,286 492,268 620,258" fill="none" stroke="#dcf0ff" stroke-width="2.8" stroke-linecap="round" opacity="0.38" transform="translate(0 -3)"/>
+          
+          
+          <path id="armVeinInner" d="M60,150 C155,173 250,197 350,222 C415,239 487,249 620,258" fill="none" stroke="url(#veinLumen)" stroke-width="15.5" stroke-linecap="round" opacity="0.35" filter="url(#innerSoftGlow)"/>
+          <path id="legVeinLInner" d="M188,96 C230,88 274,108 322,143 C389,191 455,238 620,258" fill="none" stroke="url(#veinLumen)" stroke-width="17.5" stroke-linecap="round" opacity="0.35" filter="url(#innerSoftGlow)"/>
+          <path id="legVeinRInner" d="M154,277 C180,313 243,313 315,301 C413,286 492,268 620,258" fill="none" stroke="url(#veinLumen)" stroke-width="15.5" stroke-linecap="round" opacity="0.35" filter="url(#innerSoftGlow)"/>
+          
+          
         </g>
 
         <g id="flowRibbons" clip-path="url(#veinClip)"></g>
@@ -833,7 +767,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
             <path class="leaflet-left" d="M-10 -9 Q-1 -2 -1 0 Q-1 2 -10 9" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="4.8" stroke-linecap="round"/>
             <path class="leaflet-right" d="M1 -9 Q10 -2 10 0 Q10 2 1 9" fill="rgba(231,243,255,0.68)" stroke="#eef7ff" stroke-width="4.8" stroke-linecap="round"/>
           </g>
-
+          
         </g>
 
 <!-- thorax and lungs -->
@@ -864,7 +798,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
                 <path d="M106 332 C136 324 172 324 204 333" fill="none" opacity=".17" stroke="#ffffff" stroke-width="4"/>
                 <ellipse cx="150" cy="170" fill="#ffffff" opacity=".12" rx="54" ry="26"/>
               </g>
-            </g>
+            <g fill="none" stroke="#315b60" stroke-width="5" stroke-linecap="round" opacity=".65"><path d="M713 209 Q707.6 224 695 239 M704 229 l-16 -3 M695 239 l-8 18"/><path d="M713 233 Q706.1 248 690 263 M701.5 253 l-16 -3 M690 263 l-8 18"/><path d="M713 257 Q704.6 272 685 287 M699 277 l-16 -3 M685 287 l-8 18"/><path d="M713 281 Q703.1 296 680 311 M696.5 301 l-16 -3 M680 311 l-8 18"/></g><g fill="none" stroke="#c6e4d8" stroke-width="1.6" stroke-linecap="round" opacity=".5" transform="translate(-1 -1)"><path d="M713 209 Q707.6 224 695 239 M704 229 l-16 -3 M695 239 l-8 18"/><path d="M713 233 Q706.1 248 690 263 M701.5 253 l-16 -3 M690 263 l-8 18"/><path d="M713 257 Q704.6 272 685 287 M699 277 l-16 -3 M685 287 l-8 18"/><path d="M713 281 Q703.1 296 680 311 M696.5 301 l-16 -3 M680 311 l-8 18"/></g></g>
             <g id="lungRightGroup">
               <g transform="translate(635 103) scale(0.55 0.55)">
                 <path d="M411.887573,163.138962 C441.820221,200.964310 458.824554,243.702667 464.407227,291.141296 C470.867249,346.035217 461.098663,397.865295 435.277771,446.705963 C429.424377,457.777679 422.762451,460.911469 410.332886,458.973236 C391.273529,456.001251 373.920319,448.550598 357.257568,439.239105 C344.106049,431.889771 332.267487,422.776917 321.137848,412.611786 C304.448242,397.368439 296.926422,378.072327 294.669007,356.104523 C291.913635,329.290527 289.485657,302.473053 288.420929,275.514801 C288.086823,267.055634 287.959290,258.589264 287.642639,250.129822 C286.892395,230.086060 290.286560,210.503220 293.992920,190.932236 C294.944031,185.910034 295.458832,180.749054 295.586700,175.637131 C296.059204,156.746048 295.493866,137.818695 297.700317,118.994499 C298.222595,114.538795 298.779755,110.066406 300.347626,105.822899 C302.720947,99.399452 306.758392,96.707146 313.631531,96.619308 C324.602692,96.479111 333.986633,101.406258 343.273926,106.211853 C370.149017,120.117981 392.837555,139.183334 411.887573,163.138962 Z" fill="url(#rvTplLungFill3D)" stroke="#a94a64" stroke-width="4"/>
@@ -874,7 +808,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
                 <path d="M292 333 C326 324 364 324 394 332" fill="none" opacity=".17" stroke="#ffffff" stroke-width="4"/>
                 <ellipse cx="350" cy="170" fill="#ffffff" opacity=".12" rx="54" ry="26"/>
               </g>
-            </g>
+            <g fill="none" stroke="#315b60" stroke-width="5" stroke-linecap="round" opacity=".65"><path d="M806 209 Q811.4 224 824 239 M815 229 l16 -3 M824 239 l8 18"/><path d="M806 233 Q812.9 248 829 263 M817.5 253 l16 -3 M829 263 l8 18"/><path d="M806 257 Q814.4 272 834 287 M820 277 l16 -3 M834 287 l8 18"/><path d="M806 281 Q815.9 296 839 311 M822.5 301 l16 -3 M839 311 l8 18"/></g><g fill="none" stroke="#c6e4d8" stroke-width="1.6" stroke-linecap="round" opacity=".5" transform="translate(-1 -1)"><path d="M806 209 Q811.4 224 824 239 M815 229 l16 -3 M824 239 l8 18"/><path d="M806 233 Q812.9 248 829 263 M817.5 253 l16 -3 M829 263 l8 18"/><path d="M806 257 Q814.4 272 834 287 M820 277 l16 -3 M834 287 l8 18"/><path d="M806 281 Q815.9 296 839 311 M822.5 301 l16 -3 M839 311 l8 18"/></g></g>
           </g>
 
 
@@ -882,33 +816,33 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
           <path id="diaphragmFill" d="M619,426 Q748,500 896,426 L896,466 Q748,540 619,466 Z" fill="url(#diaphGrad)" opacity="0.88" stroke="#8f332f" stroke-width="1.6"/>
           <path id="diaphragmRim" d="M619,427 Q748,494 896,427" fill="none" stroke="rgba(255,255,255,.34)" stroke-width="2.2" stroke-linecap="round"/>
           <path id="respBand" transform="translate(30,0)" fill="none" stroke="#a8bdd8" stroke-width="19" opacity="0.72" stroke-linecap="round"/>
-          <text id="respLabel" x="748" y="580" text-anchor="middle" fill="#0f172a" font-size="28" font-weight="500">Bomba respiratória</text>
+          <text id="respLabel" x="748" y="540" text-anchor="middle" fill="#c8dce9" font-size="22" font-weight="600">Bomba respiratória</text>
 
-          <!-- heart -->
+          <g id="rvDiaphragmFibers" clip-path="url(#rvDiaphragmClip)" fill="none" stroke="#ffc7a2" stroke-width="1.3" opacity=".4"></g><!-- heart -->
           <g id="heartGroup" filter="url(#rvTplHeartShadow)" transform="translate(760 252) scale(0.78) translate(-760 -296)">
-            <g transform="translate(686 230) scale(0.13 0.13)">
-              <path d="M566.2643,993.9062C425.9142,881.6787,270.1297,749.9875,164.7595,617.5243 C53.9621,478.241,12.7985,355.8564,38.9136,243.3774c15.0878-64.9847,45.8376-116.6956,91.3927-153.6974 c41.8641-34.0031,95.4034-54.0473,154.8294-57.9639c8.0587-0.5319,16.1029-0.8009,23.907-0.8009 c108.3699,0,192.3093,52.25,242.7412,151.1022l14.1638,27.7656l14.1555-27.7708 C630.1004,83.9103,712.5994,29.8836,812.3974,29.8836c10.5193,0,21.3781,0.5971,32.274,1.7746 c128.8912,13.9299,219.4241,86.5945,248.3848,199.3632c28.193,109.7772-11.2189,236.7831-117.1384,377.4871 C886.1879,727.7071,748.3957,857.333,566.2643,993.9062z" fill="url(#rvTplHeartDense3D)" opacity="0.98" stroke="#720817" stroke-width="18"/>
-              <g clip-path="url(#rvTplHeartClipLocal)">
-                <path d="M566.2643,993.9062C425.9142,881.6787,270.1297,749.9875,164.7595,617.5243 C53.9621,478.241,12.7985,355.8564,38.9136,243.3774c15.0878-64.9847,45.8376-116.6956,91.3927-153.6974 c41.8641-34.0031,95.4034-54.0473,154.8294-57.9639c8.0587-0.5319,16.1029-0.8009,23.907-0.8009 c108.3699,0,192.3093,52.25,242.7412,151.1022l14.1638,27.7656l14.1555-27.7708 C630.1004,83.9103,712.5994,29.8836,812.3974,29.8836c10.5193,0,21.3781,0.5971,32.274,1.7746 c128.8912,13.9299,219.4241,86.5945,248.3848,199.3632c28.193,109.7772-11.2189,236.7831-117.1384,377.4871 C886.1879,727.7071,748.3957,857.333,566.2643,993.9062z" fill="url(#rvTplHeartShade3D)" opacity="0.88"/>
-                <ellipse cx="330" cy="295" fill="url(#rvTplHeartHighlight)" filter="url(#rvTplHeartBlur)" opacity="0.58" rx="235" ry="92"/>
-                <ellipse cx="270" cy="245" fill="#ff9aa8" filter="url(#rvTplHeartBlur)" opacity="0.24" rx="115" ry="46"/>
-                <path d="M175 515 C315 440 540 445 690 525" fill="none" filter="url(#rvTplHeartBlur)" opacity="0.24" stroke="#ff7989" stroke-linecap="round" stroke-width="34"/>
-                <path d="M150 760 C310 905 650 938 884 700" fill="none" filter="url(#rvTplHeartBlur)" opacity="0.18" stroke="#3f0410" stroke-linecap="round" stroke-width="46"/>
-              </g>
-            </g>
-          </g>
+ <path d="M748 263 C730 229 744 203 769 211 C790 215 795 235 782 252" fill="none" stroke="#651c35" stroke-width="25" stroke-linecap="round"/>
+ <path d="M748 260 C734 234 746 214 766 221 C780 225 782 237 776 251" fill="none" stroke="#e37f85" stroke-width="14" stroke-linecap="round"/>
+ <path d="M735 276 L724 232 M768 268 Q779 240 808 242" fill="none" stroke="#173447" stroke-width="24" stroke-linecap="round"/>
+ <path d="M735 276 L724 232 M768 268 Q779 240 808 242" fill="none" stroke="url(#rvVesselNew)" stroke-width="18" stroke-linecap="round"/>
+ <path d="M738 251 C713 246 695 262 699 293 C698 326 725 360 762 384 C782 375 806 338 814 310 C825 276 806 251 785 251 C767 243 751 246 738 251Z" fill="url(#rvHeartNew)" stroke="#70203d" stroke-width="2.4"/>
+ <path d="M736 257 C739 286 753 297 760 318 C768 341 767 364 762 380" fill="none" stroke="#60182e" stroke-width="5" opacity=".7"/>
+ <path d="M724 262 C748 285 786 270 806 287 M754 294 Q783 298 798 317 M760 319 Q784 328 787 346 M740 287 Q718 296 718 314" fill="none" stroke="#71152d" stroke-width="3.5" stroke-linecap="round"/>
+ <path d="M724 260 C748 283 786 268 806 285 M752 294 Q781 298 796 316 M738 287 Q716 296 716 311" fill="none" stroke="#eda092" stroke-width="1.4" stroke-linecap="round"/>
+ <path d="M708 279 C713 261 728 258 739 263" fill="none" stroke="#ffd8ca" stroke-width="5" opacity=".36" stroke-linecap="round"/>
+ <ellipse cx="782" cy="279" rx="16" ry="24" fill="#ffb8b7" opacity=".12" transform="rotate(-30 782 279)"/>
+ </g>
 
         </g>
 
+        
+        <text id="labelVV" x="100" y="372" fill="#c8dce9" font-size="15" font-weight="700">Veias periféricas</text>
+        <text id="labelValves" x="292" y="372" fill="#c8dce9" font-size="15" font-weight="700">Válvulas venosas</text>
+        
 
-        <text id="labelVV" x="100" y="372" fill="#42586e" font-size="15" font-weight="700">Veias periféricas</text>
-        <text id="labelValves" x="292" y="372" fill="#42586e" font-size="15" font-weight="700">Válvulas venosas</text>
+        
+        
 
-
-
-
-
-      </svg>
+      </svg></div><p class="figure-hint">Use a visão geral ou amplie e deslize para explorar os detalhes.</p>
 
     <div class="reading-banner" style="margin-top:10px">
       <div class="reading-title">Leitura fisiológica imediata</div>
@@ -917,11 +851,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
     </div>
 
-
-<div class="panel" data-tab="graficos">
+    
+<div class="panel">
   <div class="panel-title">Gráfico principal</div>
   <div class="panel-sub">Curva de retorno venoso em função da pressão atrial direita, com curva de função cardíaca opcional e ponto de equilíbrio destacado.</div>
-  <canvas id="graph" width="720" height="560" style="display:block"></canvas>
+  <div class="figure-toolbar"><span>Curvas hemodinâmicas</span><button data-figure="view-graph" aria-controls="view-graph" type="button">Ampliar detalhes</button></div><div id="view-graph" class="figure-scroll" tabindex="0" style="--figure-width:720px"><canvas id="graph" width="720" height="560" style="display:block"></canvas></div><p class="figure-hint">Use a visão geral ou amplie e deslize para explorar os detalhes.</p>
   <div class="graph-legend">
     <div class="item"><span class="dot dot--rv"></span>Curva de retorno venoso</div>
     <div class="item"><span class="dot dot--cardiac"></span>Curva de função cardíaca</div>
@@ -939,7 +873,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
   </div>
 </div>
 
-  <script>
+  <script>const VEN_COLORS={"rv":"#dce9f3","cardiac":"#ff8990","pra":"#e2b6fa","pvc":"#93cfab","volume":"#87d29e","tono":"#f2d77c","complacencia":"#6cd8f3","resistencia":"#c4a2f6","freqResp":"#b1d4f4","bombaMuscular":"#ecb48e","cardiacStrength":"#edb0c8","pmsf":"#f8c16b","eq":"#b9df78"};function venRich(s){const rules=[[/pressão de enchimento sistêmico|P<sub>enchimento sistêmico<\/sub>/gi,'pmsf'],[/pressão atrial direita|P<sub>atrial direita<\/sub>|\bPRA\b/gi,'pra'],[/pressão venosa central/gi,'pvc'],[/resistência ao retorno venoso/gi,'resistencia'],[/retorno venoso/gi,'rv'],[/débito cardíaco/gi,'cardiac'],[/frequência respiratória/gi,'freqResp'],[/bomba muscular/gi,'bombaMuscular'],[/volume sanguíneo/gi,'volume'],[/tônus venoso/gi,'tono'],[/complacência venosa/gi,'complacencia']];let parts=[s];for(const [r,k]of rules)parts=parts.flatMap(t=>typeof t!=='string'?[t]:t.split(r).flatMap((v,i,a)=>i<a.length-1?[v,{html:'<span class="v-'+k+'">'+(t.match(r)||[])[i]+'</span>'}]:[v]));return parts.map(p=>typeof p==='string'?p:p.html).join('');}
+
     const stateProfiles = {
       normal: { nome:'Normal', volume:5.0, tono:50, complacencia:70, resistencia:1.0, pra:2.0, pvc:4.0, freqResp:14, bombaMuscular:20, cardiacStrength:55,
         leitura:'Estado basal com equilíbrio entre gradiente de retorno venoso, tônus venoso, complacência e função cardíaca.' },
@@ -1362,20 +1297,23 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
       const eq = currentEqPoint();
       const pmsf = physio.pmsf;
       const dynamicTexts = buildDynamicTexts();
-      document.getElementById('readingText').textContent = dynamicTexts.reading;
-      document.getElementById('interpretText').textContent = dynamicTexts.interpret;
+      const readingNode=document.getElementById('readingText'),readingHTML=venRich(dynamicTexts.reading);
+      if(readingNode.dataset.lastReading!==readingHTML){readingNode.dataset.lastReading=readingHTML;readingNode.innerHTML=readingHTML;}
+      const interpretNode=document.getElementById('interpretText');
+      const interpretKey=JSON.stringify(model)+'|'+activeState;
+      if(interpretNode.dataset.modelKey!==interpretKey){interpretNode.dataset.modelKey=interpretKey;interpretNode.innerHTML=venRich(dynamicTexts.interpret);}
       document.getElementById('equationBox').innerHTML = `
-        <strong>Retorno venoso ≈ (P<sub>enchimento sistêmico</sub> − P<sub>atrial direita</sub>) / Resistência ao retorno venoso</strong><br><br>
-        P<sub>enchimento sistêmico</sub> estimada: <strong>${formatPt(pmsf,1)} mmHg</strong><br>
-        P<sub>atrial direita</sub>: <strong>${formatPt(physio.praInstant,1)} mmHg</strong><br>
-        Resistência ao retorno venoso: <strong>${formatPt(currentResistance(),2)} mmHg·min/L</strong><br>
-        Retorno venoso atual: <strong>${formatPt(currentRV(),2)} L/min</strong><br>
-        Débito cardíaco estimado: <strong>${formatPt(physio.co,2)} L/min</strong>
-      `;
+<strong><span class="v-rv">Retorno venoso</span> ≈ (<span class="v-pmsf">Pmsf</span> − <span class="v-pra">PRA</span>) / <span class="v-resistencia">RVR</span></strong><br><br>
+<span class="v-pmsf">Pressão de enchimento sistêmico: ${formatPt(pmsf,1)} mmHg</span><br>
+<span class="v-pra">Pressão atrial direita: ${formatPt(physio.praInstant,1)} mmHg</span><br>
+<span class="v-resistencia">Resistência ao retorno venoso: ${formatPt(currentResistance(),2)} mmHg·min/L</span><br>
+<span class="v-rv">Retorno venoso atual: ${formatPt(currentRV(),2)} L/min</span><br>
+<span class="v-cardiac">Débito cardíaco estimado: ${formatPt(physio.co,2)} L/min</span>` ;
       document.getElementById('graphStatus').textContent = document.getElementById('toggleCardiac').checked
         ? `Cruzamento atual em PRA ${formatPt(eq.x,1)} mmHg, fluxo ${formatPt(eq.y,2)} L/min e débito cardíaco estimado de ${formatPt(physio.co,2)} L/min.`
         : 'Curva cardíaca oculta: o gráfico mostra apenas a curva de retorno venoso e sua tendência dinâmica.';
       document.getElementById('rvAtual').textContent = `RV atual: ${formatPt(currentRV(),2)} L/min`;
+      const box=document.getElementById('equationBox');box.innerHTML=venRich(box.innerHTML);
       applySemanticTone();
       document.getElementById('modeBadge').textContent = playing ? 'Modo: animação contínua' : 'Modo: pausado';
     }
@@ -1404,7 +1342,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
         });
 
       const gravityPool = activeState === 'ortostatismo' ? 1 : 0;
-      const venousHue = 210 + Math.min(18, model.tono / 12);
+      const venousHue = 210;
       const grad1 = document.querySelector('#veinGrad stop[offset="0%"]');
       const grad2 = document.querySelector('#veinGrad stop[offset="100%"]');
       grad1.setAttribute('stop-color', `hsl(${venousHue}, 92%, ${72 - model.tono/12}%)`);
@@ -1428,6 +1366,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
         diaphragmRim.setAttribute('d', `M619,${(dTop+1).toFixed(1)} Q748,${(dArch-4).toFixed(1)} 896,${(dTop+1).toFixed(1)}`);
       }
 
+      const fiberLayer=document.getElementById('rvDiaphragmFibers');if(fiberLayer){let lines='';for(let i=0;i<22;i++){const x=620+i*13;lines+='<path d="M'+x+' '+(breathY+18)+' Q'+(748+(x-748)*.65)+' '+(breathY+72)+' '+(748+(x-748)*.35)+' '+(breathY+122)+'"/>';}fiberLayer.innerHTML=lines;}
       const breathSin = physio.respWave;
       const lungScaleX = 1 + (0.03 + model.freqResp/620 + (activeState === 'inspiracao' ? 0.03 : 0)) * breathSin;
       const lungScaleY = 1 + (0.055 + model.freqResp/430 + (activeState === 'inspiracao' ? 0.04 : 0)) * breathSin;
@@ -1452,7 +1391,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
       if(featherMuscle){
         featherMuscle.setAttribute(
           'transform',
-          `translate(267 ${(560 + muscleLift).toFixed(2)}) scale(${muscleScaleX.toFixed(3)} ${muscleScaleY.toFixed(3)}) translate(-267 -470)`
+          `translate(267 ${(470 + muscleLift).toFixed(2)}) scale(${muscleScaleX.toFixed(3)} ${muscleScaleY.toFixed(3)}) translate(-267 -470)`
         );
       }
 
@@ -1590,7 +1529,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
       const canvas = document.getElementById('graph');
       const ctx = canvas.getContext('2d');
       const w = canvas.width, h = canvas.height;
-      ctx.clearRect(0,0,w,h);
+      ctx.clearRect(0,0,w,h);ctx.fillStyle='#0c2030';ctx.fillRect(0,0,w,h);
 
       const pad = {l:80,r:28,t:30,b:58};
       const gx = pad.l, gy = pad.t, gw = w - pad.l - pad.r, gh = h - pad.t - pad.b;
@@ -1609,12 +1548,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
       const sy = y => gy + gh - (y - yMin) / (yMax - yMin) * gh;
 
       const bgGrad = ctx.createLinearGradient(0, gy, 0, gy + gh);
-      bgGrad.addColorStop(0, '#ffffff');
-      bgGrad.addColorStop(1, '#f8fbff');
+      bgGrad.addColorStop(0, '#173447');
+      bgGrad.addColorStop(1, '#0d2232');
       ctx.fillStyle = bgGrad;
       ctx.fillRect(gx, gy, gw, gh);
 
-      ctx.strokeStyle = '#e6edf6';
+      ctx.strokeStyle = '#294556';
       ctx.lineWidth = 1;
       for(let x=xMin; x<=xMax; x+=1){ ctx.beginPath(); ctx.moveTo(sx(x), gy); ctx.lineTo(sx(x), gy+gh); ctx.stroke(); }
       const yGridStep = yMax > 16 ? 2 : 1;
@@ -1624,7 +1563,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
       ctx.lineWidth = 1.8;
       ctx.beginPath(); ctx.moveTo(gx, gy); ctx.lineTo(gx, gy+gh); ctx.lineTo(gx+gw, gy+gh); ctx.stroke();
 
-      ctx.fillStyle = '#556b7f';
+      ctx.fillStyle = '#c0d4e1';
       ctx.font = '13px Arial';
       for(let x=xMin; x<=xMax; x+=1) ctx.fillText(String(x).replace('.', ','), sx(x)-6, gy+gh+24);
       const yLabelStep = yMax > 16 ? 4 : 2;
@@ -1638,8 +1577,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
       // RV curve with volume highlight
       const rvGrad = ctx.createLinearGradient(0, gy, 0, gy + gh);
-      rvGrad.addColorStop(0, '#61b0ff');
-      rvGrad.addColorStop(1, '#1F78B4');
+      rvGrad.addColorStop(0, '#dce9f3');
+      rvGrad.addColorStop(1, '#dce9f3');
       ctx.save();
       ctx.strokeStyle = rvGrad;
       ctx.lineWidth = 5;
@@ -1666,8 +1605,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
       const showCardiac = document.getElementById('toggleCardiac').checked;
       if(showCardiac){
         const coGrad = ctx.createLinearGradient(0, gy, 0, gy + gh);
-        coGrad.addColorStop(0, '#ff8a8a');
-        coGrad.addColorStop(1, '#E31A1C');
+        coGrad.addColorStop(0, '#ff8990');
+        coGrad.addColorStop(1, '#ff8990');
         ctx.save();
         ctx.strokeStyle = coGrad;
         ctx.lineWidth = 5;
@@ -1693,13 +1632,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
       ctx.save();
       ctx.setLineDash([6,6]);
-      ctx.strokeStyle = '#E31A1C';
+      ctx.strokeStyle = '#e2b6fa';
       ctx.lineWidth = 1.5;
       ctx.beginPath(); ctx.moveTo(sx(physio.praInstant), gy); ctx.lineTo(sx(physio.praInstant), gy+gh); ctx.stroke();
-      const yRV = sy(currentRV());
+      const yRV = sy(currentRV());ctx.strokeStyle='#dce9f3';
       ctx.beginPath(); ctx.moveTo(gx, yRV); ctx.lineTo(gx+gw, yRV); ctx.stroke();
 
-      ctx.fillStyle = '#1f2937';
+      ctx.fillStyle = '#dce9f3';
       ctx.font = '13px Arial';
       ctx.textAlign = 'right';
       ctx.textBaseline = 'bottom';
@@ -1707,7 +1646,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
       ctx.restore();
 
-      ctx.fillStyle = '#5f7388';
+      ctx.fillStyle = '#e2b6fa';
       ctx.font = '12px Arial';
       ctx.fillText(`PRA atual: ${formatPt(physio.praInstant,1)} mmHg`, Math.min(sx(physio.praInstant)+8, gx+gw-125), gy+20);
 
@@ -1715,11 +1654,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
         const eq = currentEqPoint();
         const ex = sx(eq.x), ey = sy(eq.y);
         ctx.save();
-        ctx.fillStyle = '#33A02C';
+        const orb=ctx.createRadialGradient(ex-3,ey-4,1,ex,ey,9);orb.addColorStop(0,'#f0ffe4');orb.addColorStop(.45,'#b9df78');orb.addColorStop(1,'#38551c');ctx.fillStyle=orb;
         ctx.shadowColor = 'rgba(51,160,44,.48)';
         ctx.shadowBlur = 14;
         ctx.beginPath();
-        ctx.arc(ex, ey, 8, 0, Math.PI*2);
+        ctx.arc(ex, ey, 9, 0, Math.PI*2);
         ctx.fill();
         ctx.fillStyle = 'rgba(255,255,255,.82)';
         ctx.beginPath();
@@ -1773,37 +1712,28 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
     last = performance.now();
     requestAnimationFrame(loop);
   </script>
-
-<script>
-(() => {
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  if (tabButtons.length) setTab('animacao');
-
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
-  const pauseCandidates = ['btnPause','pauseBtn'];
-  let startBtn = null, pauseBtn = null;
-  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
-  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
-  if (mobileToggle && startBtn){
-    let playing = false;
-    mobileToggle.addEventListener('click', () => {
-      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
-      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
-      playing = !playing;
-    });
-  } else if (mobileToggle){
-    mobileToggle.style.display = 'none';
-  }
+<script>(()=>{
+ const mobile=matchMedia('(max-width:650px)');
+ document.querySelectorAll('.figure-scroll').forEach(view=>{
+   const button=document.querySelector('[data-figure="'+view.id+'"]');
+   let detail=mobile.matches;
+   const update=()=>{view.classList.toggle('detail',detail);view.classList.toggle('overview',!detail);button.textContent=detail?'Visão geral':'Ampliar detalhes';button.setAttribute('aria-pressed',String(detail));};
+   button.addEventListener('click',()=>{detail=!detail;update();});update();
+ });
 })();
-</script>
-  <script src="tutor-ef-data.js?v=11"></script>
-  <script src="tutor-widget.js?v=16"></script>
-</body>
+</script></body>
 </html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.metric):not(#cards-reference-reserved){--reference-accent:var(--metric-color,#b6cad9);position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.metric):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.metric):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.metric):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+.metric[data-key="rv"]{--reference-accent:var(--c-rv)!important}.metric[data-key="pra"]{--reference-accent:var(--c-pra)!important}.metric[data-key="pvc"]{--reference-accent:var(--c-pvc)!important}.metric[data-key="volume"]{--reference-accent:var(--c-volume)!important}.metric[data-key="tono"]{--reference-accent:var(--c-tono)!important}.metric[data-key="complacencia"]{--reference-accent:var(--c-complacencia)!important}.metric[data-key="resistencia"]{--reference-accent:var(--c-resistencia)!important}.metric[data-key="freqResp"]{--reference-accent:var(--c-freqResp)!important}.metric[data-key="bombaMuscular"]{--reference-accent:var(--c-bombaMuscular)!important}
+</style>
+
+<script src="tutor-ef-data.js?v=11"></script>
+<script src="tutor-widget.js?v=16"></script>

@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" /><link rel="icon" href="brand/orientador.webp">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Potencial de Ação na Membrana</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
   <style>
     :root{
       --bg:#ffffff; --panel:#fbfbfd; --line:#d9dce3; --text:#1f2937; --muted:#6b7280;
-      --phase:#2563eb; --curve-primary:#111827; --na:#2563eb; --k:#dc2626; --ligand:#f59e0b;
+      --phase:#70bcff; --curve-primary:#111827; --na:#70bcff; --k:#ff8990; --ligand:#f59e0b;
     }
     *{box-sizing:border-box}
     body{margin:0;padding:22px;font-family:Inter,"Segoe UI",Roboto,Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
@@ -42,89 +41,7 @@
     .signature{text-align:right;color:#4b5563;font-size:14px;margin-top:18px;border-top:1px solid #e5e7eb;padding-top:10px}
     .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);margin-left:6px;color:var(--muted);background:#fff}
     @media (max-width:1180px){.layout{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr}.stage-track{grid-template-columns:1fr 1fr}}
-
-    /* === Padrão mobile: cabeçalho sticky + abas === */
-    .mobile-topbar{ display:none; }
-    .mobile-tabnav{ display:none; }
-    @media (max-width:760px){
-      body{ padding:0 0 20px; }
-      h1, .subtitle{ display:none; }
-
-      .mobile-topbar{
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:10px;
-        position:sticky;
-        top:0;
-        z-index:50;
-        padding:12px 14px;
-        background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
-        border-bottom:1px solid var(--line);
-        box-shadow:0 6px 16px rgba(18,42,66,.10);
-      }
-      .mobile-topbar h2{
-        margin:0;
-        font-size:16px;
-        line-height:1.2;
-        color:#17324d;
-      }
-      .mobile-playtoggle{
-        border:none;
-        border-radius:12px;
-        padding:10px 16px;
-        font-size:14px;
-        font-weight:800;
-        color:#fff;
-        background:linear-gradient(135deg,#2f80ed,#57a7ff);
-        min-height:44px;
-        min-width:44px;
-        cursor:pointer;
-      }
-
-      .mobile-tabnav{
-        display:grid;
-        grid-template-columns:repeat(3,1fr);
-        gap:6px;
-        position:sticky;
-        top:64px;
-        z-index:49;
-        padding:8px 10px;
-        background:#eef4fb;
-        border-bottom:1px solid var(--line);
-      }
-      .mobile-tabnav button{
-        border:none;
-        border-radius:10px;
-        padding:10px 6px;
-        font-size:13px;
-        font-weight:700;
-        color:#36536d;
-        background:#fff;
-        min-height:44px;
-        cursor:pointer;
-      }
-      .mobile-tabnav button.active{
-        color:#fff;
-        background:linear-gradient(135deg,#2f80ed,#57a7ff);
-      }
-
-      [data-tab]{ display:none !important; margin-left:14px; margin-right:14px; }
-      [data-tab].tab-active{ display:block !important; }
-      .status-grid[data-tab].tab-active{ display:grid !important; }
-      .layout{ margin-left:0; margin-right:0; padding:0 14px; gap:0; }
-      .layout .panel[data-tab]{ margin-left:0; margin-right:0; }
-
-      /* Alvos de toque maiores */
-      button{ min-height:44px; padding:11px 16px; font-size:15px; }
-      label{ min-height:44px; padding:10px 14px; }
-      input[type="range"]{ width:100%; height:28px; }
-      input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
-      input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
-
-      .mode-line{ margin:10px 14px; }
-    }
-
+  
 .graph-dot{
   filter: drop-shadow(0 0 6px rgba(37,99,235,.6));
   animation: dotPulse 1.6s ease-in-out infinite;
@@ -256,7 +173,7 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
   pointer-events:none;
 }
 .pharm-label{
-  --pharm-color:#2563eb;
+  --pharm-color:#70bcff;
   position:relative;
   display:inline-flex;
   align-items:center;
@@ -283,30 +200,23 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
     0 0 0 3px color-mix(in srgb, var(--pharm-color) 20%, transparent 80%),
     0 0 18px color-mix(in srgb, var(--pharm-color) 28%, transparent 72%);
 }
-.pharm-label[data-pharm="normal"]{--pharm-color:#2563eb;}
+.pharm-label[data-pharm="normal"]{--pharm-color:#70bcff;}
 .pharm-label[data-pharm="ttx"]{--pharm-color:#7c3aed;}
 .pharm-label[data-pharm="lido"]{--pharm-color:#0f766e;}
-.pharm-label[data-pharm="tea"]{--pharm-color:#dc2626;}
+.pharm-label[data-pharm="tea"]{--pharm-color:#ff8990;}
 
 </style>
-  <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-  <link rel="stylesheet" href="tutor-widget.css?v=4">
-</head>
+<style>:root{color-scheme:dark;--bg:#0a1722;--panel:#142a3a;--line:#385466;--text:#dcebf5;--ink:#dcebf5;--muted:#a0b8c9;--na:#70bcff;--k:#ff8990;--ca:#f4e76a;--curve-primary:#e0edf5}
+*{box-sizing:border-box}body{margin:0;padding:24px;background:radial-gradient(ellipse at 15% 0,#1c3b4c,transparent 60%),#091620;color:var(--text);font-family:Segoe UI,Arial,sans-serif}h1{color:#e5f2fa;font-size:clamp(24px,3vw,34px);letter-spacing:-.035em;line-height:1.2}.subtitle,.title p{color:var(--muted);line-height:1.6}.app{padding:0;max-width:1400px;margin:auto}.controls,.scenario-row,.timeline,.card,.panel,.legend,.stage-map,.topbar{background:linear-gradient(145deg,#223b4d,#112432);border:1px solid #385466;box-shadow:inset 0 1px 0 #ffffff20,0 10px 25px #0005;border-radius:19px}.controls,.status-grid,.layout,.legend,.timeline,.stage-map,.mode-line,.scenario-row,.pro-graph-note{max-width:1400px;margin-left:auto;margin-right:auto}.controls{padding:15px;gap:12px;display:flex;flex-wrap:wrap}.controls label,.controls .pill,.scenario-label{min-height:46px;padding:10px 12px;border:1px solid #3b576b;background:#102635;color:#c7dce9;border-radius:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.controls button,button{min-height:46px;border:1px solid #638398;border-radius:12px;padding:11px 16px;color:#eaf8ff;background:linear-gradient(165deg,#55778e,#2d4a60 50%,#193345);box-shadow:inset 0 2px 1px #ffffff50,inset 0 -2px 1px #0006,0 4px 0 #06111a,0 7px 10px #0006;cursor:pointer;font-size:14px}button.primary,#playBtn{background:linear-gradient(#559886,#255c53);border-color:#8fbfb1}button:active{transform:translateY(3px);box-shadow:inset 0 2px 4px #0006,0 1px 0 #06111a}button:focus-visible,input:focus-visible,.figure-scroll:focus-visible{outline:3px solid #8de0d3;outline-offset:4px}input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:#75c9b4;flex:none}input[type=range]{appearance:none;width:140px;max-width:100%;height:12px;border-radius:20px;background:#061521;border:1px solid #58798d;box-shadow:inset 0 3px 5px #0009,0 1px 0 #fff2;margin:12px 0}input[type=range]::-webkit-slider-thumb{appearance:none;width:29px;height:29px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:inset 0 1px 2px #fff,0 3px 0 #07111b,0 6px 9px #0008}input[type=range]::-moz-range-thumb{width:27px;height:27px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:0 4px 7px #0008}.status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.status-grid .card{height:auto;min-height:155px;overflow:visible;padding:17px 20px}.card .phase{font-size:23px;min-height:0;color:#dcebf5;line-height:1.3}.card .phase small,.card-title{color:#a5bdce;line-height:1.5}.card-title{font-size:11px}.mode-badge,.pill{background:#112a3a;border-color:#385466;color:#b9cedc}.layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.layout .panel{min-width:0;overflow:hidden;padding:12px;height:auto}.panel canvas{display:block;max-width:100%;width:100%;height:auto;background:#0d2030;border:1px solid #37566a;border-radius:12px}.legend{color:#c4d7e4;line-height:1.75;text-align:left;padding:22px;font-size:15px}.signature,.mini-note,.pro-graph-note{color:#9eb7c8}.timeline-step,.stage-chip,.stage-item{background:#142c3c;color:#a9c4d7;border-color:#3b596e}.timeline-step.active,.stage-chip.active,.stage-item.active,.pharm-label.active{background:#20483f!important;color:#eafff7!important;border-color:#7dc5ad!important;box-shadow:inset 4px 0 #80c5af!important}.scenario-label:has(input:checked),.controls label:has(input[type=radio]:checked){background:#20483f;border-color:#7dc5ad}.ion-key{max-width:1400px;margin:16px auto;display:flex;gap:10px;flex-wrap:wrap}.ion-key span{padding:7px 10px;border:1px solid #385466;border-radius:8px;background:#102838;font-size:13px}.figure-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap;color:#bfd7e5;font-size:13px}.figure-toolbar button{font-size:12px;min-height:44px}.figure-scroll{max-width:100%;overflow:auto;overscroll-behavior-x:contain;border-radius:12px}.figure-hint{display:none;color:#a4c0d1;font-size:12px;line-height:1.5;margin:8px 0}.figure-scroll.detail canvas{width:var(--figure-width);max-width:none}.card#valueCard .phase,.card#mvCard .phase{color:#e0edf5}.card#valueCard,.card#mvCard{--phase:#e0edf5!important}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:650px){body{padding:12px;padding-bottom:max(16px,env(safe-area-inset-bottom))}.topbar{display:block;padding:16px}.controls{gap:12px;padding:12px}.controls button{flex:1 1 40%}.controls label,.controls .pill{flex:1 1 100%;font-size:14px;justify-content:space-between}.status-grid{grid-template-columns:minmax(0,1fr)}.status-grid .card{min-height:0}.scenario-row{display:grid;grid-template-columns:minmax(0,1fr);padding:12px}.scenario-label{margin:0;white-space:normal}.timeline-row,.stage-track{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.timeline-step:after{display:none}.timeline-step{min-width:0}.figure-scroll canvas{width:var(--figure-width);max-width:none}.figure-scroll.overview canvas{width:100%;max-width:100%}.figure-hint{display:block}.legend{padding:17px}.layout .panel{padding:10px}.figure-scroll{max-height:70svh}.phase small{font-size:14px}.ion-key{gap:7px}.mode-line{text-align:left}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.ion-na{color:#70bcff;font-weight:650}.ion-k{color:#ff8990;font-weight:650}.ion-ca{color:#f4e76a;font-weight:650}.ion-glucose{color:#87d29e;font-weight:650}.ion-atp{color:#c4a2f6;font-weight:650}.ion-adp{color:#a6c5ee;font-weight:650}.ion-pi{color:#d8cb9a;font-weight:650}.ion-sglt{color:#60d2c5;font-weight:650}.ion-pump{color:#ff9b42;font-weight:650}.ion-vm{color:#e0edf5;font-weight:650}.ion-gradient{color:#b3d6ef;font-weight:650}.ion-flux{color:#a9e1c0;font-weight:650}.ion-activity{color:#d4c095;font-weight:650}</style></head>
 <body>
-  <div class="mobile-topbar">
-    <h2>Potencial de Ação na Membrana</h2>
-    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
-  </div>
-  <div class="mobile-tabnav">
-    <button data-tabnav="animacao" class="active">Animação</button>
-    <button data-tabnav="controles">Controles</button>
-    <button data-tabnav="graficos">Gráficos</button>
-  </div>
-
   <h1>Potencial de Ação na Membrana</h1>
   <p class="subtitle">Simulador didático neuronal da bicamada lipídica com canais de Na⁺, K⁺ e leitura temporal em 7 etapas.</p>
 
-  <div class="controls" data-tab="controles">
+  <div class="controls">
     <button id="btnStart" class="primary">Iniciar</button>
     <button id="btnPause">Pausar</button>
     <button id="btnStep">Próxima etapa</button>
@@ -323,7 +233,7 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
     <label><input id="subthresholdToggle" type="checkbox"> Potencial sub-limiar</label>
   </div>
 
-  <div class="controls" id="pharmControls" data-tab="controles" style="margin-top:6px">
+  <div class="controls" id="pharmControls" style="margin-top:6px">
     <strong style="margin-right:4px">Modulação farmacológica:</strong>
     <label class="pharm-label" data-pharm="normal"><input type="radio" name="pharm" value="normal" checked> Normal</label>
     <label class="pharm-label" data-pharm="ttx"><input type="radio" name="pharm" value="ttx"> Tetrodotoxina (TTX - Baiacu)</label>
@@ -332,10 +242,10 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
   </div>
 
 
-  <div class="mode-line" data-tab="animacao"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
-  <div class="stage-map" data-tab="animacao"><div id="stageTrack" class="stage-track"></div></div>
+  <div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+  <div class="stage-map"><div id="stageTrack" class="stage-track"></div></div>
 
-  <div class="status-grid" data-tab="animacao">
+  <div class="status-grid">
     <div class="card" id="phaseCard">
       <div class="card-title">Fase atual</div>
       <div class="phase" id="phaseText">Repouso<small id="phaseDesc">Membrana polarizada, com interior negativo e canais dependentes de voltagem fechados.</small></div>
@@ -350,22 +260,54 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
     </div>
   </div>
 
-  <div class="pro-graph-note" data-tab="graficos">Gráfico com contraste ampliado e leitura otimizada para projeção em sala.</div>
+  <div class="pro-graph-note">Gráfico com contraste ampliado e leitura otimizada para projeção em sala.</div>
 
-  <div class="layout">
-    <div class="panel" data-tab="animacao"><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
-    <div class="panel" data-tab="graficos"><canvas id="graphCanvas" width="920" height="660"></canvas></div>
+  <div class="ion-key" aria-label="Cores dos componentes"><span class="ion-na">Na⁺</span><span class="ion-k">K⁺</span><span class="ion-vm">Potencial de membrana</span></div><div class="layout">
+    <div class="panel"><div class="figure-toolbar"><strong>Animação</strong><button type="button" data-figure="view-sceneCanvas" aria-controls="view-sceneCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-sceneCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Animação ampliável" style="--figure-width:980px"><canvas id="sceneCanvas" width="980" height="760"></canvas></div></div>
+    <div class="panel"><div class="figure-toolbar"><strong>Gráfico</strong><button type="button" data-figure="view-graphCanvas" aria-controls="view-graphCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-graphCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Gráfico ampliável" style="--figure-width:920px"><canvas id="graphCanvas" width="920" height="660"></canvas></div></div>
   </div>
 
-  <div class="legend" data-tab="graficos">
-    <b>Como interpretar:</b> a cena à esquerda mostra a <b>bicamada lipídica</b> com proteínas integrais, canais e movimento iônico ao longo das <b>7 etapas didáticas</b>. O gráfico à direita acompanha o <b>potencial de membrana</b> em eixo fixo ao longo do tempo, com contraste reforçado para projeção em sala. Quando <b>Potencial sub-limiar</b> está ativo, o estímulo não alcança o limiar e o gráfico mostra uma despolarização local discreta, sem disparo do potencial de ação. Em <b>Tetrodotoxina (TTX - Baiacu)</b> e <b>Lidocaína</b>, os canais de Na⁺ dependentes de voltagem são bloqueados e o pico do potencial de ação desaparece ou fica fortemente reduzido. <b>TEA (tetraetilamônio)</b> é um bloqueador experimental de canais de K⁺ usado para estudar a repolarização da membrana. A saída de K⁺ fica prejudicada e a repolarização torna-se mais lenta.
+  <div class="legend">
+    <b>Como interpretar:</b> a cena à esquerda mostra a <b>bicamada lipídica</b> com proteínas integrais, canais e movimento iônico ao longo das <b>7 etapas didáticas</b>. O gráfico à direita acompanha o <b>potencial de membrana</b> em eixo fixo ao longo do tempo, com contraste reforçado para projeção em sala. Quando <b>Potencial sub-limiar</b> está ativo, o estímulo não alcança o limiar e o gráfico mostra uma despolarização local discreta, sem disparo do potencial de ação. Em <b>Tetrodotoxina (TTX - Baiacu)</b> e <b>Lidocaína</b>, os canais de <span class="ion-na">Na⁺</span> dependentes de voltagem são bloqueados e o pico do potencial de ação desaparece ou fica fortemente reduzido. <b>TEA (tetraetilamônio)</b> é um bloqueador experimental de canais de <span class="ion-k">K⁺</span> usado para estudar a repolarização da membrana. A saída de <span class="ion-k">K⁺</span> fica prejudicada e a repolarização torna-se mais lenta.
     <span class="pill">eletrofisiologia</span>
     <span class="pill">potencial de ação</span>
     <span class="pill">membrana plasmática</span>
     <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
   </div>
 
-<script>
+<script>function semanticHTML(value){const names={'Na⁺':'na','Na+':'na','K⁺':'k','K+':'k','Ca²⁺':'ca','Ca2+':'ca','ATP':'atp','ADP':'adp','Pi':'pi','glicose':'glucose','SGLT':'sglt'};return String(value).split(/(<[^>]*>)/).map(s=>s.startsWith('<')?s:s.replace(/Na⁺\/K⁺[- ]ATPase|Na⁺|Na\+|K⁺|K\+|Ca²⁺|Ca2\+|\bATP\b|\bADP\b|\bPi\b|glicose|SGLT/g,t=>'<span class="ion-'+(names[t]||'pump')+'">'+t+'</span>')).join('');}function semanticLead(el,text){if(el.firstChild.nodeType===3){const lead=document.createElement('span');el.replaceChild(lead,el.firstChild);}el.firstChild.innerHTML=semanticHTML(text);}(()=>{const P={"na":"#70bcff","k":"#ff8990","ca":"#f4e76a","glucose":"#87d29e","atp":"#c4a2f6","adp":"#a6c5ee","pi":"#d8cb9a","sglt":"#60d2c5","pump":"#ff9b42","vm":"#e0edf5","gradient":"#b3d6ef","flux":"#a9e1c0","activity":"#d4c095"};document.querySelectorAll('canvas').forEach(canvas=>{const ctx=canvas.getContext('2d'),original=ctx.fillText.bind(ctx);ctx.fillText=function(value,x,y,maxWidth){const s=String(value),old=this.fillStyle;let col;if(s.length>48)col='#bfd3e2';else if(/Na.*ATPase|Bomba primária/.test(s))col=P.pump;else if(/SGLT|Transportador secundário/.test(s))col=P.sglt;else if(/gradiente de Na/i.test(s))col=P.gradient;else if(/(fluxo|entrada) de glicose/i.test(s))col=P.flux;else if(/ATPase ativa/.test(s))col=P.activity;else if(/^ATP$/.test(s))col=P.atp;else if(/^ADP$/.test(s))col=P.adp;else if(/^Pi$/.test(s))col=P.pi;else if(/Na[⁺+]|^Na$/.test(s)&&!/[KC]a|K[⁺+]/.test(s))col=P.na;else if(/Ca[²+]|^Ca$/.test(s))col=P.ca;else if(/K[⁺+]|^K$/.test(s))col=P.k;else if(/glicose/i.test(s))col=P.glucose;else if(/mV/.test(s))col=P.vm;else if(typeof old==='string'&&/^#[0-9a-f]{6}$/i.test(old)){const n=parseInt(old.slice(1),16);if(((n>>16)*.2126+((n>>8)&255)*.7152+(n&255)*.0722)<130)col='#bfd3e2';}if(col)this.fillStyle=col;if(/^(Na|K|Ca|ATP|ADP|Pi|Glicose)[⁺²+]*$/.test(s)){this.save();this.strokeStyle='#102838';this.lineWidth=3;this.lineJoin='round';this.strokeText(s,x,y);this.restore();}if(maxWidth===undefined)original(s,x,y);else original(s,x,y,maxWidth);this.fillStyle=old;};});})();</script><script>// Shared schematic materials: bilayer, transmembrane bundles and gates.
+const MembraneArt=(()=>{
+ const lipid='#9cb4c5';
+ function tint(hex,f){const n=parseInt(hex.slice(1),16);return '#'+[n>>16,(n>>8)&255,n&255].map(v=>Math.round(f<1?v*f:v+(255-v)*(f-1)).toString(16).padStart(2,'0')).join('');}
+ function ball(c,x,y,r,color){const g=c.createRadialGradient(x-r*.35,y-r*.4,r*.03,x,y,r);g.addColorStop(0,tint(color,1.8));g.addColorStop(.32,tint(color,1.25));g.addColorStop(.67,color);g.addColorStop(1,tint(color,.3));c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();}
+ function strand(c,pts,w,color){c.lineCap='round';c.lineJoin='round';for(const [d,col]of [[0,tint(color,.28)],[-w*.18,color],[-w*.3,tint(color,1.4)]]){c.strokeStyle=col;c.lineWidth=d===0?w:d===-w*.18?w*.56:w*.15;c.beginPath();pts.forEach(([x,y],i)=>i?c.lineTo(x+d,y):c.moveTo(x+d,y));c.stroke();}}
+ function bilayer(c,x,top,w,h){c.save();const step=h<100?18:23,r=step*.39;
+ const bg=c.createLinearGradient(0,top,0,top+h);bg.addColorStop(0,'#314f61');bg.addColorStop(.2,'#172d3b');bg.addColorStop(.5,'#071621');bg.addColorStop(.8,'#172d3b');bg.addColorStop(1,'#314f61');c.fillStyle=bg;c.fillRect(x,top,w,h);
+ // A rear row supplies depth; every leaflet has inward-facing paired tails.
+ for(const rear of [true,false]){c.globalAlpha=rear?.38:1;const shift=rear?step*.48:0,dy=rear?-r*.6:0;
+ for(let px=x+r+shift;px<x+w-r;px+=step){for(const side of [1,-1]){const yy=(side===1?top:top+h)+dy;const len=h*.42-r;
+ for(const branch of [-1,1]){const bx=px+branch*r*.32;strand(c,[[bx,yy+side*r*.7],[bx+branch*2,yy+side*(r+len*.32)],[bx-branch*1.5,yy+side*(r+len*.57)],[bx+branch*3,yy+side*(r+len*.8)],[bx+branch*2,yy+side*(r+len)]],Math.max(2.2,r*.37),lipid);}
+ ball(c,px,yy,r,lipid);}}
+ }c.restore();}
+ function protein(c,x,y,w,h,color,opening=.65,carrier=false,showGate=true){c.save();c.translate(x,y);
+ // Subunits surround a recessed aqueous vestibule; the silhouette is lobulated.
+ c.shadowColor='#000b';c.shadowBlur=w*.16;c.shadowOffsetY=5;
+ c.fillStyle='#071721';c.beginPath();c.ellipse(w*.5,h*.51,w*.39,h*.49,0,0,Math.PI*2);c.fill();c.shadowBlur=0;c.shadowOffsetY=0;
+ for(const rear of [true,false]){for(const side of [-1,1]){const bx=w*.5+side*w*(rear?.15:.27),bw=w*(rear?.3:.36);
+ const g=c.createLinearGradient(bx-bw*.6,0,bx+bw*.6,0);g.addColorStop(0,tint(color,.28));g.addColorStop(.28,color);g.addColorStop(.43,tint(color,1.6));g.addColorStop(.65,color);g.addColorStop(1,tint(color,.32));c.fillStyle=g;
+ c.beginPath();c.moveTo(bx,y*0+h*.02);c.bezierCurveTo(bx-bw,h*-.02,bx-bw*.6,h*.24,bx-bw*.38,h*.42);c.bezierCurveTo(bx-bw*.5,h*.7,bx-bw*.8,h*.95,bx,h*.98);c.bezierCurveTo(bx+bw*.75,h*1.02,bx+bw*.53,h*.74,bx+bw*.4,h*.56);c.bezierCurveTo(bx+bw*.46,h*.3,bx+bw*.8,h*.04,bx,h*.02);c.fill();
+ c.save();c.clip();for(let i=0;i<13;i++){const yy=h*.08+i*h*.068;c.strokeStyle=tint(color,.5);c.lineWidth=2;c.beginPath();c.moveTo(bx-bw,yy);c.bezierCurveTo(bx-bw*.4,yy+h*.035,bx+bw*.4,yy+h*.045,bx+bw,yy+h*.008);c.stroke();c.strokeStyle=tint(color,1.25);c.lineWidth=.7;c.stroke();}c.restore();
+ }}
+ if(carrier){ // Alternating-access transporter: a solid central occlusion, not an open tube.
+ ball(c,w*.5,h*(.42+.15*opening),w*.21,color);
+ }else if(showGate)gate(c,w*.5,h*.45,opening,color,w*.45);
+ c.restore();}
+ function gate(c,x,y,open,color,w=42){c.save();const gap=Math.max(.035,Math.min(1,open))*w*.34;for(const s of [-1,1]){strand(c,[[x+s*w*.5,y-12],[x+s*(gap+3),y],[x+s*w*.5,y+12]],Math.max(4,w*.17),color);}c.restore();}
+ function curve(c){c.save();const color=c.strokeStyle,w=c.lineWidth;c.lineCap='round';c.lineJoin='round';c.strokeStyle='#06121c';c.lineWidth=w+4;c.stroke();c.strokeStyle=color;c.lineWidth=w;c.stroke();c.strokeStyle='#ffffff55';c.lineWidth=Math.max(.8,w*.22);c.stroke();c.restore();}
+ function marker(c,x,y,r,color){c.save();c.shadowColor='#000b';c.shadowBlur=5;c.shadowOffsetY=2;ball(c,x,y,r,color);c.shadowBlur=0;c.shadowOffsetY=0;c.strokeStyle='#06121c';c.lineWidth=1.6;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.stroke();c.strokeStyle=color;c.lineWidth=.9;c.beginPath();c.arc(x,y,r+1.8,0,Math.PI*2);c.stroke();c.restore();}
+ return {bilayer,protein,gate,curve,marker};
+})();
+</script><script>
 (() => {
 let pharmMode='normal';
   const TOTAL = 400;
@@ -391,22 +333,22 @@ function isLido(){ return pharmMode === 'lido'; }
 function isTEA(){ return pharmMode === 'tea'; }
 
   const actionStages = [
-    { name:'1. Repouso', short:'Repouso', start:0, end:48, color:'#2563eb', desc:'Membrana polarizada em torno de -70 mV.', event:'Gradientes mantidos', eventDesc:'Bomba Na⁺/K⁺ e canais de vazamento sustentam a polarização.' },
+    { name:'1. Repouso', short:'Repouso', start:0, end:48, color:'#70bcff', desc:'Membrana polarizada em torno de -70 mV.', event:'Gradientes mantidos', eventDesc:'Bomba Na⁺/K⁺ e canais de vazamento sustentam a polarização.' },
     { name:'2. Estímulo inicial', short:'Estímulo', start:49, end:92, color:'#0ea5e9', desc:'Pequena perturbação local com discreta entrada de cargas positivas.', event:'Despolarização local', eventDesc:'O potencial começa a subir, mas ainda pode ser insuficiente.' },
     { name:'3. Limiar', short:'Limiar', start:93, end:118, color:'#f59e0b', desc:'A membrana atinge a faixa limiar em torno de -55 mV.', event:'Disparo recrutado', eventDesc:'Abertura regenerativa dos canais de Na⁺ dependentes de voltagem.' },
-    { name:'4. Despolarização rápida', short:'Despolarização', start:119, end:178, color:'#dc2626', desc:'Abertura maciça de canais de Na⁺ e rápida ascensão do potencial.', event:'Entrada intensa de Na⁺', eventDesc:'O interior torna-se progressivamente menos negativo e depois positivo.' },
+    { name:'4. Despolarização rápida', short:'Despolarização', start:119, end:178, color:'#ff8990', desc:'Abertura maciça de canais de Na⁺ e rápida ascensão do potencial.', event:'Entrada intensa de Na⁺', eventDesc:'O interior torna-se progressivamente menos negativo e depois positivo.' },
     { name:'5. Pico / overshoot', short:'Pico', start:179, end:214, color:'#be123c', desc:'Potencial positivo máximo com início da inativação do Na⁺.', event:'Na⁺ inativando', eventDesc:'O influxo de Na⁺ diminui e a saída de K⁺ começa a predominar.' },
     { name:'6. Repolarização', short:'Repolarização', start:215, end:302, color:'#7c3aed', desc:'Saída de K⁺ repolariza a membrana.', event:'Saída de K⁺', eventDesc:'O potencial retorna para valores negativos.' },
     { name:'7. Hiperpolarização / retorno', short:'Retorno', start:303, end:400, color:'#6b7280', desc:'Persistência transitória do K⁺ aberto antes do retorno ao repouso.', event:'Recuperação', eventDesc:'A excitabilidade volta gradualmente ao basal.' }
   ];
   const subStages = [
-    { name:'1. Repouso', short:'Repouso', start:0, end:56, color:'#2563eb', desc:'Membrana estável em torno de -70 mV.', event:'Gradientes mantidos', eventDesc:'Distribuição iônica desigual em repouso.' },
+    { name:'1. Repouso', short:'Repouso', start:0, end:56, color:'#70bcff', desc:'Membrana estável em torno de -70 mV.', event:'Gradientes mantidos', eventDesc:'Distribuição iônica desigual em repouso.' },
     { name:'2. Estímulo inicial', short:'Estímulo', start:57, end:126, color:'#0ea5e9', desc:'Estímulo local produz discreta entrada de cargas positivas.', event:'Perturbação local', eventDesc:'A despolarização é pequena e gradativa.' },
     { name:'3. Aproximação do limiar', short:'Quase limiar', start:127, end:185, color:'#f59e0b', desc:'O potencial sobe, mas permanece abaixo do limiar.', event:'Sub-limiar', eventDesc:'Não há recrutamento regenerativo suficiente.' },
     { name:'4. Potencial sub-limiar máximo', short:'Máximo sub-limiar', start:186, end:228, color:'#fb923c', desc:'Pico sub-limiar sem disparo de potencial de ação.', event:'Sem disparo', eventDesc:'A membrana não entra em despolarização rápida.' },
     { name:'5. Dissipação', short:'Dissipação', start:229, end:286, color:'#94a3b8', desc:'O sinal local começa a se dissipar.', event:'Decaimento passivo', eventDesc:'A energia eletrotônica diminui com o tempo.' },
     { name:'6. Retorno progressivo', short:'Retorno', start:287, end:348, color:'#64748b', desc:'A membrana volta gradualmente ao repouso.', event:'Fechamento progressivo', eventDesc:'Os poucos canais abertos retornam ao basal.' },
-    { name:'7. Repouso restabelecido', short:'Repouso final', start:349, end:400, color:'#2563eb', desc:'Retorno completo ao nível de repouso.', event:'Homeostase', eventDesc:'A membrana recupera seu estado basal.' }
+    { name:'7. Repouso restabelecido', short:'Repouso final', start:349, end:400, color:'#70bcff', desc:'Retorno completo ao nível de repouso.', event:'Homeostase', eventDesc:'A membrana recupera seu estado basal.' }
   ];
 
   const sceneCanvas = document.getElementById('sceneCanvas');
@@ -472,7 +414,7 @@ function isTEA(){ return pharmMode === 'tea'; }
     if (f <= 274) return lerp(-72, -82, ease((f - 206) / 68));
     return lerp(-82, -70, ease((f - 274) / 126));
   }
-
+  
 function getVm(f){
     let v = getVmBase(f);
     if (isSub()) v = Math.min(v, -52);
@@ -531,11 +473,11 @@ function getVm(f){
 
   function updateStatus(){
     const st = getStage(frame), vm = getVm(frame), polarity = vm >= 0 ? 'Interior positivo' : 'Interior negativo';
-    phaseText.firstChild.textContent = st.name;
+    semanticLead(phaseText,st.name);
     phaseDesc.textContent = st.desc;
-    valueText.firstChild.textContent = `${Math.round(vm)} mV`;
+    semanticLead(valueText,`${Math.round(vm)} mV`);
     valueDesc.textContent = `${polarity}; limiar didático em torno de -55 mV.`;
-    flowText.firstChild.textContent = st.event;
+    semanticLead(flowText,st.event);
     flowDesc.textContent = st.eventDesc;
     setCardsColor(st.color);
     const bits = [stepModeToggle.checked ? (stepAwaitPlay ? 'Modo: etapas (pausado)' : 'Modo: etapas') : 'Modo: contínuo', isSub() ? 'Sub-limiar ON' : 'PA completo'];
@@ -565,9 +507,9 @@ function getVm(f){
   function drawPhospholipid(x, topMem, bottomMem){
     const headTop = sctx.createRadialGradient(x-5, topMem-6, 2, x, topMem, 13);
     headTop.addColorStop(0, '#ffffff');
-    headTop.addColorStop(0.38, '#cbe5ff');
-    headTop.addColorStop(0.72, '#60a5fa');
-    headTop.addColorStop(1, '#1d4ed8');
+    headTop.addColorStop(0.38, '#d9e7ef');
+    headTop.addColorStop(0.72, '#9cb4c5');
+    headTop.addColorStop(1, '#405e70');
     sctx.save();
     sctx.shadowColor = 'rgba(29,78,216,0.18)';
     sctx.shadowBlur = 8;
@@ -575,9 +517,9 @@ function getVm(f){
     sctx.restore();
     const headBottom = sctx.createRadialGradient(x-5, bottomMem-6, 2, x, bottomMem, 13);
     headBottom.addColorStop(0, '#ffffff');
-    headBottom.addColorStop(0.38, '#cbe5ff');
-    headBottom.addColorStop(0.72, '#60a5fa');
-    headBottom.addColorStop(1, '#1d4ed8');
+    headBottom.addColorStop(0.38, '#d9e7ef');
+    headBottom.addColorStop(0.72, '#9cb4c5');
+    headBottom.addColorStop(1, '#405e70');
     sctx.save();
     sctx.shadowColor = 'rgba(29,78,216,0.18)';
     sctx.shadowBlur = 8;
@@ -585,9 +527,9 @@ function getVm(f){
     sctx.restore();
 
     const tail = sctx.createLinearGradient(x, topMem+16, x, topMem+58);
-    tail.addColorStop(0, '#ffe1b4');
-    tail.addColorStop(0.45, '#fbbf24');
-    tail.addColorStop(1, '#d97706');
+    tail.addColorStop(0, '#d9e7ef');
+    tail.addColorStop(0.45, '#8299a8');
+    tail.addColorStop(1, '#435d70');
     sctx.save();
     sctx.lineCap = 'round';
     sctx.lineWidth = 2.8;
@@ -602,85 +544,10 @@ function getVm(f){
     sctx.stroke();
     sctx.restore();
   }
-  function drawProtein(x, y, w, h, color1, color2){
-    const radius = Math.min(w * 0.5, 999);
+  function drawProtein(x,y,w,h,color1,color2){MembraneArt.protein(sctx,x,y,w,h,color2,1,false,false);}
 
-    sctx.save();
-    roundedBox(sctx, x, y, w, h, radius);
-    sctx.clip();
+  function drawGate(cx,cy,openness,color){MembraneArt.gate(sctx,cx,cy+62,openness,color,44);}
 
-    const body = sctx.createLinearGradient(x, y, x, y + h);
-    body.addColorStop(0, color1);
-    body.addColorStop(0.18, color1);
-    body.addColorStop(0.68, color2);
-    body.addColorStop(1, color2);
-    sctx.fillStyle = body;
-    sctx.fillRect(x, y, w, h);
-
-    const leftGloss = sctx.createLinearGradient(x, y, x + w * 0.34, y);
-    leftGloss.addColorStop(0, 'rgba(255,255,255,0.22)');
-    leftGloss.addColorStop(0.45, 'rgba(255,255,255,0.08)');
-    leftGloss.addColorStop(1, 'rgba(255,255,255,0.00)');
-    sctx.fillStyle = leftGloss;
-    sctx.fillRect(x, y, w * 0.36, h);
-
-    const centerReflex = sctx.createLinearGradient(x + w * 0.48, y, x + w * 0.62, y);
-    centerReflex.addColorStop(0, 'rgba(255,255,255,0.00)');
-    centerReflex.addColorStop(0.55, 'rgba(255,255,255,0.06)');
-    centerReflex.addColorStop(1, 'rgba(255,255,255,0.00)');
-    sctx.fillStyle = centerReflex;
-    sctx.fillRect(x + w * 0.42, y, w * 0.26, h);
-
-    const baseShade = sctx.createRadialGradient(x + w * 0.46, y + h * 0.97, 1, x + w * 0.46, y + h * 0.97, w * 0.56);
-    baseShade.addColorStop(0, 'rgba(255,255,255,0.18)');
-    baseShade.addColorStop(0.52, 'rgba(255,255,255,0.06)');
-    baseShade.addColorStop(1, 'rgba(255,255,255,0.00)');
-    sctx.fillStyle = baseShade;
-    sctx.fillRect(x, y, w, h);
-
-    const lowerLeftGlow = sctx.createRadialGradient(x + w * 0.20, y + h * 0.92, 1, x + w * 0.20, y + h * 0.92, w * 0.28);
-    lowerLeftGlow.addColorStop(0, 'rgba(255,255,255,0.16)');
-    lowerLeftGlow.addColorStop(0.48, 'rgba(255,255,255,0.06)');
-    lowerLeftGlow.addColorStop(1, 'rgba(255,255,255,0.00)');
-    sctx.fillStyle = lowerLeftGlow;
-    sctx.fillRect(x, y, w, h);
-
-    sctx.restore();
-
-    const shine1 = sctx.createRadialGradient(x + w * 0.14, y + h * 0.08, 0.5, x + w * 0.14, y + h * 0.08, w * 0.11);
-    shine1.addColorStop(0, 'rgba(255,255,255,0.96)');
-    shine1.addColorStop(0.46, 'rgba(255,255,255,0.56)');
-    shine1.addColorStop(1, 'rgba(255,255,255,0.00)');
-    sctx.beginPath();
-    sctx.arc(x + w * 0.14, y + h * 0.08, Math.max(4.2, w * 0.055), 0, Math.PI * 2);
-    sctx.fillStyle = shine1;
-    sctx.fill();
-
-    const shine2 = sctx.createRadialGradient(x + w * 0.34, y + h * 0.13, 0.5, x + w * 0.34, y + h * 0.13, w * 0.12);
-    shine2.addColorStop(0, 'rgba(255,255,255,0.92)');
-    shine2.addColorStop(0.42, 'rgba(255,255,255,0.50)');
-    shine2.addColorStop(1, 'rgba(255,255,255,0.00)');
-    sctx.beginPath();
-    sctx.arc(x + w * 0.34, y + h * 0.13, Math.max(3.8, w * 0.052), 0, Math.PI * 2);
-    sctx.fillStyle = shine2;
-    sctx.fill();
-
-    const shine3 = sctx.createRadialGradient(x + w * 0.55, y + h * 0.08, 0.5, x + w * 0.55, y + h * 0.08, w * 0.13);
-    shine3.addColorStop(0, 'rgba(255,248,230,0.92)');
-    shine3.addColorStop(0.48, 'rgba(255,248,230,0.48)');
-    shine3.addColorStop(1, 'rgba(255,248,230,0.00)');
-    sctx.beginPath();
-    sctx.arc(x + w * 0.55, y + h * 0.08, Math.max(4.0, w * 0.056), 0, Math.PI * 2);
-    sctx.fillStyle = shine3;
-    sctx.fill();
-  }
-  function drawGate(cx, cy, openness, color){
-    const gap = 8 + openness * 18; sctx.save();
-    sctx.strokeStyle = color; sctx.lineWidth = 4.5; sctx.shadowColor = color + '66'; sctx.shadowBlur = 10; sctx.beginPath();
-    sctx.moveTo(cx - 16, cy - 18); sctx.lineTo(cx - gap / 2, cy); sctx.lineTo(cx - 16, cy + 18);
-    sctx.moveTo(cx + 16, cy - 18); sctx.lineTo(cx + gap / 2, cy); sctx.lineTo(cx + 16, cy + 18); sctx.stroke();
-    sctx.restore();
-  }
   function drawIon(x, y, r, color, label){
     const grd = sctx.createRadialGradient(x - r * .4, y - r * .4, 1, x, y, r); grd.addColorStop(0, '#ffffff'); grd.addColorStop(.55, color); grd.addColorStop(1, 'rgba(15,23,42,0.9)');
     sctx.save();
@@ -688,7 +555,7 @@ function getVm(f){
     sctx.beginPath(); sctx.arc(x, y, r, 0, Math.PI * 2); sctx.fillStyle = grd; sctx.fill();
     sctx.restore();
     sctx.strokeStyle = 'rgba(17,24,39,0.08)'; sctx.lineWidth = 0.8; sctx.stroke();
-    sctx.fillStyle = '#ffffff'; sctx.font = 'bold 10px Arial'; sctx.textAlign = 'center'; sctx.fillText(label, x, y + 3); sctx.textAlign = 'left';
+    sctx.fillStyle = '#102838'; sctx.font = 'bold 10px Arial'; sctx.textAlign = 'center'; sctx.fillText(label, x, y + 3); sctx.textAlign = 'left';
   }
   function drawFlowArrows(cx, topY, bottomY, count, color, direction){
     sctx.save();
@@ -712,28 +579,27 @@ function getVm(f){
 
   function drawScene(){
     sctx.clearRect(0, 0, sceneCanvas.width, sceneCanvas.height);
+sceneCanvas.getContext('2d').fillStyle='#0d2030';sceneCanvas.getContext('2d').fillRect(0,0,sceneCanvas.width,sceneCanvas.height);
     const vm = getVm(frame), naOpen = getNaOpen(frame), kOpen = getKOpen(frame), ligOpen = getLigandOpen(frame), showLabels = labelsToggle.checked;
     const stages = getStages(), currentStageIndex = stages.findIndex(s => frame >= s.start && frame <= s.end);
-    sctx.fillStyle = '#111827'; sctx.font = 'bold 21px Arial'; sctx.fillText('Membrana plasmática', 18, 30);
+    sctx.fillStyle = '#c4d8e6'; sctx.font = 'bold 21px Arial'; sctx.fillText('Membrana plasmática', 18, 30);
 
     const topMem = 226, bottomMem = 408, headR = 12, phosphoSpacing = 32;
-    const innerShade = sctx.createLinearGradient(0, topMem + 18, 0, bottomMem - 18); innerShade.addColorStop(0, '#f9d8b3'); innerShade.addColorStop(.45, '#ffe9c9'); innerShade.addColorStop(1, '#f5c58c');
-    sctx.fillStyle = innerShade; sctx.fillRect(88, topMem + 12, 744, bottomMem - topMem - 24);
-    for (let x = 104; x <= 812; x += phosphoSpacing) { drawPhospholipid(x, topMem, bottomMem); }
+    MembraneArt.bilayer(sctx,88,topMem,744,bottomMem-topMem);
 
-    drawProtein(205, topMem - 34, 96, 250, '#dbeafe', '#60a5fa');
-    drawProtein(413, topMem - 34, 96, 250, '#fee2e2', '#f87171');
+    drawProtein(205, topMem - 34, 96, 250, '#dbeafe', '#70bcff');
+    drawProtein(413, topMem - 34, 96, 250, '#fee2e2', '#ff8990');
     drawProtein(621, topMem - 34, 96, 250, '#fef3c7', '#fbbf24');
-    drawGate(253, topMem + 17, naOpen, '#2563eb'); drawGate(461, topMem + 17, kOpen, '#dc2626'); drawGate(669, topMem + 17, ligOpen, '#f59e0b');
+    drawGate(253, topMem + 17, naOpen, '#70bcff'); drawGate(461, topMem + 17, kOpen, '#ff8990'); drawGate(669, topMem + 17, ligOpen, '#f59e0b');
 
-    if (naOpen > 0.15) { drawFlowArrows(253, 170, 482, Math.max(1, Math.round(naOpen * 4)), '#2563eb', 'down'); drawParticleStream(253, 'down', frame, '#60a5fa', 'Na', 8); }
-    if (kOpen > 0.15) { drawFlowArrows(461, 170, 482, Math.max(1, Math.round(kOpen * 4)), '#dc2626', 'up'); drawParticleStream(461, 'up', frame, '#f87171', 'K', 8); }
+    if (naOpen > 0.15) { drawFlowArrows(253, 170, 482, Math.max(1, Math.round(naOpen * 4)), '#70bcff', 'down'); drawParticleStream(253, 'down', frame, '#70bcff', 'Na', 8); }
+    if (kOpen > 0.15) { drawFlowArrows(461, 170, 482, Math.max(1, Math.round(kOpen * 4)), '#ff8990', 'up'); drawParticleStream(461, 'up', frame, '#ff8990', 'K', 8); }
     if (ligOpen > 0.14) { drawFlowArrows(669, 170, 482, Math.max(1, Math.round(ligOpen * 3)), '#f59e0b', 'down'); drawParticleStream(669, 'down', frame * 0.9, '#fbbf24', '+', 10.5); }
 
     for (let i = 0; i < 8; i++) {
       const t = (frame * 0.01 + i / 8) % 1;
-      drawIon(110 + i * 82 + Math.sin(frame * 0.02 + i) * 6, 128 + t * 18, 12, '#60a5fa', 'Na');
-      drawIon(108 + i * 82 + Math.cos(frame * 0.017 + i) * 6, 514 - t * 15, 12, '#f87171', 'K');
+      drawIon(110 + i * 82 + Math.sin(frame * 0.02 + i) * 6, 128 + t * 18, 12, '#70bcff', 'Na');
+      drawIon(108 + i * 82 + Math.cos(frame * 0.017 + i) * 6, 514 - t * 15, 12, '#ff8990', 'K');
     }
 
     if (showLabels) {
@@ -741,33 +607,34 @@ function getVm(f){
       drawLabel('Meio intracelular', 88, 560, '#111827', 'bold 17px Arial');
     }
 
-    roundedBox(sctx, 764, 78, 172, 62, 14); sctx.fillStyle = '#fff'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.lineWidth = 1.4; sctx.stroke();
-    sctx.fillStyle = vm >= 0 ? '#dc2626' : '#111827'; sctx.font = 'bold 25px Arial'; sctx.fillText(`${Math.round(vm)} mV`, 782, 117);
+    roundedBox(sctx, 764, 78, 172, 62, 14); sctx.fillStyle = '#102838'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.lineWidth = 1.4; sctx.stroke();
+    sctx.fillStyle = vm >= 0 ? '#ff8990' : '#111827'; sctx.font = 'bold 25px Arial'; sctx.fillText(`${Math.round(vm)} mV`, 782, 117);
 
-    roundedBox(sctx, 24, 576, 600, 82, 16); sctx.fillStyle = '#fff'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.stroke();
-    sctx.fillStyle = '#111827'; sctx.font = 'bold 16px Arial'; sctx.fillText('Resumo fisiológico', 40, 599); sctx.font = '14px Arial';
+    roundedBox(sctx, 24, 576, 600, 82, 16); sctx.fillStyle = '#102838'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.stroke();
+    sctx.fillStyle = '#c4d8e6'; sctx.font = 'bold 16px Arial'; sctx.fillText('Resumo fisiológico', 40, 599); sctx.font = '14px Arial';
     sctx.fillStyle = '#475569'; sctx.fillText(`Etapa atual: ${stages[currentStageIndex]?.name || stages[0].name}`, 40, 622);
-    sctx.fillStyle = '#2563eb'; sctx.fillText(`Abertura Na⁺: ${Math.round(naOpen * 100)}%`, 40, 645);
-    sctx.fillStyle = '#dc2626'; sctx.fillText(`Abertura K⁺: ${Math.round(kOpen * 100)}%`, 230, 645);
+    sctx.fillStyle = '#70bcff'; sctx.fillText(`Abertura Na⁺: ${Math.round(naOpen * 100)}%`, 40, 645);
+    sctx.fillStyle = '#ff8990'; sctx.fillText(`Abertura K⁺: ${Math.round(kOpen * 100)}%`, 230, 645);
     sctx.fillStyle = '#b45309'; sctx.fillText(`Ligante: ${Math.round(ligOpen * 100)}%`, 420, 645);
 
-    roundedBox(sctx, 24, 668, 856, 68, 16); sctx.fillStyle = '#fff'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.stroke();
+    roundedBox(sctx, 24, 668, 856, 68, 16); sctx.fillStyle = '#102838'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.stroke();
     sctx.font = '14px Arial';
-    sctx.fillStyle = '#2563eb'; sctx.fillText('■ Canal de Na⁺ dependente de voltagem', 40, 694);
-    sctx.fillStyle = '#dc2626'; sctx.fillText('■ Canal de K⁺ dependente de voltagem', 332, 694);
+    sctx.fillStyle = '#70bcff'; sctx.fillText('■ Canal de Na⁺ dependente de voltagem', 40, 694);
+    sctx.fillStyle = '#ff8990'; sctx.fillText('■ Canal de K⁺ dependente de voltagem', 332, 694);
     sctx.fillStyle = '#b45309'; sctx.fillText('■ Canal regulado por ligante', 624, 694);
-    sctx.fillStyle = '#2563eb'; sctx.fillText('▲ Na⁺ entrando', 40, 719);
-    sctx.fillStyle = '#dc2626'; sctx.fillText('▲ K⁺ saindo', 210, 719);
+    sctx.fillStyle = '#70bcff'; sctx.fillText('▲ Na⁺ entrando', 40, 719);
+    sctx.fillStyle = '#ff8990'; sctx.fillText('▲ K⁺ saindo', 210, 719);
     sctx.fillStyle = '#f59e0b'; sctx.fillText('▲ Canal por ligante', 356, 719);
   }
 
   function drawGraphBase(){
     gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
+graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fillRect(0,0,graphCanvas.width,graphCanvas.height);
     const left=75, top=82, right=845, bottom=500, width=right-left, height=bottom-top;
 
     const bg = gctx.createLinearGradient(0, 12, 0, 638);
-    bg.addColorStop(0, '#ffffff');
-    bg.addColorStop(1, '#f8fafc');
+    bg.addColorStop(0, '#193344');
+    bg.addColorStop(1, '#0d2030');
     gctx.fillStyle = bg;
     roundedBox(gctx, 14, 12, 892, 626, 18);
     gctx.fill();
@@ -775,7 +642,7 @@ function getVm(f){
     gctx.lineWidth = 1.5;
     gctx.stroke();
 
-    gctx.fillStyle = '#0f172a';
+    gctx.fillStyle = '#c4d8e6';
     gctx.font = 'bold 24px Arial';
     gctx.textAlign = 'center';
     gctx.fillText('Gráfico do potencial de membrana', 460, 38);
@@ -784,7 +651,7 @@ function getVm(f){
     gctx.fillText('Traçado neuronal clássico', 460, 62);
     gctx.textAlign = 'left';
 
-    gctx.fillStyle = '#ffffff';
+    gctx.fillStyle = '#193344';
     roundedBox(gctx, left-16, top-10, width+28, height+26, 16);
     gctx.fill();
     gctx.strokeStyle = '#cbd5e1';
@@ -820,7 +687,7 @@ function getVm(f){
 
     const left=90, top=82, right=860, bottom=500, width=right-left, st = getStage(frame);
     const currentStart = left + (st.start / TOTAL) * width, currentEnd = left + (st.end / TOTAL) * width;
-    gctx.fillStyle = st.color + '10';
+    gctx.fillStyle = '#e0edf5' + '10';
     roundedBox(gctx, currentStart, top+2, Math.max(16, currentEnd - currentStart), bottom - top - 4, 10);
     gctx.fill();
 
@@ -834,13 +701,13 @@ function getVm(f){
     gctx.lineTo(left, bottom);
     gctx.closePath();
     const fill = gctx.createLinearGradient(0, top, 0, bottom);
-    fill.addColorStop(0, st.color + '24');
+    fill.addColorStop(0, '#e0edf5' + '24');
     fill.addColorStop(1, 'rgba(255,255,255,0)');
     gctx.fillStyle = fill;
     gctx.fill();
     gctx.restore();
 
-    gctx.strokeStyle = '#0f172a';
+    gctx.strokeStyle='#e0edf5';
     gctx.lineWidth=5.2;
     gctx.lineJoin = 'round';
     gctx.lineCap = 'round';
@@ -849,9 +716,9 @@ function getVm(f){
       const x = left + (i/TOTAL)*width, y = pressureToY(getVm(i));
       if(i===0) gctx.moveTo(x,y); else gctx.lineTo(x,y);
     }
-    gctx.stroke();
+    MembraneArt.curve(gctx);
 
-    gctx.strokeStyle=st.color + '66';
+    gctx.strokeStyle='#e0edf5' + '66';
     gctx.lineWidth=2.2;
     gctx.setLineDash([4,5]);
     getPauseFrames().forEach(f=>{ const px = left + (f / TOTAL) * width; gctx.beginPath(); gctx.moveTo(px, top+4); gctx.lineTo(px, bottom - 4); gctx.stroke(); });
@@ -860,22 +727,7 @@ function getVm(f){
     const px = left + (frame / TOTAL) * width;
     const py = pressureToY(getVm(frame));
 
-    const halo = gctx.createRadialGradient(px, py, 2, px, py, 22);
-    halo.addColorStop(0, st.color + '99');
-    halo.addColorStop(0.45, st.color + '33');
-    halo.addColorStop(1, 'rgba(255,255,255,0)');
-    gctx.beginPath();
-    gctx.arc(px, py, 22, 0, Math.PI * 2);
-    gctx.fillStyle = halo;
-    gctx.fill();
-
-    gctx.beginPath();
-    gctx.arc(px, py, 7.5, 0, Math.PI * 2);
-    gctx.fillStyle = st.color;
-    gctx.fill();
-    gctx.lineWidth = 2;
-    gctx.strokeStyle = '#ffffff';
-    gctx.stroke();
+    MembraneArt.marker(gctx,px,py,9,'#e0edf5');
   }
 
   function render(){
@@ -901,33 +753,28 @@ function getVm(f){
   render();
 })();
 </script>
-
-<script>
-(() => {
-  // Navegação por abas (mobile)
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  setTab('animacao');
-
-  // Botão play/pause do cabeçalho sticky (espelha os botões originais)
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const originalStart = document.getElementById('btnStart');
-  const originalPause = document.getElementById('btnPause');
-  let mobileIsPlaying = false;
-  mobileToggle.addEventListener('click', () => {
-    if (mobileIsPlaying) { originalPause.click(); mobileToggle.textContent = '▶ Iniciar'; }
-    else { originalStart.click(); mobileToggle.textContent = '⏸ Pausar'; }
-    mobileIsPlaying = !mobileIsPlaying;
-  });
+<script>(()=>{
+ const mobile=matchMedia('(max-width:650px)');
+ document.querySelectorAll('.figure-scroll').forEach(view=>{
+   const button=document.querySelector('[data-figure="'+view.id+'"]');
+   let detail=mobile.matches;
+   const update=()=>{view.classList.toggle('detail',detail);view.classList.toggle('overview',!detail);button.textContent=detail?'Visão geral':'Ampliar detalhes';button.setAttribute('aria-pressed',String(detail));};
+   button.addEventListener('click',()=>{detail=!detail;update();});update();
+ });
 })();
-</script>
-  <script src="tutor-ef-data.js?v=11"></script>
-  <script src="tutor-widget.js?v=16"></script>
-</body>
+</script></body>
 </html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.status-grid .card):not(#cards-reference-reserved){--reference-accent:var(--phase,#b6cad9);position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+
+</style>
+
+<script src="tutor-ef-data.js?v=11"></script>
+<script src="tutor-widget.js?v=16"></script>

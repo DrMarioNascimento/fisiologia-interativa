@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" /><link rel="icon" href="brand/orientador.webp">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Lei de Poiseuille – fisiologia interativa</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
 <style>
 :root{
   --bg:#ffffff;
@@ -225,99 +224,38 @@ button.btn-reset{
   .action-controls .tool-btn{font-size:16px!important;padding:12px 16px!important;}
 }
 
-/* === PADRÃO VISUAL CONSOLIDADO — PROF. MÁRIO | BLOCO 4 === */
-:root{--grid-depth:0 16px 34px rgba(18,42,66,.13),0 4px 10px rgba(18,42,66,.07),inset 0 1px 0 rgba(255,255,255,.94)}
-body{background:radial-gradient(circle at 10% 3%,rgba(31,120,180,.06),transparent 29%),radial-gradient(circle at 90% 8%,rgba(177,89,40,.045),transparent 28%),linear-gradient(180deg,#fbfdff 0%,#eef4fb 100%)!important}
-.controls,.quick,.panel,.legend,.card{border:1px solid #d3dfeb!important;background:linear-gradient(145deg,#fff 0%,#f5faff 100%)!important;box-shadow:var(--grid-depth)!important;border-radius:20px!important}
-.action-controls .tool-btn{min-width:118px;box-shadow:0 5px 0 rgba(38,63,91,.25),0 10px 18px rgba(18,42,66,.16),inset 0 1px 0 rgba(255,255,255,.32)!important}
-.action-controls .tool-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(38,63,91,.23),0 14px 22px rgba(18,42,66,.18)!important}
-.action-controls .tool-btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(38,63,91,.25),0 5px 9px rgba(18,42,66,.13)!important}
-input[type=range]{appearance:none;height:10px;border-radius:999px;background:linear-gradient(180deg,#c8d6e5,#edf4fb);box-shadow:inset 0 2px 4px rgba(18,42,66,.24),0 1px 0 #fff}
-input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#1F78B4 48%,#174f85 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1F78B4;cursor:pointer}
-input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#1F78B4 48%,#174f85 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1F78B4;cursor:pointer}
-.card{border-left:0!important;isolation:isolate;box-shadow:0 12px 24px rgba(18,42,66,.12),inset 0 1px 0 rgba(255,255,255,.94)!important}
-.card::before{display:block!important;inset:10px auto 10px -4px!important;width:10px!important;border-radius:999px!important;background:linear-gradient(180deg,var(--card-color,var(--blue)),color-mix(in srgb,var(--card-color,var(--blue)) 65%,#fff 35%))!important;box-shadow:0 0 11px color-mix(in srgb,var(--card-color,var(--blue)) 42%,transparent)!important}
-.card.card-flow{--card-color:var(--c-flow)}.card.card-res{--card-color:var(--c-resistance)}.card.card-insight{--card-color:var(--c-insight)}
-canvas{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.07)!important}
-@media(max-width:900px){.action-controls .tool-btn{min-width:0;flex:1 1 132px}}
-
-
-/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
-@media (max-width:760px){
-  button{ min-height:44px; padding:11px 16px; font-size:15px; }
-  label{ min-height:40px; padding:8px 10px; }
-  input[type="range"]{ width:100%; height:28px; }
-  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
-  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
-  select{ min-height:44px; font-size:15px; }
-  a{ min-height:44px; display:inline-flex; align-items:center; }
-}
-
-/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
-.mobile-topbar{ display:none; }
-.mobile-tabnav{ display:none; }
-@media (max-width:760px){
-  h1{ display:none; }
-  .mobile-topbar{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    position:sticky; top:0; z-index:50; padding:12px 14px;
-    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
-    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
-  }
-  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
-  .mobile-playtoggle{
-    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
-    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
-    min-height:44px; min-width:44px; cursor:pointer;
-  }
-  .mobile-tabnav{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
-    position:sticky; top:64px; z-index:49; padding:8px 10px;
-    background:#eef4fb; border-bottom:1px solid #d7e1ec;
-  }
-  .mobile-tabnav button{
-    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
-    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
-  }
-  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
-  [data-tab]{ display:none !important; }
-  [data-tab].tab-active{ display:block !important; }
-  .status-grid[data-tab].tab-active{ display:grid !important; }
-}
 </style>
-  <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-  <link rel="stylesheet" href="tutor-widget.css?v=4">
-</head>
-<body>
-  <div class="mobile-topbar">
-    <h2>Lei de Poiseuille – fisiologia interativa</h2>
-    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
-  </div>
-  <div class="mobile-tabnav">
-    <button data-tabnav="animacao" class="active">Animação</button>
-    <button data-tabnav="controles">Controles</button>
-    <button data-tabnav="graficos">Gráficos</button>
-  </div>
+<style>:root{--bg:#0a1924;--panel:#142b3c;--line:#3a5467;--text:#dceaf4;--muted:#abc1d1}body{background:radial-gradient(ellipse at 15% 0,#203e50,transparent 65%),#091620;color:var(--text)}h1{font-size:clamp(26px,3vw,38px);letter-spacing:-.03em}.subtitle{line-height:1.6}.mode-tabs,.controls,.quick,.panel,.eq-box,.interpret-block,.metric-card{background:linear-gradient(145deg,#223d50,#102432)!important;border:1px solid #3c586b!important;box-shadow:inset 0 1px #ffffff24,0 9px 23px #0005!important;color:#dceaf4;border-radius:18px}.panel{padding:16px;min-width:0}.controls{gap:14px;padding:16px;grid-template-columns:repeat(4,minmax(0,1fr))}.controls label.control{background:#102737!important;padding:14px;border:1px solid #3a5669;border-radius:13px;min-width:0}.control-name,.control-value{color:#d1e4f0}.main-layout{grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);gap:18px}.panel-title,.eq-main,.model-title,.interpret-title{color:#e1eff8}.eq-sub,.metric-sub,.interpret-footer,.badge{color:#adc5d7}.eq-box{padding:18px}.eq-main{line-height:1.7;font-size:19px}.eq-sub{font-size:15px;line-height:1.8}.metric-card{min-height:110px;padding:16px}.metric-title{font-size:13px;line-height:1.5}.metric-value{font-size:27px}.metric-card:after,.metric-card:before{display:none}.metric-sub{font-size:12px}.result-grid{gap:12px}.interpret-block{width:100%;max-width:1460px;padding:22px}.interpret-text{color:#d5e5f0!important;font-size:18px;line-height:1.85;text-align:left}.interpret-title{font-size:21px}.interpret-footer{margin-top:20px}.hidden{display:none!important}
+button{min-height:46px;border:1px solid #6b899e!important;border-radius:12px;color:#edf7ff!important;background:linear-gradient(#55788f,#263f53)!important;box-shadow:inset 0 2px #ffffff44,inset 0 -2px #0006,0 4px #06141e,0 7px 11px #0006!important}button.active,button[aria-pressed=true]{background:linear-gradient(#427e6f,#224e45)!important;border-color:#91d0b9!important;box-shadow:inset 4px 0 #a1ddc7,0 4px #06141e!important}button:active{transform:translateY(2px)}.ios-mode-label{color:#acc1d1!important}.ios-mode-label.hill-active,.ios-mode-label.iso-active{color:#d8fff0!important;text-shadow:none!important}.ios-switch-slider{box-shadow:inset 0 3px 6px #0009,0 1px #fff3}.ios-switch-slider:before{background:radial-gradient(circle at 30% 20%,#fff,#d0e6f0 38%,#6c8a9e)!important;box-shadow:0 3px 7px #0008}
+input[type=range]{appearance:none;width:100%;height:12px;min-width:0;background:#061723;border:1px solid #5c7b90;border-radius:20px;box-shadow:inset 0 3px 5px #000b,0 1px #fff2;margin:15px 0}input[type=range]::-webkit-slider-thumb{appearance:none;width:29px;height:29px;border:1px solid #d2e6f1;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bcd9e8 35%,#567e98 70%,#183449);box-shadow:0 3px #06121b,0 6px 9px #0008}input[type=range]::-moz-range-thumb{width:27px;height:27px;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bcd9e8 35%,#567e98 70%,#183449);border:1px solid #d2e6f1}button:focus-visible,input:focus-visible,.figure-scroll:focus-visible{outline:3px solid #a2ddcc;outline-offset:4px}.canvas-wrap{background:#0c2030;border-color:#3a5669;min-width:0}.canvas-wrap canvas{background:#0c2030!important;width:100%;height:auto}.figure-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0;color:#adc7d7}.figure-scroll{max-width:100%;overflow:auto}.figure-scroll.detail canvas{width:980px;max-width:none}
+@media(max-width:1150px){.main-layout{grid-template-columns:minmax(0,1fr)}.controls{grid-template-columns:repeat(2,minmax(0,1fr))}.result-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){body{padding:12px;padding-bottom:max(16px,env(safe-area-inset-bottom))}.controls{grid-template-columns:minmax(0,1fr);padding:12px}.panel{padding:12px}.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric-card{min-height:100px;padding:13px}.metric-value{font-size:24px}.interpret-block{padding:16px}.interpret-text{font-size:16px}.figure-scroll{max-height:70svh}.figure-scroll.overview canvas{width:100%;max-width:100%}#actionControls>label{min-width:0!important;width:100%}.quick{display:flex;flex-wrap:wrap;gap:12px}.quick button{flex:1 1 42%}.ios-mode-wrap{flex-wrap:wrap}}
+#actionControls.controls{background:linear-gradient(145deg,#223d50,#102432)!important;box-shadow:inset 0 1px #fff2,0 8px 20px #0005!important}#actionControls label.control,#actionControls label.control:has(input:checked){background:#102737!important;border:1px solid #4c6a7f!important;box-shadow:inset 0 1px #fff2!important;color:#dceaf4!important}#actionControls .control-name,#actionControls .control-value{color:#dceaf4!important}#actionControls button{border:1px solid #6b899e!important;border-radius:12px!important;box-shadow:inset 0 2px #fff4,0 4px #06141e!important}.ios-switch{border:0!important;outline:none!important;background:transparent!important;padding:0!important;box-shadow:none!important;border-radius:999px}.ios-switch:has(input:focus-visible){outline:2px solid #b8e6d9!important;outline-offset:4px!important}.interpret-text b{color:#e1eff7}.canvas-wrap{display:block!important;width:100%;max-width:100%;min-width:0;overflow:visible}.figure-scroll{width:100%;max-height:none!important;overflow:visible!important;min-width:0}.figure-scroll canvas{display:block;width:100%!important;max-width:100%!important;height:auto!important}.scene-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}.scene-heading .panel-title{margin:0}.scene-heading button{white-space:nowrap;flex:none}.hill-dialog{box-sizing:border-box;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;padding:16px;border:0;background:#0b1e2c;color:#dceaf4;overflow:hidden}.hill-dialog[open]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}.hill-dialog::backdrop{background:#05111dee}.hill-dialog-close{align-self:flex-end;flex:none}.hill-dialog .figure-scroll{width:min(100%,calc((100dvh - 100px)*1.507692));flex:none}.hill-dialog canvas{object-fit:contain}.main-layout>*{min-width:0}.panel.stats-panel{min-height:0}@media(max-width:650px){.scene-heading{gap:8px}.scene-heading .panel-title{font-size:18px}.scene-heading button{font-size:13px;padding:10px 12px}.hill-dialog{padding:10px}}
 
+:root{--c-flow:#dce9f3;--c-pressure:#f8c16b;--c-radius:#70bcff;--c-viscosity:#c4a2f6;--c-length:#87d29e;--c-resistance:#ecb48e;--c-insight:#f2d77c;--c-vessel:#ff8990;--c-reference:#a2b5c7}
+.layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:1460px;margin:auto}.panel{min-width:0}.controls.action-controls,.controls.parameter-controls,.quick,.status-grid .card,.legend{background:linear-gradient(145deg,#223d50,#102432)!important;color:#dceaf4!important;border:1px solid #3c586b!important;box-shadow:inset 0 1px #fff2,0 8px 22px #0005!important;border-radius:18px}.parameter-controls>label,.action-controls>label,.quick label{background:#102737!important;border:1px solid #3c586b!important;color:#c6dce9!important;border-radius:12px;padding:14px;min-width:0}.parameter-controls{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.parameter-controls input{width:100%!important}.card-title{color:#bed3e2!important}.status-grid .card{padding:18px;min-width:0}.phase small{color:#bed3e2!important;line-height:1.6;font-size:14px}.phase{font-size:27px}.mode-badge{background:#142e40!important;color:#c7deec!important}.legend{width:100%;max-width:1460px;margin:18px auto;padding:22px;font-size:17px;line-height:1.85}.legend>div{color:#c7dce9!important;text-align:left!important}.legend>b{color:#e2eff7!important}.legend div b[style*="#0f172a"]{color:#e2eff7!important}.scene-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.scene-heading strong{font-size:18px}.scene-heading button{white-space:nowrap}.panel canvas{display:block;width:100%!important;height:auto!important;max-width:100%!important;background:#0c2030!important}.status-grid{max-width:1460px;margin:16px auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.action-controls{display:flex!important;flex-wrap:wrap}.tool-btn.active{background:linear-gradient(#427e6f,#224e45)!important;color:#effff8!important}.signature{color:#a8c3d5!important}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr)}.parameter-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.parameter-controls,.status-grid{grid-template-columns:minmax(0,1fr)}.legend{font-size:16px;padding:16px}.controls.action-controls>label{width:100%}.scene-heading strong{font-size:16px}}
+.parameter-controls label:has(#radiusRange),#radiusLabel{color:#70bcff!important}.parameter-controls label:has(#pressureRange),#pressureLabel{color:#f8c16b!important}.parameter-controls label:has(#viscRange),#viscLabel{color:#c4a2f6!important}.parameter-controls label:has(#lengthRange),#lengthLabel{color:#87d29e!important}body{background:radial-gradient(ellipse at 15% 0,#203e50,transparent 65%),#091620!important}.status-grid .card .phase small,.status-grid .card small[id]{color:#c3d8e6!important;font-size:15px!important;line-height:1.65!important;opacity:1!important}.card:after,.card:before{display:none!important}.plot-options{max-width:1460px;margin:12px auto;display:flex;flex-wrap:wrap;gap:12px}.plot-options label,.plot-options label:has(input:checked){display:inline-flex!important;align-items:center;justify-content:flex-start;gap:10px;width:auto!important;min-width:0!important;white-space:nowrap;background:#132e40!important;color:#dcebf5!important;border:1px solid #496b80!important;box-shadow:none!important;padding:12px 16px;border-radius:12px;min-height:46px;font-size:15px}.plot-options input{width:19px;height:19px;margin:0;flex:none;accent-color:#85c9af}.speed-control{min-width:0!important;max-width:100%;background:#122c3d!important;color:#dcebf5!important}.speed-control span{color:#dcebf5!important}@media(max-width:650px){.plot-options{gap:8px}.plot-options label{padding:10px;font-size:13px}.action-controls .speed-control{flex-wrap:wrap}.speed-control input[type=range]{max-width:100%}}.status-grid .card{height:260px;min-height:260px;max-height:260px;display:flex;flex-direction:column}.status-grid .card-title{flex:none}.status-grid .phase{flex:1;min-height:0;font-variant-numeric:tabular-nums}.status-grid .phase small{min-height:0;overflow-y:auto;overflow-wrap:break-word}@media(max-width:1100px){.status-grid{grid-template-columns:minmax(0,1fr)}}@media(max-width:650px){.status-grid .card{height:300px;min-height:300px;max-height:300px}}@media(max-width:380px){.status-grid .card{height:340px;min-height:340px;max-height:340px}}</style></head>
+<body>
 <h1>Lei de Poiseuille</h1>
 <p class="subtitle">Relação entre fluxo, gradiente de pressão, raio do vaso, viscosidade e comprimento em um simulador interativo.</p>
 
-<div class="controls action-controls" data-tab="controles">
+<div class="controls action-controls">
   <button id="btnStart" class="tool-btn btn-start">Iniciar</button>
   <button id="btnPause" class="tool-btn btn-pause">Pausar</button>
   <button id="btnReset" class="tool-btn btn-reset">Resetar</button>
   <button id="btnLabels" class="tool-btn btn-labels active">Mostrar rótulos</button>
   <button id="btnDemo" class="tool-btn btn-step">Executar por etapas</button>
 
-  <label class="speed-control">Velocidade
-    <input id="speedRange" type="range" min="0.5" max="2.4" step="0.1" value="1.0">
+  <label class="speed-control">Velocidade da animação
+    <input id="speedRange" type="range" min="0.25" max="1.5" step="0.05" value="0.75">
     <span id="speedLabel">1.0×</span>
   </label>
 </div>
 
 <input id="labelsToggle" type="checkbox" checked hidden>
 
-<div class="controls parameter-controls" data-tab="controles">
+<div class="controls parameter-controls">
   <label>Raio
     <input id="radiusRange" type="range" min="10" max="300" step="1" value="40">
     <span id="radiusLabel">4.0 mm</span>
@@ -338,11 +276,11 @@ canvas{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.0
     <span id="lengthLabel">10.0 cm</span>
   </label>
 
-  <label><input id="curveToggle" type="checkbox" checked> Mostrar curva teórica</label>
-  <label><input id="logToggle" type="checkbox"> Escala log</label>
+  
+  
 </div>
 
-<div class="quick" data-tab="controles">
+<div class="plot-options"><label><input id="curveToggle" type="checkbox" checked> Mostrar curva teórica</label><label><input id="logToggle" type="checkbox"> Escala log</label></div><div class="quick">
   <strong style="margin-right:4px">Estados rápidos:</strong>
   <label><input type="radio" name="preset" value="normal" checked> Normal</label>
   <label><input type="radio" name="preset" value="vasoconstricao"> Vasoconstrição</label>
@@ -353,11 +291,11 @@ canvas{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.0
   <label><input type="radio" name="preset" value="cava"> Veia cava</label>
 </div>
 
-<div class="mode-line" data-tab="animacao"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+<p style="max-width:1460px;margin:10px auto;color:#b8cedd;font-size:14px;line-height:1.6">Movimento em escala didática: a velocidade da animação altera apenas o ritmo de exibição, sem modificar o fluxo calculado.</p><div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
 
-<div class="status-grid" data-tab="animacao">
+<div class="status-grid">
   <div class="card card-flow" id="flowCard">
-    <div class="card-title">Fluxo em relação a 2,0 mm</div>
+    <div class="card-title">Fluxo / referência fixa</div>
     <div class="phase" id="flowText">1.0x<small id="flowDesc">Multiplicador do fluxo em comparação com o raio de referência de 2,0 mm.</small></div>
   </div>
   <div class="card card-res" id="resCard">
@@ -371,17 +309,17 @@ canvas{box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.0
 </div>
 
 <div class="layout">
-  <div class="panel" data-tab="animacao"><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
-  <div class="panel" data-tab="graficos"><canvas id="graphCanvas" width="920" height="760"></canvas></div>
+  <div class="panel"><div class="scene-heading"><strong>Vaso e escoamento</strong><button type="button" data-expand="sceneCanvas">Tela cheia</button></div><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
+  <div class="panel"><div class="scene-heading"><strong>Fluxo × raio</strong><button type="button" data-expand="graphCanvas">Tela cheia</button></div><canvas id="graphCanvas" width="920" height="760"></canvas></div>
 </div>
 
-<div class="legend" data-tab="graficos">
+<div class="legend">
   <b style="color:#0f172a; font-weight:600;">Como interpretar:</b>
   <div style="text-align: justify; color:#475569; font-weight:400;">
-    <b style="color:#0f172a; font-weight:600;">Gradiente de pressão (ΔP):</b> quanto maior a diferença de pressão entre entrada e saída do vaso, maior tende a ser o fluxo.
-    <b style="color:#0f172a; font-weight:600;">Raio:</b> é a variável mais impactante, pois o fluxo depende de r⁴.
-    <b style="color:#0f172a; font-weight:600;">Viscosidade (mPa·s):</b> quanto maior a viscosidade, maior a resistência ao escoamento.
-    <b style="color:#0f172a; font-weight:600;">Comprimento:</b> vasos mais longos aumentam a resistência e reduzem o fluxo.
+    <b style="color:#f8c16b;font-weight:650">Gradiente de pressão (ΔP):</b> quanto maior a diferença de pressão entre entrada e saída do vaso, maior tende a ser o fluxo.
+    <b style="color:#70bcff;font-weight:650">Raio:</b> é a variável mais impactante, pois o fluxo depende de r⁴.
+    <b style="color:#c4a2f6;font-weight:650">Viscosidade (mPa·s):</b> quanto maior a viscosidade, maior a resistência ao escoamento.
+    <b style="color:#87d29e;font-weight:650">Comprimento:</b> vasos mais longos aumentam a resistência e reduzem o fluxo.
     <b style="color:#0f172a; font-weight:600;">Leitura visual:</b> no vaso à esquerda, maior diâmetro e maior velocidade aparente das partículas indicam maior fluxo; no gráfico à direita, a curva mostra por que o raio é o principal modulador.
     <b style="color:#0f172a; font-weight:600;">Aplicação clínica:</b> vasoconstrição reduz intensamente o fluxo; vasodilatação o amplia; aumento da viscosidade, como na policitemia, dificulta o escoamento; redução da viscosidade, como na anemia, tende a facilitar o fluxo.
   </div>
@@ -427,20 +365,14 @@ const insightText=document.getElementById('insightText');
 const insightDesc=document.getElementById('insightDesc');
 
 let running=false, raf=null, lastTs=0, t=0;
+let particlePhase=0;
+// Visual time scale: monotonic compression keeps the flow observable over the full radius range.
+function particleCyclesPerSecond(){const relativeVelocity=flowMultiplier()/Math.pow(radius/20,2);const z=Math.log1p(relativeVelocity)/Math.log(5);return .035+.23*z/(1+z);}
+function advanceParticles(dt,speed){particlePhase=(particlePhase+dt/1000*speed*particleCyclesPerSecond())%1;}
 let demoMode=false, demoPhase=0;
 let stepMode=false, stepColumn=0, stepTimer=0;
 
-const COLORS = {
-  flow:'#1F78B4',
-  pressure:'#E31A1C',
-  radius:'#1F78B4',
-  viscosity:'#6A3D9A',
-  length:'#33A02C',
-  resistance:'#B15928',
-  insight:'#FF7F00',
-  vessel:'#1F78B4',
-  reference:'#64748b'
-};
+const COLORS = {"flow":"#dce9f3","pressure":"#f8c16b","radius":"#70bcff","viscosity":"#c4a2f6","length":"#87d29e","resistance":"#ecb48e","insight":"#f2d77c","vessel":"#ff8990","reference":"#a2b5c7"};
 
 let radius=40;   // 2.0 to 8.0 mm shown as /10
 let pressure=80; // mmHg
@@ -477,17 +409,14 @@ function calcResistance(r=radius,v=viscosity,l=length){
   return (8 * vv * ll) / (Math.PI * Math.pow(rr,4));
 }
 
-function flowMultiplier(r=radius){
-  const refRadius = 20; // 2.0 mm
-  return Math.pow((r/10)/(refRadius/10),4);
-}
+function flowMultiplier(r=radius){return calcFlow(r,pressure,viscosity,length)/calcFlow(20,80,20,100);}
 
 function maxFlowMultiplier(){
   return flowMultiplier(Number(radiusRange.max));
 }
 
 function axisMaxMultiplier(){
-  const dynamicMax = Math.max(maxFlowMultiplier(), flowMultiplier(radius) * 1.12, 10);
+  const dynamicMax = Math.max(Math.pow(Number(radiusRange.max)/20,4), maxFlowMultiplier(), flowMultiplier(radius) * 1.12, 10);
   if(logToggle && logToggle.checked) return Math.max(dynamicMax, 100);
   return dynamicMax;
 }
@@ -526,7 +455,7 @@ function syncControls(){
   pressureLabel.textContent=pressure+' mmHg';
   viscLabel.textContent=(viscosity/10).toFixed(1)+' mPa·s';
   lengthLabel.textContent=(length/10).toFixed(1)+' cm';
-  speedLabel.textContent=parseFloat(speedRange.value).toFixed(1)+'×';
+  speedLabel.textContent=parseFloat(speedRange.value).toFixed(2)+'×';
 }
 
 function updateModeBadge(){
@@ -545,10 +474,10 @@ function updateStatus(){
   const q=calcFlow();
   const mult=flowMultiplier();
   const r=calcResistance();
-  const rBase=calcResistance(40,20,100);
+  const rBase=calcResistance(20,20,100);
   const rRel=r/rBase;
   flowText.firstChild.textContent=formatCompact(mult)+'x';
-  flowDesc.textContent=`${classifyVessel()} | Multiplicador do fluxo em relação a 2,0 mm | ΔP ${pressure} mmHg · raio ${(radius/10).toFixed(1)} mm · η ${(viscosity/10).toFixed(1)} mPa·s · L ${(length/10).toFixed(1)} cm`;
+  flowDesc.textContent=`${classifyVessel()} | Fluxo / referência fixa (2 mm, 80 mmHg, 2 mPa·s, 10 cm) | ΔP ${pressure} mmHg · raio ${(radius/10).toFixed(1)} mm · η ${(viscosity/10).toFixed(1)} mPa·s · L ${(length/10).toFixed(1)} cm`;
   resText.firstChild.textContent=formatCompact(rRel);
   resDesc.textContent = rRel>1 ? 'Resistência acima do padrão: o escoamento encontra mais oposição.' : 'Resistência abaixo do padrão: o escoamento está mais favorecido.';
   insightText.firstChild.textContent = radius<32 ? 'Vasoconstrição pesa' : radius>52 ? 'Vasodilatação amplia' : 'r⁴ domina';
@@ -581,7 +510,7 @@ function drawIon(x,y,r,color,label){
   sctx.fillStyle='rgba(255,255,255,.55)';
   sctx.fill();
   sctx.restore();
-  sctx.fillStyle='#fff';
+  sctx.fillStyle='#173244';
   sctx.font='bold 10px Arial';
   sctx.textAlign='center';
   sctx.fillText(label,x,y+3);
@@ -634,9 +563,9 @@ function drawArrow(x1,y1,x2,y2,color,width=5,label=''){
 }
 
 function drawScene(){
-  sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);
+  sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);sctx.fillStyle='#0c2030';sctx.fillRect(0,0,sceneCanvas.width,sceneCanvas.height);
 
-  sctx.fillStyle='#111827';
+  sctx.fillStyle='#c0d5e3';
   sctx.font='bold 22px Arial';
   sctx.fillText('Escoamento em um vaso cilíndrico — escala dinâmica', 18, 30);
 
@@ -651,18 +580,18 @@ function drawScene(){
   const outletWidth=70 + pressureRatio*16;
 
   roundedBox(sctx,40,105,900,86,14);
-  sctx.fillStyle='#fff';
+  sctx.fillStyle='#173244';
   sctx.fill();
   sctx.strokeStyle='#d1d5db';
   sctx.stroke();
 
-  sctx.fillStyle='#111827';
+  sctx.fillStyle='#c0d5e3';
   sctx.font='bold 18px Arial';
   sctx.fillText('Fórmula',60,138);
   sctx.font='bold 30px Arial';
   sctx.fillStyle='#2563eb';
-  sctx.fillText('Q = (π · ΔP · r⁴) / (8 · η · L)',170,146);
-  sctx.fillStyle='#64748b';
+  let fx=170;for(const [text,color]of [['Q',COLORS.flow],[' = (π · ','#c0d5e3'],['ΔP',COLORS.pressure],[' · ','#c0d5e3'],['r⁴',COLORS.radius],[') / (8 · ','#c0d5e3'],['η',COLORS.viscosity],[' · ','#c0d5e3'],['L',COLORS.length],[')','#c0d5e3']]){sctx.fillStyle=color;sctx.fillText(text,fx,146);fx+=sctx.measureText(text).width;}
+  sctx.fillStyle='#c0d5e3';
   sctx.font='14px Arial';
   sctx.fillText('Fluxo cresce muito com o raio e cai com o aumento da viscosidade e do comprimento.',60,170);
 
@@ -674,11 +603,11 @@ function drawScene(){
   vesselGrad.addColorStop(0.72,'#b91c1c');
   vesselGrad.addColorStop(1,'#7f1d1d');
   sctx.fillStyle=vesselGrad;
-  sctx.shadowColor = radius>52 ? '#2563eb44' : radius<32 ? '#dc262644' : '#94a3b844';
+  sctx.shadowColor = '#0009';
   sctx.shadowBlur = 20;
   sctx.fill();
   sctx.shadowBlur = 0;
-  sctx.strokeStyle = radius>52 ? '#2563eb' : radius<32 ? '#dc2626' : '#dc2626';
+  sctx.strokeStyle = COLORS.vessel;
   sctx.lineWidth = radius>52 || radius<32 ? 3.2 : 2.4;
   sctx.stroke();
 
@@ -704,16 +633,16 @@ function drawScene(){
 
   roundedBox(sctx,tubeX+32,lumenY,tubeW-64,lumenH,38);
   const lumenGrad=sctx.createLinearGradient(tubeX,lumenY,tubeX,lumenY+lumenH);
-  lumenGrad.addColorStop(0,'#eff6ff');
-  lumenGrad.addColorStop(.5,'#dbeafe');
-  lumenGrad.addColorStop(1,'#bfdbfe');
+  lumenGrad.addColorStop(0,'#142d40');
+  lumenGrad.addColorStop(.5,'#335b72');
+  lumenGrad.addColorStop(1,'#102331');
   sctx.fillStyle=lumenGrad;
   sctx.fill();
   sctx.save();
   roundedBox(sctx,tubeX+32,lumenY,tubeW-64,lumenH,38);
   sctx.clip();
   const lumen3D=sctx.createLinearGradient(0,lumenY,0,lumenY+lumenH);
-  lumen3D.addColorStop(0,'rgba(255,255,255,.72)');
+  lumen3D.addColorStop(0,'rgba(255,255,255,.16)');
   lumen3D.addColorStop(.22,'rgba(255,255,255,.12)');
   lumen3D.addColorStop(.52,'rgba(37,99,235,.04)');
   lumen3D.addColorStop(1,'rgba(30,58,138,.18)');
@@ -738,23 +667,23 @@ function drawScene(){
   sctx.closePath();
   sctx.fill();
 
-  drawArrow(24, tubeY+tubeH/2, tubeX-16, tubeY+tubeH/2, '#2563eb', 5, 'ΔP');
+  drawArrow(24, tubeY+tubeH/2, tubeX-16, tubeY+tubeH/2, COLORS.pressure, 5, 'ΔP');
   drawArrow(tubeX+tubeW+16, tubeY+tubeH/2, 956, tubeY+tubeH/2, '#64748b', 5, '');
 
-  const speedFactor = clamp(mult/8, 0.35, 5.2) * parseFloat(speedRange.value);
+  const speedFactor = 0.18 + 0.7*Math.log1p(mult/Math.pow(radius/20,2));
   const particleCount = Math.round(clamp(mult/6, 5, 18));
   for(let i=0;i<particleCount;i++){
-    const tt=((t*0.0015*speedFactor)+(i/particleCount))%1;
+    const tt=(particlePhase+(i/particleCount))%1;
     const x=tubeX+58+tt*(tubeW-116);
     const y=tubeY+tubeH/2 + Math.sin(tt*8 + i)*lumenH*0.20 + (i%2===0? -lumenH*0.12 : lumenH*0.12);
-    drawIon(x,y,15,'#60a5fa','Q');
+    drawIon(x,y,15,COLORS.flow,'Q');
   }
 
   if(labelsToggle.checked){
-    sctx.fillStyle='#111827';
+    sctx.fillStyle='#c0d5e3';
     sctx.font='bold 17px Arial';
-    sctx.fillText('Entrada', tubeX+40, tubeY+36);
-    sctx.fillText('Saída', tubeX+tubeW-92, tubeY+36);
+    sctx.fillStyle='#183447';sctx.fillText('Entrada', tubeX+40, tubeY+36);
+    sctx.fillStyle='#183447';sctx.fillText('Saída', tubeX+tubeW-92, tubeY+36);
 
     sctx.fillStyle=COLORS.radius;
     sctx.font='bold 15px Arial';
@@ -774,7 +703,7 @@ function drawScene(){
   // lower explanatory boxes
   function note(x,y,w,h,title,text,color){
     roundedBox(sctx,x,y,w,h,12);
-    sctx.fillStyle='#fff';
+    sctx.fillStyle='#173244';
     sctx.fill();
     sctx.strokeStyle=color;
     sctx.lineWidth=2;
@@ -782,7 +711,7 @@ function drawScene(){
     sctx.fillStyle=color;
     sctx.font='bold 16px Arial';
     sctx.fillText(title,x+14,y+26);
-    sctx.fillStyle='#475569';
+    sctx.fillStyle='#c0d5e3';
     sctx.font='14px Arial';
     wrapText(sctx,text,x+14,y+50,w-28,18);
   }
@@ -810,22 +739,22 @@ function wrapText(ctx,text,x,y,maxWidth,lineHeight){
 }
 
 function drawGraphBase(){
-  gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
+  gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);gctx.fillStyle='#0c2030';gctx.fillRect(0,0,graphCanvas.width,graphCanvas.height);
 
   roundedBox(gctx,16,14,888,732,18);
-  gctx.fillStyle='#fff';
+  gctx.fillStyle='#173244';
   gctx.fill();
   gctx.strokeStyle='#d7dde6';
   gctx.lineWidth=1.5;
   gctx.stroke();
 
-  gctx.fillStyle='#0f172a';
+  gctx.fillStyle='#c0d5e3';
   gctx.font='bold 22px Arial';
   gctx.textAlign='center';
   gctx.fillText('Multiplicador do fluxo em função do raio', 460, 42);
-  gctx.fillStyle='#64748b';
+  gctx.fillStyle='#c0d5e3';
   gctx.font='14px Arial';
-  gctx.fillText(`Referência: raio de 2,0 mm = 1x. Escala ${logToggle.checked ? 'logarítmica' : 'linear'} dinâmica até ${(Number(radiusRange.max)/10).toFixed(0)} mm.`, 460, 68);
+  gctx.fillText(`Referência fixa: 2 mm · 80 mmHg · 2 mPa·s · 10 cm. Escala ${logToggle.checked ? 'logarítmica' : 'linear'} dinâmica até ${(Number(radiusRange.max)/10).toFixed(0)} mm.`, 460, 68);
 
   const left=104, right=852, top=104, bottom=592;
   const width=right-left, height=bottom-top;
@@ -839,10 +768,10 @@ function drawGraphBase(){
     gctx.lineTo(right,y);
     gctx.stroke();
 
-    gctx.fillStyle='#334155';
+    gctx.fillStyle='#c0d5e3';
     gctx.font='bold 13px Arial';
     gctx.textAlign='right';
-    const yVal = logToggle.checked ? Math.pow(10, (i/8)*Math.log10(axisMaxMultiplier())) : (i/8)*axisMaxMultiplier();
+    const yVal = logToggle.checked ? Math.expm1((i/8)*Math.log1p(axisMaxMultiplier())) : (i/8)*axisMaxMultiplier();
     gctx.fillText(yVal >= 1000 ? (yVal/1000).toFixed(1)+'k' : yVal.toFixed(0), left-12, y+4);
   }
 
@@ -855,7 +784,7 @@ function drawGraphBase(){
     gctx.lineTo(x,bottom);
     gctx.stroke();
 
-    gctx.fillStyle='#334155';
+    gctx.fillStyle='#c0d5e3';
     gctx.font='bold 13px Arial';
     gctx.textAlign='center';
     const xVal = (Number(radiusRange.min)/10) + (i/6)*((Number(radiusRange.max)-Number(radiusRange.min))/10);
@@ -873,13 +802,13 @@ function drawGraphBase(){
   gctx.save();
   gctx.translate(36,(top+bottom)/2);
   gctx.rotate(-Math.PI/2);
-  gctx.fillStyle='#475569';
+  gctx.fillStyle='#c0d5e3';
   gctx.font='bold 14px Arial';
   gctx.textAlign='center';
   gctx.fillText('Fluxo relativo (× vs 2,0 mm)',0,0);
   gctx.restore();
 
-  gctx.fillStyle='#475569';
+  gctx.fillStyle='#c0d5e3';
   gctx.font='bold 14px Arial';
   gctx.textAlign='center';
   gctx.fillText('Raio do vaso (mm)', (left+right)/2, bottom+70);
@@ -888,8 +817,8 @@ function drawGraphBase(){
   const readX=56, readY=626, readW=808, readH=116;
   roundedBox(gctx,readX,readY,readW,readH,14);
   const readGrad=gctx.createLinearGradient(readX,readY,readX,readY+readH);
-  readGrad.addColorStop(0,'#ffffff');
-  readGrad.addColorStop(1,'#f8fafc');
+  readGrad.addColorStop(0,'#203c50');
+  readGrad.addColorStop(1,'#112a3a');
   gctx.fillStyle=readGrad;
   gctx.fill();
   gctx.strokeStyle='#d1d5db';
@@ -897,18 +826,18 @@ function drawGraphBase(){
   gctx.stroke();
 
   gctx.textAlign='left';
-  gctx.fillStyle='#0f172a';
+  gctx.fillStyle='#c0d5e3';
   gctx.font='bold 15px Arial';
   gctx.fillText('Leitura atual', readX+18, readY+27);
 
   function miniReadout(x,y,w,title,value,color){
     roundedBox(gctx,x,y,w,42,10);
-    gctx.fillStyle='#ffffff';
+    gctx.fillStyle='#173244';
     gctx.fill();
     gctx.strokeStyle=color;
     gctx.lineWidth=1.4;
     gctx.stroke();
-    gctx.fillStyle='#64748b';
+    gctx.fillStyle='#c0d5e3';
     gctx.font='bold 10px Arial';
     gctx.fillText(title.toUpperCase(), x+10, y+14);
     gctx.fillStyle=color;
@@ -919,7 +848,7 @@ function drawGraphBase(){
   miniReadout(readX+18, readY+42, 190, 'Raio selecionado', `${(radius/10).toFixed(1)} mm`, COLORS.radius);
   miniReadout(readX+222, readY+42, 190, 'Tipo de vaso', classifyVessel(), COLORS.vessel);
   miniReadout(readX+426, readY+42, 156, 'Fluxo', `${flowMultiplier().toFixed(1)}x`, COLORS.flow);
-  miniReadout(readX+596, readY+42, 194, 'Resistência rel.', `${(calcResistance()/calcResistance(40,20,100)).toFixed(2)}`, COLORS.resistance);
+  miniReadout(readX+596, readY+42, 194, 'Resistência rel.', `${(calcResistance()/calcResistance(20,20,100)).toFixed(2)}`, COLORS.resistance);
 
   // legenda do gráfico no rodapé do painel
   const legY=readY+101;
@@ -927,7 +856,7 @@ function drawGraphBase(){
   gctx.lineWidth=4;
   gctx.beginPath();
   gctx.moveTo(readX+28,legY); gctx.lineTo(readX+70,legY); gctx.stroke();
-  gctx.fillStyle='#334155';
+  gctx.fillStyle='#c0d5e3';
   gctx.font='bold 12px Arial';
   gctx.fillText('Curva do multiplicador do fluxo (r⁴)', readX+80, legY+4);
 
@@ -937,7 +866,7 @@ function drawGraphBase(){
   gctx.beginPath();
   gctx.moveTo(readX+326,legY); gctx.lineTo(readX+368,legY); gctx.stroke();
   gctx.setLineDash([]);
-  gctx.fillText('Referência em 4,0 mm', readX+378, legY+4);
+  gctx.fillText('Referência fixa: 1x', readX+378, legY+4);
 }
 function graphXFromRadius(r){
   const left=104, right=852;
@@ -948,9 +877,9 @@ function graphYFromFlow(mult){
   const top=104, bottom=592;
   const maxMult=axisMaxMultiplier();
   if(logToggle && logToggle.checked){
-    const safe=Math.max(mult,1);
-    const logMax=Math.log10(Math.max(maxMult,10));
-    return bottom - (Math.log10(safe)/logMax)*(bottom-top);
+    const safe=Math.max(mult,0);
+    const logMax=Math.log1p(Math.max(maxMult,10));
+    return bottom - (Math.log1p(safe)/logMax)*(bottom-top);
   }
   return bottom - (mult/maxMult)*(bottom-top);
 }
@@ -973,15 +902,15 @@ function drawGraphCurves(){
     gctx.lineJoin='round';
     gctx.shadowColor='rgba(31,120,180,.22)';
     gctx.shadowBlur=10;
-    gctx.strokeStyle='rgba(31,120,180,0.22)';
+    gctx.strokeStyle='#05131e';
     gctx.lineWidth=11;
     traceCurve();
     gctx.stroke();
     gctx.shadowBlur=0;
     const curveGrad=gctx.createLinearGradient(left,0,right,0);
-    curveGrad.addColorStop(0,'#6bb6e8');
+    curveGrad.addColorStop(0,COLORS.flow);
     curveGrad.addColorStop(.45,COLORS.flow);
-    curveGrad.addColorStop(1,'#0f4f7c');
+    curveGrad.addColorStop(1,COLORS.flow);
     gctx.strokeStyle=curveGrad;
     gctx.lineWidth=4.8;
     traceCurve();
@@ -997,7 +926,7 @@ function drawGraphCurves(){
   gctx.lineWidth=2.5;
   gctx.setLineDash([6,7]);
   gctx.beginPath();
-  const baseY=graphYFromFlow(flowMultiplier(40));
+  const baseY=graphYFromFlow(1);
   gctx.moveTo(left,baseY);
   gctx.lineTo(right,baseY);
   gctx.stroke();
@@ -1043,7 +972,7 @@ function drawGraphCurves(){
   gctx.stroke();
   gctx.setLineDash([]);
 
-  gctx.fillStyle='#0f172a';
+  gctx.fillStyle='#c0d5e3';
   gctx.font='bold 14px Arial';
   gctx.fillText('Ponto atual', px+14, py-10);
   gctx.font='bold 12px Arial';
@@ -1077,7 +1006,7 @@ function resetAll(){
   stepTimer=0;
   presetInputs.find(i=>i.value==='normal').checked=true;
   applyPreset('normal');
-  t=0;
+  t=0;particlePhase=0;
   render();
 }
 
@@ -1092,10 +1021,10 @@ function startDemo(){
 function loop(ts){
   if(!running) return;
   if(!lastTs) lastTs=ts;
-  const dt=ts-lastTs;
+  const dt=Math.min(Math.max(ts-lastTs,0),80);
   lastTs=ts;
   const speed=parseFloat(speedRange.value);
-  t += dt*speed;
+  t += dt*speed;advanceParticles(dt,speed);
 
   if(demoMode){
     const minR = Number(radiusRange.min);
@@ -1103,17 +1032,17 @@ function loop(ts){
     if(stepMode){
       const columns = 6;
       stepTimer += dt*speed;
-      if(stepTimer > 4200){
+      if(stepTimer > 8000){
         stepTimer = 0;
         stepColumn = (stepColumn + 1) % columns;
       }
       const colW = (maxR - minR) / columns;
       const a = minR + stepColumn * colW;
       const b = minR + (stepColumn + 1) * colW;
-      const local = (Math.sin((stepTimer/4200)*Math.PI*2 - Math.PI/2)+1)/2;
+      const local = (Math.sin((stepTimer/8000)*Math.PI*2 - Math.PI/2)+1)/2;
       radius = a + local * (b - a);
     }else{
-      const cyc = (t*0.00018)%1;
+      const cyc = (t/28000)%1;
       radius = minR + (Math.sin(cyc*Math.PI*2 - Math.PI/2)+1)/2 * (maxR-minR);
     }
     pressure = 80;
@@ -1137,7 +1066,7 @@ btnLabels.addEventListener('click', ()=>{
   render();
 });
 
-speedRange.addEventListener('input', ()=>{ speedLabel.textContent=parseFloat(speedRange.value).toFixed(1)+'×'; render(); });
+speedRange.addEventListener('input', ()=>{ speedLabel.textContent=parseFloat(speedRange.value).toFixed(2)+'×'; render(); });
 radiusRange.addEventListener('input', e=>{ demoMode=false; stepMode=false; stepTimer=0; radius=Number(e.target.value); presetInputs.forEach(i=>i.checked=false); render(); });
 pressureRange.addEventListener('input', e=>{ demoMode=false; stepMode=false; stepTimer=0; pressure=Number(e.target.value); presetInputs.forEach(i=>i.checked=false); render(); });
 viscRange.addEventListener('input', e=>{ demoMode=false; stepMode=false; stepTimer=0; viscosity=Number(e.target.value); presetInputs.forEach(i=>i.checked=false); render(); });
@@ -1149,37 +1078,20 @@ applyPreset('normal');
 render();
 })();
 </script>
-
-<script>
-(() => {
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  if (tabButtons.length) setTab('animacao');
-
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
-  const pauseCandidates = ['btnPause','pauseBtn'];
-  let startBtn = null, pauseBtn = null;
-  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
-  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
-  if (mobileToggle && startBtn){
-    let playing = false;
-    mobileToggle.addEventListener('click', () => {
-      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
-      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
-      playing = !playing;
-    });
-  } else if (mobileToggle){
-    mobileToggle.style.display = 'none';
-  }
-})();
-</script>
-  <script src="tutor-ef-data.js?v=11"></script>
-  <script src="tutor-widget.js?v=16"></script>
-</body>
+<script>(()=>{document.querySelectorAll('[data-expand]').forEach(button=>{const canvas=document.getElementById(button.dataset.expand),home=canvas.parentNode;const dialog=document.createElement('dialog');dialog.className='hill-dialog';dialog.setAttribute('aria-label',button.previousElementSibling.textContent);const close=document.createElement('button');close.textContent='Fechar';close.type='button';close.className='hill-dialog-close';const wrap=document.createElement('div');wrap.className='figure-scroll';wrap.style.width='min(100%,calc((100dvh - 100px)*'+(canvas.width/canvas.height)+'))';dialog.append(close,wrap);document.body.appendChild(dialog);let overflow='';button.addEventListener('click',()=>{overflow=document.body.style.overflow;wrap.appendChild(canvas);dialog.showModal();document.body.style.overflow='hidden';close.focus();});close.addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{home.appendChild(canvas);document.body.style.overflow=overflow;button.focus();});});})();
+</script></body>
 </html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.status-grid .card):not(#cards-reference-reserved){--reference-accent:#b6cad9;position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+#flowCard{--reference-accent:var(--c-flow)!important}#resCard{--reference-accent:var(--c-resistance)!important}#insightCard{--reference-accent:var(--c-insight)!important}
+</style>
+
+<script src="tutor-ef-data.js?v=11"></script>
+<script src="tutor-widget.js?v=16"></script>

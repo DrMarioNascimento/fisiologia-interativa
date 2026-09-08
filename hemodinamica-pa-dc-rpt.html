@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" /><link rel="icon" href="brand/orientador.webp">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>PA, DC e RPT – fisiologia interativa</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
 <style>
 :root{
   --bg:#ffffff;
@@ -118,297 +117,97 @@ canvas{width:100%;height:auto;display:block;border:1px solid #e5e7eb;border-radi
 }
 
 
-/* === PADRÃO PREMIUM PROF. MÁRIO — botões, cards, estados rápidos e gráficos 3D === */
-:root{
-  --c-pas:#2563eb;
-  --c-pad:#8b5cf6;
-  --c-dc:#FF7F00;
-  --c-rpt:#E31A1C;
-  --c-pam:#10b981;
-  --c-pp:#06b6d4;
-  --shadow-premium:0 12px 26px rgba(15,23,42,.08), inset 0 1px 0 rgba(255,255,255,.95);
-}
-.controls,.selector,.legend,.panel{
-  background:linear-gradient(180deg,#fcfcfe 0%, #f7f9fc 100%) !important;
-  box-shadow:var(--shadow-premium);
-}
-.controls:first-of-type{
-  justify-content:center !important;
-  border-radius:20px !important;
-  padding:16px 18px !important;
-}
-button{
-  border:none !important;
-  border-radius:18px !important;
-  padding:11px 18px !important;
-  font-size:16px !important;
-  font-weight:900 !important;
-  color:#fff !important;
-  cursor:pointer;
-  box-shadow:0 7px 18px rgba(15,23,42,.12), inset 0 1px 0 rgba(255,255,255,.25);
-  transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
-}
-button:hover{transform:translateY(-1px);filter:brightness(1.05);box-shadow:0 12px 24px rgba(15,23,42,.16), inset 0 1px 0 rgba(255,255,255,.3)}
-button:active{transform:translateY(0)}
-#btnStart,.primary{background:linear-gradient(135deg,#2563eb,#60a5fa) !important;}
-#btnPause{background:linear-gradient(135deg,#334155,#64748b) !important;}
-#btnReset{background:linear-gradient(135deg,#dc2626,#fb7185) !important;}
-#labelsToggle{accent-color:#22c55e;}
-#quickStates button{
-  background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%) !important;
-  color:#17324d !important;
-  border:1px solid #d7e1ec !important;
-  box-shadow:0 4px 12px rgba(15,23,42,.08) !important;
-  position:relative;
-}
-#quickStates button::after{
-  content:"";position:absolute;inset:-4px;border-radius:22px;opacity:0;pointer-events:none;
-  background:radial-gradient(circle at center, rgba(37,99,235,.28), rgba(37,99,235,0) 68%);
-  filter:blur(2px);transition:opacity .18s ease;
-}
-#quickStates button:hover::after,#quickStates button.active-preset::after{opacity:1;}
-#quickStates button:hover,#quickStates button.active-preset{
-  color:#fff !important;
-  background:linear-gradient(135deg,#2563eb,#60a5fa) !important;
-  border-color:#8fb3ff !important;
-  box-shadow:0 0 0 4px rgba(37,99,235,.16),0 0 22px rgba(37,99,235,.34),0 12px 24px rgba(15,23,42,.16) !important;
-}
-#presetShock.active-preset,#presetShock:hover{background:linear-gradient(135deg,#dc2626,#fb7185) !important;box-shadow:0 0 0 4px rgba(220,38,38,.16),0 0 24px rgba(220,38,38,.34),0 12px 24px rgba(15,23,42,.16) !important;}
-#presetExercise.active-preset,#presetExercise:hover{background:linear-gradient(135deg,#FF7F00,#fbbf24) !important;box-shadow:0 0 0 4px rgba(255,127,0,.16),0 0 24px rgba(255,127,0,.34),0 12px 24px rgba(15,23,42,.16) !important;}
-#presetHT.active-preset,#presetHT:hover{background:linear-gradient(135deg,#8b5cf6,#c084fc) !important;box-shadow:0 0 0 4px rgba(139,92,246,.16),0 0 24px rgba(139,92,246,.34),0 12px 24px rgba(15,23,42,.16) !important;}
-#presetVasoC.active-preset,#presetVasoC:hover{background:linear-gradient(135deg,#E31A1C,#fb7185) !important;box-shadow:0 0 0 4px rgba(227,26,28,.16),0 0 24px rgba(227,26,28,.34),0 12px 24px rgba(15,23,42,.16) !important;}
-#presetVasoD.active-preset,#presetVasoD:hover{background:linear-gradient(135deg,#10b981,#34d399) !important;box-shadow:0 0 0 4px rgba(16,185,129,.16),0 0 24px rgba(16,185,129,.34),0 12px 24px rgba(15,23,42,.16) !important;}
-label.control,label.pick{
-  border-radius:16px !important;
-  box-shadow:0 4px 12px rgba(15,23,42,.06);
-  font-weight:800;
-}
-label.pick:has(input:checked), label.control:has(input[type="checkbox"]:checked){
-  border-color:#8fb3ff !important;
-  background:linear-gradient(180deg,#ffffff 0%,#eaf2ff 100%) !important;
-  box-shadow:0 0 0 3px rgba(37,99,235,.14),0 8px 18px rgba(15,23,42,.08) !important;
-}
-.status-grid{grid-template-columns:repeat(5,minmax(0,1fr));}
-.card{
-  background:linear-gradient(180deg,#ffffff 0%,#fbfdff 100%) !important;
-  border-radius:18px !important;
-  box-shadow:var(--shadow-premium) !important;
-  min-height:132px !important;
-  border-left:0 !important;
-}
-.card::before{width:9px;border-radius:18px 0 0 18px;background:var(--card-color,#2563eb) !important;}
-.card::after{
-  content:"";position:absolute;right:-52px;bottom:-52px;width:132px;height:132px;border-radius:50%;
-  background:radial-gradient(circle at center,color-mix(in srgb,var(--card-color,#2563eb) 20%,white 80%) 0%,rgba(255,255,255,0) 68%);
-  box-shadow:0 0 0 1.2px color-mix(in srgb,var(--card-color,#2563eb) 28%,transparent),0 0 18px color-mix(in srgb,var(--card-color,#2563eb) 22%,transparent);
-  opacity:.75;pointer-events:none;
-}
-.card-title{font-weight:900;color:#52667e;font-size:12.5px;}
-/* Cards com linhas fixas: valor, unidade e interpretação não sobem/descem */
-.phase{
-  font-weight:900;
-  color:var(--card-color,#0f172a);
-  min-height:120px!important;
-  display:grid!important;
-  grid-template-rows:42px 54px 34px;
-  align-content:start!important;
-  row-gap:2px;
-  padding-left:4px;
-  line-height:1.05;
-}
-.card-value{
-  font-size:38px;
-  line-height:42px;
-  font-weight:950;
-  color:var(--card-color,#0f172a);
-  letter-spacing:-.02em;
-  white-space:nowrap;
-}
-.card-unit{
-  font-size:34px;
-  line-height:39px;
-  font-weight:950;
-  color:var(--card-color,#0f172a);
-  letter-spacing:-.02em;
-  white-space:normal;
-  overflow-wrap:anywhere;
-}
-.phase small{
-  display:block;
-  font-weight:850;
-  color:#52667e;
-  line-height:1.22;
-  font-size:14px;
-  align-self:start;
-  min-height:30px;
-}
-#cardRPT .card-unit{font-size:33px;}
-#cardDER .card-value{font-size:38px;}
-#cardDER .card-unit{font-size:33px;}
-@media(max-width:1280px){.card-value{font-size:34px}.card-unit{font-size:29px}#cardRPT .card-unit,#cardDER .card-unit{font-size:28px}}
-#cardPAS{--card-color:var(--c-pas)}
-#cardPAD{--card-color:var(--c-pad)}
-#cardDC{--card-color:var(--c-dc)}
-#cardRPT{--card-color:var(--c-rpt)}
-#cardDER{--card-color:var(--c-pam)}
-.card.auto{opacity:.92;filter:saturate(.9)}
-canvas{
-  border-radius:18px !important;
-  box-shadow:0 18px 34px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.96) !important;
-}
-.signature{font-weight:700;}
-@media(max-width:1180px){.status-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:760px){.status-grid{grid-template-columns:1fr}}
-
-/* === PADRÃO VISUAL CONSOLIDADO — PROF. MÁRIO | BLOCO 4 === */
-:root{
-  --grid-depth:0 16px 34px rgba(18,42,66,.13),0 4px 10px rgba(18,42,66,.07),inset 0 1px 0 rgba(255,255,255,.94);
-  --grid-depth-hover:0 20px 40px rgba(18,42,66,.16),0 6px 14px rgba(18,42,66,.08),inset 0 1px 0 rgba(255,255,255,.95);
-}
-body{
-  background:
-    radial-gradient(circle at 10% 3%,rgba(216,57,62,.055),transparent 28%),
-    radial-gradient(circle at 90% 8%,rgba(37,99,235,.055),transparent 30%),
-    linear-gradient(180deg,#fbfdff 0%,#eef4fb 100%);
-  color:#17324d;
-}
-.controls,.selector,.panel,.legend{
-  background:linear-gradient(145deg,#ffffff 0%,#f6faff 100%)!important;
-  border:1px solid #d3dfeb!important;
-  border-radius:20px!important;
-  box-shadow:var(--grid-depth)!important;
-}
-.controls,.selector{margin-bottom:14px!important;padding:14px 16px!important}
-.panel{padding:14px!important}
-button{
-  min-width:112px;min-height:44px;
-  box-shadow:0 5px 0 rgba(38,63,91,.28),0 10px 18px rgba(18,42,66,.16),inset 0 1px 0 rgba(255,255,255,.32)!important;
-}
-button:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(38,63,91,.26),0 14px 22px rgba(18,42,66,.18),inset 0 1px 0 rgba(255,255,255,.35)!important}
-button:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(38,63,91,.28),0 5px 9px rgba(18,42,66,.13)!important}
-#quickStates button{min-width:auto;min-height:40px}
-label.control,label.pick{
-  background:linear-gradient(180deg,#fff,#f7faff)!important;
-  border:1px solid #d5e0eb!important;
-  box-shadow:0 5px 12px rgba(18,42,66,.08),inset 0 1px 0 #fff!important;
-}
-input[type=range]{
-  appearance:none;width:125px;height:10px;border-radius:999px;
-  background:linear-gradient(180deg,#c8d6e5,#edf4fb);
-  box-shadow:inset 0 2px 4px rgba(18,42,66,.24),0 1px 0 #fff;
-}
-input[type=range]::-webkit-slider-thumb{
-  appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;
-  background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#2563eb 48%,#174f9d 100%);
-  box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #245fae;cursor:pointer;
-}
-input[type=range]::-moz-range-thumb{
-  width:18px;height:18px;border-radius:50%;border:2px solid #fff;
-  background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#2563eb 48%,#174f9d 100%);
-  box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #245fae;cursor:pointer;
-}
-.card{
-  border:1px solid #d3dfeb!important;border-radius:18px!important;
-  background:linear-gradient(145deg,#fff 0%,#f3f8fc 100%)!important;
-  box-shadow:0 12px 24px rgba(18,42,66,.12),inset 0 1px 0 rgba(255,255,255,.94)!important;
-  isolation:isolate;
-}
-.card::before{
-  inset:10px auto 10px -4px!important;width:10px!important;border-radius:999px!important;
-  background:linear-gradient(180deg,var(--card-color,#2563eb),color-mix(in srgb,var(--card-color,#2563eb) 68%,#fff 32%))!important;
-  box-shadow:0 0 11px color-mix(in srgb,var(--card-color,#2563eb) 42%,transparent)!important;
-}
-.card::after{right:-54px;bottom:-54px;width:138px;height:138px;opacity:.66}
-canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,66,.08),0 8px 18px rgba(18,42,66,.07)!important}
-.mode-badge{font-weight:800;border-color:#d3dfeb;box-shadow:0 6px 14px rgba(18,42,66,.09)}
-@media(max-width:760px){
-  body{padding:14px}
-  button{min-width:0;flex:1 1 132px}
-  .selector-block{flex-wrap:wrap}
-  .checks{flex-wrap:wrap;justify-content:flex-start}
-}
-
-
-/* === Transições suaves de estados rápidos === */
-.card .phase-value,
-.card .phase-unit,
-.card .phase-desc,
-.metric-value,
-.metric-unit,
-.metric-sub{
-  transition: color .28s ease, transform .28s ease, opacity .28s ease;
-}
-.card.updating .phase-value,
-.card.updating .phase-unit,
-.card.updating .phase-desc{
-  transform: translateY(-1px);
-}
-#quickStates button{
-  position:relative;
-  overflow:hidden;
-}
-#quickStates button.active-preset::after{
-  opacity:1;
-}
-
-
-/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
-@media (max-width:760px){
-  button{ min-height:44px; padding:11px 16px; font-size:15px; }
-  label{ min-height:40px; padding:8px 10px; }
-  input[type="range"]{ width:100%; height:28px; }
-  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
-  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
-  select{ min-height:44px; font-size:15px; }
-  a{ min-height:44px; display:inline-flex; align-items:center; }
-}
-
-/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
-.mobile-topbar{ display:none; }
-.mobile-tabnav{ display:none; }
-@media (max-width:760px){
-  h1{ display:none; }
-  .mobile-topbar{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    position:sticky; top:0; z-index:50; padding:12px 14px;
-    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
-    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
-  }
-  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
-  .mobile-playtoggle{
-    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
-    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
-    min-height:44px; min-width:44px; cursor:pointer;
-  }
-  .mobile-tabnav{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
-    position:sticky; top:64px; z-index:49; padding:8px 10px;
-    background:#eef4fb; border-bottom:1px solid #d7e1ec;
-  }
-  .mobile-tabnav button{
-    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
-    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
-  }
-  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
-  [data-tab]{ display:none !important; }
-  [data-tab].tab-active{ display:block !important; }
-  .status-grid[data-tab].tab-active{ display:grid !important; }
-}
 </style>
-  <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-  <link rel="stylesheet" href="tutor-widget.css?v=4">
-</head>
-<body>
-  <div class="mobile-topbar">
-    <h2>PA, DC e RPT – fisiologia interativa</h2>
-    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
-  </div>
-  <div class="mobile-tabnav">
-    <button data-tabnav="animacao" class="active">Animação</button>
-    <button data-tabnav="controles">Controles</button>
-    <button data-tabnav="graficos">Gráficos</button>
-  </div>
+<style>:root{--PAS:#84abff;--PAD:#f892c1;--DC:#ff8990;--RPT:#d8b8a0;--PAM:#f8c16b;--PP:#6cd8f3}
+:root{--bg:#091923;--panel:#17303f;--line:#395566;--text:#dce9f3;--muted:#b3c8d7;color-scheme:dark}
+body{background:radial-gradient(ellipse at 20% 0,#254556,#08151e);color:var(--text);font-family:system-ui,'Segoe UI',sans-serif;padding:20px}
+h1{font-size:clamp(23px,2.5vw,32px);line-height:1.2}.subtitle{line-height:1.5;margin-bottom:18px}
+.controls,.selector,.card,.panel,.legend{background:linear-gradient(140deg,#203c4d,#112633);border:1px solid var(--line);box-shadow:inset 0 2px 1px #ffffff18,0 10px 22px #0003;border-radius:22px}
+.selector-block{flex-wrap:wrap;min-width:0}.selector-head{min-width:0;flex:1}.selector-title{color:var(--text)}.selector-sub{white-space:normal;line-height:1.4;font-size:13px}.checks{flex-wrap:wrap;justify-content:flex-start}
+button{min-height:44px;border:1px solid #6b899a;border-radius:13px;color:#edf7fc;background:linear-gradient(#49697f,#263e4f);box-shadow:inset 0 2px 1px #ffffff55,inset 0 -2px 2px #0008,0 4px 0 #05121b,0 7px 12px #0005;font-weight:750}
+button:hover{filter:brightness(1.12)}button:active{transform:translateY(2px)}#btnStart,button.active-preset{background:linear-gradient(#448779,#1b5147)!important;color:#edfff6!important}#btnReset{background:linear-gradient(#a95863,#713640)}
+label.control,label.pick,.mode-badge{background:#102633!important;border-color:#486474!important;color:var(--text);box-shadow:inset 0 1px #ffffff20;border-radius:14px;min-width:0;min-height:44px}
+label.pick:has(input:checked),label.control:has(input[type=checkbox]:checked){background:#214c4a!important;border-color:#70aa9a!important;color:#e3fff4}
+.controls:has(#pasRange){display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.controls:has(#pasRange) label.control{display:grid;grid-template-columns:42px minmax(0,1fr) 136px;gap:12px;padding:10px 14px}.control-value{min-width:0;font-size:14px}.control-name{color:inherit}
+input[type=range]{appearance:none;min-width:0;max-width:100%;height:32px;background:transparent;touch-action:pan-y;--thumb:#adcddb}
+.controls:has(#pasRange) input[type=range]{width:100%}input[type=range]::-webkit-slider-runnable-track{height:9px;border:1px solid #698391;border-radius:99px;background:#061622;box-shadow:inset 0 3px 4px #000b,0 1px #ffffff30}input[type=range]::-webkit-slider-thumb{appearance:none;width:27px;height:27px;margin-top:-10px;border:1px solid #d6eaf5;border-radius:50%;background:radial-gradient(circle at 30% 22%,#fff,var(--thumb) 43%,#2b5266);box-shadow:inset -3px -3px 4px #0005,0 4px 4px #000a}
+input[type=range]::-moz-range-track{height:9px;border:1px solid #698391;border-radius:99px;background:#061622}input[type=range]::-moz-range-thumb{width:27px;height:27px;border:1px solid #d6eaf5;border-radius:50%;background:radial-gradient(circle at 30% 22%,#fff,var(--thumb) 43%,#2b5266)}
+input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border-radius:99px;border:1px solid #698391;background:radial-gradient(circle at 10px 10px,#e7f6ff 0 8px,transparent 9px),#081c28;box-shadow:inset 0 2px 4px #0007;cursor:pointer}input[type=checkbox]:checked{background:radial-gradient(circle at 26px 10px,#e7f6ff 0 8px,transparent 9px),#287560}
+:focus-visible{outline:3px solid #b9e6ff;outline-offset:3px}:disabled{opacity:.65;cursor:default}
+.status-grid{grid-template-columns:repeat(5,minmax(0,1fr));align-items:stretch}.status-grid .card{height:150px;min-height:150px;max-height:150px;padding:12px}.card:before,.card.auto:before{background:var(--variable,var(--PAM))!important}.card-title{color:var(--text);font-size:12px}.card-value{font-size:30px}.card-unit,.phase small{color:var(--muted)!important;font-size:13px;line-height:1.45}.phase{min-height:0}.card.updating{animation:none!important;transform:none!important}.auto-badge{background:#1f4457;color:#dce9f3}.notice{color:#f8c16b}
+#cardDER .card-value{color:var(--PAM)}#derDesc{color:var(--muted)!important}
+.layout{grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}.panel{min-width:0}.scene-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.scene-heading h2{font-size:18px;margin:0}.scene-heading button{font-size:13px;padding:8px 12px;flex-shrink:0}canvas{width:100%;height:auto;background:#0b202e;border-color:#365365}.canvas-home{min-width:0}
+.legend{font-size:17px;line-height:1.8}.legend>div{color:var(--text);text-align:left}.legend b{color:#e7f3fc}.signature{font-size:14px!important;color:var(--muted)!important;line-height:1.5;border-color:var(--line)}
+.hill-dialog{max-width:98vw;width:98vw;max-height:98dvh;padding:12px;background:#0b202e;border:1px solid #607e90;border-radius:18px}.hill-dialog::backdrop{background:#000b}.hill-dialog-close{display:block;margin:0 0 10px auto}.figure-scroll{margin:auto;max-width:100%}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}.status-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){body{padding:10px}.controls:has(#pasRange){grid-template-columns:1fr}.controls:has(#pasRange) label.control{grid-template-columns:36px minmax(0,1fr) 118px;padding:9px;gap:7px}.control-value{font-size:12px}.status-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.status-grid .card{height:160px;min-height:160px;max-height:160px;padding:12px}.status-grid .card:last-child{grid-column:1/-1;height:150px;min-height:150px;max-height:150px}.card-value{font-size:27px}.selector-block{display:block}.checks{margin-top:12px}.legend{font-size:16px;padding:14px}.scene-heading h2{font-size:16px}.controls label.control:has(#speedRange){width:100%;display:grid;grid-template-columns:auto minmax(0,1fr) auto}.controls label.control #speedRange{width:100%}.selector-sub{line-height:1.5}.controls{gap:10px;padding:12px}}
 
+/* Espaço reservado ao indicador automático sem deslocar os valores. */
+.status-grid .card-title{min-height:20px;margin-bottom:4px}
+@media(min-width:651px) and (max-width:1400px){.status-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+
+
+/* Dois pares compactos e derivadas em uma coluna mais larga. */
+.status-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.6fr);grid-template-rows:repeat(2,90px);gap:10px}
+.status-grid #cardPAS{grid-column:1;grid-row:1}
+.status-grid #cardPAD{grid-column:1;grid-row:2}
+.status-grid #cardDC{grid-column:2;grid-row:1}
+.status-grid #cardRPT{grid-column:2;grid-row:2}
+.status-grid .card{height:90px;min-height:0;max-height:none;padding:10px 14px}
+.status-grid .card-title{font-size:11px;min-height:17px;margin-bottom:3px;letter-spacing:.035em}
+.status-grid .phase{display:grid;grid-template-columns:max-content minmax(0,1fr);column-gap:8px;align-items:baseline;line-height:1.1;padding-left:0}
+.status-grid .card-value{font-size:25px;line-height:1.05}
+.status-grid .card-unit{font-size:12px;line-height:1.2}
+.status-grid .phase small{grid-column:1/-1;margin-top:3px;font-size:12px;line-height:1.25}
+.status-grid #cardDER{grid-column:3;grid-row:1/3;height:190px;min-height:0;max-height:none;padding:16px 18px;display:flex;flex-direction:column;justify-content:center}
+.status-grid #cardDER .card-title{margin-bottom:8px}
+.status-grid #cardDER .card-value{font-size:30px}
+.status-grid #cardDER .phase small{margin-top:12px;font-size:14px;line-height:1.5}
+@media(max-width:850px){.status-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,100px) auto}.status-grid .card{height:100px;padding:10px 12px}.status-grid #cardDER{grid-column:1/-1;grid-row:3;height:125px;padding:12px 16px}.status-grid #cardDER .phase small{margin-top:6px}.status-grid .card-title{min-height:20px}}
+@media(max-width:400px){.status-grid{grid-template-rows:repeat(2,112px) auto;gap:8px}.status-grid .card{height:112px;padding:9px 11px}.status-grid .card-title{font-size:10px;min-height:28px}.status-grid .phase{column-gap:5px}.status-grid .card-value{font-size:23px}.status-grid .card-unit{font-size:10px}.status-grid .phase small{font-size:11px}.status-grid #cardDER{height:145px}.status-grid #cardDER .card-title{min-height:0}}
+
+/* Leituras horizontais compactas nos pares empilhados. */
+@media(min-width:851px){
+  .status-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.3fr);grid-template-rows:repeat(2,58px);gap:8px}
+  .status-grid .card:not(#cardDER){height:58px;display:flex;align-items:center;gap:10px;padding:9px 12px}
+  .status-grid .card:not(#cardDER) .card-title{flex:0 0 auto;min-height:0;margin:0;font-size:12px;white-space:nowrap}
+  .status-grid .card:not(#cardDER) .phase{display:flex;flex:1;align-items:baseline;gap:6px;min-width:0}
+  .status-grid .card:not(#cardDER) .card-value{font-size:23px;white-space:nowrap}
+  .status-grid .card:not(#cardDER) .card-unit{white-space:nowrap;font-size:11px}
+  .status-grid .card:not(#cardDER) .phase small{display:none}
+  .status-grid .card:not(#cardDER) .auto-badge{margin-left:4px;font-size:9px;padding:2px 4px}
+  .status-grid #cardDER{height:124px;padding:10px 16px}
+  .status-grid #cardDER .card-title{margin-bottom:4px}
+  .status-grid #cardDER .card-value{font-size:27px}
+  .status-grid #cardDER .phase small{margin-top:6px;font-size:13px;line-height:1.4}
+}
+.status-grid abbr{text-decoration:none}
+.status-grid .card:not(#cardDER) .phase{flex-direction:row;flex-wrap:nowrap}
+.controls>#modeBadge{background:transparent;border:0;box-shadow:none;min-height:0;padding:4px 0;margin-left:4px;font-size:12px;line-height:1.4}
+.notice:empty{display:none}
+@media(min-width:851px){.status-grid .card:not(#cardDER) .phase small{display:block;margin:0 0 0 auto;font-size:11px;white-space:nowrap}.status-grid .card:not(#cardDER) .auto-badge{display:none!important}}
+@media(max-width:850px){
+.status-grid{grid-template-columns:minmax(0,1fr);grid-template-rows:repeat(4,52px) auto;gap:8px}
+.status-grid #cardPAS{grid-column:1;grid-row:1}.status-grid #cardPAD{grid-column:1;grid-row:2}.status-grid #cardDC{grid-column:1;grid-row:3}.status-grid #cardRPT{grid-column:1;grid-row:4}
+.status-grid .card:not(#cardDER){height:52px;display:flex;align-items:center;gap:10px;padding:8px 12px}
+.status-grid .card:not(#cardDER) .card-title{min-height:0;margin:0;font-size:12px;white-space:nowrap;width:30px}
+.status-grid .card:not(#cardDER) .auto-badge{display:none!important}
+.status-grid .card:not(#cardDER) .phase{display:flex;align-items:baseline;gap:6px;flex:1;min-width:0}
+.status-grid .card:not(#cardDER) .card-value{font-size:22px;white-space:nowrap}
+.status-grid .card:not(#cardDER) .card-unit{font-size:11px;white-space:nowrap}
+.status-grid .card:not(#cardDER) .phase small{margin:0 0 0 auto;font-size:11px;white-space:nowrap}
+.status-grid #cardDER{grid-column:1;grid-row:5;height:140px;padding:12px}
+}
+
+.v-PAS,#cardPAS .card-title,#cardPAS .card-value,label:has(#pasRange),label:has(#pickPAS){color:#84abff!important}#cardPAS{--variable:#84abff}label:has(#pasRange){--thumb:#84abff}
+.v-PAD,#cardPAD .card-title,#cardPAD .card-value,label:has(#padRange),label:has(#pickPAD){color:#f892c1!important}#cardPAD{--variable:#f892c1}label:has(#padRange){--thumb:#f892c1}
+.v-DC,#cardDC .card-title,#cardDC .card-value,label:has(#dcRange),label:has(#pickDC){color:#ff8990!important}#cardDC{--variable:#ff8990}label:has(#dcRange){--thumb:#ff8990}
+.v-RPT,#cardRPT .card-title,#cardRPT .card-value,label:has(#rptRange),label:has(#pickRPT){color:#d8b8a0!important}#cardRPT{--variable:#d8b8a0}label:has(#rptRange){--thumb:#d8b8a0}
+.v-PAM,#cardPAM .card-title,#cardPAM .card-value,label:has(#pamRange),label:has(#pickPAM){color:#f8c16b!important}#cardPAM{--variable:#f8c16b}label:has(#pamRange){--thumb:#f8c16b}
+.v-PP,#cardPP .card-title,#cardPP .card-value,label:has(#ppRange),label:has(#pickPP){color:#6cd8f3!important}#cardPP{--variable:#6cd8f3}label:has(#ppRange){--thumb:#6cd8f3}</style></head>
+<body>
 <h1>Pressão arterial, débito cardíaco e resistência periférica total</h1>
 <p class="subtitle">Simulador interativo da relação entre PAS, PAD, DC, RPT, PAM e pressão de pulso.</p>
 
@@ -426,7 +225,7 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
     </div>
   </div>
 </div>
-<div class="controls" style="margin-top:0; justify-content:flex-start;" data-tab="controles">
+<div class="controls" style="margin-top:0; justify-content:flex-start;">
   <button id="btnStart" class="primary">Iniciar</button>
   <button id="btnPause">Pausar</button>
   <button id="btnReset">Resetar</button>
@@ -436,12 +235,12 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
       <input id="speedRange" type="range" min="0.5" max="2.4" step="0.1" value="1.0">
       <span id="speedLabel" class="control-value speed">1.0x</span>
     </label>
-</div>
+<div id="modeBadge" class="mode-badge">Modo: coerente</div>
 </div>
 
 <div id="notice" class="notice"></div>
 
-<div class="controls" data-tab="controles">
+<div class="controls">
   <label class="control"><span class="control-name">PAS</span>
     <input id="pasRange" type="range" min="80" max="220" step="1" value="120">
     <span id="pasLabel" class="control-value">120 mmHg</span>
@@ -463,9 +262,9 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
   </label>
 </div>
 
-<div class="mode-line" data-tab="animacao"><div id="modeBadge" class="mode-badge">Modo: coerente</div></div>
 
-<div class="controls" id="quickStates" style="justify-content:flex-start;" data-tab="controles">
+
+<div class="controls" id="quickStates" style="justify-content:flex-start;">
   <strong style="margin-right:4px">Estados rápidos:</strong>
   <button id="presetShock">Choque</button>
   <button id="presetExercise">Exercício</button>
@@ -478,7 +277,7 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
 
 
 
-<div class="status-grid" data-tab="animacao">
+<div class="status-grid">
   <div class="card" id="cardPAS">
     <div class="card-title">PAS <span id="badgePAS" class="auto-badge" style="display:none">auto</span></div>
     <div class="phase" id="pasText">
@@ -496,7 +295,7 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
     </div>
   </div>
   <div class="card" id="cardDC">
-    <div class="card-title">Débito cardíaco <span id="badgeDC" class="auto-badge" style="display:none">auto</span></div>
+    <div class="card-title"><abbr title="Débito cardíaco">DC</abbr> <span id="badgeDC" class="auto-badge" style="display:none">auto</span></div>
     <div class="phase" id="dcText">
       <div class="card-value" id="dcValue">5.0</div>
       <div class="card-unit">L/min</div>
@@ -522,21 +321,21 @@ canvas{border:1px solid #d3dfeb!important;box-shadow:inset 0 2px 6px rgba(18,42,
 </div>
 
 <div class="layout">
-  <div class="panel" data-tab="animacao"><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
-  <div class="panel" data-tab="graficos"><canvas id="graphCanvas" width="980" height="860"></canvas></div>
+  <div class="panel"><div class="scene-heading"><h2>Circuito integrado</h2><button data-expand="sceneCanvas" type="button">Tela cheia</button></div><div class="canvas-home"><canvas id="sceneCanvas" width="980" height="860"></canvas></div></div>
+  <div class="panel"><div class="scene-heading"><h2>Painel hemodinâmico</h2><button data-expand="graphCanvas" type="button">Tela cheia</button></div><div class="canvas-home"><canvas id="graphCanvas" width="980" height="860"></canvas></div></div>
 </div>
 
-<div class="legend" data-tab="graficos">
-  <b style="color:#0f172a; font-weight:600;">Como interpretar:</b>
-  <div style="text-align: justify; color:#475569; font-weight:400;">
-    <b style="color:#0f172a; font-weight:600;">PAS e PAD:</b> representam a pressão arterial sistólica e diastólica.
-    <b style="color:#0f172a; font-weight:600;">PAM:</b> é calculada automaticamente pela relação clínica aproximada <b>PAM ≈ PAD + 1/3(PAS − PAD)</b>.
-    <b style="color:#0f172a; font-weight:600;">DC:</b> representa o fluxo global impulsionado pelo coração.
-    <b style="color:#0f172a; font-weight:600;">RPT:</b> sintetiza a oposição global oferecida pelo leito vascular sistêmico.
-    <b style="color:#0f172a; font-weight:600;">Coerência do modelo:</b> você pode selecionar somente três variáveis por vez; a quarta é calculada automaticamente para manter a consistência fisiológica.
-    <b style="color:#0f172a; font-weight:600;">Relação central:</b> neste simulador, a lógica integra a relação hemodinâmica <b>PAM ≈ DC × RPT</b> com a leitura clínica baseada em <b>PAS e PAD</b>.
+<div class="legend">
+  <b >Como interpretar:</b>
+  <div >
+    <b ><span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span>:</b> representam a pressão arterial sistólica e diastólica.
+    <b ><span class="v-PAM">PAM</span>:</b> é calculada automaticamente pela relação clínica aproximada <b><span class="v-PAM">PAM</span> ≈ <span class="v-PAD">PAD</span> + 1/3(<span class="v-PAS">PAS</span> − <span class="v-PAD">PAD</span>)</b>.
+    <b ><span class="v-DC">DC</span>:</b> representa o fluxo global impulsionado pelo coração.
+    <b ><span class="v-RPT">RPT</span>:</b> sintetiza a oposição global oferecida pelo leito vascular sistêmico.
+    <b >Coerência do modelo:</b> você pode selecionar somente três variáveis por vez; a quarta é calculada automaticamente para manter a consistência fisiológica.
+    <b >Relação central:</b> neste simulador, a lógica integra a relação hemodinâmica <b><span class="v-PAM">PAM</span> ≈ <span class="v-DC">DC</span> × <span class="v-RPT">RPT</span></b> com a leitura clínica baseada em <b><span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span></b>.
   </div>
-  <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
+  <div class="signature"><strong>Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</strong></div>
 </div>
 
 <script>
@@ -772,13 +571,13 @@ function updateStatus(){
   dcValue.textContent  = `${DC.toFixed(1)}`;
   rptValue.textContent = `${RPT.toFixed(1)}`;
 
-  pasText.querySelector('small').textContent = pickPAS.checked ? 'Variável livre.' : 'Calculada automaticamente.';
-  padText.querySelector('small').textContent = pickPAD.checked ? 'Variável livre.' : 'Calculada automaticamente.';
-  dcText.querySelector('small').textContent  = pickDC.checked  ? 'Variável livre.' : 'Calculado automaticamente.';
-  rptText.querySelector('small').textContent = pickRPT.checked ? 'Variável livre.' : 'Calculada automaticamente.';
+  pasText.querySelector('small').textContent = pickPAS.checked ? 'Livre' : 'Auto';
+  padText.querySelector('small').textContent = pickPAD.checked ? 'Livre' : 'Auto';
+  dcText.querySelector('small').textContent  = pickDC.checked  ? 'Livre' : 'Auto';
+  rptText.querySelector('small').textContent = pickRPT.checked ? 'Livre' : 'Auto';
 
   derValue.textContent = `PAM ${pamPress.toFixed(0)}`;
-  derDesc.textContent = `PP ${pp.toFixed(0)} mmHg · DC×RPT = ${pamHem.toFixed(0)} mmHg · Δ = ${delta.toFixed(1)} mmHg`;
+  derDesc.innerHTML = `<span class="v-PP">PP ${pp.toFixed(0)} mmHg</span> · <span class="v-DC">DC</span>×<span class="v-RPT">RPT</span> = <span class="v-PAM">${pamHem.toFixed(0)} mmHg</span> · Δ = ${delta.toFixed(1)} mmHg`;
 
   modeBadge.textContent = selectedCount()===3
     ? `Modo: coerente | calculada: ${missingVar()}`
@@ -800,6 +599,12 @@ function roundedBox(ctx,x,y,w,h,r){
 }
 
 function draw3DStroke(ctx, drawPath, color, width){
+  ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
+  ctx.shadowColor='#0009';ctx.shadowBlur=9;ctx.shadowOffsetY=5;
+  ctx.strokeStyle='#541f2b';ctx.lineWidth=width+3;ctx.beginPath();drawPath(ctx);ctx.stroke();ctx.shadowBlur=0;ctx.shadowOffsetY=0;
+  for(const [ratio,shade] of [[1,'#8b2e42'],[.84,color],[.57,'#ef6c7d'],[.22,'#ffbac1']]){ctx.strokeStyle=shade;ctx.lineWidth=Math.max(1,width*ratio);ctx.beginPath();drawPath(ctx);ctx.stroke();}
+  ctx.restore();return;
+
   ctx.save();
   ctx.lineCap='round';
   ctx.lineJoin='round';
@@ -843,52 +648,26 @@ function drawBloodSphere(ctx,x,y,r,color,label=''){
   ctx.save(); ctx.shadowColor=color+'66'; ctx.shadowBlur=7;
   ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
   ctx.shadowBlur=0; ctx.strokeStyle='rgba(255,255,255,.72)'; ctx.lineWidth=1.6; ctx.stroke();
-  if(label){ctx.fillStyle='#fff';ctx.font='bold 9px Arial';ctx.textAlign='center';ctx.fillText(label,x,y+3);ctx.textAlign='left';}
+  if(label){ctx.fillStyle="#102633";ctx.font='bold 9px Arial';ctx.textAlign='center';ctx.fillText(label,x,y+3);ctx.textAlign='left';}
   ctx.restore();
 }
 
 function drawHeart(x,y,w,h,beatAmp){
-  const pulse = 1 + 0.05*Math.sin(t*0.01*beatAmp);
-  sctx.save();
-  sctx.translate(x+w/2,y+h/2);
-  sctx.scale(pulse,pulse);
-  sctx.translate(-(x+w/2),-(y+h/2));
-
-  // corpo principal
-  sctx.beginPath();
-  sctx.moveTo(x+w/2, y+h*0.88);
-  sctx.bezierCurveTo(x-w*0.10, y+h*0.62, x+w*0.00, y+h*0.10, x+w*0.28, y+h*0.26);
-  sctx.bezierCurveTo(x+w*0.44, y+h*0.02, x+w*0.84, y+h*0.06, x+w*0.86, y+h*0.34);
-  sctx.bezierCurveTo(x+w*0.88, y+h*0.60, x+w*0.66, y+h*0.82, x+w/2, y+h*0.88);
-  const grd=sctx.createLinearGradient(x,y,x+w,y+h);
-  grd.addColorStop(0,'#fecdd3');
-  grd.addColorStop(0.32,'#fb7185');
-  grd.addColorStop(1,'#b91c1c');
-  sctx.fillStyle=grd;
-  sctx.shadowColor='#991b1b44';
-  sctx.shadowBlur=24;
-  sctx.fill();
-  sctx.shadowBlur=0;
-  sctx.lineWidth=2.6;
-  sctx.strokeStyle='#881337';
-  sctx.stroke();
-
-  // brilho superior esquerdo
-  const highlight = sctx.createRadialGradient(x+w*0.34,y+h*0.30,2,x+w*0.34,y+h*0.30,w*0.36);
-  highlight.addColorStop(0,'rgba(255,255,255,0.75)');
-  highlight.addColorStop(1,'rgba(255,255,255,0)');
-  sctx.fillStyle=highlight;
-  sctx.fill();
-
-  // sulco central leve
-  sctx.strokeStyle='rgba(127,29,29,0.35)';
-  sctx.lineWidth=2;
-  sctx.beginPath();
-  sctx.moveTo(x+w*0.50, y+h*0.18);
-  sctx.quadraticCurveTo(x+w*0.43, y+h*0.40, x+w*0.49, y+h*0.74);
-  sctx.stroke();
-
-  sctx.restore();
+ const c=sctx,pulse=1+.035*Math.sin(t*.01*beatAmp);
+ c.save();c.translate(x+w*.5,y+h*.5);c.scale(pulse,pulse);c.translate(-w*.5,-h*.5);
+ const tube=(path,color,width)=>{c.lineCap='round';c.lineJoin='round';c.beginPath();path();c.strokeStyle='#301924';c.lineWidth=width+3;c.stroke();c.strokeStyle=color;c.lineWidth=width;c.stroke();c.strokeStyle='#ffffff70';c.lineWidth=width*.22;c.stroke();};
+ tube(()=>{c.moveTo(w*.54,h*.29);c.bezierCurveTo(w*.42,-h*.04,w*.84,-h*.07,w*.83,h*.25)},'#ba5562',w*.15);
+ tube(()=>{c.moveTo(w*.24,h*.40);c.lineTo(w*.19,h*.03)},'#688db2',w*.12);
+ tube(()=>{c.moveTo(w*.44,h*.39);c.quadraticCurveTo(w*.65,h*.08,w*.98,h*.16)},'#89a5c3',w*.11);
+ c.beginPath();c.moveTo(w*.39,h*.18);c.bezierCurveTo(w*.12,h*.10,-w*.03,h*.38,w*.14,h*.65);c.bezierCurveTo(w*.25,h*.84,w*.55,h*.94,w*.68,h*.99);c.bezierCurveTo(w*.93,h*.79,w*1.02,h*.49,w*.84,h*.29);c.bezierCurveTo(w*.75,h*.15,w*.56,h*.14,w*.39,h*.18);c.closePath();
+ const muscle=c.createRadialGradient(w*.38,h*.32,3,w*.63,h*.63,w*.68);muscle.addColorStop(0,'#f3a0ad');muscle.addColorStop(.36,'#c4546e');muscle.addColorStop(.72,'#882e49');muscle.addColorStop(1,'#3f192c');
+ c.shadowColor='#0008';c.shadowBlur=12;c.shadowOffsetY=6;c.fillStyle=muscle;c.fill();c.shadowBlur=0;c.shadowOffsetY=0;c.strokeStyle='#e598a7';c.lineWidth=1.6;c.stroke();
+ c.save();c.clip();
+ tube(()=>{c.moveTo(w*.63,h*.21);c.bezierCurveTo(w*.44,h*.41,w*.68,h*.66,w*.68,h*.94)},'#913b52',w*.045);
+ for(let i=0;i<4;i++){const yy=h*(.38+i*.11);tube(()=>{c.moveTo(w*.57,yy);c.quadraticCurveTo(w*.39,yy+h*.06,w*(.17+i*.08),yy+h*.08)},'#bd697b',w*.014);}
+ c.restore();
+ c.beginPath();c.ellipse(w*.26,h*.31,w*.16,h*.11,-.55,0,Math.PI*2);const atrium=c.createRadialGradient(w*.21,h*.27,1,w*.28,h*.33,w*.20);atrium.addColorStop(0,'#f3b2bc');atrium.addColorStop(1,'#91364e');c.fillStyle=atrium;c.fill();
+ c.restore();
 }
 
 function drawArrow(x1,y1,x2,y2,color,width=5,label=''){
@@ -896,7 +675,7 @@ function drawArrow(x1,y1,x2,y2,color,width=5,label=''){
   sctx.save();
   sctx.lineCap='round'; sctx.lineJoin='round';
   sctx.shadowColor=color+'66';
-  sctx.shadowBlur=10;
+  sctx.shadowBlur=0;
   sctx.strokeStyle=color; sctx.lineWidth=width;
   sctx.beginPath(); sctx.moveTo(x1,y1); sctx.lineTo(x2,y2); sctx.stroke();
   const head=18, wing=Math.PI/7;
@@ -923,8 +702,14 @@ function drawArrow(x1,y1,x2,y2,color,width=5,label=''){
   sctx.restore();
 }
 
+const HEMO_COLORS={"PAS":"#84abff","PAD":"#f892c1","DC":"#ff8990","RPT":"#d8b8a0","PAM":"#f8c16b","PP":"#6cd8f3"};
+for(const ctx of [sctx,gctx]){const native=ctx.fillText.bind(ctx);ctx.fillText=function(text,x,y,...rest){
+ const pieces=String(text).split(/(\b(?:PAS|PAD|PAM|DC|RPT|PP)\b)/);if(pieces.length===1){native(text,x,y,...rest);return;}
+ ctx.save();const total=ctx.measureText(String(text)).width;let pos=x-(ctx.textAlign==='center'?total/2:ctx.textAlign==='right'?total:0);ctx.textAlign='left';const base=ctx.fillStyle;
+ for(const part of pieces){ctx.fillStyle=HEMO_COLORS[part]||base;native(part,pos,y);pos+=ctx.measureText(part).width;}ctx.restore();};}
 function drawScene(){
   sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);
+  sctx.save();sctx.translate(0,50);
   const pp = PP(PAS,PAD);
   const pam = PAMfromPressures(PAS,PAD);
   const vesselTone = clamp((RPT-8)/(40-8),0,1);
@@ -932,25 +717,25 @@ function drawScene(){
   const pulseAmp = clamp((pp-20)/(100-20),0,1);
   const arteryWidth = 64 - vesselTone*26;
 
-  sctx.fillStyle='#111827';
+  sctx.fillStyle='#cadce8';
   sctx.font='bold 22px Arial';
   sctx.fillText('Integração entre pressão arterial, fluxo e resistência', 18, 30);
 
   roundedBox(sctx,24,52,932,88,14);
-  sctx.fillStyle='#fff';
+  sctx.fillStyle="#102633";
   sctx.fill();
-  sctx.strokeStyle='#d1d5db';
+  sctx.strokeStyle='#345164';
   sctx.stroke();
 
-  sctx.fillStyle='#111827';
+  sctx.fillStyle='#cadce8';
   sctx.font='bold 18px Arial';
   sctx.fillText('Relações do modelo', 48, 82);
   sctx.font='bold 24px Arial';
-  sctx.fillStyle='#2563eb';
+  sctx.fillStyle='#84abff';
   sctx.fillText('PAM ≈ PAD + 1/3(PAS − PAD)', 230, 85);
-  sctx.fillStyle='#10b981';
+  sctx.fillStyle='#f8c16b';
   sctx.fillText('PAM ≈ DC × RPT', 610, 85);
-  sctx.fillStyle='#64748b';
+  sctx.fillStyle='#cadce8';
   sctx.font='14px Arial';
   sctx.fillText('O simulador usa 3 variáveis livres e calcula automaticamente a quarta.', 48, 116);
 
@@ -979,15 +764,15 @@ function drawScene(){
 
   // label areas
   if(labelsToggle.checked){
-    sctx.fillStyle='#111827'; sctx.font='bold 16px Arial';
+    sctx.fillStyle='#cadce8'; sctx.font='bold 16px Arial';
     sctx.fillText('Coração',120,190);
     sctx.fillText('Artérias',420,190);
     sctx.fillText('Arteríolas / RPT',675,190);
-    sctx.fillStyle='#64748b'; sctx.font='14px Arial';
+    sctx.fillStyle='#cadce8'; sctx.font='14px Arial';
   }
 
-  drawArrow(270,405,430,405,'#2563eb',5,'Fluxo');
-  drawArrow(660,345,830,345,'#10b981',5,'Resistência');
+  drawArrow(270,405,430,405,'#ff8990',5,'Fluxo');
+  drawArrow(660,345,830,345,'#d8b8a0',5,'Resistência');
 
 
   // flowing particles
@@ -1024,17 +809,11 @@ function drawScene(){
   for(let i=0;i<16;i++){
     const tt=((t*0.0013*speed)+(i/16))%1;
     let p;
-    if(tt<0.38){
-      p = trunkPoint(tt/0.38);
-    }else if(tt<0.58){
-      p = upperPoint((tt-0.38)/0.20);
-    }else if(tt<0.78){
-      p = lowerPoint((tt-0.58)/0.20);
-    }else{
-      const which = i % artPaths.length;
-      p = artPaths[which]((tt-0.78)/0.22);
-    }
-    drawBloodCell(p.x,p.y,8.6);
+    const branch=i%6,upper=branch<3;
+    if(tt<.45){p={x:240+215*tt/.45,y:345};}
+    else if(tt<.7){const u=(tt-.45)/.25;p=upper?cubicPoint({x:455,y:345},{x:505,y:345},{x:554,y:303},{x:620,y:270},u):cubicPoint({x:455,y:345},{x:505,y:345},{x:554,y:387},{x:620,y:420},u);}
+    else{const seg=arterioleSegments[branch],u=(tt-.7)/.3;p={x:seg[0]+(seg[2]-seg[0])*u,y:seg[1]+(seg[3]-seg[1])*u};}
+    drawBloodCell(p.x,p.y,6.5);
   }
 
   // redraw heart on top so erythrocytes emerge from behind it
@@ -1042,9 +821,9 @@ function drawScene(){
 
   // bottom summary
   roundedBox(sctx,34,610,910,118,16);
-  sctx.fillStyle='#fff'; sctx.fill();
-  sctx.strokeStyle='#d1d5db'; sctx.stroke();
-  sctx.fillStyle='#111827'; sctx.font='bold 16px Arial';
+  sctx.fillStyle="#102633"; sctx.fill();
+  sctx.strokeStyle='#345164'; sctx.stroke();
+  sctx.fillStyle='#cadce8'; sctx.font='bold 16px Arial';
   sctx.fillText('Resumo fisiológico', 52, 638);
 
   const col1 = 72, col2 = 290, col3 = 520, col4 = 735;
@@ -1053,45 +832,46 @@ function drawScene(){
   sctx.font='bold 15px Arial';
 
   // linha 1 (mesma ordem do painel superior)
-  sctx.fillStyle='#f59e0b';
+  sctx.fillStyle='#ff8990';
   sctx.fillText(`DC: ${DC.toFixed(1)} L/min`, col1, row1);
 
-  sctx.fillStyle='#ef4444';
+  sctx.fillStyle='#d8b8a0';
   sctx.fillText(`RPT: ${RPT.toFixed(1)} mmHg·min/L`, col2, row1);
 
-  sctx.fillStyle='#06b6d4';
+  sctx.fillStyle='#6cd8f3';
   sctx.fillText(`PP: ${pp.toFixed(0)} mmHg`, col3, row1);
 
   // sobra (última coluna)
-  sctx.fillStyle='#0f172a';
+  sctx.fillStyle='#cadce8';
   sctx.fillText(`DC × RPT = ${(DC*RPT).toFixed(0)} mmHg`, col4, row1);
 
   // linha 2 (mesma ordem do painel inferior)
-  sctx.fillStyle='#8b5cf6';
+  sctx.fillStyle='#f892c1';
   sctx.fillText(`PAD: ${PAD.toFixed(0)} mmHg`, col1, row2);
 
-  sctx.fillStyle='#10b981';
+  sctx.fillStyle='#f8c16b';
   sctx.fillText(`PAM: ${pam.toFixed(0)} mmHg`, col2, row2);
 
-  sctx.fillStyle='#2563eb';
+  sctx.fillStyle='#84abff';
   sctx.fillText(`PAS: ${PAS.toFixed(0)} mmHg`, col3, row2);
+sctx.restore();
 }
 
 function drawGraph(){
   gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
 
   roundedBox(gctx,18,18,944,824,18);
-  gctx.fillStyle='#fff';
+  gctx.fillStyle="#102633";
   gctx.fill();
-  gctx.strokeStyle='#d7dde6';
+  gctx.strokeStyle='#345164';
   gctx.lineWidth=1.4;
   gctx.stroke();
 
-  gctx.fillStyle='#0f172a';
+  gctx.fillStyle='#cadce8';
   gctx.font='bold 24px Arial';
   gctx.textAlign='center';
   gctx.fillText('Painel hemodinâmico', 490, 50);
-  gctx.fillStyle='#64748b';
+  gctx.fillStyle='#cadce8';
   gctx.font='14px Arial';
   gctx.fillText('Comparação entre PAS, PAD, PAM, DC e RPT.', 490, 78);
 
@@ -1102,34 +882,34 @@ function drawGraph(){
 
   // painel superior
   const left=110, right=900, top=132, bottom=418, width=right-left, height=bottom-top, barW=122;
-
+  
 
   for(let i=0;i<=11;i++){
     const y = bottom - (i/11)*height;
-    gctx.strokeStyle = i===0||i===11 ? '#d6dde7' : '#edf1f5';
+    gctx.strokeStyle = i===0||i===11 ? '#345164' : '#345164';
     gctx.lineWidth = i===0||i===11 ? 1 : 0.7;
     gctx.beginPath();
     gctx.moveTo(left,y);
     gctx.lineTo(right,y);
     gctx.stroke();
 
-    gctx.fillStyle='#475569';
+    gctx.fillStyle='#cadce8';
     gctx.font='bold 12px Arial';
     gctx.textAlign='right';
-
+    
   }
 
-    gctx.fillStyle='#475569';
+    gctx.fillStyle='#cadce8';
   gctx.font='bold 16px Arial';
   gctx.textAlign='left';
   gctx.fillText('Fluxo, resistência e pressão de pulso', left, top-34);
   gctx.font='bold 12px Arial';
-  gctx.fillStyle='#06b6d4';
+  gctx.fillStyle='#6cd8f3';
   gctx.fillText(`PP: escala dinâmica até ${maxPP} mmHg`, left+430, top-34);
   const topItems = [
-    {x:240,label:'DC',value:DC,color:'#FF7F00',unit:'L/min',max:20},
-    {x:450,label:'RPT',value:RPT,color:'#E31A1C',unit:'mmHg·min/L',max:40},
-    {x:660,label:'PP',value:pp,color:'#06b6d4',unit:'mmHg',max:maxPP}
+    {x:240,label:'DC',value:DC,color:'#ff8990',unit:'L/min',max:20},
+    {x:450,label:'RPT',value:RPT,color:'#d8b8a0',unit:'mmHg·min/L',max:40},
+    {x:660,label:'PP',value:pp,color:'#6cd8f3',unit:'mmHg',max:maxPP}
   ];
 
   topItems.forEach(item=>{
@@ -1137,23 +917,23 @@ function drawGraph(){
     const y = bottom-h;
     draw3DBar(gctx,item.x,y,barW,h,item.color);
 
-    gctx.fillStyle='#0f172a';
+    gctx.fillStyle=item.color;
     gctx.font='bold 13px Arial';
     gctx.textAlign='center';
     gctx.fillText(item.label==='DC' ? item.value.toFixed(1)+' L/min' : item.label==='RPT' ? item.value.toFixed(1)+' mmHg·min/L' : item.value.toFixed(0)+' mmHg', item.x+barW/2, y-14);
 
-    gctx.fillStyle='#334155';
+    gctx.fillStyle=item.color;
     gctx.font='bold 14px Arial';
     gctx.fillText(item.label, item.x+barW/2, bottom+18);
   });
 
   // painel inferior
   const top2=500, bottom2=706, height2=bottom2-top2;
-
+  
 
   for(let i=0;i<=10;i++){
     const y = bottom2 - (i/10)*height2;
-    gctx.strokeStyle = i===0||i===10 ? '#d6dde7' : '#edf1f5';
+    gctx.strokeStyle = i===0||i===10 ? '#345164' : '#345164';
     gctx.lineWidth = i===0||i===10 ? 1 : 0.7;
     gctx.beginPath();
     gctx.moveTo(left,y);
@@ -1162,37 +942,37 @@ function drawGraph(){
   }
 
     gctx.textAlign='left';
-  gctx.fillStyle='#475569';
+  gctx.fillStyle='#cadce8';
   gctx.font='bold 16px Arial';
   gctx.fillText('Pressões (mmHg)', left, top2-12);
 
   const bottomItems = [
-    {x:240,w:122,h:(PAD/220)*height2,color:'#8b5cf6',label:'PAD',txt:`${PAD.toFixed(0)} mmHg`},
-    {x:450,w:122,h:(pam/220)*height2,color:'#10b981',label:'PAM',txt:`${pam.toFixed(0)} mmHg`},
-    {x:660,w:122,h:(PAS/220)*height2,color:'#2563eb',label:'PAS',txt:`${PAS.toFixed(0)} mmHg`}
+    {x:240,w:122,h:(PAD/220)*height2,color:'#f892c1',label:'PAD',txt:`${PAD.toFixed(0)} mmHg`},
+    {x:450,w:122,h:(pam/220)*height2,color:'#f8c16b',label:'PAM',txt:`${pam.toFixed(0)} mmHg`},
+    {x:660,w:122,h:(PAS/220)*height2,color:'#84abff',label:'PAS',txt:`${PAS.toFixed(0)} mmHg`}
   ];
 
   bottomItems.forEach(item=>{
     const y = bottom2-item.h;
     draw3DBar(gctx,item.x,y,item.w,item.h,item.color);
 
-    gctx.fillStyle='#0f172a';
+    gctx.fillStyle=item.color;
     gctx.font='bold 13px Arial';
     gctx.textAlign='center';
     gctx.fillText(item.txt, item.x+item.w/2, y-14);
 
-    gctx.fillStyle='#334155';
+    gctx.fillStyle=item.color;
     gctx.font='bold 14px Arial';
     gctx.fillText(item.label, item.x+item.w/2, bottom2+18);
   });
 
   // caixa final
   roundedBox(gctx,120,766,740,56,14);
-  gctx.fillStyle='#ffffff';
+  gctx.fillStyle="#102633";
   gctx.fill();
-  gctx.strokeStyle='#d1d5db';
+  gctx.strokeStyle='#345164';
   gctx.stroke();
-  gctx.fillStyle='#0f172a';
+  gctx.fillStyle='#cadce8';
   gctx.font='bold 15px Arial';
   gctx.textAlign='center';
   gctx.fillText(`PAM clínica ≈ ${pam.toFixed(0)} mmHg | PAM hemodinâmica = DC × RPT = ${(DC*RPT).toFixed(0)} mmHg`, 490, 801);
@@ -1266,37 +1046,20 @@ syncSliderState();
 applyPreset('rest', false);
 })();
 </script>
-
-<script>
-(() => {
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  if (tabButtons.length) setTab('animacao');
-
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
-  const pauseCandidates = ['btnPause','pauseBtn'];
-  let startBtn = null, pauseBtn = null;
-  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
-  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
-  if (mobileToggle && startBtn){
-    let playing = false;
-    mobileToggle.addEventListener('click', () => {
-      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
-      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
-      playing = !playing;
-    });
-  } else if (mobileToggle){
-    mobileToggle.style.display = 'none';
-  }
-})();
-</script>
-  <script src="tutor-ef-data.js?v=11"></script>
-  <script src="tutor-widget.js?v=16"></script>
-</body>
+<script>(()=>{document.querySelectorAll('[data-expand]').forEach(button=>{const canvas=document.getElementById(button.dataset.expand),home=canvas.parentNode;const dialog=document.createElement('dialog');dialog.className='hill-dialog';dialog.setAttribute('aria-label',button.previousElementSibling.textContent);const close=document.createElement('button');close.textContent='Fechar';close.type='button';close.className='hill-dialog-close';const wrap=document.createElement('div');wrap.className='figure-scroll';wrap.style.width='min(100%,calc((100dvh - 100px)*'+(canvas.width/canvas.height)+'))';dialog.append(close,wrap);document.body.appendChild(dialog);let overflow='';button.addEventListener('click',()=>{overflow=document.body.style.overflow;wrap.appendChild(canvas);dialog.showModal();document.body.style.overflow='hidden';close.focus();});close.addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{home.appendChild(canvas);document.body.style.overflow=overflow;button.focus();});});})();
+</script></body>
 </html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.status-grid .card):not(#cards-reference-reserved){--reference-accent:var(--phase,#b6cad9);position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+#cardPAS{--reference-accent:var(--PAS)!important}#cardPAD{--reference-accent:var(--PAD)!important}#cardDC{--reference-accent:var(--DC)!important}#cardRPT{--reference-accent:var(--RPT)!important}#cardDER{--reference-accent:var(--PAM)!important}
+</style>
+
+<script src="tutor-ef-data.js?v=11"></script>
+<script src="tutor-widget.js?v=16"></script>

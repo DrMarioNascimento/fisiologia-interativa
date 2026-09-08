@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8" /><link rel="icon" href="brand/orientador.webp">
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Transporte Ativo Secundário — Simulador Interativo</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
 <style>
   :root{
     --bg:#f6f8fc;
@@ -17,9 +16,9 @@
     --blue:#2f80ed;
     --blue2:#57a7ff;
     --red:#E31A1C;
-    --green:#33A02C;
-    --amber:#FF7F00;
-    --violet:#6A3D9A;
+    --green:#87d29e;
+    --amber:#ff9b42;
+    --violet:#ff8990;
     --teal:#18a7a7;
     --slate:#475569;
     --rose:#E3127C;
@@ -27,10 +26,10 @@
     --shadow:0 10px 24px rgba(18,42,66,.10);
     --radius:18px;
     --phaseColor:#2f80ed;
-    --c-na:#1F78B4;
-    --c-k:#6A3D9A;
-    --c-glucose:#33A02C;
-    --c-atp:#FF7F00;
+    --c-na:#70bcff;
+    --c-k:#ff8990;
+    --c-glucose:#87d29e;
+    --c-atp:#ff9b42;
     --c-red:#E31A1C;
   }
   *{box-sizing:border-box}
@@ -221,10 +220,10 @@
     box-shadow:0 1px 5px rgba(18,42,66,.06);
   }
   .timeline-step.active{
-    border-color:var(--phaseColor,#1F78B4);
+    border-color:var(--phaseColor,#70bcff);
     border-width:2px;
-    box-shadow:0 0 0 3px color-mix(in srgb, var(--phaseColor,#1F78B4) 22%, white),0 0 18px color-mix(in srgb, var(--phaseColor,#1F78B4) 20%, transparent);
-    color:var(--phaseColor,#1F78B4);
+    box-shadow:0 0 0 3px color-mix(in srgb, var(--phaseColor,#70bcff) 22%, white),0 0 18px color-mix(in srgb, var(--phaseColor,#70bcff) 20%, transparent);
+    color:var(--phaseColor,#70bcff);
   }
   .timeline-step::after{
     content:"→";
@@ -348,71 +347,21 @@
   .card:nth-child(3) .phase{color:var(--c-glucose)}
   .panel:first-of-type::before{content:"Animação integrada";display:block;font-size:18px;font-weight:900;padding:0 2px 10px;color:#184a72;}
   .panel:nth-of-type(2)::before{content:"Gráfico funcional";display:block;font-size:18px;font-weight:900;padding:0 2px 10px;color:#245f27;}
-
-/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
-@media (max-width:760px){
-  button{ min-height:44px; padding:11px 16px; font-size:15px; }
-  label{ min-height:40px; padding:8px 10px; }
-  input[type="range"]{ width:100%; height:28px; }
-  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
-  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
-  select{ min-height:44px; font-size:15px; }
-  a{ min-height:44px; display:inline-flex; align-items:center; }
-}
-
-/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
-.mobile-topbar{ display:none; }
-.mobile-tabnav{ display:none; }
-@media (max-width:760px){
-  h1{ display:none; }
-  .mobile-topbar{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    position:sticky; top:0; z-index:50; padding:12px 14px;
-    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
-    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
-  }
-  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
-  .mobile-playtoggle{
-    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
-    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
-    min-height:44px; min-width:44px; cursor:pointer;
-  }
-  .mobile-tabnav{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
-    position:sticky; top:64px; z-index:49; padding:8px 10px;
-    background:#eef4fb; border-bottom:1px solid #d7e1ec;
-  }
-  .mobile-tabnav button{
-    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
-    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
-  }
-  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
-  [data-tab]{ display:none !important; }
-  [data-tab].tab-active{ display:block !important; }
-  .status-grid[data-tab].tab-active{ display:grid !important; }
-}
 </style>
-  <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-  <link rel="stylesheet" href="tutor-widget.css?v=4">
-</head>
+<style>.topbar{grid-template-columns:minmax(0,1fr);padding:22px;gap:20px}.topbar .title{min-width:0;width:100%}.topbar .title h1{font-size:clamp(24px,3vw,34px);line-height:1.25}.topbar .title .subtitle{font-size:15px;line-height:1.65;max-width:85ch;margin-top:10px}.topbar .controls{min-width:0;width:100%;justify-content:flex-start;box-sizing:border-box}.topbar .controls .pill{max-width:100%;min-width:0}@media(max-width:650px){.topbar{padding:15px}.topbar .controls{padding:10px}.topbar .controls .pill{width:100%}}</style><style>:root{color-scheme:dark;--bg:#0a1722;--panel:#142a3a;--line:#385466;--text:#dcebf5;--ink:#dcebf5;--muted:#a0b8c9;--na:#70bcff;--k:#ff8990;--ca:#f4e76a;--curve-primary:#e0edf5}
+*{box-sizing:border-box}body{margin:0;padding:24px;background:radial-gradient(ellipse at 15% 0,#1c3b4c,transparent 60%),#091620;color:var(--text);font-family:Segoe UI,Arial,sans-serif}h1{color:#e5f2fa;font-size:clamp(24px,3vw,34px);letter-spacing:-.035em;line-height:1.2}.subtitle,.title p{color:var(--muted);line-height:1.6}.app{padding:0;max-width:1400px;margin:auto}.controls,.scenario-row,.timeline,.card,.panel,.legend,.stage-map,.topbar{background:linear-gradient(145deg,#223b4d,#112432);border:1px solid #385466;box-shadow:inset 0 1px 0 #ffffff20,0 10px 25px #0005;border-radius:19px}.controls,.status-grid,.layout,.legend,.timeline,.stage-map,.mode-line,.scenario-row,.pro-graph-note{max-width:1400px;margin-left:auto;margin-right:auto}.controls{padding:15px;gap:12px;display:flex;flex-wrap:wrap}.controls label,.controls .pill,.scenario-label{min-height:46px;padding:10px 12px;border:1px solid #3b576b;background:#102635;color:#c7dce9;border-radius:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.controls button,button{min-height:46px;border:1px solid #638398;border-radius:12px;padding:11px 16px;color:#eaf8ff;background:linear-gradient(165deg,#55778e,#2d4a60 50%,#193345);box-shadow:inset 0 2px 1px #ffffff50,inset 0 -2px 1px #0006,0 4px 0 #06111a,0 7px 10px #0006;cursor:pointer;font-size:14px}button.primary,#playBtn{background:linear-gradient(#559886,#255c53);border-color:#8fbfb1}button:active{transform:translateY(3px);box-shadow:inset 0 2px 4px #0006,0 1px 0 #06111a}button:focus-visible,input:focus-visible,.figure-scroll:focus-visible{outline:3px solid #8de0d3;outline-offset:4px}input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:#75c9b4;flex:none}input[type=range]{appearance:none;width:140px;max-width:100%;height:12px;border-radius:20px;background:#061521;border:1px solid #58798d;box-shadow:inset 0 3px 5px #0009,0 1px 0 #fff2;margin:12px 0}input[type=range]::-webkit-slider-thumb{appearance:none;width:29px;height:29px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:inset 0 1px 2px #fff,0 3px 0 #07111b,0 6px 9px #0008}input[type=range]::-moz-range-thumb{width:27px;height:27px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:0 4px 7px #0008}.status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.status-grid .card{height:auto;min-height:155px;overflow:visible;padding:17px 20px}.card .phase{font-size:23px;min-height:0;color:#dcebf5;line-height:1.3}.card .phase small,.card-title{color:#a5bdce;line-height:1.5}.card-title{font-size:11px}.mode-badge,.pill{background:#112a3a;border-color:#385466;color:#b9cedc}.layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.layout .panel{min-width:0;overflow:hidden;padding:12px;height:auto}.panel canvas{display:block;max-width:100%;width:100%;height:auto;background:#0d2030;border:1px solid #37566a;border-radius:12px}.legend{color:#c4d7e4;line-height:1.75;text-align:left;padding:22px;font-size:15px}.signature,.mini-note,.pro-graph-note{color:#9eb7c8}.timeline-step,.stage-chip,.stage-item{background:#142c3c;color:#a9c4d7;border-color:#3b596e}.timeline-step.active,.stage-chip.active,.stage-item.active,.pharm-label.active{background:#20483f!important;color:#eafff7!important;border-color:#7dc5ad!important;box-shadow:inset 4px 0 #80c5af!important}.scenario-label:has(input:checked),.controls label:has(input[type=radio]:checked){background:#20483f;border-color:#7dc5ad}.ion-key{max-width:1400px;margin:16px auto;display:flex;gap:10px;flex-wrap:wrap}.ion-key span{padding:7px 10px;border:1px solid #385466;border-radius:8px;background:#102838;font-size:13px}.figure-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap;color:#bfd7e5;font-size:13px}.figure-toolbar button{font-size:12px;min-height:44px}.figure-scroll{max-width:100%;overflow:auto;overscroll-behavior-x:contain;border-radius:12px}.figure-hint{display:none;color:#a4c0d1;font-size:12px;line-height:1.5;margin:8px 0}.figure-scroll.detail canvas{width:var(--figure-width);max-width:none}.card#valueCard .phase,.card#mvCard .phase{color:#e0edf5}.card#valueCard,.card#mvCard{--phase:#e0edf5!important}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:650px){body{padding:12px;padding-bottom:max(16px,env(safe-area-inset-bottom))}.topbar{display:block;padding:16px}.controls{gap:12px;padding:12px}.controls button{flex:1 1 40%}.controls label,.controls .pill{flex:1 1 100%;font-size:14px;justify-content:space-between}.status-grid{grid-template-columns:minmax(0,1fr)}.status-grid .card{min-height:0}.scenario-row{display:grid;grid-template-columns:minmax(0,1fr);padding:12px}.scenario-label{margin:0;white-space:normal}.timeline-row,.stage-track{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.timeline-step:after{display:none}.timeline-step{min-width:0}.figure-scroll canvas{width:var(--figure-width);max-width:none}.figure-scroll.overview canvas{width:100%;max-width:100%}.figure-hint{display:block}.legend{padding:17px}.layout .panel{padding:10px}.figure-scroll{max-height:70svh}.phase small{font-size:14px}.ion-key{gap:7px}.mode-line{text-align:left}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.ion-na{color:#70bcff;font-weight:650}.ion-k{color:#ff8990;font-weight:650}.ion-ca{color:#f4e76a;font-weight:650}.ion-glucose{color:#87d29e;font-weight:650}.ion-atp{color:#c4a2f6;font-weight:650}.ion-adp{color:#a6c5ee;font-weight:650}.ion-pi{color:#d8cb9a;font-weight:650}.ion-sglt{color:#60d2c5;font-weight:650}.ion-pump{color:#ff9b42;font-weight:650}.ion-vm{color:#e0edf5;font-weight:650}.ion-gradient{color:#b3d6ef;font-weight:650}.ion-flux{color:#a9e1c0;font-weight:650}.ion-activity{color:#d4c095;font-weight:650}</style></head>
 <body>
-  <div class="mobile-topbar">
-    <h2>Transporte Ativo Secundário — Simulador Interativo</h2>
-    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
-  </div>
-  <div class="mobile-tabnav">
-    <button data-tabnav="animacao" class="active">Animação</button>
-    <button data-tabnav="controles">Controles</button>
-    <button data-tabnav="graficos">Gráficos</button>
-  </div>
-
 <div class="app">
-  <div class="topbar" data-tab="controles">
+  <div class="topbar">
     <div class="title">
       <h1>Transporte ativo secundário — SGLT / Na⁺-glicose</h1>
       <p class="subtitle">Animação tridimensional do gradiente de Na⁺, da Na⁺/K⁺ ATPase e do cotransporte Na⁺ + glicose através da membrana.</p>
     </div>
-    <div class="controls" data-tab="controles">
+    <div class="controls">
     <button id="playBtn">⏵ Reproduzir</button>
     <button id="pauseBtn">⏸ Pausar</button>
     <button id="resetBtn">↺ Resetar</button>
@@ -431,7 +380,7 @@
     <label class="scenario-label"><input type="radio" name="scenario" id="scHypoinsulinemia" value="hypoinsulinemia"> Hipoinsulinemia</label>
   </div>
 
-  <div class="status-grid" data-tab="animacao">
+  <div class="status-grid">
     <div class="card" id="phaseCard">
       <div class="card-title">Fase atual</div>
       <div class="phase" id="phaseText">Gradiente de Na⁺
@@ -464,31 +413,63 @@
     </div>
   </div>
 
-  <div class="layout">
-    <div class="panel" data-tab="animacao">
-      <canvas id="sceneCanvas" width="920" height="760"></canvas>
+  <div class="ion-key" aria-label="Cores dos componentes"><span class="ion-na">Na⁺</span><span class="ion-k">K⁺</span><span class="ion-glucose">Glicose</span><span class="ion-atp">ATP</span><span class="ion-adp">ADP</span><span class="ion-pi">Pi</span><span class="ion-sglt">SGLT</span><span class="ion-pump">Na⁺/K⁺-ATPase</span></div><div class="layout">
+    <div class="panel">
+      <div class="figure-toolbar"><strong>Animação</strong><button type="button" data-figure="view-sceneCanvas" aria-controls="view-sceneCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-sceneCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Animação ampliável" style="--figure-width:920px"><canvas id="sceneCanvas" width="920" height="760"></canvas></div><div class="glucose-fixed-key" style="display:flex;align-items:center;gap:10px;padding:14px 16px;margin-top:10px;border:1px solid #385466;border-radius:12px;background:#102838;color:#87d29e;font-size:19px;font-weight:650;flex-wrap:wrap"><span aria-hidden="true" style="display:inline-block;width:24px;height:24px;border-radius:50%;flex:none;background:radial-gradient(circle at 32% 25%,#eefbf2,#87d29e 45%,#234b33 95%);box-shadow:0 2px 4px #0009;border:1px solid #87d29e"></span>Glicose<span class="ion-pump" style="margin-left:16px">Na⁺/K⁺ ATPase</span><span style="flex-basis:100%;font-size:18px;line-height:1.65;color:#dcebf5"><span class="ion-atp">ATP</span> → <span class="ion-gradient">gradiente de Na⁺</span> → <span class="ion-flux">entrada de glicose</span></span></div>
       <div class="mini-note">Meio extracelular acima · citossol abaixo · Na⁺ e glicose entram pela face extracelular (topo do transportador)</div>
     </div>
-    <div class="panel" data-tab="graficos">
-      <canvas id="graphCanvas" width="920" height="760"></canvas>
+    <div class="panel">
+      <div class="figure-toolbar"><strong>Gráfico</strong><button type="button" data-figure="view-graphCanvas" aria-controls="view-graphCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-graphCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Gráfico ampliável" style="--figure-width:920px"><canvas id="graphCanvas" width="920" height="760"></canvas></div>
       <div class="mini-note">O transporte de glicose depende do gradiente de Na⁺ criado pela Na⁺/K⁺ ATPase.</div>
     </div>
   </div>
 
-  <div class="legend" data-tab="graficos">
-    <b>Gradiente de Na⁺:</b> a Na⁺/K⁺ ATPase consome ATP para extrudir Na⁺, tornando a concentração de Na⁺ maior no meio extracelular e menor no citosol.
-    <b>Transporte ativo secundário:</b> o cotransportador SGLT não usa ATP diretamente; ele aproveita a energia do Na⁺ retornando a favor de seu gradiente para trazer glicose para dentro da célula.
-    <b>Simporte:</b> Na⁺ e glicose atravessam a membrana na mesma direção.
-    <b>Interpretação:</b> ATP → gradiente de Na⁺ → entrada acoplada de glicose. Se a ATPase for desligada, o gradiente cai e o transporte secundário diminui progressivamente.
-    <b>Glicosídeos cardíacos / Digitálico:</b> inibem a Na⁺/K⁺ ATPase, reduzem o gradiente de Na⁺ e tendem a diminuir o transporte ativo secundário dependente desse gradiente.
-    <b>Hipóxia / Isquemia:</b> a queda do ATP compromete a ATPase, colapsa progressivamente o gradiente de Na⁺ e reduz intensamente o simporte de glicose.
-    <b>Gliflozinas:</b> bloqueiam o SGLT; a ATPase pode permanecer ativa, mas a entrada acoplada de Na⁺ + glicose cai acentuadamente.
-    <b>Hipoinsulinemia:</b> não bloqueia diretamente o SGLT, mas nesta animação é representada como redução indireta da captação/aproveitamento global da glicose, com menor entrada efetiva.
+  <div class="legend">
+    <b>Gradiente de <span class="ion-na">Na⁺</span>:</b> a <span class="ion-na">Na⁺</span>/<span class="ion-k">K⁺</span> <span class="ion-atp">ATP</span>ase consome <span class="ion-atp">ATP</span> para extrudir <span class="ion-na">Na⁺</span>, tornando a concentração de <span class="ion-na">Na⁺</span> maior no meio extracelular e menor no citosol. 
+    <b>Transporte ativo secundário:</b> o cotransportador <span class="ion-sglt">SGLT</span> não usa <span class="ion-atp">ATP</span> diretamente; ele aproveita a energia do <span class="ion-na">Na⁺</span> retornando a favor de seu gradiente para trazer <span class="ion-glucose">glicose</span> para dentro da célula. 
+    <b>Simporte:</b> <span class="ion-na">Na⁺</span> e <span class="ion-glucose">glicose</span> atravessam a membrana na mesma direção. 
+    <b>Interpretação:</b> <span class="ion-atp">ATP</span> → gradiente de <span class="ion-na">Na⁺</span> → entrada acoplada de <span class="ion-glucose">glicose</span>. Se a <span class="ion-atp">ATP</span>ase for desligada, o gradiente cai e o transporte secundário diminui progressivamente. 
+    <b>Glicosídeos cardíacos / Digitálico:</b> inibem a <span class="ion-na">Na⁺</span>/<span class="ion-k">K⁺</span> <span class="ion-atp">ATP</span>ase, reduzem o gradiente de <span class="ion-na">Na⁺</span> e tendem a diminuir o transporte ativo secundário dependente desse gradiente. 
+    <b>Hipóxia / Isquemia:</b> a queda do <span class="ion-atp">ATP</span> compromete a <span class="ion-atp">ATP</span>ase, colapsa progressivamente o gradiente de <span class="ion-na">Na⁺</span> e reduz intensamente o simporte de <span class="ion-glucose">glicose</span>. 
+    <b>Gliflozinas:</b> bloqueiam o <span class="ion-sglt">SGLT</span>; a <span class="ion-atp">ATP</span>ase pode permanecer ativa, mas a entrada acoplada de <span class="ion-na">Na⁺</span> + <span class="ion-glucose">glicose</span> cai acentuadamente. 
+    <b>Hipoinsulinemia:</b> não bloqueia diretamente o <span class="ion-sglt">SGLT</span>, mas nesta animação é representada como redução indireta da captação/aproveitamento global da <span class="ion-glucose">glicose</span>, com menor entrada efetiva.
     <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
   </div>
 </div>
 
-<script>
+<script>function semanticHTML(value){const names={'Na⁺':'na','Na+':'na','K⁺':'k','K+':'k','Ca²⁺':'ca','Ca2+':'ca','ATP':'atp','ADP':'adp','Pi':'pi','glicose':'glucose','SGLT':'sglt'};return String(value).split(/(<[^>]*>)/).map(s=>s.startsWith('<')?s:s.replace(/Na⁺\/K⁺[- ]ATPase|Na⁺|Na\+|K⁺|K\+|Ca²⁺|Ca2\+|\bATP\b|\bADP\b|\bPi\b|glicose|SGLT/g,t=>'<span class="ion-'+(names[t]||'pump')+'">'+t+'</span>')).join('');}function semanticLead(el,text){if(el.firstChild.nodeType===3){const lead=document.createElement('span');el.replaceChild(lead,el.firstChild);}el.firstChild.innerHTML=semanticHTML(text);}(()=>{const P={"na":"#70bcff","k":"#ff8990","ca":"#f4e76a","glucose":"#87d29e","atp":"#c4a2f6","adp":"#a6c5ee","pi":"#d8cb9a","sglt":"#60d2c5","pump":"#ff9b42","vm":"#e0edf5","gradient":"#b3d6ef","flux":"#a9e1c0","activity":"#d4c095"};document.querySelectorAll('canvas').forEach(canvas=>{const ctx=canvas.getContext('2d'),original=ctx.fillText.bind(ctx);ctx.fillText=function(value,x,y,maxWidth){const s=String(value),old=this.fillStyle;let col;if(s.length>48)col='#bfd3e2';else if(/Na.*ATPase|Bomba primária/.test(s))col=P.pump;else if(/SGLT|Transportador secundário/.test(s))col=P.sglt;else if(/gradiente de Na/i.test(s))col=P.gradient;else if(/(fluxo|entrada) de glicose/i.test(s))col=P.flux;else if(/ATPase ativa/.test(s))col=P.activity;else if(/^ATP$/.test(s))col=P.atp;else if(/^ADP$/.test(s))col=P.adp;else if(/^Pi$/.test(s))col=P.pi;else if(/Na[⁺+]|^Na$/.test(s)&&!/[KC]a|K[⁺+]/.test(s))col=P.na;else if(/Ca[²+]|^Ca$/.test(s))col=P.ca;else if(/K[⁺+]|^K$/.test(s))col=P.k;else if(/glicose/i.test(s))col=P.glucose;else if(/mV/.test(s))col=P.vm;else if(typeof old==='string'&&/^#[0-9a-f]{6}$/i.test(old)){const n=parseInt(old.slice(1),16);if(((n>>16)*.2126+((n>>8)&255)*.7152+(n&255)*.0722)<130)col='#bfd3e2';}if(col)this.fillStyle=col;if(/^(Na|K|Ca|ATP|ADP|Pi|Glicose)[⁺²+]*$/.test(s)){this.save();this.strokeStyle='#102838';this.lineWidth=3;this.lineJoin='round';this.strokeText(s,x,y);this.restore();}if(maxWidth===undefined)original(s,x,y);else original(s,x,y,maxWidth);this.fillStyle=old;};});})();</script><script>// Shared schematic materials: bilayer, transmembrane bundles and gates.
+const MembraneArt=(()=>{
+ const lipid='#9cb4c5';
+ function tint(hex,f){const n=parseInt(hex.slice(1),16);return '#'+[n>>16,(n>>8)&255,n&255].map(v=>Math.round(f<1?v*f:v+(255-v)*(f-1)).toString(16).padStart(2,'0')).join('');}
+ function ball(c,x,y,r,color){const g=c.createRadialGradient(x-r*.35,y-r*.4,r*.03,x,y,r);g.addColorStop(0,tint(color,1.8));g.addColorStop(.32,tint(color,1.25));g.addColorStop(.67,color);g.addColorStop(1,tint(color,.3));c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();}
+ function strand(c,pts,w,color){c.lineCap='round';c.lineJoin='round';for(const [d,col]of [[0,tint(color,.28)],[-w*.18,color],[-w*.3,tint(color,1.4)]]){c.strokeStyle=col;c.lineWidth=d===0?w:d===-w*.18?w*.56:w*.15;c.beginPath();pts.forEach(([x,y],i)=>i?c.lineTo(x+d,y):c.moveTo(x+d,y));c.stroke();}}
+ function bilayer(c,x,top,w,h){c.save();const step=h<100?18:23,r=step*.39;
+ const bg=c.createLinearGradient(0,top,0,top+h);bg.addColorStop(0,'#314f61');bg.addColorStop(.2,'#172d3b');bg.addColorStop(.5,'#071621');bg.addColorStop(.8,'#172d3b');bg.addColorStop(1,'#314f61');c.fillStyle=bg;c.fillRect(x,top,w,h);
+ // A rear row supplies depth; every leaflet has inward-facing paired tails.
+ for(const rear of [true,false]){c.globalAlpha=rear?.38:1;const shift=rear?step*.48:0,dy=rear?-r*.6:0;
+ for(let px=x+r+shift;px<x+w-r;px+=step){for(const side of [1,-1]){const yy=(side===1?top:top+h)+dy;const len=h*.42-r;
+ for(const branch of [-1,1]){const bx=px+branch*r*.32;strand(c,[[bx,yy+side*r*.7],[bx+branch*2,yy+side*(r+len*.32)],[bx-branch*1.5,yy+side*(r+len*.57)],[bx+branch*3,yy+side*(r+len*.8)],[bx+branch*2,yy+side*(r+len)]],Math.max(2.2,r*.37),lipid);}
+ ball(c,px,yy,r,lipid);}}
+ }c.restore();}
+ function protein(c,x,y,w,h,color,opening=.65,carrier=false,showGate=true){c.save();c.translate(x,y);
+ // Subunits surround a recessed aqueous vestibule; the silhouette is lobulated.
+ c.shadowColor='#000b';c.shadowBlur=w*.16;c.shadowOffsetY=5;
+ c.fillStyle='#071721';c.beginPath();c.ellipse(w*.5,h*.51,w*.39,h*.49,0,0,Math.PI*2);c.fill();c.shadowBlur=0;c.shadowOffsetY=0;
+ for(const rear of [true,false]){for(const side of [-1,1]){const bx=w*.5+side*w*(rear?.15:.27),bw=w*(rear?.3:.36);
+ const g=c.createLinearGradient(bx-bw*.6,0,bx+bw*.6,0);g.addColorStop(0,tint(color,.28));g.addColorStop(.28,color);g.addColorStop(.43,tint(color,1.6));g.addColorStop(.65,color);g.addColorStop(1,tint(color,.32));c.fillStyle=g;
+ c.beginPath();c.moveTo(bx,y*0+h*.02);c.bezierCurveTo(bx-bw,h*-.02,bx-bw*.6,h*.24,bx-bw*.38,h*.42);c.bezierCurveTo(bx-bw*.5,h*.7,bx-bw*.8,h*.95,bx,h*.98);c.bezierCurveTo(bx+bw*.75,h*1.02,bx+bw*.53,h*.74,bx+bw*.4,h*.56);c.bezierCurveTo(bx+bw*.46,h*.3,bx+bw*.8,h*.04,bx,h*.02);c.fill();
+ c.save();c.clip();for(let i=0;i<13;i++){const yy=h*.08+i*h*.068;c.strokeStyle=tint(color,.5);c.lineWidth=2;c.beginPath();c.moveTo(bx-bw,yy);c.bezierCurveTo(bx-bw*.4,yy+h*.035,bx+bw*.4,yy+h*.045,bx+bw,yy+h*.008);c.stroke();c.strokeStyle=tint(color,1.25);c.lineWidth=.7;c.stroke();}c.restore();
+ }}
+ if(carrier){ // Alternating-access transporter: a solid central occlusion, not an open tube.
+ ball(c,w*.5,h*(.42+.15*opening),w*.21,color);
+ }else if(showGate)gate(c,w*.5,h*.45,opening,color,w*.45);
+ c.restore();}
+ function gate(c,x,y,open,color,w=42){c.save();const gap=Math.max(.035,Math.min(1,open))*w*.34;for(const s of [-1,1]){strand(c,[[x+s*w*.5,y-12],[x+s*(gap+3),y],[x+s*w*.5,y+12]],Math.max(4,w*.17),color);}c.restore();}
+ function curve(c){c.save();const color=c.strokeStyle,w=c.lineWidth;c.lineCap='round';c.lineJoin='round';c.strokeStyle='#06121c';c.lineWidth=w+4;c.stroke();c.strokeStyle=color;c.lineWidth=w;c.stroke();c.strokeStyle='#ffffff55';c.lineWidth=Math.max(.8,w*.22);c.stroke();c.restore();}
+ function marker(c,x,y,r,color){c.save();c.shadowColor='#000b';c.shadowBlur=5;c.shadowOffsetY=2;ball(c,x,y,r,color);c.shadowBlur=0;c.shadowOffsetY=0;c.strokeStyle='#06121c';c.lineWidth=1.6;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.stroke();c.strokeStyle=color;c.lineWidth=.9;c.beginPath();c.arc(x,y,r+1.8,0,Math.PI*2);c.stroke();c.restore();}
+ return {bilayer,protein,gate,curve,marker};
+})();
+</script><script>
 (() => {
   const sceneCanvas = document.getElementById('sceneCanvas');
   const sctx = sceneCanvas.getContext('2d');
@@ -526,11 +507,11 @@
   let frame = 0, running = true, raf = 0, lastTs = 0;
 
   const stages = [
-    {name:"ATPase expulsa Na⁺", start:0,   end:110, color:"#FF7F00",
+    {name:"ATPase expulsa Na⁺", start:0,   end:110, color:"#ff9b42",
      phase:"Gradiente de Na⁺", phaseDesc:"A Na⁺/K⁺ ATPase usa ATP para expulsar Na⁺ e deixar o meio extracelular mais rico nesse íon.",
      energy:"ATP direto", energyDesc:"Aqui o ATP é consumido diretamente pela bomba Na⁺/K⁺ ATPase.",
      event:"Na⁺ sai da célula", eventDesc:"A ATPase move Na⁺ para fora e K⁺ para dentro, criando o gradiente que alimentará o transporte secundário."},
-    {name:"Gradiente estabelecido", start:111, end:210, color:"#1F78B4",
+    {name:"Gradiente estabelecido", start:111, end:210, color:"#70bcff",
      phase:"Energia potencial", phaseDesc:"O Na⁺ acumulado fora da célula representa energia armazenada no gradiente eletroquímico.",
      energy:"Gradiente alto", energyDesc:"Quanto maior o gradiente de Na⁺, maior a força que favorece o retorno do Na⁺ para o citosol.",
      event:"Na⁺ quer voltar", eventDesc:"O Na⁺ tende a entrar novamente na célula a favor do seu gradiente."},
@@ -538,11 +519,11 @@
      phase:"Ligação do Na⁺", phaseDesc:"O Na⁺ liga-se primeiro ao cotransportador SGLT na face extracelular.",
      energy:"Gradiente acopla", energyDesc:"O SGLT começa a capturar a energia do Na⁺ a favor do gradiente.",
      event:"SGLT aberto fora", eventDesc:"A proteína transportadora reconhece o Na⁺ e prepara a ligação da glicose."},
-    {name:"Glicose liga-se", start:301, end:390, color:"#33A02C",
+    {name:"Glicose liga-se", start:301, end:390, color:"#87d29e",
      phase:"Ligação da glicose", phaseDesc:"A glicose liga-se ao mesmo transportador, aproveitando o estado de alta afinidade induzido pelo Na⁺.",
      energy:"Simporte", energyDesc:"Na⁺ e glicose passam a ocupar a mesma proteína transportadora.",
      event:"Carga completa", eventDesc:"O cotransportador agora contém Na⁺ + glicose e está pronto para mudar de conformação."},
-    {name:"Mudança conformacional", start:391, end:520, color:"#6A3D9A",
+    {name:"Mudança conformacional", start:391, end:520, color:"#ff8990",
      phase:"Mudança conformacional", phaseDesc:"O SGLT inverte sua abertura para o lado citosólico, carregando os dois solutos através da membrana.",
      energy:"ATP indireto", energyDesc:"A energia continua vindo do gradiente de Na⁺, e não de ATP hidrolisado no SGLT.",
      event:"Translocação", eventDesc:"A proteína muda de forma e leva Na⁺ e glicose para o interior celular."},
@@ -589,9 +570,9 @@
       }
     }[sc];
 
-    phaseText.innerHTML = st.phase + scenarioNotes.phase + `<small>${st.phaseDesc}</small>`;
-    energyText.innerHTML = st.energy + scenarioNotes.energy + `<small>${st.energyDesc}</small>`;
-    eventText.innerHTML = st.event + `<small>${scenarioNotes.event || st.eventDesc}</small>`;
+    phaseText.innerHTML = semanticHTML(st.phase + scenarioNotes.phase + `<small>${st.phaseDesc}</small>`);
+    energyText.innerHTML = semanticHTML(st.energy + scenarioNotes.energy + `<small>${st.energyDesc}</small>`);
+    eventText.innerHTML = semanticHTML(st.event + `<small>${scenarioNotes.event || st.eventDesc}</small>`);
     document.documentElement.style.setProperty('--phaseColor', st.color);
     timelineSteps.forEach((el, idx)=>{
       if (idx === stages.indexOf(st)) el.classList.add('active');
@@ -640,28 +621,7 @@
     ctx.closePath();
   }
 
-  function drawBilayer(){
-    const x = 90, y = 245, w = 740, h = 170;
-    const grad = sctx.createLinearGradient(x, y, x, y+h);
-    grad.addColorStop(0, '#fff8fb');
-    grad.addColorStop(0.5, '#fde2e9');
-    grad.addColorStop(1, '#fff8fb');
-    sctx.fillStyle = grad;
-    roundRect(sctx, x, y, w, h, 28); sctx.fill();
-    sctx.strokeStyle = '#e5c8d3'; sctx.lineWidth = 2; sctx.stroke();
-
-    for(let i=0;i<21;i++){
-      const px = x + 24 + i*34;
-      sphere(sctx, px, y+18, 10, '#FF7F00', '#ffd39a');
-      rod(sctx, px, y+28, px, y+64, 5, '#FF7F00', '#fcd34d');
-      sphere(sctx, px, y+h-18, 10, '#FF7F00', '#ffd39a');
-      rod(sctx, px, y+h-28, px, y+h-64, 5, '#FF7F00', '#fcd34d');
-    }
-
-    sctx.fillStyle = '#64748b'; sctx.font = 'bold 20px Inter, Arial';
-    sctx.fillText('Meio extracelular', 94, 82);
-    sctx.fillText('Citossol', 94, 690);
-  }
+  function drawBilayer(){MembraneArt.bilayer(sctx,90,263,740,134);}
 
   function drawATPase(gradLevel){
     const scCfg = getScenarioConfig();
@@ -676,20 +636,7 @@
     const bodyX = -bodyW/2;
     const bodyY = -88;
 
-    const g = sctx.createLinearGradient(-46,-96,46,96);
-    g.addColorStop(0, '#ede9fe');
-    g.addColorStop(0.18, '#c4b5fd');
-    g.addColorStop(0.62, '#6A3D9A');
-    g.addColorStop(1, '#4c1d95');
-    sctx.fillStyle = g;
-    roundRect(sctx, bodyX, bodyY, bodyW, 266, 40);
-    sctx.fill();
-    sctx.strokeStyle = '#5b21b6'; sctx.lineWidth = 2; sctx.stroke();
-
-    // cavidade interna
-    sctx.fillStyle = 'rgba(255,255,255,.24)';
-    roundRect(sctx, -22 + Math.sin(cyc*Math.PI)*2, -62, 44, 214, 20); sctx.fill();
-
+    MembraneArt.protein(sctx,bodyX,bodyY,bodyW,266,'#ff9b42',e12,true);
     if (energyToggle.checked){
       const approach = Math.min(cyc / 0.42, 1);
       const convert = clamp((cyc - 0.42) / 0.16, 0, 1);
@@ -701,7 +648,7 @@
       if (alphaATP > 0.03){
         sctx.save();
         sctx.globalAlpha = alphaATP;
-        sphere(sctx, atpX, atpY, 24, '#FF7F00', '#ffd39a');
+        sphere(sctx, atpX, atpY, 24, '#c4a2f6', '#ffd39a');
         sctx.fillStyle = '#713f12'; sctx.font = 'bold 15px Inter, Arial';
         sctx.fillText('ATP', atpX - 16, atpY + 5);
         sctx.restore();
@@ -714,7 +661,7 @@
       if (alphaADP > 0.03){
         sctx.save();
         sctx.globalAlpha = alphaADP;
-        sphere(sctx, adpX, adpY, 20, '#FF7F00', '#ffd39a');
+        sphere(sctx, adpX, adpY, 20, '#a6c5ee', '#ffd39a');
         sctx.fillStyle = '#78350f'; sctx.font = 'bold 14px Inter, Arial';
         sctx.fillText('ADP', adpX - 16, adpY + 5);
         sctx.restore();
@@ -726,7 +673,7 @@
       if (alphaPi > 0.03){
         sctx.save();
         sctx.globalAlpha = alphaPi;
-        sphere(sctx, piX, piY, 14, '#94a3b8', '#e2e8f0');
+        sphere(sctx, piX, piY, 14, '#d8cb9a', '#e2e8f0');
         sctx.fillStyle = '#334155'; sctx.font = 'bold 12px Inter, Arial';
         sctx.fillText('Pi', piX - 7, piY + 4);
         sctx.restore();
@@ -743,7 +690,7 @@
       const alpha = atpaseToggle.checked ? (0.24 + 0.76 * tt) * scCfg.atpase : 0.10;
       sctx.save();
       sctx.globalAlpha = alpha;
-      sphere(sctx, xx, yy, 15, '#1F78B4', '#8fc5ff');
+      sphere(sctx, xx, yy, 15, '#70bcff', '#8fc5ff');
       sctx.fillStyle = '#eff6ff';
       sctx.font = 'bold 13px Inter, Arial';
       sctx.fillText('Na⁺', xx-12, yy+4);
@@ -761,7 +708,7 @@
       const alpha = atpaseToggle.checked ? (0.22 + 0.78 * tt) * scCfg.atpase : 0.10;
       sctx.save();
       sctx.globalAlpha = alpha;
-      sphere(sctx, xx, yy, 14, '#6A3D9A', '#cfbdf4');
+      sphere(sctx, xx, yy, 14, '#ff8990', '#cfbdf4');
       sctx.fillStyle = '#faf5ff';
       sctx.font = 'bold 12px Inter, Arial';
       sctx.fillText('K⁺', xx-9, yy+4);
@@ -769,14 +716,14 @@
     });
 
     // K+ de referência no citosol, fora da proteína
-    sphere(sctx, -126, 210, 14, '#6A3D9A', '#cfbdf4');
+    sphere(sctx, -126, 210, 14, '#ff8990', '#cfbdf4');
     sctx.fillStyle = '#faf5ff'; sctx.font = 'bold 12px Inter, Arial'; sctx.fillText('K⁺', -135, 214);
 
     // Rótulo alinhado mais baixo, próximo ao SGLT
-    sctx.fillStyle = '#4c1d95';
+    sctx.fillStyle = '#794322';
     sctx.font = 'bold 15px Inter, Arial';
     sctx.textAlign = 'center';
-    sctx.fillText('Na⁺/K⁺ ATPase', 18, 312);
+    
     sctx.textAlign = 'start';
     sctx.restore();
 
@@ -790,7 +737,7 @@
       const driftY = Math.cos(frame/55 + i*0.9) * 6;
       const xx = bx + driftX;
       const yy = by + driftY;
-      sphere(sctx, xx, yy, 15, '#1F78B4', '#8fc5ff');
+      sphere(sctx, xx, yy, 15, '#70bcff', '#8fc5ff');
       sctx.fillStyle = '#eff6ff'; sctx.font = 'bold 12px Inter, Arial'; sctx.fillText('Na⁺', xx-11, yy+4);
     });
 
@@ -803,7 +750,7 @@
       if (cyc2 < 0.25) alpha = cyc2/0.25;
       sctx.save();
       sctx.globalAlpha = alpha;
-      sphere(sctx, xx, yy, 15, '#1F78B4', '#8fc5ff');
+      sphere(sctx, xx, yy, 15, '#70bcff', '#8fc5ff');
       sctx.fillStyle = '#eff6ff';
       sctx.font = 'bold 10px Inter, Arial';
       sctx.fillText('Na⁺', xx-9, yy+3);
@@ -812,7 +759,7 @@
 
     const kOutside = [[250,92],[662,96],[742,152]];
     kOutside.forEach(([xx,yy])=>{
-      sphere(sctx, xx, yy, 14, '#6A3D9A', '#cfbdf4');
+      sphere(sctx, xx, yy, 14, '#ff8990', '#cfbdf4');
       sctx.fillStyle = '#faf5ff'; sctx.font = 'bold 12px Inter, Arial'; sctx.fillText('K⁺', xx-9, yy+4);
     });
 
@@ -824,7 +771,7 @@
       const driftY = Math.sin(frame/48 + i*0.8) * 7;
       const xx = baseX + driftX;
       const yy = baseY + driftY;
-      sphere(sctx, xx, yy, 15, '#1F78B4', '#8fc5ff');
+      sphere(sctx, xx, yy, 15, '#70bcff', '#8fc5ff');
       sctx.fillStyle = '#eff6ff'; sctx.font = 'bold 12px Inter, Arial'; sctx.fillText('Na⁺', xx-11, yy+4);
     }
   }
@@ -840,25 +787,7 @@
     const flip = progressIn(391, 520) * Math.min(scCfg.sglt, scCfg.glucose);
     const release = progressIn(521, 650) * Math.min(scCfg.sglt, scCfg.glucose);
 
-    const g = sctx.createLinearGradient(-90,-110,90,110);
-    g.addColorStop(0, '#f3e8ff');
-    g.addColorStop(0.18, '#d8b4fe');
-    g.addColorStop(0.58, '#6A3D9A');
-    g.addColorStop(1, '#581c87');
-    sctx.fillStyle = g;
-    roundRect(sctx, -62, -138, 124, 276, 44);
-    sctx.globalAlpha = 0.45 + 0.55 * Math.max(scCfg.sglt, 0.18);
-    sctx.fill();
-    sctx.strokeStyle = '#581c87'; sctx.lineWidth = 2; sctx.stroke();
-    sctx.globalAlpha = 1;
-
-    const morph = flip;
-    const leftShift = lerp(-14, 20, morph);
-    const rightShift = lerp(14, -20, morph);
-    sctx.fillStyle = 'rgba(255,255,255,.26)';
-    roundRect(sctx, leftShift-24, -110, 34, 220, 18); sctx.fill();
-    roundRect(sctx, rightShift-10, -110, 34, 220, 18); sctx.fill();
-
+    const morph=flip;MembraneArt.protein(sctx,-62,-138,124,276,'#60d2c5',morph,true);
     const dockY = -96;
     sctx.fillStyle = 'rgba(255,255,255,.14)';
     roundRect(sctx, -38, -122, 76, 42, 18); sctx.fill();
@@ -899,15 +828,16 @@
       sctx.stroke();
     }
 
-    sphere(sctx, lerp(naOutsideX, coupledNaX, flip), lerp(naOutsideY, coupledNaY, flip), 21, '#1F78B4', '#8fc5ff');
+    sphere(sctx, lerp(naOutsideX, coupledNaX, flip), lerp(naOutsideY, coupledNaY, flip), 21, '#70bcff', '#8fc5ff');
     sctx.fillStyle = '#eff6ff'; sctx.font = 'bold 15px Inter, Arial';
     sctx.fillText('Na⁺', lerp(naOutsideX, coupledNaX, flip)-14, lerp(naOutsideY, coupledNaY, flip)+5);
 
-    sphere(sctx, lerp(gluOutsideX, coupledGluX, flip), lerp(gluOutsideY, coupledGluY, flip), 24, '#33A02C', '#b8efc7');
-    sctx.fillStyle = '#14532d'; sctx.font = 'bold 14px Inter, Arial';
-    sctx.fillText('Glicose', lerp(gluOutsideX, coupledGluX, flip)-25, lerp(gluOutsideY, coupledGluY, flip)+5);
+    const glucoseX=lerp(gluOutsideX,coupledGluX,flip),glucoseY=lerp(gluOutsideY,coupledGluY,flip);
+    sctx.save();const glucoseMaterial=sctx.createRadialGradient(glucoseX-8,glucoseY-9,1,glucoseX,glucoseY,24);
+    glucoseMaterial.addColorStop(0,'#effff1');glucoseMaterial.addColorStop(.2,'#c2efd0');glucoseMaterial.addColorStop(.48,'#87d29e');glucoseMaterial.addColorStop(.8,'#3d8053');glucoseMaterial.addColorStop(1,'#163c28');
+    sctx.shadowColor='#0009';sctx.shadowBlur=6;sctx.shadowOffsetY=4;sctx.fillStyle=glucoseMaterial;sctx.beginPath();sctx.arc(glucoseX,glucoseY,24,0,Math.PI*2);sctx.fill();sctx.restore();
 
-    sctx.fillStyle = '#4c1d95'; sctx.font = 'bold 15px Inter, Arial';
+    sctx.fillStyle = '#794322'; sctx.font = 'bold 15px Inter, Arial';
     sctx.textAlign = 'center'; sctx.fillText('SGLT (Na⁺/glicose)', 58, 178); sctx.textAlign = 'start';
 
     sctx.fillStyle = '#334155'; sctx.font = '13px Inter, Arial';
@@ -920,11 +850,12 @@
 
   function drawScene(){
     sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);
-    sctx.fillStyle = '#111827'; sctx.font = 'bold 22px Inter, Arial';
+sceneCanvas.getContext('2d').fillStyle='#0d2030';sceneCanvas.getContext('2d').fillRect(0,0,sceneCanvas.width,sceneCanvas.height);
+    sctx.fillStyle = '#c4d8e6'; sctx.font = 'bold 22px Inter, Arial';
     sctx.fillText('Membrana plasmática, ATPase e cotransportador SGLT', 18, 30);
 
     // rótulos superiores fixos
-    sctx.fillStyle = '#f8fafc'; sctx.strokeStyle = '#cbd5e1'; sctx.lineWidth = 1.5;
+    sctx.fillStyle = '#102838'; sctx.strokeStyle = '#cbd5e1'; sctx.lineWidth = 1.5;
     roundRect(sctx, 34, 94, 168, 34, 12); sctx.fill(); sctx.stroke();
     roundRect(sctx, 538, 94, 214, 34, 12); sctx.fill(); sctx.stroke();
     sctx.fillStyle = '#334155'; sctx.font = 'bold 14px Inter, Arial';
@@ -946,22 +877,23 @@
     sctx.restore();
 
     sctx.fillStyle = '#334155'; sctx.font = 'bold 14px Inter, Arial';
-    sctx.fillText('ATP → gradiente de Na⁺ → entrada de glicose', 235, 734);
+    
   }
 
   function drawGraph(){
     const sc = getScenario();
     const scCfg = getScenarioConfig();
     gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
-    gctx.fillStyle = '#111827'; gctx.font = 'bold 22px Inter, Arial';
+graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fillRect(0,0,graphCanvas.width,graphCanvas.height);
+    gctx.fillStyle = '#c4d8e6'; gctx.font = 'bold 22px Inter, Arial';
     gctx.fillText('Gradiente de Na⁺, fluxo de glicose e dependência da ATPase', 18, 30);
 
     const x0 = 86, y0 = 595, w = 752, h = 460;
-    gctx.strokeStyle = '#374151'; gctx.lineWidth = 1.8;
+    gctx.strokeStyle = '#c4d8e6'; gctx.lineWidth = 1.8;
     gctx.beginPath(); gctx.moveTo(x0, 84); gctx.lineTo(x0, y0); gctx.lineTo(x0+w, y0); gctx.stroke();
 
-    gctx.fillStyle = '#4b5563'; gctx.font = '14px Inter, Arial';
-    gctx.fillText('Intensidade relativa', 18, 74);
+    gctx.fillStyle = '#c4d8e6'; gctx.font = '14px Inter, Arial';
+    gctx.fillText('Intensidade relativa', 18, 74); 
     gctx.fillText('Tempo', 790, 736);
 
     stages.forEach((st, i) => {
@@ -972,7 +904,7 @@
       gctx.font = '12px Inter, Arial';
       const stepCycle = [0, 14, 28];
       const stepOffset = stepCycle[i % 3];
-      gctx.textAlign = 'right'; gctx.fillText(st.name, sx + 120, 744 + stepOffset); gctx.textAlign = 'start';
+      gctx.textAlign = 'right'; gctx.fillText(st.name, sx + 120, 655 + stepOffset); gctx.textAlign = 'start';
     });
 
     const grayStart = x0 + (stages[stages.length - 1].end/TOTAL)*w;
@@ -983,7 +915,7 @@
       const yy = y0 - (v/100)*(h-50);
       gctx.strokeStyle = '#e5e7eb'; gctx.lineWidth = 1;
       gctx.beginPath(); gctx.moveTo(x0, yy); gctx.lineTo(x0+w, yy); gctx.stroke();
-      gctx.fillStyle = '#6b7280'; gctx.font = '12px Inter, Arial';
+      gctx.fillStyle = '#c4d8e6'; gctx.font = '12px Inter, Arial';
       gctx.fillText(String(v), x0-24, yy+4);
     });
 
@@ -1022,7 +954,7 @@
         const x = toX(f), y = toY(v);
         if (i===0) gctx.moveTo(x,y); else gctx.lineTo(x,y);
       });
-      gctx.stroke();
+      MembraneArt.curve(gctx);
     }
 
     const cur = curStage();
@@ -1030,22 +962,22 @@
     gctx.fillStyle = cur.color + '16';
     gctx.fillRect(cs, 84, ce - cs, h + 20);
 
-    plot(grad, '#1F78B4', 4);
-    plot(glucose, '#33A02C', 4);
-    plot(atpdep, '#111827', 3.4);
+    plot(grad, '#b3d6ef', 4);
+    plot(glucose, '#a9e1c0', 4);
+    plot(atpdep, '#d4c095', 3.4);
 
     const curGrad = grad.find(([f])=>f>=frame) || grad[grad.length-1];
     const curGlu = glucose.find(([f])=>f>=frame) || glucose[glucose.length-1];
     const curATP = atpdep.find(([f])=>f>=frame) || atpdep[atpdep.length-1];
 
-    [[curGrad,'#1F78B4'],[curGlu,'#33A02C'],[curATP,'#111827']].forEach(([p,c])=>{
-      sphere(gctx, toX(p[0]), toY(p[1]), 5.2, c, '#ffffff');
+    [[curGrad,'#b3d6ef'],[curGlu,'#a9e1c0'],[curATP,'#d4c095']].forEach(([p,c])=>{
+      MembraneArt.marker(gctx,toX(p[0]),toY(p[1]),8,c);
     });
 
     const items = [
-      ['Gradiente de Na⁺', '#1F78B4'],
-      ['Entrada de glicose', '#33A02C'],
-      ['ATPase ativa', '#111827']
+      ['Gradiente de Na⁺', '#b3d6ef'],
+      ['Entrada de glicose', '#a9e1c0'],
+      ['ATPase ativa', '#d4c095']
     ];
     let lx = 110;
     items.forEach(([label, color])=>{
@@ -1058,7 +990,7 @@
 
     if (!atpaseToggle.checked){
       gctx.fillStyle = '#991b1b'; gctx.font = 'bold 16px Inter, Arial';
-      gctx.fillText('ATPase desligada: o gradiente de Na⁺ cai e o transporte secundário enfraquece.', 164, 598);
+      gctx.fillText('ATPase desligada: o gradiente de Na⁺ cai e o transporte secundário enfraquece.', 100, 695);
     }
 
     const scenarioMsg = {
@@ -1070,7 +1002,7 @@
     if (scenarioMsg){
       gctx.fillStyle = '#7c2d12';
       gctx.font = 'bold 15px Inter, Arial';
-      gctx.fillText(scenarioMsg, 132, 620);
+      gctx.fillText(scenarioMsg, 100, 715);
     }
   }
 
@@ -1106,37 +1038,28 @@
   raf = requestAnimationFrame(loop);
 })();
 </script>
-
-<script>
-(() => {
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  if (tabButtons.length) setTab('animacao');
-
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
-  const pauseCandidates = ['btnPause','pauseBtn'];
-  let startBtn = null, pauseBtn = null;
-  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
-  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
-  if (mobileToggle && startBtn){
-    let playing = false;
-    mobileToggle.addEventListener('click', () => {
-      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
-      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
-      playing = !playing;
-    });
-  } else if (mobileToggle){
-    mobileToggle.style.display = 'none';
-  }
+<script>(()=>{
+ const mobile=matchMedia('(max-width:650px)');
+ document.querySelectorAll('.figure-scroll').forEach(view=>{
+   const button=document.querySelector('[data-figure="'+view.id+'"]');
+   let detail=mobile.matches;
+   const update=()=>{view.classList.toggle('detail',detail);view.classList.toggle('overview',!detail);button.textContent=detail?'Visão geral':'Ampliar detalhes';button.setAttribute('aria-pressed',String(detail));};
+   button.addEventListener('click',()=>{detail=!detail;update();});update();
+ });
 })();
-</script>
-  <script src="tutor-ef-data.js?v=11"></script>
-  <script src="tutor-widget.js?v=16"></script>
-</body>
+</script></body>
 </html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.status-grid .card):not(#cards-reference-reserved){--reference-accent:var(--phase,#b6cad9);position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+
+</style>
+
+<script src="tutor-ef-data.js?v=11"></script>
+<script src="tutor-widget.js?v=16"></script>

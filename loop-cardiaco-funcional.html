@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/><link rel="icon" href="brand/orientador.webp">
+<meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Simulador - Loop Cardíaco Funcional</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
 <style>
 :root{
   --bg:#f6f8fc; --panel:#ffffff; --ink:#17324d; --muted:#5c7086; --line:#d7e1ec;
@@ -79,88 +78,27 @@ body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:linear-grad
 footer{text-align:center;color:var(--muted);font-size:12px;padding:6px}
 @media(max-width:1100px){.main-grid{grid-template-columns:1fr}.animation-panel{min-height:640px}.metric-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:680px){.topbar{grid-template-columns:1fr}.metric-grid,.states,.flow{grid-template-columns:1fr}.flow .arrow{display:none}}
+:root{color-scheme:dark;--bg:#08121c;--panel:#142432;--ink:#e0edf5;--muted:#94acbd;--line:#30495b;--c-fc:#d7e6f0;--c-edv:#70bcff;--c-esv:#87d29e;--c-vs:#ffb45f;--c-ef:#c4a0f6;--c-dc:#ff8990;--shadow:inset 0 1px 0 #ffffff12,0 12px 26px #0005;--radius:22px}
+body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121c}.app{max-width:1560px;padding:24px;gap:20px}.topbar{background:linear-gradient(140deg,#243b4c,#10202d);padding:23px;grid-template-columns:1fr;gap:20px}.title h1{font-size:28px;letter-spacing:-.04em}.title p{line-height:1.6;max-width:780px}.top-actions{justify-content:flex-start;gap:12px}.panel{background:linear-gradient(145deg,#1b2f3f,#101e2b)}.panel-header{background:linear-gradient(#233949,#192b3a);padding:16px}.panel-header h2{font-size:16px}.panel-header span{font-size:11px}.tool-btn,.state-btn{min-height:44px;border:1px solid #577184;box-shadow:inset 0 2px 1px #ffffff38,inset 0 -2px 1px #0006,0 5px 0 #050e17,0 8px 10px #0006;background:linear-gradient(155deg,#476076,#263d50 55%,#172b3c);font-weight:600}.tool-btn.primary{background:linear-gradient(#568bac,#284c69)}.tool-btn.success{background:linear-gradient(#58a38e,#24574f)}.tool-btn.danger{background:linear-gradient(#9b5861,#542d3e)}.tool-btn.dark{background:linear-gradient(#4a6177,#253749)}.tool-btn:active,.state-btn:active{transform:translateY(4px);box-shadow:inset 0 2px 6px #0006,0 1px 0 #050e17}button:focus-visible,input:focus-visible{outline:3px solid #92dded;outline-offset:5px}.speed-box,.stage-status{background:#0b1925;box-shadow:inset 0 3px 6px #0006}.speed-box{padding:10px}.main-grid{grid-template-columns:minmax(350px,.75fr) minmax(0,1.25fr);gap:20px}.animation-panel{min-height:0}.scene-wrap{padding:18px;background:radial-gradient(ellipse at 50% 45%,#23465355,transparent 65%),#0a1823;align-items:start}.scene-wrap>svg{height:auto;max-height:1000px}.slider-card{background:linear-gradient(145deg,#1c3243,#102331);box-shadow:inset 0 1px 0 #ffffff14,0 3px 7px #0005;padding:16px}.slider-card label{font-weight:600;margin-bottom:16px}.slider-card span{color:#a8d9ed;background:#081724;border:1px solid #355064;border-radius:7px;padding:4px 7px;box-shadow:inset 0 2px 4px #0007}input[type=range]{appearance:none;height:10px;border-radius:9px;border:1px solid #466175;background:#07131e;box-shadow:inset 0 3px 5px #000b,0 1px 0 #ffffff22;cursor:pointer;margin:10px 0}input[type=range]::-webkit-slider-thumb{appearance:none;width:27px;height:27px;border:1px solid #c6dfea;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bcd8e6 30%,#597b93 66%,#193449);box-shadow:inset 0 1px 2px #fff,0 4px 0 #06101a,0 7px 9px #0009}input[type=range]::-moz-range-thumb{width:25px;height:25px;border:1px solid #c6dfea;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bcd8e6 30%,#597b93 66%,#193449);box-shadow:0 4px 0 #06101a,0 7px 9px #0009}.metric{background:linear-gradient(140deg,#0a1824,#1a3040);box-shadow:inset 0 3px 7px #0005,0 1px 0 #fff1}.metric strong{font-weight:600;font-variant-numeric:tabular-nums;text-shadow:0 0 20px #ffffff13}.formula-card,.flow .node,.note{background:linear-gradient(140deg,#0d1d2a,#172b3b)}.formula-card code{font-size:17px}.flow-strip{background:#0e1e2b}.flow .node{font-size:13px}.note{font-size:13px;text-align:left}.badge{color:#acd5f0;background:#17374b}.states{gap:12px;padding-bottom:18px}.metric small{font-size:10px}.scene-wrap svg text{font-family:Segoe UI,Arial,sans-serif}.scene-wrap svg text[fill="#5f6f86"],.scene-wrap svg text[fill="#8f7a63"],.scene-wrap svg text[fill="#1f2d3d"]{fill:#b6ccd9}.scene-wrap svg text[fill="#2f80ed"]{fill:#8ac7ff}.scene-wrap svg text[fill="#e34d4d"]{fill:#ffa0a7}.scene-wrap svg text[fill="#d87a2c"]{fill:#ffd09a}
+@media(max-width:1100px){.main-grid{grid-template-columns:1fr}.animation-panel{grid-row:1}.scene-wrap>svg{max-height:850px}.left-stack{grid-template-columns:1fr 1fr}.metric-grid{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.app{padding:12px}.title h1{font-size:23px}.topbar{padding:18px}.left-stack{grid-template-columns:1fr}.metric-grid{grid-template-columns:repeat(2,1fr)}.top-actions{gap:10px}.tool-btn{flex:1 1 auto}.scene-wrap{padding:4px}.panel-header span{display:none}.flow{grid-template-columns:1fr auto 1fr auto 1fr}.flow .arrow{display:block}.note{font-size:12px}}@media(prefers-reduced-motion:reduce){button{transition:none!important}}
 
-/* === PADRÃO VISUAL CONSOLIDADO — PROF. MÁRIO | BLOCO 4 === */
-:root{--grid-depth:0 16px 34px rgba(18,42,66,.13),0 4px 10px rgba(18,42,66,.07),inset 0 1px 0 rgba(255,255,255,.94)}
-body{background:radial-gradient(circle at 9% 3%,rgba(227,26,28,.05),transparent 28%),radial-gradient(circle at 91% 7%,rgba(31,120,180,.06),transparent 30%),linear-gradient(180deg,#fbfdff 0%,#eef4fb 100%)}
-.topbar,.panel{border:1px solid #d3dfeb;background:linear-gradient(145deg,#fff 0%,#f5faff 100%);box-shadow:var(--grid-depth);border-radius:20px}
-.tool-btn{min-width:106px;min-height:42px;box-shadow:0 5px 0 rgba(38,63,91,.25),0 10px 18px rgba(18,42,66,.16),inset 0 1px 0 rgba(255,255,255,.32)}
-.tool-btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(38,63,91,.23),0 14px 22px rgba(18,42,66,.18)}
-.tool-btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(38,63,91,.25),0 5px 9px rgba(18,42,66,.13)}
-.speed-box,.slider-card,.formula-card,.flow .node{background:linear-gradient(180deg,#fff,#f5f9fd);border-color:#d3dfeb;box-shadow:0 8px 17px rgba(18,42,66,.09),inset 0 1px 0 rgba(255,255,255,.94)}
-input[type=range]{appearance:none;height:10px;border-radius:999px;background:linear-gradient(180deg,#c8d6e5,#edf4fb);box-shadow:inset 0 2px 4px rgba(18,42,66,.24),0 1px 0 #fff}
-input[type=range]::-webkit-slider-thumb{appearance:none;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#1F78B4 48%,#174f85 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1F78B4;cursor:pointer}
-input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;border:2px solid #fff;background:radial-gradient(circle at 32% 28%,#b6ddff 0%,#1F78B4 48%,#174f85 100%);box-shadow:0 3px 8px rgba(18,42,66,.30),0 0 0 1px #1F78B4;cursor:pointer}
-.metric{border:1px solid #d3dfeb;border-left:0;background:linear-gradient(145deg,#fff,#f3f8fc);box-shadow:0 10px 20px rgba(18,42,66,.11),inset 0 1px 0 rgba(255,255,255,.94)}
-.metric::before{content:"";position:absolute;left:-4px;top:9px;bottom:9px;width:10px;border-radius:999px;background:linear-gradient(180deg,var(--metric-strong),color-mix(in srgb,var(--metric-strong) 65%,#fff 35%));box-shadow:0 0 10px color-mix(in srgb,var(--metric-strong) 40%,transparent);z-index:1}
-.state-btn{box-shadow:0 6px 13px rgba(18,42,66,.09),inset 0 1px 0 #fff}
-.scene-wrap>svg{filter:drop-shadow(0 8px 15px rgba(18,42,66,.08))}
-@media(max-width:680px){.tool-btn{min-width:0;flex:1 1 130px}.top-actions{justify-content:flex-start}}
-
-/* === Padrão mobile universal: fonte + alvos de toque maiores (aplicado a todos os simuladores) === */
-@media (max-width:760px){
-  button{ min-height:44px; padding:11px 16px; font-size:15px; }
-  label{ min-height:40px; padding:8px 10px; }
-  input[type="range"]{ width:100%; height:28px; }
-  input[type="range"]::-webkit-slider-thumb{ width:26px; height:26px; }
-  input[type="checkbox"], input[type="radio"]{ width:20px; height:20px; }
-  select{ min-height:44px; font-size:15px; }
-  a{ min-height:44px; display:inline-flex; align-items:center; }
-}
-
-/* === Padrão mobile: cabeçalho sticky + abas (aplicado em lote) === */
-.mobile-topbar{ display:none; }
-.mobile-tabnav{ display:none; }
-@media (max-width:760px){
-  h1{ display:none; }
-  .mobile-topbar{
-    display:flex; align-items:center; justify-content:space-between; gap:10px;
-    position:sticky; top:0; z-index:50; padding:12px 14px;
-    background:linear-gradient(180deg,#ffffff 0%, #f8fbff 100%);
-    border-bottom:1px solid #d7e1ec; box-shadow:0 6px 16px rgba(18,42,66,.10);
-  }
-  .mobile-topbar h2{ margin:0; font-size:16px; line-height:1.2; color:#17324d; }
-  .mobile-playtoggle{
-    border:none; border-radius:12px; padding:10px 16px; font-size:14px; font-weight:800;
-    color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff);
-    min-height:44px; min-width:44px; cursor:pointer;
-  }
-  .mobile-tabnav{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:6px;
-    position:sticky; top:64px; z-index:49; padding:8px 10px;
-    background:#eef4fb; border-bottom:1px solid #d7e1ec;
-  }
-  .mobile-tabnav button{
-    border:none; border-radius:10px; padding:10px 6px; font-size:13px; font-weight:700;
-    color:#36536d; background:#fff; min-height:44px; cursor:pointer;
-  }
-  .mobile-tabnav button.active{ color:#fff; background:linear-gradient(135deg,#2f80ed,#57a7ff); }
-  [data-tab]{ display:none !important; }
-  [data-tab].tab-active{ display:block !important; }
-  .status-grid[data-tab].tab-active{ display:grid !important; }
-}
 </style>
-  <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-  <link rel="stylesheet" href="tutor-widget.css?v=4">
-</head>
+<style>/* Shared teaching palette. Identical quantities retain identical colors across simulators. */
+:root{--c-rv:#dce9f3;--c-dc:#ff8990;--c-edv:#70bcff;--c-esv:#87d29e;--c-vs:#ffb45f;--c-ef:#f2d77c;--c-fc:#9ce4ed;--c-fr:#b1d4f4;--c-o2:#c4a2f6;--c-co2:#ecb48e;--c-pas:#84abff;--c-pad:#f892c1;--c-papm:#6cd8f3;--c-pam:#f8c16b;--c-pv:#93cfab;--c-palv:#f2c986;--c-ppl:#79bcff}
+.app #rpm,.app #freqLabel,.app #frLabel{color:var(--c-fr);text-shadow:none}
+.app #hrLabel{color:var(--c-fc)}
+.app .metric.fc,.app .metric.edv,.app .metric.esv,.app .metric.vs,.app .metric.ef,.app .metric.dc{border-left-color:var(--metric-strong)}
+.app .metric.fc{--metric-strong:var(--c-fc)}.app .metric.edv{--metric-strong:var(--c-edv)}.app .metric.esv{--metric-strong:var(--c-esv)}.app .metric.vs{--metric-strong:var(--c-vs)}.app .metric.ef{--metric-strong:var(--c-ef)}.app .metric.dc{--metric-strong:var(--c-dc)}
+.app .metric.fc small,.app .metric.edv small,.app .metric.esv small,.app .metric.vs small,.app .metric.ef small,.app .metric.dc small{color:var(--metric-strong)}
+</style></head>
 <body>
-  <div class="mobile-topbar">
-    <h2>Simulador - Loop Cardíaco Funcional</h2>
-    <button class="mobile-playtoggle" id="mobilePlayToggle">▶ Iniciar</button>
-  </div>
-  <div class="mobile-tabnav">
-    <button data-tabnav="animacao" class="active">Animação</button>
-    <button data-tabnav="controles">Controles</button>
-    <button data-tabnav="graficos">Gráficos</button>
-  </div>
-
 <div class="app">
-  <div class="topbar" data-tab="controles">
+  <div class="topbar">
     <div class="title">
       <h1>Simulador — Loop Cardíaco Funcional</h1>
       <p>Simulador funcional para ensinar a relação EDV → ESV → VS → FE → DC com cálculos auditáveis em tempo real.</p>
     </div>
-    <div class="top-actions" data-tab="controles">
+    <div class="top-actions">
       <button class="tool-btn primary" id="startBtn">Iniciar</button>
       <button class="tool-btn dark" id="pauseBtn">Pausar</button>
       <button class="tool-btn danger" id="resetBtn">Resetar</button>
@@ -173,7 +111,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 
   <div class="main-grid">
     <div class="left-stack">
-      <div class="panel" data-tab="animacao">
+      <div class="panel">
         <div class="panel-header"><h2>Controles do loop</h2><span>altere somente o essencial</span></div>
         <div class="slider-grid">
           <div class="slider-card"><label>FC <span id="fcLabel">70 bpm</span></label><input id="fc" type="range" min="40" max="200" step="1" value="70"/></div>
@@ -182,7 +120,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
         </div>
       </div>
 
-      <div class="panel" data-tab="graficos">
+      <div class="panel">
         <div class="panel-header"><h2>Situações rápidas</h2><span>exemplos para aula</span></div>
         <div class="states">
           <button class="state-btn" data-state="normal">Eupneia</button>
@@ -194,7 +132,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
         </div>
       </div>
 
-      <div class="panel" data-tab="animacao">
+      <div class="panel">
         <div class="panel-header"><h2>Variáveis centrais</h2><span>calculadas pelas fórmulas</span></div>
         <div class="metric-grid">
           <div class="metric fc"><small>FC</small><strong id="fcVal">70</strong><em>bpm</em></div>
@@ -213,7 +151,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
         </div>
       </div>
 
-      <div class="panel" data-tab="graficos">
+      <div class="panel">
         <div class="panel-header"><h2>Fórmulas ativas</h2></div>
         <div class="relationship">
           <div class="formula-card" data-step="vs"><h3>Volume sistólico</h3><code><span class="c-vs">VS</span> = <span class="c-edv">EDV</span> − <span class="c-esv">ESV</span></code></div>
@@ -223,13 +161,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
       </div>
     </div>
 
-    <div class="panel animation-panel" data-tab="animacao">
-      <div class="panel-header"><h2>Animação integrada</h2><span>coração, pulmões, retorno venoso e tecidos preservados</span></div>
+    <div class="panel animation-panel">
+      <div class="panel-header"><h2>Animação integrada</h2><span>Circuito cardiopulmonar · vista esquemática</span></div>
       <div class="scene-wrap">
         <svg aria-label="Circuito cardiopulmonar simplificado" preserveAspectRatio="xMidYMin meet" viewBox="0 0 980 1140"><defs>
 <lineargradient id="bgGlow" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#fbfdff"></stop>
-<stop offset="100%" stop-color="#eef5fd"></stop>
+<stop offset="0%" stop-color="#0d2030"></stop>
+<stop offset="100%" stop-color="#091722"></stop>
 </lineargradient>
 <lineargradient id="lungGrad" x1="0" x2="1">
 <stop offset="0%" stop-color="#ffd6e2"></stop>
@@ -259,11 +197,11 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 <fedropshadow dx="0" dy="6" flood-color="#7a3850" flood-opacity="0.20" stdDeviation="5.5"></fedropshadow>
 </filter>
 <radialgradient cx="30%" cy="22%" id="lungFill3DDeep" r="82%">
-<stop offset="0%" stop-color="#fff2f6"></stop>
-<stop offset="24%" stop-color="#ffd4de"></stop>
-<stop offset="52%" stop-color="#ed9bad"></stop>
-<stop offset="78%" stop-color="#d47790"></stop>
-<stop offset="100%" stop-color="#b95774"></stop>
+<stop offset="0%" stop-color="#d8eee5"></stop>
+<stop offset="24%" stop-color="#92cbbd"></stop>
+<stop offset="52%" stop-color="#5c9c96"></stop>
+<stop offset="78%" stop-color="#33656d"></stop>
+<stop offset="100%" stop-color="#183948"></stop>
 </radialgradient>
 <lineargradient id="lungEdgeShade" x1="0" x2="1" y1="0" y2="1">
 <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"></stop>
@@ -271,10 +209,10 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 <stop offset="100%" stop-color="#7d2c49" stop-opacity="0.28"></stop>
 </lineargradient>
 <lineargradient id="airway3D" x1="0" x2="1" y1="0" y2="1">
-<stop offset="0%" stop-color="#f1d0c7"></stop>
-<stop offset="35%" stop-color="#c99a8f"></stop>
-<stop offset="70%" stop-color="#a96f67"></stop>
-<stop offset="100%" stop-color="#7f4e4c"></stop>
+<stop offset="0%" stop-color="#e6eee7"></stop>
+<stop offset="35%" stop-color="#adcac7"></stop>
+<stop offset="70%" stop-color="#6d929a"></stop>
+<stop offset="100%" stop-color="#354e5d"></stop>
 </lineargradient>
 <lineargradient id="airwayHighlight" x1="0" x2="1" y1="0" y2="0">
 <stop offset="0%" stop-color="#ffffff" stop-opacity="0.52"></stop>
@@ -299,29 +237,29 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 <fedropshadow dx="0" dy="2" flood-color="#ff8a4d" flood-opacity="0.45" stdDeviation="3"></fedropshadow>
 </filter>
 <lineargradient id="labelCapsuleBlue" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#ffffff"></stop>
-<stop offset="55%" stop-color="#f4f9ff"></stop>
-<stop offset="100%" stop-color="#e6f2ff"></stop>
+<stop offset="0%" stop-color="#243f53"></stop>
+<stop offset="55%" stop-color="#1b3041"></stop>
+<stop offset="100%" stop-color="#112333"></stop>
 </lineargradient>
 <lineargradient id="labelCapsuleRed" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#ffffff"></stop>
-<stop offset="55%" stop-color="#fff6f6"></stop>
-<stop offset="100%" stop-color="#ffe7e7"></stop>
+<stop offset="0%" stop-color="#43303e"></stop>
+<stop offset="55%" stop-color="#302435"></stop>
+<stop offset="100%" stop-color="#1c2030"></stop>
 </lineargradient>
 <lineargradient id="labelCapsuleOrange" x1="0" x2="0" y1="0" y2="1">
-<stop offset="0%" stop-color="#ffffff"></stop>
-<stop offset="55%" stop-color="#fff9f0"></stop>
-<stop offset="100%" stop-color="#fff0dc"></stop>
+<stop offset="0%" stop-color="#423c35"></stop>
+<stop offset="55%" stop-color="#302d30"></stop>
+<stop offset="100%" stop-color="#1b2530"></stop>
 </lineargradient>
 <lineargradient id="venousBox3D" x1="0" x2="1" y1="0" y2="1">
-<stop offset="0%" stop-color="#f8fcff"></stop>
-<stop offset="48%" stop-color="#e2f1ff"></stop>
-<stop offset="100%" stop-color="#b8dcff"></stop>
+<stop offset="0%" stop-color="#203e55"></stop>
+<stop offset="48%" stop-color="#142c40"></stop>
+<stop offset="100%" stop-color="#0c1d2c"></stop>
 </lineargradient>
 <lineargradient id="tissueBox3D" x1="0" x2="1" y1="0" y2="1">
-<stop offset="0%" stop-color="#fffdf8"></stop>
-<stop offset="48%" stop-color="#fff0d8"></stop>
-<stop offset="100%" stop-color="#ffd39a"></stop>
+<stop offset="0%" stop-color="#443d39"></stop>
+<stop offset="48%" stop-color="#302b32"></stop>
+<stop offset="100%" stop-color="#1a2230"></stop>
 </lineargradient>
 <filter height="150%" id="box3DShadow" width="150%" x="-25%" y="-25%">
 <fedropshadow dx="0" dy="7" flood-color="#17324d" flood-opacity="0.18" stdDeviation="5"></fedropshadow>
@@ -459,7 +397,20 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 <fegaussianblur stdDeviation="3"></fegaussianblur>
 </filter>
 
-</defs>
+<clipPath id="venousBlockClip"><rect x="16" y="905" width="212" height="145" rx="24" ry="24"/></clipPath>
+<clipPath id="tissueBlockClip"><rect x="752" y="905" width="212" height="145" rx="24" ry="24"/></clipPath>
+<radialgradient cx="30%" cy="24%" id="cellSphere3D" r="78%">
+<stop offset="0%" stop-color="#eafff4" stop-opacity="0.98"></stop>
+<stop offset="38%" stop-color="#86e1ba" stop-opacity="0.82"></stop>
+<stop offset="74%" stop-color="#37b985" stop-opacity="0.66"></stop>
+<stop offset="100%" stop-color="#168962" stop-opacity="0.54"></stop>
+</radialgradient><radialgradient cx="36%" cy="30%" id="cellNucleus3D" r="72%">
+<stop offset="0%" stop-color="#f2c1ff"></stop>
+<stop offset="48%" stop-color="#9a40d2"></stop>
+<stop offset="100%" stop-color="#4b1478"></stop>
+</radialgradient><filter height="190%" id="cellSoft3D" width="190%" x="-45%" y="-45%">
+<fedropshadow dx="0" dy="5" flood-color="#1e6b51" flood-opacity="0.24" stdDeviation="4.5"></fedropshadow>
+</filter></defs>
 <rect fill="url(#bgGlow)" height="1140" rx="28" width="980" x="0" y="0"></rect>
 
 <!-- Faixa de células verdes removida para evitar ambiguidade visual no loop cardíaco. -->
@@ -492,52 +443,56 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 </g>
 <!-- Pulmões anatômicos adaptados de pulmao4.svg -->
 <g filter="url(#lungInnerDepth)" id="lungLeft" transform="translate(302 40) scale(0.72 0.62)">
-<path d="M155.838989,436.912048 C137.876068,447.431946 119.394066,455.565704 99.031670,458.943451 C86.275085,461.059479 80.278084,458.314545 74.096382,446.875702 C56.350201,414.037567 46.095200,379.060120 43.531498,341.762299 C39.818996,287.751251 50.661430,237.046021 78.278641,190.386551 C101.794876,150.655716 134.000961,120.097321 176.540421,101.122147 C182.354477,98.528717 188.363113,96.656059 194.836044,96.638443 C202.778824,96.616829 207.106720,99.860565 209.296097,107.614952 C210.839828,113.082596 211.497284,118.718674 211.970245,124.332596 C212.947617,135.933578 213.200394,147.603378 214.417664,159.174774 C217.204086,185.662888 216.159439,212.315125 217.906601,238.766464 C219.192856,258.239929 219.418442,277.639313 219.101715,297.018860 C218.710785,320.940704 216.363434,344.793304 212.474518,368.488525 C209.209961,388.379578 198.414505,403.414215 183.908630,416.341858 C175.315430,424.000092 166.041473,430.797211 155.838989,436.912048 Z" fill="url(#lungFill3DDeep)" stroke="#a94a64" stroke-width="3"></path>
+<path d="M155.838989,436.912048 C137.876068,447.431946 119.394066,455.565704 99.031670,458.943451 C86.275085,461.059479 80.278084,458.314545 74.096382,446.875702 C56.350201,414.037567 46.095200,379.060120 43.531498,341.762299 C39.818996,287.751251 50.661430,237.046021 78.278641,190.386551 C101.794876,150.655716 134.000961,120.097321 176.540421,101.122147 C182.354477,98.528717 188.363113,96.656059 194.836044,96.638443 C202.778824,96.616829 207.106720,99.860565 209.296097,107.614952 C210.839828,113.082596 211.497284,118.718674 211.970245,124.332596 C212.947617,135.933578 213.200394,147.603378 214.417664,159.174774 C217.204086,185.662888 216.159439,212.315125 217.906601,238.766464 C219.192856,258.239929 219.418442,277.639313 219.101715,297.018860 C218.710785,320.940704 216.363434,344.793304 212.474518,368.488525 C209.209961,388.379578 198.414505,403.414215 183.908630,416.341858 C175.315430,424.000092 166.041473,430.797211 155.838989,436.912048 Z" fill="url(#lungFill3DDeep)" stroke="#608f92" stroke-width="3"></path>
 <path d="M92 286 C122 278 162 278 200 288" fill="none" opacity=".24" stroke="#ffffff" stroke-width="4"></path>
 <path d="M88 214 C118 160 168 128 205 118 C190 168 197 250 187 318 C166 295 121 274 88 214Z" fill="#ffffff" opacity=".10"></path>
 <path d="M82 388 C126 412 178 405 207 366" fill="none" opacity=".16" stroke="#7f2f4a" stroke-linecap="round" stroke-width="8"></path>
 <path d="M106 332 C136 324 172 324 204 333" fill="none" opacity=".17" stroke="#ffffff" stroke-width="4"></path>
 <ellipse cx="150" cy="170" fill="#ffffff" opacity=".12" rx="54" ry="26"></ellipse>
-</g>
+<path d="M205 165 L170 220 L125 255 M170 220 L174 285 L138 337 M174 285 L197 343 M125 255 L98 304 M170 220 L127 210" fill="none" stroke="#1e414a" stroke-width="10" stroke-linecap="round" opacity=".45"/><path d="M205 165 L170 220 L125 255 M170 220 L174 285 L138 337 M174 285 L197 343 M125 255 L98 304 M170 220 L127 210" fill="none" stroke="#b4dbcd" stroke-width="5" stroke-linecap="round" opacity=".7"/></g>
 <g filter="url(#lungInnerDepth)" id="lungRight" transform="translate(312 40) scale(0.72 0.62)">
-<path d="M411.887573,163.138962 C441.820221,200.964310 458.824554,243.702667 464.407227,291.141296 C470.867249,346.035217 461.098663,397.865295 435.277771,446.705963 C429.424377,457.777679 422.762451,460.911469 410.332886,458.973236 C391.273529,456.001251 373.920319,448.550598 357.257568,439.239105 C344.106049,431.889771 332.267487,422.776917 321.137848,412.611786 C304.448242,397.368439 296.926422,378.072327 294.669006,356.104523 C291.913635,329.290527 289.485657,302.473053 288.420929,275.514801 C288.086823,267.055634 287.959290,258.589264 287.642639,250.129822 C286.892395,230.086060 290.286560,210.503220 293.992920,190.932236 C294.944031,185.910034 295.458832,180.749054 295.586700,175.637131 C296.059204,156.746048 295.493866,137.818695 297.700317,118.994499 C298.222595,114.538795 298.779755,110.066406 300.347626,105.822899 C302.720947,99.399452 306.758392,96.707146 313.631531,96.619308 C324.602692,96.479111 333.986633,101.406258 343.273926,106.211853 C370.149017,120.117981 392.837555,139.183334 411.887573,163.138962 Z" fill="url(#lungFill3DDeep)" stroke="#a94a64" stroke-width="3"></path>
+<path d="M411.887573,163.138962 C441.820221,200.964310 458.824554,243.702667 464.407227,291.141296 C470.867249,346.035217 461.098663,397.865295 435.277771,446.705963 C429.424377,457.777679 422.762451,460.911469 410.332886,458.973236 C391.273529,456.001251 373.920319,448.550598 357.257568,439.239105 C344.106049,431.889771 332.267487,422.776917 321.137848,412.611786 C304.448242,397.368439 296.926422,378.072327 294.669006,356.104523 C291.913635,329.290527 289.485657,302.473053 288.420929,275.514801 C288.086823,267.055634 287.959290,258.589264 287.642639,250.129822 C286.892395,230.086060 290.286560,210.503220 293.992920,190.932236 C294.944031,185.910034 295.458832,180.749054 295.586700,175.637131 C296.059204,156.746048 295.493866,137.818695 297.700317,118.994499 C298.222595,114.538795 298.779755,110.066406 300.347626,105.822899 C302.720947,99.399452 306.758392,96.707146 313.631531,96.619308 C324.602692,96.479111 333.986633,101.406258 343.273926,106.211853 C370.149017,120.117981 392.837555,139.183334 411.887573,163.138962 Z" fill="url(#lungFill3DDeep)" stroke="#608f92" stroke-width="3"></path>
 <path d="M302 288 C340 278 382 278 414 286" fill="none" opacity=".24" stroke="#ffffff" stroke-width="4"></path>
 <path d="M408 214 C378 160 328 128 291 118 C306 168 299 250 309 318 C330 295 375 274 408 214Z" fill="#ffffff" opacity=".10"></path>
 <path d="M398 372 C364 390 324 386 302 354" fill="none" opacity=".16" stroke="#7f2f4a" stroke-linecap="round" stroke-width="8"></path>
 <path d="M292 333 C326 324 364 324 394 332" fill="none" opacity=".17" stroke="#ffffff" stroke-width="4"></path>
 <ellipse cx="350" cy="170" fill="#ffffff" opacity=".12" rx="54" ry="26"></ellipse>
-</g>
+<path d="M295 165 L330 220 L375 255 M330 220 L326 285 L362 337 M326 285 L303 343 M375 255 L402 304 M330 220 L373 210" fill="none" stroke="#1e414a" stroke-width="10" stroke-linecap="round" opacity=".45"/><path d="M295 165 L330 220 L375 255 M330 220 L326 285 L362 337 M326 285 L303 343 M375 255 L402 304 M330 220 L373 210" fill="none" stroke="#b4dbcd" stroke-width="5" stroke-linecap="round" opacity=".7"/></g>
 <!-- Vias aéreas mantidas por cima dos pulmões --></g>
 <!-- Leitura -->
 <g filter="url(#softShadow)" id="statusBox" transform="translate(40,78)">
-<rect fill="#ffffff" height="250" rx="20" stroke="#d7e1ec" stroke-width="2" width="225"></rect>
-<text fill="#17324d" font-size="18" font-weight="800" x="18" y="28">Leitura do circuito</text>
+<rect fill="#122a3b" height="250" rx="20" stroke="#d7e1ec" stroke-width="2" width="225"></rect>
+<text fill="#c2dbea" font-size="18" font-weight="800" x="18" y="28">Leitura do circuito</text>
 <text fill="#2f80ed" font-size="15" font-weight="700" id="statusText1" x="18" y="58">Respiração modula RV</text>
 <text fill="#e34d4d" font-size="14" font-weight="700" id="statusText2" x="18" y="90"></text>
 <text fill="#20b26b" font-size="14" font-weight="700" id="statusText3" x="18" y="168"></text>
 </g>
-<!-- Coração centralizado -->
-<g filter="url(#newHeartPremiumShadow)" id="heartGroup">
-<g id="heartMain">
-<g transform="translate(337 425) scale(0.27 0.25)">
-<defs>
-<clippath id="newHeartClipLocal">
-<path d="M566.2643,993.9062C425.9142,881.6787,270.1297,749.9875,164.7595,617.5243 C53.9621,478.241,12.7985,355.8564,38.9136,243.3774c15.0878-64.9847,45.8376-116.6956,91.3927-153.6974 c41.8641-34.0031,95.4034-54.0473,154.8294-57.9639c8.0587-0.5319,16.1029-0.8009,23.907-0.8009 c108.3699,0,192.3093,52.25,242.7412,151.1022l14.1638,27.7656l14.1555-27.7708 C630.1004,83.9103,712.5994,29.8836,812.3974,29.8836c10.5193,0,21.3781,0.5971,32.274,1.7746 c128.8912,13.9299,219.4241,86.5945,248.3848,199.3632c28.193,109.7772-11.2189,236.7831-117.1384,377.4871 C886.1879,727.7071,748.3957,857.333,566.2643,993.9062z"></path>
-</clippath>
-</defs>
-<path d="M566.2643,993.9062C425.9142,881.6787,270.1297,749.9875,164.7595,617.5243 C53.9621,478.241,12.7985,355.8564,38.9136,243.3774c15.0878-64.9847,45.8376-116.6956,91.3927-153.6974 c41.8641-34.0031,95.4034-54.0473,154.8294-57.9639c8.0587-0.5319,16.1029-0.8009,23.907-0.8009 c108.3699,0,192.3093,52.25,242.7412,151.1022l14.1638,27.7656l14.1555-27.7708 C630.1004,83.9103,712.5994,29.8836,812.3974,29.8836c10.5193,0,21.3781,0.5971,32.274,1.7746 c128.8912,13.9299,219.4241,86.5945,248.3848,199.3632c28.193,109.7772-11.2189,236.7831-117.1384,377.4871 C886.1879,727.7071,748.3957,857.333,566.2643,993.9062z" fill="url(#newHeartDense3D)" opacity="0.98" stroke="#720817" stroke-width="18"></path>
-<g clip-path="url(#newHeartClipLocal)">
-<path d="M566.2643,993.9062C425.9142,881.6787,270.1297,749.9875,164.7595,617.5243 C53.9621,478.241,12.7985,355.8564,38.9136,243.3774c15.0878-64.9847,45.8376-116.6956,91.3927-153.6974 c41.8641-34.0031,95.4034-54.0473,154.8294-57.9639c8.0587-0.5319,16.1029-0.8009,23.907-0.8009 c108.3699,0,192.3093,52.25,242.7412,151.1022l14.1638,27.7656l14.1555-27.7708 C630.1004,83.9103,712.5994,29.8836,812.3974,29.8836c10.5193,0,21.3781,0.5971,32.274,1.7746 c128.8912,13.9299,219.4241,86.5945,248.3848,199.3632c28.193,109.7772-11.2189,236.7831-117.1384,377.4871 C886.1879,727.7071,748.3957,857.333,566.2643,993.9062z" fill="url(#newHeartShade3D)" opacity="0.88"></path>
-<ellipse cx="330" cy="295" fill="url(#newHeartDenseHighlight)" filter="url(#newHeartSoftBlur)" opacity="0.58" rx="235" ry="92"></ellipse>
-<ellipse cx="270" cy="245" fill="#ff9aa8" filter="url(#newHeartSoftBlur)" opacity="0.24" rx="115" ry="46"></ellipse>
-<path d="M175 515 C315 440 540 445 690 525" fill="none" filter="url(#newHeartSoftBlur)" opacity="0.24" stroke="#ff7989" stroke-linecap="round" stroke-width="34"></path>
-<path d="M150 760 C310 905 650 938 884 700" fill="none" filter="url(#newHeartSoftBlur)" opacity="0.18" stroke="#3f0410" stroke-linecap="round" stroke-width="46"></path>
+<g id="heartGroup" filter="url(#heartShadow3D)">
+ <defs>
+  <radialGradient id="myocardium" cx="28%" cy="20%" r="85%"><stop stop-color="#ffb5b0"/><stop offset=".3" stop-color="#d55d70"/><stop offset=".65" stop-color="#923348"/><stop offset="1" stop-color="#330f29"/></radialGradient>
+  <radialGradient id="cavity" cx="36%" cy="28%" r="75%"><stop stop-color="#e97586"/><stop offset=".45" stop-color="#992c47"/><stop offset="1" stop-color="#260b21"/></radialGradient>
+  <linearGradient id="coronary" x2="1" y2="0"><stop stop-color="#522638"/><stop offset=".45" stop-color="#f6a4a0"/><stop offset="1" stop-color="#89374b"/></linearGradient>
+ </defs>
+ <!-- Fixed vessel roots and atrial region frame the contracting ventricular muscle. -->
+ <path d="M485 490 C480 458 475 420 491 416 C525 403 547 436 531 472" fill="none" stroke="#270f25" stroke-width="29"/>
+ <path d="M485 490 C480 458 475 420 491 416 C525 403 547 436 531 472" fill="none" stroke="url(#arterialVessel3D)" stroke-width="22"/>
+ <path d="M495 490 C516 462 511 445 519 432" fill="none" stroke="url(#venousVessel3D)" stroke-width="21" stroke-linecap="round"/>
+ <path d="M434 534 C411 516 411 485 433 475 C452 463 477 478 480 500 L471 545Z" fill="url(#myocardium)" stroke="#9d5a6a" stroke-width="2"/>
+ <path d="M509 490 C530 467 568 475 575 505 C580 524 565 543 550 551 L502 541Z" fill="url(#myocardium)" stroke="#9d5a6a" stroke-width="2"/>
+ <g id="heartMain">
+  <path d="M453 505 C411 509 393 550 406 590 C418 631 461 670 510 692 C536 704 559 662 580 617 C599 575 580 532 546 515 C519 502 480 496 453 505Z" fill="url(#myocardium)" stroke="#8b4c62" stroke-width="2"/>
+  <path d="M452 520 C418 542 424 591 451 622 C469 642 491 657 510 668" fill="none" stroke="#ffc3b9" stroke-width="7" stroke-linecap="round" opacity=".16"/>
+  <path d="M486 522 C503 548 488 579 500 617 C506 638 522 656 514 682" fill="none" stroke="#391324" stroke-width="12" opacity=".6"/>
+  <path d="M487 523 C503 550 490 579 503 616 C510 640 522 655 516 677 M501 575 C468 568 455 552 443 544 M503 615 C533 601 549 580 559 559" fill="none" stroke="url(#coronary)" stroke-width="5" stroke-linecap="round"/>
+  <!-- Schematic ventricular window: its area follows the selected EDV and ESV. -->
+  <ellipse cx="543" cy="580" rx="29" ry="48" transform="rotate(19 543 580)" fill="#310e26" stroke="#f8aba7" stroke-width="9"/>
+  <ellipse id="ventricleVolume" cx="543" cy="580" rx="24" ry="42" transform="rotate(19 543 580)" fill="#9f3b56" stroke="#ffb0ab" stroke-width="2"/>
+  <path d="M427 557 Q451 567 462 592 M433 579 Q452 586 470 607 M443 604 Q461 609 481 633" fill="none" stroke="#ffd0bb" opacity=".12" stroke-width="2"/>
+ </g>
+ <text id="heartPhaseLabel" x="490" y="733" text-anchor="middle" fill="#aac2d4" font-size="15" letter-spacing="2">ENCHIMENTO</text>
+ <text x="490" y="754" text-anchor="middle" fill="#829bad" font-size="11">Cavidade ventricular · representação esquemática</text>
 </g>
-</g>
-</g>
-<!-- Mantido apenas para compatibilidade com a lógica de volume; invisível no novo coração -->
-<ellipse cx="490" cy="560" fill="transparent" id="ventricleVolume" opacity="0" rx="52" ry="66" stroke="transparent"></ellipse>
-</g>
+
 <!-- Retorno venoso bem mais baixo / extremo esquerdo -->
 <g filter="url(#box3DShadow)" id="venousBlock">
 <defs>
@@ -556,6 +511,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 <text fill="#5f6f86" font-size="13" font-weight="700" text-anchor="middle" x="110" y="988">reservatório venoso</text>
 <text fill="#5f6f86" font-size="13" font-weight="700" text-anchor="middle" x="110" y="1012">pré-carga / enchimento</text>
 </g>
+<g id="tissueCells" aria-label="Células dos tecidos"><animateTransform attributeName="transform" type="translate" values="0 0;0 -2;0 0" dur="5.8s" repeatCount="indefinite"/><g filter="url(#cellSoft3D)"><circle cx="807" cy="886" r="16" fill="url(#cellSphere3D)" stroke="#4ac094" stroke-width="1.1"/><circle cx="808" cy="887" r="5.76" fill="url(#cellNucleus3D)"/><ellipse cx="801.56" cy="879.92" rx="4.8" ry="2.88" fill="#fff" opacity=".34"/></g><g filter="url(#cellSoft3D)"><circle cx="838" cy="866" r="20" fill="url(#cellSphere3D)" stroke="#4ac094" stroke-width="1.1"/><circle cx="839" cy="867" r="7.199999999999999" fill="url(#cellNucleus3D)"/><ellipse cx="831.2" cy="858.4" rx="6" ry="3.5999999999999996" fill="#fff" opacity=".34"/></g><g filter="url(#cellSoft3D)"><circle cx="875" cy="881" r="23" fill="url(#cellSphere3D)" stroke="#4ac094" stroke-width="1.1"/><circle cx="876" cy="882" r="8.28" fill="url(#cellNucleus3D)"/><ellipse cx="867.18" cy="872.26" rx="6.8999999999999995" ry="4.14" fill="#fff" opacity=".34"/></g><g filter="url(#cellSoft3D)"><circle cx="912" cy="865" r="18" fill="url(#cellSphere3D)" stroke="#4ac094" stroke-width="1.1"/><circle cx="913" cy="866" r="6.4799999999999995" fill="url(#cellNucleus3D)"/><ellipse cx="905.88" cy="858.16" rx="5.3999999999999995" ry="3.2399999999999998" fill="#fff" opacity=".34"/></g><g filter="url(#cellSoft3D)"><circle cx="939" cy="889" r="14" fill="url(#cellSphere3D)" stroke="#4ac094" stroke-width="1.1"/><circle cx="940" cy="890" r="5.04" fill="url(#cellNucleus3D)"/><ellipse cx="934.24" cy="883.68" rx="4.2" ry="2.52" fill="#fff" opacity=".34"/></g></g>
 <!-- Tecidos bem mais baixo / extremo direito -->
 <g filter="url(#box3DShadow)" id="tissueBlock">
 <defs>
@@ -577,7 +533,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 <!-- Conectores ajustados -->
 <g id="labelsLayer">
 <g id="labelPulmoes" style="pointer-events:none" transform="translate(490,25)">
-<rect fill="#ffffff" filter="url(#softShadow)" height="36" rx="18" stroke="#bfcfe0" stroke-width="2" width="140" x="-70" y="-20"></rect>
+<rect fill="#1c3346" filter="url(#softShadow)" height="36" rx="18" stroke="#bfcfe0" stroke-width="2" width="140" x="-70" y="-20"></rect>
 <text dominant-baseline="middle" fill="#1f2d3d" font-size="16" font-weight="800" text-anchor="middle">Pulmões</text>
 </g>
 <g id="labelEntradaVenosa" style="pointer-events:none" transform="translate(230,760)">
@@ -593,7 +549,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bor
 <text dominant-baseline="middle" fill="#2f80ed" font-size="16" font-weight="800" text-anchor="middle">Retorno ao circuito</text>
 </g>
 </g>
-<g id="bloodParticles"></g>
+<g id="bloodParticles"></g><circle id="ejectionPulse" cx="542" cy="580" r="11" fill="none" stroke="#ffccbd" stroke-width="2.5" opacity="0"/>
 </svg>
       </div>
       <p class="note"><strong>Como interpretar:</strong> o enchimento ventricular define o <span class="c-edv"><strong>EDV (volume diastólico final)</strong></span>; o volume que permanece após a ejeção define o <span class="c-esv"><strong>ESV (volume sistólico final)</strong></span>; e a diferença entre eles gera o <span class="c-vs"><strong>VS (volume sistólico)</strong></span>. A <span class="c-fc"><strong>FC (frequência cardíaca)</strong></span> multiplica o VS para formar o <span class="c-dc"><strong>DC (débito cardíaco)</strong></span>. A <strong>FE (fração de ejeção)</strong> representa a porcentagem do EDV ejetada a cada batimento. Na circulação pulmonar, a <strong>artéria pulmonar</strong> leva sangue venoso do coração aos pulmões, enquanto a <strong>veia pulmonar</strong> traz sangue arterial dos pulmões ao coração.</p>
@@ -820,11 +776,10 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
   }
 
   function updateLungsVisual(){
-    if(!lungsGroup) return;
-    const breathPhase = (Math.sin(model.time * Math.PI * 2 * 0.22) + 1) / 2;
-    const scale = 1 + breathPhase * 0.035;
-    const yLift = -breathPhase * 6;
-    lungsGroup.setAttribute('transform', 'translate(490 285) scale('+scale.toFixed(4)+') translate(-490 '+(-285 + yLift).toFixed(2)+')');
+    const breath=(Math.sin(model.time*Math.PI*2*.22)+1)/2;
+    [['lungLeft',302],['lungRight',312]].forEach(([id,x])=>{
+      const lung=$('#'+id);if(lung)lung.setAttribute('transform','translate('+x+' 40) translate(250 100) scale('+(1+.025*breath)+' '+(1+.04*breath)+') translate(-250 -100) scale(.72 .62)');
+    });
   }
 
   function setAnimationSpeed(speed){
@@ -856,32 +811,23 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
   }
 
   function updateHeartVisual(){
-    const bpm = Math.max(40, model.fc);
-    const beatPeriod = 60 / bpm;
-    const phase = (model.time % beatPeriod) / beatPeriod;
-    // systolic ejection: brief contraction; diastole: filling
-    const systole = Math.exp(-Math.pow((phase - 0.20) / 0.12, 2));
-    const filling = Math.exp(-Math.pow((phase - 0.78) / 0.22, 2));
-    const volumeFactor = Math.max(0, Math.min(1, (model.edv - 70) / 130));
-    const contractionFactor = Math.max(0, Math.min(1, (model.vs - 25) / 100));
-    const scale = 1 + (0.025 + volumeFactor * 0.025) * filling - (0.045 + contractionFactor * 0.025) * systole;
-    const tx = 490, ty = 560;
-    if(heartGroup){
-      heartGroup.setAttribute('transform', `translate(${tx} ${ty}) scale(${scale.toFixed(4)}) translate(${-tx} ${-ty})`);
-    }
-    if(heartMain){
-      heartMain.style.opacity = String(0.94 + 0.06 * systole);
-    }
+    const phase=(model.time%(60/Math.max(40,model.fc)))/(60/Math.max(40,model.fc));
+    const smooth=x=>x*x*(3-2*x);
+    const ejection=phase<.12?0:phase<.42?smooth((phase-.12)/.30):phase<.52?1:1-smooth((phase-.52)/.48);
+    const volume=model.edv-(model.edv-model.esv)*ejection;
+    const size=Math.sqrt(Math.max(1,volume)/120);
+    if(heartMain)heartMain.setAttribute('transform','translate(490 505) scale('+(1-.055*ejection).toFixed(4)+' '+(1-.085*ejection).toFixed(4)+') translate(-490 -505)');
     if(ventricleVolume){
-      const rx = 30 + volumeFactor * 42 - systole * (10 + contractionFactor * 12);
-      const ry = 38 + volumeFactor * 52 - systole * (14 + contractionFactor * 16);
-      ventricleVolume.setAttribute('rx', Math.max(14, rx).toFixed(1));
-      ventricleVolume.setAttribute('ry', Math.max(18, ry).toFixed(1));
-      ventricleVolume.setAttribute('opacity', '0.18');
-      ventricleVolume.setAttribute('fill', 'rgba(31,120,180,0.20)');
-      ventricleVolume.setAttribute('stroke', '#1F78B4');
-      ventricleVolume.setAttribute('stroke-width', '2');
+      ventricleVolume.setAttribute('rx',(24*size).toFixed(2));
+      ventricleVolume.setAttribute('ry',(42*size).toFixed(2));
     }
+    const label=$('#heartPhaseLabel');
+    if(label)label.textContent=phase<.12?'CONTRAÇÃO':phase<.42?'EJEÇÃO':phase<.52?'RELAXAMENTO':'ENCHIMENTO';
+    const pulse=$('#ejectionPulse');
+    if(pulse){const p=Math.max(0,Math.min(1,(phase-.12)/.3));const q=1-p;
+      const x=q*q*q*542+3*q*q*p*606+3*q*p*p*688+p*p*p*776;
+      const y=q*q*q*580+3*q*q*p*730+3*q*p*p*840+p*p*p*920;
+      pulse.setAttribute('cx',x);pulse.setAttribute('cy',y);pulse.setAttribute('opacity',phase>=.12&&phase<.42?'.75':'0');}
   }
 
   function tick(ts){
@@ -962,37 +908,19 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
   model.raf = requestAnimationFrame(tick);
 })();
 </script>
-
-<script>
-(() => {
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  if (tabButtons.length) setTab('animacao');
-
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
-  const pauseCandidates = ['btnPause','pauseBtn'];
-  let startBtn = null, pauseBtn = null;
-  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
-  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
-  if (mobileToggle && startBtn){
-    let playing = false;
-    mobileToggle.addEventListener('click', () => {
-      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
-      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
-      playing = !playing;
-    });
-  } else if (mobileToggle){
-    mobileToggle.style.display = 'none';
-  }
-})();
-</script>
-  <script src="tutor-ef-data.js?v=11"></script>
-  <script src="tutor-widget.js?v=16"></script>
 </body>
 </html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.metric):not(#cards-reference-reserved){--reference-accent:var(--metric-strong,currentColor);position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.metric):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.metric):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.metric):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+
+</style>
+
+<script src="tutor-ef-data.js?v=11"></script>
+<script src="tutor-widget.js?v=16"></script>
