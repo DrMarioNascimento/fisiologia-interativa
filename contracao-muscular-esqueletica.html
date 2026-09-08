@@ -925,18 +925,25 @@ function getContraction(f){
     const forcePoints = [];
     const calciumPoints = [];
     const bridgePoints = [];
-    for(let i=0;i<=frame;i++){
+    for(let i=0;i<=TOTAL;i++){
       const x = x0 + (i/TOTAL)*w;
-      forcePoints.push({x, y:y0 - getContraction(i)*3.5});
-      calciumPoints.push({x, y:y0 - getCalcium(i)*2.45});
-      bridgePoints.push({x, y:y0 - getCrossBridges(i)*2.9});
+      forcePoints.push({x, y:y0 - getContraction(i)*(h/100)});
+      calciumPoints.push({x, y:y0 - getCalcium(i)*(h/100)});
+      bridgePoints.push({x, y:y0 - getCrossBridges(i)*(h/100)});
     }
     drawGraphLine3D(gctx, forcePoints, STD_COLORS.forca, 4.4, false);
     drawGraphLine3D(gctx, calciumPoints, STD_COLORS.calcio, 3.0, true);
     drawGraphLine3D(gctx, bridgePoints, STD_COLORS.pontes, 3.8, false);
 
-    const px = x0 + (frame/TOTAL)*w, py = y0 - getContraction(frame)*3.5;
-    drawGraphSphere(gctx, px, py, 8.5, cur.color);
+    // The complete curves stay visible; the cursor follows the animation.
+    const px = x0 + (frame/TOTAL)*w;
+    gctx.save();
+    gctx.strokeStyle = '#dcebf599'; gctx.lineWidth = 1.2;
+    gctx.beginPath(); gctx.moveTo(px,84); gctx.lineTo(px,y0); gctx.stroke();
+    gctx.restore();
+    drawGraphSphere(gctx, px, y0-getCalcium(frame)*(h/100), 6, STD_COLORS.calcio);
+    drawGraphSphere(gctx, px, y0-getCrossBridges(frame)*(h/100), 6, STD_COLORS.pontes);
+    drawGraphSphere(gctx, px, y0-getContraction(frame)*(h/100), 7, STD_COLORS.forca);
 
     gctx.strokeStyle = '#9ca3af'; gctx.setLineDash([4,4]);
     pauseFrames.forEach(f => {
