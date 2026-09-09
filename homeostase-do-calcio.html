@@ -136,6 +136,7 @@ input[type=checkbox],input[type=radio]{accent-color:#2f80ed}
 }
 </style>
   <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
+<link rel="stylesheet" href="calcio-visual.css?v=20260909">
 </head>
 <body>
   <div class="mobile-topbar">
@@ -151,11 +152,11 @@ input[type=checkbox],input[type=radio]{accent-color:#2f80ed}
 <h1>Homeostase do cálcio</h1>
 <p class="subtitle">Interação integrada entre exposição solar, vitamina D, PTH, calcitonina, intestino, vasos sanguíneos, osso e excreção renal de fosfato.</p>
 <div class="controls controls-actions" data-tab="controles">
-<button id="btnStart" class="primary">Iniciar</button><button id="btnPause">Pausar</button><button id="btnStep">Próxima etapa</button><button id="btnReset">Resetar</button>
-<label>Velocidade <input id="speedRange" type="range" min="0.5" max="2.4" step="0.1" value="0.5"><span id="speedLabel">0.5x</span></label>
+<div class="playback"><button id="btnStart" class="primary">Iniciar</button><button id="btnPause">Pausar</button><button id="btnStep">Próxima etapa</button><button id="btnReset">Resetar</button>
+</div><div class="parameters"><label>Velocidade <input id="speedRange" type="range" min="0.5" max="2.4" step="0.1" value="0.5"><span id="speedLabel">0.5x</span></label>
 <label>Exposição solar <input id="sunRange" type="range" min="0" max="100" step="1" value="55"><span id="sunLabel">55%</span></label>
 <label>PTH <input id="pthRange" type="range" min="0" max="100" step="1" value="50"><span id="pthLabel">50%</span></label>
-<label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label><label><input id="stepModeToggle" type="checkbox"> Executar por etapas</label><label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label><label><input id="normalLineToggle" type="checkbox" checked> Linha normal no gráfico</label>
+</div><div class="options"><label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label><label><input id="stepModeToggle" type="checkbox"> Executar por etapas</label><label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label><label><input id="normalLineToggle" type="checkbox" checked> Linha normal no gráfico</label></div>
 </div>
 <div class="quick" id="quickStates" data-tab="controles"><strong style="margin-right:4px">Estados rápidos:</strong>
 <label><input type="radio" name="preset" value="normal" checked> Normal</label><label><input type="radio" name="preset" value="hipocalcemia"> Hipocalcemia</label><label><input type="radio" name="preset" value="hipercalcemia"> Hipercalcemia</label><label><input type="radio" name="preset" value="hiperpara"> Hiperparatireoidismo</label><label><input type="radio" name="preset" value="hipopara"> Hipoparatireoidismo</label><label><input type="radio" name="preset" value="baixosol"> Baixa exposição solar</label></div>
@@ -168,7 +169,7 @@ input[type=checkbox],input[type=radio]{accent-color:#2f80ed}
 </div>
 <div class="graph-note">Estratégia do gráfico: curvas com amplitudes, atrasos e estilos distintos para reduzir sobreposição.</div>
 <div class="layout">
-<div class="panel" data-tab="animacao"><div class="scene-wrap"><div class="scene-bg"></div>
+<div class="panel" data-tab="animacao"><div class="panel-heading"><h2>Integração entre os órgãos</h2><button type="button" data-zoom="sceneCanvas">Ampliar animação</button></div><div class="scene-wrap"><div class="scene-bg"></div>
 <img class="organ-img sun-img" src="img/sun.svg" alt="Sol">
 <img class="organ-img liver-img" src="img/liver.svg" alt="Fígado">
 <img class="organ-img kidney-img" src="img/kidney.svg" alt="Rim">
@@ -176,8 +177,8 @@ input[type=checkbox],input[type=radio]{accent-color:#2f80ed}
 <img class="organ-img intestine-img" src="img/intestine.svg" alt="Intestino">
 <img class="organ-img bone-img" src="img/bone.svg" alt="Osso">
 <canvas id="sceneCanvas" width="980" height="760"></canvas></div></div>
-<div class="panel" data-tab="graficos"><canvas id="graphCanvas" width="920" height="1060"></canvas></div></div>
-<div class="legend" data-tab="graficos">
+<div class="panel" data-tab="graficos"><div class="panel-heading"><h2>Resposta ao longo do processo</h2><button type="button" data-zoom="graphCanvas">Ampliar gráficos</button></div><canvas id="graphCanvas" width="920" height="1060"></canvas></div></div>
+<div class="legend" data-tab="graficos"><details><summary>Como interpretar a simulação</summary><div class="reading">
   <b style="color:#0f172a; font-weight:600;">Como interpretar:</b>
   <div style="text-align: justify; color:#475569; font-weight:400;">
     <b style="color:#0f172a; font-weight:600;">Sol e Pele (Captação):</b> A radiação UVB converte o 7-deidrocolesterol em Vitamina D3, iniciando a cascata. 
@@ -188,13 +189,13 @@ input[type=checkbox],input[type=radio]{accent-color:#2f80ed}
     <b style="color:#0f172a; font-weight:600;">Ossos (Equilíbrio):</b> Funcionam como reserva, liberando cálcio para manter a homeostase. 
     <b style="color:#0f172a; font-weight:600;">Estados clínicos:</b> Hipocalcemia causa hiperexcitabilidade; hipercalcemia associa-se a cálculos e arritmias; hiperparatireoidismo leva à perda óssea; hipoparatireoidismo reduz o cálcio sérico; baixa exposição solar reduz a síntese de D3.
   </div>
-  <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
+</div></details>  <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
 </div>
 <script>
 (()=>{
 const TOTAL=420, sceneCanvas=document.getElementById('sceneCanvas'),graphCanvas=document.getElementById('graphCanvas'),sctx=sceneCanvas.getContext('2d'),gctx=graphCanvas.getContext('2d');
 const btnStart=document.getElementById('btnStart'),btnPause=document.getElementById('btnPause'),btnStep=document.getElementById('btnStep'),btnReset=document.getElementById('btnReset'),speedRange=document.getElementById('speedRange'),speedLabel=document.getElementById('speedLabel'),sunRange=document.getElementById('sunRange'),sunLabel=document.getElementById('sunLabel'),pthRange=document.getElementById('pthRange'),pthLabel=document.getElementById('pthLabel'),loopToggle=document.getElementById('loopToggle'),stepModeToggle=document.getElementById('stepModeToggle'),labelsToggle=document.getElementById('labelsToggle'),normalLineToggle=document.getElementById('normalLineToggle'),presetInputs=[...document.querySelectorAll('input[name="preset"]')],modeBadge=document.getElementById('modeBadge'),stageTrack=document.getElementById('stageTrack'),phaseText=document.getElementById('phaseText'),phaseDesc=document.getElementById('phaseDesc'),valueText=document.getElementById('valueText'),valueDesc=document.getElementById('valueDesc'),flowText=document.getElementById('flowText'),flowDesc=document.getElementById('flowDesc'),phaseCard=document.getElementById('phaseCard'),valueCard=document.getElementById('valueCard'),flowCard=document.getElementById('flowCard');
-const stages=[{name:'1. Exposição solar',short:'Sol / pele',start:0,end:64,color:'#f59e0b',desc:'A radiação UVB favorece a síntese cutânea de colecalciferol.',event:'Vitamina D₃ cutânea',eventDesc:'A etapa inicial depende da exposição solar.'},{name:'2. Fígado',short:'Fígado',start:65,end:128,color:'#7c3a2d',desc:'O fígado converte o colecalciferol em 25-OH colecalciferol.',event:'Reserva hepática',eventDesc:'A forma circulante de armazenamento é produzida no fígado.'},{name:'3. Rim',short:'Rim',start:129,end:194,color:'#0ea5e9',desc:'O rim participa da ativação do calcitriol, modulada pelo PTH.',event:'Ativação renal',eventDesc:'Forma-se o calcitriol, a vitamina D ativa.'},{name:'4. Intestino / vasos',short:'Intestino e vasos',start:195,end:268,color:'#10b981',desc:'O calcitriol aumenta a absorção intestinal de cálcio e fósforo, com entrada na circulação.',event:'Fluxo intestinal',eventDesc:'Ca²⁺ e fosfato tornam-se visíveis na circulação plasmática.'},{name:'5. PTH / Calcitonina',short:'Hormônios',start:269,end:340,color:'#dc2626',desc:'PTH e calcitonina ajustam os fluxos entre rim, osso e sangue.',event:'Regulação hormonal',eventDesc:'PTH sobe na hipocalcemia; calcitonina ganha destaque na hipercalcemia.'},{name:'6. Osso / equilíbrio final',short:'Osso e equilíbrio',start:341,end:420,color:'#6b7280',desc:'O osso atua como reservatório, enquanto cálcio e fosfato se estabilizam.',event:'Homeostase final',eventDesc:'A resposta final depende da integração entre todos os compartimentos.'}];
+const stages=[{name:'1. Exposição solar',short:'Sol / pele',start:0,end:64,color:'#f59e0b',desc:'A radiação UVB favorece a síntese cutânea de colecalciferol.',event:'Vitamina D₃ cutânea',eventDesc:'A etapa inicial depende da exposição solar.'},{name:'2. Fígado',short:'Fígado',start:65,end:128,color:'#d6a18c',desc:'O fígado converte o colecalciferol em 25-OH colecalciferol.',event:'Reserva hepática',eventDesc:'A forma circulante de armazenamento é produzida no fígado.'},{name:'3. Rim',short:'Rim',start:129,end:194,color:'#7bcaed',desc:'O rim participa da ativação do calcitriol, modulada pelo PTH.',event:'Ativação renal',eventDesc:'Forma-se o calcitriol, a vitamina D ativa.'},{name:'4. Intestino / vasos',short:'Intestino e vasos',start:195,end:268,color:'#10b981',desc:'O calcitriol aumenta a absorção intestinal de cálcio e fósforo, com entrada na circulação.',event:'Fluxo intestinal',eventDesc:'Ca²⁺ e fosfato tornam-se visíveis na circulação plasmática.'},{name:'5. PTH / Calcitonina',short:'Hormônios',start:269,end:340,color:'#f19b9b',desc:'PTH e calcitonina ajustam os fluxos entre rim, osso e sangue.',event:'Regulação hormonal',eventDesc:'PTH sobe na hipocalcemia; calcitonina ganha destaque na hipercalcemia.'},{name:'6. Osso / equilíbrio final',short:'Osso e equilíbrio',start:341,end:420,color:'#b3c8d4',desc:'O osso atua como reservatório, enquanto cálcio e fosfato se estabilizam.',event:'Homeostase final',eventDesc:'A resposta final depende da integração entre todos os compartimentos.'}];
 let running=false,frame=0,raf=null,lastTs=0,stepAwaitPlay=false,sun=55,pth=50;
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v)), getSpeed=()=>parseFloat(speedRange.value), getStage=f=>stages.find(s=>f>=s.start&&f<=s.end)||stages[0], getPauseFrames=()=>stages.map(s=>s.end), setCardsColor=color=>{phaseCard.style.setProperty('--phase',color);valueCard.style.setProperty('--phase',color);flowCard.style.setProperty('--phase',color)};
 function updateModeBadge(){const base=stepModeToggle.checked?(stepAwaitPlay?'Modo: por etapas (pausado)':'Modo: por etapas'):'Modo: contínuo';modeBadge.textContent=`${base} | Sol ${sun}% | PTH ${pth}%`;}
@@ -212,7 +213,7 @@ if(activePreset==='baixosol') return `<span class="ref-head">Referências</span>
 return '';
 }
 function updateStatus(){const st=getStage(frame),d=computeState(),c=toClinical(d);phaseText.firstChild.textContent=st.name;phaseDesc.textContent=st.desc;valueText.firstChild.textContent=`${c.calciumMg} mg/dL`;valueDesc.innerHTML=`Fosfato: ${c.phosphateMg} mg/dL · PTH: ${c.pthPg} pg/mL · Calcitonina: ${c.calcitoninPg} pg/mL${getReferenceHTML()}`;flowText.firstChild.textContent=st.event;flowDesc.textContent=st.eventDesc;setCardsColor(st.color);updateModeBadge();}
-function renderStageMap(){const current=stages.findIndex(s=>frame>=s.start&&frame<=s.end);stageTrack.innerHTML=stages.map((s,idx)=>`<div class="stage-node" style="border-color:${s.color};box-shadow:${idx===current?'0 0 0 2px '+s.color+'55, 0 10px 24px '+s.color+'22, inset 0 0 0 1px '+s.color+'30':'inset 0 0 0 1px '+s.color+'20'};background:${idx===current?s.color+'12':'#fff'}"><div class="stage-num" style="background:${idx===current?s.color:'#eef2ff'};color:${idx===current?'#fff':'#1e3a8a'}">${idx+1}</div><div class="stage-name" style="color:${s.color}">${s.short}</div><div class="stage-mini" style="font-weight:${idx===current?'700':'400'}">${s.event}</div></div>`).join('');}
+function renderStageMap(){const current=stages.findIndex(s=>frame>=s.start&&frame<=s.end);stageTrack.innerHTML=stages.map((s,idx)=>`<div class="stage-node" aria-current="${idx===current?'step':'false'}" style="--stage:${s.color}"><div class="stage-num">${idx+1}</div><div class="stage-name">${s.short}</div><div class="stage-mini">${s.event}</div></div>`).join('');}
 function roundedBox(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath()}
 function drawIon(x,y,r,color,label){
 const grd=sctx.createRadialGradient(x-r*.45,y-r*.45,1,x,y,r);
@@ -297,7 +298,7 @@ if(label&&labelsToggle.checked){
 }
 sctx.restore()
 }
-function drawVessel(x,y,w,h){const grad=sctx.createLinearGradient(x,y,x,y+h);grad.addColorStop(0,'#fee2e2');grad.addColorStop(.5,'#fecaca');grad.addColorStop(1,'#fca5a5');roundedBox(sctx,x,y,w,h,30);sctx.fillStyle=grad;sctx.fill();sctx.strokeStyle='#dc2626';sctx.lineWidth=2;sctx.stroke()}
+function drawVessel(x,y,w,h){const grad=sctx.createLinearGradient(x,y,x,y+h);grad.addColorStop(0,'#fee2e2');grad.addColorStop(.5,'#fecaca');grad.addColorStop(1,'#fca5a5');roundedBox(sctx,x,y,w,h,30);sctx.fillStyle=grad;sctx.fill();sctx.strokeStyle='#f19b9b';sctx.lineWidth=2;sctx.stroke()}
 function drawParticleStreamInVessel(x,y,w,h,progress){for(let i=0;i<9;i++){const t=(progress*0.012+i/9)%1;const px=x+28+t*(w-56),py=y+h*0.36+Math.sin(progress*0.02+i)*9;drawIon(px,py,16,'#60a5fa','Ca')}for(let i=0;i<8;i++){const t=(progress*0.014+i/8+0.3)%1;const px=x+24+t*(w-48),py=y+h*0.70+Math.cos(progress*0.018+i)*8;drawIon(px,py,16,'#a78bfa','P')}}
 function drawDirectedParticles(points,progress,color,label,count=5,radius=8,offset=0){const segs=[];let total=0;for(let i=0;i<points.length-1;i++){const dx=points[i+1].x-points[i].x,dy=points[i+1].y-points[i].y,len=Math.hypot(dx,dy);segs.push({dx,dy,len,start:total});total+=len}if(total<=0)return;for(let i=0;i<count;i++){let d=((progress*1.6+offset+i/count)%1)*total;for(let s=0;s<segs.length;s++){const seg=segs[s];if(d<=seg.start+seg.len){const local=(d-seg.start)/seg.len,x=points[s].x+seg.dx*local,y=points[s].y+seg.dy*local;drawIon(x,y,radius,color,label);break}}}}
 
@@ -307,18 +308,18 @@ function drawScene(){
   const d = computeState();
   const st = getStage(frame);
 
-  sctx.fillStyle = '#111827';
+  sctx.fillStyle = '#dcebf3';
   sctx.font = 'bold 21px Arial';
   sctx.fillText('Esquema integrado da homeostase do cálcio', 18, 30);
 
-  function drawBox(x,y,w,h,title,subtitle='',accent='#cbd5e1'){
+  function drawBox(x,y,w,h,title,subtitle='',accent='#395b6c'){
     roundedBox(sctx,x,y,w,h,12);
 
     const gradBox = sctx.createRadialGradient(
       x + w*0.28, y + h*0.28, 2,
       x + w/2, y + h/2, Math.max(w,h)*0.9
     );
-    gradBox.addColorStop(0, '#ffffff');
+    gradBox.addColorStop(0, '#284858');
     gradBox.addColorStop(0.55, accent + '22');
     gradBox.addColorStop(1, accent + '66');
 
@@ -340,14 +341,14 @@ function drawScene(){
     sctx.stroke();
     sctx.restore();
 
-    sctx.fillStyle='#111827';
+    sctx.fillStyle='#dcebf3';
     sctx.textAlign='center';
     sctx.textBaseline='middle';
 
     if(subtitle){
       sctx.font='bold 17px Arial';
       sctx.fillText(title, x+w/2, y+h/2-10);
-      sctx.fillStyle='#667085';
+      sctx.fillStyle='#aec6d5';
       sctx.font='13px Arial';
       sctx.fillText(subtitle, x+w/2, y+h/2+10);
     } else {
@@ -414,11 +415,11 @@ function drawScene(){
   // caixas
   drawSunBox(POS.expo.x-24, POS.expo.y-24, POS.expo.w+48, POS.expo.h+48, 'Exposição solar');
   drawBox(POS.pele.x, POS.pele.y, POS.pele.w, POS.pele.h, 'Pele', '', '#f59e0b');
-  drawBox(POS.figado.x, POS.figado.y, POS.figado.w, POS.figado.h, 'Fígado', '', '#7c3a2d');
-  drawBox(POS.rins.x, POS.rins.y, POS.rins.w, POS.rins.h, 'Rins', '', '#0ea5e9');
+  drawBox(POS.figado.x, POS.figado.y, POS.figado.w, POS.figado.h, 'Fígado', '', '#d6a18c');
+  drawBox(POS.rins.x, POS.rins.y, POS.rins.w, POS.rins.h, 'Rins', '', '#7bcaed');
   drawBox(POS.intestine.x, POS.intestine.y, POS.intestine.w, POS.intestine.h, 'Intestino', '', '#10b981');
-  drawBox(POS.para.x, POS.para.y, POS.para.w, POS.para.h, 'Paratireoides', '', '#dc2626');
-  drawBox(POS.ossos.x, POS.ossos.y, POS.ossos.w, POS.ossos.h, 'Ossos', '', '#6b7280');
+  drawBox(POS.para.x, POS.para.y, POS.para.w, POS.para.h, 'Paratireoides', '', '#f19b9b');
+  drawBox(POS.ossos.x, POS.ossos.y, POS.ossos.w, POS.ossos.h, 'Ossos', '', '#b3c8d4');
 
   // sangue - vaso aberto em corte longitudinal
   const vx = POS.sangue.x - 1;
@@ -437,7 +438,7 @@ function drawScene(){
   sctx.shadowBlur = 18;
   sctx.fill();
   sctx.shadowBlur = 0;
-  sctx.strokeStyle = '#dc2626';
+  sctx.strokeStyle = '#f19b9b';
   sctx.lineWidth = 2.6;
   sctx.stroke();
 
@@ -459,7 +460,7 @@ function drawScene(){
   sctx.stroke();
   sctx.restore();
 
-  sctx.fillStyle = '#111827';
+  sctx.fillStyle = '#dcebf3';
   sctx.font = 'bold 18px Arial';
   sctx.textAlign = 'left';
   sctx.textBaseline = 'middle';
@@ -468,19 +469,19 @@ function drawScene(){
 
   // UVB - ajuste solicitado
   // seta superior (aponta para fora da pele, para cima)
-  drawArrow(POS.expo.x + POS.expo.w, POS.expo.y + 18, POS.pele.x, POS.pele.y - 10, '#1b668f', 4.5, '', 0);
+  drawArrow(POS.expo.x + POS.expo.w, POS.expo.y + 18, POS.pele.x, POS.pele.y - 10, '#85c9e8', 4.5, '', 0);
 
   // seta do meio (mantida)
-  drawArrow(POS.expo.x + POS.expo.w, POS.expo.y + 32, POS.pele.x, POS.pele.y + 32, '#1b668f', 4.5, '', 0);
+  drawArrow(POS.expo.x + POS.expo.w, POS.expo.y + 32, POS.pele.x, POS.pele.y + 32, '#85c9e8', 4.5, '', 0);
 
   // seta inferior (aponta para fora da pele, para baixo)
-  drawArrow(POS.expo.x + POS.expo.w, POS.expo.y + 46, POS.pele.x, POS.pele.y + POS.pele.h + 10, '#1b668f', 4.5, '', 0);
+  drawArrow(POS.expo.x + POS.expo.w, POS.expo.y + 46, POS.pele.x, POS.pele.y + POS.pele.h + 10, '#85c9e8', 4.5, '', 0);
 
   // rótulos UVB centralizados na seta do meio (acima e abaixo dela)
   if(labelsToggle.checked){
     const midX = (POS.expo.x + POS.expo.w + POS.pele.x) / 2;
     const arrowY = POS.pele.y + 32;
-    sctx.fillStyle = '#1b668f';
+    sctx.fillStyle = '#85c9e8';
     sctx.font = 'bold 13px Arial';
     sctx.textAlign = 'center';
     sctx.fillText('UVB', midX, arrowY - 10);
@@ -492,19 +493,19 @@ function drawScene(){
   drawDirectedParticles([{x:POS.pele.x + POS.pele.w, y:POS.pele.y + 32},{x:POS.figado.x, y:POS.figado.y + 32}], frame*0.009, '#f59e0b', 'D3', 4, 16, 0.08);
 
   // Fígado -> Rins (25)
-  drawDirectedParticles([{x:POS.figado.x + POS.figado.w, y:POS.figado.y + 32},{x:POS.rins.x, y:POS.rins.y + 32}], frame*0.009, '#7c3a2d', '25', 4, 16, 0.20);
+  drawDirectedParticles([{x:POS.figado.x + POS.figado.w, y:POS.figado.y + 32},{x:POS.rins.x, y:POS.rins.y + 32}], frame*0.009, '#d6a18c', '25', 4, 16, 0.20);
 
   // PTH Paratireoides -> Rins (linha vertical)
-  drawArrow(POS.para.x + POS.para.w/2, POS.para.y, POS.para.x + POS.para.w/2, POS.rins.y + POS.rins.h, '#dc2626', 4.8, 'PTH');
+  drawArrow(POS.para.x + POS.para.w/2, POS.para.y, POS.para.x + POS.para.w/2, POS.rins.y + POS.rins.h, '#f19b9b', 4.8, 'PTH');
 
   // PTH Paratireoides -> Ossos
-  drawArrow(POS.para.x + POS.para.w/2, POS.para.y + POS.para.h, POS.ossos.x + POS.ossos.w - 2, POS.ossos.y + 2, '#dc2626', 4.8, '');
+  drawArrow(POS.para.x + POS.para.w/2, POS.para.y + POS.para.h, POS.ossos.x + POS.ossos.w - 2, POS.ossos.y + 2, '#f19b9b', 4.8, '');
 
   // Rins -> Intestino (Calcitriol) - somente moléculas; sem seta
   drawDirectedParticles([{x:POS.rins.x + 6, y:POS.rins.y + POS.rins.h},{x:POS.intestine.x + POS.intestine.w - 8, y:POS.intestine.y}], frame*0.010, '#10b981', 'C', 4, 16, 0.32);
 
   // Intestino -> Sangue (somente moléculas; sem setas)
-  drawDirectedParticles([{x:POS.intestine.x, y:POS.intestine.y + 14},{x:POS.sangue.x - 1 + 300, y:POS.sangue.y - 1}], frame*0.010, '#2563eb', 'Ca²⁺', 4, 16, 0.44);
+  drawDirectedParticles([{x:POS.intestine.x, y:POS.intestine.y + 14},{x:POS.sangue.x - 1 + 300, y:POS.sangue.y - 1}], frame*0.010, '#70bcff', 'Ca²⁺', 4, 16, 0.44);
   // Guia P (seta temporária) + coordenadas compartilhadas
   const pGuideStart = {x:POS.intestine.x + 20, y:POS.intestine.y + POS.intestine.h};
   const pGuideEnd = {x:POS.sangue.x - 1 + 365, y:POS.sangue.y - 1 + 28};
@@ -523,11 +524,11 @@ function drawScene(){
     const t = (base + frame * 0.01) % 1;
     const x = pGuideStart.x + pDx * t + pNx * pOffset;
     const y = pGuideStart.y + pDy * t + pNy * pOffset;
-    drawIon(x, y,16, '#8b5cf6', 'P');
+    drawIon(x, y,16, '#b8a2f1', 'P');
   });
 
   // Ossos -> Sangue (somente moléculas; sem seta)
-  drawDirectedParticles([{x:POS.ossos.x + POS.ossos.w/2, y:POS.ossos.y},{x:POS.sangue.x - 1 + 300, y:POS.sangue.y - 1 + POS.sangue.h + 2}], frame*0.010, '#2563eb', 'Ca²⁺', 4, 16, 0.68);
+  drawDirectedParticles([{x:POS.ossos.x + POS.ossos.w/2, y:POS.ossos.y},{x:POS.sangue.x - 1 + 300, y:POS.sangue.y - 1 + POS.sangue.h + 2}], frame*0.010, '#70bcff', 'Ca²⁺', 4, 16, 0.68);
 
   // partículas no sangue
   for(let i=0;i<11;i++){
@@ -540,7 +541,7 @@ function drawScene(){
   }
 
   if(labelsToggle.checked){
-    sctx.fillStyle = '#667085';
+    sctx.fillStyle = '#aec6d5';
     sctx.font = '14px Arial';
     
     
@@ -554,12 +555,12 @@ function drawScene(){
     
     sctx.restore();
 
-    sctx.fillStyle = '#667085';
+    sctx.fillStyle = '#aec6d5';
     sctx.font = '14px Arial';
     
     
 
-    sctx.fillStyle = '#dc2626';
+    sctx.fillStyle = '#f19b9b';
     sctx.font = 'bold 14px Arial';
     
   }
@@ -569,21 +570,21 @@ const d=computeState(),c=toClinical(d),st=getStage(frame);
 
 // caixa principal do resumo (mantida)
 roundedBox(sctx,26,610,930,116,16);
-sctx.fillStyle='#fff';
+sctx.fillStyle='#173440';
 sctx.fill();
-sctx.strokeStyle='#d1d5db';
+sctx.strokeStyle='#395b6c';
 sctx.stroke();
 
 // legenda em duas linhas, com margem direita alinhada ao meio da caixa pele
-roundedBox(sctx,26,500,329,86,12);
-sctx.fillStyle='#fff';
+roundedBox(sctx,26,500,415,86,12);
+sctx.fillStyle='#173440';
 sctx.fill();
-sctx.strokeStyle='#d1d5db';
+sctx.strokeStyle='#395b6c';
 sctx.stroke();
 
 function drawLegendItem(x,y,color,label,text){
   drawIon(x, y,16, color, label);
-  sctx.fillStyle='#111827';
+  sctx.fillStyle='#dcebf3';
   sctx.font='13px Arial';
   sctx.textAlign='left';
   sctx.textBaseline='middle';
@@ -597,27 +598,27 @@ drawLegendItem(230,526,'#7c3aed','25','25-OH vitamina D');
 
 // linha inferior
 drawLegendItem(52,560,'#10b981','C','1,25(OH)₂D₃ / Calcitriol');
-drawLegendItem(230,560,'#8b5cf6','P','Fósforo');
+drawLegendItem(230,560,'#b8a2f1','P','Fósforo');
 
-sctx.fillStyle='#111827';
+sctx.fillStyle='#dcebf3';
 sctx.font='bold 16px Arial';
 sctx.fillText('Resumo fisiológico e unidades clínicas',42,636);
 sctx.font='14px Arial';
-sctx.fillStyle='#475569';
+sctx.fillStyle='#aec6d5';
 sctx.fillText(`Etapa atual: ${st.name}`,42,661);
 sctx.fillStyle='#f59e0b';
 sctx.fillText(`Exposição solar: ${sun}%`,42,686);
-sctx.fillStyle='#dc2626';
+sctx.fillStyle='#f19b9b';
 sctx.fillText(`PTH: ${c.pthPg} pg/mL`,212,686);
-sctx.fillStyle='#ec4899';
+sctx.fillStyle='#eda7cf';
 sctx.fillText(`Calcitonina: ${c.calcitoninPg} pg/mL`,360,686);
 sctx.fillStyle='#10b981';
 sctx.fillText(`Calcitriol (relativo): ${Math.round(d.calcitriol)}%`,548,686);
-sctx.fillStyle='#2563eb';
+sctx.fillStyle='#70bcff';
 sctx.fillText(`Ca²⁺ plasmático: ${c.calciumMg} mg/dL`,42,710);
-sctx.fillStyle='#8b5cf6';
+sctx.fillStyle='#b8a2f1';
 sctx.fillText(`Fosfato plasmático: ${c.phosphateMg} mg/dL`,252,710);
-sctx.fillStyle='#8b5cf6';
+sctx.fillStyle='#b8a2f1';
 sctx.fillText(`Excreção de fosfato: ${Math.round(d.phosphaturia)}%`,492,710);
 sctx.fillStyle='#10b981';
 sctx.fillText(`Absorção intestinal de Ca²⁺: ${Math.round(d.intestinalCa)}%`,700,710)
@@ -637,47 +638,47 @@ const stageBarY=912;
 const stageTextY=952;
 
 const bg=gctx.createLinearGradient(0,16,0,1040);
-bg.addColorStop(0,'#fff');
-bg.addColorStop(1,'#f8fafc');
+bg.addColorStop(0,'#173440');
+bg.addColorStop(1,'#102733');
 gctx.fillStyle=bg;
 roundedBox(gctx,16,14,892,1032,18);
 gctx.fill();
-gctx.strokeStyle='#d7dde6';
+gctx.strokeStyle='#395b6c';
 gctx.lineWidth=1.5;
 gctx.stroke();
 
-gctx.fillStyle='#0f172a';
+gctx.fillStyle='#dcebf3';
 gctx.font='bold 22px Arial';
 gctx.textAlign='center';
 gctx.fillText('Resposta dinâmica: cálcio, fosfato, PTH e calcitonina',460,titleY);
-gctx.fillStyle='#64748b';
+gctx.fillStyle='#aec6d5';
 gctx.font='14px Arial';
 gctx.fillText('painel superior: mg/dL · painel inferior: pg/mL',460,subtitleY);
 gctx.textAlign='left';
 
 function drawPanel(x1,y1,x2,y2,unit,ticks){
-  gctx.fillStyle='#fff';
+  gctx.fillStyle='#102733';
   roundedBox(gctx,x1-16,y1-8,(x2-x1)+28,(y2-y1)+18,16);
   gctx.fill();
-  gctx.strokeStyle='#cbd5e1';
+  gctx.strokeStyle='#395b6c';
   gctx.lineWidth=1.3;
   gctx.stroke();
 
   const n=ticks.length-1;
   ticks.forEach((tick, idx)=>{
-    const y=y2-((y2-y1)/n)*idx;
-    gctx.strokeStyle=tick.major ? '#d6dde7' : '#ecf0f5';
+    const y=y1+((y2-y1)/n)*idx;
+    gctx.strokeStyle=tick.major ? '#395b6c' : '#395b6c';
     gctx.lineWidth=tick.major ? 1.0 : 0.65;
     gctx.beginPath();
     gctx.moveTo(x1,y);
     gctx.lineTo(x2,y);
     gctx.stroke();
-    gctx.fillStyle='#334155';
+    gctx.fillStyle='#dcebf3';
     gctx.font='bold 13px Arial';
     gctx.fillText(tick.label,x1-36,y+4);
   });
 
-  gctx.fillStyle='#475569';
+  gctx.fillStyle='#aec6d5';
   gctx.font='bold 14px Arial';
   gctx.save();
   gctx.translate(34,(y1+y2)/2);
@@ -699,7 +700,7 @@ drawPanel(left,top1,right,bottom1,'mg/dL',[
   {label:'0',major:true}
 ]);
 
-gctx.fillStyle='#ffffff';
+gctx.fillStyle='#173440';
 gctx.fillRect(left-18,sepTop,right-left+36,sepBottom-sepTop);
 
 drawPanel(left,top2,right,bottom2,'pg/mL',[
@@ -722,7 +723,7 @@ gctx.lineTo(left,bottom2);
 gctx.lineTo(right,bottom2);
 gctx.stroke();
 
-gctx.fillStyle='#475569';
+gctx.fillStyle='#aec6d5';
 gctx.font='bold 14px Arial';
 gctx.textAlign='center';
 gctx.fillText('Progressão do processo fisiológico',(left+right)/2,xLabelY);
@@ -906,12 +907,12 @@ function drawCurve(){
   if(normalLineToggle.checked){
     // referências clínicas em linha tradicional fina, sem faixa larga
     const refs=[
-      {v:8.5,top:top1,bottom:bottom1,min:0,max:16,c:'#2563eb',lab:'Ca 8,5'},
-      {v:10.5,top:top1,bottom:bottom1,min:0,max:16,c:'#2563eb',lab:'Ca 10,5'},
-      {v:2.5,top:top1,bottom:bottom1,min:0,max:16,c:'#8b5cf6',lab:'P 2,5'},
-      {v:4.5,top:top1,bottom:bottom1,min:0,max:16,c:'#8b5cf6',lab:'P 4,5'},
-      {v:15,top:top2,bottom:bottom2,min:10,max:70,c:'#dc2626',lab:'PTH 15'},
-      {v:65,top:top2,bottom:bottom2,min:10,max:70,c:'#dc2626',lab:'PTH 65'}
+      {v:8.5,top:top1,bottom:bottom1,min:0,max:16,c:'#70bcff',lab:'Ca 8,5'},
+      {v:10.5,top:top1,bottom:bottom1,min:0,max:16,c:'#70bcff',lab:'Ca 10,5'},
+      {v:2.5,top:top1,bottom:bottom1,min:0,max:16,c:'#b8a2f1',lab:'P 2,5'},
+      {v:4.5,top:top1,bottom:bottom1,min:0,max:16,c:'#b8a2f1',lab:'P 4,5'},
+      {v:15,top:top2,bottom:bottom2,min:10,max:70,c:'#f19b9b',lab:'PTH 15'},
+      {v:65,top:top2,bottom:bottom2,min:10,max:70,c:'#f19b9b',lab:'PTH 65'}
     ];
     refs.forEach((r,idx)=>{
       const y=panelY(r.v,r.top,r.bottom,r.min,r.max);
@@ -931,10 +932,10 @@ function drawCurve(){
     });
   }
 
-  drawOneCurvePanel(v=>v.calcium,'#2563eb',4.8,top1,bottom1,[],0,16);
-  drawOneCurvePanel(v=>v.phosphate,'#8b5cf6',4.2,top1,bottom1,[],0,16);
-  drawOneCurvePanel(v=>v.pthCurve,'#dc2626',3.8,top2,bottom2,[10,7],10,70);
-  drawOneCurvePanel(v=>v.calcitoninCurve,'#ec4899',3.8,top2,bottom2,[4,6],10,70);
+  drawOneCurvePanel(v=>v.calcium,'#70bcff',4.8,top1,bottom1,[],0,16);
+  drawOneCurvePanel(v=>v.phosphate,'#b8a2f1',4.2,top1,bottom1,[],0,16);
+  drawOneCurvePanel(v=>v.pthCurve,'#f19b9b',3.8,top2,bottom2,[10,7],10,70);
+  drawOneCurvePanel(v=>v.calcitoninCurve,'#eda7cf',3.8,top2,bottom2,[4,6],10,70);
 
   gctx.strokeStyle=st.color+'66';
   gctx.lineWidth=2.0;
@@ -954,10 +955,10 @@ function drawCurve(){
 
   const px=left+(frame/TOTAL)*width,current=curveValues(frame);
   [
-    {y:panelY(current.calcium,top1,bottom1,0,16),c:'#2563eb'},
-    {y:panelY(current.phosphate,top1,bottom1,0,16),c:'#8b5cf6'},
-    {y:panelY(current.pthCurve,top2,bottom2,10,70),c:'#dc2626'},
-    {y:panelY(current.calcitoninCurve,top2,bottom2,10,70),c:'#ec4899'}
+    {y:panelY(current.calcium,top1,bottom1,0,16),c:'#70bcff'},
+    {y:panelY(current.phosphate,top1,bottom1,0,16),c:'#b8a2f1'},
+    {y:panelY(current.pthCurve,top2,bottom2,10,70),c:'#f19b9b'},
+    {y:panelY(current.calcitoninCurve,top2,bottom2,10,70),c:'#eda7cf'}
   ].forEach(p=>{
     // esfera perfeita com glow, sem borda branca
     const halo=gctx.createRadialGradient(px,p.y,2,px,p.y,26);
@@ -985,13 +986,13 @@ function drawCurve(){
 
   const legendY=820;
   const items=[
-    {x:96,y:legendY,c:'#2563eb',label:'Cálcio plasmático',dash:[]},
-    {x:476,y:legendY,c:'#8b5cf6',label:'Fosfato plasmático',dash:[]},
-    {x:96,y:legendY+46,c:'#dc2626',label:'PTH',dash:[10,7]},
-    {x:476,y:legendY+46,c:'#ec4899',label:'Calcitonina',dash:[4,6]}
+    {x:96,y:legendY,c:'#70bcff',label:'Cálcio plasmático',dash:[]},
+    {x:476,y:legendY,c:'#b8a2f1',label:'Fosfato plasmático',dash:[]},
+    {x:96,y:legendY+46,c:'#f19b9b',label:'PTH',dash:[10,7]},
+    {x:476,y:legendY+46,c:'#eda7cf',label:'Calcitonina',dash:[4,6]}
   ];
   items.forEach(item=>{
-    gctx.fillStyle='#ffffff';
+    gctx.fillStyle='#173440';
     roundedBox(gctx,item.x-14,item.y-21,318,34,13);
     gctx.fill();
     gctx.strokeStyle=item.c+'40';
@@ -1013,7 +1014,7 @@ function drawCurve(){
     gctx.arc(item.x+68,item.y,6.5,0,Math.PI*2);
     gctx.fillStyle=dot;
     gctx.fill();
-    gctx.fillStyle='#334155';
+    gctx.fillStyle='#dcebf3';
     gctx.font='bold 14px Arial';
     gctx.fillText(item.label,item.x+84,item.y+5);
   });
@@ -1025,34 +1026,6 @@ btnStart.addEventListener('click',play); btnPause.addEventListener('click',()=>p
 })();
 </script>
 
-<script>
-(() => {
-  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
-  const tabSections = [...document.querySelectorAll('[data-tab]')];
-  function setTab(name){
-    tabButtons.forEach(b => b.classList.toggle('active', b.dataset.tabnav === name));
-    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab === name));
-  }
-  tabButtons.forEach(b => b.addEventListener('click', () => setTab(b.dataset.tabnav)));
-  if (tabButtons.length) setTab('animacao');
-
-  const mobileToggle = document.getElementById('mobilePlayToggle');
-  const candidates = ['btnStart','btnPlay','playBtn','startBtn'];
-  const pauseCandidates = ['btnPause','pauseBtn'];
-  let startBtn = null, pauseBtn = null;
-  for (const id of candidates){ const el = document.getElementById(id); if (el){ startBtn = el; break; } }
-  for (const id of pauseCandidates){ const el = document.getElementById(id); if (el){ pauseBtn = el; break; } }
-  if (mobileToggle && startBtn){
-    let playing = false;
-    mobileToggle.addEventListener('click', () => {
-      if (playing && pauseBtn){ pauseBtn.click(); mobileToggle.textContent = '▶ Iniciar'; }
-      else { startBtn.click(); mobileToggle.textContent = '⏸ Pausar'; }
-      playing = !playing;
-    });
-  } else if (mobileToggle){
-    mobileToggle.style.display = 'none';
-  }
-})();
-</script>
+<script src="calcio-visual.js?v=20260909"></script>
 </body>
 </html>
