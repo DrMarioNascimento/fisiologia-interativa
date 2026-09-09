@@ -136,7 +136,7 @@ input[type=checkbox],input[type=radio]{accent-color:#2f80ed}
 }
 </style>
   <link rel="stylesheet" href="mobile-smartphone.css?v=20260815">
-<link rel="stylesheet" href="calcio-visual.css?v=20260909c">
+<link rel="stylesheet" href="calcio-visual.css?v=20260909d">
 </head>
 <body>
   <div class="mobile-topbar">
@@ -197,6 +197,7 @@ input[type=checkbox],input[type=radio]{accent-color:#2f80ed}
   </div>
 </div></details>  <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
 </div>
+<script src="calcio-moleculas.js?v=20260909"></script>
 <script>
 (()=>{
 const TOTAL=420, sceneCanvas=document.getElementById('sceneCanvas'),graphCanvas=document.getElementById('graphCanvas'),sctx=sceneCanvas.getContext('2d'),gctx=graphCanvas.getContext('2d');
@@ -221,19 +222,7 @@ return '';
 function updateStatus(){const st=getStage(frame),d=computeState(),c=toClinical(d);phaseText.firstChild.textContent=st.name;phaseDesc.textContent=st.desc;valueText.firstChild.textContent=`${c.calciumMg} mg/dL`;valueDesc.innerHTML=`Fosfato: ${c.phosphateMg} mg/dL · PTH: ${c.pthPg} pg/mL · Calcitonina: ${c.calcitoninPg} pg/mL${getReferenceHTML()}`;flowText.firstChild.textContent=st.event;flowDesc.textContent=st.eventDesc;setCardsColor(st.color);updateModeBadge();}
 function renderStageMap(){const current=stages.findIndex(s=>frame>=s.start&&frame<=s.end);stageTrack.innerHTML=stages.map((s,idx)=>`<div class="stage-node" aria-current="${idx===current?'step':'false'}" style="--stage:${s.color}"><div class="stage-num">${idx+1}</div><div class="stage-name">${s.short}</div><div class="stage-mini">${s.event}</div></div>`).join('');}
 function roundedBox(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath()}
-const moleculeColors={D3:'#ffe066','25':'#ffc7a8',C:'#7bf1b0','Ca²⁺':'#8cddff',Ca:'#8cddff',P:'#cbb3ff'};
-function drawIon(x,y,r,color,label){
-color=moleculeColors[label]||color;
-sctx.save();
-sctx.beginPath();
-if(label==='25'){for(let i=0;i<6;i++){const angle=Math.PI/3*i,px=x+Math.cos(angle)*r,py=y+Math.sin(angle)*r;i?sctx.lineTo(px,py):sctx.moveTo(px,py)}sctx.closePath()}
-else if(label==='P'){sctx.moveTo(x,y-r);sctx.lineTo(x+r,y);sctx.lineTo(x,y+r);sctx.lineTo(x-r,y);sctx.closePath()}
-else sctx.arc(x,y,r,0,Math.PI*2);
-sctx.fillStyle=color;sctx.fill();sctx.lineWidth=1.5;sctx.strokeStyle='#0a202c';sctx.stroke();
-// Reflexo pequeno na borda, fora da região central do símbolo.
-sctx.beginPath();sctx.ellipse(x-r*.4,y-r*.52,r*.22,r*.10,-.5,0,Math.PI*2);sctx.fillStyle='#ffffff88';sctx.fill();
-sctx.fillStyle='#10212c';sctx.font='bold '+(label==='Ca²⁺'?11:12)+'px Arial';sctx.textAlign='center';sctx.textBaseline='middle';sctx.fillText(label,x,y+.5);sctx.restore();
-}
+function drawIon(x,y,r,color,label){window.drawCalciumMolecule(sctx,x,y,r,label)}
 function drawArrow(x1,y1,x2,y2,color,width=4.8,label=''){
 const a=Math.atan2(y2-y1,x2-x1), nx=-Math.sin(a), ny=Math.cos(a);
 sctx.save();
