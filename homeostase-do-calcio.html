@@ -935,12 +935,12 @@ function drawScene(){
   drawDirectedParticles([{x:POS.rins.x + 45, y:POS.rins.y + POS.rins.h},{x:POS.intestine.x + POS.intestine.w - 8, y:POS.intestine.y}], frame*0.010, '#7bf1b0', 'C', 4, 16, 0.32);
 
   // Intestino -> Sangue (somente moléculas; sem setas)
-  drawDirectedParticles([{x:POS.intestine.x + 40, y:POS.intestine.y + 60},{x:POS.sangue.x + 460, y:POS.sangue.y}], frame*0.010, '#8cddff', 'Ca²⁺', Math.max(1,Math.min(6,Math.round(d.intestinalCa/30))), 16, 0.44);
+  drawDirectedParticles([{x:POS.intestine.x + 40, y:POS.intestine.y + 60},{x:POS.sangue.x + 460, y:POS.sangue.y}], frame*0.010, '#8cddff', 'Ca²⁺', Math.max(1,Math.min(6,Math.round(d.intestinalCa/18))), 16, 0.44);
   // Fosfato em trajeto separado, abaixo do cálcio intestinal.
-  drawDirectedParticles([{x:POS.intestine.x + 40,y:POS.intestine.y + 120},{x:POS.sangue.x + POS.sangue.w - 15,y:POS.sangue.y + 35}],frame*0.010,'#cbb3ff','P',4,16,0.20);
+  drawDirectedParticles([{x:POS.intestine.x + 40,y:POS.intestine.y + 120},{x:POS.sangue.x + POS.sangue.w - 15,y:POS.sangue.y + 35}],frame*0.010,'#cbb3ff','P',5,16,0.20);
 
   // Ossos -> Sangue (somente moléculas; sem seta)
-  drawDirectedParticles([{x:POS.ossos.x + POS.ossos.w/2, y:POS.ossos.y},{x:POS.sangue.x - 1 + 300, y:POS.sangue.y - 1 + POS.sangue.h + 2}], frame*0.010, '#8cddff', 'Ca²⁺', Math.max(1,Math.min(6,Math.round(d.boneInput/30))), 16, 0.68);
+  drawDirectedParticles([{x:POS.ossos.x + POS.ossos.w/2, y:POS.ossos.y},{x:POS.sangue.x - 1 + 300, y:POS.sangue.y - 1 + POS.sangue.h + 2}], frame*0.010, '#8cddff', 'Ca²⁺', Math.max(1,Math.min(6,Math.round(d.boneInput/18))), 16, 0.68);
 
   // partículas no sangue
   for(let i=0;i<11;i++){
@@ -953,13 +953,12 @@ function drawScene(){
   }
 
   // Fluxos regulatórios adicionais; intensidade acompanha o mesmo estado dos gráficos.
-  const flow=(points,color,label,count)=>drawDirectedParticles(points,frame*.007,color,label,Math.max(1,Math.min(6,Math.round(count))),10);
+  const flow=(points,color,label,count)=>{const length=points.slice(1).reduce((sum,p,i)=>sum+Math.hypot(p.x-points[i].x,p.y-points[i].y),0);const limit=Math.max(1,Math.floor(length/30));drawDirectedParticles(points,frame*.007,color,label,Math.max(1,Math.min(limit,Math.round(count*5))),10)};
   sctx.save();sctx.setLineDash([6,5]);drawArrow(550,470,790,470,'#8cddff',2.5,'');sctx.restore();
   // Retorno ao sangue e saída urinária ocupam corredores separados.
-  drawArrow(820,195,340,420,'#8cddff',2.5,'');
   flow([{x:820,y:195},{x:340,y:420}],'#8cddff','Ca²⁺',d.renalRetention/45);
   // Saída esquemática do fosfato sanguíneo por excreção renal.
-  drawArrow(150,515,150,650,'#cbb3ff',2.5,'');flow([{x:150,y:515},{x:150,y:650}],'#cbb3ff','P',d.phosphaturia/45);
+  flow([{x:150,y:515},{x:150,y:650}],'#cbb3ff','P',d.phosphaturia/45);
   flow([{x:230,y:510},{x:540,y:710},{x:610,y:710}],'#8cddff','Ca²⁺',d.boneDeposit/35);
   if(labelsToggle.checked){sctx.save();sctx.font='13px Arial';sctx.fillStyle='#dcebf3';sctx.fillText(d.calcium<8.5?'Ca baixo: estímulo ao PTH':d.calcium>10.5?'Ca alto: inibição do PTH':'Feedback Ca → PTH',555,493);sctx.fillText('Deposição óssea',235,645);sctx.fillText('Reabsorção óssea',550,565);sctx.fillStyle='#8cddff';sctx.fillText('Cálcio reabsorvido → sangue',430,250);sctx.fillStyle='#cbb3ff';sctx.fillText('Fosfato → urina',174,566);sctx.fillText('Excreção renal',174,584);sctx.restore()}
   if(labelsToggle.checked){
