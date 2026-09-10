@@ -960,7 +960,7 @@ function drawScene(){
   // Saída esquemática do fosfato sanguíneo por excreção renal.
   drawArrow(150,515,150,615,'#cbb3ff',2.5,'');flow([{x:150,y:515},{x:150,y:615}],'#cbb3ff','P',d.phosphaturia/45);
   flow([{x:230,y:510},{x:540,y:710},{x:610,y:710}],'#8cddff','Ca²⁺',d.boneDeposit/35);
-  if(labelsToggle.checked){sctx.save();sctx.font='13px Arial';sctx.fillStyle='#dcebf3';sctx.fillText(d.calcium<8.5?'Ca baixo: estímulo ao PTH':d.calcium>10.5?'Ca alto: inibição do PTH':'Feedback Ca → PTH',555,493);sctx.fillText('Deposição óssea',315,645);sctx.fillText('Reabsorção óssea',350,565);sctx.fillStyle='#8cddff';sctx.fillText('Cálcio reabsorvido → sangue',430,250);sctx.fillStyle='#cbb3ff';sctx.fillText('Fosfato → urina',174,566);sctx.fillText('Excreção renal',174,584);sctx.restore()}
+  if(labelsToggle.checked){sctx.save();sctx.font='13px Arial';sctx.fillStyle='#dcebf3';sctx.fillText(d.calcium<8.5?'Ca baixo: estímulo ao PTH':d.calcium>10.5?'Ca alto: inibição do PTH':'Feedback Ca → PTH',555,493);sctx.fillText('Deposição óssea',235,645);sctx.fillText('Reabsorção óssea',550,565);sctx.fillStyle='#8cddff';sctx.fillText('Cálcio reabsorvido → sangue',430,250);sctx.fillStyle='#cbb3ff';sctx.fillText('Fosfato → urina',174,566);sctx.fillText('Excreção renal',174,584);sctx.restore()}
   if(labelsToggle.checked){
     sctx.fillStyle = '#aec6d5';
     sctx.font = '14px Arial';
