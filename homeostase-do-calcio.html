@@ -849,7 +849,7 @@ function drawScene(){
   organ('pele',POS.pele,'Pele','#ffe066');organ('figado',POS.figado,'Fígado','#deb5ff');organ('rins',POS.rins,'Rins','#79dcff');
   organ('intestino',POS.intestine,'Intestino','#7bf1b0');organ('paratireoides',POS.para,'Tireoide','#ffb86b');organ('osso',POS.ossos,'Óssos','#f4f0dd');
 
-  if(labelsToggle.checked){sctx.save();sctx.fillStyle='#ffe066';sctx.font='12px Arial';sctx.textAlign='center';sctx.fillText('Paratireoides: pontos amarelos',885,POS.para.y+POS.para.h+42);sctx.restore()}
+  if(labelsToggle.checked){sctx.save();sctx.fillStyle='#ffe066';sctx.font='12px Arial';sctx.textAlign='center';sctx.fillText('Paratireoides (em amarelo)',885,POS.para.y+POS.para.h+42);sctx.restore()}
   // sangue - vaso aberto em corte longitudinal
   const vx = POS.sangue.x - 1;
   const vy = POS.sangue.y - 1;
@@ -972,11 +972,13 @@ function drawScene(){
   // Fluxos regulatórios adicionais; intensidade acompanha o mesmo estado dos gráficos.
   const flow=(points,color,label,count)=>drawDirectedParticles(points,frame*.007,color,label,Math.max(1,Math.min(6,Math.round(count))),10);
   sctx.save();sctx.setLineDash([6,5]);drawArrow(550,470,790,470,'#8cddff',2.5,'');sctx.restore();
-  drawArrow(740,205,740,450,'#8cddff',2.5,'');drawArrow(740,450,540,450,'#8cddff',2.5,'');
-  flow([{x:870,y:175},{x:740,y:205},{x:740,y:450},{x:540,y:450}],'#8cddff','Ca²⁺',d.renalRetention/45);
-  drawArrow(805,190,780,325,'#cbb3ff',2.5,'');flow([{x:805,y:190},{x:780,y:325}],'#cbb3ff','P',d.phosphaturia/45);
+  // Retorno ao sangue e saída urinária ocupam corredores separados.
+  sctx.save();sctx.strokeStyle='#8cddff';sctx.lineWidth=2.5;sctx.lineJoin='round';sctx.beginPath();sctx.moveTo(835,180);sctx.lineTo(835,245);sctx.lineTo(740,245);sctx.lineTo(740,450);sctx.stroke();sctx.restore();
+  drawArrow(740,450,540,450,'#8cddff',2.5,'');
+  flow([{x:835,y:180},{x:835,y:245},{x:740,y:245},{x:740,y:450},{x:540,y:450}],'#8cddff','Ca²⁺',d.renalRetention/45);
+  drawArrow(895,190,895,315,'#cbb3ff',2.5,'');flow([{x:895,y:190},{x:895,y:315}],'#cbb3ff','P',d.phosphaturia/45);
   flow([{x:230,y:510},{x:540,y:710},{x:610,y:710}],'#8cddff','Ca²⁺',d.boneDeposit/35);
-  if(labelsToggle.checked){sctx.save();sctx.font='13px Arial';sctx.fillStyle='#dcebf3';sctx.fillText(d.calcium<8.5?'Ca baixo: estímulo ao PTH':d.calcium>10.5?'Ca alto: inibição do PTH':'Feedback Ca → PTH',555,493);sctx.fillText('Ca reabsorvido',700,352);sctx.fillText('Fosfato → urina',760,340);sctx.fillText('Deposição óssea',315,645);sctx.fillText('Reabsorção óssea',350,565);sctx.restore()}
+  if(labelsToggle.checked){sctx.save();sctx.font='13px Arial';sctx.fillStyle='#dcebf3';sctx.fillText(d.calcium<8.5?'Ca baixo: estímulo ao PTH':d.calcium>10.5?'Ca alto: inibição do PTH':'Feedback Ca → PTH',555,493);sctx.fillText('Deposição óssea',315,645);sctx.fillText('Reabsorção óssea',350,565);sctx.fillStyle='#8cddff';sctx.fillText('Ca reabsorvido',754,282);sctx.fillText('→ sangue',754,300);sctx.fillStyle='#cbb3ff';sctx.textAlign='center';sctx.fillText('Fosfato',895,340);sctx.fillText('→ urina',895,358);sctx.restore()}
   if(labelsToggle.checked){
     sctx.fillStyle = '#aec6d5';
     sctx.font = '14px Arial';
