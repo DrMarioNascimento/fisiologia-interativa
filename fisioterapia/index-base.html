@@ -748,13 +748,15 @@
     ];
 
     const modules = [
+      {group:'celular', title:'Osmose e equilíbrio hidroeletrolítico', tags:['Fisiologia celular','Compartimentos'], objective:'Comparar tonicidade, osmolaridade e distribuição de água entre LIC e LEC.', use:'Exploração dos estados de referência e de mudanças de solutos no meio extracelular.', meta:'Água e solutos'},
+      {group:'celular', title:'Homeostase integrada tricompartimentada', tags:['Fisiologia celular','Homeostase'], objective:'Relacionar plasma, líquido intersticial e LIC em um modelo integrado de transporte e distribuição de água.', use:'Exploração do Estado basal, da sudorese e da redistribuição após adição de água.', meta:'Plasma · interstício · LIC'},
       {group:'celular', title:'Potencial de ação na membrana', tags:['Fisiologia celular','Membrana'], shot:'assets/screenshots/potencial-acao-membrana.jpg', objective:'Acompanhar em sete etapas as mudanças de permeabilidade, os fluxos de Na⁺ e K⁺ e a variação do potencial de membrana.', use:'Introdução guiada ao potencial de repouso, despolarização, repolarização e hiperpolarização.', meta:'7 etapas'},
       {group:'celular', title:'Potencial de ação do neurônio', tags:['Fisiologia celular','Neurônio'], shot:'assets/screenshots/neuronio-interativo.jpg', objective:'Visualizar o impulso nervoso, a membrana ampliada e a abertura sequencial dos canais dependentes de voltagem.', use:'Demonstração contínua ou por etapas dos eventos elétricos que constituem o potencial de ação.', meta:'Fluxos iônicos'},
       {group:'celular', title:'Transporte ativo secundário — SGLT', tags:['Transporte','Na⁺–glicose'], shot:'assets/screenshots/sglt-transporte.jpg', objective:'Relacionar o gradiente de Na⁺, a Na⁺/K⁺ ATPase e o cotransporte de glicose através da membrana.', use:'Discussão de energia potencial, transporte primário e secundário e efeitos de condições fisiopatológicas.', meta:'Modelo 3D'},
 
       {group:'muscular', title:'Contração muscular esquelética', tags:['Músculo','Linha temporal'], shot:'assets/screenshots/contracao-muscular.jpg', objective:'Acompanhar do potencial de ação ao relaxamento: ACh, placa motora, Ca²⁺, pontes cruzadas, ATP e sarcômero.', use:'Revisão sequencial da junção neuromuscular e do acoplamento excitação–contração.', meta:'7 etapas'},
       {group:'muscular', title:'Acoplamento excitação–contração', tags:['Placa motora','Acoplamento'], shot:'assets/screenshots/acoplamento-excitacao-contracao.jpg', objective:'Conectar a chegada do impulso nervoso à liberação de Ca²⁺ e à exposição dos sítios de ligação da actina.', use:'Exploração integrada da placa motora, túbulos T, retículo sarcoplasmático e sarcômero.', meta:'Sequência completa'},
-      {group:'muscular', title:'Contração muscular e sarcômero', tags:['Músculo','Sarcômero'], shot:'assets/screenshots/contracao-sarcomero.jpg', objective:'Explorar o ciclo das pontes cruzadas, o consumo de ATP e as alterações da zona H durante a contração.', use:'Aprofundamento do mecanismo molecular com foco ampliado no sarcômero.', meta:'Pontes cruzadas'},
+      {group:'muscular', title:'Contração muscular e sarcômero', tags:['Músculo','Sarcômero'], shot:'assets/screenshots/contracao-sarcomero.jpg', objective:'Relacionar a organização do músculo aos filamentos com as etapas de Ca²⁺, pontes cruzadas e retorno.', use:'Exploração guiada dos eventos sobre uma ilustração anatômica fixa; o deslizamento dos filamentos é discutido pela teoria.', meta:'Pontes cruzadas'},
       {group:'muscular', title:'Contrações musculares interativas', tags:['Músculo','Tipos de contração'], shot:'assets/screenshots/contracoes-musculares.jpg', objective:'Comparar contrações estática, dinâmica e isocinética, relacionando carga, movimento e produção de força.', use:'Aplicação em Educação Física e Fisioterapia para análise de diferentes ações musculares.', meta:'Comparação funcional'},
       {group:'muscular', title:'Hill × Isocinético', tags:['Músculo','Desempenho'], shot:'assets/screenshots/hill-isocinetico.jpg', objective:'Integrar força, velocidade, ativação neural, torque e potência em diferentes condições de contração.', use:'Comparação dos modelos de Hill e isocinético em situações aplicadas ao movimento humano.', meta:'Força × velocidade'},
       {group:'muscular', title:'Da intenção ao movimento', tags:['Músculo','Controle neuromuscular'], objective:'Integrar drive motivacional e atenção, giro do cíngulo, relé talâmico, vias motoras, recrutamento, frequência de disparo e acoplamento excitação–contração.', use:'Viagem interativa da intenção ao gesto, com tarefas funcionais, feedback seletivo e resposta conceitual progressiva.', meta:'Integração neuromuscular'},
@@ -764,7 +766,7 @@
       {group:'celular', title:'Potencial de ação cardíaco', tags:['Fisiologia celular','Cardiomiócito'], shot:'assets/screenshots/potencial-acao-cardiaco.jpg', objective:'Reconhecer as fases do potencial de ação do cardiomiócito e relacioná-las aos fluxos iônicos e ao período refratário.', use:'Introdução à eletrofisiologia cardíaca e análise orientada das fases 0 a 4.', meta:'Fases 0–4'},
       {group:'cardiovascular', title:'Pressão arterial, DC e RPT', tags:['Cardiovascular','Hemodinâmica'], shot:'assets/screenshots/hemodinamica.jpg', objective:'Relacionar pressão arterial, débito cardíaco, resistência periférica total, PAM e pressão de pulso.', use:'Comparação entre exercício, hemorragia, hipertensão, insuficiência cardíaca e alterações vasculares.', meta:'Variáveis integradas'},
       {group:'cardiovascular', title:'Retorno venoso', tags:['Cardiovascular','Hemodinâmica'], shot:'assets/screenshots/retorno-venoso.jpg', objective:'Compreender como pressão atrial direita, volume, tônus, complacência, resistência e bombas periféricas determinam o retorno venoso.', use:'Construção da curva de retorno venoso e discussão de ortostatismo, exercício e hemorragia.', meta:'Curvas ajustáveis'},
-      {group:'cardiovascular', title:'Loop cardíaco funcional', tags:['Cardiovascular','Ciclo cardíaco'], shot:'assets/screenshots/loop-cardiaco.jpg', objective:'Integrar enchimento, ejeção, volumes ventriculares e abertura e fechamento das válvulas ao longo do ciclo cardíaco.', use:'Leitura orientada das fases do ciclo e das relações entre eventos mecânicos e hemodinâmicos.', meta:'Ciclo completo'},
+      {group:'cardiovascular', title:'Loop cardíaco funcional', tags:['Cardiovascular','Ciclo cardíaco'], shot:'assets/screenshots/loop-cardiaco.jpg', objective:'Relacionar volumes diastólico e sistólico finais, volume sistólico, fração de ejeção e débito cardíaco.', use:'Comparação de condições de enchimento e ejeção pelos indicadores do loop; a cena não detalha os movimentos das válvulas.', meta:'Ciclo completo'},
       {group:'cardiovascular', title:'Lei de Poiseuille', tags:['Cardiovascular','Fluxo'], shot:'assets/screenshots/poiseuille.jpg', objective:'Relacionar fluxo, gradiente de pressão, raio, viscosidade e comprimento do vaso.', use:'Demonstração do forte efeito do raio vascular sobre a resistência e o fluxo sanguíneo.', meta:'Fluxo × resistência'},
 
       {group:'respiratorio', title:'Mecânica ventilatória', tags:['Respiratório','Pressões'], shot:'assets/screenshots/ventilacao-pulmonar.jpg', objective:'Visualizar as relações entre pressão pleural, pressão alveolar, volume, complacência, resistência e ventilação minuto.', use:'Comparação entre eupneia, asma, enfisema, fibrose, exercício e ventilação mecânica.', meta:'Gráficos sincronizados'},
@@ -781,12 +783,14 @@
 
     const simulatorBase = '../';
     const simulatorFiles = [
+      'osmose-equilibrio-hidroeletrolitico.html',
+      'homeostase-integrada-tricompartimental.html',
       'potencial-acao-membrana.html',
       'neuronio-interativo.html',
       'transporte-ativo-secundario-sglt.html',
-      'contracao-muscular-sarcomero.html',
-      'acoplamento-excitacao-contracao.html',
       'contracao-muscular-esqueletica.html',
+      'acoplamento-excitacao-contracao.html',
+      'contracao-muscular-sarcomero.html',
       'contracoes-musculares-interativas.html',
       'modelos-hill-isocinetico.html',
       'da-intencao-ao-movimento.html',

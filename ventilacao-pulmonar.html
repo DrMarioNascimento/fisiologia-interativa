@@ -203,8 +203,8 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
         <input id="massRange" type="range" min="40" max="120" step="1" value="70">
         <span class="setting-value" id="massLabel">70 kg</span>
       </label>
-      <label><span class="setting-name">VDf</span>
-        <input id="vdPhysRange" type="range" min="0" max="350" step="10" value="0">
+      <label><span class="setting-name">Espaço morto adicional</span>
+        <input id="vdPhysRange" aria-describedby="vdAdditionalHelp" type="range" min="0" max="350" step="10" value="0">
         <span class="setting-value" id="vdPhysLabel">0 mL</span>
       </label>
       <label><span class="setting-name">Complacência</span>
@@ -247,6 +247,7 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
 
 
   <div class="legend">
+    <p id="vdAdditionalHelp"><b>Espaço morto adicional:</b> este controle acrescenta um componente alveolar ao espaço morto estimado pelo cenário. O indicador <b>VDf</b> mostra o espaço morto fisiológico total, incluindo o anatômico. Em Eupneia, com massa de 70 kg e controle em 0 mL, o VDf é cerca de 154 mL. O modelo limita o componente adicional conforme o volume corrente.</p>
     <b>Como interpretar:</b> o simulador separa o <b>modo ventilatório</b> do <b>cenário clínico</b>. <span class="var-fr">FR (frequência respiratória)</span> e <span class="var-vt">Vt (volume corrente)</span> determinam a <b><span class="var-ve">VE (ventilação minuto)</span></b> pela relação <b><span class="var-ve">VE</span> = <span class="var-fr">FR</span> × <span class="var-vt">Vt</span></b>. A massa corporal estima o <b><span class="var-vd">VDa (espaço morto anatômico)</span></b> em aproximadamente 2,2 mL/kg. O <b><span class="var-vdf">VDf (espaço morto fisiológico)</span></b> representa o espaço morto anatômico somado ao espaço morto alveolar/patológico. A <b><span class="var-va">VA (ventilação alveolar)</span></b> é a porção efetiva para trocas gasosas: <b><span class="var-va">VA</span> = <span class="var-fr">FR</span> × [<span class="var-vt">Vt</span> − <span class="var-vdf">VDf</span>]</b>, repercutindo na <span class="var-sao2">SaO₂ (saturação arterial de oxigênio)</span>. Na ventilação espontânea, o diafragma torna a <span class="var-ppl">Ppl (pressão pleural)</span> mais negativa e a <span class="var-palv">Palv (pressão alveolar)</span> oscila pouco. Na ventilação mecânica, <span class="var-peep">PEEP (pressão expiratória final positiva)</span> e <span class="var-pinsp">Pinsp (pressão inspiratória)</span> elevam a <span class="var-palv">Palv</span>, deslocam a <span class="var-ppl">Ppl</span> para valores menos negativos e podem reduzir o <span class="var-rv">RV (retorno venoso)</span>.
     <span class="pill">ventilação</span>
     <span class="pill">mecânica respiratória</span>
