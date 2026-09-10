@@ -123,7 +123,7 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
       <div class="panel">
         <div class="panel-header"><h2>Situações rápidas</h2><span>exemplos para aula</span></div>
         <div class="states">
-          <button class="state-btn" data-state="normal">Eupneia</button>
+          <button class="state-btn" data-state="normal">Condição basal</button>
           <button class="state-btn" data-state="preload">Pré-carga ↑</button>
           <button class="state-btn" data-state="contract">Contratilidade ↑</button>
           <button class="state-btn" data-state="afterload">Pós-carga ↑</button>
@@ -614,7 +614,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
   };
 
   const presets = {
-    normal:   {fc:70,  edv:120, esv:50, label:'Eupneia'},
+    normal:   {fc:70,  edv:120, esv:50, label:'Condição basal'},
     preload:  {fc:70,  edv:145, esv:50, label:'Pré-carga ↑'},
     contract: {fc:70,  edv:120, esv:35, label:'Contratilidade ↑'},
     afterload:{fc:70,  edv:120, esv:65, label:'Pós-carga ↑'},
@@ -856,7 +856,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
     clearStepHighlight();
     model.stepIndex = -1;
     model.time = 0;
-    setStage('Eupneia');
+    setStage('Condição basal');
     updateHeartVisual();
     try{ svgRoot?.setCurrentTime?.(0); }catch(e){}
   }
