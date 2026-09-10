@@ -833,7 +833,7 @@ function drawScene(){
     figado:    {x: 550, y: 70,  w: 160, h: 105},
     rins:      {x: 810, y: 55,  w: 160, h: 125},
 
-    intestine: {x: 690, y: 270, w: 150, h: 150},
+    intestine: {x: 650, y: 270, w: 150, h: 150},
     sangue:    {x: 10,  y: 420, w: 540, h: 88},
     para:      {x: 800, y: 380, w: 170, h: 140},
     ossos:     {x: 550, y: 605, w: 150, h: 150}
@@ -934,27 +934,9 @@ function drawScene(){
   drawDirectedParticles([{x:POS.rins.x + 45, y:POS.rins.y + POS.rins.h},{x:POS.intestine.x + POS.intestine.w - 8, y:POS.intestine.y}], frame*0.010, '#7bf1b0', 'C', 4, 16, 0.32);
 
   // Intestino -> Sangue (somente moléculas; sem setas)
-  drawDirectedParticles([{x:POS.intestine.x, y:POS.intestine.y + POS.intestine.h - 35},{x:POS.sangue.x - 1 + 300, y:POS.sangue.y - 1}], frame*0.010, '#8cddff', 'Ca²⁺', Math.max(1,Math.min(6,Math.round(d.intestinalCa/30))), 16, 0.44);
-  // Guia P (seta temporária) + coordenadas compartilhadas
-  const pGuideStart = {x:POS.intestine.x + 20, y:POS.intestine.y + POS.intestine.h};
-  const pGuideEnd = {x:POS.sangue.x - 1 + 365, y:POS.sangue.y - 1 + 28};
-
-
-  // Fósforo: fluxo animado alinhado à trajetória
-  const pDx = pGuideEnd.x - pGuideStart.x;
-  const pDy = pGuideEnd.y - pGuideStart.y;
-  const pLen = Math.hypot(pDx, pDy) || 1;
-  const pNx = -pDy / pLen;
-  const pNy = pDx / pLen;
-  const pOffset = 8;
-
-  const baseTs = [0, 0.25, 0.5, 0.75];
-  baseTs.forEach((base) => {
-    const t = (base + frame * 0.01) % 1;
-    const x = pGuideStart.x + pDx * t + pNx * pOffset;
-    const y = pGuideStart.y + pDy * t + pNy * pOffset;
-    drawIon(x, y,16, '#cbb3ff', 'P');
-  });
+  drawDirectedParticles([{x:POS.intestine.x + 40, y:POS.intestine.y + 60},{x:POS.sangue.x + 460, y:POS.sangue.y}], frame*0.010, '#8cddff', 'Ca²⁺', Math.max(1,Math.min(6,Math.round(d.intestinalCa/30))), 16, 0.44);
+  // Fosfato em trajeto separado, abaixo do cálcio intestinal.
+  drawDirectedParticles([{x:POS.intestine.x + 40,y:POS.intestine.y + 120},{x:POS.sangue.x + POS.sangue.w - 15,y:POS.sangue.y + 35}],frame*0.010,'#cbb3ff','P',4,16,0.20);
 
   // Ossos -> Sangue (somente moléculas; sem seta)
   drawDirectedParticles([{x:POS.ossos.x + POS.ossos.w/2, y:POS.ossos.y},{x:POS.sangue.x - 1 + 300, y:POS.sangue.y - 1 + POS.sangue.h + 2}], frame*0.010, '#8cddff', 'Ca²⁺', Math.max(1,Math.min(6,Math.round(d.boneInput/30))), 16, 0.68);
@@ -973,12 +955,12 @@ function drawScene(){
   const flow=(points,color,label,count)=>drawDirectedParticles(points,frame*.007,color,label,Math.max(1,Math.min(6,Math.round(count))),10);
   sctx.save();sctx.setLineDash([6,5]);drawArrow(550,470,790,470,'#8cddff',2.5,'');sctx.restore();
   // Retorno ao sangue e saída urinária ocupam corredores separados.
-  drawArrow(820,195,535,430,'#8cddff',2.5,'');
-  flow([{x:820,y:195},{x:535,y:430}],'#8cddff','Ca²⁺',d.renalRetention/45);
+  drawArrow(820,195,340,420,'#8cddff',2.5,'');
+  flow([{x:820,y:195},{x:340,y:420}],'#8cddff','Ca²⁺',d.renalRetention/45);
   // Saída esquemática do fosfato sanguíneo por excreção renal.
   drawArrow(150,515,150,615,'#cbb3ff',2.5,'');flow([{x:150,y:515},{x:150,y:615}],'#cbb3ff','P',d.phosphaturia/45);
   flow([{x:230,y:510},{x:540,y:710},{x:610,y:710}],'#8cddff','Ca²⁺',d.boneDeposit/35);
-  if(labelsToggle.checked){sctx.save();sctx.font='13px Arial';sctx.fillStyle='#dcebf3';sctx.fillText(d.calcium<8.5?'Ca baixo: estímulo ao PTH':d.calcium>10.5?'Ca alto: inibição do PTH':'Feedback Ca → PTH',555,493);sctx.fillText('Deposição óssea',315,645);sctx.fillText('Reabsorção óssea',350,565);sctx.fillStyle='#8cddff';sctx.fillText('Ca reabsorvido',585,269);sctx.fillText('→ sangue',585,287);sctx.fillStyle='#cbb3ff';sctx.fillText('Fosfato → urina',174,566);sctx.fillText('Excreção renal',174,584);sctx.restore()}
+  if(labelsToggle.checked){sctx.save();sctx.font='13px Arial';sctx.fillStyle='#dcebf3';sctx.fillText(d.calcium<8.5?'Ca baixo: estímulo ao PTH':d.calcium>10.5?'Ca alto: inibição do PTH':'Feedback Ca → PTH',555,493);sctx.fillText('Deposição óssea',315,645);sctx.fillText('Reabsorção óssea',350,565);sctx.fillStyle='#8cddff';sctx.fillText('Cálcio reabsorvido → sangue',430,250);sctx.fillStyle='#cbb3ff';sctx.fillText('Fosfato → urina',174,566);sctx.fillText('Excreção renal',174,584);sctx.restore()}
   if(labelsToggle.checked){
     sctx.fillStyle = '#aec6d5';
     sctx.font = '14px Arial';
