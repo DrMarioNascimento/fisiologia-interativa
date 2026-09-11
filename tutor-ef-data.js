@@ -64,11 +64,11 @@ function renderAxes(){axesEl.innerHTML=axes.map(a=>'<button class="axis" type="b
 function renderCards(){
   const list=modules.filter(m=>m.group===active);
   const escape=escapeRooms[active];
-  const escapeCard=escape ? '<article class="card"><span class="meta">Sala piloto · Fisiologia em Fuga</span><h2>'+escape.title+'</h2><p>'+escape.goal+'</p><div class="actions"><a class="btn btn-primary" href="'+escape.href+'">Entrar no escape room</a></div></article>' : '';
-  cardsEl.innerHTML=escapeCard+list.map((m,i)=>{
+  const escapeCard=escape ? '<article class="card escape-card"><span class="meta">Desafio de fechamento</span><h2>ESCAPE ROOM</h2><p class="escape-call">Liberte seu conhecimento — ou fique preso na sala.</p><p>Use o que aprendeu nesta unidade para abrir os cinco cadeados antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="'+escape.href+'" aria-label="Entrar em '+escape.title+'">Entrar no escape room</a></div></article>' : '';
+  cardsEl.innerHTML=list.map((m,i)=>{
     const qs=m.qs.map((item,qi)=>'<div class="q"><b>'+(qi+1)+'. '+item.q+'</b><div class="opts">'+item.opts.map((opt,oi)=>'<button type="button" data-m="'+i+'" data-q="'+qi+'" data-o="'+oi+'">'+opt+'</button>').join('')+'</div><p class="feedback">'+item.why+'</p></div>').join('');
     return '<article class="card"><span class="meta">'+m.group+'</span><h2>'+m.title+'</h2><p>'+m.goal+'</p><ol class="steps">'+m.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="actions"><button class="btn btn-ghost" type="button" data-map>Ver mapa</button><a class="btn btn-primary" href="'+m.href+'">Abrir simulador</a><button class="btn btn-ghost" type="button" data-open>Questões</button></div><div class="panel">'+qs+'</div></article>';
-  }).join('');
+  }).join('')+escapeCard;
   cardsEl.querySelectorAll('[data-map]').forEach(btn=>btn.addEventListener('click',openMap));
   cardsEl.querySelectorAll('[data-open]').forEach(btn=>btn.addEventListener('click',()=>{btn.closest('.card').classList.toggle('is-open');}));
   cardsEl.querySelectorAll('.opts button').forEach(btn=>btn.addEventListener('click',()=>{const m=list[Number(btn.dataset.m)];const item=m.qs[Number(btn.dataset.q)];const ok=Number(btn.dataset.o)===item.a;btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('ok','bad'));btn.classList.add(ok?'ok':'bad');const fb=btn.closest('.q').querySelector('.feedback');fb.classList.add('show');fb.textContent=(ok?'Certo. ':'Ainda não. ')+item.why;}));
