@@ -32,6 +32,15 @@
     .grid { display:grid; gap:14px; padding:18px 0 28px; }
     .card { display:grid; gap:10px; padding:18px; border:1px solid var(--line); border-radius:var(--radius); background:linear-gradient(145deg,#fff 0%,#fff 68%,#eef8f3 100%); box-shadow:0 10px 28px rgba(15,91,66,.07); }
     .card h2 { margin:0; font-size:1.12rem; } .card p { margin:0; color:var(--muted); font-size:.9rem; }
+    .escape-card { position:relative; isolation:isolate; overflow:hidden; min-height:210px; align-content:end; color:#fff; border-color:#6f5932; background:#071411; box-shadow:0 16px 34px rgba(4,24,20,.24); }
+    .escape-card::before { content:""; position:absolute; inset:0; z-index:0; background:url('assets/escape-room-fisiologia.jpg') center 52%/cover no-repeat; opacity:.42; filter:saturate(.72) contrast(1.08); }
+    .escape-card::after { content:""; position:absolute; inset:0; z-index:0; background:linear-gradient(90deg,rgba(5,17,15,.95) 0%,rgba(5,17,15,.78) 54%,rgba(5,17,15,.48) 100%); }
+    .escape-card > * { position:relative; z-index:1; }
+    .escape-card .meta { color:#efbd5c; }
+    .escape-card h2 { font-size:clamp(1.45rem,4vw,2rem); letter-spacing:.08em; }
+    .escape-card p { max-width:620px; color:rgba(255,255,255,.86); }
+    .escape-card .escape-call { color:#fff; font-size:1.05rem; font-weight:800; }
+    .escape-card .btn-primary { color:#291c05; background:linear-gradient(180deg,#ffd77a 0%,#e7ab36 55%,#bd7912 100%); box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -4px 8px rgba(91,48,3,.24),0 10px 22px rgba(0,0,0,.28); }
     .meta { color:var(--green); font-size:.68rem; font-weight:850; letter-spacing:.08em; text-transform:uppercase; }
     .steps { margin:0; padding-left:18px; color:#355257; font-size:.88rem; }
     .actions { display:flex; flex-wrap:wrap; gap:8px; }
@@ -80,7 +89,7 @@
       <div class="modal-body"><img id="mapImage" alt="Mapa mental do eixo"></div>
     </div>
   </div>
-  <script src="tutor-fisio-data.js?v=3"></script>
+  <script src="tutor-fisio-data.js?v=4"></script>
   <script>
     let active = 'celular';
     const config = window.fisioterapiaTutor;
@@ -110,13 +119,13 @@
     function renderCards() {
       const list=config.modules.filter(item=>item.group===active);
       const escapeRoom=config.escapeRooms?.[active];
-      const escapeCard=escapeRoom ? `<article class="card"><span class="meta">Sala piloto · Fisiologia em Fuga</span><h2>${esc(escapeRoom.title)}</h2><p>${esc(escapeRoom.goal)}</p><div class="actions"><a class="btn btn-primary" href="${esc(escapeRoom.href)}">Entrar no escape room</a></div></article>` : '';
-      cardsEl.innerHTML=escapeCard+list.map((item,moduleIndex)=>{
+      const escapeCard=escapeRoom ? `<article class="card escape-card"><span class="meta">Desafio de fechamento</span><h2>ESCAPE ROOM</h2><p class="escape-call">Liberte seu conhecimento — ou fique preso na sala.</p><p>Use o que aprendeu nesta unidade para abrir os cinco cadeados antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="${esc(escapeRoom.href)}" aria-label="Entrar em ${esc(escapeRoom.title)}">Entrar no escape room</a></div></article>` : '';
+      cardsEl.innerHTML=list.map((item,moduleIndex)=>{
         const maps=groupMaps(item.group);
         const mapButtons=maps.map((map,index)=>`<button class="btn btn-ghost" type="button" data-map="${index}">${maps.length>1 ? 'Mapa '+(index+1) : 'Ver mapa'}</button>`).join('');
         const questions=(item.qs||[]).map((question,questionIndex)=>`<div class="q"><b>${questionIndex+1}. ${esc(question.q)}</b><div class="opts">${question.opts.map((option,optionIndex)=>`<button type="button" data-option="${optionIndex}" data-answer="${question.a}">${String.fromCharCode(65+optionIndex)}) ${esc(option)}</button>`).join('')}</div><p class="feedback" data-why="${esc(question.why)}"></p></div>`).join('');
         return `<article class="card" data-module="${moduleIndex}"><span class="meta">${esc(config.axisNames[item.group])}</span><h2>${esc(item.title)}</h2><p>${esc(item.goal)}</p><ol class="steps">${(item.steps||[]).map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="actions">${mapButtons}<a class="btn btn-primary" href="${esc(item.href)}?percurso=fisioterapia">Abrir simulador</a><button class="btn btn-ghost" type="button" data-open>Questões</button></div><div class="panel">${questions}</div></article>`;
-      }).join('');
+      }).join('')+escapeCard;
     }
     axesEl.addEventListener('click',event=>{
       const button=event.target.closest('[data-axis]');
