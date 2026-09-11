@@ -8,10 +8,35 @@ const maps = {
 };
 
 const escapeRooms = {
+  celular: {
+    title:'A Célula Sitiada',
+    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/celular',
+    goal:'Resolva os cadeados sobre membrana, transporte e potenciais de ação antes do tempo.'
+  },
+  muscular: {
+    title:'O Músculo em Silêncio',
+    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/muscular',
+    goal:'Resolva os cadeados sobre excitabilidade e contração muscular antes do tempo.'
+  },
+  osteoarticular: {
+    title:'O Osso que Se Reconstrói',
+    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/osteoarticular',
+    goal:'Resolva os cadeados sobre homeostase do cálcio e adaptação óssea antes do tempo.'
+  },
   cardiovascular: {
     title:'A Prova do Débito',
     href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/cardiovascular',
-    goal:'Resolva cinco cadeados sobre débito cardíaco, retorno venoso e resistência vascular antes do tempo.'
+    goal:'Resolva os cadeados sobre débito cardíaco, retorno venoso e resistência vascular antes do tempo.'
+  },
+  respiratorio: {
+    title:'O Fôlego Perdido',
+    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/respiratorio',
+    goal:'Resolva os cadeados sobre mecânica ventilatória, gases e hemoglobina antes do tempo.'
+  },
+  integracao: {
+    title:'A Marcha do Oxigênio',
+    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/integracao',
+    goal:'Resolva os cadeados sobre débito, extração e consumo de oxigênio antes do tempo.'
   }
 };
 
@@ -64,7 +89,7 @@ function renderAxes(){axesEl.innerHTML=axes.map(a=>'<button class="axis" type="b
 function renderCards(){
   const list=modules.filter(m=>m.group===active);
   const escape=escapeRooms[active];
-  const escapeCard=escape ? '<article class="card escape-card"><span class="meta">Desafio de fechamento</span><h2>ESCAPE ROOM</h2><p class="escape-call">Liberte seu conhecimento — ou fique preso na sala.</p><p>Use o que aprendeu nesta unidade para abrir os cinco cadeados antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="'+escape.href+'" aria-label="Entrar em '+escape.title+'">Entrar no escape room</a></div></article>' : '';
+  const escapeCard=escape ? '<article class="card escape-card"><span class="meta">Desafio de fechamento</span><h2>ESCAPE ROOM</h2><p class="escape-call">Liberte seu conhecimento — ou fique preso na sala.</p><p>Use o que aprendeu nesta unidade para abrir os cadeados antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="'+escape.href+'" aria-label="Entrar em '+escape.title+'">Entrar no escape room</a></div></article>' : '';
   cardsEl.innerHTML=list.map((m,i)=>{
     const qs=m.qs.map((item,qi)=>'<div class="q"><b>'+(qi+1)+'. '+item.q+'</b><div class="opts">'+item.opts.map((opt,oi)=>'<button type="button" data-m="'+i+'" data-q="'+qi+'" data-o="'+oi+'">'+opt+'</button>').join('')+'</div><p class="feedback">'+item.why+'</p></div>').join('');
     return '<article class="card"><span class="meta">'+m.group+'</span><h2>'+m.title+'</h2><p>'+m.goal+'</p><ol class="steps">'+m.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol><div class="actions"><button class="btn btn-ghost" type="button" data-map>Ver mapa</button><a class="btn btn-primary" href="'+m.href+'">Abrir simulador</a><button class="btn btn-ghost" type="button" data-open>Questões</button></div><div class="panel">'+qs+'</div></article>';
