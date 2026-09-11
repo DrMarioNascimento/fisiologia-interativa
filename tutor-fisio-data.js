@@ -35,6 +35,13 @@ window.fisioterapiaTutor = {
     respiratorio: '04 Sistema respiratório',
     integracao: '05 Integração cardiorrespiratória'
   },
+  escapeRooms: {
+    cardiovascular: {
+      title:'O Desafio da Mudança Postural',
+      href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/cardiovascular',
+      goal:'Resolva cinco cadeados sobre ortostatismo, retorno venoso e resposta cardiovascular antes do tempo.'
+    }
+  },
   maps: {
     celular: [
       {src:'assets/maps/organizacao-funcional-membranas.webp', title:'Organização funcional e membranas'}
