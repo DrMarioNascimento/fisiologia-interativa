@@ -94,11 +94,31 @@
 
 @media (max-width: 640px) {
   .tutor-input { font-size: 16px; }
-  .tutor-launcher { width: 68px; height: 68px; right: 14px; bottom: 14px; }
-  .tutor-portrait img { width: 80px; top: -13px; }
-  .tutor-panel { inset: auto 8px 8px; width: auto; height: min(76vh, 650px); border-radius: 22px; transform-origin: bottom center; }
+  .tutor-launcher {
+    width: 60px;
+    height: 60px;
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  }
+  .tutor-portrait img { width: 72px; top: -12px; }
+  .tutor-launcher .tutor-badge { min-width: 26px; height: 26px; right: -3px; top: -4px; }
+  .tutor-panel {
+    inset: auto 8px calc(8px + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    height: min(76vh, 650px);
+    border-radius: 22px;
+    transform-origin: bottom center;
+  }
   .tutor-panel.is-open + .tutor-launcher { visibility: hidden; }
-  .tutor-hint { right: 12px; bottom: 92px; }
+  .tutor-hint {
+    right: 12px;
+    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+    width: max-content;
+    max-width: min(220px, calc(100vw - 104px));
+    padding: 9px 11px;
+    font-size: .75rem;
+    line-height: 1.35;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
