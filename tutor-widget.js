@@ -404,6 +404,15 @@
       if (module.qs?.[index] && Number.isInteger(choice)) lastQuiz={module,question:module.qs[index],index,choice};
     }
   });
+  const hideTutorHint = () => {
+    const hint = document.querySelector('#tutorHint');
+    if (hint) hint.hidden = true;
+  };
   window.addEventListener('resize', () => { placePanel(); });
-  setTimeout(()=>{document.querySelector('#tutorHint').hidden=true;},7000);
+  window.addEventListener('scroll', hideTutorHint, { passive: true, once: true });
+  document.addEventListener('pointerdown', event => {
+    const hint = document.querySelector('#tutorHint');
+    if (hint && !hint.hidden && !event.target.closest('#tutorHint, #tutorLauncher')) hideTutorHint();
+  }, { passive: true });
+  setTimeout(hideTutorHint, 5000);
 })();
