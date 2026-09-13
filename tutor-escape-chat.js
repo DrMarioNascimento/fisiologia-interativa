@@ -15,23 +15,33 @@
   function axisId() {
     return (typeof active !== 'undefined' && active) ? active : '';
   }
+  function isGeneric(query) {
+    return /^(escape|room|escape room|sala|fuga|cadeado|cadeados|todas|todos)?$/.test(norm(query).trim());
+  }
   function htmlFor(query) {
     const list = rooms();
     if (!list.length) return '<p>Não há escape room cadastrado neste tutor.</p>';
     const q = norm(query);
-    var selected = list.filter(function (room) {
-      return q.indexOf(room.id) !== -1 || q.indexOf(norm(room.title)) !== -1;
-    });
-    if (!selected.length && axisId() && q.indexOf('todas') === -1) {
+    var selected = [];
+    if (!isGeneric(query)) {
+      selected = list.filter(function (room) {
+        return q.indexOf(room.id) !== -1 || q.indexOf(norm(room.title)) !== -1;
+      });
+    }
+    if (!selected.length && axisId() && !isGeneric(query) === false && q.indexOf('todas') === -1 && q.indexOf('todos') === -1) {
+      selected = list.filter(function (room) { return room.id === axisId(); });
+    }
+    if (!selected.length && axisId() && !/todas|todos/.test(q)) {
       selected = list.filter(function (room) { return room.id === axisId(); });
     }
     if (!selected.length) selected = list;
-    return '<p>Escape room da disciplina:</p>' + selected.map(function (room) {
+    const intro = selected.length === 1 ? 'Escape room desta unidade:' : 'Escape rooms da disciplina:';
+    return '<p>' + intro + '</p>' + selected.map(function (room) {
       return '<div class="tutor-result"><b>' + room.title + '</b><span>Unidade ' + room.id + '</span><br><a class="tutor-link" href="' + room.href + '">Entrar no escape room</a></div>';
     }).join('');
   }
   function isEscape(text) {
-    return /escape|fuga|cadeado/.test(norm(text));
+    return /\b(escape|room|fuga|cadeado|cadeados)\b/.test(norm(text));
   }
   function paint(html) {
     var box = document.querySelector('#tutorMessages');
