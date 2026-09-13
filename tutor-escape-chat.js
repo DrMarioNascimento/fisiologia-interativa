@@ -22,27 +22,80 @@
   function axisId() {
     return (typeof active !== 'undefined' && active) ? active : '';
   }
+  function tokens(value) {
+    return norm(value).split(/[^a-z0-9]+/).filter(function (part) { return part.length >= 3 || /^(pa|dc|hb|o2)$/.test(part); });
+  }
+  function stemHit(a, b) {
+    if (!a || !b) return false;
+    return a === b || (a.length >= 3 && b.length >= 3 && (a.indexOf(b) === 0 || b.indexOf(a) === 0));
+  }
+  var shortHints = {
+    fick: 'fick-integrado-cardiorrespiratorio.html',
+    vo2: 'consumo-o2-debito-cardiaco-diferenca-av.html',
+    avo2: 'consumo-o2-debito-cardiaco-diferenca-av.html',
+    wolff: 'mecanotransducao-lei-de-wolff.html',
+    mecano: 'mecanotransducao-lei-de-wolff.html',
+    pth: 'homeostase-do-calcio.html',
+    calcio: 'homeostase-do-calcio.html',
+    sglt: 'transporte-ativo-secundario-sglt.html',
+    poiseu: 'lei-de-poiseuille.html',
+    hill: 'modelos-hill-isocinetico.html',
+    isocin: 'modelos-hill-isocinetico.html',
+    hemo: 'curva-dissociacao-hemoglobina.html',
+    vent: 'ventilacao-pulmonar.html',
+    folego: 'ventilacao-pulmonar.html',
+    retorno: 'retorno-venoso.html',
+    loop: 'loop-cardiaco-funcional.html',
+    sarcom: 'contracao-muscular-sarcomero.html',
+    placa: 'contracao-muscular-esqueletica.html',
+    neuronio: 'neuronio-interativo.html',
+    sgl: 'transporte-ativo-secundario-sglt.html',
+    clasto: 'homeostase-do-calcio.html',
+    blasto: 'homeostase-do-calcio.html',
+    osteo: 'mecanotransducao-lei-de-wolff.html',
+    rpt: 'hemodinamica-pa-dc-rpt.html',
+    hemodin: 'hemodinamica-pa-dc-rpt.html'
+  };
   function matchModule(query) {
     const q = norm(query);
-    var best = null, score = 0;
+    const qTokens = tokens(query);
+    var hinted = null;
+    qTokens.concat(q.split(' ').filter(Boolean)).forEach(function (tok) {
+      Object.keys(shortHints).forEach(function (key) {
+        if (stemHit(tok, key) || q.indexOf(key) !== -1) {
+          hinted = shortHints[key];
+        }
+      });
+    });
+    if (hinted) {
+      var foundHint = catalogModules().filter(function (item) { return item.href === hinted; })[0];
+      if (foundHint) return foundHint;
+    }
+    var best = null, score = 0, second = 0;
     catalogModules().forEach(function (item) {
       const title = norm(item.title);
       const slug = norm(String(item.href || '').replace('.html', '').replace(/-/g, ' '));
+      const itemTokens = tokens(item.title + ' ' + item.href + ' ' + (item.goal || ''));
       var s = 0;
       if (title && q.indexOf(title) !== -1) s += 12;
-      title.split(' ').filter(function (part) { return part.length > 3; }).forEach(function (part) {
-        if (q.indexOf(part) !== -1) s += 3;
-      });
       if (slug && q.indexOf(slug) !== -1) s += 8;
-      if (s > score) { score = s; best = item; }
+      qTokens.forEach(function (tok) {
+        itemTokens.forEach(function (part) {
+          if (tok === part) s += tok.length >= 4 ? 8 : 5;
+          else if (stemHit(tok, part)) s += 4;
+        });
+      });
+      if (s > score) { second = score; score = s; best = item; }
+      else if (s > second) second = s;
     });
-    return score >= 6 ? best : null;
+    if (score >= 4 && score > second) return best;
+    return score >= 8 ? best : null;
   }
   var axisHints = {
     celular: /celular|membrana|potencial|sodio|potassio|sglt|neuronio/,
     muscular: /muscular|musculo|sarcomero|contracao|miosina|actina|placa motora/,
-    osteoarticular: /osteo|osso|osteoclasto|osteoblasto|osteocito|calcio|pth|wolff|mecanotransduc|remodel|articular/,
-    cardiovascular: /cardio|coracao|pressao|debito|retorno|poiseuille|sangue|hemodinam/,
+    osteoarticular: /osteo|osso|osteoclasto|osteoblasto|osteocito|clasto|blasto|calcio|pth|wolff|mecanotransduc|remodel|articular/,
+    cardiovascular: /cardio|coracao|pressao|debito|retorno|poiseuille|sangue|hemodinam|\brpt\b|\bpa\b|\bdc\b/,
     respiratorio: /respirat|pulmao|ventil|hemoglobina|surfactante/,
     integracao: /integrac|fick|vo2|extracao|cardiorrespir/
   };
@@ -61,12 +114,12 @@
     if (named) return [named];
     const axis = guessedAxis(query);
     const list = catalogModules();
-    const q = norm(query);
     var scored = list.map(function (item) {
       const hay = norm([item.title, item.goal, item.group, (item.steps || []).join(' ')].join(' '));
       var score = 0;
-      q.split(' ').filter(function (t) { return t.length > 3; }).forEach(function (term) {
-        if (hay.indexOf(term) !== -1) score += 2;
+      tokens(query).forEach(function (term) {
+        if (hay.indexOf(term) !== -1) score += 3;
+        hay.split(' ').forEach(function (part) { if (stemHit(term, part)) score += 2; });
       });
       if (axis && item.group === axis) score += 4;
       return { item: item, score: score };
