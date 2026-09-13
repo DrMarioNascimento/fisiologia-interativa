@@ -99,7 +99,7 @@
     const mapImage = document.querySelector('#mapImage');
     const mapTitle = document.querySelector('#mapTitle');
     const closeMap = document.querySelector('#closeMap');
-    const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[char]));
     const axisOrder = ['celular','muscular','cardiovascular','respiratorio','integracao'];
     const shortAxisNames = {
       celular:'Celular',
@@ -108,7 +108,6 @@
       respiratorio:'Respiratório',
       integracao:'Integração'
     };
-
     function groupMaps(group) {
       const value=config.maps[group];
       return !value ? [] : (Array.isArray(value) ? value : [value]);
@@ -161,6 +160,7 @@
     renderAxes();
     renderCards();
   </script>
+  <script src="tutor-ligacao-fuga.js?v=3"></script>
   <script src="tutor-widget.js?v=18"></script>
 </body>
 </html>
