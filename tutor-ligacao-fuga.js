@@ -3,8 +3,10 @@
     if (!href || href.indexOf("origem=") !== -1) return href;
     return href + (href.indexOf("?") >= 0 ? "&" : "?") + "origem=" + origem;
   }
-  function eixoDaBusca(ids) {
-    return new URLSearchParams(location.search).get("eixo");
+  function idsDisponiveis() {
+    if (typeof axes !== "undefined") return axes.map(function (item) { return item.id; });
+    if (typeof axisOrder !== "undefined") return axisOrder.slice();
+    return [];
   }
   function gravarEixo(id) {
     const url = new URL(location.href);
@@ -12,30 +14,35 @@
     history.replaceState(null, "", url);
   }
 
-  if (typeof axes !== "undefined" && typeof renderCards === "function") {
-    const ids = axes.map(function (item) { return item.id; });
-    const pedido = eixoDaBusca(ids);
-    if (ids.indexOf(pedido) !== -1) active = pedido;
-    const cardsAntigo = renderCards;
-    renderCards = function () {
-      cardsAntigo();
-      document.querySelectorAll(".escape-card a.btn-primary").forEach(function (link) {
-        link.setAttribute("href", comOrigem(link.getAttribute("href"), "site"));
-      });
-    };
+  const ids = idsDisponiveis();
+  if (!ids.length || typeof renderCards !== "function") return;
+
+  const pedido = new URLSearchParams(location.search).get("eixo");
+  if (ids.indexOf(pedido) !== -1) active = pedido;
+
+  const cardsAntigo = renderCards;
+  renderCards = function () {
+    cardsAntigo();
+    document.querySelectorAll(".escape-card a.btn-primary").forEach(function (link) {
+      link.setAttribute("href", comOrigem(link.getAttribute("href"), "site"));
+    });
+  };
+
+  if (typeof renderAxes === "function") {
     const eixosAntigo = renderAxes;
     renderAxes = function () {
       eixosAntigo();
       document.querySelectorAll(".axis").forEach(function (botao) {
         botao.addEventListener("click", function () {
-          const id = botao.getAttribute("data-id");
+          const id = botao.getAttribute("data-id") || botao.getAttribute("data-axis");
           if (id) gravarEixo(id);
         });
       });
     };
-    if (document.querySelector("#axes") && document.querySelector("#cards")) {
-      renderAxes();
-      renderCards();
-    }
+  }
+
+  if (document.querySelector("#axes") && document.querySelector("#cards")) {
+    if (typeof renderAxes === "function") renderAxes();
+    renderCards();
   }
 })();
