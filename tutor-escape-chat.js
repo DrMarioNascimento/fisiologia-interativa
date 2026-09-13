@@ -22,15 +22,33 @@
   function axisId() {
     return (typeof active !== 'undefined' && active) ? active : '';
   }
+  function matchModule(query) {
+    const q = norm(query);
+    var best = null, score = 0;
+    catalogModules().forEach(function (item) {
+      const title = norm(item.title);
+      const slug = norm(String(item.href || '').replace('.html', '').replace(/-/g, ' '));
+      var s = 0;
+      if (title && q.indexOf(title) !== -1) s += 12;
+      title.split(' ').filter(function (part) { return part.length > 3; }).forEach(function (part) {
+        if (q.indexOf(part) !== -1) s += 3;
+      });
+      if (slug && q.indexOf(slug) !== -1) s += 8;
+      if (s > score) { score = s; best = item; }
+    });
+    return score >= 6 ? best : null;
+  }
   var axisHints = {
     celular: /celular|membrana|potencial|sodio|potassio|sglt|neuronio/,
-    muscular: /muscular|musculo|sarcimero|sarcomero|contracao|miosina|actina|placa motora/,
-    osteoarticular: /osteo|osso|osteoclasto|osteoblasto|osteocito|calcio|pth|wolff|remodel|articular/,
+    muscular: /muscular|musculo|sarcomero|contracao|miosina|actina|placa motora/,
+    osteoarticular: /osteo|osso|osteoclasto|osteoblasto|osteocito|calcio|pth|wolff|mecanotransduc|remodel|articular/,
     cardiovascular: /cardio|coracao|pressao|debito|retorno|poiseuille|sangue|hemodinam/,
     respiratorio: /respirat|pulmao|ventil|hemoglobina|surfactante/,
     integracao: /integrac|fick|vo2|extracao|cardiorrespir/
   };
   function guessedAxis(query) {
+    const named = matchModule(query);
+    if (named && named.group) return named.group;
     const q = norm(query);
     var found = Object.keys(axisHints).filter(function (id) { return axisHints[id].test(q); });
     if (found.indexOf('osteoarticular') !== -1 && isFisioPage()) {
@@ -39,6 +57,8 @@
     return found[0] || axisId();
   }
   function relatedModules(query) {
+    const named = matchModule(query);
+    if (named) return [named];
     const axis = guessedAxis(query);
     const list = catalogModules();
     const q = norm(query);
@@ -79,9 +99,7 @@
     const mods = relatedModules(query);
     const rooms = isGenericEscape(query) ? catalogRooms() : relatedRooms(query);
     if (!mods.length && !rooms.length) return '';
-    var html = opts.afterAi
-      ? '<p><b>Para continuar neste tutor:</b></p>'
-      : '<p>Encontrei estes recursos da disciplina:</p>';
+    var html = opts.afterAi ? '<p><b>Para continuar neste tutor:</b></p>' : '<p>Encontrei estes recursos da disciplina:</p>';
     mods.forEach(function (item) {
       html += '<div class="tutor-result"><b>' + item.title + '</b><span>' + (item.goal || '') + '</span><br><a class="tutor-link" href="' + moduleHref(item.href) + '">Abrir simulador</a></div>';
     });
@@ -101,6 +119,13 @@
     box.scrollTop = box.scrollHeight;
     return el;
   }
+  function selectCard(module) {
+    if (!module) return;
+    document.querySelectorAll('#cards .card').forEach(function (card) {
+      var title = card.querySelector('h2');
+      if (title && title.textContent === module.title) card.click();
+    });
+  }
   var pendingAiQuery = '';
   function watchAi() {
     var box = document.querySelector('#tutorMessages');
@@ -119,6 +144,21 @@
       if (extra) paint(extra);
     }).observe(box, { childList: true, subtree: true, characterData: true });
   }
+  var nativeFetch = window.fetch;
+  window.fetch = function (url, options) {
+    try {
+      const target = String(url || '');
+      if (options && options.body && /\/api\/tutor/.test(target)) {
+        const body = JSON.parse(options.body);
+        const named = matchModule(body.message || '');
+        if (named) {
+          body.module = named.href;
+          options = Object.assign({}, options, { body: JSON.stringify(body) });
+        }
+      }
+    } catch (error) {}
+    return options === undefined ? nativeFetch.call(this, url) : nativeFetch.call(this, url, options);
+  };
   function ready() {
     var form = document.querySelector('#tutorForm');
     var chips = document.querySelector('.tutor-chips');
@@ -148,6 +188,8 @@
         paint(resourcesHtml(text, { allRooms: isGenericEscape(text) }));
         return;
       }
+      var named = matchModule(text);
+      if (named) selectCard(named);
       if (aiOn) pendingAiQuery = text;
     }, true);
   }
