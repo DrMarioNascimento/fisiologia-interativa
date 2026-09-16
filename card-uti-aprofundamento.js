@@ -11,16 +11,35 @@ document.addEventListener('DOMContentLoaded',()=>{
     const style=document.createElement('style');
     style.id='uti-card-style';
     style.textContent=`
-      .module-card[data-uti-card="1"]{cursor:default}
+      a.module-card[data-uti-card="1"]{cursor:pointer;text-decoration:none;color:inherit}
       .module-card[data-uti-card="1"] .module-category{text-transform:none;letter-spacing:.035em}
       .module-card[data-uti-card="1"] h3{-webkit-line-clamp:2}
       .uti-kicker{margin:0 0 6px;color:var(--group-color,var(--petrol-800));font-size:.68rem;font-weight:850;letter-spacing:.08em;text-transform:uppercase}
-      .uti-actions{display:flex!important;align-items:center!important;flex-flow:row nowrap!important;gap:18px!important;margin-top:auto!important;width:100%!important}
-      .uti-actions a{display:inline-flex!important;width:auto!important;min-height:0!important;white-space:nowrap!important;color:var(--group-color,var(--petrol-800));font-size:.7rem;font-weight:900;letter-spacing:.035em;text-decoration:none}
-      .uti-actions a:hover{text-decoration:underline;text-underline-offset:4px}
-      @media(max-width:420px){.uti-actions{gap:10px!important}.uti-actions a{font-size:.64rem!important}}
+      .uti-actions{margin-top:auto;color:var(--group-color,var(--petrol-800));font-size:.7rem;font-weight:900;letter-spacing:.035em}
     `;
     document.head.appendChild(style);
+  };
+
+  const markup=()=>`
+      <span class="module-category">Integração - Módulo de aprofundamento</span>
+      <div class="uti-kicker">Desafio de fechamento</div>
+      <h3>ESCAPE ROOM</h3>
+      <p>Plantão de 6 horas: regular água, eletrólitos, circulação, ventilação, ácido-base e rim num único paciente. O monitor mostra o estado; o aluno decide.</p>
+      <div class="uti-actions">Abrir simulador →</div>`;
+
+  const paint=card=>{
+    card.className='module-card';
+    card.dataset.utiCard='1';
+    card.dataset.deepened='1';
+    card.dataset.group='integracao';
+    card.dataset.title='escape room';
+    card.href=SIM;
+    card.target='_blank';
+    card.rel='noopener noreferrer';
+    card.setAttribute('aria-label','Abrir simulador ESCAPE ROOM');
+    card.style.cursor='pointer';
+    card.innerHTML=markup();
+    return card;
   };
 
   const apply=()=>{
@@ -36,37 +55,25 @@ document.addEventListener('DOMContentLoaded',()=>{
       const title=norm(item.querySelector('h3')?.textContent);
       return title==='escape room' || title==='uti fisiologica' || item.dataset.utiCard==='1';
     });
-    const existing=target.querySelector('[data-uti-card="1"]')||named[0];
-    named.filter(item=>item!==existing).forEach(item=>item.remove());
     if(term && !cardText.includes(term) && term!=='escape' && term!=='uti' && term!=='desafio'){
-      existing?.remove();
+      named.forEach(item=>item.remove());
       return;
     }
 
-    let card=existing;
-    if(!card){
-      card=document.createElement('article');
-      card.className='module-card';
+    let card=target.querySelector('a.module-card[data-uti-card="1"]');
+    named.filter(item=>item!==card).forEach(item=>item.remove());
+    if(card && card.getAttribute('href')===SIM && card.parentElement===target && card===target.lastElementChild){
+      const count=target.closest('.curriculum-block')?.querySelector('.curriculum-count');
+      if(count){const n=target.querySelectorAll('.module-card').length;count.textContent=`${n} ${n===1?'simulador':'simuladores'}`;} 
+      return;
     }
-    card.dataset.utiCard='1';
-    card.dataset.deepened='1';
-    card.dataset.group='integracao';
-    card.dataset.title='escape room';
-    card.removeAttribute('href');
-    card.removeAttribute('target');
-    card.removeAttribute('rel');
-    card.removeAttribute('aria-label');
-    card.style.cursor='default';
-    card.innerHTML=`
-      <span class="module-category">Integração - Módulo de aprofundamento</span>
-      <div class="uti-kicker">Desafio de fechamento</div>
-      <h3>ESCAPE ROOM</h3>
-      <p>Plantão de 6 horas: regular água, eletrólitos, circulação, ventilação, ácido-base e rim num único paciente. O monitor mostra o estado; o aluno decide.</p>
-      <div class="uti-actions">
-        <a href="${SIM}" target="_blank" rel="noopener noreferrer">Abrir simulador →</a>
-      </div>`;
-    card.querySelectorAll('a').forEach(link=>link.addEventListener('click',event=>event.stopPropagation()));
-    if(card.parentElement!==target||card!==target.lastElementChild) target.appendChild(card);
+    if(!card){
+      card=document.createElement('a');
+      target.appendChild(paint(card));
+    }else{
+      paint(card);
+      if(card.parentElement!==target||card!==target.lastElementChild) target.appendChild(card);
+    }
     const count=target.closest('.curriculum-block')?.querySelector('.curriculum-count');
     if(count){
       const n=target.querySelectorAll('.module-card').length;
