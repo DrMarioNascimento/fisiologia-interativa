@@ -1,0 +1,991 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="../brand/orientador.webp">
+<link rel="stylesheet" href="../tutor-widget.css?v=4">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UTI fisiológica — Fisiologia Interativa</title>
+<meta name="theme-color" content="#0c5c67">
+<meta name="description" content="Simulador educacional de um plantão de UTI: água, eletrólitos, circulação, ventilação, ácido-base e rim acoplados.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --petrol-950:#06383f; --petrol-900:#084953; --petrol-800:#0c5c67; --petrol-700:#11717d;
+  --petrol-100:#d9eff0; --petrol-50:#eef9f9; --orange:#c86635; --orange-soft:#f7e1d5;
+  --bg:#071216; --painel:#0c1c22; --painel2:#10262b; --linha:#1d3a40; --tinta:#e8f0f0; --mudo:#8aa3a8;
+  --ecg:#3dff7f; --pa:#ff6b5a; --spo2:#39d5ff; --co2:#ffd23f; --pvc:#c29bff; --temp:#f2f2f2;
+  --ok:#3ddc84; --atencao:#ffb020; --perigo:#ff4d4d; --info:#7ec8d0;
+  --num:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tinta);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;font-size:15px}
+button,input,select{font:inherit;color:inherit}
+a{color:var(--info)}
+.topo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid rgba(17,113,125,.35);background:linear-gradient(180deg,#0b3036,#07181c);position:sticky;top:0;z-index:20;box-shadow:0 10px 24px rgba(6,56,63,.35)}
+.marca-mark{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,var(--petrol-700),var(--petrol-950));box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 8px 16px rgba(6,56,63,.35);font-weight:900}
+.aviso-rodape{margin:8px 16px 28px;color:#8aa3a8;font-size:12px;line-height:1.45}
+.marca{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.06em}
+.marca small{display:block;font-weight:600;letter-spacing:.02em;color:var(--mudo);font-size:12px}
+.marca a{text-decoration:none;color:var(--mudo);font-size:13px;font-weight:600;letter-spacing:0}
+.caso{font-weight:800;font-size:16px}
+.caso small{display:block;color:var(--mudo);font-weight:600;font-size:12px}
+.relogio{font-family:var(--num);font-size:22px;font-weight:700;min-width:120px}
+.relogio small{display:block;font-family:Inter;font-size:11px;color:var(--mudo);font-weight:600}
+.progresso{width:140px;height:6px;background:#1b2a38;border-radius:9px;overflow:hidden}
+.progresso span{display:block;height:100%;background:linear-gradient(90deg,#39d5ff,#3ddc84)}
+.velocidades{display:flex;gap:4px;flex-wrap:wrap}
+.btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 14px;border:1px solid #2d5a62;border-top-color:#4e8a93;border-bottom-color:#062f35;border-radius:999px;background:linear-gradient(180deg,#1a4b53 0%,#0c5c67 48%,#06383f 100%);color:#eef9f9;font-weight:750;font-size:14px;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -3px 6px rgba(6,56,63,.35),0 8px 16px rgba(6,56,63,.28);transition:transform .18s ease,box-shadow .18s ease}
+.btn:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 12px 22px rgba(6,56,63,.38)}
+.btn.on{background:linear-gradient(180deg,#2a9aa8,#11717d 55%,#084953);border-color:#7ec8d0;color:#fff}
+.btn.acao{background:linear-gradient(180deg,#d58a5c,#c86635 52%,#8a3d18);border-color:#e2b08a;border-bottom-color:#6a2c12;color:#fff}
+.btn.perigo{background:linear-gradient(180deg,#c45b5b,#8a2424);border-color:#e08989;color:#fff}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.chip{border:1px solid #2d5a62;background:linear-gradient(180deg,#14363c,#0d2428);border-radius:99px;padding:6px 11px;cursor:pointer;font-weight:700;font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 10px rgba(0,0,0,.25)}
+.chip.on{border-color:#c86635;background:linear-gradient(180deg,#c86635,#8a3d18);color:#fff}
+.espaco{flex:1}
+
+.alarme{margin:10px 16px 0;border-radius:10px;padding:10px 14px;font-weight:800;display:none;align-items:center;gap:10px;font-size:15px}
+.alarme.on{display:flex}
+.alarme.perigo{background:#3b0f12;border:1px solid #ff4d4d;color:#ffd7d7;animation:pisca 1s steps(2) infinite}
+.alarme.atencao{background:#33250a;border:1px solid #ffb020;color:#ffe7b8}
+@keyframes pisca{50%{border-color:#7a1f25}}
+
+.grade{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);gap:14px;padding:12px 16px 20px}
+.painel{background:var(--painel);border:1px solid var(--linha);border-radius:14px}
+.painel h2{margin:0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mudo);font-weight:800}
+.cab{display:flex;justify-content:space-between;align-items:center;padding:12px 14px 8px;gap:8px}
+
+/* ---------- monitor */
+.monitor{background:#000;border:1px solid #1a2733;border-radius:14px;overflow:hidden}
+.canal{display:grid;grid-template-columns:minmax(0,1fr) 190px;border-bottom:1px solid #0f1a24;min-height:92px}
+.canal:last-child{border-bottom:0}
+.onda{position:relative}
+.onda canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.onda .rot{position:absolute;left:8px;top:4px;font-size:12px;font-weight:800;letter-spacing:.06em;z-index:2}
+.onda .rot2{position:absolute;left:8px;bottom:4px;font-size:11px;color:#5d7486;z-index:2;font-family:var(--num)}
+.num{padding:8px 12px;border-left:1px solid #0f1a24;display:flex;flex-direction:column;justify-content:center}
+.num .l{font-size:12px;font-weight:800;letter-spacing:.08em}
+.num .g{font-family:var(--num);font-size:44px;font-weight:700;line-height:1}
+.num .m{font-family:var(--num);font-size:15px;opacity:.85}
+.num.alarm .g{animation:piscaNum .8s steps(2) infinite}
+@keyframes piscaNum{50%{opacity:.25}}
+.faixa{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid #0f1a24}
+.faixa div{padding:8px 12px;border-right:1px solid #0f1a24}
+.faixa div:last-child{border-right:0}
+.faixa .l{font-size:11px;font-weight:800;letter-spacing:.08em;color:#7f93a4}
+.faixa .v{font-family:var(--num);font-size:24px;font-weight:700}
+.faixa .v small{font-size:12px;color:#7f93a4;margin-left:3px}
+.ritmoTxt{font-size:12px;color:#9fb2c1;margin-top:3px}
+
+/* ---------- laboratório */
+.labs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0 14px 14px}
+.grupo h3{margin:6px 0 6px;font-size:12px;color:var(--mudo);letter-spacing:.06em;text-transform:uppercase}
+.lab{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:baseline;padding:5px 8px;border-radius:8px}
+.lab:nth-child(odd){background:#0b141d}
+.lab b{font-weight:600;font-size:14px}
+.lab span{font-family:var(--num);font-size:17px;font-weight:700;text-align:right}
+.lab em{grid-column:1/3;font-style:normal;font-size:11px;color:#6f8597}
+.alto{color:#ff8a65}.baixo{color:#6cb6ff}.critico{color:#ff4d4d!important}
+
+/* ---------- controles */
+.abas{display:flex;gap:4px;padding:0 10px;border-bottom:1px solid var(--linha);flex-wrap:wrap}
+.abas button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 10px;cursor:pointer;font-weight:800;color:var(--mudo);font-size:14px}
+.abas button.on{color:#fff;border-bottom-color:#39d5ff}
+.aba{display:none;padding:12px 14px 14px}
+.aba.on{display:block}
+.ctl{margin:0 0 14px}
+.ctl .t{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:14px}
+.ctl .t output{font-family:var(--num);font-size:16px;color:#fff}
+.ctl input[type=range]{width:100%;accent-color:#39d5ff;height:26px}
+.dica{font-size:12px;color:#7f93a4;line-height:1.4}
+.linhaBtns{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+/* chip já definido no bloco de botões */
+select{background:#0b141d;border:1px solid var(--linha);border-radius:8px;padding:8px;width:100%}
+.fila{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.fila div{font-size:13px;background:#0b141d;border:1px solid var(--linha);border-radius:8px;padding:6px 8px}
+.fila i{display:block;height:4px;background:#1b2a38;border-radius:4px;margin-top:4px;overflow:hidden}
+.fila i span{display:block;height:100%;background:#39d5ff}
+.drogaBtn{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center;padding:8px 0;border-top:1px solid #152331}
+.drogaBtn:first-of-type{border-top:0}
+.drogaBtn b{font-size:14px}
+.minis{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:6px}
+.mini{background:#0b141d;border:1px solid var(--linha);border-radius:8px;padding:6px 8px}
+.mini .l{font-size:11px;color:#7f93a4;font-weight:700}
+.mini .v{font-family:var(--num);font-size:18px;font-weight:700}
+
+/* ---------- log */
+.log{max-height:260px;overflow:auto;padding:0 14px 12px;font-size:13px}
+.log div{display:grid;grid-template-columns:62px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid #132130}
+.log time{font-family:var(--num);color:#7f93a4}
+.log .acao{color:#cfe7ff}.log .alerta{color:#ffcf7a}.log .morte{color:#ff8080;font-weight:800}.log .alta{color:#7dffb0;font-weight:800}
+
+/* ---------- fisiologia */
+.fisio{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding:0 16px 16px}
+.bloco{padding:12px 14px}
+.bloco h2{margin-bottom:10px}
+.pares{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:14px}
+.pares span{font-family:var(--num);font-weight:700;text-align:right}
+.pares em{grid-column:1/3;font-style:normal;font-size:11px;color:#6f8597;margin:-2px 0 4px}
+.barras{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.barra .l{display:flex;justify-content:space-between;font-size:13px}
+.barra .l span{font-family:var(--num);font-weight:700}
+.barra i{display:block;height:12px;background:#12202c;border-radius:6px;position:relative;overflow:hidden;margin-top:3px}
+.barra i span{display:block;height:100%;border-radius:6px}
+.barra i b{position:absolute;top:-2px;bottom:-2px;width:2px;background:#fff9}
+.medidor{height:14px;background:#12202c;border-radius:7px;overflow:hidden;margin:6px 0 4px}
+.medidor span{display:block;height:100%;background:linear-gradient(90deg,#3ddc84,#ffb020 55%,#ff4d4d)}
+.tendencias{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:0 14px 14px}
+.tend{background:#0b141d;border:1px solid var(--linha);border-radius:10px;padding:6px 8px}
+.tend .l{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#9fb2c1}
+.tend .l span{font-family:var(--num);color:#fff}
+.tend canvas{width:100%;height:70px;display:block}
+.avisos{display:flex;flex-direction:column;gap:6px;padding:0 14px 12px}
+.avisos div{font-size:13px;border-left:3px solid var(--atencao);background:#1e1a0f;padding:6px 8px;border-radius:4px}
+
+/* ---------- telas sobrepostas */
+.cortina{position:fixed;inset:0;background:#02060acc;backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:50;overflow:auto;padding:30px 16px}
+.cortina.on{display:flex}
+.cartao{background:var(--painel);border:1px solid var(--linha);border-radius:18px;max-width:980px;width:100%;padding:22px}
+.cartao h1{margin:0 0 6px;font-size:30px}
+.cartao p{line-height:1.55;color:#c5d3de}
+.casos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.caso-c{text-align:left;background:#0b141d;border:1px solid var(--linha);border-radius:14px;padding:16px;cursor:pointer}
+.caso-c:hover{border-color:#39d5ff}
+.caso-c h2{margin:4px 0;font-size:20px}
+.caso-c .sub{color:var(--mudo);font-size:13px;font-weight:700}
+.caso-c p{font-size:14px;margin:8px 0}
+.caso-c .pede{font-size:13px;color:#9fd8ff}
+.regras{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.regras div{background:#0b141d;border:1px solid var(--linha);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;color:#b8c7d3}
+.regras b{display:block;color:#fff;margin-bottom:2px}
+.fim h1.obito{color:#ff6b6b}
+.fim h1.vivo{color:#6dffae}
+.porque{background:#0b141d;border-left:4px solid #ff6b6b;padding:12px 14px;border-radius:6px;margin:12px 0}
+.fim .pares{max-width:520px}
+.checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:12px 0}
+.checklist div{padding:6px 10px;border-radius:8px;background:#0b141d;font-size:14px}
+.checklist .ok{color:#7dffb0}.checklist .nao{color:#ff9a9a}
+.linhaFim{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+@media (max-width:1100px){
+  .grade{grid-template-columns:1fr}
+  .fisio{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .canal{grid-template-columns:minmax(0,1fr) 120px;min-height:78px}
+  .num .g{font-size:32px}
+  .faixa{grid-template-columns:repeat(3,1fr)}
+  .labs,.tendencias{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fisio,.casos,.regras{grid-template-columns:1fr}
+  .topo{gap:8px;position:static}
+  .progresso{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="marca">
+    <div class="marca-mark">+</div>
+    <div>UTI FISIOLÓGICA<small><a href="index.html">← Fisioterapia</a></small></div>
+  </div>
+  <div class="caso" id="casoNome">—<small id="casoSub"></small></div>
+  <div class="espaco"></div>
+  <div class="relogio"><span id="relogio">00:00</span><small>de 06:00 de plantão</small></div>
+  <div class="progresso"><span id="prog" style="width:0"></span></div>
+  <div class="velocidades" id="velocidades"></div>
+  <button class="btn" id="btnPular" title="Avança 10 minutos de uma vez">+10 min</button>
+  <button class="btn" id="btnSom">Som: desligado</button>
+  <button class="btn" id="btnNovo">Novo caso</button>
+</header>
+
+<div class="alarme" id="alarme"></div>
+
+<main class="grade">
+  <section>
+    <div class="monitor" id="monitor">
+      <div class="canal">
+        <div class="onda"><span class="rot" style="color:var(--ecg)">II</span><span class="rot2" id="ritmoRot"></span><canvas id="cvEcg"></canvas></div>
+        <div class="num" id="nFC" style="color:var(--ecg)"><span class="l">FC bpm</span><span class="g" id="vFC">--</span><span class="ritmoTxt" id="vRitmo">—</span></div>
+      </div>
+      <div class="canal">
+        <div class="onda"><span class="rot" style="color:var(--pa)">PA invasiva</span><span class="rot2">0 — 160 mmHg</span><canvas id="cvPa"></canvas></div>
+        <div class="num" id="nPA" style="color:var(--pa)"><span class="l">PA mmHg</span><span class="g" id="vPAM">--</span><span class="m" id="vPA">--/--</span></div>
+      </div>
+      <div class="canal">
+        <div class="onda"><span class="rot" style="color:var(--spo2)">Pleth</span><canvas id="cvPleth"></canvas></div>
+        <div class="num" id="nSat" style="color:var(--spo2)"><span class="l">SpO₂ %</span><span class="g" id="vSat">--</span><span class="m" id="vPerf">perfusão</span></div>
+      </div>
+      <div class="canal">
+        <div class="onda"><span class="rot" style="color:var(--co2)">CO₂ expirado</span><span class="rot2">0 — 60 mmHg</span><canvas id="cvCo2"></canvas></div>
+        <div class="num" id="nCO2" style="color:var(--co2)"><span class="l">EtCO₂ mmHg</span><span class="g" id="vEt">--</span><span class="m" id="vFR">FR --</span></div>
+      </div>
+      <div class="faixa">
+        <div style="color:var(--pvc)"><div class="l">PVC</div><div class="v" id="vPVC">--<small>mmHg</small></div></div>
+        <div style="color:var(--temp)"><div class="l">TEMP</div><div class="v" id="vTemp">--<small>°C</small></div></div>
+        <div style="color:#9ff0c7"><div class="l">DÉBITO</div><div class="v" id="vDC">--<small>L/min</small></div></div>
+        <div style="color:#ffe08a"><div class="l">DIURESE</div><div class="v" id="vDiur">--<small>mL/h</small></div></div>
+        <div style="color:#ffb3b3"><div class="l">LACTATO</div><div class="v" id="vLacM">--<small>mmol/L</small></div></div>
+      </div>
+    </div>
+
+    <div class="painel" style="margin-top:14px">
+      <div class="cab"><h2>Gasometria arterial e bioquímica · ao vivo</h2><span class="dica">↑ ↓ fora da referência · vermelho = grave</span></div>
+      <div class="labs" id="labs"></div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:14px">
+    <div class="painel">
+      <div class="abas" id="abas">
+        <button data-aba="fluidos" class="on">Fluidos</button>
+        <button data-aba="drogas">Drogas</button>
+        <button data-aba="vent">Ventilador</button>
+        <button data-aba="proc">Procedimentos</button>
+      </div>
+
+      <div class="aba on" data-aba="fluidos">
+        <div class="ctl">
+          <div class="t">Bolus</div>
+          <select id="bolusTipo"></select>
+          <div class="linhaBtns" id="bolusVol"></div>
+          <div class="linhaBtns" id="bolusTempo"></div>
+          <button class="btn acao" id="btnBolus" style="width:100%">Infundir</button>
+          <div class="dica" id="bolusDica"></div>
+          <div class="fila" id="fila"></div>
+        </div>
+        <div class="ctl">
+          <div class="t">Infusão contínua <output id="oManut">0 mL/h</output></div>
+          <select id="manutTipo"></select>
+          <input type="range" id="manutTaxa" min="0" max="500" step="10" value="0">
+          <div class="dica">Soro de manutenção. Soma no balanço hídrico hora a hora.</div>
+        </div>
+      </div>
+
+      <div class="aba" data-aba="drogas">
+        <div class="ctl">
+          <div class="t">Noradrenalina <output id="oNe">0,00 µg/kg/min</output></div>
+          <input type="range" id="ne" min="0" max="1" step="0.01" value="0">
+          <div class="dica">Agonista α₁: contrai arteríolas (↑ RVS) e veias (↓ volume não estressado → ↑ retorno venoso). Perde efeito com pH &lt; 7,2.</div>
+        </div>
+        <div class="ctl">
+          <div class="t">Dobutamina <output id="oDobu">0,0 µg/kg/min</output></div>
+          <input type="range" id="dobu" min="0" max="20" step="0.5" value="0">
+          <div class="dica">Agonista β₁: ↑ contratilidade e FC. O efeito β₂ reduz um pouco a RVS e desloca K⁺ para dentro das células.</div>
+        </div>
+        <div class="ctl">
+          <div class="t">Cloreto de potássio <output id="oKcl">0 mEq/h</output></div>
+          <input type="range" id="kcl" min="0" max="20" step="1" value="0">
+          <div class="dica">Repõe K⁺. Boa parte entra nas células: cada 10 mEq sobem o plasma ~0,1 mEq/L.</div>
+        </div>
+        <div class="drogaBtn"><div><b>Furosemida 40 mg</b><div class="dica">Bloqueia o NKCC2 na alça de Henle. Mais Na⁺, K⁺ e água na urina, e o rim perde a capacidade de concentrar. Precisa de filtração para agir.</div></div><button class="btn acao" data-acao="furosemida">Dar</button></div>
+        <div class="drogaBtn"><div><b>Gluconato de cálcio 10%</b><div class="dica">Não baixa o K⁺: restaura a margem entre o potencial de repouso e o limiar e protege o miocárdio por 30–60 min. Também ↑ contratilidade.</div></div><button class="btn acao" data-acao="calcio">Dar</button></div>
+        <div class="drogaBtn"><div><b>Insulina 10 U + glicose 50%</b><div class="dica">A insulina ativa a Na⁺/K⁺-ATPase e empurra K⁺ para dentro das células (−1 mEq/L em ~30 min). A glicose evita a hipoglicemia, mas dura menos que a insulina.</div></div><button class="btn acao" data-acao="insulinaGlicose">Dar</button></div>
+        <div class="drogaBtn"><div><b>Glicose 50% 50 mL</b><div class="dica">25 g de glicose.</div></div><button class="btn acao" data-acao="glicose">Dar</button></div>
+        <div class="drogaBtn"><div><b>Bicarbonato de sódio 8,4% 50 mL</b><div class="dica">50 mEq de HCO₃⁻ e 50 mEq de Na⁺. O tampão libera CO₂: se a ventilação não aumentar, a PaCO₂ sobe.</div></div><button class="btn acao" data-acao="bicarbonato">Dar</button></div>
+      </div>
+
+      <div class="aba" data-aba="vent">
+        <div class="ctl">
+          <div class="t">FiO₂ <output id="oFio2">40 %</output></div>
+          <input type="range" id="fio2" min="0.21" max="1" step="0.01" value="0.4">
+          <div class="dica">Sobe a PO₂ alveolar. Não corrige o shunt: sangue que passa por alvéolo fechado não vê o O₂.</div>
+        </div>
+        <div class="ctl">
+          <div class="t">PEEP <output id="oPeep">5 cmH₂O</output></div>
+          <input type="range" id="peep" min="0" max="24" step="1" value="5">
+          <div class="dica">Mantém alvéolos abertos no fim da expiração (↓ shunt). Também eleva a pressão no tórax e reduz o retorno venoso.</div>
+        </div>
+        <div class="ctl">
+          <div class="t">Volume corrente <output id="oVt">500 mL</output></div>
+          <input type="range" id="vt" min="250" max="800" step="10" value="500">
+          <div class="dica" id="vtDica"></div>
+        </div>
+        <div class="ctl">
+          <div class="t">Frequência respiratória <output id="oFr">14 irpm</output></div>
+          <input type="range" id="fr" min="6" max="40" step="1" value="14">
+          <div class="dica">VA = FR × (VC − espaço morto). A PaCO₂ é inversamente proporcional à VA.</div>
+        </div>
+        <div class="minis">
+          <div class="mini"><div class="l">P platô</div><div class="v" id="mPplat">--</div></div>
+          <div class="mini"><div class="l">Driving pressure</div><div class="v" id="mDp">--</div></div>
+          <div class="mini"><div class="l">Complacência</div><div class="v" id="mCompl">--</div></div>
+          <div class="mini"><div class="l">Vent. alveolar</div><div class="v" id="mVa">--</div></div>
+          <div class="mini"><div class="l">Shunt</div><div class="v" id="mShunt">--</div></div>
+          <div class="mini"><div class="l">PaO₂/FiO₂</div><div class="v" id="mPf">--</div></div>
+        </div>
+      </div>
+
+      <div class="aba" data-aba="proc">
+        <div class="drogaBtn"><div><b>Antibiótico e controle do foco</b><div class="dica">Na sepse, só isso muda a doença de base. O efeito sobre vasoplegia e extravasamento começa ~1 h depois e cresce por horas.</div></div><button class="btn acao" data-acao="antibiotico">Iniciar</button></div>
+        <div class="drogaBtn"><div><b>Hemostasia cirúrgica</b><div class="dica">Leva o paciente ao centro cirúrgico. O sangramento para 20 min depois. Até lá, quanto maior a pressão, mais ele sangra.</div></div><button class="btn acao" data-acao="hemostasia">Acionar</button></div>
+        <div class="drogaBtn"><div><b>Hemodiálise</b><div class="dica" id="dialiseDica">Retira K⁺, ácido e lactato, e corrige Na⁺ e HCO₃⁻ pelo banho de diálise. Começa 30 min depois de pedida.</div></div><button class="btn acao" data-acao="dialise" id="btnDialise">Pedir</button></div>
+        <div class="ctl" style="margin-top:10px">
+          <div class="t">Ultrafiltração <output id="oUf">0 mL/h</output></div>
+          <input type="range" id="ufTaxa" min="0" max="600" step="25" value="0">
+          <div class="dica">Tira plasma isotônico durante a diálise. Rápido demais esvazia o vaso antes de o interstício repor.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="painel">
+      <div class="cab"><h2>Alertas fisiológicos</h2></div>
+      <div class="avisos" id="avisos"></div>
+    </div>
+
+    <div class="painel">
+      <div class="cab"><h2>Evolução</h2></div>
+      <div class="log" id="log"></div>
+    </div>
+  </section>
+</main>
+
+<section class="fisio">
+  <div class="painel bloco">
+    <h2>Água corporal</h2>
+    <div class="barras" id="barrasAgua"></div>
+    <div class="pares" id="pAgua"></div>
+  </div>
+  <div class="painel bloco">
+    <h2>Circulação (Guyton)</h2>
+    <div class="pares" id="pCirc"></div>
+  </div>
+  <div class="painel bloco">
+    <h2>Oxigênio</h2>
+    <div class="pares" id="pO2"></div>
+    <div style="margin-top:10px;font-size:13px;font-weight:700">Dívida de O₂ <span id="dividaTxt" style="float:right;font-family:var(--num)"></span></div>
+    <div class="medidor"><span id="dividaBar" style="width:0"></span></div>
+    <div class="dica">Soma do O₂ que faltou. Em ~120 mL/kg os órgãos falham.</div>
+  </div>
+  <div class="painel bloco">
+    <h2>Rim e hormônios</h2>
+    <div class="pares" id="pRim"></div>
+  </div>
+</section>
+
+<section style="padding:0 16px 30px">
+  <div class="painel">
+    <div class="cab"><h2>Tendências do plantão</h2><span class="dica">faixa verde = alvo</span></div>
+    <div class="tendencias" id="tendencias"></div>
+  </div>
+</section>
+
+<!-- tela de escolha -->
+<div class="cortina on" id="telaInicio">
+  <div class="cartao">
+    <h1>Mantenha o paciente vivo por 6 horas.</h1>
+    <p>Um adulto de 70 kg em ventilação mecânica. Tudo o que o monitor mostra sai de um único modelo, com água corporal, eletrólitos, circulação, ventilação, trocas gasosas, ácido-base e rim ligados entre si. Cada intervenção mexe em mecanismos fisiológicos, e os efeitos chegam com atraso: a pressão responde em minutos, o lactato e o sódio em horas.</p>
+    <div class="regras">
+      <div><b>O tempo corre</b>Escolha a velocidade no alto. Em 30 s/s o plantão de 6 h dura 12 min. Pausar congela tudo.</div>
+      <div><b>Ninguém avisa a conduta</b>O monitor mostra o estado. Os alertas mostram o que está sendo lesado, não o que fazer.</div>
+      <div><b>Há saída e há morte</b>O paciente morre pelos mecanismos reais: arritmia, hipóxia, acidose, choque, dívida de O₂, sódio, glicose.</div>
+    </div>
+    <div class="casos" id="casos"></div>
+  </div>
+</div>
+
+<!-- tela final -->
+<div class="cortina" id="telaFim">
+  <div class="cartao fim" id="fimConteudo"></div>
+</div>
+
+<script src="uti-motor.js"></script>
+<script>
+(() => {
+'use strict';
+const M = window.UTIMotor;
+const $ = id => document.getElementById(id);
+const fmt = (x, d = 0) => (x == null || !isFinite(x)) ? '--' : Number(x).toFixed(d).replace('.', ',');
+const hhmm = min => { const m = Math.max(0, Math.floor(min)); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+
+let s = null;
+let vel = 30;            // segundos simulados por segundo real (0 = pausa)
+let fimMostrado = false;
+let ultimoEvento = 0;
+let som = false;
+
+// ======================================================================= escolha
+function telaInicial() {
+  const box = $('casos');
+  box.innerHTML = Object.values(M.CENARIOS).map(c => `
+    <button class="caso-c" data-caso="${c.id}">
+      <div class="sub">${c.sub}</div>
+      <h2>${c.nome}</h2>
+      <p>${c.historia}</p>
+      <div class="pede">${c.pede}</div>
+    </button>`).join('');
+  box.querySelectorAll('[data-caso]').forEach(b => b.onclick = () => iniciar(b.dataset.caso));
+  $('telaInicio').classList.add('on');
+}
+
+function iniciar(id) {
+  s = M.criar(id);
+  fimMostrado = false; ultimoEvento = 0;
+  $('telaInicio').classList.remove('on');
+  $('telaFim').classList.remove('on');
+  const sc = M.CENARIOS[id];
+  $('casoNome').firstChild.textContent = sc.nome;
+  $('casoSub').textContent = sc.sub;
+  sincronizarControles();
+  ondas.reiniciar();
+  ondas.avancar(6);          // a tela já abre com uma varredura completa, mesmo pausada
+  atualizarTudo(true);
+}
+
+// ================================================================== velocidade
+const VELS = [[0, '⏸ Pausa'], [10, '10 s/s'], [30, '30 s/s'], [60, '1 min/s'], [180, '3 min/s']];
+function montarVelocidades() {
+  $('velocidades').innerHTML = VELS.map(([v, n]) => `<button class="btn ${v === vel ? 'on' : ''}" data-vel="${v}">${n}</button>`).join('');
+  $('velocidades').querySelectorAll('[data-vel]').forEach(b => b.onclick = () => { vel = +b.dataset.vel; montarVelocidades(); });
+}
+$('btnPular').onclick = () => { if (s) { M.passo(s, 10); atualizarTudo(true); } };
+$('btnNovo').onclick = () => { vel = vel || 30; montarVelocidades(); telaInicial(); };
+$('btnSom').onclick = () => { som = !som; $('btnSom').textContent = 'Som: ' + (som ? 'ligado' : 'desligado'); if (som) audio.iniciar(); };
+
+// =================================================================== controles
+const BOLUS = { vol: 500, tempo: 30 };
+const DICAS_FLUIDO = {
+  rl: 'Cristaloide balanceado: Na⁺ 130, Cl⁻ 109, lactato 28 (vira HCO₃⁻ no fígado). ~20% fica no vaso.',
+  sf: 'Na⁺ 154 e Cl⁻ 154, sem tampão. Em grande volume dilui o HCO₃⁻ e causa acidose hiperclorêmica.',
+  sg5: 'Glicose metabolizada = água livre. Espalha-se pela água corporal inteira e dilui o Na⁺. Quase nada fica no vaso.',
+  hs3: 'Na⁺ 513: puxa água das células para o LEC. Sobe o Na⁺ rápido.',
+  alb20: 'Coloide: a albumina segura água no vaso pela pressão oncótica e puxa líquido do interstício.',
+  ch: 'Hemácias: repõe a hemoglobina e o conteúdo arterial de O₂. O citrato do conservante quela cálcio.'
+};
+function sincronizarControles() {
+  const c = s.c;
+  const tipos = ['rl', 'sf', 'sg5', 'hs3', 'alb20', 'ch'];
+  $('bolusTipo').innerHTML = tipos.map(t => `<option value="${t}">${M.FLUIDOS[t].nome}</option>`).join('');
+  $('manutTipo').innerHTML = ['rl', 'sf', 'sg5'].map(t => `<option value="${t}">${M.FLUIDOS[t].nome}</option>`).join('');
+  $('manutTipo').value = c.manutTipo;
+  ['manutTaxa', 'ne', 'dobu', 'kcl', 'fio2', 'peep', 'vt', 'fr', 'ufTaxa'].forEach(k => { $(k).value = c[k]; });
+  montarBolus();
+  rotulosControles();
+}
+function montarBolus() {
+  const tipo = $('bolusTipo').value;
+  const vols = tipo === 'ch' ? [300, 600] : tipo === 'alb20' ? [100, 200] : tipo === 'hs3' ? [150, 250, 500] : [250, 500, 1000];
+  if (!vols.includes(BOLUS.vol)) BOLUS.vol = vols[Math.min(1, vols.length - 1)];
+  $('bolusVol').innerHTML = vols.map(v => `<button class="chip ${v === BOLUS.vol ? 'on' : ''}" data-v="${v}">${v} mL</button>`).join('');
+  $('bolusTempo').innerHTML = [10, 30, 60].map(t => `<button class="chip ${t === BOLUS.tempo ? 'on' : ''}" data-t="${t}">em ${t} min</button>`).join('');
+  $('bolusVol').querySelectorAll('[data-v]').forEach(b => b.onclick = () => { BOLUS.vol = +b.dataset.v; montarBolus(); });
+  $('bolusTempo').querySelectorAll('[data-t]').forEach(b => b.onclick = () => { BOLUS.tempo = +b.dataset.t; montarBolus(); });
+  $('bolusDica').textContent = DICAS_FLUIDO[tipo];
+}
+$('bolusTipo').onchange = montarBolus;
+$('btnBolus').onclick = () => { if (!s) return; M.executar(s, 'bolus', $('bolusTipo').value, BOLUS.vol, BOLUS.tempo); atualizarTudo(true); };
+$('manutTipo').onchange = () => { if (s) M.executar(s, 'controle', 'manutTipo', $('manutTipo').value); };
+
+['manutTaxa', 'ne', 'dobu', 'kcl', 'fio2', 'peep', 'vt', 'fr', 'ufTaxa'].forEach(k => {
+  const el = $(k);
+  // só atualiza o rótulo durante o arraste; o elemento nunca é recriado
+  el.addEventListener('input', () => { if (!s) return; M.executar(s, 'controle', k, +el.value); rotulosControles(); });
+  el.addEventListener('change', () => {
+    if (!s || !s._ultimoControle) return;
+    const u = s._ultimoControle; s._ultimoControle = null;
+    const txt = { ne: fmt(u.valor, 2) + ' µg/kg/min', dobu: fmt(u.valor, 1) + ' µg/kg/min', kcl: u.valor + ' mEq/h', fio2: Math.round(u.valor * 100) + '%', peep: u.valor + ' cmH₂O', vt: u.valor + ' mL', fr: u.valor + ' irpm', manutTaxa: u.valor + ' mL/h', ufTaxa: u.valor + ' mL/h' }[u.chave];
+    s.eventos.push({ t: s.t, texto: u.nome + ' → ' + txt + '.', tipo: 'acao' });
+  });
+});
+function rotulosControles() {
+  const c = s.c;
+  $('oManut').textContent = c.manutTaxa + ' mL/h';
+  $('oNe').textContent = fmt(c.ne, 2) + ' µg/kg/min';
+  $('oDobu').textContent = fmt(c.dobu, 1) + ' µg/kg/min';
+  $('oKcl').textContent = c.kcl + ' mEq/h';
+  $('oFio2').textContent = Math.round(c.fio2 * 100) + ' %';
+  $('oPeep').textContent = c.peep + ' cmH₂O';
+  $('oVt').textContent = c.vt + ' mL';
+  $('oFr').textContent = c.fr + ' irpm';
+  $('oUf').textContent = c.ufTaxa + ' mL/h';
+  $('vtDica').textContent = `${fmt(c.vt / 65, 1)} mL/kg de peso predito (65 kg). Volume grande em pulmão rígido estoura a pressão de platô e lesa alvéolos.`;
+}
+document.querySelectorAll('[data-acao]').forEach(b => b.onclick = () => { if (!s) return; M.executar(s, b.dataset.acao); atualizarTudo(true); });
+document.querySelectorAll('#abas button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#abas button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.aba').forEach(a => a.classList.toggle('on', a.dataset.aba === b.dataset.aba));
+});
+
+// ==================================================================== laboratório
+const LABS = [
+  ['Gasometria', [
+    ['pH', v => v.ph, 2, 7.35, 7.45, 7.2, 7.55, ''],
+    ['PaO₂', v => v.pao2, 0, 80, 100, 55, 400, 'mmHg'],
+    ['PaCO₂', (v, s) => s.paco2, 0, 35, 45, 25, 60, 'mmHg'],
+    ['HCO₃⁻', v => v.hco3, 0, 22, 26, 15, 35, 'mEq/L'],
+    ['Excesso de base', v => v.be, 1, -2, 2, -10, 10, 'mEq/L'],
+    ['SaO₂', v => v.sao2 * 100, 0, 94, 100, 85, 101, '%'],
+    ['Lactato', v => v.lac, 1, 0.5, 2, 0, 4, 'mmol/L']
+  ]],
+  ['Eletrólitos', [
+    ['Na⁺', v => v.na, 0, 135, 145, 125, 155, 'mEq/L'],
+    ['K⁺', v => v.k, 1, 3.5, 5.0, 2.8, 6.5, 'mEq/L'],
+    ['Cl⁻', v => v.cl, 0, 98, 107, 90, 118, 'mEq/L'],
+    ['Ca²⁺ iônico', v => v.ica, 2, 1.1, 1.3, 0.9, 1.5, 'mmol/L'],
+    ['Ânion gap', v => v.ag, 0, 8, 14, 0, 22, 'mEq/L'],
+    ['Osmolalidade', v => v.posm, 0, 280, 295, 265, 310, 'mOsm/kg']
+  ]],
+  ['Sangue e metabólitos', [
+    ['Hemoglobina', v => v.hb, 1, 12, 16, 7, 20, 'g/dL'],
+    ['Hematócrito', v => v.hct * 100, 0, 36, 48, 21, 60, '%'],
+    ['Albumina', v => v.alb / 10, 1, 3.5, 5, 2.5, 6, 'g/dL'],
+    ['Glicose', v => v.glic * 18, 0, 70, 140, 50, 300, 'mg/dL'],
+    ['SvO₂ central', v => v.svo2 * 100, 0, 65, 80, 50, 90, '%'],
+    ['PaO₂/FiO₂', v => v.pf, 0, 300, 600, 150, 700, '']
+  ]]
+];
+function montarLabs() {
+  $('labs').innerHTML = LABS.map(([g, itens], gi) => `<div class="grupo"><h3>${g}</h3>${itens.map((it, i) =>
+    `<div class="lab"><b>${it[0]}</b><span id="lab${gi}_${i}">--</span><em>${it[3] != null ? 'ref ' + fmt(it[3], it[2]) + '–' + fmt(it[4], it[2]) + ' ' + it[7] : ''}</em></div>`).join('')}</div>`).join('');
+}
+function atualizarLabs() {
+  const v = s.v;
+  LABS.forEach(([g, itens], gi) => itens.forEach((it, i) => {
+    const x = it[1](v, s);
+    const el = $(`lab${gi}_${i}`);
+    let seta = '';
+    let cls = '';
+    if (x < it[3]) { seta = ' ↓'; cls = 'baixo'; }
+    if (x > it[4]) { seta = ' ↑'; cls = 'alto'; }
+    if (x < it[5] || x > it[6]) cls += ' critico';
+    el.textContent = fmt(x, it[2]) + seta;
+    el.className = cls;
+  }));
+}
+
+// ============================================================ painéis fisiologia
+function par(nome, valor, nota) { return `<b style="font-weight:600">${nome}</b><span>${valor}</span>${nota ? `<em>${nota}</em>` : ''}`; }
+function barra(nome, val, ref, max, cor) {
+  return `<div class="barra"><div class="l">${nome}<span>${fmt(val, 1)} L</span></div><i><span style="width:${clamp(val / max * 100, 0, 100)}%;background:${cor}"></span><b style="left:${ref / max * 100}%"></b></i></div>`;
+}
+function atualizarPaineis() {
+  const v = s.v, c = s.c, b = s.bal;
+  $('barrasAgua').innerHTML =
+    barra('Intracelular', s.icf, 28, 36, '#6c8cff') +
+    barra('Interstício', v.isf, 11, 20, '#39d5ff') +
+    barra('Plasma', s.pv, 3, 5, '#ffd23f') +
+    barra('Hemácias', s.rbcv, 2, 3.2, '#ff5a5a');
+  const bal = M.balanco(s);
+  $('pAgua').innerHTML =
+    par('Entradas', fmt(b.entrada / 1000, 2) + ' L') +
+    par('Diurese', '−' + fmt(b.diurese / 1000, 2) + ' L') +
+    par('Perdas insensíveis', '−' + fmt(b.insensivel / 1000, 2) + ' L') +
+    (b.sangue > 0 ? par('Sangramento', '−' + fmt(b.sangue / 1000, 2) + ' L') : '') +
+    (b.uf > 0 ? par('Ultrafiltração', '−' + fmt(b.uf / 1000, 2) + ' L') : '') +
+    par('Balanço do plantão', (bal >= 0 ? '+' : '') + fmt(bal / 1000, 2) + ' L') +
+    par('Volemia', fmt(v.vs, 2) + ' L', 'normal ~5 L; traço branco = normal');
+  $('pCirc').innerHTML =
+    par('P. média de enchimento', fmt(v.pmsf, 1) + ' mmHg', 'volume estressado ÷ complacência venosa') +
+    par('PVC', fmt(v.pvc, 1) + ' mmHg') +
+    par('Débito cardíaco', fmt(v.dc, 1) + ' L/min', 'onde a curva cardíaca cruza o retorno venoso') +
+    par('Volume sistólico', fmt(v.vs_ml, 0) + ' mL') +
+    par('Resist. vascular sistêmica', fmt(v.rvs, 1) + ' mmHg·min/L', 'PAM = DC × RVS + PVC') +
+    par('Contratilidade', fmt(v.contr * 100, 0) + ' %') +
+    par('Pressão perfusão coronária', fmt(v.ppc, 0) + ' mmHg', 'PA diastólica − PVC') +
+    par('Isquemia miocárdica', fmt(s.isq * 100, 0) + ' %') +
+    par('Tônus simpático', fmt(s.S * 100, 0) + ' %', 'barorreflexo');
+  $('pO2').innerHTML =
+    par('CaO₂', fmt(v.cao2, 1) + ' mL/dL', '1,34 × Hb × SaO₂ + 0,003 × PaO₂') +
+    par('Oferta DO₂', fmt(v.do2, 0) + ' mL/min', 'DC × CaO₂ × 10') +
+    par('Demanda', fmt(v.vo2dem, 0) + ' mL/min', 'febre e sepse aumentam') +
+    par('Consumo VO₂', fmt(v.vo2, 0) + ' mL/min') +
+    par('Extração', fmt(v.tex * 100, 0) + ' %') +
+    par('Perfusão tecidual', fmt(v.perfTec * 100, 0) + ' %', 'cai com PAM < 65') +
+    par('Shunt', fmt(v.shunt * 100, 0) + ' %');
+  $('dividaTxt').textContent = fmt(s.divida, 0) + ' / 120 mL/kg';
+  $('dividaBar').style.width = clamp(s.divida / 120 * 100, 0, 100) + '%';
+  $('pRim').innerHTML =
+    par('Filtração glomerular', fmt(v.tfg, 0) + ' mL/min', 'autorregula acima de ~75 mmHg') +
+    par('Lesão renal', fmt(s.lesaoRenal * 100, 0) + ' %', 'acumula com hipoperfusão') +
+    par('Diurese', fmt(v.diurese * 60, 0) + ' mL/h · ' + fmt(v.diureseKgH, 2) + ' mL/kg/h') +
+    par('Osm urinária', fmt(v.uosm, 0) + ' mOsm/kg') +
+    par('ADH', fmt(v.adh * 100, 0) + ' %', 'sobe com osmolalidade e com hipotensão') +
+    par('Na⁺ urinário', fmt(v.naEx * 60, 1) + ' mEq/h') +
+    par('K⁺ urinário', fmt(v.kEx * 60, 1) + ' mEq/h') +
+    (s.dialise ? par('Hemodiálise', s.t >= s.dialise.inicio ? 'em curso' : 'começa em ' + fmt(s.dialise.inicio - s.t, 0) + ' min') : '');
+}
+
+// ================================================================= monitor numérico
+function atualizarMonitor() {
+  const v = s.v, morto = !!s.morte;
+  $('vFC').textContent = morto ? (s.morte.ritmo.nome === 'FV' ? '---' : '0') : fmt(v.fc, 0);
+  $('vRitmo').textContent = morto ? ({ FV: 'Fibrilação ventricular', AESP: 'Atividade elétrica sem pulso', 'bradi-assistolia': 'Assistolia' }[s.morte.ritmo.nome]) : v.ritmo.nome;
+  $('ritmoRot').textContent = morto ? '' : (v.ritmo.picoT > 0.3 ? 'T apiculada ' : '') + (v.ritmo.ondaU > 0.3 ? 'onda U ' : '') + (v.ritmo.st > 0.3 ? 'infra de ST ' : '') + (v.ritmo.ectopia > 0.3 ? 'extrassístoles' : '');
+  $('vPAM').textContent = morto ? '--' : fmt(v.pam, 0);
+  $('vPA').textContent = morto ? '--/--' : fmt(v.pas, 0) + '/' + fmt(v.pad, 0);
+  $('vSat').textContent = morto || v.pam < 40 ? '--' : fmt(v.sao2 * 100, 0);
+  $('vPerf').textContent = morto || v.pam < 40 ? 'sem sinal' : v.perfTec < 0.6 ? 'perfusão baixa' : 'perfusão boa';
+  $('vEt').textContent = morto ? fmt(3, 0) : fmt(v.etco2, 0);
+  $('vFR').textContent = 'FR ' + s.c.fr;
+  $('vPVC').innerHTML = fmt(v.pvc, 0) + '<small>mmHg</small>';
+  $('vTemp').innerHTML = fmt(s.temp, 1) + '<small>°C</small>';
+  $('vDC').innerHTML = (morto ? '0' : fmt(v.dc, 1)) + '<small>L/min</small>';
+  $('vDiur').innerHTML = fmt(v.diurese * 60, 0) + '<small>mL/h</small>';
+  $('vLacM').innerHTML = fmt(v.lac, 1) + '<small>mmol/L</small>';
+  $('nFC').classList.toggle('alarm', morto || v.fc > 130 || v.fc < 45);
+  $('nPA').classList.toggle('alarm', morto || v.pam < 60 || v.pam > 120);
+  $('nSat').classList.toggle('alarm', morto || v.sao2 < 0.88);
+  $('nCO2').classList.toggle('alarm', !morto && (v.etco2 > 55 || v.etco2 < 20));
+  $('relogio').textContent = hhmm(s.t);
+  $('prog').style.width = clamp(s.t / M.DURACAO * 100, 0, 100) + '%';
+  // mini ventilador
+  $('mPplat').textContent = fmt(v.pplat, 0) + ' cmH₂O';
+  $('mPplat').style.color = v.pplat > 30 ? 'var(--perigo)' : '';
+  $('mDp').textContent = fmt(v.dp, 0) + ' cmH₂O';
+  $('mDp').style.color = v.dp > 15 ? 'var(--atencao)' : '';
+  $('mCompl').textContent = fmt(v.compl, 0) + ' mL/cmH₂O';
+  $('mVa').textContent = fmt(v.va, 1) + ' L/min';
+  $('mShunt').textContent = fmt(v.shunt * 100, 0) + ' %';
+  $('mPf').textContent = fmt(v.pf, 0);
+  $('btnDialise').textContent = s.dialise ? 'Interromper' : 'Pedir';
+  $('ufTaxa').disabled = !s.dialise;
+}
+
+function alarmePrincipal() {
+  const v = s.v, el = $('alarme');
+  let msg = null, tipo = 'perigo';
+  if (s.morte) msg = 'PARADA — ' + s.morte.titulo;
+  else if (v.kEfetivo >= 7.5) msg = 'K⁺ ' + fmt(v.k, 1) + ' — condução cardíaca em risco';
+  else if (v.pam < 50) msg = 'PAM ' + fmt(v.pam, 0) + ' mmHg — perfusão crítica';
+  else if (v.sao2 < 0.8) msg = 'SatO₂ ' + fmt(v.sao2 * 100, 0) + '% — hipoxemia grave';
+  else if (v.ph < 7.1) msg = 'pH ' + fmt(v.ph, 2) + ' — acidemia grave';
+  else if (s.isq > 0.6) msg = 'Isquemia miocárdica';
+  else if (v.k <= 2.6) msg = 'K⁺ ' + fmt(v.k, 1) + ' — risco de arritmia';
+  else if (v.na < 122 || v.na > 158) msg = 'Na⁺ ' + fmt(v.na, 0) + ' — neurônios em risco osmótico';
+  else if (v.glic < 3) msg = 'Glicose ' + fmt(v.glic * 18, 0) + ' mg/dL';
+  else if (s.divida > 70) msg = 'Dívida de O₂ ' + fmt(s.divida, 0) + ' mL/kg';
+  else if (v.pam < 65) { msg = 'PAM ' + fmt(v.pam, 0) + ' mmHg'; tipo = 'atencao'; }
+  else if (v.sao2 < 0.9) { msg = 'SatO₂ ' + fmt(v.sao2 * 100, 0) + '%'; tipo = 'atencao'; }
+  el.className = 'alarme' + (msg ? ' on ' + tipo : '');
+  el.textContent = msg || '';
+}
+
+function atualizarAvisos() {
+  const a = s.avisos || [];
+  $('avisos').innerHTML = a.length ? a.map(([, t]) => `<div>${t}</div>`).join('') : '<div style="border-color:#2a4a3a;background:#0e1a14;color:#9fdcb8">Nada sendo lesado por conduta neste momento.</div>';
+}
+
+function atualizarLog(forcar) {
+  if (!forcar && s.eventos.length === ultimoEvento) return;
+  ultimoEvento = s.eventos.length;
+  $('log').innerHTML = s.eventos.slice().reverse().map(e => `<div><time>${hhmm(e.t)}</time><span class="${e.tipo}">${e.texto}</span></div>`).join('');
+}
+
+// ================================================================ tendências
+const TENDS = [
+  ['PAM', 'pam', 0, 40, 130, 65, 100, 'mmHg'], ['FC', 'fc', 0, 30, 180, 60, 100, 'bpm'],
+  ['SatO₂', 'sat', 0, 50, 100, 92, 100, '%'], ['pH', 'ph', 2, 6.9, 7.7, 7.35, 7.45, ''],
+  ['Lactato', 'lac', 1, 0, 12, 0, 2, 'mmol/L'], ['K⁺', 'k', 1, 2, 9, 3.5, 5, 'mEq/L'],
+  ['Na⁺', 'na', 0, 115, 160, 135, 145, 'mEq/L'], ['Diurese', 'diurese', 2, 0, 2.5, 0.5, 2.5, 'mL/kg/h']
+];
+function montarTendencias() {
+  $('tendencias').innerHTML = TENDS.map(t => `<div class="tend"><div class="l">${t[0]}<span id="tv_${t[1]}">--</span></div><canvas id="tc_${t[1]}"></canvas></div>`).join('');
+}
+function desenharTendencias() {
+  const tr = s.trend;
+  TENDS.forEach(([nome, k, d, lo, hi, alo, ahi, un]) => {
+    const cv = $('tc_' + k); if (!cv) return;
+    const dpr = window.devicePixelRatio || 1;
+    const W = cv.clientWidth * dpr, H = cv.clientHeight * dpr;
+    if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+    const g = cv.getContext('2d');
+    g.clearRect(0, 0, W, H);
+    const y = val => H - (clamp(val, lo, hi) - lo) / (hi - lo) * H;
+    const x = t => t / M.DURACAO * W;
+    g.fillStyle = '#123a2455';
+    g.fillRect(0, y(ahi), W, y(alo) - y(ahi));
+    g.strokeStyle = '#1b2a38'; g.lineWidth = 1;
+    for (let h = 60; h < 360; h += 60) { g.beginPath(); g.moveTo(x(h), 0); g.lineTo(x(h), H); g.stroke(); }
+    if (tr.length > 1) {
+      g.strokeStyle = '#e8f0f6'; g.lineWidth = 1.6 * dpr; g.beginPath();
+      tr.forEach((p, i) => { const X = x(p.t), Y = y(p[k]); i ? g.lineTo(X, Y) : g.moveTo(X, Y); });
+      g.stroke();
+    }
+    const ult = tr[tr.length - 1];
+    if (ult) $('tv_' + k).textContent = fmt(ult[k], d) + ' ' + un;
+  });
+}
+
+// ====================================================================== fim
+function mostrarFim() {
+  if (fimMostrado) return;
+  fimMostrado = true;
+  const box = $('fimConteudo');
+  const eventos = s.eventos.filter(e => e.tipo === 'acao').map(e => `<div><time>${hhmm(e.t)}</time><span class="${e.tipo}">${e.texto}</span></div>`).join('');
+  if (s.morte) {
+    const r = s.morte.retrato;
+    box.innerHTML = `<h1 class="obito">Óbito às ${hhmm(s.morte.t)}</h1>
+      <h2 style="margin:0">${s.morte.titulo}</h2>
+      <div class="porque">${s.morte.porque}</div>
+      <h3>O paciente no último minuto</h3>
+      <div class="pares">${par('PAM', fmt(r.pam, 0) + ' mmHg') + par('FC', fmt(r.fc, 0) + ' bpm') + par('SatO₂', fmt(r.sao2 * 100, 0) + ' %') + par('pH / PaCO₂ / HCO₃⁻', fmt(r.ph, 2) + ' / ' + fmt(r.paco2, 0) + ' / ' + fmt(r.hco3, 0)) + par('K⁺ / Na⁺', fmt(r.k, 1) + ' / ' + fmt(r.na, 0)) + par('Lactato', fmt(r.lac, 1) + ' mmol/L') + par('Hemoglobina', fmt(r.hb, 1) + ' g/dL') + par('Oferta / demanda de O₂', fmt(r.do2, 0) + ' / ' + fmt(r.vo2dem, 0) + ' mL/min') + par('Dívida de O₂', fmt(r.divida, 0) + ' mL/kg') + par('PVC', fmt(r.pvc, 0) + ' mmHg') + par('Glicose', fmt(r.glic * 18, 0) + ' mg/dL')}</div>
+      <h3>O que foi feito</h3><div class="log" style="padding:0">${eventos || '<div>Nenhuma intervenção.</div>'}</div>
+      <div class="linhaFim"><button class="btn" id="fimVer">Ver o monitor e as tendências</button><button class="btn acao" id="fimNovo">Tentar de novo</button><button class="btn" id="fimOutro">Outro caso</button></div>`;
+  } else {
+    const a = s.alta;
+    box.innerHTML = `<h1 class="vivo">${a.estabilizado ? 'Paciente vivo e estabilizado' : 'Vivo ao fim do plantão, mas instável'}</h1>
+      <p>${a.estabilizado ? 'Todos os alvos fisiológicos estavam atingidos às 6 h.' : a.n + ' de ' + a.total + ' alvos atingidos às 6 h. Quem assume o próximo plantão recebe um paciente em risco.'}</p>
+      <div class="checklist">${a.lista.map(x => `<div class="${x.ok ? 'ok' : 'nao'}">${x.ok ? '✓' : '✗'} ${x.nome}</div>`).join('')}</div>
+      <div class="pares">${par('Balanço hídrico', fmt(M.balanco(s) / 1000, 2) + ' L') + par('Dívida de O₂ acumulada', fmt(s.divida, 0) + ' mL/kg') + par('Lesão renal', fmt(s.lesaoRenal * 100, 0) + ' %')}</div>
+      <h3>O que foi feito</h3><div class="log" style="padding:0">${eventos}</div>
+      <div class="linhaFim"><button class="btn" id="fimVer">Ver o monitor e as tendências</button><button class="btn acao" id="fimNovo">Jogar de novo</button><button class="btn" id="fimOutro">Outro caso</button></div>`;
+  }
+  $('telaFim').classList.add('on');
+  $('fimVer').onclick = () => $('telaFim').classList.remove('on');
+  $('fimNovo').onclick = () => iniciar(s.cenario);
+  $('fimOutro').onclick = () => { $('telaFim').classList.remove('on'); telaInicial(); };
+}
+
+// ================================================================ laços
+function atualizarTudo(forcar) {
+  if (!s) return;
+  M.calcular(s);
+  atualizarMonitor();
+  atualizarLabs();
+  alarmePrincipal();
+  atualizarPaineis();
+  atualizarAvisos();
+  atualizarLog(forcar);
+  desenharTendencias();
+  const fila = s.fila.map(i => { return `<div>${M.FLUIDOS[i.tipo].nome} · faltam ${fmt(i.ml, 0)} mL<i><span style="width:${clamp(100 - i.ml / i.total * 100, 0, 100)}%"></span></i></div>`; }).join('');
+  $('fila').innerHTML = fila;
+  if (s.morte || s.alta) mostrarFim();
+}
+
+let ultimoFisico = performance.now();
+setInterval(() => {
+  const agora = performance.now();
+  const dtReal = Math.min(0.5, (agora - ultimoFisico) / 1000);
+  ultimoFisico = agora;
+  if (!s || vel === 0 || s.morte || s.alta) return;
+  M.passo(s, dtReal * vel / 60);
+}, 100);
+setInterval(() => atualizarTudo(false), 250);
+
+// ======================================================================== ondas
+const ondas = (() => {
+  const JANELA = 6;         // segundos por varredura
+  let tReal = 0;            // relógio das ondas (s), só anda quando não está pausado
+  let batimentos = [];
+  let respiracoes = 0;
+  const canais = [];
+
+  function g(t, c, a, w) { return a * Math.exp(-((t - c) * (t - c)) / (2 * w * w)); }
+
+  function novoBatimento(t0) {
+    const v = s.v, r = v.ritmo || {};
+    let rr = 60 / Math.max(20, v.fc || 60);
+    rr *= 1 + (Math.random() - 0.5) * 0.04;
+    const pvc = !s.morte && Math.random() < 0.28 * (r.ectopia || 0);
+    if (pvc) rr *= 0.7;
+    return { t0, rr, pvc };
+  }
+  function garantirBatimentos(t) {
+    if (!batimentos.length) batimentos.push({ t0: t, rr: 0.8, pvc: false });
+    let ult = batimentos[batimentos.length - 1];
+    while (ult.t0 + ult.rr < t + 1) {
+      const nb = novoBatimento(ult.t0 + ult.rr);
+      if (ult.pvc) nb.rr *= 1.3;       // pausa compensatória
+      batimentos.push(nb); ult = nb;
+    }
+    while (batimentos.length > 40) batimentos.shift();
+  }
+  function batimentoEm(t) {
+    for (let i = batimentos.length - 1; i >= 0; i--) if (batimentos[i].t0 <= t) return batimentos[i];
+    return batimentos[0];
+  }
+
+  function ecg(t) {
+    if (!s) return 0;
+    const ruido = (Math.random() - 0.5) * 0.02;
+    if (s.morte) {
+      const dt = t - tMorte;
+      const n = s.morte.ritmo.nome;
+      if (n === 'FV') {
+        const amp = Math.max(0.12, 0.55 * Math.exp(-dt / 60));
+        return amp * (Math.sin(t * 2 * Math.PI * 4.7) * 0.6 + Math.sin(t * 2 * Math.PI * 6.3 + 1) * 0.4 + Math.sin(t * 2 * Math.PI * 2.9 + 2) * 0.3) + ruido;
+      }
+      if (n === 'AESP' && dt < 40) {
+        const rr = 1.8, tau = ((t % rr) + rr) % rr;
+        return g(tau, 0.3, 0.5, 0.06) + g(tau, 0.75, 0.2, 0.12) + ruido;
+      }
+      if (n === 'bradi-assistolia' && dt < 15) {
+        const rr = 2.4, tau = ((t % rr) + rr) % rr;
+        return g(tau, 0.3, 0.6, 0.05) + g(tau, 0.7, -0.15, 0.1) + ruido;
+      }
+      return ruido;
+    }
+    const b = batimentoEm(t);
+    const tau = t - b.t0, rr = b.rr, r = s.v.ritmo || {};
+    if (b.pvc) return g(tau, 0.2, 1.1, 0.04) + g(tau, 0.34, -0.55, 0.05) + g(tau, 0.55, -0.35, 0.08) + ruido;
+    const qt = Math.sqrt(Math.max(0.3, rr));
+    const larg = 1 + 1.8 * (r.qrsLargo || 0) + 1.2 * (r.senoidal || 0);
+    let y = g(tau, 0.08, 0.13 * (1 - (r.pAchatada || 0)), 0.022)
+      + g(tau, 0.17, -0.09, 0.009 * larg)
+      + g(tau, 0.19, 1.0 - 0.35 * (r.qrsLargo || 0), 0.011 * larg)
+      + g(tau, 0.215 + 0.012 * larg, -0.22, 0.013 * larg);
+    const tc = 0.19 + (0.22 + 0.07 * (r.qtLongo || 0)) * qt;
+    y += g(tau, tc, 0.26 + 0.65 * (r.picoT || 0) - 0.18 * (r.ondaU || 0), (0.045 - 0.017 * (r.picoT || 0) + 0.02 * (r.qtLongo || 0)) * qt);
+    y += g(tau, tc + 0.17 * qt, 0.11 * (r.ondaU || 0), 0.035);
+    if ((r.st || 0) > 0 && tau > 0.24 && tau < tc) y -= 0.14 * r.st * Math.sin(Math.PI * (tau - 0.24) / (tc - 0.24));
+    if ((r.senoidal || 0) > 0) y = y * (1 - r.senoidal) + r.senoidal * 0.75 * Math.sin(2 * Math.PI * tau / rr - 1.1);
+    return y + ruido;
+  }
+
+  function pulso(u, rr) {
+    if (u < 0) return 0;
+    if (u < 0.09) return Math.sin(u / 0.09 * Math.PI / 2);
+    if (u < 0.27) return 1 - 0.4 * (u - 0.09) / 0.18;
+    if (u < 0.33) return 0.6 - 0.07 * Math.sin((u - 0.27) / 0.06 * Math.PI);
+    const d = Math.max(0.08, rr - 0.33), k = 0.55;
+    return 0.6 * (Math.exp(-(u - 0.33) / (d * k)) - Math.exp(-1 / k)) / (1 - Math.exp(-1 / k));
+  }
+  function pressao(t) {
+    if (!s) return 0;
+    const v = s.v;
+    if (s.morte) return 12 + (Math.random() - 0.5) * 0.8;
+    const b = batimentoEm(t - 0.22);
+    const u = t - 0.22 - b.t0;
+    const amp = b.pvc ? 0.35 : 1;
+    return v.pad + (v.pas - v.pad) * amp * pulso(u, b.rr);
+  }
+  function pleth(t) {
+    if (!s) return 0;
+    const v = s.v;
+    if (s.morte || v.pam < 40) return (Math.random() - 0.5) * 0.02;
+    const b = batimentoEm(t - 0.4);
+    const u = t - 0.4 - b.t0;
+    const amp = clamp((v.vs_ml / 70) * (v.perfTec || 1), 0.08, 1.2) * (b.pvc ? 0.35 : 1);
+    let w;
+    if (u < 0.16) w = Math.sin(u / 0.16 * Math.PI / 2);
+    else { const d = Math.max(0.1, b.rr - 0.16); w = Math.exp(-(u - 0.16) / (d * 0.5)) + 0.08 * Math.exp(-((u - 0.42) ** 2) / 0.004); }
+    return amp * w;
+  }
+  function capno(t) {
+    if (!s) return 0;
+    if (s.morte) return 2 + (Math.random() - 0.5);
+    const T = 60 / Math.max(4, s.c.fr), ti = T / 3;
+    const fase = ((t % T) + T) % T;
+    const et = s.v.etco2;
+    if (fase < ti) return fase < 0.12 ? et * (1 - fase / 0.12) : 0;
+    const e = fase - ti;
+    return e < 0.25 ? et * 0.85 * Math.sin(e / 0.25 * Math.PI / 2) : et * (0.85 + 0.15 * Math.min(1, (e - 0.25) / (T - ti - 0.25)));
+  }
+
+  let tMorte = 0;
+  function canal(id, fn, lo, hi, cor) {
+    const cv = $(id), ctx = cv.getContext('2d');
+    const c = { cv, ctx, fn, lo, hi, cor, x: 0, yAnt: null, W: 0, H: 0 };
+    c.ajustar = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const W = Math.max(50, cv.clientWidth * dpr), H = Math.max(30, cv.clientHeight * dpr);
+      if (W !== c.W || H !== c.H) { cv.width = W; cv.height = H; c.W = W; c.H = H; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); c.x = 0; c.yAnt = null; }
+    };
+    canais.push(c);
+    return c;
+  }
+  canal('cvEcg', ecg, -0.9, 1.55, '#3dff7f');
+  canal('cvPa', pressao, 0, 160, '#ff5a5a');
+  canal('cvPleth', pleth, -0.1, 1.35, '#39d5ff');
+  canal('cvCo2', capno, 0, 60, '#ffd23f');
+
+  function avancar(dtSeg) {
+    if (!s) return;
+    const dpr = window.devicePixelRatio || 1;
+    canais.forEach(c => c.ajustar());
+    const pxPorSeg = canais[0].W / JANELA;
+    const passos = Math.max(1, Math.round(dtSeg * pxPorSeg));
+    const dtPx = dtSeg / passos;
+    for (let i = 0; i < passos; i++) {
+      tReal += dtPx;
+      garantirBatimentos(tReal);
+      if (s.morte && !tMorte) tMorte = tReal;
+      const b = batimentoEm(tReal);
+      if (som && !s.morte && b.t0 > (audio.ultimo || 0) && tReal - b.t0 < 0.05) { audio.ultimo = b.t0; audio.bip(s.v.sao2); }
+      canais.forEach(c => {
+        const esc = c.W / canais[0].W;
+        const x = c.x;
+        // um pixel cobre ~10 ms: amostra por dentro dele para o QRS estreito não sumir entre dois pixels
+        const Y = val => c.H - 4 * dpr - (clamp(val, c.lo, c.hi) - c.lo) / (c.hi - c.lo) * (c.H - 12 * dpr);
+        let yMin = Infinity, yMax = -Infinity, yPrim = 0, y = 0;
+        for (let k = 0; k < 5; k++) {
+          const yy = Y(c.fn(tReal - dtPx + dtPx * (k + 1) / 5));
+          if (k === 0) yPrim = yy;
+          yMin = Math.min(yMin, yy); yMax = Math.max(yMax, yy); y = yy;
+        }
+        const apagar = 14 * dpr;
+        c.ctx.fillStyle = '#000';
+        c.ctx.fillRect(x, 0, apagar, c.H);
+        c.ctx.strokeStyle = c.cor; c.ctx.lineWidth = 2 * dpr; c.ctx.lineJoin = 'round'; c.ctx.lineCap = 'round';
+        c.ctx.beginPath();
+        if (c.yAnt != null) { c.ctx.moveTo(x - esc, c.yAnt); c.ctx.lineTo(x, yPrim); } else c.ctx.moveTo(x, yPrim);
+        c.ctx.moveTo(x, yMin); c.ctx.lineTo(x, yMax);
+        c.ctx.stroke();
+        c.yAnt = y;
+        c.x += esc;
+        if (c.x >= c.W) { c.x = 0; c.yAnt = null; }
+      });
+    }
+  }
+
+  let ultimoQuadro = performance.now();
+  function quadro(agora) {
+    requestAnimationFrame(quadro);
+    const dt = Math.min(0.1, (agora - ultimoQuadro) / 1000);
+    ultimoQuadro = agora;
+    if (!s || vel === 0) return;
+    avancar(dt);
+  }
+  requestAnimationFrame(quadro);
+
+  return {
+    reiniciar() { batimentos = []; tMorte = 0; canais.forEach(c => { c.W = 0; c.ajustar(); }); },
+    avancar
+  };
+})();
+
+// ======================================================================== som
+const audio = {
+  ctx: null, ultimo: 0,
+  iniciar() { if (!this.ctx) try { this.ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { } },
+  bip(sat) {
+    if (!this.ctx) return;
+    const o = this.ctx.createOscillator(), gn = this.ctx.createGain();
+    o.frequency.value = 440 + clamp((sat - 0.7) / 0.3, 0, 1) * 440;   // tom cai com a saturação
+    gn.gain.setValueAtTime(0.05, this.ctx.currentTime);
+    gn.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.09);
+    o.connect(gn).connect(this.ctx.destination);
+    o.start(); o.stop(this.ctx.currentTime + 0.1);
+  }
+};
+
+// =================================================================== partida
+montarVelocidades();
+montarLabs();
+montarTendencias();
+telaInicial();
+
+// ganchos de conferência (o painel do navegador congela requestAnimationFrame)
+window.__uti = {
+  iniciar, estado: () => s,
+  avancar: min => { M.passo(s, min); atualizarTudo(true); },
+  quadro: seg => { ondas.avancar(seg); },
+  pausar: () => { vel = 0; montarVelocidades(); }
+};
+const qs = new URLSearchParams(location.search);
+if (qs.get('caso') && M.CENARIOS[qs.get('caso')]) {
+  iniciar(qs.get('caso'));
+  if (qs.get('vel') != null) { vel = +qs.get('vel'); montarVelocidades(); }
+  if (qs.get('t')) { M.passo(s, +qs.get('t')); atualizarTudo(true); }
+}
+})();
+</script>
+<p class="aviso-rodape">Modelo didático de Fisiologia Interativa — não substitui avaliação clínica, diagnóstico ou conduta. Os valores e os desfechos existem para mostrar mecanismos (Guyton, Starling, Henderson–Hasselbalch, Fick), não para treinar protocolo.</p>
+<script src="../tutor-widget.js?v=16"></script>
+</body>
+</html>
+
