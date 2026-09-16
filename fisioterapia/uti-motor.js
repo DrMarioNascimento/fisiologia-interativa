@@ -1,1 +1,2 @@
-PLACEHOLDER_MOTOR
+/* placeholder will be replaced - see next commit */
+window.UTIMotor = { criar(){ return { t:0, v:{}, c:{}, morte:null, alta:null, eventos:[], trend:[], avisos:[], fila:[], bal:{}, dz:{} }; }, passo(s){ return s; }, executar(s){ return s; }, calcular(s){ s.v = s.v||{}; return s.v; }, CENARIOS:{}, FLUIDOS:{}, CAUSAS:{}, DURACAO:360, DIVIDA_LETAL:120, PESO:70, criterios(){ return []; }, balanco(){ return 0; }, satO2(){ return 1; } };
