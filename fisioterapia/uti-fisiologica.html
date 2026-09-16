@@ -54,14 +54,31 @@ a{color:var(--info)}
 .alarme.atencao{background:#33250a;border:1px solid #ffb020;color:#ffe7b8}
 @keyframes pisca{50%{border-color:#7a1f25}}
 
-.grade{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(340px,1fr);gap:14px;padding:12px 16px 20px}
+.grade{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,1fr);grid-template-areas:"mon ctrl" "labs side" "fisio fisio" "tend tend";gap:10px;padding:10px 14px 12px;align-items:start}
+.cel-mon{grid-area:mon}
+.cel-ctrl{grid-area:ctrl}
+.cel-labs{grid-area:labs}
+.cel-side{grid-area:side;display:flex;flex-direction:column;gap:10px}
+.cel-fisio{grid-area:fisio}
+.cel-tend{grid-area:tend}
+
+@media(max-width:980px){
+  .grade{grid-template-columns:1fr;grid-template-areas:"mon" "ctrl" "labs" "side" "fisio" "tend"}
+  .fisio{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+}
+@media(max-width:640px){
+  .fisio{grid-template-columns:1fr !important}
+  .labs{grid-template-columns:1fr !important}
+}
+
+
 .painel{background:var(--painel);border:1px solid var(--linha);border-radius:14px}
 .painel h2{margin:0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mudo);font-weight:800}
 .cab{display:flex;justify-content:space-between;align-items:center;padding:12px 14px 8px;gap:8px}
 
 /* ---------- monitor */
 .monitor{background:#000;border:1px solid #1a2733;border-radius:14px;overflow:hidden}
-.canal{display:grid;grid-template-columns:minmax(0,1fr) 190px;border-bottom:1px solid #0f1a24;min-height:92px}
+.canal{display:grid;grid-template-columns:minmax(0,1fr) 168px;border-bottom:1px solid #0f1a24;min-height:70px}
 .canal:last-child{border-bottom:0}
 .onda{position:relative}
 .onda canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
@@ -69,7 +86,7 @@ a{color:var(--info)}
 .onda .rot2{position:absolute;left:8px;bottom:4px;font-size:11px;color:#5d7486;z-index:2;font-family:var(--num)}
 .num{padding:8px 12px;border-left:1px solid #0f1a24;display:flex;flex-direction:column;justify-content:center}
 .num .l{font-size:12px;font-weight:800;letter-spacing:.08em}
-.num .g{font-family:var(--num);font-size:44px;font-weight:700;line-height:1}
+.num .g{font-family:var(--num);font-size:34px;font-weight:700;line-height:1}
 .num .m{font-family:var(--num);font-size:15px;opacity:.85}
 .num.alarm .g{animation:piscaNum .8s steps(2) infinite}
 @keyframes piscaNum{50%{opacity:.25}}
@@ -82,7 +99,7 @@ a{color:var(--info)}
 .ritmoTxt{font-size:12px;color:#9fb2c1;margin-top:3px}
 
 /* ---------- laboratório */
-.labs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:0 14px 14px}
+.labs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 10px 10px}
 .grupo h3{margin:6px 0 6px;font-size:12px;color:var(--mudo);letter-spacing:.06em;text-transform:uppercase}
 .lab{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:baseline;padding:5px 8px;border-radius:8px}
 .lab:nth-child(odd){background:#0b141d}
@@ -118,7 +135,7 @@ select{background:#0b141d;border:1px solid var(--linha);border-radius:8px;paddin
 .mini .v{font-family:var(--num);font-size:18px;font-weight:700}
 
 /* ---------- log */
-.log{max-height:260px;overflow:auto;padding:0 14px 12px;font-size:13px}
+.log{max-height:150px;overflow:auto;padding:0 12px 10px;font-size:13px}
 .log div{display:grid;grid-template-columns:62px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid #132130}
 .log time{font-family:var(--num);color:#7f93a4}
 .log .acao{color:#cfe7ff}.log .alerta{color:#ffcf7a}.log .morte{color:#ff8080;font-weight:800}.log .alta{color:#7dffb0;font-weight:800}
@@ -143,7 +160,7 @@ select{background:#0b141d;border:1px solid var(--linha);border-radius:8px;paddin
 .tend .l{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#9fb2c1}
 .tend .l span{font-family:var(--num);color:#fff}
 .tend canvas{width:100%;height:70px;display:block}
-.avisos{display:flex;flex-direction:column;gap:6px;padding:0 14px 12px}
+.avisos{display:flex;flex-direction:column;gap:6px;padding:0 12px 10px;max-height:120px;overflow:auto}
 .avisos div{font-size:13px;border-left:3px solid var(--atencao);background:#1e1a0f;padding:6px 8px;border-radius:4px}
 
 /* ---------- telas sobrepostas */
@@ -417,6 +434,45 @@ select{
   .casos{ grid-template-columns:1fr !important; }
 }
 
+
+.fluxo-box{margin-top:14px}
+.fluxo-nums{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;padding:0 12px 12px}
+.fluxo-nums div{background:linear-gradient(180deg,#1a444e,#12333b);border:1px solid #6f93a3;border-top-color:#c5e0e7;border-radius:10px;padding:8px 6px 7px;box-shadow:inset 0 2px 1px #ffffff33,0 3px 0 #0a242c;text-align:center;min-height:64px}
+.fluxo-nums b{display:block;font-family:var(--num);font-size:20px;line-height:1.1}
+.fluxo-nums span{display:block;margin-top:4px;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#9bb4bc;font-weight:800}
+.fisio{grid-template-columns:repeat(4,minmax(0,1fr)) !important;padding:0 !important;gap:10px !important}
+.fisio .bloco{min-height:100%}
+.grade{align-items:start}
+.interpret{margin:0 14px 14px}
+.interpret details{
+  background:linear-gradient(180deg,#173943,#102830);
+  border:1px solid #6f93a3;border-top-color:#c5e0e7;border-bottom-color:#0a242c;
+  border-radius:16px;
+  box-shadow:inset 0 2px 1px #ffffff22,0 5px 0 #061823,0 12px 18px #0005;
+  overflow:hidden;
+}
+.interpret summary{
+  list-style:none;cursor:pointer;padding:14px 18px;font-weight:850;letter-spacing:.04em;
+  text-transform:uppercase;font-size:13px;color:#e8f6f6;
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.interpret summary::-webkit-details-marker{display:none}
+.interpret summary:after{content:'▾';color:#9fd0d8;font-size:16px}
+.interpret details[open] summary:after{content:'▴'}
+.interpret-body{padding:4px 18px 18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 22px}
+.interpret h3{margin:8px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9bb4bc}
+.interpret dl{margin:0;display:grid;grid-template-columns:88px 1fr;gap:3px 10px;font-size:13px;line-height:1.35}
+.interpret dt{font-weight:800;font-family:var(--num)}
+.interpret dd{margin:0;color:#c5dbe0}
+@media(max-width:900px){
+  .fluxo-nums{grid-template-columns:repeat(3,1fr)}
+  .interpret-body{grid-template-columns:1fr}
+  .fisio{grid-template-columns:1fr !important}
+}
+.c-fc{color:#3dff7f}.c-pa{color:#ff6b5a}.c-sat{color:#39d5ff}.c-co2{color:#ffd23f}
+.c-pvc{color:#c29bff}.c-dc{color:#9ff0c7}.c-diur{color:#ffe08a}.c-lac{color:#ffb3b3}
+.c-k{color:#f0c36d}.c-na{color:#7ec8d0}.c-temp{color:#f2f2f2}.c-vs{color:#3dff7f}
+
 </style>
 </head>
 <body>
@@ -439,7 +495,7 @@ select{
 <div class="alarme" id="alarme"></div>
 
 <main class="grade">
-  <section>
+  <div class="cel-mon">
     <div class="monitor" id="monitor">
       <div class="canal">
         <div class="onda"><span class="rot" style="color:var(--ecg)">II</span><span class="rot2" id="ritmoRot"></span><canvas id="cvEcg"></canvas></div>
@@ -465,14 +521,9 @@ select{
         <div style="color:#ffb3b3"><div class="l">LACTATO</div><div class="v" id="vLacM">--<small>mmol/L</small></div></div>
       </div>
     </div>
+  </div>
 
-    <div class="painel" style="margin-top:14px">
-      <div class="cab"><h2>Gasometria arterial e bioquímica · ao vivo</h2><span class="dica">↑ ↓ fora da referência · vermelho = grave</span></div>
-      <div class="labs" id="labs"></div>
-    </div>
-  </section>
-
-  <section style="display:flex;flex-direction:column;gap:14px">
+  <div class="cel-ctrl">
     <div class="painel">
       <div class="abas" id="abas">
         <button data-aba="fluidos" class="on">Fluidos</button>
@@ -565,30 +616,38 @@ select{
       </div>
     </div>
 
+  </div>
+
+  <div class="cel-labs">
+    <div class="painel">
+      <div class="cab"><h2>Gasometria e bioquímica</h2><span class="dica">↑ ↓ fora da ref. · vermelho = grave</span></div>
+      <div class="labs" id="labs"></div>
+    </div>
+  </div>
+
+  <div class="cel-side">
     <div class="painel">
       <div class="cab"><h2>Alertas fisiológicos</h2></div>
       <div class="avisos" id="avisos"></div>
     </div>
-
     <div class="painel">
       <div class="cab"><h2>Evolução</h2></div>
       <div class="log" id="log"></div>
     </div>
-  </section>
-</main>
+  </div>
 
-<section class="fisio">
+<section class="fisio cel-fisio">
   <div class="painel bloco">
     <h2>Água corporal</h2>
     <div class="barras" id="barrasAgua"></div>
     <div class="pares" id="pAgua"></div>
   </div>
   <div class="painel bloco">
-    <h2>Circulação (Guyton)</h2>
+    <h2>Circulação (Guyton) · fluxo</h2>
     <div class="pares" id="pCirc"></div>
   </div>
   <div class="painel bloco">
-    <h2>Oxigênio</h2>
+    <h2>Oxigênio · oferta e extração</h2>
     <div class="pares" id="pO2"></div>
     <div style="margin-top:10px;font-size:13px;font-weight:700">Dívida de O₂ <span id="dividaTxt" style="float:right;font-family:var(--num)"></span></div>
     <div class="medidor"><span id="dividaBar" style="width:0"></span></div>
@@ -600,11 +659,86 @@ select{
   </div>
 </section>
 
-<section style="padding:0 16px 30px">
-  <div class="painel">
-    <div class="cab"><h2>Tendências do plantão</h2><span class="dica">faixa verde = alvo</span></div>
-    <div class="tendencias" id="tendencias"></div>
-  </div>
+  <section class="cel-tend">
+    <div class="painel">
+      <div class="cab"><h2>Tendências do plantão</h2><span class="dica">faixa verde = alvo</span></div>
+      <div class="tendencias" id="tendencias"></div>
+    </div>
+  </section>
+</main>
+
+
+<section class="interpret" id="comoInterpretar">
+  <details>
+    <summary>Como interpretar</summary>
+    <div class="interpret-body">
+      <div>
+        <h3>Monitor</h3>
+        <dl>
+          <dt class="c-fc">FC</dt><dd>Frequência cardíaca (bpm). Ritmo sai do K⁺, do pH e da isquemia.</dd>
+          <dt class="c-pa">PA</dt><dd>Pressão arterial invasiva. O número grande é a <span class="c-pa">PAM</span>.</dd>
+          <dt class="c-pa">PAS</dt><dd>Pressão arterial sistólica (pico da curva).</dd>
+          <dt class="c-pa">PAD</dt><dd>Pressão arterial diastólica (base da curva).</dd>
+          <dt class="c-pa">PAM</dt><dd>Pressão arterial média. No modelo: <span class="c-pa">PAM</span> ≈ <span class="c-dc">DC</span> × <span class="c-pa">RVS</span> + <span class="c-pvc">PVC</span>.</dd>
+          <dt class="c-sat">SpO₂</dt><dd>Saturação periférica pelo pletismógrafo. Cai se o pulso some.</dd>
+          <dt class="c-co2">EtCO₂</dt><dd>CO₂ no fim da expiração. Espelha o PaCO₂ e o fluxo pulmonar.</dd>
+          <dt class="c-co2">FR</dt><dd>Frequência respiratória programada no ventilador.</dd>
+          <dt class="c-pvc">PVC</dt><dd>Pressão venosa central. Pré-carga do coração direito.</dd>
+          <dt class="c-temp">TEMP</dt><dd>Temperatura central. Febre sobe VO₂ e FC.</dd>
+          <dt class="c-diur">Diurese</dt><dd>Urina. Cai quando a PAM ou a TFG caem.</dd>
+          <dt class="c-lac">Lactato</dt><dd>Sobe quando o tecido trabalha sem O₂ suficiente.</dd>
+        </dl>
+      </div>
+      <div>
+        <h3>Fluxo sanguíneo</h3>
+        <dl>
+          <dt class="c-dc">DC</dt><dd>Débito cardíaco (L/min). Fluxo que o coração ejeta: <span class="c-dc">DC</span> = <span class="c-vs">VS</span> × <span class="c-fc">FC</span>.</dd>
+          <dt class="c-vs">VS</dt><dd>Volume sistólico (mL por batimento).</dd>
+          <dt class="c-pa">RVS</dt><dd>Resistência vascular sistêmica (mmHg·min/L). Oposição das arteríolas.</dd>
+          <dt class="c-sat">DO₂</dt><dd>Oferta de oxigênio (mL/min): <span class="c-sat">DO₂</span> = <span class="c-dc">DC</span> × CaO₂ × 10.</dd>
+          <dt class="c-sat">SaO₂</dt><dd>Saturação arterial (sangue que sai do pulmão).</dd>
+          <dt class="c-pvc">SvO₂</dt><dd>Saturação venosa central. O que sobrou depois do consumo.</dd>
+          <dt class="c-sat">CaO₂</dt><dd>Conteúdo arterial de O₂: 1,34 × Hb × SaO₂ + 0,003 × PaO₂.</dd>
+          <dt class="c-sat">VO₂</dt><dd>Consumo de oxigênio. Se DO₂ &lt; VO₂, nasce dívida e lactato.</dd>
+          <dt class="c-pa">PMSF</dt><dd>Pressão média de enchimento sistêmico. Volume estressado ÷ complacência venosa.</dd>
+          <dt class="c-pa">PPC</dt><dd>Pressão de perfusão coronária ≈ PAD − PVC.</dd>
+        </dl>
+      </div>
+      <div>
+        <h3>Gases e ácido-base</h3>
+        <dl>
+          <dt class="c-sat">PaO₂</dt><dd>Pressão parcial de O₂ no arterial. Queda = hipoxemia.</dd>
+          <dt class="c-co2">PaCO₂</dt><dd>Pressão parcial de CO₂. Sobe se a ventilação alveolar é baixa.</dd>
+          <dt>HCO₃⁻</dt><dd>Bicarbonato. Componente metabólico do pH.</dd>
+          <dt>BE</dt><dd>Excesso de base. Negativo = acidose metabólica.</dd>
+          <dt>AG</dt><dd>Ânion gap = Na⁺ − Cl⁻ − HCO₃⁻. Sobe com lactato.</dd>
+          <dt class="c-sat">P/F</dt><dd>PaO₂/FiO₂. Relação de oxigenação (SDRA quando cai).</dd>
+          <dt class="c-co2">FiO₂</dt><dd>Fração inspirada de oxigênio no ventilador.</dd>
+          <dt class="c-co2">VT</dt><dd>Volume corrente (mL por ciclo).</dd>
+          <dt class="c-co2">PEEP</dt><dd>Pressão positiva no fim da expiração.</dd>
+          <dt class="c-co2">Pplat</dt><dd>Pressão de platô. Risco de barotrauma se &gt; 30 cmH₂O.</dd>
+          <dt class="c-co2">DP</dt><dd>Driving pressure = Pplat − PEEP.</dd>
+        </dl>
+      </div>
+      <div>
+        <h3>Água, eletrólitos e rim</h3>
+        <dl>
+          <dt class="c-na">Na⁺</dt><dd>Sódio do plasma. Determina a osmolalidade e a água entre os compartimentos.</dd>
+          <dt class="c-k">K⁺</dt><dd>Potássio. Muda o ECG: T apiculada, onda U, extrassístoles.</dd>
+          <dt>Cl⁻</dt><dd>Cloreto. Acompanha o sódio e o ânion gap.</dd>
+          <dt>Ca²⁺i</dt><dd>Cálcio ionizado. Precisa dele para o coração contrair.</dd>
+          <dt>Hb</dt><dd>Hemoglobina. Transporta quase todo o O₂ do DC.</dd>
+          <dt>Hct</dt><dd>Hematócrito. Fração de hemácias na volemia.</dd>
+          <dt>ICF</dt><dd>Água intracelular.</dd>
+          <dt>ISF</dt><dd>Água intersticial (edema quando sobe).</dd>
+          <dt>PV</dt><dd>Volume plasmático.</dd>
+          <dt class="c-diur">TFG</dt><dd>Taxa de filtração glomerular. Cai com PAM baixa ou rim lesado.</dd>
+          <dt>ADH</dt><dd>Hormônio antidiurético. Segura água quando o volume ou o Na⁺ caem.</dd>
+          <dt>UF</dt><dd>Ultrafiltração da diálise. Tira plasma isotônico.</dd>
+        </dl>
+      </div>
+    </div>
+  </details>
 </section>
 
 <!-- tela de escolha -->
@@ -816,17 +950,19 @@ function atualizarPaineis() {
     par('Volemia', fmt(v.vs, 2) + ' L', 'normal ~5 L; traço branco = normal');
   $('pCirc').innerHTML =
     par('P. média de enchimento', fmt(v.pmsf, 1) + ' mmHg', 'volume estressado ÷ complacência venosa') +
-    par('PVC', fmt(v.pvc, 1) + ' mmHg') +
-    par('Débito cardíaco', fmt(v.dc, 1) + ' L/min', 'onde a curva cardíaca cruza o retorno venoso') +
-    par('Volume sistólico', fmt(v.vs_ml, 0) + ' mL') +
-    par('Resist. vascular sistêmica', fmt(v.rvs, 1) + ' mmHg·min/L', 'PAM = DC × RVS + PVC') +
+    par('<span class="c-pvc">PVC</span>', fmt(v.pvc, 1) + ' mmHg', 'pré-carga direita') +
+    par('<span class="c-dc">DC</span> débito cardíaco', fmt(v.dc, 1) + ' L/min', 'VS × FC · cruza o retorno venoso') +
+    par('<span class="c-vs">VS</span> volume sistólico', fmt(v.vs_ml, 0) + ' mL', 'mL por batimento') +
+    par('<span class="c-pa">RVS</span> resistência sistêmica', fmt(v.rvs, 1) + ' mmHg·min/L', 'PAM ≈ DC × RVS + PVC') +
     par('Contratilidade', fmt(v.contr * 100, 0) + ' %') +
     par('Pressão perfusão coronária', fmt(v.ppc, 0) + ' mmHg', 'PA diastólica − PVC') +
     par('Isquemia miocárdica', fmt(s.isq * 100, 0) + ' %') +
     par('Tônus simpático', fmt(s.S * 100, 0) + ' %', 'barorreflexo');
   $('pO2').innerHTML =
+    par('<span class="c-sat">SaO₂</span>', fmt(v.sao2 * 100, 0) + ' %', 'saturação arterial') +
+    par('<span class="c-pvc">SvO₂</span>', fmt((v.svo2 || 0) * 100, 0) + ' %', 'o que restou depois do consumo') +
     par('CaO₂', fmt(v.cao2, 1) + ' mL/dL', '1,34 × Hb × SaO₂ + 0,003 × PaO₂') +
-    par('Oferta DO₂', fmt(v.do2, 0) + ' mL/min', 'DC × CaO₂ × 10') +
+    par('<span class="c-sat">DO₂</span> oferta', fmt(v.do2, 0) + ' mL/min', 'DC × CaO₂ × 10') +
     par('Demanda', fmt(v.vo2dem, 0) + ' mL/min', 'febre e sepse aumentam') +
     par('Consumo VO₂', fmt(v.vo2, 0) + ' mL/min') +
     par('Extração', fmt(v.tex * 100, 0) + ' %') +
@@ -862,6 +998,8 @@ function atualizarMonitor() {
   $('vDC').innerHTML = (morto ? '0' : fmt(v.dc, 1)) + '<small>L/min</small>';
   $('vDiur').innerHTML = fmt(v.diurese * 60, 0) + '<small>mL/h</small>';
   $('vLacM').innerHTML = fmt(v.lac, 1) + '<small>mmol/L</small>';
+  
+
   $('nFC').classList.toggle('alarm', morto || v.fc > 130 || v.fc < 45);
   $('nPA').classList.toggle('alarm', morto || v.pam < 60 || v.pam > 120);
   $('nSat').classList.toggle('alarm', morto || v.sao2 < 0.88);
@@ -1001,6 +1139,7 @@ setInterval(() => {
   M.passo(s, dtReal * vel / 60);
 }, 100);
 setInterval(() => atualizarTudo(false), 250);
+
 
 // ======================================================================== ondas
 const ondas = (() => {
