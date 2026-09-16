@@ -70,11 +70,19 @@ a{color:var(--info)}
 
 /* ---------- percurso */
 .percurso{padding:0 14px 14px}
-.trilho{position:relative;height:34px;border-radius:9px;overflow:hidden;display:flex;background:#0a131b;border:1px solid var(--linha)}
-.trilho div{height:100%;position:relative;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#061018;overflow:hidden;white-space:nowrap;border-right:2px solid #070b0f}
-.trilho .feito{position:absolute;left:0;top:0;bottom:0;background:#ffffff30}
-.trilho .rotSeg{position:relative;z-index:1;padding:0 4px;text-overflow:ellipsis;overflow:hidden}
-.marcador{position:absolute;top:-4px;bottom:-4px;width:3px;background:#fff;border-radius:2px;box-shadow:0 0 0 2px #000}
+.trilho{position:relative;height:42px;border-radius:13px;overflow:hidden;display:flex;background:#061018;
+  border:1px solid #8eb0bc;border-top-color:#d7eef4;border-bottom-color:#041016;
+  box-shadow:inset 0 3px 6px #0009,0 4px 0 #061823,0 8px 14px #0006}
+.trilho>div{height:100%;position:relative;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#061018;overflow:hidden;white-space:nowrap;border-right:2px solid #061018;
+  box-shadow:inset 0 3px 0 #ffffff66,inset 0 -5px 8px #0005}
+.trilho .nado{background:linear-gradient(180deg,#9edbff,#2f90e6 46%,#145a9a)}
+.trilho .bike,.trilho .mtb{background:linear-gradient(180deg,#ffe09a,#e89420 48%,#9a5608)}
+.trilho .corrida{background:linear-gradient(180deg,#c4ffe0,#3dcf7c 48%,#187a44)}
+.trilho .trekking{background:linear-gradient(180deg,#d4f5a8,#6bb83a 48%,#3a7a18)}
+.trilho .canoa{background:linear-gradient(180deg,#b8f6ff,#2ec6e0 48%,#0e7a90)}
+.trilho .feito{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#ffffff55,#ffffff10);pointer-events:none}
+.trilho .rotSeg{position:relative;z-index:1;padding:0 6px;text-overflow:ellipsis;overflow:hidden;text-shadow:0 1px 0 #fff8,0 -1px 0 #0002}
+.marcador{position:absolute;top:-5px;bottom:-5px;width:6px;border-radius:3px;background:linear-gradient(180deg,#fff,#c5dbe3 55%,#7a99a6);box-shadow:0 0 0 2px #061018,0 3px 0 #0007,0 6px 8px #0005;z-index:3}
 .perfil{height:54px;margin-top:8px;display:block;width:100%}
 .info3{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px}
 .caixa{background:#0a131b;border:1px solid var(--linha);border-radius:10px;padding:8px 10px}
@@ -197,8 +205,9 @@ html,body{background:radial-gradient(ellipse at 8% -10%,#2a5d6a 0%,transparent 4
 }
 .monitor{box-shadow:inset 0 2px 0 #ffffff18,0 6px 0 #061823,0 16px 28px #0008!important}
 .casos{gap:20px!important}
-.caso-c{position:relative;padding-left:22px!important;min-height:180px}
-.caso-c::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:#c86635}
+.caso-c{position:relative;overflow:hidden;padding-left:20px!important;min-height:180px;
+  box-shadow:inset 6px 0 0 #0c5c67,inset 0 2px 1px #ffffff22,0 4px 0 #061823,0 10px 16px #0005!important}
+.caso-c::before{display:none!important}
 .assinatura-fi,.aviso-rodape{margin:14px 16px 22px;color:#9bb4bc;font-size:12px;text-align:center;line-height:1.45}
 .interpret{margin:0 16px 16px}
 .interpret details{background:linear-gradient(180deg,#173943,#102830);border:1px solid #6f93a3;border-radius:16px;box-shadow:inset 0 2px 1px #ffffff22,0 5px 0 #061823}
@@ -708,7 +717,7 @@ function desenharTrilho() {
     if (s.seg >= i) pos = (acum + g.peso * frac) / total * 100;
     const w = g.peso / total * 100;
     acum += g.peso;
-    return `<div style="width:${w}%;background:${COR_TIPO[g.tipo]}" title="${g.nome}"><span class="feito" style="width:${frac * 100}%"></span><span class="rotSeg">${g.nome}</span></div>`;
+    return `<div class="${g.tipo}" style="width:${w}%" title="${g.nome}"><span class="feito" style="width:${frac * 100}%"></span><span class="rotSeg">${g.nome}</span></div>`;
   }).join('');
   $('trilho').innerHTML = html + `<span class="marcador" style="left:calc(${s.seg >= segs.length ? 100 : pos}% - 1px)"></span>`;
   desenharPerfil();
