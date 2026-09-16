@@ -54,21 +54,30 @@ a{color:var(--info)}
 .alarme.atencao{background:#33250a;border:1px solid #ffb020;color:#ffe7b8}
 @keyframes pisca{50%{border-color:#7a1f25}}
 
-.grade{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,1fr);grid-template-areas:"mon ctrl" "labs side" "fisio fisio" "tend tend";gap:10px;padding:10px 14px 12px;align-items:start}
+.grade{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(300px,1fr);grid-template-areas:"mon ctrl" "labs labs" "fisio fisio" "tend tend";gap:10px;padding:10px 14px 12px;align-items:start}
 .cel-mon{grid-area:mon}
 .cel-ctrl{grid-area:ctrl}
 .cel-labs{grid-area:labs}
-.cel-side{grid-area:side;display:flex;flex-direction:column;gap:10px}
+
 .cel-fisio{grid-area:fisio}
 .cel-tend{grid-area:tend}
+.tend-main{padding-bottom:8px}
+.tend-log{margin-top:0;border-top:1px solid #2a4552;border-radius:0 0 14px 14px;box-shadow:none!important}
+.tendencias{grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:8px!important;padding:0 10px 8px!important}
+.tend canvas{height:46px!important}
+.log{max-height:none;display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px 10px}
+.log div{display:flex;gap:8px;align-items:baseline;padding:5px 10px;border:1px solid #5e8293;border-radius:999px;background:linear-gradient(180deg,#1a444e,#12333b);margin:0;border-bottom:0}
+
+
 
 @media(max-width:980px){
-  .grade{grid-template-columns:1fr;grid-template-areas:"mon" "ctrl" "labs" "side" "fisio" "tend"}
+  .grade{grid-template-columns:1fr;grid-template-areas:"mon" "ctrl" "labs" "fisio" "tend"}
   .fisio{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .tendencias{grid-template-columns:repeat(4,minmax(0,1fr))!important}
 }
 @media(max-width:640px){
   .fisio{grid-template-columns:1fr !important}
-  .labs{grid-template-columns:1fr !important}
+  
 }
 
 
@@ -99,13 +108,13 @@ a{color:var(--info)}
 .ritmoTxt{font-size:12px;color:#9fb2c1;margin-top:3px}
 
 /* ---------- laboratório */
-.labs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 10px 10px}
-.grupo h3{margin:6px 0 6px;font-size:12px;color:var(--mudo);letter-spacing:.06em;text-transform:uppercase}
-.lab{display:grid;grid-template-columns:1fr auto;gap:2px 8px;align-items:baseline;padding:5px 8px;border-radius:8px}
-.lab:nth-child(odd){background:#0b141d}
-.lab b{font-weight:600;font-size:14px}
-.lab span{font-family:var(--num);font-size:17px;font-weight:700;text-align:right}
-.lab em{grid-column:1/3;font-style:normal;font-size:11px;color:#6f8597}
+.labs{display:flex;flex-wrap:wrap;gap:6px;padding:4px 10px 12px;align-items:stretch}
+.grupo{display:contents}
+.grupo h3{display:none}
+.lab{flex:1 1 90px;min-width:84px;max-width:1fr;display:flex;flex-direction:column;gap:1px;padding:7px 8px 6px;border-radius:10px;background:linear-gradient(180deg,#1a444e,#12333b);border:1px solid #5e8293;box-shadow:inset 0 1px 0 #ffffff22,0 2px 0 #0a242c}
+.lab b{font-weight:700;font-size:11px;letter-spacing:.03em;color:#c5dbe0}
+.lab span{font-family:var(--num);font-size:20px;font-weight:700;text-align:left;line-height:1.1}
+.lab em{font-style:normal;font-size:10px;color:#7f93a4}
 .alto{color:#ff8a65}.baixo{color:#6cb6ff}.critico{color:#ff4d4d!important}
 
 /* ---------- controles */
@@ -119,7 +128,11 @@ a{color:var(--info)}
 .ctl .t output{font-family:var(--num);font-size:16px;color:#fff}
 .ctl input[type=range]{width:100%;accent-color:#39d5ff;height:26px}
 .dica{font-size:12px;color:#7f93a4;line-height:1.4}
-.linhaBtns{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.linhaBtns{display:flex;gap:6px;flex-wrap:nowrap;margin:6px 0;align-items:center}
+.linhaBolus{flex-wrap:wrap}
+.linhaBolus .linhaBtns{margin:0}
+.linhaBolus .sep{width:1px;height:28px;background:#5e8293;flex:0 0 1px;opacity:.7}
+
 /* chip já definido no bloco de botões */
 select{background:#0b141d;border:1px solid var(--linha);border-radius:8px;padding:8px;width:100%}
 .fila{margin-top:8px;display:flex;flex-direction:column;gap:6px}
@@ -155,11 +168,11 @@ select{background:#0b141d;border:1px solid var(--linha);border-radius:8px;paddin
 .barra i b{position:absolute;top:-2px;bottom:-2px;width:2px;background:#fff9}
 .medidor{height:14px;background:#12202c;border-radius:7px;overflow:hidden;margin:6px 0 4px}
 .medidor span{display:block;height:100%;background:linear-gradient(90deg,#3ddc84,#ffb020 55%,#ff4d4d)}
-.tendencias{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:0 14px 14px}
+.tendencias{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:8px;padding:0 10px 8px}
 .tend{background:#0b141d;border:1px solid var(--linha);border-radius:10px;padding:6px 8px}
 .tend .l{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#9fb2c1}
 .tend .l span{font-family:var(--num);color:#fff}
-.tend canvas{width:100%;height:70px;display:block}
+.tend canvas{width:100%;height:46px;display:block}
 .avisos{display:flex;flex-direction:column;gap:6px;padding:0 12px 10px;max-height:120px;overflow:auto}
 .avisos div{font-size:13px;border-left:3px solid var(--atencao);background:#1e1a0f;padding:6px 8px;border-radius:4px}
 
@@ -196,7 +209,7 @@ select{background:#0b141d;border:1px solid var(--linha);border-radius:8px;paddin
   .canal{grid-template-columns:minmax(0,1fr) 120px;min-height:78px}
   .num .g{font-size:32px}
   .faixa{grid-template-columns:repeat(3,1fr)}
-  .labs,.tendencias{grid-template-columns:repeat(2,minmax(0,1fr))}
+   .tendencias{grid-template-columns:repeat(2,minmax(0,1fr))}
   .fisio,.casos,.regras{grid-template-columns:1fr}
   .topo{gap:8px;position:static}
   .progresso{display:none}
@@ -536,8 +549,11 @@ select{
         <div class="ctl">
           <div class="t">Bolus</div>
           <select id="bolusTipo"></select>
-          <div class="linhaBtns" id="bolusVol"></div>
-          <div class="linhaBtns" id="bolusTempo"></div>
+          <div class="linhaBtns linhaBolus">
+            <span id="bolusVol" class="linhaBtns"></span>
+            <i class="sep"></i>
+            <span id="bolusTempo" class="linhaBtns"></span>
+          </div>
           <button class="btn acao" id="btnBolus" style="width:100%">Infundir</button>
           <div class="dica" id="bolusDica"></div>
           <div class="fila" id="fila"></div>
@@ -616,23 +632,16 @@ select{
       </div>
     </div>
 
+    <div class="painel" style="margin-top:10px">
+      <div class="cab"><h2>Alertas fisiológicos</h2></div>
+      <div class="avisos" id="avisos"></div>
+    </div>
   </div>
 
   <div class="cel-labs">
     <div class="painel">
       <div class="cab"><h2>Gasometria e bioquímica</h2><span class="dica">↑ ↓ fora da ref. · vermelho = grave</span></div>
       <div class="labs" id="labs"></div>
-    </div>
-  </div>
-
-  <div class="cel-side">
-    <div class="painel">
-      <div class="cab"><h2>Alertas fisiológicos</h2></div>
-      <div class="avisos" id="avisos"></div>
-    </div>
-    <div class="painel">
-      <div class="cab"><h2>Evolução</h2></div>
-      <div class="log" id="log"></div>
     </div>
   </div>
 
@@ -663,6 +672,8 @@ select{
     <div class="painel">
       <div class="cab"><h2>Tendências do plantão</h2><span class="dica">faixa verde = alvo</span></div>
       <div class="tendencias" id="tendencias"></div>
+      <div class="cab" style="padding-top:4px"><h2>Evolução</h2></div>
+      <div class="log" id="log"></div>
     </div>
   </section>
 </main>
