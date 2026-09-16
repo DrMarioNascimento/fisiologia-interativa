@@ -59,13 +59,14 @@
       <form class="composer" id="form"><input id="input" maxlength="240" placeholder="Ex.: potencial de ação, retorno venoso, sangue..." aria-label="Pergunta ao tutor"><button class="send" aria-label="Enviar">➜</button></form>
     </div>
   </section>
-  <script src="tutor-ef-data.js?v=12"></script>
-  <script src="tutor-fisio-data.js"></script>
+  <script src="tutor-ef-data.js?v=17"></script>
+  <script src="tutor-fisio-data.js?v=6"></script>
+  <script src="tutor-desafios-extra.js?v=1"></script>
   <script>
     (function(){
       const box=document.getElementById('messages'),input=document.getElementById('input');
       const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').trim();
-      const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c]));
       const base='https://drmarionascimento.github.io/fisiologia-interativa/';
       const isFisio=new URLSearchParams(location.search).get('percurso')==='fisioterapia';
       const course=isFisio?'fisio':'ef';
@@ -119,7 +120,7 @@
           document.querySelector('.ai details').open=innerHeight>=480;
         }catch{document.getElementById('aiNotice').textContent='IA ainda não disponível. Simuladores, mapas e aprofundamentos continuam funcionando.';document.querySelector('.ai details').open=true;}
       }
-      const profundos=()=>moduleItems().filter(m=>['da-intencao-ao-movimento.html','sangue.html','ventilacao-pulmonar-neonatal.html'].includes(m.href)||/aprofund|integr|sangue|neonatal|intencao/i.test(`${m.title||''} ${m.goal||''} ${m.href||''}`));
+      const profundos=()=>moduleItems().filter(m=>['da-intencao-ao-movimento.html','sangue.html','ventilacao-pulmonar-neonatal.html','atleta-box.html','fisioterapia/uti-fisiologica.html'].includes(m.href)||/aprofund|integr|sangue|neonatal|intencao|atleta|uti|escape|plantao/i.test(`${m.title||''} ${m.goal||''} ${m.href||''}`));
       function find(q){const terms=norm(q).split(' ').filter(t=>t.length>2);return moduleItems().map(m=>{const hay=norm(`${m.title} ${m.goal} ${(m.steps||[]).join(' ')}`);let score=0;terms.forEach(t=>{if(hay.includes(t))score+=norm(m.title).includes(t)?5:1});return{m,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6).map(x=>x.m)}
       function act(type){
         if(type==='simuladores')return add('<p><b>Qual simulador você quer explorar?</b></p>'+linkList(moduleItems().map(m=>({title:m.title,href:m.href}))));
