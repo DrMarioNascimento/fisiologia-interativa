@@ -1,0 +1,1070 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="icon" href="brand/orientador.webp">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Box do Atleta — Fisiologia Interativa</title>
+<meta name="theme-color" content="#0c5c67">
+<meta name="description" content="Simulador educacional de provas longas: água, sódio, calor, glicogênio e ritmo acoplados.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#070b0f; --painel:#0e161e; --painel2:#121d27; --linha:#213242; --tinta:#eaf1f6; --mudo:#8fa3b4;
+  --fc:#ff5a6e; --resp:#6ee7ff; --temp:#ffb04a; --glic:#b98cff; --ritmo:#7dffb0; --pse:#ffe066; --alt:#9fd0ff;
+  --ok:#3ddc84; --atencao:#ffb020; --perigo:#ff4d4d; --info:#6cb6ff;
+  --num:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--tinta);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;font-size:15px}
+button,input,select{font:inherit;color:inherit}
+a{color:var(--info)}
+.topo{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--linha);background:#09121a;position:sticky;top:0;z-index:20}
+.marca{font-weight:900;letter-spacing:.06em}
+.marca small{display:block;font-weight:600;letter-spacing:0;font-size:12px}
+.marca a{text-decoration:none;color:var(--mudo)}
+.caso{font-weight:800;font-size:16px}
+.caso small{display:block;color:var(--mudo);font-weight:600;font-size:12px}
+.relogio{font-family:var(--num);font-size:22px;font-weight:700;min-width:120px}
+.relogio small{display:block;font-family:Inter;font-size:11px;color:var(--mudo);font-weight:600}
+.velocidades{display:flex;gap:4px;flex-wrap:wrap}
+.btn{border:1px solid var(--linha);background:var(--painel2);border-radius:9px;padding:8px 12px;cursor:pointer;font-weight:700;font-size:14px}
+.btn:hover{border-color:#3a5670}
+.btn.on{background:#1d3a52;border-color:#6ee7ff;color:#fff}
+.btn.acao{background:#133047;border-color:#2a5a7e}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.espaco{flex:1}
+
+.alarme{margin:10px 16px 0;border-radius:10px;padding:10px 14px;font-weight:800;display:none;align-items:center;gap:10px}
+.alarme.on{display:flex}
+.alarme.perigo{background:#3b0f12;border:1px solid #ff4d4d;color:#ffd7d7;animation:pisca 1s steps(2) infinite}
+.alarme.atencao{background:#33250a;border:1px solid #ffb020;color:#ffe7b8}
+@keyframes pisca{50%{border-color:#7a1f25}}
+
+.grade{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(340px,1fr);gap:14px;padding:12px 16px 16px}
+.painel{background:var(--painel);border:1px solid var(--linha);border-radius:14px}
+.painel h2{margin:0;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--mudo);font-weight:800}
+.cab{display:flex;justify-content:space-between;align-items:center;padding:12px 14px 8px;gap:8px;flex-wrap:wrap}
+.dica{font-size:12px;color:#7f93a4;line-height:1.4}
+
+/* ---------- telemetria */
+.monitor{background:#000;border:1px solid #1a2733;border-radius:14px;overflow:hidden}
+.canal{display:grid;grid-template-columns:minmax(0,1fr) 190px;border-bottom:1px solid #0f1a24;min-height:96px}
+.onda{position:relative}
+.onda canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.onda .rot{position:absolute;left:8px;top:4px;font-size:12px;font-weight:800;letter-spacing:.06em;z-index:2}
+.num{padding:8px 12px;border-left:1px solid #0f1a24;display:flex;flex-direction:column;justify-content:center}
+.num .l{font-size:12px;font-weight:800;letter-spacing:.08em}
+.num .g{font-family:var(--num);font-size:44px;font-weight:700;line-height:1}
+.num .m{font-family:var(--num);font-size:14px;opacity:.85}
+.alarm .g,.alarm .v{animation:piscaNum .8s steps(2) infinite}
+@keyframes piscaNum{50%{opacity:.25}}
+.faixa{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+.faixa>div{padding:9px 12px;border-right:1px solid #0f1a24;border-top:1px solid #0f1a24}
+.faixa .l{font-size:11px;font-weight:800;letter-spacing:.08em;color:#7f93a4}
+.faixa .v{font-family:var(--num);font-size:24px;font-weight:700;white-space:nowrap}
+.faixa .v small{font-size:12px;color:#7f93a4;margin-left:3px}
+.faixa .s{font-size:11px;color:#8fa3b4;margin-top:2px}
+
+/* ---------- percurso */
+.percurso{padding:0 14px 14px}
+.trilho{position:relative;height:34px;border-radius:9px;overflow:hidden;display:flex;background:#0a131b;border:1px solid var(--linha)}
+.trilho div{height:100%;position:relative;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#061018;overflow:hidden;white-space:nowrap;border-right:2px solid #070b0f}
+.trilho .feito{position:absolute;left:0;top:0;bottom:0;background:#ffffff30}
+.trilho .rotSeg{position:relative;z-index:1;padding:0 4px;text-overflow:ellipsis;overflow:hidden}
+.marcador{position:absolute;top:-4px;bottom:-4px;width:3px;background:#fff;border-radius:2px;box-shadow:0 0 0 2px #000}
+.perfil{height:54px;margin-top:8px;display:block;width:100%}
+.info3{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:10px}
+.caixa{background:#0a131b;border:1px solid var(--linha);border-radius:10px;padding:8px 10px}
+.caixa .l{font-size:11px;font-weight:800;letter-spacing:.06em;color:#7f93a4;text-transform:uppercase}
+.caixa .v{font-family:var(--num);font-size:18px;font-weight:700}
+.caixa .s{font-size:12px;color:#9fb2c1}
+.pares{display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:13px}
+.pares span{font-family:var(--num);font-weight:700;text-align:right}
+
+/* ---------- controles */
+.abas{display:flex;gap:2px;padding:0 8px;border-bottom:1px solid var(--linha);flex-wrap:wrap}
+.abas button{background:none;border:0;border-bottom:3px solid transparent;padding:10px 8px;cursor:pointer;font-weight:800;color:var(--mudo);font-size:14px}
+.abas button.on{color:#fff;border-bottom-color:#6ee7ff}
+.aba{display:none;padding:12px 14px 14px}
+.aba.on{display:block}
+.ctl{margin:0 0 14px}
+.ctl .t{display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:14px}
+.ctl .t output{font-family:var(--num);font-size:16px;color:#fff}
+.ctl input[type=range]{width:100%;accent-color:#6ee7ff;height:26px}
+.linhaBtns{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.chip{border:1px solid var(--linha);background:#0b141d;border-radius:99px;padding:6px 11px;cursor:pointer;font-weight:700;font-size:13px}
+.chip.on{border-color:#6ee7ff;background:#123047}
+.chip:disabled{opacity:.4;cursor:not-allowed}
+select{background:#0b141d;border:1px solid var(--linha);border-radius:8px;padding:8px;width:100%}
+.equiv{font-family:var(--num);font-size:13px;color:#cfe7ff;margin:2px 0 4px}
+.item{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:8px 0;border-top:1px solid #152331}
+.item:first-child{border-top:0}
+.item b{font-size:14px}
+.item .comp{font-family:var(--num);font-size:12px;color:#9fd8ff}
+.item .onde{font-size:11px;font-weight:700;color:#ffcf7a}
+.grupoItens{font-size:11px;font-weight:800;letter-spacing:.08em;color:#6f8597;text-transform:uppercase;margin:14px 0 2px}
+.grupoItens:first-child{margin-top:0}
+.fila{font-size:13px;background:#0b141d;border:1px dashed #2a5a7e;border-radius:8px;padding:6px 8px;margin-bottom:8px;display:none}
+.fila.on{display:block}
+.stepper{display:flex;align-items:center;gap:6px}
+.stepper button{width:30px;height:30px;border-radius:8px;border:1px solid var(--linha);background:#0b141d;cursor:pointer;font-weight:800}
+.stepper span{font-family:var(--num);min-width:22px;text-align:center;font-weight:700}
+
+.sinais{display:flex;flex-direction:column;gap:6px;padding:0 14px 12px}
+.sinais div{font-size:13px;border-left:3px solid var(--atencao);background:#1e1a0f;padding:6px 8px;border-radius:4px}
+.sinais div.calmo{border-color:#2a4a3a;background:#0e1a14;color:#9fdcb8}
+.log{max-height:280px;overflow:auto;padding:0 14px 12px;font-size:13px}
+.log div{display:grid;grid-template-columns:52px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid #132130}
+.log time{font-family:var(--num);color:#7f93a4}
+.log .acao{color:#cfe7ff}.log .fala{color:#ffe7a8;font-style:italic}.log .sinal{color:#ffc58a}.log .prova{color:#9fb2c1}.log .alerta{color:#ff9a9a}.log .fim{font-weight:800;color:#fff}
+
+/* ---------- tendências */
+.tendencias{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:0 14px 14px}
+.tend{background:#0b141d;border:1px solid var(--linha);border-radius:10px;padding:6px 8px}
+.tend .l{display:flex;justify-content:space-between;gap:6px;font-size:12px;font-weight:700;color:#9fb2c1}
+.tend .l span{font-family:var(--num);color:#fff;white-space:nowrap}
+.tend canvas{width:100%;height:78px;display:block}
+.tend .cap{font-size:11px;color:#7f93a4;line-height:1.35;margin-top:4px}
+.legenda{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:#9fb2c1;margin-top:3px}
+.legenda i{display:inline-block;width:10px;height:3px;border-radius:2px;margin-right:4px;vertical-align:middle}
+
+/* ---------- telas sobrepostas */
+.cortina{position:fixed;inset:0;background:#02060acc;backdrop-filter:blur(3px);display:none;align-items:flex-start;justify-content:center;z-index:50;overflow:auto;padding:30px 16px}
+.cortina.on{display:flex}
+.cartao{background:var(--painel);border:1px solid var(--linha);border-radius:18px;max-width:1080px;width:100%;padding:22px}
+.cartao h1{margin:0 0 6px;font-size:30px}
+.cartao h3{margin:18px 0 8px}
+.cartao p{line-height:1.55;color:#c5d3de}
+.provaBloco{margin-top:18px}
+.provaBloco>h2{margin:0 0 2px;font-size:22px}
+.provaBloco>.resumo{font-size:14px;color:#b8c7d3;margin:0 0 4px;line-height:1.5}
+.provaBloco>.logi{font-size:12px;color:#8fa3b4;margin:0 0 8px;line-height:1.45}
+.casos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.caso-c{text-align:left;background:#0b141d;border:1px solid var(--linha);border-radius:14px;padding:16px;cursor:pointer}
+.caso-c:hover{border-color:#6ee7ff}
+.caso-c h2{margin:4px 0;font-size:18px}
+.caso-c .sub{color:var(--mudo);font-size:13px;font-weight:700}
+.caso-c p{font-size:14px;margin:8px 0}
+.caso-c .pede{font-size:13px;color:#9fd8ff}
+.regras{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.regras div{background:#0b141d;border:1px solid var(--linha);border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;color:#b8c7d3}
+.regras b{display:block;color:#fff;margin-bottom:2px}
+.fim h1.abandono{color:#ff8a65}
+.fim h1.chegada{color:#6dffae}
+.porque{background:#0b141d;border-left:4px solid #ff8a65;padding:12px 14px;border-radius:6px;margin:12px 0;line-height:1.55}
+.atend{background:#0b141d;border-left:4px solid #6cb6ff;padding:10px 14px;border-radius:6px;line-height:1.5;color:#cfe0ec}
+.checklist{display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin:12px 0}
+.checklist div{padding:6px 10px;border-radius:8px;background:#0b141d;font-size:14px}
+.checklist .ok{color:#7dffb0}.checklist .nao{color:#ff9a9a}
+.splits{display:flex;gap:8px;flex-wrap:wrap}
+.splits div{background:#0b141d;border:1px solid var(--linha);border-radius:8px;padding:6px 10px;font-size:13px}
+.splits b{font-family:var(--num)}
+.dentro{grid-template-columns:repeat(3,minmax(0,1fr));padding:0}
+.limites{height:18px;border-radius:6px;overflow:hidden;display:flex;border:1px solid var(--linha)}
+.linhaFim{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+
+@media (max-width:1100px){
+  .grade{grid-template-columns:1fr}
+  .dentro,.tendencias{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .canal{grid-template-columns:minmax(0,1fr) 120px;min-height:80px}
+  .num .g{font-size:32px}
+  .tendencias,.dentro{grid-template-columns:1fr}
+  .casos,.regras,.checklist{grid-template-columns:1fr}
+  .topo{gap:8px;position:static}
+}
+
+/* FI — relevo e cor */
+html,body{background:radial-gradient(ellipse at 8% -10%,#2a5d6a 0%,transparent 42%),#0b202b!important}
+.topo{background:linear-gradient(180deg,#1e4d58,#0d2a32)!important;border-bottom:1px solid #7aa0ad!important;box-shadow:inset 0 1px 0 #ffffff33,0 8px 18px #0005!important}
+.btn,.chip,.abas button,.velocidades button,.caso-c{
+  border:1px solid #8eb0bc!important;border-top-color:#e5f6fa!important;border-bottom-color:#0a202c!important;
+  background:linear-gradient(#567e93,#305367 48%,#193748)!important;
+  box-shadow:inset 0 2px 1px #d9f3ff88,inset 0 -3px 4px #071a27aa,0 4px 0 #061823,0 7px 8px #0007!important;
+  transition:filter .15s,transform .15s!important
+}
+.btn:hover,.chip:hover,.caso-c:hover{filter:brightness(1.1);transform:translateY(-2px)}
+.btn:active,.chip:active,.caso-c:active{transform:translateY(3px)!important;box-shadow:inset 0 2px 5px #0006,0 1px 0 #071b25!important}
+.btn.on,.chip.on,.abas button.on{background:linear-gradient(#518f82,#28685d 48%,#153c37)!important}
+.btn.acao{background:linear-gradient(#d58a5c,#c86635 52%,#8a3d18)!important;border-color:#f0c4a4!important}
+.painel,.cartao,.caixa,.tend,.caso-c,.regras div{
+  border:1px solid #6f93a3!important;border-top-color:#c5e0e7!important;
+  box-shadow:inset 0 2px 1px #ffffff22,0 4px 0 #061823,0 10px 16px #0005!important
+}
+.monitor{box-shadow:inset 0 2px 0 #ffffff18,0 6px 0 #061823,0 16px 28px #0008!important}
+.casos{gap:20px!important}
+.caso-c{position:relative;padding-left:22px!important;min-height:180px}
+.caso-c::before{content:"";position:absolute;left:0;top:0;bottom:0;width:8px;background:#c86635}
+.assinatura-fi,.aviso-rodape{margin:14px 16px 22px;color:#9bb4bc;font-size:12px;text-align:center;line-height:1.45}
+.interpret{margin:0 16px 16px}
+.interpret details{background:linear-gradient(180deg,#173943,#102830);border:1px solid #6f93a3;border-radius:16px;box-shadow:inset 0 2px 1px #ffffff22,0 5px 0 #061823}
+.interpret summary{list-style:none;cursor:pointer;padding:14px 18px;font-weight:850;letter-spacing:.04em;text-transform:uppercase;font-size:13px}
+.interpret summary::-webkit-details-marker{display:none}
+.interpret summary:after{content:"▾";float:right;color:#9fd0d8}
+.interpret details[open] summary:after{content:"▴"}
+.interpret-body{padding:4px 18px 18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 22px}
+.interpret h3{margin:8px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#9bb4bc}
+.interpret dl{margin:0;display:grid;grid-template-columns:90px 1fr;gap:3px 10px;font-size:13px;line-height:1.35}
+.interpret dt{font-weight:800;font-family:var(--num)}
+.interpret dd{margin:0;color:#c5dbe0}
+.c-fc{color:#ff5a6e}.c-resp{color:#6ee7ff}.c-temp{color:#ffb04a}.c-glic{color:#b98cff}.c-pse{color:#ffe066}
+@media(max-width:900px){.interpret-body{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="marca">BOX DO ATLETA<small><a href="index.html">← Fisiologia Interativa</a></small></div>
+  <div class="caso" id="casoNome">—<small id="casoSub"></small></div>
+  <div class="espaco"></div>
+  <div class="relogio"><span id="relogio">0:00</span><small id="hora">tempo de prova</small></div>
+  <div class="velocidades" id="velocidades"></div>
+  <button class="btn" id="btnPular" title="Avança 10 minutos de prova de uma vez">+10 min</button>
+  <button class="btn" id="btnNovo">Novo caso</button>
+</header>
+
+<div class="alarme" id="alarme"></div>
+
+<main class="grade">
+  <section style="display:flex;flex-direction:column;gap:14px;min-width:0">
+    <div class="monitor">
+      <div class="canal">
+        <div class="onda"><span class="rot" style="color:var(--fc)">ECG · cinta peitoral</span><canvas id="cvEcg"></canvas></div>
+        <div class="num" id="nFC" style="color:var(--fc)"><span class="l">FC bpm</span><span class="g" id="vFC">--</span><span class="m" id="vFCpct">-- % da máx</span></div>
+      </div>
+      <div class="canal">
+        <div class="onda"><span class="rot" style="color:var(--resp)">Respiração · cinta</span><canvas id="cvResp"></canvas></div>
+        <div class="num" style="color:var(--resp)"><span class="l">FR irpm</span><span class="g" id="vFR">--</span><span class="m" id="vVE">-- L/min</span></div>
+      </div>
+      <div class="faixa">
+        <div style="color:var(--ritmo)"><div class="l" id="lRitmo">RITMO</div><div class="v" id="vRitmo">--</div><div class="s" id="sRitmo"></div></div>
+        <div style="color:var(--temp)" id="cxTemp"><div class="l">TEMP. CENTRAL</div><div class="v" id="vTemp">--<small>°C</small></div><div class="s">cápsula ingerível</div></div>
+        <div style="color:var(--glic)" id="cxGlic"><div class="l">GLICEMIA</div><div class="v" id="vGlic">--<small>mg/dL</small></div><div class="s">sensor contínuo</div></div>
+        <div style="color:var(--pse)"><div class="l">PSE</div><div class="v" id="vPSE">--<small>/20</small></div><div class="s" id="sPSE">Borg</div></div>
+        <div style="color:#cfe7ff"><div class="l">ESFORÇO</div><div class="v" id="vEsf">--<small>%</small></div><div class="s" id="sEsf">do VO₂máx</div></div>
+        <div style="color:var(--alt)" id="cxSat"><div class="l">SpO₂</div><div class="v" id="vSat">--<small>%</small></div><div class="s" id="sSat">oxímetro de dedo</div></div>
+      </div>
+    </div>
+
+    <div class="painel">
+      <div class="cab"><h2>Percurso</h2><span class="dica" id="segTxt"></span></div>
+      <div class="percurso">
+        <div class="trilho" id="trilho"></div>
+        <canvas class="perfil" id="perfil"></canvas>
+        <div class="info3">
+          <div class="caixa"><div class="l">Ambiente</div><div class="v" id="vAr">--</div><div class="s" id="sAr"></div></div>
+          <div class="caixa"><div class="l">Próximo apoio</div><div class="v" id="vPosto">--</div><div class="s" id="sPosto"></div></div>
+          <div class="caixa"><div class="l">Pesagens</div><div class="v" id="vPeso">--</div><div class="s" id="sPeso"></div></div>
+          <div class="caixa" id="cxMochila"><div class="l">Mochila</div><div class="v" id="vMochila">--</div><div class="s" id="sMochila"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="painel">
+      <div class="cab"><h2>O que entrou</h2><span class="dica">o que você sabe que ele consumiu</span></div>
+      <div class="percurso">
+        <div class="info3">
+          <div class="caixa"><div class="l">Líquido</div><div class="v" id="vLiq">--</div><div class="s" id="sLiq"></div></div>
+          <div class="caixa"><div class="l">Carboidrato</div><div class="v" id="vCho">--</div><div class="s" id="sCho"></div></div>
+          <div class="caixa"><div class="l">Sódio</div><div class="v" id="vNa">--</div><div class="s" id="sNa"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:14px;min-width:0">
+    <div class="painel">
+      <div class="abas" id="abas">
+        <button data-aba="ritmo" class="on">Ritmo e plano</button>
+        <button data-aba="comer">Comer e beber</button>
+        <button data-aba="mochila" id="abaMochila">Mochila</button>
+        <button data-aba="apoio">Corpo e apoio</button>
+      </div>
+
+      <div class="aba on" data-aba="ritmo">
+        <div class="ctl">
+          <div class="t">Intensidade pedida <output id="oInt">--</output></div>
+          <input type="range" id="intensidade" min="0.35" max="0.85" step="0.01" value="0.65">
+          <div class="equiv" id="equiv"></div>
+          <div class="dica">A alavanca principal. Mais intensidade é mais calor produzido, mais carboidrato por minuto, mais suor e menos sangue para o intestino. Se faltar algo, ele não consegue fazer o que você pediu.</div>
+        </div>
+        <div class="ctl">
+          <div class="t">Plano de hidratação</div>
+          <div class="linhaBtns" id="modos">
+            <button class="chip" data-modo="sede">Beber pela sede</button>
+            <button class="chip" data-modo="fixo">Plano fixo por hora</button>
+            <button class="chip" data-modo="nada">Só o que eu entregar</button>
+          </div>
+          <div class="dica" id="modoDica"></div>
+        </div>
+        <div class="ctl" id="ctlPlano">
+          <div class="t">Bebida do plano</div>
+          <select id="bebida"></select>
+          <div class="t" style="margin-top:10px" id="tTaxa">Volume <output id="oTaxa">-- mL/h</output></div>
+          <input type="range" id="taxa" min="0" max="1600" step="50" value="600">
+          <div class="equiv" id="planoEquiv"></div>
+        </div>
+        <div class="ctl">
+          <div class="t">Ele come sozinho</div>
+          <div class="linhaBtns"><select id="autoItem" style="width:auto;flex:1"></select></div>
+          <div class="linhaBtns" id="autoCada"></div>
+          <div class="dica" id="autoDica"></div>
+        </div>
+      </div>
+
+      <div class="aba" data-aba="comer">
+        <div class="fila" id="fila"></div>
+        <div class="dica" id="comerDica" style="margin-bottom:8px"></div>
+        <div id="itensComer"></div>
+      </div>
+
+      <div class="aba" data-aba="mochila">
+        <div class="dica" style="margin-bottom:8px">O que a mochila leva de cada vez. Ela é refeita com esta lista em cada posto ou transição; o reservatório de água também é enchido nos riachos. Tudo pesa: mais carga custa mais energia em cada passo.</div>
+        <div class="ctl">
+          <div class="t">Reservatório de água <output id="oReserv">-- L</output></div>
+          <input type="range" id="reserv" min="0" max="3000" step="250" value="1000">
+        </div>
+        <div id="listaMochila"></div>
+        <div class="equiv" id="cargaTxt" style="margin-top:8px"></div>
+      </div>
+
+      <div class="aba" data-aba="apoio">
+        <div id="blocoRoupa" class="ctl">
+          <div class="t">Roupa</div>
+          <div class="linhaBtns" id="roupas"></div>
+          <div class="dica">Isola do frio e do vento, mas atrapalha a evaporação do suor. Molhada de chuva, só a impermeável mantém o isolamento. Trocar custa 2 min parado.</div>
+        </div>
+        <div id="blocoSono" class="ctl">
+          <div class="t">Dormir <output id="oSono"></output></div>
+          <div class="linhaBtns">
+            <button class="chip" data-dormir="20">Cochilo de 20 min</button>
+            <button class="chip" data-dormir="90">Um ciclo: 90 min</button>
+            <button class="chip" data-acao="acordar">Acordar agora</button>
+          </div>
+          <div class="dica">Parado e dormindo, o corpo quase não produz calor: com manta térmica, mas sem jaqueta na madrugada, o frio cobra. Na canoa não dá para dormir.</div>
+        </div>
+        <div id="itensApoio"></div>
+      </div>
+    </div>
+
+    <div class="painel">
+      <div class="cab"><h2>O que você vê nele</h2></div>
+      <div class="sinais" id="sinais"></div>
+    </div>
+
+    <div class="painel">
+      <div class="cab"><h2>O que ele diz e o que aconteceu</h2></div>
+      <div class="log" id="log"></div>
+    </div>
+  </section>
+</main>
+
+<section style="padding:0 16px 30px">
+  <div class="painel">
+    <div class="cab"><h2>Tendências da prova</h2><span class="dica">faixa verde = alvo · linhas verticais = fim de cada trecho</span></div>
+    <div class="tendencias" id="tendencias"></div>
+  </div>
+</section>
+
+<div class="cortina on" id="telaInicio">
+  <div class="cartao">
+    <h1>Leve o atleta até a linha de chegada.</h1>
+    <p>Você é o treinador, com rádio e equipe de apoio. Escolha a prova e o atleta. Tudo sai de um único modelo fisiológico: gasto energético, glicogênio e glicemia, esvaziamento gástrico e absorção intestinal, produção e perda de calor, frio e tremor, suor e sódio, volume plasmático e débito cardíaco, oxigênio na altitude e sono.</p>
+    <div class="regras">
+      <div><b>Você vê o que um treinador vê</b>FC, ritmo, temperatura da cápsula, glicemia do sensor, saturação, peso quando pesa, o que ele comeu e bebeu, o que ele fala e como ele está. Sódio, glicogênio, intestino e sono ficam escondidos até o fim.</div>
+      <div><b>A logística conta</b>Cada prova tem seus pontos de apoio. Entre eles, só o que ele carrega. Na natação não se come; na canoa não se dorme.</div>
+      <div><b>Terminar não basta</b>Na chegada ou no abandono, a fisiologia por dentro é revelada: o que acabou, o que sobrou e por quê.</div>
+    </div>
+    <div id="casos"></div>
+  </div>
+</div>
+
+<div class="cortina" id="telaFim">
+  <div class="cartao fim" id="fimConteudo"></div>
+</div>
+
+<script src="atleta-motor.js"></script>
+<script>
+(() => {
+'use strict';
+const M = window.AtletaMotor;
+const $ = id => document.getElementById(id);
+const fmt = (x, d = 0) => (x == null || !isFinite(x)) ? '--' : Number(x).toFixed(d).replace('.', ',');
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const hm = min => { const m = Math.max(0, Math.floor(min)); return Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0'); };
+const mss = min => { const t = Math.round(min * 60); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); };
+const pace = mpm => mpm > 0 ? mss(1000 / mpm) : '--';
+
+let s = null, vel = 60, fimMostrado = false, ultimoEvento = -1, TENDS = [];
+
+// ================================================================ escolha
+function telaInicial() {
+  const provas = [];
+  Object.values(M.CENARIOS).forEach(c => { let p = provas.find(x => x.prova === c.prova); if (!p) provas.push(p = { prova: c.prova, casos: [] }); p.casos.push(c); });
+  $('casos').innerHTML = provas.map(({ prova, casos }) => `
+    <div class="provaBloco">
+      <h2>${prova.nome}</h2>
+      <p class="resumo">${prova.resumo}</p>
+      <p class="logi">${prova.logistica}</p>
+      <div class="casos">${casos.map(c => `
+        <button class="caso-c" data-caso="${c.id}">
+          <div class="sub">${c.sub}</div>
+          <p>${c.historia}</p>
+          <div class="pede">${c.pede}</div>
+        </button>`).join('')}</div>
+    </div>`).join('');
+  $('casos').querySelectorAll('[data-caso]').forEach(b => b.onclick = () => iniciar(b.dataset.caso));
+  $('telaInicio').classList.add('on');
+  $('telaInicio').scrollTop = 0;
+}
+
+function iniciar(id) {
+  s = M.criar(id);
+  fimMostrado = false; ultimoEvento = -1; ultimoSeg = -1;
+  $('telaInicio').classList.remove('on');
+  $('telaFim').classList.remove('on');
+  const sc = M.CENARIOS[id];
+  $('casoNome').firstChild.textContent = sc.nome;
+  $('casoSub').textContent = sc.sub;
+  const P = s.prova;
+  $('abaMochila').style.display = s.lista ? '' : 'none';
+  $('blocoRoupa').style.display = P.frio ? '' : 'none';
+  $('blocoSono').style.display = P.sono ? '' : 'none';
+  $('cxSat').style.display = P.altitude ? '' : 'none';
+  $('cxMochila').style.display = s.mochila ? '' : 'none';
+  $('perfil').style.display = P.segmentos.some(g => g.perfil) ? '' : 'none';
+  document.querySelector('#abas [data-aba="ritmo"]').click();
+  montarTendencias();
+  montarItens();
+  sincronizarControles();
+  ondas.reiniciar();
+  ondas.avancar(4);
+  atualizarTudo(true);
+}
+
+// ============================================================= velocidade
+const VELS = [[0, '⏸ Pausa'], [30, '30 s/s'], [60, '1 min/s'], [120, '2 min/s'], [300, '5 min/s'], [600, '10 min/s']];
+function montarVelocidades() {
+  $('velocidades').innerHTML = VELS.map(([v, n]) => `<button class="btn ${v === vel ? 'on' : ''}" data-vel="${v}">${n}</button>`).join('');
+  $('velocidades').querySelectorAll('[data-vel]').forEach(b => b.onclick = () => { vel = +b.dataset.vel; montarVelocidades(); });
+}
+$('btnPular').onclick = () => { if (s && !s.fim) { M.passo(s, 10); atualizarTudo(true); } };
+$('btnNovo').onclick = () => { telaInicial(); };
+
+// ============================================================== controles
+const MODO_DICA = {
+  sede: 'Bebe (a bebida do plano) quando a osmolalidade sobe ou o volume cai. Protege contra beber demais, mas quem sua muito tende a ficar para trás.',
+  fixo: 'Bebe o volume por hora que você definir, com ou sem sede. Serve para quem sabe quanto sua; quem erra para mais acumula água.',
+  nada: 'Não bebe nada além do que você entregar pela aba Comer e beber.'
+};
+function sincronizarControles() {
+  const c = s.c;
+  $('intensidade').value = c.intensidade;
+  $('bebida').innerHTML = M.BEBIDAS_PLANO.map(k => `<option value="${k}">${M.ITENS[k].nome}</option>`).join('');
+  $('bebida').value = c.bebida;
+  $('taxa').value = c.taxa;
+  $('autoItem').innerHTML = '<option value="">Nada: só o que você mandar</option>' + ['gel', 'gelcaf', 'cereal', 'banana', 'batata', 'proteina'].map(k => `<option value="${k}">${M.ITENS[k].nome}</option>`).join('');
+  $('autoItem').value = c.autoItem || '';
+  if (s.lista) $('reserv').value = s.lista.agua || 0;
+  rotulosControles();
+}
+$('intensidade').addEventListener('input', () => { if (!s) return; M.executar(s, 'controle', 'intensidade', +$('intensidade').value); rotulosControles(); });
+$('taxa').addEventListener('input', () => { if (!s) return; M.executar(s, 'controle', 'taxa', +$('taxa').value); rotulosControles(); });
+['intensidade', 'taxa'].forEach(k => $(k).addEventListener('change', () => {
+  if (!s || !s._ultimoControle) return;
+  const u = s._ultimoControle; s._ultimoControle = null;
+  const txt = u.chave === 'intensidade' ? Math.round(u.valor * 100) + '% do VO₂máx' : u.valor + ' mL/h';
+  s.eventos.push({ t: s.t, texto: u.nome + ' → ' + txt + '.', tipo: 'acao' });
+}));
+$('bebida').onchange = () => { if (!s) return; M.executar(s, 'controle', 'bebida', $('bebida').value); registrarControle('Bebida do plano → ' + M.ITENS[$('bebida').value].nome + '.'); rotulosControles(); };
+$('autoItem').onchange = () => { if (!s) return; const v = $('autoItem').value || null; M.executar(s, 'controle', 'autoItem', v); if (v && !s.c.autoCada) M.executar(s, 'controle', 'autoCada', 45); registrarControle('Come sozinho → ' + (v ? M.ITENS[v].nome.toLowerCase() : 'nada') + '.'); rotulosControles(); };
+$('reserv').addEventListener('input', () => { if (!s || !s.lista) return; M.executar(s, 'lista', 'agua', +$('reserv').value); rotulosControles(); atualizarMochila(); });
+document.querySelectorAll('#modos [data-modo]').forEach(b => b.onclick = () => {
+  if (!s) return;
+  M.executar(s, 'controle', 'hidratacao', b.dataset.modo);
+  registrarControle('Plano de hidratação → ' + b.textContent.toLowerCase() + '.');
+  rotulosControles();
+});
+function registrarControle(texto) { s._ultimoControle = null; if (!s.fim) s.eventos.push({ t: s.t, texto, tipo: 'acao' }); }
+
+function textoRitmo(tipo, v, pot) {
+  if (tipo === 'nado') return v > 0 ? mss(100 / v) + ' /100 m' : '--';
+  if (tipo === 'bike' || tipo === 'mtb') return fmt(v * 0.06, 1) + ' km/h · ' + fmt(pot, 0) + ' W';
+  if (tipo === 'canoa') return fmt(v * 0.06, 1) + ' km/h';
+  if (tipo === 'trekking') return fmt(v * 0.06, 1) + ' km/h';
+  if (tipo === 'corrida') return pace(v) + ' /km' + (v < 100 ? ' (caminhando)' : '');
+  return '';
+}
+function rotulosControles() {
+  const c = s.c, segs = s.prova.segmentos;
+  $('oInt').textContent = Math.round(c.intensidade * 100) + '% VO₂máx';
+  let seg = M.segAtual(s);
+  if (seg.tipo === 'transicao' && segs[s.seg + 1]) seg = segs[s.seg + 1];
+  const r = M.ritmoPara(s, c.intensidade, seg.tipo);
+  const pos = M.posicao(s);
+  $('equiv').textContent = 'Sem limitação, aqui dá: ' + textoRitmo(seg.tipo, r.vel, r.potencia) + (Math.abs(pos.grade) > 0.02 ? ' (' + (pos.grade > 0 ? 'subida' : 'descida') + ' de ' + fmt(Math.abs(pos.grade) * 100, 0) + '%)' : '');
+  document.querySelectorAll('#modos [data-modo]').forEach(b => b.classList.toggle('on', b.dataset.modo === c.hidratacao));
+  $('modoDica').textContent = MODO_DICA[c.hidratacao] + (s.mochila ? ' Nos trechos de mochila, a bebida sai do reservatório: acabou, não bebe.' : '');
+  $('ctlPlano').style.display = c.hidratacao === 'nada' ? 'none' : '';
+  $('tTaxa').style.display = $('taxa').style.display = c.hidratacao === 'fixo' ? '' : 'none';
+  $('oTaxa').textContent = c.taxa + ' mL/h';
+  const b = M.ITENS[c.bebida];
+  $('planoEquiv').textContent = c.hidratacao === 'fixo'
+    ? `= ${fmt((b.glic + b.fruc) * c.taxa / 500, 0)} g de carboidrato/h · ${fmt(b.na * c.taxa / 500 * 23, 0)} mg de Na⁺/h`
+    : `${b.nome}: ${fmt(b.glic + b.fruc, 0)} g de carboidrato e ${fmt(b.na * 23, 0)} mg de Na⁺ por 500 mL`;
+  $('autoCada').innerHTML = c.autoItem ? [20, 30, 45, 60, 90].map(m => `<button class="chip ${c.autoCada === m ? 'on' : ''}" data-cada="${m}">a cada ${m} min</button>`).join('') : '';
+  $('autoCada').querySelectorAll('[data-cada]').forEach(x => x.onclick = () => { M.executar(s, 'controle', 'autoCada', +x.dataset.cada); registrarControle('Come sozinho a cada ' + x.dataset.cada + ' min.'); rotulosControles(); });
+  $('autoDica').textContent = c.autoItem
+    ? `Sem você mandar, ele come ${M.ITENS[c.autoItem].nome.toLowerCase()} a cada ${c.autoCada} min${s.mochila ? ' — da mochila; se acabou, pega outra coisa que tiver' : ''}. ≈ ${fmt((M.ITENS[c.autoItem].glic + M.ITENS[c.autoItem].fruc) * 60 / c.autoCada, 0)} g de carboidrato/h.`
+    : 'Ele não come nada por conta própria.';
+  if (s.lista) $('oReserv').textContent = fmt((s.lista.agua || 0) / 1000, 2) + ' L';
+  document.querySelectorAll('#roupas [data-roupa]').forEach(x => x.classList.toggle('on', +x.dataset.roupa === c.roupa));
+}
+
+const DICAS = {
+  agua: 'Repõe água, sem sódio e sem energia. Em excesso, dilui o Na⁺.',
+  iso: '6% de carboidrato e sódio. Perto da osmolalidade do plasma: esvazia rápido do estômago.',
+  b21: '9%, duas partes de glicose para uma de frutose. A frutose usa outro transportador (GLUT5), então soma quando o da glicose (SGLT1) satura, em torno de 60 g/h.',
+  gel: '22 g de glicose em 40 mL: muito concentrado. Sem água, fica no estômago e puxa água para dentro do intestino. Horas de gel enjoam.',
+  gelcaf: 'Gel + 75 mg de cafeína. A cafeína reduz a percepção de esforço e a sonolência; meia-vida de ~5 h.',
+  cola: 'Açúcar (glicose e frutose) com um pouco de cafeína. Clássico no fim da prova, quando o doce do gel enjoa.',
+  banana: 'Carboidrato, potássio e alguma fibra. Vai bem pedalando ou caminhando; correndo, pesa mais.',
+  cereal: 'Carboidrato com um pouco de fibra e gordura: esvazia mais devagar que o gel.',
+  proteina: 'Pouco carboidrato. Proteína, gordura e fibra atrasam o esvaziamento gástrico, e correndo isso sacode no estômago. Não resolve a quebra: serve para recuperação e provas de vários dias.',
+  batata: 'Amido com bastante sódio: comida de verdade, salgada, boa quando o doce cansa.',
+  sopa: 'Quente, salgada e com carboidrato. Aquece um pouco, repõe sódio e corta o enjoo de doce. Só existe no posto ou na transição.',
+  sal: 'Sódio sem água. Repõe o que sai no suor, mas não impede a hiponatremia se a água estiver sobrando.',
+  cafeina: '~3 mg/kg. Reduz a percepção de esforço e a sonolência; acima de ~6 mg/kg irrita o estômago.',
+  raspadinha: 'O gelo derretendo absorve calor do núcleo (calor latente de fusão). Conta também como 300 mL de água.',
+  esponja: 'Água fria na pele conduz e evapora calor. O efeito dura poucos minutos.',
+  gelo: 'Resfria a pele da nuca e da cabeça por ~15 min.'
+};
+function comp(it) {
+  const p = [];
+  if (it.vol >= 30) p.push(it.vol + ' mL');
+  if (it.glic + it.fruc) p.push((it.glic + it.fruc) + ' g CHO');
+  if (it.lento) p.push(it.lento + ' g prot/gord/fibra');
+  if (it.na) p.push(Math.round(it.na * 23) + ' mg Na⁺');
+  if (it.caf) p.push(it.caf + ' mg cafeína');
+  return p.join(' · ');
+}
+function itemHTML(id) {
+  const it = M.ITENS[id];
+  return `<div class="item"><div><b>${it.nome}</b> <span class="dica">${it.porcao}</span><div class="comp">${comp(it)}</div><div class="onde" data-onde="${id}"></div></div><button class="btn acao" data-dar="${id}">Dar</button><div class="dica">${DICAS[id]}</div></div>`;
+}
+function montarItens() {
+  const P = s.prova;
+  const bebidas = s.mochila ? ['cola'] : ['agua', 'iso', 'b21', 'cola'];
+  $('itensComer').innerHTML =
+    '<div class="grupoItens">Bebidas</div>' + bebidas.map(itemHTML).join('') +
+    '<div class="grupoItens">Carboidrato rápido</div>' + ['gel', 'gelcaf'].map(itemHTML).join('') +
+    '<div class="grupoItens">Comida</div>' + ['banana', 'cereal', 'batata', 'sopa', 'proteina'].map(itemHTML).join('') +
+    '<div class="grupoItens">Suplementos</div>' + ['sal', 'cafeina'].map(itemHTML).join('');
+  const calor = !P.frio || P.id === 'ultra';
+  $('itensApoio').innerHTML =
+    (calor ? '<div class="grupoItens">Resfriar</div>' + ['esponja', 'gelo', 'raspadinha'].map(itemHTML).join('') : '') +
+    '<div class="grupoItens">Paradas</div>' +
+    `<div class="item"><div><b>Pesar</b><div class="dica">No próximo posto ou na transição. Custa 1 min. Perder 1 kg é perder ~1 L de água (mais o glicogênio e a gordura queimados); ganhar peso numa prova longa é sinal de água sobrando.</div></div><button class="btn acao" data-acao="pesar">Pedir</button></div>` +
+    `<div class="item"><div><b>Parar 5 min na sombra</b><div class="dica">Sem sol e sem o calor do esforço, com água na pele. Custa tempo.</div></div><button class="btn acao" data-acao="sombra">Pedir</button></div>`;
+  $('roupas').innerHTML = M.ROUPAS.map((r, i) => `<button class="chip" data-roupa="${i}">${r.nome}</button>`).join('');
+  $('roupas').querySelectorAll('[data-roupa]').forEach(b => b.onclick = () => { if (!s) return; M.executar(s, 'roupa', +b.dataset.roupa); atualizarTudo(true); });
+  document.querySelectorAll('[data-dar]').forEach(b => b.onclick = () => { if (!s) return; M.executar(s, 'dar', b.dataset.dar); atualizarTudo(true); });
+  document.querySelectorAll('[data-acao]').forEach(b => b.onclick = () => { if (!s) return; M.executar(s, b.dataset.acao); atualizarTudo(true); });
+  document.querySelectorAll('[data-dormir]').forEach(b => b.onclick = () => { if (!s) return; M.executar(s, 'dormir', +b.dataset.dormir); atualizarTudo(true); });
+  if (s.lista) {
+    $('listaMochila').innerHTML = M.CARREGAVEIS.map(id => `<div class="item"><div><b>${M.ITENS[id].nome}</b><div class="comp">${comp(M.ITENS[id])} · ${M.ITENS[id].g} g</div></div><div class="stepper"><button data-menos="${id}">−</button><span id="qt_${id}">0</span><button data-mais="${id}">+</button></div></div>`).join('');
+    const mudar = (id, d) => { const q = clamp((s.lista[id] || 0) + d, 0, 20); M.executar(s, 'lista', id, q); atualizarMochila(); };
+    document.querySelectorAll('[data-menos]').forEach(b => b.onclick = () => mudar(b.dataset.menos, -1));
+    document.querySelectorAll('[data-mais]').forEach(b => b.onclick = () => mudar(b.dataset.mais, 1));
+  }
+}
+document.querySelectorAll('#abas button').forEach(b => b.onclick = () => {
+  document.querySelectorAll('#abas button').forEach(x => x.classList.toggle('on', x === b));
+  document.querySelectorAll('.aba').forEach(a => a.classList.toggle('on', a.dataset.aba === b.dataset.aba));
+});
+function atualizarMochila() {
+  if (!s.lista) return;
+  M.CARREGAVEIS.forEach(id => { const el = $('qt_' + id); if (el) el.textContent = s.lista[id] || 0; });
+  let g = s.lista.agua || 0;
+  M.CARREGAVEIS.forEach(id => g += (s.lista[id] || 0) * M.ITENS[id].g);
+  let cho = 0; M.CARREGAVEIS.forEach(id => cho += (s.lista[id] || 0) * (M.ITENS[id].glic + M.ITENS[id].fruc));
+  $('cargaTxt').textContent = `Lista cheia: ${fmt(g / 1000, 1)} kg de comida e água + ${fmt(s.prova.cargaBase, 1)} kg de equipamento obrigatório · ${fmt(cho, 0)} g de carboidrato`;
+  $('oReserv').textContent = fmt((s.lista.agua || 0) / 1000, 2) + ' L';
+}
+
+// ============================================================== telemetria
+function janela(campo, min) {
+  const tr = s.trend; if (tr.length < 2) return 0;
+  const ult = tr[tr.length - 1];
+  let ini = tr[0];
+  for (let i = tr.length - 1; i >= 0; i--) if (ult.t - tr[i].t >= min) { ini = tr[i]; break; }
+  const dt = (ult.t - ini.t) / 60;
+  return dt > 0.2 ? (ult[campo] - ini[campo]) / dt : 0;
+}
+function atualizarMonitor() {
+  const v = s.v, a = s.a, tipo = v.tipo, seg = M.segAtual(s), P = s.prova;
+  $('relogio').textContent = hm(s.t);
+  $('hora').textContent = 'tempo de prova · ' + M.horaDoDia(s);
+  $('vFC').textContent = fmt(v.fc, 0);
+  $('vFCpct').textContent = fmt(v.fc / a.fcMax * 100, 0) + '% da máx';
+  $('nFC').classList.toggle('alarm', v.fc >= a.fcMax * 0.95);
+  $('vFR').textContent = fmt(v.fr, 0);
+  $('vVE').textContent = fmt(v.ve, 0) + ' L/min';
+  const nomeRitmo = { nado: 'RITMO NADO', bike: 'VELOCIDADE', mtb: 'VELOCIDADE', canoa: 'VELOCIDADE', corrida: 'PACE', trekking: 'VELOCIDADE', transicao: 'TRANSIÇÃO', parado: 'CHEGOU' }[tipo];
+  const kmTxt = seg.km ? fmt(s.km, seg.km < 10 ? 2 : 1) + ' de ' + fmt(seg.km, 1) + ' km' : '';
+  $('lRitmo').textContent = v.dormindo ? 'DORMINDO' : s.parada > 0 ? 'PARADO' : nomeRitmo;
+  if (v.dormindo || s.parada > 0) { $('vRitmo').innerHTML = '0'; $('sRitmo').textContent = (v.dormindo ? 'acorda em ' + fmt(s.dormindo, 0) : 'volta em ' + fmt(s.parada, 0)) + ' min · ' + kmTxt; }
+  else if (tipo === 'nado') { $('vRitmo').innerHTML = mss(100 / v.vel) + '<small>/100m</small>'; $('sRitmo').textContent = kmTxt; }
+  else if (tipo === 'bike' || tipo === 'mtb') { $('vRitmo').innerHTML = fmt(v.vel * 0.06, 1) + '<small>km/h</small>'; $('sRitmo').textContent = fmt(v.potencia, 0) + ' W · ' + kmTxt; }
+  else if (tipo === 'canoa' || tipo === 'trekking') { $('vRitmo').innerHTML = fmt(v.vel * 0.06, 1) + '<small>km/h</small>'; $('sRitmo').textContent = kmTxt; }
+  else if (tipo === 'corrida') { $('vRitmo').innerHTML = pace(v.vel) + '<small>/km</small>'; $('sRitmo').textContent = (v.vel > 0 && v.vel < 100 ? 'caminhando · ' : '') + kmTxt; }
+  else { $('vRitmo').innerHTML = '--'; $('sRitmo').textContent = tipo === 'transicao' ? seg.nome.toLowerCase() : ''; }
+  if (Math.abs(v.pos.grade) > 0.02 && !v.parado && tipo !== 'transicao') $('sRitmo').textContent += ' · ' + (v.pos.grade > 0 ? '↗ ' : '↘ ') + fmt(Math.abs(v.pos.grade) * 100, 0) + '%';
+  $('vTemp').innerHTML = fmt(s.tc, 1) + '<small>°C</small>';
+  $('cxTemp').classList.toggle('alarm', s.tc >= 39.5 || s.tc < 35.5);
+  $('vGlic').innerHTML = fmt(s.cgm * 18, 0) + '<small>mg/dL</small>';
+  $('cxGlic').classList.toggle('alarm', s.cgm * 18 < 70);
+  $('vPSE').innerHTML = fmt(v.pse, 0) + '<small>/20</small>';
+  $('sPSE').textContent = ['', '', '', '', '', '', 'nenhum esforço', 'extremamente leve', 'extremamente leve', 'muito leve', 'muito leve', 'leve', 'leve', 'um pouco intenso', 'um pouco intenso', 'intenso', 'intenso', 'muito intenso', 'muito intenso', 'extremamente intenso', 'exaustão'][Math.round(clamp(v.pse, 6, 20))];
+  const pedido = tipo === 'transicao' || v.parado ? null : s.c.intensidade;
+  $('vEsf').innerHTML = fmt(v.pct * 100, 0) + '<small>%</small>';
+  const falta = pedido != null && pedido - v.pct > 0.02;
+  $('sEsf').textContent = pedido == null ? 'do VO₂máx' : falta ? 'pediu ' + Math.round(pedido * 100) + '% · não consegue' : 'do VO₂máx · como pedido';
+  $('sEsf').style.color = falta ? '#ffb020' : '';
+  if (P.altitude) {
+    $('vSat').innerHTML = fmt(v.sao2 * 100, 0) + '<small>%</small>';
+    $('sSat').textContent = fmt(v.pos.alt, 0) + ' m de altitude';
+    $('cxSat').classList.toggle('alarm', v.sao2 < 0.86);
+  }
+
+  // percurso
+  const am = v.am;
+  $('vAr').textContent = fmt(am.tar, 0) + ' °C · ' + fmt(am.ur * 100, 0) + '%';
+  const ceu = am.chuva ? 'chovendo' : am.sol > 0.5 ? 'sol forte' : am.sol > 0.1 ? 'sol fraco' : 'noite';
+  $('sAr').textContent = ceu + ' · vento ' + fmt(am.vento * 3.6, 0) + ' km/h' + (am.tar > 22 ? ' · IBUTG ' + fmt(am.wbgt, 0) + ' °C' + (am.wbgt >= 28 ? ' (risco alto)' : am.wbgt >= 23 ? ' (moderado)' : '') : '');
+  const ap = M.proximoApoio(s);
+  if (seg.tipo === 'nado') { $('vPosto').textContent = 'na água'; $('sPosto').textContent = 'nada até a transição'; }
+  else if (seg.tipo === 'transicao') { $('vPosto').textContent = seg.nome; $('sPosto').textContent = 'tudo entregue na hora' + (s.mochila ? ' · mochila refeita' : ''); }
+  else if (ap) {
+    const alvo = ap.posto || ap.fim;
+    const eta = x => isFinite(x.min) ? '~' + fmt(x.min, 0) + ' min' : 'parado';
+    $('vPosto').textContent = ap.posto ? 'posto km ' + fmt(ap.posto.km, 1) : ap.fim.nome;
+    $('sPosto').textContent = 'em ' + eta(alvo) + (ap.fonte ? ' · riacho em ' + eta(ap.fonte) : '') + (seg.apoio === 'carrega' ? ' · na bike ele leva o que você manda' : seg.apoio === 'mochila' ? ' · até lá, só a mochila' : '');
+  }
+  const ult = s.pesos[s.pesos.length - 1];
+  const dp = (ult.kg - s.massa0) / s.massa0 * 100;
+  $('vPeso').textContent = fmt(ult.kg, 1) + ' kg';
+  $('vPeso').style.color = dp > 0.5 ? '#ff9a9a' : dp < -4 ? '#ffb020' : '';
+  $('sPeso').textContent = (s.pesos.length > 1 ? (dp >= 0 ? '+' : '') + fmt(dp, 1) + '% · ' : '') + ult.onde + ' (' + hm(ult.t) + ')' + (s.pesarPedido ? ' · pesagem pedida' : '');
+  if (s.mochila) {
+    $('vMochila').textContent = fmt(s.mochila.agua / 1000, 1) + ' L';
+    $('vMochila').style.color = s.mochila.agua <= 0 ? '#ff9a9a' : '';
+    const itens = M.CARREGAVEIS.filter(id => s.mochila[id] > 0).map(id => M.ITENS[id].nome.toLowerCase() + ' ×' + s.mochila[id]);
+    $('sMochila').textContent = (itens.join(', ') || 'sem comida') + ' · ' + fmt(v.carga, 1) + ' kg';
+  }
+  const corte = seg.corte || (s.seg === P.segmentos.length - 1 ? P.corteFinal : null);
+  $('segTxt').textContent = s.fim ? '' : seg.nome + (corte ? ' · corte em ' + hm(corte) : ' · corte final em ' + hm(P.corteFinal));
+  desenharTrilho();
+
+  // o que entrou
+  const liqH = janela('agua', 60), choH = janela('cho', 60), naH = janela('naIng', 60);
+  $('vLiq').textContent = fmt(liqH, 0) + ' mL/h';
+  $('sLiq').textContent = 'última hora · total ' + fmt(s.bal.agua / 1000, 1) + ' L';
+  $('vCho').textContent = fmt(choH, 0) + ' g/h';
+  $('vCho').style.color = seg.tipo !== 'transicao' && seg.tipo !== 'nado' && s.tSeg > 60 && choH < 35 ? '#ffb020' : '';
+  $('sCho').textContent = 'última hora · total ' + fmt(s.bal.cho, 0) + ' g';
+  $('vNa').textContent = fmt(naH * 23, 0) + ' mg/h';
+  $('sNa').textContent = 'última hora · total ' + fmt(s.bal.na * 23 / 1000, 1) + ' g';
+
+  // fila e disponibilidade
+  const fila = $('fila');
+  if (s.fila.length) { fila.classList.add('on'); fila.textContent = 'Esperando o próximo apoio: ' + s.fila.map(id => M.ITENS[id].nome.toLowerCase()).join(', ') + '.'; }
+  else fila.classList.remove('on');
+  const apoio = seg.tipo === 'transicao' ? 'transicao' : seg.apoio;
+  $('comerDica').textContent = { nenhum: 'Na natação não se come nem se bebe.', carrega: 'No ciclismo ele leva o que você mandar: sai na hora.', posto: 'Tudo fica separado para o próximo posto.', mochila: 'O que está na mochila sai na hora; o resto espera o próximo ' + (seg.posto ? 'posto.' : 'ponto de apoio (transição).'), transicao: 'Na transição tudo sai na hora.' }[apoio] || '';
+  document.querySelectorAll('[data-onde]').forEach(el => {
+    const id = el.dataset.onde;
+    el.textContent = apoio === 'mochila' ? (M.ITENS[id].carrega && s.mochila[id] > 0 ? 'na mochila: ' + s.mochila[id] : 'só no apoio') : '';
+  });
+  const nado = seg.tipo === 'nado';
+  document.querySelectorAll('[data-dar],[data-acao],[data-dormir],[data-roupa]').forEach(b => b.disabled = nado || !!s.fim);
+  if (P.sono) $('oSono').textContent = v.dormindo ? 'dormindo · ' + fmt(s.dormindo, 0) + ' min' : 'acordado há ' + fmt(s.vigilia, 0) + ' h';
+  document.querySelectorAll('#roupas [data-roupa]').forEach(x => x.classList.toggle('on', +x.dataset.roupa === s.c.roupa));
+}
+
+const COR_TIPO = { nado: '#39a8ff', bike: '#ffb04a', mtb: '#ffb04a', corrida: '#7dffb0', trekking: '#9be07a', canoa: '#6ee7ff' };
+function desenharTrilho() {
+  const segs = s.prova.segmentos;
+  const partes = segs.map((g, i) => ({ g, i })).filter(x => x.g.tipo !== 'transicao');
+  const total = partes.reduce((a, x) => a + x.g.peso, 0);
+  let pos = 0, acum = 0;
+  const html = partes.map(({ g, i }) => {
+    const frac = s.seg > i ? 1 : s.seg === i ? clamp(s.km / g.km, 0, 1) : 0;
+    if (s.seg >= i) pos = (acum + g.peso * frac) / total * 100;
+    const w = g.peso / total * 100;
+    acum += g.peso;
+    return `<div style="width:${w}%;background:${COR_TIPO[g.tipo]}" title="${g.nome}"><span class="feito" style="width:${frac * 100}%"></span><span class="rotSeg">${g.nome}</span></div>`;
+  }).join('');
+  $('trilho').innerHTML = html + `<span class="marcador" style="left:calc(${s.seg >= segs.length ? 100 : pos}% - 1px)"></span>`;
+  desenharPerfil();
+}
+function desenharPerfil() {
+  const cv = $('perfil'); if (cv.style.display === 'none') return;
+  const dpr = window.devicePixelRatio || 1;
+  const W = Math.max(50, cv.clientWidth * dpr), H = Math.max(20, cv.clientHeight * dpr);
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const g = cv.getContext('2d'); g.clearRect(0, 0, W, H);
+  const segs = s.prova.segmentos, partes = segs.map((x, i) => ({ x, i })).filter(p => p.x.tipo !== 'transicao');
+  const total = partes.reduce((a, p) => a + p.x.peso, 0);
+  let aMin = Infinity, aMax = -Infinity;
+  partes.forEach(({ x }) => (x.perfil || [[0, s.amb.altBase], [x.km, s.amb.altBase]]).forEach(([, al]) => { aMin = Math.min(aMin, al); aMax = Math.max(aMax, al); }));
+  aMax = Math.max(aMax, aMin + 200);
+  const Y = al => H - 3 * dpr - (al - aMin) / (aMax - aMin) * (H - 16 * dpr);
+  let x0 = 0;
+  g.lineWidth = 1.5 * dpr;
+  partes.forEach(({ x, i }) => {
+    const w = x.peso / total * W, pf = x.perfil || [[0, s.amb.altBase], [x.km, s.amb.altBase]];
+    g.beginPath(); g.moveTo(x0, H);
+    pf.forEach(([km, al]) => g.lineTo(x0 + km / x.km * w, Y(al)));
+    g.lineTo(x0 + w, H); g.closePath();
+    g.fillStyle = s.seg > i ? '#2a4a60' : '#16283a'; g.fill();
+    g.strokeStyle = COR_TIPO[x.tipo]; g.beginPath();
+    pf.forEach(([km, al], j) => { const X = x0 + km / x.km * w; j ? g.lineTo(X, Y(al)) : g.moveTo(X, Y(al)); }); g.stroke();
+    if (s.seg === i) { const X = x0 + clamp(s.km / x.km, 0, 1) * w; g.fillStyle = '#fff'; g.beginPath(); g.arc(X, Y(s.v.pos.alt), 3.5 * dpr, 0, 7); g.fill(); }
+    x0 += w;
+  });
+  g.fillStyle = '#6f8597'; g.font = (10 * dpr) + 'px JetBrains Mono, monospace'; g.textBaseline = 'top';
+  g.fillText(fmt(aMax, 0) + ' m', 3 * dpr, 1 * dpr);
+}
+
+function alarmePrincipal() {
+  const v = s.v, el = $('alarme');
+  let msg = null, tipo = 'perigo';
+  const ultPeso = s.pesos[s.pesos.length - 1], dp = (ultPeso.kg - s.massa0) / s.massa0 * 100;
+  const ultEv = s.eventos[s.eventos.length - 1];
+  if (s.fim) { msg = s.fim.tipo === 'chegada' ? 'CHEGADA em ' + hm(s.fim.t) : 'ABANDONO — ' + s.fim.titulo; tipo = s.fim.tipo === 'chegada' ? 'atencao' : 'perigo'; }
+  else if (s.sinais.includes('Andar cambaleante')) msg = 'Andar cambaleante e fala confusa';
+  else if (s.tc >= 40) msg = 'Temperatura central ' + fmt(s.tc, 1) + ' °C';
+  else if (s.tc < 35.5) msg = 'Temperatura central ' + fmt(s.tc, 1) + ' °C — hipotermia';
+  else if (s.cgm * 18 < 70) msg = 'Glicemia ' + fmt(s.cgm * 18, 0) + ' mg/dL';
+  else if (ultEv && /Vomitou/.test(ultEv.texto) && s.t - ultEv.t < 10) msg = 'Vomitou';
+  else if (s.sinais.includes('Cabeceando, olhar parado')) msg = 'Cabeceando de sono em movimento';
+  else if (s.tc >= 39.5) { msg = 'Temperatura central ' + fmt(s.tc, 1) + ' °C'; tipo = 'atencao'; }
+  else if (s.tc < 36.2) { msg = 'Temperatura central ' + fmt(s.tc, 1) + ' °C'; tipo = 'atencao'; }
+  else if (s.pesos.length > 1 && dp > 0.5 && s.t - ultPeso.t < 90) { msg = 'Peso ACIMA da largada (+' + fmt(dp, 1) + '%)'; tipo = 'atencao'; }
+  else if (s.prova.altitude && v.sao2 < 0.86 && !v.parado) { msg = 'SpO₂ ' + fmt(v.sao2 * 100, 0) + '% na altitude'; tipo = 'atencao'; }
+  else if (s.mochila && s.mochila.agua <= 0 && v.seg.apoio === 'mochila' && v.tipo !== 'transicao') { msg = 'Reservatório de água vazio'; tipo = 'atencao'; }
+  else if (v.fc >= s.a.fcMax * 0.95) { msg = 'FC ' + fmt(v.fc, 0) + ' bpm, perto da máxima'; tipo = 'atencao'; }
+  el.className = 'alarme' + (msg ? ' on ' + tipo : '');
+  el.textContent = msg || '';
+}
+
+function atualizarSinais() {
+  const sn = s.sinais || [];
+  $('sinais').innerHTML = sn.length ? sn.map(t => `<div>${t}</div>`).join('') : '<div class="calmo">Nada que chame atenção.</div>';
+}
+function atualizarLog(forcar) {
+  if (!forcar && s.eventos.length === ultimoEvento) return;
+  ultimoEvento = s.eventos.length;
+  $('log').innerHTML = s.eventos.slice().reverse().map(e => `<div><time>${hm(e.t)}</time><span class="${e.tipo}">${e.texto}</span></div>`).join('');
+}
+
+// =============================================================== gráficos
+function grafico(cv, series, lo, hi, faixa, tMax) {
+  const dpr = window.devicePixelRatio || 1;
+  const W = Math.max(50, cv.clientWidth * dpr), H = Math.max(30, cv.clientHeight * dpr);
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const g = cv.getContext('2d');
+  g.clearRect(0, 0, W, H);
+  const tm = tMax || s.prova.corteFinal;
+  const x = t => t / tm * W, y = val => H - (clamp(val, lo, hi) - lo) / (hi - lo) * H;
+  if (faixa) { g.fillStyle = '#123a2455'; g.fillRect(0, y(faixa[1]), W, y(faixa[0]) - y(faixa[1])); }
+  g.strokeStyle = '#1b2a38'; g.lineWidth = 1;
+  (s.splits || []).forEach(sp => { g.beginPath(); g.moveTo(x(sp.fim), 0); g.lineTo(x(sp.fim), H); g.stroke(); });
+  series.forEach(se => {
+    const pts = s.trend;
+    if (pts.length < 2) return;
+    g.strokeStyle = se.cor; g.lineWidth = 1.6 * dpr; g.beginPath();
+    let prim = true;
+    pts.forEach((p, i) => { const val = se.f(p, i, pts); if (val == null || !isFinite(val)) { prim = true; return; } const X = x(p.t), Y = y(val); prim ? g.moveTo(X, Y) : g.lineTo(X, Y); prim = false; });
+    g.stroke();
+  });
+  g.fillStyle = '#6f8597'; g.font = (10 * dpr) + 'px JetBrains Mono, monospace';
+  g.textBaseline = 'top'; g.fillText(String(hi).replace('.', ','), 3 * dpr, 2 * dpr);
+  g.textBaseline = 'bottom'; g.fillText(String(lo).replace('.', ','), 3 * dpr, H - 2 * dpr);
+}
+const taxa = campo => (p, i, pts) => {
+  let j = i; while (j > 0 && p.t - pts[j].t < 60) j--;
+  const dt = (p.t - pts[j].t) / 60; return dt > 0.3 ? (p[campo] - pts[j][campo]) / dt : null;
+};
+function montarTendencias() {
+  const P = s.prova;
+  TENDS = [
+    { nome: 'FC', un: 'bpm', lo: 40, hi: 200, series: [{ f: p => p.fc, cor: '#ff5a6e' }], atual: () => fmt(s.v.fc, 0) },
+    { nome: 'Temperatura central', un: '°C', lo: P.frio ? 34 : 36.5, hi: 41.5, faixa: [36.5, 39], series: [{ f: p => p.tc, cor: '#ffb04a' }], atual: () => fmt(s.tc, 1) },
+    { nome: 'Glicemia (sensor)', un: 'mg/dL', lo: 30, hi: 180, faixa: [70, 140], series: [{ f: p => p.cgm * 18, cor: '#b98cff' }], atual: () => fmt(s.cgm * 18, 0) },
+    { nome: 'PSE', un: '/20', lo: 6, hi: 20, series: [{ f: p => p.pse, cor: '#ffe066' }], atual: () => fmt(s.v.pse, 0) },
+    { nome: 'Esforço feito × pedido', un: '%', lo: 0, hi: 90, series: [{ f: p => p.alvo * 100, cor: '#3a5670' }, { f: p => p.pct * 100, cor: '#cfe7ff' }], atual: () => fmt(s.v.pct * 100, 0) },
+    { nome: 'Líquido ingerido', un: 'mL/h', lo: 0, hi: 1800, faixa: [400, 900], series: [{ f: taxa('agua'), cor: '#6ee7ff' }], atual: () => fmt(janela('agua', 60), 0) },
+    { nome: 'Carboidrato ingerido', un: 'g/h', lo: 0, hi: 140, faixa: [P.alvos.cho[0], P.alvos.cho[1] - 5], series: [{ f: taxa('cho'), cor: '#7dffb0' }], atual: () => fmt(janela('cho', 60), 0) },
+    P.altitude
+      ? { nome: 'Altitude (azul) e SpO₂ (laranja)', un: 'm', lo: 0, hi: 3200, series: [{ f: p => p.alt, cor: '#9fd0ff' }, { f: p => (p.sao2 - 0.7) / 0.3 * 3200, cor: '#ff8a65' }], atual: () => fmt(s.v.pos.alt, 0) }
+      : { nome: 'Temperatura do ar e IBUTG', un: '°C', lo: 15, hi: 40, series: [{ f: p => p.tar, cor: '#9fb2c1' }, { f: p => p.wbgt, cor: '#ff8a65' }], atual: () => fmt(s.v.am.tar, 0) }
+  ];
+  $('tendencias').innerHTML = TENDS.map((t, i) => `<div class="tend"><div class="l">${t.nome}<span id="tv${i}">--</span></div><canvas id="tc${i}"></canvas></div>`).join('');
+}
+function desenharTendencias() {
+  TENDS.forEach((t, i) => { grafico($('tc' + i), t.series, t.lo, t.hi, t.faixa); $('tv' + i).textContent = t.atual() + ' ' + t.un; });
+}
+
+// ==================================================================== fim
+const LIMITE_COR = { glicogenio: '#ff8a65', glicemia: '#b98cff', calor: '#ff4d4d', frio: '#6cb6ff', altitude: '#9fd0ff', bracos: '#6ee7ff', cardiovascular: '#ff5a9e', estomago: '#c9a26b', musculo: '#4f7cff', lactato: '#ffe066', sono: '#8a7dff' };
+const LIMITE_NOME = { glicogenio: 'glicogênio muscular', glicemia: 'glicemia', calor: 'calor', frio: 'frio', altitude: 'oxigênio na altitude', bracos: 'força dos braços (canoa)', cardiovascular: 'débito cardíaco (volume + FC máx)', estomago: 'estômago', musculo: 'dano muscular', lactato: 'lactato', sono: 'sono' };
+function dentroDe(P) {
+  const d = [
+    { nome: 'Glicogênio', un: '%', lo: 0, hi: 100, series: [{ f: p => p.glyM * 100, cor: '#ff8a65', n: 'muscular' }, { f: p => p.glyL * 100, cor: '#ffd23f', n: 'hepático' }],
+      cap: 'O muscular abastece o próprio músculo; o hepático segura a glicemia. Quando o hepático acaba sem carboidrato entrando, a glicemia cai.' },
+    { nome: 'Glicemia real', un: 'mg/dL', lo: 30, hi: 180, faixa: [70, 140], series: [{ f: p => p.G * 18, cor: '#b98cff', n: 'plasma' }],
+      cap: 'O sensor mostrava isso com ~10 min de atraso.' },
+    { nome: 'Sódio plasmático', un: 'mEq/L', lo: 120, hi: 155, faixa: [135, 145], series: [{ f: p => p.na, cor: '#6ee7ff', n: 'Na⁺' }],
+      cap: 'Cai quando entra mais água do que sai (com o sódio do suor indo embora); sobe quando a água perdida não é reposta.' },
+    { nome: 'Volume plasmático', un: '% do repouso', lo: 55, hi: 110, faixa: [85, 100], series: [{ f: p => p.pvRel * 100, cor: '#ff5a6e', n: 'plasma' }],
+      cap: 'Menos plasma é menos enchimento do coração: o volume sistólico cai e a FC sobe para o mesmo esforço (deriva cardiovascular).' },
+    { nome: 'Água e peso', un: '% da largada', lo: -10, hi: 6, faixa: [-4, 0], series: [{ f: p => -p.perdaAgua, cor: '#6ee7ff', n: 'água corporal' }, { f: p => -p.perda, cor: '#eaf1f6', n: 'peso' }],
+      cap: 'O peso cai também pelo glicogênio e pela gordura oxidados, por isso a balança exagera um pouco a desidratação.' },
+    { nome: 'Estômago e intestino', un: 'mL', lo: 0, hi: 1000, series: [{ f: p => p.est, cor: '#c9a26b', n: 'estômago' }, { f: p => p.intest, cor: '#7dffb0', n: 'intestino' }, { f: p => p.gi * 1000, cor: '#ff4d4d', n: 'desconforto (0–100%)' }],
+      cap: 'O que não esvazia nem é absorvido fica parado; o desconforto sobe com volume, gordura/proteína, conteúdo hipertônico, calor, intensidade e horas de doce.' },
+    { nome: 'Suor × líquido ingerido', un: 'L/h', lo: 0, hi: 2.5, series: [{ f: p => p.sr, cor: '#ffb04a', n: 'suor' }, { f: (p, i, pts) => { const r = taxa('agua')(p, i, pts); return r == null ? null : r / 1000; }, cor: '#6ee7ff', n: 'ingerido' }],
+      cap: 'A diferença acumulada é a desidratação. Líquido acima do suor por horas é o caminho da hiponatremia.' },
+    { nome: 'Carboidrato: queimado × absorvido', un: 'g/h', lo: 0, hi: 200, series: [{ f: taxa('choOx'), cor: '#ff8a65', n: 'oxidado' }, { f: taxa('choExo'), cor: '#7dffb0', n: 'absorvido do intestino' }],
+      cap: 'O que é queimado acima do que é absorvido sai dos estoques. A absorção tem teto (~60 g/h só glicose, ~90 g/h com frutose).' },
+    { nome: 'Fluxo de sangue na pele', un: 'L/min', lo: 0, hi: 5, series: [{ f: p => p.skbf, cor: '#ff5a9e', n: 'pele' }],
+      cap: 'No calor é por aqui que o calor sai do núcleo; quando falta volume, o coração corta a pele primeiro. No frio, a pele se fecha para guardar calor.' }
+  ];
+  if (P.frio) d.push({ nome: 'Pele, núcleo e tremor', un: '°C / W', lo: 0, hi: 42, series: [{ f: p => p.tc, cor: '#ffb04a', n: 'núcleo °C' }, { f: p => p.tsk, cor: '#9fd0ff', n: 'pele °C' }, { f: p => p.tremor / 12, cor: '#6cb6ff', n: 'tremor (÷12 W)' }],
+    cap: 'Vasoconstrição esfria a pele para proteger o núcleo; o tremor produz calor gastando glicose. Com a roupa molhada e sem carboidrato, os dois falham.' });
+  if (P.altitude) d.push({ nome: 'Saturação arterial', un: '%', lo: 70, hi: 100, faixa: [94, 100], series: [{ f: p => p.sao2 * 100, cor: '#9fd0ff', n: 'SaO₂' }],
+    cap: 'A pressão do O₂ cai com a altitude; com menos O₂ por litro de sangue, o mesmo esforço pede mais débito e o VO₂ máximo possível diminui.' });
+  if (P.sono) d.push({ nome: 'Pressão de sono', un: '0–1', lo: 0, hi: 1.3, faixa: [0, 0.55], series: [{ f: p => p.sono, cor: '#8a7dff', n: 'sonolência' }],
+    cap: 'Sobe com as horas acordado e, de madrugada, com o ritmo circadiano. Acima de ~0,8: alucinações; acima de 1: microssonos.' });
+  return d;
+}
+
+function mostrarFim() {
+  if (fimMostrado) return;
+  fimMostrado = true;
+  const F = s.fim, r = F.retrato, DENTRO = dentroDe(s.prova);
+  const acoes = s.eventos.filter(e => e.tipo === 'acao').map(e => `<div><time>${hm(e.t)}</time><span class="acao">${e.texto}</span></div>`).join('');
+  const splits = s.splits.filter(sp => !/transi/i.test(sp.nome)).map(sp => `<div>${sp.nome} <b>${hm(sp.t)}</b></div>`).join('');
+  const tMax = Math.max(60, s.t);
+  let topo;
+  if (F.tipo === 'abandono') {
+    topo = `<h1 class="abandono">Abandono em ${hm(F.t)} de prova</h1>
+      <h2 style="margin:0">${F.titulo}</h2>
+      <div class="dica" style="margin-top:4px">${F.segmento}${F.km > 0 ? ', km ' + fmt(F.km, 1) : ''} · ${M.horaDoDia(s, F.t)}</div>
+      <div class="porque">${F.porque}</div>
+      <div class="atend">${F.atendimento}</div>`;
+  } else {
+    topo = `<h1 class="chegada">Chegada em ${hm(F.t)}</h1>
+      <p>${F.n === F.total ? 'Terminou com todos os alvos fisiológicos cumpridos.' : F.n + ' de ' + F.total + ' alvos cumpridos. Terminou, mas pagou um preço fisiológico que dava para evitar.'}</p>
+      <div class="checklist">${F.lista.map(x => `<div class="${x.ok ? 'ok' : 'nao'}">${x.ok ? '✓' : '✗'} ${x.nome}</div>`).join('')}</div>`;
+  }
+  const tr = s.trend, conta = {};
+  const faixas = tr.map((p, i) => { const prox = tr[i + 1]; const dt = prox ? prox.t - p.t : 0; if (p.limite) conta[p.limite] = (conta[p.limite] || 0) + dt; return `<span title="${hm(p.t)}" style="width:${dt / tMax * 100}%;background:${p.limite ? LIMITE_COR[p.limite] : '#1b2a38'}"></span>`; }).join('');
+  const legLim = Object.keys(conta).sort((a, b) => conta[b] - conta[a]).map(k => `<span><i style="background:${LIMITE_COR[k]}"></i>${LIMITE_NOME[k]} ${hm(conta[k])}</span>`).join('');
+  $('fimConteudo').innerHTML = `${topo}
+    <h3>Tempos</h3><div class="splits">${splits || '<div>—</div>'}</div>
+    <h3>Balanço da prova</h3>
+    <div class="pares" style="max-width:600px">
+      <b style="font-weight:600">Suor</b><span>${fmt(r.suor, 1)} L · ${fmt(r.naSuor * 23 / 1000, 1)} g de Na⁺</span>
+      <b style="font-weight:600">Ingerido</b><span>${fmt(r.agua / 1000, 1)} L · ${fmt(s.bal.na * 23 / 1000, 1)} g de Na⁺ · ${fmt(r.cho, 0)} g CHO</span>
+      <b style="font-weight:600">Urina</b><span>${fmt(r.urina, 1)} L</span>
+      <b style="font-weight:600">Peso</b><span>${(r.perda <= 0 ? '+' : '−') + fmt(Math.abs(r.perda), 1)}%</span>
+      ${s.prova.sono ? `<b style="font-weight:600">Dormiu</b><span>${fmt(r.sonoMin, 0)} min</span>` : ''}
+      <b style="font-weight:600">No momento final</b><span>Na⁺ ${fmt(r.na, 0)} · glicemia ${fmt(r.G * 18, 0)} · ${fmt(r.tc, 1)} °C</span>
+    </div>
+    <h3>O que limitou o ritmo</h3>
+    <div class="limites">${faixas}</div>
+    <div class="legenda">${legLim || '<span>Nada: ele fez o ritmo pedido o tempo todo.</span>'}</div>
+    <h3>A fisiologia por dentro</h3>
+    <p class="dica" style="margin-top:0">O que você não via durante a prova.</p>
+    <div class="tendencias dentro">${DENTRO.map((d, i) => `<div class="tend"><div class="l">${d.nome}<span>${d.un}</span></div><canvas id="dc${i}"></canvas><div class="legenda">${d.series.map(se => `<span><i style="background:${se.cor}"></i>${se.n}</span>`).join('')}</div><div class="cap">${d.cap}</div></div>`).join('')}</div>
+    <h3>O que você fez</h3><div class="log" style="padding:0;max-height:220px">${acoes || '<div><time>—</time><span>Nenhuma intervenção.</span></div>'}</div>
+    <div class="linhaFim"><button class="btn" id="fimVer">Ver a telemetria</button><button class="btn acao" id="fimNovo">Tentar de novo</button><button class="btn" id="fimOutro">Outro caso</button></div>`;
+  $('telaFim').classList.add('on');
+  $('telaFim').scrollTop = 0;
+  const desenhar = () => DENTRO.forEach((d, i) => { const cv = $('dc' + i); if (cv) grafico(cv, d.series, d.lo, d.hi, d.faixa, tMax); });
+  requestAnimationFrame(desenhar);
+  setTimeout(desenhar, 50);
+  $('fimVer').onclick = () => $('telaFim').classList.remove('on');
+  $('fimNovo').onclick = () => iniciar(s.cenario);
+  $('fimOutro').onclick = () => { $('telaFim').classList.remove('on'); telaInicial(); };
+}
+
+// ================================================================== laços
+function atualizarTudo(forcar) {
+  if (!s) return;
+  M.calcular(s);
+  atualizarMonitor();
+  alarmePrincipal();
+  atualizarSinais();
+  atualizarLog(forcar);
+  desenharTendencias();
+  if (forcar) { rotulosControles(); atualizarMochila(); }
+  if (s.fim) mostrarFim();
+}
+let ultimoFisico = performance.now(), ultimoSeg = -1, ultimoEquiv = 0;
+setInterval(() => {
+  const agora = performance.now();
+  const dtReal = Math.min(0.5, (agora - ultimoFisico) / 1000);
+  ultimoFisico = agora;
+  if (!s || vel === 0 || s.fim) return;
+  M.passo(s, dtReal * vel / 60);
+  if (s.seg !== ultimoSeg) { ultimoSeg = s.seg; rotulosControles(); atualizarMochila(); }
+  if (agora - ultimoEquiv > 2000) { ultimoEquiv = agora; rotulosControles(); }
+}, 100);
+setInterval(() => atualizarTudo(false), 250);
+
+// ================================================================== ondas
+const ondas = (() => {
+  const JANELA = 4;
+  let tReal = 0, batimentos = [];
+  const canais = [];
+  const g = (t, c, a, w) => a * Math.exp(-((t - c) * (t - c)) / (2 * w * w));
+  function garantir(t) {
+    if (!batimentos.length) batimentos.push({ t0: t, rr: 0.8 });
+    let ult = batimentos[batimentos.length - 1];
+    while (ult.t0 + ult.rr < t + 1) {
+      const rr = 60 / Math.max(35, s.v.fc) * (1 + (Math.random() - 0.5) * 0.03);
+      ult = { t0: ult.t0 + ult.rr, rr }; batimentos.push(ult);
+    }
+    while (batimentos.length > 60) batimentos.shift();
+  }
+  function batimentoEm(t) { for (let i = batimentos.length - 1; i >= 0; i--) if (batimentos[i].t0 <= t) return batimentos[i]; return batimentos[0]; }
+  function ecg(t) {
+    if (!s) return 0;
+    const v = s.v, impacto = (v.tipo === 'corrida' || v.tipo === 'trekking') && !v.parado;
+    const mov = impacto ? 0.07 * Math.sin(t * 2 * Math.PI * Math.max(1.2, v.vel / 60 * 0.75)) : (v.tipo === 'bike' || v.tipo === 'mtb' || v.tipo === 'canoa') && !v.parado ? 0.02 * Math.sin(t * 2 * Math.PI * 1.5) : 0;
+    const tremor = v.tremor > 60 ? (Math.random() - 0.5) * 0.08 * Math.min(1, v.tremor / 300) : 0;
+    const b = batimentoEm(t), tau = t - b.t0, qt = Math.sqrt(Math.max(0.25, b.rr));
+    let y = g(tau, 0.06, 0.12, 0.018) + g(tau, 0.13, -0.08, 0.008) + g(tau, 0.15, 1.0, 0.01) + g(tau, 0.17, -0.2, 0.011);
+    y += g(tau, 0.15 + 0.2 * qt, 0.28, 0.04 * qt);
+    return y + mov + tremor + (Math.random() - 0.5) * 0.012;
+  }
+  function resp(t) {
+    if (!s) return 0;
+    const v = s.v, T = 60 / Math.max(6, v.fr);
+    const fase = ((t % T) + T) % T / T;
+    const amp = clamp(v.ve / v.fr / 2.5, 0.25, 1);
+    return amp * (fase < 0.42 ? Math.sin(fase / 0.42 * Math.PI / 2) : Math.cos((fase - 0.42) / 0.58 * Math.PI / 2) ** 1.6);
+  }
+  function canal(id, fn, lo, hi, cor) {
+    const cv = $(id), ctx = cv.getContext('2d');
+    const c = { cv, ctx, fn, lo, hi, cor, x: 0, yAnt: null, W: 0, H: 0 };
+    c.ajustar = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const W = Math.max(50, cv.clientWidth * dpr), H = Math.max(30, cv.clientHeight * dpr);
+      if (W !== c.W || H !== c.H) { cv.width = W; cv.height = H; c.W = W; c.H = H; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H); c.x = 0; c.yAnt = null; }
+    };
+    canais.push(c);
+  }
+  canal('cvEcg', ecg, -0.5, 1.3, '#ff5a6e');
+  canal('cvResp', resp, -0.1, 1.1, '#6ee7ff');
+  function avancar(dtSeg) {
+    if (!s) return;
+    const dpr = window.devicePixelRatio || 1;
+    canais.forEach(c => c.ajustar());
+    const passos = Math.max(1, Math.round(dtSeg * canais[0].W / JANELA));
+    const dtPx = dtSeg / passos;
+    for (let i = 0; i < passos; i++) {
+      tReal += dtPx;
+      garantir(tReal);
+      canais.forEach(c => {
+        const esc = c.W / canais[0].W, x = c.x;
+        const Y = val => c.H - 4 * dpr - (clamp(val, c.lo, c.hi) - c.lo) / (c.hi - c.lo) * (c.H - 12 * dpr);
+        let yMin = Infinity, yMax = -Infinity, yPrim = 0, y = 0;
+        for (let k = 0; k < 5; k++) {
+          const yy = Y(c.fn(tReal - dtPx + dtPx * (k + 1) / 5));
+          if (k === 0) yPrim = yy;
+          yMin = Math.min(yMin, yy); yMax = Math.max(yMax, yy); y = yy;
+        }
+        c.ctx.fillStyle = '#000'; c.ctx.fillRect(x, 0, 14 * dpr, c.H);
+        c.ctx.strokeStyle = c.cor; c.ctx.lineWidth = 1.5 * dpr; c.ctx.lineJoin = 'round'; c.ctx.lineCap = 'round';
+        c.ctx.beginPath();
+        if (c.yAnt != null) { c.ctx.moveTo(x - esc, c.yAnt); c.ctx.lineTo(x, yPrim); } else c.ctx.moveTo(x, yPrim);
+        c.ctx.moveTo(x, yMin); c.ctx.lineTo(x, yMax);
+        c.ctx.stroke();
+        c.yAnt = y; c.x += esc;
+        if (c.x >= c.W) { c.x = 0; c.yAnt = null; }
+      });
+    }
+  }
+  let ultimoQuadro = performance.now();
+  function quadro(agora) {
+    requestAnimationFrame(quadro);
+    const dt = Math.min(0.1, (agora - ultimoQuadro) / 1000);
+    ultimoQuadro = agora;
+    if (!s || vel === 0 || s.fim) return;
+    avancar(dt);
+  }
+  requestAnimationFrame(quadro);
+  return { reiniciar() { batimentos = []; canais.forEach(c => { c.W = 0; c.ajustar(); }); }, avancar };
+})();
+
+// ================================================================= partida
+montarVelocidades();
+telaInicial();
+
+window.__box = {
+  iniciar, estado: () => s,
+  avancar: min => { M.passo(s, min); atualizarTudo(true); },
+  quadro: seg => ondas.avancar(seg),
+  pausar: () => { vel = 0; montarVelocidades(); }
+};
+const qs = new URLSearchParams(location.search);
+if (qs.get('caso') && M.CENARIOS[qs.get('caso')]) {
+  iniciar(qs.get('caso'));
+  if (qs.get('vel') != null) { vel = +qs.get('vel'); montarVelocidades(); }
+  if (qs.get('t')) { M.passo(s, +qs.get('t')); atualizarTudo(true); }
+}
+})();
+</script>
+
+<section class="interpret" id="comoInterpretar">
+  <details>
+    <summary>Como interpretar</summary>
+    <div class="interpret-body">
+      <div>
+        <h3>Telemetria</h3>
+        <dl>
+          <dt class="c-fc">FC</dt><dd>Frequência cardíaca da cinta. Sobe com intensidade, calor e queda do volume plasmático (deriva).</dd>
+          <dt class="c-resp">FR / VE</dt><dd>Frequência e ventilação-minuto. Acompanham o % do VO₂máx.</dd>
+          <dt class="c-temp">Tc</dt><dd>Temperatura central (cápsula). Acima de ~40 °C o calor limita o ritmo.</dd>
+          <dt class="c-glic">Glicemia</dt><dd>Sensor contínuo (~10 min de atraso). Cai quando o fígado esvazia sem CHO.</dd>
+          <dt class="c-pse">PSE</dt><dd>Percepção subjetiva de esforço (Borg 6–20).</dd>
+          <dt>SpO₂</dt><dd>Saturação. Cai na altitude; no nível do mar quase não mexe.</dd>
+        </dl>
+      </div>
+      <div>
+        <h3>Água, sódio e energia</h3>
+        <dl>
+          <dt>Na⁺</dt><dd>Sódio plasmático. Água demais sem sal → hiponatremia; suor sem repor água → sobe.</dd>
+          <dt>PV</dt><dd>Volume plasmático relativo. Queda = menos retorno venoso e VS menor.</dd>
+          <dt>CHO</dt><dd>Carboidrato. Teto de absorção ~60 g/h só glicose, ~90 g/h com frutose.</dd>
+          <dt>GlyM / GlyL</dt><dd>Glicogênio muscular e hepático. O muscular quebra o ritmo; o hepático segura a glicemia.</dd>
+          <dt>GI</dt><dd>Desconforto gastrointestinal. Volume, hipertonia, proteína/gordura e calor travam o esvaziamento.</dd>
+          <dt>WBGT</dt><dd>Temperatura de globo úmido. Resume o estresse térmico do ambiente.</dd>
+        </dl>
+      </div>
+    </div>
+  </details>
+</section>
+<p class="aviso-rodape">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©<br>Modelo didático de Fisiologia Interativa — não substitui avaliação clínica, diagnóstico ou conduta esportiva.</p>
+
+</body>
+</html>
