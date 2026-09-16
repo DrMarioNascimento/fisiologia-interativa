@@ -1,0 +1,169 @@
+/* Fisiologia Interativa — acabamento da UTI (cores + profundidade) */
+:root{
+  --petrol-950:#06383f;
+  --petrol-900:#084953;
+  --petrol-800:#0c5c67;
+  --petrol-700:#11717d;
+  --orange:#c86635;
+  --orange-soft:#f7e1d5;
+}
+
+html,body{
+  background:
+    radial-gradient(ellipse at 0 0,#214252,transparent 70%),
+    #0b202b !important;
+  color:#dcebf3;
+}
+
+.topo{
+  background:linear-gradient(180deg,#1a4652,#0b202b) !important;
+  border-bottom:1px solid #4e7584 !important;
+  box-shadow:inset 0 1px 0 #d9f3ff33, 0 8px 18px #0006 !important;
+}
+
+.marca-mark{
+  background:linear-gradient(145deg,#11717d,#06383f) !important;
+  box-shadow:inset 0 1px 0 #ffffff55, 0 6px 14px #0006 !important;
+}
+
+.painel,
+.ctrl-box,
+.chart-box,
+.metric{
+  border:1px solid #6f93a3 !important;
+  background:linear-gradient(180deg,#16323d,#10262f) !important;
+  box-shadow:
+    inset 0 2px 1px #ffffff22,
+    inset 0 -4px 6px #06182388,
+    0 4px 0 #061823,
+    0 10px 16px #0005 !important;
+}
+
+.caso-c,
+.card,
+.mini,
+.spark,
+.tend,
+.lab{
+  border:1px solid #5e8293 !important;
+  background:linear-gradient(180deg,#17343f,#112830) !important;
+  box-shadow:inset 0 1px 0 #ffffff22, 0 4px 0 #071b24, 0 8px 12px #0004 !important;
+}
+
+button.btn,
+.btn,
+.chip,
+.abas button,
+.linhaBtns button,
+.drogaBtn button,
+.velocidades button,
+.caso-c{
+  min-height:42px !important;
+  padding:8px 14px !important;
+  border:1px solid #7394a4 !important;
+  border-bottom-color:#0a202c !important;
+  border-radius:13px !important;
+  color:#f1f8fc !important;
+  background:linear-gradient(#567e93,#305367 48%,#193748) !important;
+  box-shadow:
+    inset 0 2px 1px #d9f3ff66,
+    inset 0 -3px 4px #071a27aa,
+    0 4px 0 #061823,
+    0 7px 8px #0008 !important;
+  font-weight:750 !important;
+  cursor:pointer;
+  transition:filter .15s, transform .15s !important;
+}
+button.btn:hover,
+.btn:hover,
+.chip:hover,
+.abas button:hover,
+.caso-c:hover{
+  filter:brightness(1.12);
+  transform:translateY(-1px);
+}
+button.btn:active,
+.btn:active,
+.chip:active,
+.abas button:active{
+  transform:translateY(3px) !important;
+  box-shadow:inset 0 2px 5px #0006, 0 1px 0 #071b25 !important;
+}
+
+.btn.on,
+.chip.on,
+.abas button.on,
+.btn.primary,
+.velocidades .btn.on{
+  background:linear-gradient(#518f82,#28685d 48%,#153c37) !important;
+  border-color:#7fb9b0 !important;
+}
+
+.btn.acao,
+.btn.warn,
+button[data-acao]{
+  background:linear-gradient(#d58a5c,#c86635 52%,#8a3d18) !important;
+  border-color:#e2b08a !important;
+  border-bottom-color:#5a2410 !important;
+  color:#fff !important;
+}
+
+.btn.perigo{
+  background:linear-gradient(#a06176,#743c52 48%,#452334) !important;
+}
+
+.abas{
+  border-bottom-color:#4e7584 !important;
+}
+.abas button{
+  border-radius:12px 12px 0 0 !important;
+  min-height:38px !important;
+  box-shadow:inset 0 2px 1px #d9f3ff44, 0 2px 0 #061823 !important;
+}
+.abas button.on{
+  border-bottom-color:#65d5cc !important;
+}
+
+input[type=range]{
+  appearance:none !important;
+  height:30px !important;
+  background:linear-gradient(#355568,#0a1c28) center/100% 9px no-repeat !important;
+  accent-color:#65d5cc;
+}
+input[type=range]::-webkit-slider-thumb{
+  appearance:none;
+  width:18px; height:18px;
+  border-radius:50%;
+  border:1px solid #d9f3ff99;
+  background:linear-gradient(#7fd0c8,#2a8f86);
+  box-shadow:0 2px 0 #061823, 0 4px 8px #0006;
+}
+
+select{
+  border:1px solid #7394a4 !important;
+  border-bottom-color:#0a202c !important;
+  border-radius:11px !important;
+  background:linear-gradient(#2a4e5c,#16323d) !important;
+  box-shadow:inset 0 2px 1px #d9f3ff33, 0 3px 0 #061823 !important;
+  color:#f1f8fc !important;
+}
+
+.cartao{
+  background:linear-gradient(180deg,#173843,#10262f) !important;
+  border:1px solid #6f93a3 !important;
+  box-shadow:
+    inset 0 2px 1px #ffffff28,
+    0 8px 0 #061823,
+    0 22px 40px #0007 !important;
+}
+.caso-c h2{color:#e8f6f6}
+.regras div{
+  background:linear-gradient(180deg,#16323d,#10262f) !important;
+  border:1px solid #5e8293 !important;
+  box-shadow:inset 0 1px 0 #ffffff22, 0 4px 0 #071b24 !important;
+}
+
+.monitor{
+  border:1px solid #4e7584 !important;
+  box-shadow:inset 0 1px 0 #ffffff10, 0 8px 0 #061823, 0 16px 24px #0007 !important;
+}
