@@ -48,11 +48,11 @@ test('página inicial — mapa, fichas, lista e salas', async ({ page }, testInf
     await page.locator('#pills button').nth(i).click();
     await expect(page.locator('#p-name')).toContainText(nome);
     await expect(page.locator('#p-sims li').first()).toBeVisible();
-    await expect(page.locator('#p-doors .mapthumb').first()).toBeVisible();
+    await expect(page.locator('#p-doors button').first()).toBeVisible();
   }
 
   // mapa mental ampliado
-  await page.locator('#p-doors .mapthumb').first().click();
+  await page.locator('#p-doors button').first().click();
   await expect(page.locator('#mapdlg')).toBeVisible();
   await page.click('#md-x');
   await expect(page.locator('#mapdlg')).toBeHidden();

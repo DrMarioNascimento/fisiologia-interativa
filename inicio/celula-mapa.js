@@ -96,13 +96,13 @@ function drawMembrane(t,beat){
   // rótulos da membrana: FISIOLOGIA HUMANA no topo; no lado oposto, MEIO EXTERNO (fora) e MEIO INTERNO (dentro)
   arcText('FISIOLOGIA HUMANA', R+22, -Math.PI/2+off, 'auto', '600 11px "JetBrains Mono", monospace', 'rgba(63,224,200,.9)', 9.2/(R+22));
   arcText('MEIO EXTERNO', R+22, Math.PI/2+off, 'auto', '500 10px "JetBrains Mono", monospace', 'rgba(163,179,190,.8)', 8.4/(R+22));
-  arcText('MEIO INTERNO', R-20, Math.PI/2+off, 'auto', '500 10px "JetBrains Mono", monospace', 'rgba(63,224,200,.75)', 8.4/(R-20));
+  arcText('MEIO INTERNO', R-(W<560?26:20), Math.PI/2+off, 'auto', '500 10px "JetBrains Mono", monospace', 'rgba(63,224,200,.75)', 8.4/(R-20));
   // cadeado da Operação Protocolo Eferente, preso na membrana (lado direito)
   const la=0.08+off, lx=CX+Math.cos(la)*R, ly=CY+Math.sin(la)*R;
   c.fillStyle='#0c1219';c.strokeStyle='#E8B05C';c.lineWidth=1.3;c.beginPath();c.arc(lx,ly,13,0,7);c.fill();c.stroke();
   drawLock(lx,ly+.5,7.5,'#E8B05C'); lockPos={x:lx,y:ly};
   c.save();c.font='600 9px "JetBrains Mono", monospace';c.fillStyle='#E8B05C';c.textAlign='center';
-  const od=W<560?-40:34, ox=lx+Math.cos(la)*od, oy=ly+Math.sin(la)*od; c.fillText('OPERAÇÃO',ox,oy-4);c.fillText('SECRETA',ox,oy+7);c.restore();
+  const od=W<560?-40:34, ox=lx+Math.cos(la)*od, oy=ly+Math.sin(la)*od; if(W>=560){c.fillText('OPERAÇÃO',ox,oy-4);c.fillText('SECRETA',ox,oy+7);}c.restore();
 }
 // texto em arco; bottom=true escreve pela parte de baixo, legível da esquerda para a direita
 function arcText(str,rr,center,bottom,font,fill,step,stroke){
@@ -333,16 +333,17 @@ function renderPanelRaw(){
   const ul=document.getElementById('p-sims');ul.innerHTML='';
   u.sims.forEach(s=>{const li=document.createElement('li');li.innerHTML=`<a href="${esc(s.href)}" title="${esc(s.obj)}">${esc(s.t)}<span>${s.deep?esc(s.deep)+' →':'abrir →'}</span></a>`;ul.appendChild(li)});
   const d=document.getElementById('p-doors');
-  d.className='maps n'+Math.min(3,u.mapas.length);
-  d.innerHTML=u.mapas.map((m,i)=>`<button type="button" class="mapthumb" data-i="${i}" aria-label="Abrir mapa mental: ${esc(m.t)}"><img alt="" loading="lazy" src="${esc(m.src)}"><span>${esc(m.t)}</span></button>`).join('');
-  d.querySelectorAll('.mapthumb').forEach(b=>b.onclick=()=>openMap(+b.dataset.i,sel));
+  d.className='chips';
+  const ico='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5 9 3l6 2.5 6-2.5v14L15 20l-6-2.5-6 2.5z"/><path d="M9 3v14.5M15 5.5V20"/></svg>';
+  d.innerHTML=u.mapas.map((m,i)=>`<button type="button" data-i="${i}" title="${esc(m.t)}" aria-label="Abrir mapa mental: ${esc(m.t)}">${ico}${u.mapas.length>1?'Mapa '+String(i+1).padStart(2,'0'):'Mapa mental'}</button>`).join('');
+  d.querySelectorAll('button').forEach(b=>b.onclick=()=>openMap(+b.dataset.i,sel));
 
 }
 /* ---------- roleta das salas + dial ---------- */
 function rooms(){
-  const list=[{k:'protocolo',op:true,nome:D.operacao.nome,unit:D.operacao.sub,img:D.operacao.img,href:D.operacao.href}];
-  ORDER[course].forEach(k=>list.push({k,nome:UNITS[k].sala.nome,unit:UNITS[k].nome,img:UNITS[k].sala.img,href:UNITS[k].sala.href}));
-  if(D.desafio) list.push({k:D.desafio.unidade,kk:'desafio',nome:D.desafio.nome,unit:D.desafio.sub,img:D.desafio.img,href:D.desafio.href});
+  const list=[{k:'protocolo',op:true,nome:D.operacao.nome,unit:D.operacao.sub,img:D.operacao.img,grande:D.operacao.grande,href:D.operacao.href}];
+  ORDER[course].forEach(k=>list.push({k,nome:UNITS[k].sala.nome,unit:UNITS[k].nome,img:UNITS[k].sala.img,grande:UNITS[k].sala.grande,href:UNITS[k].sala.href}));
+  if(D.desafio) list.push({k:D.desafio.unidade,kk:'desafio',nome:D.desafio.nome,unit:D.desafio.sub,img:D.desafio.img,grande:D.desafio.grande,href:D.desafio.href});
   return list;
 }
 let room=0, ringRot=0; const ROLS=[];
@@ -361,18 +362,18 @@ function dialSVG(){
 function makeRol(host){
   const w=document.getElementById('rolmid'), info=document.getElementById('rolinfo');
   w.innerHTML=`<div class="dialbox"><svg class="dial" viewBox="0 0 400 400" aria-hidden="true">${dialSVG()}</svg><div class="ringroom"></div><div class="dialcenter"><div class="big">01</div><span class="mono">DE 07</span></div></div>`;
-  info.innerHTML=`<p class="mono tf-lbl">Fisiologia em Fuga</p><div aria-live="polite"><div class="roomname">—</div><div class="roomunit">—</div></div>
+  info.innerHTML=`<figure class="vit" aria-hidden="true"><img alt="" src=""></figure><div class="vtxt"><p class="mono tf-lbl">Fisiologia em Fuga</p><div aria-live="polite"><div class="roomname">—</div><div class="roomunit">—</div></div>
   <div class="arrows"><button type="button" aria-label="Sala anterior">←</button><button type="button" aria-label="Próxima sala">→</button></div>
-  <div class="tbtns"><a class="pri enter" href="#">Entrar na sala</a></div>`;
-  const o={enter:info.querySelector('a.enter'),ring:w.querySelector('.ringroom'),dial:w.querySelector('svg.dial'),num:w.querySelector('.dialcenter .big'),of:w.querySelector('.dialcenter .mono'),name:info.querySelector('.roomname'),unit:info.querySelector('.roomunit')};
+  <div class="tbtns"><a class="pri enter" href="#">Entrar na sala</a></div></div>`;
+  const o={vit:info.querySelector('.vit img'),enter:info.querySelector('a.enter'),ring:w.querySelector('.ringroom'),dial:w.querySelector('svg.dial'),num:w.querySelector('.dialcenter .big'),of:w.querySelector('.dialcenter .mono'),name:info.querySelector('.roomname'),unit:info.querySelector('.roomunit')};
   const [p,n]=info.querySelectorAll('.arrows button');p.onclick=()=>pickRoom(room-1);n.onclick=()=>pickRoom(room+1);
   ROLS.push(o);
 }
 function renderTutor(){
   const t=document.getElementById('tutorbox');
   const i=ORDER[course].indexOf(sel), u=UNITS[sel];
-  t.innerHTML=`<div><b>Tutor ${course==='ef'?'EF':'Fisio'}</b><p>${String(i+1).padStart(2,'0')} · ${esc(u.nome)}: relembre o mapa, abra o simulador e responda às questões com o tutor.</p></div>
-  <div class="tbtns"><a class="pri" href="${esc(D.tutor)}?eixo=${esc(sel)}">Estudar com o tutor</a></div>`;
+  t.style.setProperty('--c',COL[sel]);
+  t.innerHTML=`<div class="tbtns"><a class="pri" href="${esc(D.tutor)}?eixo=${esc(sel)}" title="${esc(u.nome)}">Estudar ${String(i+1).padStart(2,'0')} · ${esc(u.curto)} com o tutor</a></div>`;
 }
 /* Operação Secreta: mesma confirmação usada nos tutores */
 document.addEventListener('click',e=>{const a=e.target.closest('a.enter[data-op="1"]');if(!a)return;e.preventDefault();
@@ -383,9 +384,21 @@ function buildRooms(){
   for(const o of ROLS){ o.ring.innerHTML='';
     R0.forEach((r,i)=>{const a=i/R0.length*2*Math.PI-Math.PI/2;const b=document.createElement('button');b.type='button';b.className='room';
       b.style.left=(50+Math.cos(a)*38)+'%';b.style.top=(50+Math.sin(a)*38)+'%';b.setAttribute('aria-label',r.nome);
-      b.innerHTML=`<img alt="" loading="lazy" src="${esc(r.img)}">`;b.onclick=()=>pickRoom(i);o.ring.appendChild(b);});
+      b.innerHTML=`<img alt="" loading="lazy" src="${esc(r.img)}">`;b.onclick=()=>pickRoom(i);
+      if(HOVER){b.onmouseenter=()=>previewRoom(i);b.onmouseleave=()=>previewRoom(room);}
+      o.ring.appendChild(b);});
   }
   setRoom(room);
+}
+/* vitrine: mostra a imagem original da sala; no computador, acompanha o mouse sobre a roda */
+const HOVER=matchMedia('(hover: hover) and (pointer: fine)').matches;
+function showVit(r){
+  for(const o of ROLS){ if(o.vit && o.vit.getAttribute('src')!==r.grande){o.vit.parentElement.classList.remove('on');o.vit.onload=()=>o.vit.parentElement.classList.add('on');o.vit.src=r.grande;} }
+}
+function previewRoom(i){
+  const R0=rooms(), r=R0[i]; if(!r) return;
+  for(const o of ROLS){ o.name.textContent=r.nome; o.unit.textContent=r.unit; o.name.parentElement.parentElement.classList.toggle('preview', i!==room); }
+  showVit(r);
 }
 function pickRoom(i){ // escolher uma sala também abre a unidade correspondente
   const R0=rooms(); const ii=(i+R0.length)%R0.length, k=R0[ii].k; if(k!=='protocolo'&&k!==sel){select(k);} setRoom(ii);
@@ -400,6 +413,7 @@ function setRoom(i){
     o.name.textContent=R0[room].nome; o.unit.textContent=R0[room].unit;
     o.enter.href=R0[room].href; o.enter.dataset.op=R0[room].op?'1':'';
     o.enter.textContent=R0[room].kk==='desafio'?'Abrir o desafio':'Entrar na sala';
+    showVit(R0[room]);
   }
 }
 /* ---------- boot ---------- */

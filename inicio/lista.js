@@ -4,7 +4,7 @@
   'use strict';
   const D = window.FI_DADOS;
   const esc = s => String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  const norm = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const colorVar = {celular:'--u1', muscular:'--u2', osteoarticular:'--u3', cardiovascular:'--u4', respiratorio:'--u5', integracao:'--u6'};
   const cor = id => 'var(' + colorVar[id] + ')';
   const mapIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5 9 3l6 2.5 6-2.5v14L15 20l-6-2.5-6 2.5z"/><path d="M9 3v14.5M15 5.5V20"/></svg>';
@@ -35,10 +35,10 @@
   /* lista */
   const list = document.getElementById('units');
   const search = document.getElementById('search');
-  function card(u, s) {
+  function card(u, s, k) {
     const deep = !!s.deep;
     const leitura = s.leitura ? `<a href="${esc(s.leitura)}" target="_blank" rel="noopener">Leitura complementar ↗</a>` : '';
-    return `<article class="card${deep ? ' deep' : ''}" style="--c:${cor(u.id)}">
+    return `<article class="card rv${deep ? ' deep' : ''}" style="--c:${cor(u.id)};--i:${(k % 3) + 1}">
       ${deep ? `<span class="badge">${esc(s.deep)}</span>` : `<span class="cat">${esc(s.cat || u.curto)}</span>`}
       <h4>${esc(s.t)}</h4><p>${esc(s.obj)}</p>
       <div class="go"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}</div>
@@ -53,13 +53,13 @@
       total += sims.length;
       const maps = u.mapas.map((m, i) => `<button type="button" data-map="${u.id}" data-i="${i}">${mapIcon}${u.mapas.length > 1 ? 'Mapa ' + String(i + 1).padStart(2, '0') : 'Mapa mental'}</button>`).join('');
       return `<section class="unit" id="u-${u.id}" style="--c:${cor(u.id)}" aria-labelledby="h-${u.id}">
-        <div class="unit-side">
+        <div class="unit-side rv">
           <span class="unit-num" aria-hidden="true">${u.num}</span>
           <h3 id="h-${u.id}">${esc(u.nome)}</h3>
           <p>${esc(u.desc)}</p>
           <div class="chips">${maps}<a class="lock" href="${esc(u.sala.href)}">${lockIcon}${esc(u.sala.nome)}</a></div>
         </div>
-        <div class="cards">${sims.map(s => card(u, s)).join('')}</div>
+        <div class="cards">${sims.map((s, k) => card(u, s, k)).join('')}</div>
       </section>`;
     }).join('');
     document.getElementById('empty').hidden = total > 0;
@@ -83,6 +83,13 @@
     }), {rootMargin: '-40% 0px -50% 0px'});
     const watch = () => list.querySelectorAll('.unit').forEach(s => io.observe(s));
     watch(); new MutationObserver(watch).observe(list, {childList: true});
+  }
+
+  /* surgimento ao rolar: cada bloco aparece uma vez, quando chega na tela */
+  if (document.documentElement.classList.contains('js-rv')) {
+    const rvIO = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); rvIO.unobserve(en.target); } }), {rootMargin: '0px 0px -8% 0px', threshold: .08});
+    const armar = () => document.querySelectorAll('.rv:not(.in)').forEach(el => rvIO.observe(el));
+    armar(); new MutationObserver(armar).observe(list, {childList: true});
   }
 
   /* janela de entrada: uma vez por sessão, como no site anterior */

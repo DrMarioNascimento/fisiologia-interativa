@@ -10,7 +10,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="inicio/inicio.css?v=2">
+<link rel="stylesheet" href="inicio/inicio.css?v=3">
+<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&"IntersectionObserver" in window)document.documentElement.classList.add("js-rv");</script>
 </head>
 <body>
 <div class="ambient-layer" aria-hidden="true">
@@ -39,31 +40,31 @@
 
 <main id="conteudo">
 <section class="hero" id="inicio">
-  <p class="eyebrow">Educação Física · Fisiologia Humana</p>
-  <h1>Fisiologia Interativa<br><span class="serif grad">Explore mecanismos. Conecte sistemas.</span></h1>
-  <div class="hero-foot">
+  <p class="eyebrow rv">Educação Física · Fisiologia Humana</p>
+  <h1 class="rv" style="--i:1">Fisiologia Interativa<br><span class="serif grad">Explore mecanismos. Conecte sistemas.</span></h1>
+  <div class="hero-foot rv" style="--i:2">
   <blockquote class="quote">Viver não é apenas existir; é compreender os processos que nos sustentam. Fisiologia não é só conteúdo de prova — é vida, é ferramenta, é cultura em nossos próprios corpos.<cite>Prof. Mário César Nascimento, PhD</cite></blockquote>
   <p class="aviso"><b>Material didático.</b> Simuladores para fins de aprendizagem; não recomendados para prescrição a alunos ou pacientes.</p>
   </div>
-  <div class="ecg" role="img" aria-label="Traçado de eletrocardiograma animado, derivação DII, 75 batimentos por minuto">
+  <div class="ecg rv" style="--i:3" role="img" aria-label="Traçado de eletrocardiograma animado, derivação DII, 75 batimentos por minuto">
     <div class="lbl" aria-hidden="true"><span>DII</span><span class="bpm">♥ 75 bpm</span><span>25 mm/s · 10 mm/mV</span></div>
     <canvas id="ecg"></canvas>
   </div>
 </section>
 
 <section id="mapa" aria-labelledby="t-mapa">
-  <p class="eyebrow">Mapa das unidades</p>
-  <h2 id="t-mapa">Do detalhe celular <span class="serif">à integração dos sistemas.</span></h2>
-  <p style="margin-top:14px">Toque numa célula, nas bolinhas ao redor dela (cada uma é um simulador) ou nos botões das unidades. A unidade escolhida gira para o topo e abre ao lado, com os mapas mentais e os simuladores.</p>
+  <p class="eyebrow rv">Mapa das unidades</p>
+  <h2 id="t-mapa" class="rv" style="--i:1">Do detalhe celular <span class="serif">à integração dos sistemas.</span></h2>
+  <p class="rv" style="--i:2;margin-top:14px">Toque numa célula, nas bolinhas ao redor dela (cada uma é um simulador) ou nos botões das unidades. A unidade escolhida gira para o topo e abre ao lado, com o mapa mental e os simuladores.</p>
   <div class="mapa-shell">
-    <div class="stage">
+    <div class="stage rv" style="--i:2">
       <div class="stage-head"><span class="mono">Corte esquemático · meio interno</span>
         <div class="coursebadge"><small>Curso</small><strong>Educação Física</strong></div>
       </div>
       <canvas id="cm" aria-label="Célula-Mapa: as unidades da disciplina representadas como células no meio interno. Use os botões das unidades para navegar pelo teclado."></canvas>
       <div class="tip" id="tip" aria-hidden="true"></div>
     </div>
-    <aside class="panel" id="panel" aria-live="polite">
+    <aside class="panel rv" style="--i:3" id="panel" aria-live="polite">
         <div class="counter"><span class="big" id="p-num">01</span><span class="of" id="p-of">DE 06</span></div>
         <h3 id="p-name"></h3>
         <p class="cellcap" id="p-cell"></p>
@@ -73,7 +74,7 @@
         <ul id="p-sims"></ul>
     </aside>
   </div>
-  <div class="tf" id="tfB" aria-label="Unidades, tutor e Fisiologia em Fuga">
+  <div class="tf rv" id="tfB" aria-label="Unidades, tutor e Fisiologia em Fuga">
     <div class="tf-left">
       <p class="mono tf-lbl">Unidades</p>
       <div class="unit-pills" id="pills" role="group" aria-label="Unidades"></div>
@@ -85,11 +86,11 @@
 </section>
 
 <section id="simuladores" aria-labelledby="t-sim">
-  <div class="section-heading">
+  <div class="section-heading rv">
     <div><p class="eyebrow">Unidades e simuladores</p><h2 id="t-sim">Todos os simuladores, <span class="serif">unidade por unidade.</span></h2></div>
     <p>Relembre o conteúdo no mapa mental, escolha um simulador e, ao final da unidade, enfrente a sala de fuga.</p>
   </div>
-  <div class="tools">
+  <div class="tools rv" style="--i:1">
     <div class="filters" id="filters" role="group" aria-label="Filtrar por unidade"></div>
     <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span class="sr-only">Buscar simulador</span><input id="search" type="search" placeholder="Buscar simulador" autocomplete="off"></label>
   </div>
@@ -99,17 +100,17 @@
 
 <section id="como-usar" aria-labelledby="t-uso">
   <div class="use">
-    <div>
+    <div class="rv">
       <p class="eyebrow">Objetivo didático</p>
       <h2 id="t-uso">Visualizar. Manipular. <span class="serif grad">Compreender.</span></h2>
       <p style="margin-top:14px">Cada simulador transforma relações abstratas em experiências observáveis. O estudante modifica variáveis, acompanha respostas e constrói explicações fisiológicas com base no que acontece na tela.</p>
       <div class="note"><b>Formas de acesso:</b> navegador no computador, tablet ou celular. Não exige instalação.</div>
     </div>
     <div class="steps">
-      <div class="step"><span class="n">01</span><div><h3>Relembre o conteúdo no mapa mental</h3><p>Retome os conceitos essenciais antes de iniciar a exploração do simulador.</p></div></div>
-      <div class="step"><span class="n">02</span><div><h3>Selecione um estado fisiológico</h3><p>Comece pelo normal e compare exercício, repouso ou condições específicas.</p></div></div>
-      <div class="step"><span class="n">03</span><div><h3>Modifique uma variável</h3><p>Ajuste pressões, volumes, frequência, resistência, complacência ou ativação.</p></div></div>
-      <div class="step"><span class="n">04</span><div><h3>Interprete a resposta integrada</h3><p>Observe gráficos e indicadores para explicar o encadeamento de causa e efeito.</p></div></div>
+      <div class="step rv" style="--i:1"><span class="n">01</span><div><h3>Relembre o conteúdo no mapa mental</h3><p>Retome os conceitos essenciais antes de iniciar a exploração do simulador.</p></div></div>
+      <div class="step rv" style="--i:2"><span class="n">02</span><div><h3>Selecione um estado fisiológico</h3><p>Comece pelo normal e compare exercício, repouso ou condições específicas.</p></div></div>
+      <div class="step rv" style="--i:3"><span class="n">03</span><div><h3>Modifique uma variável</h3><p>Ajuste pressões, volumes, frequência, resistência, complacência ou ativação.</p></div></div>
+      <div class="step rv" style="--i:4"><span class="n">04</span><div><h3>Interprete a resposta integrada</h3><p>Observe gráficos e indicadores para explicar o encadeamento de causa e efeito.</p></div></div>
     </div>
   </div>
 </section>
@@ -143,8 +144,8 @@
   <div class="acts"><button class="btn" type="button" id="op-nao">Não</button><a class="btn gold" id="op-sim" href="#">Sim, entrar</a></div>
 </dialog>
 
-<script src="inicio/dados-ef.js?v=1"></script>
-<script src="inicio/celula-mapa.js?v=2"></script>
-<script src="inicio/lista.js?v=1"></script>
+<script src="inicio/dados-ef.js?v=3"></script>
+<script src="inicio/celula-mapa.js?v=3"></script>
+<script src="inicio/lista.js?v=3"></script>
 </body>
 </html>

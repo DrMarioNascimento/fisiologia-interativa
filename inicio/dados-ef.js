@@ -46,6 +46,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "A Célula Sitiada",
     "img": "assets/salas/celular.webp",
+  "grande": "assets/salas/grande/celular.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/celular?origem=site"
    }
   },
@@ -111,6 +112,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "O Músculo em Silêncio",
     "img": "assets/salas/muscular.webp",
+  "grande": "assets/salas/grande/muscular.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/muscular?origem=site"
    }
   },
@@ -144,6 +146,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "O Osso que Se Reconstrói",
     "img": "assets/salas/osteoarticular.webp",
+  "grande": "assets/salas/grande/osteoarticular.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/osteoarticular?origem=site"
    }
   },
@@ -205,6 +208,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "A Prova do Débito",
     "img": "assets/salas/cardiovascular.webp",
+  "grande": "assets/salas/grande/cardiovascular.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/cardiovascular?origem=site"
    }
   },
@@ -258,6 +262,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "O Fôlego Perdido",
     "img": "assets/salas/respiratorio.webp",
+  "grande": "assets/salas/grande/respiratorio.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/respiratorio?origem=site"
    }
   },
@@ -304,6 +309,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "A Marcha do Oxigênio",
     "img": "assets/salas/sala-base.webp",
+  "grande": "assets/salas/grande/sala-base.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/integracao?origem=site"
    }
   }
@@ -312,6 +318,7 @@ window.FI_DADOS = {
   "nome": "Operação Secreta",
   "sub": "Protocolo Eferente · todas as unidades",
   "img": "assets/salas/sala-base.webp",
+  "grande": "assets/salas/grande/sala-base.webp",
   "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/protocolo-eferente?origem=site"
  },
  "desafio": {
@@ -319,6 +326,7 @@ window.FI_DADOS = {
   "nome": "Box do Atleta",
   "sub": "desafio de fechamento · integração",
   "img": "assets/salas/box-atleta.webp",
+  "grande": "assets/salas/grande/box-atleta.webp",
   "href": "atleta-box.html?percurso=educacao-fisica"
  }
 };
