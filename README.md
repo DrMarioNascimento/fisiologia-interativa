@@ -13,6 +13,17 @@ O projeto complementa aulas, estudos dirigidos e atividades acadêmicas por meio
 - **Hospedagem institucional:** em processo de implantação na infraestrutura da UDESC
 - **Endereço institucional sugerido:** `fisiologia-interativa-sites.cefid.udesc.br`
 
+## Página inicial (Educação Física)
+
+A página inicial usa o tema escuro "fluorescência" e é montada a partir de um único arquivo de dados:
+
+- `inicio/dados-ef.js` — unidades, simuladores, mapas mentais, salas da Fisiologia em Fuga, Operação Secreta e desafio de fechamento;
+- `inicio/celula-mapa.js` — Célula-Mapa (unidades como células no meio interno), ECG de 75 bpm, ficha da unidade e roleta das salas;
+- `inicio/lista.js` — lista das unidades, filtros, busca (Ctrl K) e janela de entrada;
+- `inicio/inicio.css` — tokens de cor, tipografia e layout (coluna única no celular).
+
+A versão anterior permanece em `index-legado.html`. A página da Fisioterapia ainda usa o formato anterior.
+
 ## Finalidade educacional
 
 A plataforma busca favorecer uma aprendizagem ativa e integrativa da Fisiologia Humana. Seus recursos permitem:

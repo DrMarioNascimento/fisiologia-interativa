@@ -1,1 +1,145 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><link rel="icon" href="brand/orientador.webp"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fisiologia Interativa</title></head><body><script>(async()=>{const r=await fetch('./index-base.html',{cache:'no-cache'});let h=await r.text();h=h.replace('</head>','<style>.deep-actions{display:flex!important;align-items:center!important;flex-flow:row nowrap!important;gap:18px!important;margin-top:auto}.deep-actions a{white-space:nowrap!important;display:inline-flex!important;width:auto!important;min-height:0!important}.deep-reading{color:var(--group-color,var(--petrol-800));font-size:.7rem;font-weight:900;letter-spacing:.045em;text-decoration:none}.deep-reading:hover,.deep-actions .open-link:hover{text-decoration:underline;text-underline-offset:4px}.module-card[data-deepened="1"]{cursor:default}.module-card[data-deepened="1"] .module-category{text-transform:none}@media(max-width:420px){.deep-actions{gap:10px!important}.deep-actions a{font-size:.66rem!important}}.nav-links{gap:10px!important}.nav-links .btn-soft{min-height:42px;padding:0 16px;border:1px solid rgba(22,113,81,.28);border-radius:999px;color:#0F5B42;background:linear-gradient(180deg,#f4fcf8 0%,#d7f1e4 46%,#b7e4cd 100%);box-shadow:inset 0 1px 0 #fff,inset 0 -3px 6px rgba(15,91,66,.16),0 7px 16px rgba(15,91,66,.18);font-weight:750;text-decoration:none}.nav-links .btn-soft:hover{transform:translateY(-1px);box-shadow:inset 0 1px 0 #fff,inset 0 -3px 6px rgba(15,91,66,.16),0 10px 20px rgba(15,91,66,.22)}.nav-links .btn-primary{box-shadow:inset 0 1px 0 rgba(255,255,255,.42),inset 0 -5px 9px rgba(7,40,30,.24),0 10px 22px rgba(15,91,66,.3)!important}.nav-links .btn-soft:active,.nav-links .btn-primary:active{transform:translateY(1px)}.nav-links>a.btn{display:inline-flex!important}@media(max-width:720px){.shell.nav{width:min(calc(100% - 20px),var(--max));min-height:60px;gap:7px}.nav .brand{flex:0 0 40px;min-width:40px;min-height:40px!important;gap:0}.nav .brand-copy{display:none!important}.nav .brand-mark{width:40px}.nav-links{flex:1 1 auto;min-width:0;gap:5px!important}.nav-links>a.btn-soft,.nav-links>a.btn{flex:1 1 0;min-width:0;min-height:40px!important;padding:0 5px!important;font-size:clamp(.64rem,2.75vw,.76rem)!important;line-height:1;white-space:nowrap;letter-spacing:-.015em}}</style><script src="card-intencao-aprofundamento.js?v=20260908" defer><\/script><script src="card-sangue-aprofundamento.js?v=2" defer><\/script><script src="card-atleta-aprofundamento.js?v=1" defer><\/script><script>document.addEventListener("DOMContentLoaded",function(){var n=document.querySelector(".nav-links");if(!n)return;n.querySelectorAll("a").forEach(function(a){if(a.classList.contains("btn-primary"))return;a.classList.add("btn","btn-soft");});if(!n.querySelector("[data-tutor]")){var a=document.createElement("a");a.href="tutor-ef.html";a.setAttribute("data-tutor","1");a.className="btn btn-soft";a.textContent="Tutor EF";var f=n.querySelector("a");if(f)f.after(a);else n.appendChild(a);}else{n.querySelector("[data-tutor]").classList.add("btn","btn-soft");}});<\/script></head>');document.open();document.write(h);document.close()})().catch(()=>document.body.textContent='Não foi possível carregar a página. Atualize o navegador.');</script></body></html>
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fisiologia Interativa</title>
+<meta name="description" content="Simuladores educacionais para explorar mecanismos, testar cenários e integrar variáveis da Fisiologia Humana — Educação Física.">
+<meta name="theme-color" content="#070b10">
+<link rel="icon" href="brand/orientador.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="inicio/inicio.css?v=1">
+</head>
+<body>
+<div class="ambient-layer" aria-hidden="true">
+  <span class="ambient ambient-cell" style="--x:3%;--y:18%;--s:54px;--o:.25;--d:17s;--dx:20px;--dy:-34px"></span>
+  <span class="ambient ambient-molecule" style="--x:91%;--y:13%;--s:21px;--o:.32;--d:14s;--delay:-4s;--dx:-24px;--dy:30px"></span>
+  <span class="ambient ambient-cell" style="--x:94%;--y:47%;--s:78px;--o:.21;--d:22s;--delay:-8s;--dx:-31px;--dy:-22px"></span>
+  <span class="ambient ambient-molecule" style="--x:5%;--y:70%;--s:17px;--o:.30;--d:13s;--delay:-6s;--dx:26px;--dy:-36px"></span>
+  <span class="ambient ambient-cell" style="--x:78%;--y:82%;--s:43px;--o:.22;--d:19s;--delay:-2s;--dx:18px;--dy:-30px"></span>
+  <span class="ambient ambient-molecule" style="--x:22%;--y:89%;--s:14px;--o:.28;--d:16s;--delay:-10s;--dx:-22px;--dy:27px"></span>
+  <span class="ambient ambient-cell" style="--x:48%;--y:7%;--s:32px;--o:.18;--d:20s;--delay:-5s;--dx:28px;--dy:20px"></span>
+  <span class="ambient ambient-molecule" style="--x:68%;--y:38%;--s:12px;--o:.25;--d:12s;--delay:-3s;--dx:-18px;--dy:-25px"></span>
+</div>
+
+<div class="wrap">
+<header class="bar">
+  <a class="brand" href="#inicio" title="Prof. Mário César Nascimento, PhD ©">
+    <span class="avtile"><img class="av" src="assets/avatar-prof-mario.webp" alt="Avatar do Prof. Mário César Nascimento"></span>
+    <span class="bt"><b>Fisiologia Interativa</b><small>Prof. Mário César Nascimento, PhD ©</small></span>
+  </a>
+  <nav class="dots" id="dots" aria-label="Unidades"></nav>
+  <div class="navr">
+    <button class="btn" type="button" id="btnSearch" aria-label="Buscar simulador"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span class="lbl">Buscar</span><span class="kbd">Ctrl K</span></button>
+    <a class="btn pri" href="tutor-ef.html">Tutor EF</a>
+  </div>
+</header>
+
+<main id="conteudo">
+<section class="hero" id="inicio">
+  <p class="eyebrow">Educação Física · Fisiologia Humana</p>
+  <h1>Fisiologia Interativa<br><span class="serif grad">Explore mecanismos. Conecte sistemas.</span></h1>
+  <blockquote class="quote">Viver não é apenas existir; é compreender os processos que nos sustentam. Fisiologia não é só conteúdo de prova — é vida, é ferramenta, é cultura em nossos próprios corpos.<cite>Prof. Mário César Nascimento, PhD</cite></blockquote>
+  <div class="ecg" role="img" aria-label="Traçado de eletrocardiograma animado, derivação DII, 75 batimentos por minuto">
+    <div class="lbl" aria-hidden="true"><span>DII</span><span class="bpm">♥ 75 bpm</span><span>25 mm/s · 10 mm/mV</span></div>
+    <canvas id="ecg"></canvas>
+  </div>
+  <p class="aviso"><b>Material didático.</b> Simuladores para fins de aprendizagem; não recomendados para prescrição a alunos ou pacientes.</p>
+</section>
+
+<section id="mapa" aria-labelledby="t-mapa">
+  <p class="eyebrow">Mapa das unidades</p>
+  <h2 id="t-mapa">Do detalhe celular <span class="serif">à integração dos sistemas.</span></h2>
+  <p style="margin-top:14px">Toque numa célula, nas bolinhas ao redor dela (cada uma é um simulador) ou nos botões das unidades. A unidade escolhida gira para o topo e abre ao lado, com os mapas mentais e os simuladores.</p>
+  <div class="mapa-shell">
+    <div class="stage">
+      <div class="stage-head"><span class="mono">Corte esquemático · meio interno</span>
+        <div class="coursebadge"><small>Curso</small><strong>Educação Física</strong></div>
+      </div>
+      <canvas id="cm" aria-label="Célula-Mapa: as unidades da disciplina representadas como células no meio interno. Use os botões das unidades para navegar pelo teclado."></canvas>
+      <div class="tip" id="tip" aria-hidden="true"></div>
+    </div>
+    <div class="col">
+      <aside class="panel" id="panel" aria-live="polite">
+        <div class="counter"><span class="big" id="p-num">01</span><span class="of" id="p-of">DE 06</span></div>
+        <h3 id="p-name"></h3>
+        <p class="cellcap" id="p-cell"></p>
+        <p class="plabel">Relembre no mapa mental</p>
+        <div class="maps" id="p-doors"></div>
+        <p class="plabel">Simuladores</p>
+        <ul id="p-sims"></ul>
+      </aside>
+      <div class="unit-pills" id="pills" role="group" aria-label="Unidades"></div>
+    </div>
+  </div>
+  <div class="tf" id="tfB">
+    <div class="tfhead" id="fuga"><span>Tutor e Fisiologia em Fuga</span><em>acompanha a unidade escolhida</em></div>
+  </div>
+</section>
+
+<section id="simuladores" aria-labelledby="t-sim">
+  <div class="section-heading">
+    <div><p class="eyebrow">Unidades e simuladores</p><h2 id="t-sim">Todos os simuladores, <span class="serif">unidade por unidade.</span></h2></div>
+    <p>Relembre o conteúdo no mapa mental, escolha um simulador e, ao final da unidade, enfrente a sala de fuga.</p>
+  </div>
+  <div class="tools">
+    <div class="filters" id="filters" role="group" aria-label="Filtrar por unidade"></div>
+    <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><span class="sr-only">Buscar simulador</span><input id="search" type="search" placeholder="Buscar simulador" autocomplete="off"></label>
+  </div>
+  <div class="units" id="units"></div>
+  <p class="empty" id="empty" hidden>Nenhum simulador encontrado com essa busca.</p>
+</section>
+
+<section id="como-usar" aria-labelledby="t-uso">
+  <div class="use">
+    <div>
+      <p class="eyebrow">Objetivo didático</p>
+      <h2 id="t-uso">Visualizar. Manipular. <span class="serif grad">Compreender.</span></h2>
+      <p style="margin-top:14px">Cada simulador transforma relações abstratas em experiências observáveis. O estudante modifica variáveis, acompanha respostas e constrói explicações fisiológicas com base no que acontece na tela.</p>
+      <div class="note"><b>Formas de acesso:</b> navegador no computador, tablet ou celular. Não exige instalação.</div>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="n">01</span><div><h3>Relembre o conteúdo no mapa mental</h3><p>Retome os conceitos essenciais antes de iniciar a exploração do simulador.</p></div></div>
+      <div class="step"><span class="n">02</span><div><h3>Selecione um estado fisiológico</h3><p>Comece pelo normal e compare exercício, repouso ou condições específicas.</p></div></div>
+      <div class="step"><span class="n">03</span><div><h3>Modifique uma variável</h3><p>Ajuste pressões, volumes, frequência, resistência, complacência ou ativação.</p></div></div>
+      <div class="step"><span class="n">04</span><div><h3>Interprete a resposta integrada</h3><p>Observe gráficos e indicadores para explicar o encadeamento de causa e efeito.</p></div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="sig"><img src="assets/MCN.png" alt="Avatar do Prof. Mário diante do computador"><div><strong>Prof. Mário César Nascimento, PhD ©</strong>Fisiologia Humana · Educação Física</div></div>
+  <a href="#inicio">Voltar ao topo ↑</a>
+</footer>
+</div>
+
+<dialog class="welcome" id="welcome" aria-labelledby="w-t">
+  <p class="eyebrow">Antes de explorar</p>
+  <h2 id="w-t">Visualizar. Manipular. <span class="serif grad">Compreender.</span></h2>
+  <p style="margin-top:12px">Cada simulador transforma relações fisiológicas abstratas em experiências observáveis. Modifique variáveis, acompanhe as respostas e construa explicações com base no que acontece na tela.</p>
+  <div class="wsteps"><div><b>01</b>Relembre o conteúdo no mapa mental.</div><div><b>02</b>Selecione um estado fisiológico.</div><div><b>03</b>Modifique uma variável.</div><div><b>04</b>Interprete a resposta integrada.</div></div>
+  <div class="note"><b>Aviso importante:</b> simuladores para fins didáticos de aprendizagem. Não recomendados para prescrição a alunos ou pacientes.</div>
+  <button class="btn pri" type="button" id="welcomeAccept">Entendi — explorar os simuladores</button>
+</dialog>
+
+<dialog class="mapdlg" id="mapdlg" aria-label="Mapa mental ampliado">
+  <header><div><small id="md-u"></small><b id="md-t"></b></div>
+  <div class="mdbtns"><span id="md-nav" class="mdbtns"><button type="button" id="md-p" aria-label="Mapa anterior">←</button><button type="button" id="md-n" aria-label="Próximo mapa">→</button></span><button type="button" id="md-x" aria-label="Fechar">✕</button></div></header>
+  <img id="md-img" alt="">
+</dialog>
+
+<dialog class="opdlg" id="opdlg" aria-labelledby="op-t">
+  <h2 id="op-t">Operação Secreta</h2>
+  <p>Só entre aqui se você estudou o conteúdo e quer encarar um desafio!</p>
+  <p><b>Estudou o conteúdo?</b></p>
+  <div class="acts"><button class="btn" type="button" id="op-nao">Não</button><a class="btn gold" id="op-sim" href="#">Sim, entrar</a></div>
+</dialog>
+
+<script src="inicio/dados-ef.js?v=1"></script>
+<script src="inicio/celula-mapa.js?v=1"></script>
+<script src="inicio/lista.js?v=1"></script>
+</body>
+</html>
