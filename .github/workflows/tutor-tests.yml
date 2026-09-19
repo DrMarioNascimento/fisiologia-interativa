@@ -1,0 +1,44 @@
+name: Testes dos tutores
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tutor-*.html'
+      - 'tutor-*.js'
+      - 'tutor-*.css'
+      - 'server/**'
+      - 'tests/tutor/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/tutor-tests.yml'
+  pull_request:
+    paths:
+      - 'tutor-*.html'
+      - 'tutor-*.js'
+      - 'tutor-*.css'
+      - 'server/**'
+      - 'tests/tutor/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/tutor-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  tutor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Instalar dependências
+        run: npm install
+      - name: Testar servidor e validação
+        run: npm run test:tutor
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Testar os quatro acessos do tutor
+        run: npm run test:tutor:browser
