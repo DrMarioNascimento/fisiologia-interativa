@@ -84,7 +84,10 @@ for(const course of ['ef','fisio']) test(`Moodle ${course} iframe: shared API, c
   const actual=await frame.locator('a.link').evaluateAll(nodes=>nodes.map(n=>n.getAttribute('href')));
   const {loadCatalog}=require('../../server/catalog.cjs');
   const catalog=loadCatalog(require('node:path').resolve(__dirname,'../..'));
-  expect(actual).toEqual(catalog[course].map(m=>'https://drmarionascimento.github.io/fisiologia-interativa/'+m.href+(course==='fisio'?'?percurso=fisioterapia':'')));
+  const extraHref = course === 'ef' ? 'atleta-box.html' : 'fisioterapia/uti-fisiologica.html';
+  const expected = catalog[course].map(m=>'https://drmarionascimento.github.io/fisiologia-interativa/'+m.href+(course==='fisio'?'?percurso=fisioterapia':''));
+  expected.push('https://drmarionascimento.github.io/fisiologia-interativa/'+extraHref+(course==='fisio'?'?percurso=fisioterapia':''));
+  expect(actual).toEqual(expected);
   await frame.locator('#aiEnabled').check();
   await frame.locator('#input').fill('Por que o sódio entra na célula?');await frame.locator('.send').click();
   await expect(frame.locator('.ai-response')).toContainText('<b>texto seguro</b>');
