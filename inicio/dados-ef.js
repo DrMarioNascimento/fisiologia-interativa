@@ -325,8 +325,8 @@ window.FI_DADOS = {
   "unidade": "integracao",
   "nome": "Box do Atleta",
   "sub": "desafio de fechamento · integração",
-  "img": "assets/salas/box-atleta.webp",
-  "grande": "assets/salas/grande/box-atleta.webp",
+  "img": "assets/salas/box-atleta-v2.webp",
+  "grande": "assets/salas/grande/box-atleta-v2.webp",
   "href": "atleta-box.html?percurso=educacao-fisica"
  }
 };
