@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="inicio/inicio.css?v=1">
+<link rel="stylesheet" href="inicio/inicio.css?v=2">
 </head>
 <body>
 <div class="ambient-layer" aria-hidden="true">
@@ -41,12 +41,14 @@
 <section class="hero" id="inicio">
   <p class="eyebrow">Educação Física · Fisiologia Humana</p>
   <h1>Fisiologia Interativa<br><span class="serif grad">Explore mecanismos. Conecte sistemas.</span></h1>
+  <div class="hero-foot">
   <blockquote class="quote">Viver não é apenas existir; é compreender os processos que nos sustentam. Fisiologia não é só conteúdo de prova — é vida, é ferramenta, é cultura em nossos próprios corpos.<cite>Prof. Mário César Nascimento, PhD</cite></blockquote>
+  <p class="aviso"><b>Material didático.</b> Simuladores para fins de aprendizagem; não recomendados para prescrição a alunos ou pacientes.</p>
+  </div>
   <div class="ecg" role="img" aria-label="Traçado de eletrocardiograma animado, derivação DII, 75 batimentos por minuto">
     <div class="lbl" aria-hidden="true"><span>DII</span><span class="bpm">♥ 75 bpm</span><span>25 mm/s · 10 mm/mV</span></div>
     <canvas id="ecg"></canvas>
   </div>
-  <p class="aviso"><b>Material didático.</b> Simuladores para fins de aprendizagem; não recomendados para prescrição a alunos ou pacientes.</p>
 </section>
 
 <section id="mapa" aria-labelledby="t-mapa">
@@ -61,8 +63,7 @@
       <canvas id="cm" aria-label="Célula-Mapa: as unidades da disciplina representadas como células no meio interno. Use os botões das unidades para navegar pelo teclado."></canvas>
       <div class="tip" id="tip" aria-hidden="true"></div>
     </div>
-    <div class="col">
-      <aside class="panel" id="panel" aria-live="polite">
+    <aside class="panel" id="panel" aria-live="polite">
         <div class="counter"><span class="big" id="p-num">01</span><span class="of" id="p-of">DE 06</span></div>
         <h3 id="p-name"></h3>
         <p class="cellcap" id="p-cell"></p>
@@ -70,12 +71,16 @@
         <div class="maps" id="p-doors"></div>
         <p class="plabel">Simuladores</p>
         <ul id="p-sims"></ul>
-      </aside>
-      <div class="unit-pills" id="pills" role="group" aria-label="Unidades"></div>
-    </div>
+    </aside>
   </div>
-  <div class="tf" id="tfB">
-    <div class="tfhead" id="fuga"><span>Tutor e Fisiologia em Fuga</span><em>acompanha a unidade escolhida</em></div>
+  <div class="tf" id="tfB" aria-label="Unidades, tutor e Fisiologia em Fuga">
+    <div class="tf-left">
+      <p class="mono tf-lbl">Unidades</p>
+      <div class="unit-pills" id="pills" role="group" aria-label="Unidades"></div>
+      <div class="tutor" id="tutorbox"></div>
+    </div>
+    <div class="tf-mid" id="fuga"><div id="rolmid"></div></div>
+    <div class="tf-right" id="rolinfo"></div>
   </div>
 </section>
 
@@ -139,7 +144,7 @@
 </dialog>
 
 <script src="inicio/dados-ef.js?v=1"></script>
-<script src="inicio/celula-mapa.js?v=1"></script>
+<script src="inicio/celula-mapa.js?v=2"></script>
 <script src="inicio/lista.js?v=1"></script>
 </body>
 </html>

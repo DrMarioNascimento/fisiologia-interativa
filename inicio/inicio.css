@@ -76,11 +76,15 @@ p{margin:0 0 12px;max-width:68ch;color:var(--ink2)}
 @media(max-width:900px){.dots{display:none}}
 @media(max-width:560px){.brand .bt small{display:none}.navr .btn .lbl{display:none}.navr .kbd{display:none}}
 
-section{padding-block:clamp(56px,8vw,96px);position:relative}
+section{padding-block:clamp(40px,5vw,64px);position:relative}
 section+section::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--line2),transparent)}
 
 /* abertura */
-.hero{padding-top:clamp(36px,6vw,72px);padding-bottom:28px}
+.hero{padding-top:clamp(28px,4vw,52px);padding-bottom:8px}
+.hero-foot{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,300px);gap:28px;align-items:end;margin-top:18px}
+.hero-foot .quote{margin:0;max-width:none}
+.hero-foot .aviso{margin:0;padding-left:14px;border-left:1px solid rgba(232,176,92,.5)}
+@media(max-width:760px){.hero-foot{grid-template-columns:1fr;gap:12px}}
 .quote{margin:18px 0 0;padding-left:16px;border-left:1px solid var(--acc);font-family:var(--f-serif);font-style:italic;font-size:clamp(1.12rem,1.9vw,1.45rem);line-height:1.4;color:var(--ink);max-width:62ch}
 .quote cite{display:block;margin-top:6px;font:500 10.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-style:normal}
 .ecg{position:relative;margin-top:26px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(180deg,rgba(255,116,120,.05),transparent);overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 14px 30px rgba(0,0,0,.35)}
@@ -92,7 +96,7 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;height
 .aviso b{color:var(--gold);font-weight:600}
 
 /* Célula-Mapa */
-.mapa-shell{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:26px;margin-top:26px;align-items:start}
+.mapa-shell{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,.65fr);gap:22px;margin-top:22px;align-items:start}
 @media(max-width:960px){.mapa-shell{grid-template-columns:1fr}}
 .stage{position:relative;border-radius:22px;border:1px solid var(--line);background:radial-gradient(70% 70% at 50% 50%,rgba(63,224,200,.08),transparent 70%),var(--bg2);overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 24px 50px rgba(0,0,0,.45)}
 .stage canvas{display:block;width:100%;aspect-ratio:1/1;max-height:760px;cursor:crosshair;touch-action:manipulation}
@@ -110,7 +114,7 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;height
 .panel h3{font-size:1.45rem;line-height:1.1}
 .cellcap{font-family:var(--f-serif);font-style:italic;font-size:1.12rem;color:var(--c);margin:-6px 0 0}
 .plabel{font:500 10px var(--f-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin:0 0 -8px}
-.panel ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.panel ul{list-style:none;margin:0;padding:0 4px 0 0;display:grid;gap:6px;align-content:start;flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(150,200,210,.3) transparent}
 .panel li a{display:flex;justify-content:space-between;gap:10px;align-items:center;text-decoration:none;color:var(--ink);font-size:13.5px;padding:10px 12px;border-radius:11px;border:1px solid var(--line);
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.01));box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 3px 8px rgba(0,0,0,.25);transition:border-color .15s,transform .15s}
 .panel li a:hover{border-color:var(--c);transform:translateX(2px)}
@@ -130,24 +134,29 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;height
 .unit-pills button i{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
 .unit-pills button[aria-current="true"]{color:var(--ink);border-color:var(--c);background:linear-gradient(180deg,color-mix(in srgb,var(--c) 22%,transparent),rgba(255,255,255,.02));box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px var(--c),0 8px 20px color-mix(in srgb,var(--c) 25%,transparent)}
 
-/* Tutores e Fisiologia em Fuga */
-.tf{margin-top:26px;border:1px solid rgba(232,176,92,.4);border-radius:22px;padding:20px;display:grid;gap:18px;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;
-  background:radial-gradient(60% 80% at 75% 50%,rgba(232,176,92,.07),transparent 70%),var(--card);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 24px 50px rgba(0,0,0,.4)}
-.tf .tfhead{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
-.tf .tfhead span{font:500 10.5px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
-.tf .tfhead em{font:500 10px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-style:normal}
-@media(max-width:760px){.tf{grid-template-columns:1fr}}
-.tutor{display:grid;gap:12px}
-.tutor b{display:block;font:600 1.1rem var(--f-disp)}
+/* faixa: unidades + tutor | roda das salas | sala escolhida */
+.tf{margin-top:22px;border:1px solid rgba(232,176,92,.4);border-radius:22px;padding:18px 20px;display:grid;gap:24px;grid-template-columns:minmax(0,1fr) minmax(0,340px) minmax(0,.8fr);align-items:center;
+  background:radial-gradient(40% 80% at 55% 50%,rgba(232,176,92,.07),transparent 70%),var(--card);box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 24px 50px rgba(0,0,0,.4)}
+.tf-lbl{margin:0 0 8px;color:var(--gold)}
+.tf-left{display:grid;gap:14px;align-content:center}
+.tf-left .tf-lbl{color:var(--ink3);margin:0 0 -6px}
+.tf .unit-pills{padding:0;border:0;background:none;box-shadow:none}
+.tf-right{display:grid;gap:10px;align-content:center;text-align:left}
+.tf-right .arrows{margin:0}
+@media(max-width:1060px){.tf{grid-template-columns:minmax(0,1fr) minmax(0,300px)}.tf-left{grid-column:1/-1}}
+@media(max-width:760px){.tf{grid-template-columns:1fr;gap:18px}.tf-right{text-align:center;justify-items:center}}
+.tutor{display:grid;gap:10px;padding-top:14px;border-top:1px solid var(--line)}
+.tutor b{display:block;font:600 1.05rem var(--f-disp)}
 .tutor p{font-size:13px;margin:4px 0 0}
 .tbtns{display:flex;flex-wrap:wrap;gap:8px}
 .tbtns a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:999px;font:700 13px var(--f-body);text-decoration:none;color:#03201b;border:1px solid #6ff0dc;
   background:linear-gradient(180deg,#8ff5e4 0%,#3FE0C8 45%,#1fae98 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 6px rgba(0,60,50,.35),0 8px 20px rgba(63,224,200,.25);transition:transform .15s}
 .tbtns a:hover{transform:translateY(-1px)}
 .tbtns a:active{transform:translateY(1px)}
-.rol .tbtns a{color:#2a1a04;border-color:#f3d27a;background:linear-gradient(180deg,#f7dc98 0%,#E8B05C 50%,#b8813a 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -3px 6px rgba(80,40,0,.3),0 8px 20px rgba(232,176,92,.25)}
+.tf-right .tbtns a{color:#2a1a04;border-color:#f3d27a;background:linear-gradient(180deg,#f7dc98 0%,#E8B05C 50%,#b8813a 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.5),inset 0 -3px 6px rgba(80,40,0,.3),0 8px 20px rgba(232,176,92,.25)}
+.tf-mid{width:100%}
 .rol{display:grid;gap:10px;justify-items:center;text-align:center;overflow:hidden;width:100%}
-.dialbox{position:relative;aspect-ratio:1/1;width:100%;max-width:360px;margin:0 auto}
+.dialbox{position:relative;aspect-ratio:1/1;width:100%;max-width:340px;margin:0 auto;overflow:hidden;border-radius:50%}
 .dialbox svg.dial{position:absolute;inset:0;width:100%;height:100%;transition:transform 1.1s cubic-bezier(.3,.7,.2,1)}
 .ringroom{position:absolute;inset:0;transition:transform 1.1s cubic-bezier(.3,.7,.2,1)}
 .room{position:absolute;width:20%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:2px solid #2a3440;overflow:hidden;cursor:pointer;padding:0;background:#111;transition:border-color .3s,box-shadow .3s;box-shadow:0 6px 14px rgba(0,0,0,.5)}
@@ -156,7 +165,7 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;height
 .dialcenter{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
 .dialcenter .big{font:600 clamp(2.2rem,5vw,3rem)/.9 var(--f-disp);letter-spacing:-.04em}
 .dialcenter .mono{display:block;margin-top:4px}
-.roomname{font:600 1.2rem var(--f-disp);letter-spacing:-.02em}
+.roomname{font:600 1.35rem/1.15 var(--f-disp);letter-spacing:-.02em}
 .roomunit{font-family:var(--f-serif);font-style:italic;color:var(--gold);font-size:1.02rem}
 .arrows{display:flex;gap:8px}
 .arrows button{min-width:46px;min-height:46px;border-radius:50%;border:1px solid var(--line2);color:var(--ink);font-size:18px;cursor:pointer;background:linear-gradient(180deg,rgba(255,255,255,.1),rgba(255,255,255,.02));box-shadow:var(--lift)}
