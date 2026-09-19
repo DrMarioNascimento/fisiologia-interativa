@@ -76,3 +76,22 @@ test('página inicial — mapa, fichas, lista e salas', async ({ page }, testInf
   await page.screenshot({ path: testInfo.outputPath('inicio.png'), fullPage: true });
   expect(errors, `Console errors: ${errors.join('\n')}`).toEqual([]);
 });
+
+test('página inicial da Fisioterapia — mesma estrutura, cinco unidades', async ({ page }, testInfo) => {
+  const errors = [];
+  page.on('console', m => { if (m.type() === 'error' && !/fonts\.g/.test(m.text())) errors.push(m.text()); });
+  page.on('pageerror', e => errors.push(e.message));
+  page.on('response', r => { if (r.status() >= 400 && !/fonts\.g/.test(r.url())) errors.push(r.status() + ' ' + r.url()); });
+  await page.goto('/fisioterapia/index.html?v=playwright', { waitUntil: 'networkidle' });
+  await page.click('#welcomeAccept');
+  await expect(page.locator('#pills button')).toHaveCount(5);
+  await expect(page.locator('.card')).toHaveCount(27);
+  await expect(page.locator('.coursebadge strong')).toHaveText('Fisioterapia');
+  await page.locator('#pills button').nth(2).click();
+  await expect(page.locator('#p-name')).toContainText('cardiovascular');
+  // links para outras páginas abrem em nova aba
+  const alvo = await page.locator('#p-sims a').first().evaluate(a => { a.addEventListener('click', e => e.preventDefault(), {once: true}); a.click(); return a.target; });
+  expect(alvo).toBe('_blank');
+  await auditLayout(page, 'fisio-' + testInfo.project.name);
+  expect(errors, `Console errors: ${errors.join('\n')}`).toEqual([]);
+});

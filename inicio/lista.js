@@ -101,6 +101,14 @@
     armar(); new MutationObserver(armar).observe(list, {childList: true});
   }
 
+  /* simuladores, tutor, salas, leituras: tudo abre em nova aba (a página inicial fica aberta) */
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href]'); if (!a) return;
+    const h = a.getAttribute('href') || '';
+    if (h.startsWith('#') && !a.classList.contains('enter')) return;
+    a.target = '_blank'; a.rel = 'noopener';
+  }, true);
+
   /* janela de entrada: uma vez por sessão, como no site anterior */
   const w = document.getElementById('welcome');
   let visto = false;

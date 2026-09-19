@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="tema-fi">
 <head>
   <meta charset="utf-8"><link rel="icon" href="brand/orientador.webp">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0F5B42">
+  <meta name="theme-color" content="#070b10">
   <title>Tutor Fisio — Fisiologia Interativa</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Instrument+Serif:ital@0;1&family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root { --ink:#10262b; --muted:#5e7175; --line:#dbe7e8; --canvas:#f5f9f9; --green:#0F5B42; --green-2:#167151; --radius:20px; }
     * { box-sizing: border-box; }
@@ -61,23 +61,25 @@
     @media (max-width:720px) { .brand span { display:none; } h1 { font-size:1.85rem; } }
   </style>
   <link rel="stylesheet" href="tutor-widget.css?v=5">
+  <link rel="stylesheet" href="inicio/tutor-tema.css?v=2">
 </head>
 <body>
+  <div class="fi-ambient" aria-hidden="true"><span class="cel" style="--x:3%;--y:22%;--s:54px;--d:17s"></span><span class="mol" style="--x:91%;--y:14%;--s:21px;--o:.3;--d:14s"></span><span class="cel" style="--x:94%;--y:52%;--s:78px;--o:.18;--d:22s"></span><span class="mol" style="--x:6%;--y:74%;--s:17px;--o:.3;--d:13s"></span><span class="cel" style="--x:76%;--y:86%;--s:43px;--d:19s"></span></div>
   <header>
     <div class="shell nav">
       <a class="brand" href="fisioterapia/">
-        <span class="mark" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M4 14c3.2-7.8 4.7 3.2 8-5s4.5 4.7 8-2"/><path d="M4 19h16"/></svg></span>
-        <span><strong>Tutor Fisio</strong><span>Fisiologia Interativa</span></span>
+        <span class="fi-av" aria-hidden="true"><img src="assets/avatar-prof-mario.webp" alt=""></span>
+        <span class="bt"><strong>Tutor Fisio</strong><span>Fisiologia Interativa · Prof. Mário César Nascimento, PhD ©</span></span>
       </a>
-      <a class="btn btn-ghost" href="fisioterapia/">Simuladores</a>
+      <div class="fi-navr"><a class="btn btn-ghost" href="fisioterapia/#mapa">Página inicial</a></div>
     </div>
   </header>
   <main class="shell">
     <section class="hero">
       <p class="eyebrow">Fisioterapia</p>
-      <h1>Estudar com o mesmo método da aula.</h1>
+      <h1>Estudar com o <em>mesmo método da aula.</em></h1>
       <p class="lead">Relembre o mapa, abra o simulador, modifique uma variável e interprete a resposta funcional.</p>
-      <div class="note">Material didático. Não use para prescrição a alunos ou pacientes.</div>
+      <div class="note"><b>Material didático.</b> Não use para prescrição a alunos ou pacientes.</div>
       <div class="axes" id="axes" role="group" aria-label="Eixos da disciplina"></div>
     </section>
     <section class="grid" id="cards"></section>
@@ -163,7 +165,8 @@
     renderAxes();
     renderCards();
   </script>
-  <script src="tutor-ligacao-fuga.js?v=3"></script>
+  <script src="tutor-ligacao-fuga.js?v=4"></script>
   <script src="tutor-widget.js?v=19"></script>
+  <script src="inicio/tutor-tema.js?v=1"></script>
 </body>
 </html>

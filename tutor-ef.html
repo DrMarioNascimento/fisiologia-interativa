@@ -61,7 +61,7 @@
     @media (max-width:720px) { .brand span { display:none; } h1 { font-size:1.85rem; } }
   </style>
   <link rel="stylesheet" href="tutor-widget.css?v=5">
-  <link rel="stylesheet" href="inicio/tutor-tema.css?v=1">
+  <link rel="stylesheet" href="inicio/tutor-tema.css?v=2">
 </head>
 <body>
   <div class="fi-ambient" aria-hidden="true"><span class="cel" style="--x:3%;--y:22%;--s:54px;--d:17s"></span><span class="mol" style="--x:91%;--y:14%;--s:21px;--o:.3;--d:14s"></span><span class="cel" style="--x:94%;--y:52%;--s:78px;--o:.18;--d:22s"></span><span class="mol" style="--x:6%;--y:74%;--s:17px;--o:.3;--d:13s"></span><span class="cel" style="--x:76%;--y:86%;--s:43px;--d:19s"></span></div>
@@ -93,13 +93,9 @@
   </div>
   <script src="tutor-ef-data.js?v=17"></script>
   <script src="tutor-desafios-extra.js?v=2"></script>
-  <script src="tutor-ligacao-fuga.js?v=3"></script>
+  <script src="tutor-ligacao-fuga.js?v=4"></script>
   <script src="tutor-widget.js?v=19"></script>
   <script src="tutor-escape-chat.js?v=5"></script>
-  <script>/* cor da unidade ativa nos cartões, como na página inicial */
-  (function(){var ax=document.getElementById('axes'),cd=document.getElementById('cards');if(!ax||!cd)return;
-  var cor={celular:'#B49BFF',muscular:'#FF9F57',osteoarticular:'#5ED9A6',cardiovascular:'#FF7478',respiratorio:'#63B8FF',integracao:'#3FE0C8'};
-  function pinta(){var b=ax.querySelector('[aria-pressed="true"]');if(b&&cor[b.dataset.id]){cd.style.setProperty('--c',cor[b.dataset.id]);document.documentElement.style.setProperty('--c',cor[b.dataset.id]);}}
-  new MutationObserver(pinta).observe(ax,{childList:true,subtree:true,attributes:true});pinta();})();</script>
+  <script src="inicio/tutor-tema.js?v=1"></script>
 </body>
 </html>

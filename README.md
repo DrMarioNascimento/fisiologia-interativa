@@ -13,7 +13,7 @@ O projeto complementa aulas, estudos dirigidos e atividades acadêmicas por meio
 - **Hospedagem institucional:** em processo de implantação na infraestrutura da UDESC
 - **Endereço institucional sugerido:** `fisiologia-interativa-sites.cefid.udesc.br`
 
-## Página inicial (Educação Física)
+## Páginas iniciais e tutores (Educação Física e Fisioterapia)
 
 A página inicial usa o tema escuro "fluorescência" e é montada a partir de um único arquivo de dados:
 
@@ -22,7 +22,7 @@ A página inicial usa o tema escuro "fluorescência" e é montada a partir de um
 - `inicio/lista.js` — lista das unidades, filtros, busca (Ctrl K) e janela de entrada;
 - `inicio/inicio.css` — tokens de cor, tipografia e layout (coluna única no celular).
 
-A versão anterior permanece em `index-legado.html`. A página da Fisioterapia ainda usa o formato anterior.
+A Fisioterapia usa o mesmo motor com `inicio/dados-fi.js` (em `fisioterapia/index.html`). Os tutores EF e Fisio usam `inicio/tutor-tema.css` e `inicio/tutor-tema.js`. As versões anteriores permanecem em `index-legado.html` e `fisioterapia/index-legado.html`. Na página inicial e nos tutores, simuladores, salas e leituras abrem em nova aba.
 
 ## Finalidade educacional
 

@@ -13,7 +13,7 @@
     return "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/" + cursoAtual() + "/protocolo-eferente?origem=site";
   }
   function idsDisponiveis() {
-    if (typeof axes !== "undefined") return axes.map(function (item) { return item.id; });
+    if (typeof axes !== "undefined" && Array.isArray(axes)) return axes.map(function (item) { return item.id; });
     if (typeof axisOrder !== "undefined") return axisOrder.slice();
     return [];
   }

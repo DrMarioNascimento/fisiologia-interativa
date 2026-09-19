@@ -288,7 +288,7 @@ cv.addEventListener('pointermove',e=>{const {best,x,y}=pick(e);hover=best;cv.sty
 cv.addEventListener('pointerleave',()=>{hover=null;tip.style.opacity=0});
 cv.addEventListener('click',e=>{const {best}=pick(e);if(!best)return;
   if(best.k==='protocolo'){setRoom(0);document.getElementById('tfB').scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});return;}
-  if(best.type==='sim'){location.href=best.href;return;}
+  if(best.type==='sim'){window.open(best.href,'_blank','noopener');return;}
   if(best.type==='lock'){select(best.k);document.getElementById('tfB').scrollIntoView({behavior:RM?'auto':'smooth',block:'center'});return;}
   select(best.k);});
 function select(k){
