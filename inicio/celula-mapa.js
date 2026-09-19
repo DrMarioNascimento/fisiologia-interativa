@@ -317,10 +317,10 @@ document.getElementById('md-n').onclick=()=>openMap(mapIdx+1);
 dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close();});
 dlg.addEventListener('close',()=>{mapUnit=null;});
 window.FI_openMap=openMap; window.FI_select=k=>{select(k);};
+/* a ficha tem a mesma altura da caixa da célula; a lista de simuladores rola por dentro */
 function fixPanelHeight(){
-  const p=document.getElementById('panel'); p.style.minHeight=''; const keep=sel; let mx=0;
-  for(const k of ORDER[course]){sel=k;renderPanelRaw();mx=Math.max(mx,p.offsetHeight);}
-  sel=keep;renderPanelRaw();p.style.minHeight=mx+'px';
+  const p=document.getElementById('panel'), st=document.querySelector('.stage');
+  p.style.height = (innerWidth>960 && st) ? st.offsetHeight+'px' : '';
 }
 function renderPanel(){renderPanelRaw();const idx=rooms().findIndex(r=>r.k===sel); if(idx>=0 && ROLS.length) setRoom(idx); renderTutor();}
 function renderPanelRaw(){
@@ -359,19 +359,17 @@ function dialSVG(){
   return s;
 }
 function makeRol(host){
-  const w=document.createElement('div');w.className='rol';
-  w.innerHTML=`<div class="dialbox"><svg class="dial" viewBox="0 0 400 400" aria-hidden="true">${dialSVG()}</svg><div class="ringroom"></div><div class="dialcenter"><div class="big">01</div><span class="mono">DE 07</span></div></div>
-  <div aria-live="polite"><div class="roomname">—</div><div class="roomunit">—</div></div>
+  const w=document.getElementById('rolmid'), info=document.getElementById('rolinfo');
+  w.innerHTML=`<div class="dialbox"><svg class="dial" viewBox="0 0 400 400" aria-hidden="true">${dialSVG()}</svg><div class="ringroom"></div><div class="dialcenter"><div class="big">01</div><span class="mono">DE 07</span></div></div>`;
+  info.innerHTML=`<p class="mono tf-lbl">Fisiologia em Fuga</p><div aria-live="polite"><div class="roomname">—</div><div class="roomunit">—</div></div>
   <div class="arrows"><button type="button" aria-label="Sala anterior">←</button><button type="button" aria-label="Próxima sala">→</button></div>
-  <div class="tbtns" style="justify-content:center"><a class="pri enter" href="#">Entrar na sala</a></div>`;
-  host.appendChild(w);
-  const o={enter:w.querySelector('a.enter'),ring:w.querySelector('.ringroom'),dial:w.querySelector('svg.dial'),num:w.querySelector('.dialcenter .big'),of:w.querySelector('.dialcenter .mono'),name:w.querySelector('.roomname'),unit:w.querySelector('.roomunit')};
-  const [p,n]=w.querySelectorAll('.arrows button');p.onclick=()=>pickRoom(room-1);n.onclick=()=>pickRoom(room+1);
+  <div class="tbtns"><a class="pri enter" href="#">Entrar na sala</a></div>`;
+  const o={enter:info.querySelector('a.enter'),ring:w.querySelector('.ringroom'),dial:w.querySelector('svg.dial'),num:w.querySelector('.dialcenter .big'),of:w.querySelector('.dialcenter .mono'),name:info.querySelector('.roomname'),unit:info.querySelector('.roomunit')};
+  const [p,n]=info.querySelectorAll('.arrows button');p.onclick=()=>pickRoom(room-1);n.onclick=()=>pickRoom(room+1);
   ROLS.push(o);
 }
 function renderTutor(){
-  const host=document.getElementById('tfB'); let t=host.querySelector('.tutor');
-  if(!t){t=document.createElement('div');t.className='tutor';host.insertBefore(t,host.children[1]);}
+  const t=document.getElementById('tutorbox');
   const i=ORDER[course].indexOf(sel), u=UNITS[sel];
   t.innerHTML=`<div><b>Tutor ${course==='ef'?'EF':'Fisio'}</b><p>${String(i+1).padStart(2,'0')} · ${esc(u.nome)}: relembre o mapa, abra o simulador e responda às questões com o tutor.</p></div>
   <div class="tbtns"><a class="pri" href="${esc(D.tutor)}?eixo=${esc(sel)}">Estudar com o tutor</a></div>`;
