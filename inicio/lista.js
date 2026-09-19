@@ -85,10 +85,19 @@
     watch(); new MutationObserver(watch).observe(list, {childList: true});
   }
 
-  /* surgimento ao rolar: cada bloco aparece uma vez, quando chega na tela */
+  /* surgimento ao rolar: a abertura aparece ao entrar; do "Mapa das unidades" para baixo,
+     nada aparece antes de o aluno começar a rolar a página */
   if (document.documentElement.classList.contains('js-rv')) {
-    const rvIO = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); rvIO.unobserve(en.target); } }), {rootMargin: '0px 0px -8% 0px', threshold: .08});
-    const armar = () => document.querySelectorAll('.rv:not(.in)').forEach(el => rvIO.observe(el));
+    let rolou = scrollY > 40 || !!location.hash;
+    const rvIO = new IntersectionObserver(es => es.forEach(en => {
+      if (!en.isIntersecting) return;
+      if (!rolou && !en.target.closest('#inicio')) return;
+      en.target.classList.add('in'); rvIO.unobserve(en.target);
+    }), {rootMargin: '0px 0px -12% 0px', threshold: .12});
+    const armar = () => document.querySelectorAll('.rv:not(.in)').forEach(el => { rvIO.unobserve(el); rvIO.observe(el); });
+    const acordar = () => { if (rolou) return; rolou = true; armar(); };
+    addEventListener('scroll', () => { if (scrollY > 40) acordar(); }, {passive: true});
+    addEventListener('hashchange', acordar);
     armar(); new MutationObserver(armar).observe(list, {childList: true});
   }
 

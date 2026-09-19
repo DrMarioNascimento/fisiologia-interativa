@@ -303,3 +303,14 @@ dialog::backdrop{background:rgba(3,5,8,.82);backdrop-filter:blur(4px)}
 .js-rv .rv.in{opacity:1;transform:none;filter:none}
 /* quem pede menos movimento no sistema: só esmaece, sem deslocar */
 @media (prefers-reduced-motion:reduce){.js-rv .rv{transform:none;filter:none;transition:opacity .9s ease;transition-delay:calc(var(--i,0) * 80ms)}}
+
+/* abertura ocupa a primeira tela: o restante só aparece ao rolar */
+.hero{min-height:calc(100svh - 72px);display:flex;flex-direction:column;justify-content:center;padding-block:clamp(24px,4vw,48px) 64px}
+.rolar{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--ink3);text-decoration:none;font:500 10px var(--f-mono);letter-spacing:.18em;text-transform:uppercase}
+.rolar i{width:22px;height:34px;border:1px solid var(--line2);border-radius:12px;position:relative}
+.rolar i::after{content:"";position:absolute;left:50%;top:7px;width:3px;height:7px;margin-left:-1.5px;border-radius:2px;background:var(--acc);box-shadow:0 0 8px var(--acc);animation:rolar 1.8s ease-in-out infinite}
+@keyframes rolar{0%{opacity:0;transform:translateY(0)}30%{opacity:1}80%{opacity:0;transform:translateY(12px)}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){.rolar i::after{animation:none}}
+@media(max-height:560px){.hero{min-height:0}.rolar{display:none}}
+.rolar{animation:rolarIn 1s ease 1.4s both}
+@keyframes rolarIn{from{opacity:0}}

@@ -1,0 +1,113 @@
+/* Tutor EF — mesmo padrão visual da página inicial (tema escuro "fluorescência").
+   Só vale para páginas com <html class="tema-fi">; os simuladores continuam com o tema claro.
+   Prof. Mário César Nascimento, PhD © */
+html.tema-fi{
+  --bg:#070b10;--bg2:#0c1219;--line:rgba(150,200,210,.16);--line2:rgba(150,200,210,.26);
+  --ink:#e9f1f4;--ink2:#a3b3be;--ink3:#7d8e98;--acc:#3FE0C8;--gold:#E8B05C;
+  --f-disp:'Space Grotesk',ui-sans-serif,system-ui,sans-serif;--f-serif:'Instrument Serif',Georgia,serif;
+  --f-body:'Inter',ui-sans-serif,system-ui,sans-serif;--f-mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  --card:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012) 40%,rgba(0,0,0,.12)),var(--bg2);
+  --lift:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -2px 0 rgba(0,0,0,.35),0 8px 18px rgba(0,0,0,.35);
+  --c:var(--acc);
+  color-scheme:dark;background:var(--bg);
+}
+html.tema-fi body{background:var(--bg);color:var(--ink);font-family:var(--f-body)}
+html.tema-fi .shell{width:min(calc(100% - 32px),1180px)}
+html.tema-fi a{color:inherit}
+
+/* fundo: células e moléculas, como na página inicial */
+.fi-ambient{position:fixed;z-index:0;inset:0;overflow:hidden;pointer-events:none}
+.fi-ambient span{position:absolute;left:var(--x);top:var(--y);width:var(--s);aspect-ratio:1;opacity:var(--o,.2);border-radius:50%;animation:fiFloat var(--d,18s) ease-in-out infinite alternate}
+.fi-ambient .cel{border:1px solid rgba(63,224,200,.35);background:radial-gradient(circle at 36% 34%,rgba(255,255,255,.55) 0 10%,transparent 11%),radial-gradient(circle at 52% 54%,#8c55ca 0 13%,#af7bdc 14% 21%,transparent 22%),radial-gradient(circle,rgba(142,226,202,.55),rgba(62,177,147,.18));box-shadow:0 0 30px rgba(63,224,200,.18)}
+.fi-ambient .mol{background:radial-gradient(circle at 34% 30%,#fff 0 11%,transparent 12%),linear-gradient(145deg,#ffb56f,#d75c33);box-shadow:calc(var(--s)*.72) calc(var(--s)*.28) 0 calc(var(--s)*-.22) #5d9eea,calc(var(--s)*-.48) calc(var(--s)*.72) 0 calc(var(--s)*-.3) #7dd6bd}
+@keyframes fiFloat{to{transform:translate3d(18px,-28px,0) rotate(10deg)}}
+html.tema-fi header,html.tema-fi main,html.tema-fi footer{position:relative;z-index:1}
+
+/* barra superior com o avatar */
+html.tema-fi header{background:rgba(7,11,16,.86);border-bottom:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter:blur(12px)}
+html.tema-fi .nav{min-height:70px;padding-top:4px}
+html.tema-fi .brand{gap:12px}
+html.tema-fi .brand strong{font:600 12px var(--f-disp);letter-spacing:.16em;text-transform:uppercase;color:var(--ink)}
+html.tema-fi .brand span{color:var(--ink3);font-size:10.5px}
+html.tema-fi .brand .bt{display:flex;flex-direction:column;line-height:1.15}
+.fi-av{width:36px;height:36px;border-radius:11px;background:conic-gradient(from 200deg,#3FE0C8,#63B8FF,#B49BFF,#FF7478,#FF9F57,#3FE0C8);position:relative;flex:none;transform:translateY(6px)}
+.fi-av::after{content:"";position:absolute;inset:2px;border-radius:9px;background:var(--bg)}
+.fi-av img{position:absolute;z-index:2;width:52px;max-width:none;left:-8px;top:-27px;clip-path:polygon(0 0,100% 0,100% 27px,calc(100% - 9px) 27px,calc(100% - 9px) 62px,9px 62px,9px 27px,0 27px);transform-origin:50% 100%;transition:transform .45s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+html.tema-fi .brand:hover .fi-av img{transform:translateY(-3px) rotate(-3deg)}
+.fi-navr{display:flex;gap:8px;align-items:center}
+
+/* botões com relevo */
+html.tema-fi .btn{font:600 13px var(--f-body);min-height:42px;transition:transform .15s}
+html.tema-fi .btn:hover{transform:translateY(-1px)}
+html.tema-fi .btn:active{transform:translateY(1px)}
+html.tema-fi .btn-ghost{color:var(--ink);border:1px solid var(--line2);background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.02));box-shadow:var(--lift)}
+html.tema-fi .btn-primary{color:#03201b;border:1px solid #6ff0dc;background:linear-gradient(180deg,#8ff5e4 0%,#3FE0C8 45%,#1fae98 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 6px rgba(0,60,50,.35),0 8px 20px rgba(63,224,200,.25)}
+
+/* abertura */
+html.tema-fi .hero{padding:34px 0 8px}
+html.tema-fi .eyebrow{font:500 11px var(--f-mono);letter-spacing:.18em;color:var(--acc);display:flex;align-items:center;gap:10px}
+html.tema-fi .eyebrow::before{content:"";width:28px;height:1px;background:currentColor;box-shadow:0 0 8px currentColor}
+html.tema-fi h1{font-family:var(--f-disp);font-weight:600;letter-spacing:-.03em;color:var(--ink);font-size:clamp(2.1rem,5.6vw,3.8rem)}
+html.tema-fi .hero h1 em{font-family:var(--f-serif);font-style:italic;font-weight:400;background:linear-gradient(90deg,var(--ink),var(--acc) 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+html.tema-fi .lead{color:var(--ink2)}
+html.tema-fi .note{color:var(--ink2);border:1px solid rgba(232,176,92,.45);background:rgba(232,176,92,.06)}
+html.tema-fi .note b{color:var(--gold)}
+
+/* eixos = unidades, cada um na sua cor */
+html.tema-fi .axis{--c:var(--acc);color:var(--ink2);border:1px solid var(--line2);font:500 12.5px var(--f-body);background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.015));box-shadow:var(--lift);display:inline-flex;align-items:center;gap:8px}
+html.tema-fi .axis::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+html.tema-fi .axis[aria-pressed="true"]{color:var(--ink);border-color:var(--c);background:linear-gradient(180deg,color-mix(in srgb,var(--c) 24%,transparent),rgba(255,255,255,.02));box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 0 1px var(--c),0 8px 20px color-mix(in srgb,var(--c) 25%,transparent)}
+html.tema-fi [data-id="celular"]{--c:#B49BFF} html.tema-fi [data-id="muscular"]{--c:#FF9F57}
+html.tema-fi [data-id="osteoarticular"]{--c:#5ED9A6} html.tema-fi [data-id="cardiovascular"]{--c:#FF7478}
+html.tema-fi [data-id="respiratorio"]{--c:#63B8FF} html.tema-fi [data-id="integracao"]{--c:#3FE0C8}
+
+/* cartões com o mesmo acabamento da página inicial */
+html.tema-fi .grid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;align-items:start}
+html.tema-fi .card{position:relative;overflow:hidden;border:1px solid var(--line);border-top-color:rgba(200,235,240,.26);background:var(--card);color:var(--ink);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 0 rgba(0,0,0,.35),0 14px 30px rgba(0,0,0,.42)}
+html.tema-fi .card::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);box-shadow:0 0 14px color-mix(in srgb,var(--c) 55%,transparent)}
+html.tema-fi .card h2{font-family:var(--f-disp);font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+html.tema-fi .card p{color:var(--ink2)}
+html.tema-fi .meta{font:500 10px var(--f-mono);letter-spacing:.14em;color:var(--c)}
+html.tema-fi .steps{color:var(--ink2)}
+html.tema-fi .q{border:1px solid var(--line);background:rgba(0,0,0,.2)}
+html.tema-fi .q b{color:var(--ink)}
+html.tema-fi .opts button{color:var(--ink);border:1px solid var(--line2);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.01))}
+html.tema-fi .opts button.ok{border-color:#5ED9A6;background:rgba(94,217,166,.12)}
+html.tema-fi .opts button.bad{border-color:#FF7478;background:rgba(255,116,120,.12)}
+html.tema-fi .feedback{color:var(--ink2)}
+/* sala de fuga: dourado, como na roda da página inicial */
+html.tema-fi .escape-card{--c:var(--gold);border-color:rgba(232,176,92,.5);background:#120f0b}
+html.tema-fi .escape-card .btn-primary{color:#2a1a04;border-color:#f3d27a;background:linear-gradient(180deg,#f7dc98 0%,#E8B05C 50%,#b8813a 100%)}
+
+html.tema-fi footer{border-top:1px solid var(--line);color:var(--ink3)}
+
+/* mapa mental ampliado */
+html.tema-fi .modal{background:rgba(3,5,8,.84);backdrop-filter:blur(4px)}
+html.tema-fi .modal-card,html.tema-fi .modal-head{background:var(--bg2);color:var(--ink);border-color:var(--line)}
+html.tema-fi .modal-card{border:1px solid var(--c)}
+
+/* painel do tutor (avatar flutuante) */
+html.tema-fi .tutor-launcher{background:linear-gradient(145deg,#1fae98,#0c5e53);box-shadow:0 14px 30px rgba(0,0,0,.5),0 0 0 2px rgba(63,224,200,.5)}
+html.tema-fi .tutor-hint,html.tema-fi .tutor-panel{color:var(--ink);background:var(--bg2);border-color:var(--line2);box-shadow:0 24px 60px rgba(0,0,0,.6)}
+html.tema-fi .tutor-head{color:#03201b;background:linear-gradient(135deg,#8ff5e4,#3FE0C8 55%,#1fae98)}
+html.tema-fi .tutor-close{color:#03201b;border-color:rgba(3,32,27,.3);background:rgba(255,255,255,.25)}
+html.tema-fi .tutor-context{color:var(--acc);background:#0f1a20;border-color:var(--line)}
+html.tema-fi .tutor-messages{background:linear-gradient(180deg,#0c1219,#0a0f15)}
+html.tema-fi .tutor-message.bot{color:var(--ink);background:#111a23;border-color:var(--line)}
+html.tema-fi .tutor-message.user{color:#03201b;background:var(--acc)}
+html.tema-fi .tutor-result{border-color:var(--line)}
+html.tema-fi .tutor-link,html.tema-fi .tutor-next,html.tema-fi .tutor-send{color:#03201b;background:var(--acc)}
+html.tema-fi .tutor-option{color:var(--ink);background:#111a23;border-color:var(--line2)}
+html.tema-fi .tutor-option.correct{color:#5ED9A6;border-color:#5ED9A6;background:rgba(94,217,166,.12)}
+html.tema-fi .tutor-option.wrong{color:#FF9F9F;border-color:#FF7478;background:rgba(255,116,120,.12)}
+html.tema-fi .tutor-feedback{background:#0f1a20}
+html.tema-fi .tutor-chips,html.tema-fi .tutor-form{background:var(--bg2);border-color:var(--line)}
+html.tema-fi .tutor-chip{color:var(--acc);border-color:rgba(63,224,200,.35);background:rgba(63,224,200,.08)}
+html.tema-fi .tutor-input{color:var(--ink);background:#0a0f15;border-color:var(--line2)}
+html.tema-fi .tutor-ai{color:var(--ink2);background:#0f1a20;border-color:var(--line)}
+html.tema-fi .tutor-ai button{color:var(--ink);background:#111a23;border-color:var(--line2)}
+@media (prefers-reduced-motion:reduce){.fi-ambient span{animation:none}}
+html.tema-fi .brand .fi-av{display:block!important}
+html.tema-fi .brand .bt{display:flex!important}
+@media(max-width:720px){html.tema-fi .brand .bt > span{display:none!important}}
