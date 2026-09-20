@@ -96,7 +96,18 @@
     }), {rootMargin: '0px 0px -12% 0px', threshold: .12});
     const armar = () => document.querySelectorAll('.rv:not(.in)').forEach(el => { rvIO.unobserve(el); rvIO.observe(el); });
     const acordar = () => { if (rolou) return; rolou = true; armar(); };
-    addEventListener('scroll', () => { if (scrollY > 40) acordar(); }, {passive: true});
+    /* rede de segurança: no fim da página (ou com zoom alto), mostra tudo o que já está na tela */
+    const varrer = () => {
+      if (!rolou) return;
+      const fim = innerHeight + scrollY >= document.documentElement.scrollHeight - 80;
+      document.querySelectorAll('.rv:not(.in)').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < innerHeight * (fim ? 1 : .9) && r.bottom > 0) { el.classList.add('in'); rvIO.unobserve(el); }
+      });
+    };
+    let tv = 0;
+    addEventListener('scroll', () => { if (scrollY > 40) acordar(); clearTimeout(tv); tv = setTimeout(varrer, 120); }, {passive: true});
+    addEventListener('resize', varrer);
     addEventListener('hashchange', acordar);
     armar(); new MutationObserver(armar).observe(list, {childList: true});
   }
