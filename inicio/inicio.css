@@ -58,7 +58,7 @@ p{margin:0 0 12px;max-width:68ch;color:var(--ink2)}
 /* barra */
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;margin-inline:calc(-1*clamp(16px,4vw,48px));padding:16px clamp(16px,4vw,48px) 12px;display:flex;align-items:center;gap:14px;justify-content:space-between;
   background:rgba(7,11,16,.84);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.35)}
-.brand{display:flex;gap:12px;align-items:center;text-decoration:none;color:var(--ink);min-width:0}
+.brand{display:flex;gap:22px;align-items:center;text-decoration:none;color:var(--ink);min-width:0}
 .brand .bt{display:flex;flex-direction:column;line-height:1.15;min-width:0}
 .brand .bt b{font:600 12px var(--f-disp);letter-spacing:.16em;text-transform:uppercase}
 .brand .bt small{font:400 10.5px var(--f-body);color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
