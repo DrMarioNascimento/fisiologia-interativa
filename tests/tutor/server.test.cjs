@@ -4,7 +4,7 @@ const { createTutorServer, validate } = require('../../server/tutor.cjs');
 const { loadCatalog } = require('../../server/catalog.cjs');
 const path = require('node:path');
 const catalog = loadCatalog(path.resolve(__dirname, '../..'));
-const valid = { course:'ef', module:catalog.ef[0].href, message:'Por que o sódio entra?', history:[] };
+const valid = { course:'ef', module:catalog.ef.find(m => m.href === 'potencial-acao-membrana.html').href, message:'Por que o sódio entra?', history:[] };
 const success = text => new Response(JSON.stringify({ candidates:[{finishReason:'STOP',content:{parts:[{text}]}}] }));
 async function setup(t, options={}) {
   const server = createTutorServer({env:{GEMINI_API_KEY:'test-secret',TUTOR_ALLOWED_ORIGINS:'https://aula.example'}, ...options});

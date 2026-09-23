@@ -90,13 +90,73 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
 .app .metric.fc,.app .metric.edv,.app .metric.esv,.app .metric.vs,.app .metric.ef,.app .metric.dc{border-left-color:var(--metric-strong)}
 .app .metric.fc{--metric-strong:var(--c-fc)}.app .metric.edv{--metric-strong:var(--c-edv)}.app .metric.esv{--metric-strong:var(--c-esv)}.app .metric.vs{--metric-strong:var(--c-vs)}.app .metric.ef{--metric-strong:var(--c-ef)}.app .metric.dc{--metric-strong:var(--c-dc)}
 .app .metric.fc small,.app .metric.edv small,.app .metric.esv small,.app .metric.vs small,.app .metric.ef small,.app .metric.dc small{color:var(--metric-strong)}
+/* Ciclo cardíaco, valvas, loop PV */
+:root{--ph-fill:#70bcff;--ph-ivc:#f2d77c;--ph-ej:#ff8990;--ph-ivr:#c4a2f6}
+.app .metric.pa{--metric-strong:var(--c-pas)}.app .metric.pdf{--metric-strong:var(--c-papm)}.app .metric.ea{--metric-strong:var(--c-pam)}
+.app .metric.pa small,.app .metric.pdf small,.app .metric.ea small{color:var(--metric-strong)}
+.metric.pa strong{font-size:24px}
+.slider-card label{align-items:baseline}
+.slider-card span{white-space:nowrap;flex-shrink:0}
+.slider-card .hint{display:block;color:var(--muted);font-size:12px;line-height:1.45;margin-top:2px}
+.toggle-card{display:flex;gap:12px;align-items:center;min-height:52px;padding:12px 14px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(145deg,#1c3243,#102331);box-shadow:inset 0 1px 0 #ffffff14,0 3px 7px #0005;cursor:pointer}
+.toggle-card input{width:22px;height:22px;flex:0 0 22px;accent-color:#ff8990;margin:0}
+.toggle-card strong{display:block;font-size:14px;font-weight:600}.toggle-card small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.states .state-btn.wide{grid-column:1/-1}
+.state-btn.selected{border-color:#9ce4ed;box-shadow:inset 0 2px 1px #ffffff38,0 0 0 2px #9ce4ed66,0 5px 0 #050e17}
+.explain-box{margin:0 12px 14px;padding:12px 14px;border:1px solid var(--line);border-left:4px solid #9ce4ed;border-radius:14px;background:#0b1925;font-size:13px;line-height:1.55;color:var(--ink)}
+.explain-box:empty{display:none}
+.right-stack{display:grid;gap:20px;align-content:start;min-width:0}
+.explain-box strong{color:#9ce4ed}
+.step-box{margin:12px 18px 0}
+.range-warning{margin:0 12px 12px;padding:10px 12px;border-radius:12px;border:1px solid #d9a441;background:#3a2c10;color:#ffe2a8;font-size:13px;line-height:1.5}
+.formula-card .live{display:block;margin-top:6px;color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.cycle-strip{padding:14px 18px 4px;display:grid;gap:8px}
+.cycle-now{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;align-items:baseline}
+.cycle-now strong{font-size:16px;color:#fff}.cycle-now span{font-size:13px;color:var(--muted)}
+.cycle-groups{display:flex;font-size:11px;font-weight:700;letter-spacing:1px;color:var(--muted)}
+.cycle-groups .grp{padding:0 0 3px 6px;border-left:2px solid #577184;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.cycle-groups .grp b{font-weight:600;letter-spacing:0;color:#b6ccd9}
+.cycle-groups .grp.on{color:#fff;border-left-color:#9ce4ed}
+.cycle-bar{position:relative;display:flex;height:16px;border-radius:8px;overflow:hidden;background:#07131e;border:1px solid #30495b}
+.cycle-bar .seg{display:block;height:100%;opacity:.45;transition:opacity .15s}
+.cycle-bar .seg.on{opacity:1}
+.seg.fill,.dot.fill{background:var(--ph-fill)}.seg.ivc,.dot.ivc{background:var(--ph-ivc)}.seg.ej,.dot.ej{background:var(--ph-ej)}.seg.ivr,.dot.ivr{background:var(--ph-ivr)}
+.cycle-cursor{position:absolute;top:-2px;bottom:-2px;width:3px;margin-left:-1px;background:#fff;box-shadow:0 0 6px #fff;left:0}
+.cycle-legend,.chart-legend{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 14px;font-size:12px;color:var(--muted)}
+.cycle-legend li{display:flex;gap:6px;align-items:baseline;line-height:1.4}
+.cycle-legend li.on{color:#fff;font-weight:600}
+.cycle-legend b{font-weight:600;color:#b6ccd9;white-space:nowrap;margin-left:auto}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 10px;transform:translateY(1px)}
+.graphs-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:16px}
+.chart-card{margin:0;padding:12px;border:1px solid var(--line);border-radius:16px;background:#0b1925;display:grid;gap:10px;min-width:0}
+.chart-card figcaption strong{display:block;font-size:15px}.chart-card figcaption span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.chart-card svg{width:100%;height:auto;display:block}
+.chart-legend{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+.chart-legend li{display:flex;gap:6px;align-items:center}
+.ln{display:inline-block;width:18px;height:0;border-top:3px solid;flex:0 0 18px}
+.ln.espvr{border-color:#ff8990}.ln.edpvr{border-color:#70bcff}.ln.ea{border-color:#f8c16b;border-top-style:dashed}.ln.ref{border-color:#7f95a6;border-top-style:dashed}
+.ln.plv{border-color:#f4f8fb}.ln.pao{border-color:#ff8990}.ln.pla{border-color:#87d29e}.ln.vol{border-color:#70bcff}
+.chart-card svg text{font-family:Segoe UI,Arial,sans-serif}
+@media(max-width:1100px){.graphs-grid{grid-template-columns:1fr}.right-stack{display:contents}.graphs-panel{min-width:0}}
+@media(max-width:650px){
+.scene-wrap svg #statusBox,.scene-wrap svg #heartValveLabel,.scene-wrap svg #venousBlock text[font-size="13"],.scene-wrap svg #tissueBlock text[font-size="13"]{display:none}
+.scene-wrap svg #labelValvas text{font-size:30px}
+.scene-wrap svg #heartPhaseLabel{font-size:32px}
+.scene-wrap svg #venousBlock text[font-size="18"],.scene-wrap svg #tissueBlock text[font-size="18"]{font-size:29px;transform:translateY(30px)}
+.scene-wrap svg #venousBlock text[font-size="18"]{font-size:27px;transform:translate(12px,30px)}
+.scene-wrap svg #labelsLayer > g > text{font-size:29px}
+.scene-wrap svg #labelPulmoes rect{width:180px;x:-90px;height:50px;y:-27px}
+.scene-wrap svg #labelEntradaVenosa rect,.scene-wrap svg #labelFluxoArterial rect{width:236px;x:-118px;height:50px;y:-27px}
+.scene-wrap svg #labelRetornoCircuito rect{width:300px;x:-150px;height:50px;y:-27px}
+}
+@media(max-width:650px){.cycle-strip{padding:12px 10px 4px}.cycle-legend{grid-template-columns:1fr}.graphs-grid{padding:10px;gap:12px}.chart-card{padding:10px}.step-box{margin:10px 10px 0}.metric.pa strong{font-size:21px}}
 </style></head>
 <body>
 <div class="app">
   <div class="topbar">
     <div class="title">
       <h1>Simulador — Loop Cardíaco Funcional</h1>
-      <p>Simulador funcional para ensinar a relação EDV → ESV → VS → FE → DC com cálculos auditáveis em tempo real.</p>
+      <p>Ciclo do ventrículo esquerdo em sístole e diástole: valvas mitral e aórtica, loop pressão-volume e a cadeia VDF → VSF → VS → FE → DC calculada a partir de frequência cardíaca, pré-carga, contratilidade e pós-carga.</p>
     </div>
     <div class="top-actions">
       <button class="tool-btn primary" id="startBtn">Iniciar</button>
@@ -112,57 +172,82 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
   <div class="main-grid">
     <div class="left-stack">
       <div class="panel">
-        <div class="panel-header"><h2>Controles do loop</h2><span>altere somente o essencial</span></div>
+        <div class="panel-header"><h2>Determinantes do desempenho</h2><span>os volumes resultam destes quatro fatores</span></div>
         <div class="slider-grid">
-          <div class="slider-card"><label>FC <span id="fcLabel">70 bpm</span></label><input id="fc" type="range" min="40" max="200" step="1" value="70"/></div>
-          <div class="slider-card"><label>EDV <span id="edvLabel">120 mL</span></label><input id="edv" type="range" min="70" max="200" step="1" value="120"/></div>
-          <div class="slider-card"><label>ESV <span id="esvLabel">50 mL</span></label><input id="esv" type="range" min="20" max="140" step="1" value="50"/></div>
+          <div class="slider-card"><label for="fc">Frequência cardíaca (FC) <span id="fcLabel">70 bpm</span></label><input id="fc" type="range" min="40" max="200" step="1" value="70"/><small class="hint">A sístole encurta pouco; a diástole (tempo de enchimento) encurta muito.</small></div>
+          <div class="slider-card"><label for="rv">Pré-carga · retorno venoso <span id="rvLabel">100%</span></label><input id="rv" type="range" min="50" max="300" step="5" value="100"/><small class="hint">Define a pressão de enchimento do átrio esquerdo e, pela complacência diastólica, o VDF.</small></div>
+          <div class="slider-card"><label for="ees">Contratilidade · inotropismo (Ees) <span id="eesLabel">2,6 mmHg/mL</span></label><input id="ees" type="range" min="0.8" max="5.5" step="0.1" value="2.6"/><small class="hint">Inclinação da relação pressão-volume sistólica final (ESPVR).</small></div>
+          <div class="slider-card"><label for="rpt">Pós-carga · resistência periférica (RPT) <span id="rptLabel">1,12 mmHg·s/mL</span></label><input id="rpt" type="range" min="0.4" max="2.2" step="0.02" value="1.12"/><small class="hint">Determina a pressão aórtica e a elastância arterial efetiva (Ea).</small></div>
+          <label class="toggle-card" for="remod"><input id="remod" type="checkbox"/><span><strong>Ventrículo dilatado (remodelamento excêntrico)</strong><small>Desloca as relações pressão-volume para volumes maiores.</small></span></label>
         </div>
       </div>
 
       <div class="panel">
-        <div class="panel-header"><h2>Situações rápidas</h2><span>exemplos para aula</span></div>
+        <div class="panel-header"><h2>Situações rápidas</h2><span>cada uma altera só os determinantes</span></div>
         <div class="states">
-          <button class="state-btn" data-state="normal">Condição basal</button>
+          <button class="state-btn wide" data-state="normal">Condição basal</button>
           <button class="state-btn" data-state="preload">Pré-carga ↑</button>
           <button class="state-btn" data-state="contract">Contratilidade ↑</button>
           <button class="state-btn" data-state="afterload">Pós-carga ↑</button>
-          <button class="state-btn" data-state="failure">Insuficiência cardíaca</button>
+          <button class="state-btn" data-state="failure">Insuficiência cardíaca (FE reduzida)</button>
           <button class="state-btn" data-state="tachy">Taquicardia</button>
+          <button class="state-btn" data-state="exercise">Exercício intenso</button>
         </div>
+        <div class="explain-box" id="presetExplain" aria-live="polite"></div>
       </div>
 
       <div class="panel">
-        <div class="panel-header"><h2>Variáveis centrais</h2><span>calculadas pelas fórmulas</span></div>
+        <div class="panel-header"><h2>Variáveis centrais</h2><span>resultado do ciclo simulado</span></div>
         <div class="metric-grid">
           <div class="metric fc"><small>FC</small><strong id="fcVal">70</strong><em>bpm</em></div>
-          <div class="metric edv"><small>EDV</small><strong id="edvVal">120</strong><em>mL</em></div>
-          <div class="metric esv"><small>ESV</small><strong id="esvVal">50</strong><em>mL</em></div>
-          <div class="metric vs"><small>VS</small><strong id="vsVal">70</strong><em>mL</em></div>
+          <div class="metric edv"><small>VDF (EDV)</small><strong id="edvVal">127</strong><em>mL</em></div>
+          <div class="metric esv"><small>VSF (ESV)</small><strong id="esvVal">54</strong><em>mL</em></div>
+          <div class="metric vs"><small>VS</small><strong id="vsVal">73</strong><em>mL</em></div>
           <div class="metric ef"><small>Fração de ejeção</small><strong id="efVal">58</strong><em>%</em></div>
-          <div class="metric dc"><small>DC</small><strong id="dcVal">4.9</strong><em>L/min</em></div>
+          <div class="metric dc"><small>DC</small><strong id="dcVal">5,1</strong><em>L/min</em></div>
+          <div class="metric pa"><small>PA aórtica</small><strong id="paVal">119/75</strong><em>PAS/PAD · mmHg</em></div>
+          <div class="metric pdf"><small>PDF do VE</small><strong id="pdfVal">8</strong><em>mmHg</em></div>
+          <div class="metric ea"><small>Ea (pós-carga)</small><strong id="eaVal">1,5</strong><em>mmHg/mL</em></div>
         </div>
+        <div class="range-warning" id="rangeWarning" role="status" hidden></div>
         <div class="flow-strip">
           <div class="flow">
-            <div class="node c-edv" data-step-node="edv">EDV</div><div class="arrow">−</div>
-            <div class="node c-esv" data-step-node="esv">ESV</div><div class="arrow">=</div>
+            <div class="node c-edv" data-step-node="edv">VDF</div><div class="arrow">−</div>
+            <div class="node c-esv" data-step-node="esv">VSF</div><div class="arrow">=</div>
             <div class="node c-vs" data-step-node="vs">VS</div>
           </div>
         </div>
       </div>
 
       <div class="panel">
-        <div class="panel-header"><h2>Fórmulas ativas</h2></div>
+        <div class="panel-header"><h2>Fórmulas ativas</h2><span>com os valores atuais</span></div>
         <div class="relationship">
-          <div class="formula-card" data-step="vs"><h3>Volume sistólico</h3><code><span class="c-vs">VS</span> = <span class="c-edv">EDV</span> − <span class="c-esv">ESV</span></code></div>
-          <div class="formula-card" data-step="ef"><h3>Fração de ejeção</h3><code><span class="c-ef">FE</span> = <span class="c-vs">VS</span> / <span class="c-edv">EDV</span> × 100</code></div>
-          <div class="formula-card" data-step="dc"><h3>Débito cardíaco</h3><code><span class="c-dc">DC</span> = <span class="c-fc">FC</span> × <span class="c-vs">VS</span> / 1000</code></div>
+          <div class="formula-card" data-step="vs"><h3>Volume sistólico</h3><code><span class="c-vs">VS</span> = <span class="c-edv">VDF</span> − <span class="c-esv">VSF</span></code><small class="live" id="fVs"></small></div>
+          <div class="formula-card" data-step="ef"><h3>Fração de ejeção</h3><code><span class="c-ef">FE</span> = <span class="c-vs">VS</span> / <span class="c-edv">VDF</span> × 100</code><small class="live" id="fEf"></small></div>
+          <div class="formula-card" data-step="dc"><h3>Débito cardíaco</h3><code><span class="c-dc">DC</span> = <span class="c-fc">FC</span> × <span class="c-vs">VS</span> / 1000</code><small class="live" id="fDc"></small></div>
+          <div class="formula-card" data-step="cpl"><h3>Acoplamento ventrículo-arterial</h3><code>P<sub>fs</sub> = Ees × (<span class="c-esv">VSF</span> − V<sub>0</sub>) ≈ Ea × <span class="c-vs">VS</span></code><small class="live" id="fCpl"></small></div>
         </div>
       </div>
     </div>
 
+    <div class="right-stack">
     <div class="panel animation-panel">
       <div class="panel-header"><h2>Animação integrada</h2><span>Circuito cardiopulmonar · vista esquemática</span></div>
+      <div class="cycle-strip" aria-label="Fases do ciclo cardíaco">
+        <div class="cycle-now"><strong id="cyclePhase">Enchimento (mitral aberta)</strong><span id="cycleValves">Mitral aberta · aórtica fechada</span></div>
+        <div class="cycle-groups"><div id="grpSys" class="grp sys">SÍSTOLE <b id="sysDur"></b></div><div id="grpDia" class="grp dia">DIÁSTOLE <b id="diaDur"></b></div></div>
+        <div class="cycle-bar" id="cycleBar">
+          <i class="seg ivc" data-ph="ivc"></i><i class="seg ej" data-ph="ej"></i><i class="seg ivr" data-ph="ivr"></i><i class="seg fill" data-ph="fill"></i>
+          <span class="cycle-cursor" id="cycleCursor"></span>
+        </div>
+        <ul class="cycle-legend">
+          <li data-ph="ivc"><i class="dot ivc"></i>Contração isovolumétrica (mitral e aórtica fechadas) <b id="durIvc"></b></li>
+          <li data-ph="ej"><i class="dot ej"></i>Ejeção (aórtica aberta) <b id="durEj"></b></li>
+          <li data-ph="ivr"><i class="dot ivr"></i>Relaxamento isovolumétrico (valvas fechadas) <b id="durIvr"></b></li>
+          <li data-ph="fill"><i class="dot fill"></i>Enchimento (mitral aberta; termina com a contração atrial) <b id="durFill"></b></li>
+        </ul>
+      </div>
+      <div class="explain-box step-box" id="stepExplain" aria-live="polite" hidden></div>
       <div class="scene-wrap">
         <svg aria-label="Circuito cardiopulmonar simplificado" preserveAspectRatio="xMidYMin meet" viewBox="0 0 980 1140"><defs>
 <lineargradient id="bgGlow" x1="0" x2="0" y1="0" y2="1">
@@ -416,9 +501,10 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
 <!-- Faixa de células verdes removida para evitar ambiguidade visual no loop cardíaco. -->
 
 <!-- Vasos atrás dos órgãos e caixas -->
-<path d="M430 250 C450 320 470 405 485 490" fill="none" filter="url(#vesselDepth3D)" stroke="url(#venousVessel3D)" stroke-linecap="round" stroke-width="20"></path>
+<!-- Veia pulmonar (pulmões → átrio esquerdo, sangue oxigenado) e artéria pulmonar (coração → pulmões, sangue venoso) -->
+<path d="M430 250 C450 320 470 405 485 490" fill="none" filter="url(#vesselDepth3D)" stroke="url(#arterialVessel3D)" stroke-linecap="round" stroke-width="20"></path>
 <path d="M430 250 C450 320 470 405 485 490" fill="none" opacity=".26" stroke="#ffffff" stroke-linecap="round" stroke-width="5"></path>
-<path d="M550 250 C530 320 510 405 495 490" fill="none" filter="url(#vesselDepth3D)" stroke="url(#arterialVessel3D)" stroke-linecap="round" stroke-width="20"></path>
+<path d="M550 250 C530 320 510 405 495 490" fill="none" filter="url(#vesselDepth3D)" stroke="url(#venousVessel3D)" stroke-linecap="round" stroke-width="20"></path>
 <path d="M550 250 C530 320 510 405 495 490" fill="none" opacity=".25" stroke="#ffffff" stroke-linecap="round" stroke-width="5"></path>
 <path d="M204 920 C320 840 396 730 438 580" fill="none" filter="url(#vesselDepth3D)" stroke="url(#venousVessel3D)" stroke-linecap="round" stroke-width="20"></path>
 <path d="M204 920 C320 840 396 730 438 580" fill="none" opacity=".24" stroke="#ffffff" stroke-linecap="round" stroke-width="5"></path>
@@ -461,11 +547,11 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
 <!-- Vias aéreas mantidas por cima dos pulmões --></g>
 <!-- Leitura -->
 <g filter="url(#softShadow)" id="statusBox" transform="translate(40,78)">
-<rect fill="#122a3b" height="250" rx="20" stroke="#d7e1ec" stroke-width="2" width="225"></rect>
-<text fill="#c2dbea" font-size="18" font-weight="800" x="18" y="28">Leitura do circuito</text>
-<text fill="#2f80ed" font-size="15" font-weight="700" id="statusText1" x="18" y="58">Respiração modula RV</text>
-<text fill="#e34d4d" font-size="14" font-weight="700" id="statusText2" x="18" y="90"></text>
-<text fill="#20b26b" font-size="14" font-weight="700" id="statusText3" x="18" y="168"></text>
+<rect fill="#122a3b" height="136" rx="20" stroke="#d7e1ec" stroke-width="2" width="236"></rect>
+<text fill="#c2dbea" font-size="18" font-weight="800" x="18" y="30">Leitura do ciclo</text>
+<text fill="#70bcff" font-size="15" font-weight="700" id="statusText1" x="18" y="62"></text>
+<text fill="#ffb45f" font-size="15" font-weight="700" id="statusText2" x="18" y="90"></text>
+<text fill="#9ce4ed" font-size="15" font-weight="700" id="statusText3" x="18" y="118"></text>
 </g>
 <g id="heartGroup" filter="url(#heartShadow3D)">
  <defs>
@@ -474,8 +560,8 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
   <linearGradient id="coronary" x2="1" y2="0"><stop stop-color="#522638"/><stop offset=".45" stop-color="#f6a4a0"/><stop offset="1" stop-color="#89374b"/></linearGradient>
  </defs>
  <!-- Fixed vessel roots and atrial region frame the contracting ventricular muscle. -->
- <path d="M485 490 C480 458 475 420 491 416 C525 403 547 436 531 472" fill="none" stroke="#270f25" stroke-width="29"/>
- <path d="M485 490 C480 458 475 420 491 416 C525 403 547 436 531 472" fill="none" stroke="url(#arterialVessel3D)" stroke-width="22"/>
+ <path d="M485 490 C488 500 499 504 515 497" fill="none" stroke="#270f25" stroke-width="29" stroke-linecap="round"/>
+ <path d="M485 490 C488 500 499 504 515 497" fill="none" stroke="url(#arterialVessel3D)" stroke-width="22" stroke-linecap="round"/>
  <path d="M495 490 C516 462 511 445 519 432" fill="none" stroke="url(#venousVessel3D)" stroke-width="21" stroke-linecap="round"/>
  <path d="M434 534 C411 516 411 485 433 475 C452 463 477 478 480 500 L471 545Z" fill="url(#myocardium)" stroke="#9d5a6a" stroke-width="2"/>
  <path d="M509 490 C530 467 568 475 575 505 C580 524 565 543 550 551 L502 541Z" fill="url(#myocardium)" stroke="#9d5a6a" stroke-width="2"/>
@@ -484,13 +570,24 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
   <path d="M452 520 C418 542 424 591 451 622 C469 642 491 657 510 668" fill="none" stroke="#ffc3b9" stroke-width="7" stroke-linecap="round" opacity=".16"/>
   <path d="M486 522 C503 548 488 579 500 617 C506 638 522 656 514 682" fill="none" stroke="#391324" stroke-width="12" opacity=".6"/>
   <path d="M487 523 C503 550 490 579 503 616 C510 640 522 655 516 677 M501 575 C468 568 455 552 443 544 M503 615 C533 601 549 580 559 559" fill="none" stroke="url(#coronary)" stroke-width="5" stroke-linecap="round"/>
-  <!-- Schematic ventricular window: its area follows the selected EDV and ESV. -->
-  <ellipse cx="543" cy="580" rx="29" ry="48" transform="rotate(19 543 580)" fill="#310e26" stroke="#f8aba7" stroke-width="9"/>
-  <ellipse id="ventricleVolume" cx="543" cy="580" rx="24" ry="42" transform="rotate(19 543 580)" fill="#9f3b56" stroke="#ffb0ab" stroke-width="2"/>
+  <!-- Janela esquemática do VE: a área da cavidade é proporcional ao volume simulado. -->
+  <ellipse cx="540" cy="585" rx="30" ry="50" transform="rotate(19 540 585)" fill="#310e26" stroke="#f8aba7" stroke-width="9"/>
+  <ellipse id="ventricleVolume" cx="540" cy="585" rx="17" ry="31" transform="rotate(19 540 585)" fill="#9f3b56" stroke="#ffb0ab" stroke-width="2"/>
   <path d="M427 557 Q451 567 462 592 M433 579 Q452 586 470 607 M443 604 Q461 609 481 633" fill="none" stroke="#ffd0bb" opacity=".12" stroke-width="2"/>
  </g>
- <text id="heartPhaseLabel" x="490" y="733" text-anchor="middle" fill="#aac2d4" font-size="15" letter-spacing="2">ENCHIMENTO</text>
- <text x="490" y="754" text-anchor="middle" fill="#829bad" font-size="11">Cavidade ventricular · representação esquemática</text>
+ <!-- Valvas: mitral (átrio esquerdo → VE) e aórtica (VE → aorta) -->
+ <g id="mitralValve" transform="translate(556 537) rotate(18.4)">
+  <line x1="-13" y1="0" x2="13" y2="0" stroke="#ffe7d6" stroke-width="3" opacity=".5" stroke-linecap="round"/>
+  <line class="leaflet l" x1="-12" y1="0" x2="-1" y2="3" stroke="#fff3e6" stroke-width="3.6" stroke-linecap="round"/>
+  <line class="leaflet r" x1="12" y1="0" x2="1" y2="3" stroke="#fff3e6" stroke-width="3.6" stroke-linecap="round"/>
+ </g>
+ <g id="aorticValve" transform="translate(561 627) rotate(-23)">
+  <line x1="-12" y1="0" x2="12" y2="0" stroke="#ffe7d6" stroke-width="3" opacity=".5" stroke-linecap="round"/>
+  <line class="leaflet l" x1="-11" y1="0" x2="-1" y2="3" stroke="#fff3e6" stroke-width="3.6" stroke-linecap="round"/>
+  <line class="leaflet r" x1="11" y1="0" x2="1" y2="3" stroke="#fff3e6" stroke-width="3.6" stroke-linecap="round"/>
+ </g>
+ <text id="heartPhaseLabel" x="490" y="733" text-anchor="middle" fill="#aac2d4" font-size="15" font-weight="700" letter-spacing="3">DIÁSTOLE</text>
+ <text id="heartValveLabel" x="490" y="756" text-anchor="middle" fill="#b6ccd9" font-size="14">enchimento · mitral aberta</text>
 </g>
 
 <!-- Retorno venoso bem mais baixo / extremo esquerdo -->
@@ -544,7 +641,13 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
 <rect fill="url(#labelCapsuleRed)" filter="url(#softShadow)" height="36" rx="18" stroke="#f3b4b4" stroke-width="2" width="164" x="-82" y="-20"></rect>
 <text dominant-baseline="middle" fill="#e34d4d" font-size="16" font-weight="800" text-anchor="middle">Fluxo arterial</text>
 </g>
-<g id="labelRetornoCircuito" style="pointer-events:none" transform="translate(490,1122)">
+<g id="labelValvas" style="pointer-events:none" font-size="14" font-weight="800">
+<path d="M566 533 L606 512" stroke="#c9dbe7" stroke-width="1.5" opacity=".8"/>
+<text x="610" y="512" fill="#e7f1f7" dominant-baseline="middle">Valva mitral</text>
+<path d="M572 632 L612 656" stroke="#c9dbe7" stroke-width="1.5" opacity=".8"/>
+<text x="616" y="660" fill="#e7f1f7" dominant-baseline="middle">Valva aórtica</text>
+</g>
+<g id="labelRetornoCircuito"style="pointer-events:none" transform="translate(490,1122)">
 <rect fill="url(#labelCapsuleBlue)" filter="url(#softShadow)" height="36" rx="18" stroke="#b7d5f5" stroke-width="2" width="204" x="-102" y="-20"></rect>
 <text dominant-baseline="middle" fill="#2f80ed" font-size="16" font-weight="800" text-anchor="middle">Retorno ao circuito</text>
 </g>
@@ -552,7 +655,29 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
 <g id="bloodParticles"></g><circle id="ejectionPulse" cx="542" cy="580" r="11" fill="none" stroke="#ffccbd" stroke-width="2.5" opacity="0"/>
 </svg>
       </div>
-      <p class="note"><strong>Como interpretar:</strong> o enchimento ventricular define o <span class="c-edv"><strong>EDV (volume diastólico final)</strong></span>; o volume que permanece após a ejeção define o <span class="c-esv"><strong>ESV (volume sistólico final)</strong></span>; e a diferença entre eles gera o <span class="c-vs"><strong>VS (volume sistólico)</strong></span>. A <span class="c-fc"><strong>FC (frequência cardíaca)</strong></span> multiplica o VS para formar o <span class="c-dc"><strong>DC (débito cardíaco)</strong></span>. A <strong>FE (fração de ejeção)</strong> representa a porcentagem do EDV ejetada a cada batimento. Na circulação pulmonar, a <strong>artéria pulmonar</strong> leva sangue venoso do coração aos pulmões, enquanto a <strong>veia pulmonar</strong> traz sangue arterial dos pulmões ao coração.</p>
+      <p class="note"><strong>Como interpretar:</strong> na <strong>diástole</strong>, com a mitral aberta, o enchimento define o <span class="c-edv"><strong>VDF (volume diastólico final, EDV)</strong></span>. A <strong>sístole</strong> começa com a contração isovolumétrica (as duas valvas fechadas); quando a pressão do VE supera a aórtica, a valva aórtica abre e o volume cai do VDF até o <span class="c-esv"><strong>VSF (volume sistólico final, ESV)</strong></span>. A diferença é o <span class="c-vs"><strong>VS (volume sistólico)</strong></span>; a <strong>FE (fração de ejeção)</strong> é a porcentagem do VDF ejetada, e a <span class="c-fc"><strong>FC</strong></span> multiplica o VS para formar o <span class="c-dc"><strong>DC (débito cardíaco)</strong></span>. Na circulação pulmonar, a <strong>artéria pulmonar</strong> (azul) leva sangue venoso do coração aos pulmões, e a <strong>veia pulmonar</strong> (vermelha) traz sangue oxigenado dos pulmões ao átrio esquerdo.</p>
+    </div>
+
+  <div class="panel graphs-panel">
+    <div class="panel-header"><h2>Gráficos do ciclo</h2><span>loop pressão-volume · pressões e volume no tempo</span></div>
+    <div class="graphs-grid">
+      <figure class="chart-card">
+        <figcaption><strong>Loop pressão-volume do VE</strong><span>O ponto percorre o loop junto com a animação; o loop tracejado cinza é a condição basal.</span></figcaption>
+        <svg id="pvChart" viewBox="0 0 520 380" role="img" aria-label="Loop pressão-volume do ventrículo esquerdo"></svg>
+        <ul class="chart-legend">
+          <li><i class="dot fill"></i>Enchimento</li><li><i class="dot ivc"></i>Contração isovolumétrica</li><li><i class="dot ej"></i>Ejeção</li><li><i class="dot ivr"></i>Relaxamento isovolumétrico</li>
+          <li><i class="ln espvr"></i>ESPVR (inclinação = Ees)</li><li><i class="ln edpvr"></i>EDPVR (complacência diastólica)</li><li><i class="ln ea"></i>Ea (pós-carga)</li><li><i class="ln ref"></i>Basal</li>
+        </ul>
+      </figure>
+      <figure class="chart-card">
+        <figcaption><strong>Pressões e volume ao longo de um ciclo</strong><span>Cruzamentos das pressões abrem e fecham as valvas.</span></figcaption>
+        <svg id="timeChart" viewBox="0 0 560 380" role="img" aria-label="Pressões do VE, aorta e átrio esquerdo e volume do VE ao longo do ciclo"></svg>
+        <ul class="chart-legend">
+          <li><i class="ln plv"></i>Pressão do VE</li><li><i class="ln pao"></i>Pressão aórtica</li><li><i class="ln pla"></i>Pressão do átrio esquerdo</li><li><i class="ln vol"></i>Volume do VE</li>
+        </ul>
+      </figure>
+    </div>
+  </div>
     </div>
   </div>
 
@@ -565,209 +690,540 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
 
   const $ = (sel, root=document) => root.querySelector(sel);
   const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+  const SVGNS = 'http://www.w3.org/2000/svg';
 
-  const controls = {
-    fc: $('#fc'),
-    edv: $('#edv'),
-    esv: $('#esv')
+  // ===== Motor: ventrículo esquerdo com elastância variável no tempo (Suga-Sagawa) =====
+  // P_VE(t) = e(t)·Ees·(V − V0) + [1 − e(t)]·A·(e^{k(V − Vd)} − 1)
+  // e(t): ativação normalizada (duplo-Hill); aorta: Windkessel de 3 elementos (Zc, C, RPT);
+  // enchimento: pressão do átrio esquerdo (PAE) acoplada ao retorno venoso: PAE = Pdrive·RV − Rrv·DC.
+  const ENG = {
+    V0: 10, Vd: 10, A: 0.33, k: 0.028,          // ESPVR (intercepto) e EDPVR normais
+    V0rem: 20, Vdrem: 60,                        // remodelamento excêntrico: relações desviadas à direita
+    Rmv: 0.005, Rav: 0.004, Zc: 0.04, C: 1.3,    // mmHg·s/mL e mL/mmHg
+    Pdrive: 18.5, Rrv: 2.6,                      // retorno venoso (mmHg; mmHg por L/min)
+    kick: 4, tA: 0.09,                           // contração atrial (onda a)
+    Pk: 200, Pmax: 330,                          // ESPVR linear até 200 mmHg; satura acima (limite do sarcômero)
+    dt: 0.0004
   };
 
+  function espvr(ees, v, v0){
+    const lin = ees*(v - v0);
+    if(lin <= ENG.Pk) return lin;
+    const span = ENG.Pmax - ENG.Pk;
+    return ENG.Pk + span*Math.tanh((lin - ENG.Pk)/span);
+  }
+  function edpvr(v, vd){ return ENG.A*(Math.exp(ENG.k*(v - vd)) - 1); }
+
+  function simulateBeat(p, lap, warm){
+    const T = 60/p.fc;
+    const S = Math.min(0.85, 0.30 + 0.47*T);                  // sístole encurta pouco com a FC
+    const lus = Math.pow(2.6/p.ees, 0.3);                     // relaxamento acompanha o estado inotrópico
+    const a1 = 0.303*S, a2 = 0.508*S*lus, n1 = 1.32, n2 = 21.9;
+    const dt = ENG.dt, n = Math.max(20, Math.round(T/dt));
+    const act = new Float64Array(n);
+    let emax = 0;
+    for(let i=0;i<n;i++){
+      const t = i*dt, h1 = Math.pow(t/a1, n1);
+      act[i] = (h1/(1+h1))*(1/(1+Math.pow(t/a2, n2)));
+      if(act[i] > emax) emax = act[i];
+    }
+    for(let i=0;i<n;i++) act[i] /= emax;
+    const bow = 1 + 0.3*Math.max(0, Math.min(1, (p.fc-70)/110));  // efeito escada (Bowditch)
+    const Ees = p.ees*bow;
+    const V0 = p.remod ? ENG.V0rem : ENG.V0, Vd = p.remod ? ENG.Vdrem : ENG.Vd;
+    const R = p.rpt, C = ENG.C, Zc = ENG.Zc, Rav = ENG.Rav, Rmv = ENG.Rmv;
+    const tKick = T - 0.16;
+    const laAt = t => { const ta = t - tKick; return lap + (ta > 0 && ta < ENG.tA ? ENG.kick*Math.sin(Math.PI*ta/ENG.tA) : 0); };
+    let V = warm?.V ?? 120, Pc = warm?.Pc ?? 90;
+    let prev = null, rec = null;
+    const every = Math.max(1, Math.round(0.002/dt));
+    for(let beat=0; beat<120; beat++){
+      rec = {t:[],V:[],Plv:[],Pao:[],Pla:[],Qmv:[],Qav:[]};
+      let vmax = -1e9, vmin = 1e9, pmin = 1e9;
+      for(let i=0;i<n;i++){
+        const t = i*dt, e = act[i];
+        const Plv = e*espvr(Ees, V, V0) + (1-e)*edpvr(V, Vd);
+        const Pla = laAt(t);
+        const Qmv = Pla > Plv ? (Pla-Plv)/Rmv : 0;
+        const Qav = Plv > Pc ? (Plv-Pc)/(Rav+Zc) : 0;
+        const Pao = Pc + Zc*Qav;
+        if(i % every === 0){
+          rec.t.push(t); rec.V.push(V); rec.Plv.push(Plv); rec.Pao.push(Pao); rec.Pla.push(Pla); rec.Qmv.push(Qmv); rec.Qav.push(Qav);
+        }
+        if(V > vmax) vmax = V; if(V < vmin) vmin = V; if(Pao < pmin) pmin = Pao;
+        V += (Qmv - Qav)*dt;
+        Pc += (Qav - Pc/R)/C*dt;
+        if(V < V0 + 1) V = V0 + 1;
+      }
+      if(prev && Math.abs(prev[0]-vmax) < 0.03 && Math.abs(prev[1]-vmin) < 0.03 && Math.abs(prev[2]-pmin) < 0.05) break;
+      prev = [vmax, vmin, pmin];
+    }
+    const N = rec.t.length;
+    let iMC = 0; while(iMC < N && rec.Qmv[iMC] > 0) iMC++;
+    let iAO = iMC; while(iAO < N && rec.Qav[iAO] <= 0) iAO++;
+    let iAC = iAO; while(iAC < N && rec.Qav[iAC] > 0) iAC++;
+    let iMO = iAC; while(iMO < N && rec.Qmv[iMO] <= 0) iMO++;
+    const ejected = iAO < N;
+    // reordena o ciclo para começar no fechamento da mitral (fim da diástole)
+    const rot = a => a.slice(iMC).concat(a.slice(0, iMC));
+    const cyc = {};
+    for(const key of ['V','Plv','Pao','Pla','Qmv','Qav']) cyc[key] = rot(rec[key]);
+    cyc.t = rec.t.map((_, i) => i*every*dt);
+    const ix = {ao: iAO - iMC, ac: iAC - iMC, mo: iMO - iMC};
+    const edv = cyc.V[0];
+    const esv = ejected ? cyc.V[Math.min(ix.ac, N-1)] : edv;
+    const sv = Math.max(0, edv - esv);
+    const pes = ejected ? cyc.Plv[Math.min(ix.ac, N-1)] : 0;
+    return {
+      T, N, cyc, ix, ejected, Ees, V0, Vd,
+      edv, esv, sv, ef: edv > 0 ? sv/edv*100 : 0, co: sv*p.fc/1000,
+      pas: Math.max(...cyc.Pao), pad: Math.min(...cyc.Pao), pdf: cyc.Plv[0], plvMax: Math.max(...cyc.Plv),
+      pes, ea: sv > 0 ? pes/sv : NaN,
+      tIVC: ejected ? cyc.t[ix.ao] : NaN, tEj: ejected ? cyc.t[ix.ac]-cyc.t[ix.ao] : 0,
+      tIVR: ejected && ix.mo < N ? cyc.t[ix.mo]-cyc.t[ix.ac] : NaN,
+      tSys: ejected ? cyc.t[ix.ac] : NaN,
+      warm: {V: rec.V[rec.V.length-1], Pc: rec.Pao[rec.Pao.length-1]}
+    };
+  }
+
+  function solveState(p, warm){
+    // encontra a PAE em que o débito do ventrículo iguala o retorno venoso
+    const drive = ENG.Pdrive*p.rv;
+    let w = warm?.w;
+    const f = lap => { const r = simulateBeat(p, lap, w); w = r.warm; r.lap = lap; return {r, g: lap - Math.max(0.5, drive - ENG.Rrv*r.co)}; };
+    let x0 = warm?.lap ?? 5, f0 = f(x0);
+    let x1 = Math.max(0.5, Math.min(45, drive - ENG.Rrv*f0.r.co)), f1 = f(x1);
+    for(let i=0; i<10 && Math.abs(f1.g) > 0.03; i++){
+      const den = f1.g - f0.g;
+      let x2 = Math.abs(den) > 1e-6 ? x1 - f1.g*(x1-x0)/den : x1 - f1.g*0.5;
+      x2 = Math.max(0.5, Math.min(45, x2));
+      x0 = x1; f0 = f1; x1 = x2; f1 = f(x1);
+    }
+    f1.r.w = w;
+    return f1.r;
+  }
+
+  // ===== Estado, controles e situações =====
+  const BASAL = {fc:70, rv:100, ees:2.6, rpt:1.12, remod:false};
+  const presets = {
+    normal:   {label:'Condição basal', set:{},
+      text:'Adulto em repouso: FC 70 bpm, pré-carga, contratilidade e pós-carga normais. Observe VDF ≈ 125 mL, VSF ≈ 55 mL, VS ≈ 70 mL, FE ≈ 58% e DC ≈ 5 L/min.'},
+    preload:  {label:'Pré-carga ↑', set:{rv:130},
+      text:'<strong>Muda:</strong> só o retorno venoso (100% → 130%). A pressão de enchimento sobe, o VE enche mais pela sua curva diastólica e o VDF aumenta; pelo mecanismo de Frank-Starling o VS aumenta, com FE praticamente igual.'},
+    contract: {label:'Contratilidade ↑', set:{ees:3.8},
+      text:'<strong>Muda:</strong> só o inotropismo (Ees 2,6 → 3,8 mmHg/mL). A ESPVR fica mais inclinada: o VE ejeta até um VSF menor, então VS e FE aumentam. O VDF cai um pouco porque o retorno venoso passa a ser esvaziado com mais eficiência.'},
+    afterload:{label:'Pós-carga ↑', set:{rpt:1.6},
+      text:'<strong>Muda:</strong> só a resistência periférica (RPT 1,12 → 1,60). A pressão aórtica sobe, a aórtica abre mais tarde e fecha em pressão maior: o VSF sobe, o VS e a FE caem. O VDF aumenta levemente porque sobra mais sangue no ventrículo.'},
+    failure:  {label:'Insuficiência cardíaca (FE reduzida)', set:{fc:85, rv:145, ees:1.0, rpt:1.25, remod:true},
+      text:'<strong>Muda:</strong> contratilidade muito reduzida (Ees 1,0), ventrículo dilatado (remodelamento), retenção de volume (retorno venoso 145%), FC e RPT elevadas por ativação neuro-humoral. Resultado: VDF ≈ 200 mL, VSF ≈ 140 mL, FE ≈ 30% e PDF elevada (congestão), com VS mantido à custa da dilatação.'},
+    tachy:    {label:'Taquicardia', set:{fc:150},
+      text:'<strong>Muda:</strong> só a FC (70 → 150 bpm). A diástole encurta muito mais que a sístole, o tempo de enchimento cai e o VDF diminui; o VSF não sobe (efeito escada leve). O VS cai quase na proporção do aumento da FC, então o DC muda pouco.'},
+    exercise: {label:'Exercício intenso', set:{fc:170, rv:260, ees:5.2, rpt:0.42},
+      text:'<strong>Muda:</strong> FC 170 bpm, contratilidade ↑ (simpático), retorno venoso ↑ (bomba muscular e venoconstrição) e RPT ↓ (vasodilatação muscular). O VDF se mantém apesar da diástole curta, o VSF cai, a FE chega perto de 75–80% e o DC passa de 15 L/min.'}
+  };
+
+  const controls = {fc:$('#fc'), rv:$('#rv'), ees:$('#ees'), rpt:$('#rpt'), remod:$('#remod')};
   const els = {
-    fcLabel: $('#fcLabel'), edvLabel: $('#edvLabel'), esvLabel: $('#esvLabel'),
-    fcVal: $('#fcVal'), edvVal: $('#edvVal'), esvVal: $('#esvVal'),
-    vsVal: $('#vsVal'), efVal: $('#efVal'), dcVal: $('#dcVal')
+    fcLabel:$('#fcLabel'), rvLabel:$('#rvLabel'), eesLabel:$('#eesLabel'), rptLabel:$('#rptLabel'),
+    fcVal:$('#fcVal'), edvVal:$('#edvVal'), esvVal:$('#esvVal'), vsVal:$('#vsVal'), efVal:$('#efVal'), dcVal:$('#dcVal'),
+    paVal:$('#paVal'), pdfVal:$('#pdfVal'), eaVal:$('#eaVal'),
+    fVs:$('#fVs'), fEf:$('#fEf'), fDc:$('#fDc'), fCpl:$('#fCpl'),
+    warn:$('#rangeWarning'), presetExplain:$('#presetExplain'), stepExplain:$('#stepExplain'),
+    cyclePhase:$('#cyclePhase'), cycleValves:$('#cycleValves'), cycleCursor:$('#cycleCursor'),
+    sysDur:$('#sysDur'), diaDur:$('#diaDur'), grpSys:$('#grpSys'), grpDia:$('#grpDia'),
+    durIvc:$('#durIvc'), durEj:$('#durEj'), durIvr:$('#durIvr'), durFill:$('#durFill'),
+    statusText1:$('#statusText1'), statusText2:$('#statusText2'), statusText3:$('#statusText3'),
+    heartPhaseLabel:$('#heartPhaseLabel'), heartValveLabel:$('#heartValveLabel')
   };
-
   const appRoot = $('.app');
   const svgRoot = $('.scene-wrap svg');
-  const startBtn = $('#startBtn');
-  const pauseBtn = $('#pauseBtn');
-  const resetBtn = $('#resetBtn');
-  const labelsBtn = $('#labelsBtn');
-  const stepBtn = $('#stepBtn');
-  const speedInput = $('#animSpeed');
-  const speedVal = $('#animSpeedVal');
-  const stageStatus = $('#stageStatus');
-  const heartGroup = $('#heartGroup');
-  const heartMain = $('#heartMain');
-  const ventricleVolume = $('#ventricleVolume');
-  const statusText1 = $('#statusText1');
-  const statusText2 = $('#statusText2');
-  const statusText3 = $('#statusText3');
-  const lungsGroup = $('#lungsGroup');
-  const bloodParticles = $('#bloodParticles');
+  const startBtn = $('#startBtn'), pauseBtn = $('#pauseBtn'), resetBtn = $('#resetBtn');
+  const labelsBtn = $('#labelsBtn'), stepBtn = $('#stepBtn');
+  const speedInput = $('#animSpeed'), speedVal = $('#animSpeedVal'), stageStatus = $('#stageStatus');
+  const heartMain = $('#heartMain'), ventricleVolume = $('#ventricleVolume');
+  const bloodParticles = $('#bloodParticles'), ejectionPulse = $('#ejectionPulse');
+  const mitralValve = $('#mitralValve'), aorticValve = $('#aorticValve');
 
-  const model = {
-    fc: 70,
-    edv: 120,
-    esv: 50,
-    vs: 70,
-    ef: 58.333,
-    dc: 4.9,
-    running: false,
-    speed: 1,
-    time: 0,
-    lastTs: null,
-    labelsVisible: true,
-    stepIndex: -1,
-    raf: null
+  const model = {running:false, speed:1, time:0, lastTs:null, labelsVisible:true, stepIndex:-1, raf:null,
+    res:null, ref:null, warm:null, pending:false, lastPhase:null};
+
+  const PH = {
+    ivc:{name:'Contração isovolumétrica (mitral e aórtica fechadas)', short:'SÍSTOLE', sub:'contração isovolumétrica', valves:'mitral fechada · aórtica fechada', sys:true},
+    ej: {name:'Ejeção (aórtica aberta)', short:'SÍSTOLE', sub:'ejeção · aórtica aberta', valves:'mitral fechada · aórtica aberta', sys:true},
+    ivr:{name:'Relaxamento isovolumétrico (valvas fechadas)', short:'DIÁSTOLE', sub:'relaxamento isovolumétrico', valves:'mitral fechada · aórtica fechada', sys:false},
+    fill:{name:'Enchimento (mitral aberta)', short:'DIÁSTOLE', sub:'enchimento · mitral aberta', valves:'mitral aberta · aórtica fechada', sys:false}
   };
+  const PH_COLOR = {fill:'#70bcff', ivc:'#f2d77c', ej:'#ff8990', ivr:'#c4a2f6'};
 
-  const presets = {
-    normal:   {fc:70,  edv:120, esv:50, label:'Condição basal'},
-    preload:  {fc:70,  edv:145, esv:50, label:'Pré-carga ↑'},
-    contract: {fc:70,  edv:120, esv:35, label:'Contratilidade ↑'},
-    afterload:{fc:70,  edv:120, esv:65, label:'Pós-carga ↑'},
-    failure:  {fc:95,  edv:135, esv:90, label:'Insuficiência cardíaca'},
-    tachy:    {fc:150, edv:105, esv:55, label:'Taquicardia'}
-  };
-
-  const stepSequence = [
-    {name:'1. Enchimento: EDV aumenta', fc:70, edv:145, esv:70, formula:'vs', nodes:['edv']},
-    {name:'2. Ejeção: ESV diminui', fc:70, edv:145, esv:45, formula:'vs', nodes:['esv','vs']},
-    {name:'3. Fração de ejeção', fc:70, edv:145, esv:45, formula:'ef', nodes:['edv','vs']},
-    {name:'4. Débito cardíaco', fc:90, edv:145, esv:45, formula:'dc', nodes:['vs']}
-  ];
-
+  const fmt = (x, d=0) => Number.isFinite(x) ? x.toFixed(d).replace('.', ',') : '—';
   function setStage(text){ if(stageStatus) stageStatus.textContent = text || 'Pronto'; }
 
-  function clampValues(){
-    let fc = Number(controls.fc?.value ?? model.fc);
-    let edv = Number(controls.edv?.value ?? model.edv);
-    let esv = Number(controls.esv?.value ?? model.esv);
-    if(!Number.isFinite(fc)) fc = 70;
-    if(!Number.isFinite(edv)) edv = 120;
-    if(!Number.isFinite(esv)) esv = 50;
-    if(esv >= edv){
-      esv = Math.max(20, edv - 1);
-      if(controls.esv) controls.esv.value = esv;
-    }
-    model.fc = fc;
-    model.edv = edv;
-    model.esv = esv;
-    model.vs = edv - esv;
-    model.ef = edv > 0 ? (model.vs / edv) * 100 : 0;
-    model.dc = (fc * model.vs) / 1000;
+  function readParams(){
+    const num = (el, def) => { const v = Number(el?.value); return Number.isFinite(v) ? v : def; };
+    return {
+      fc: num(controls.fc, BASAL.fc),
+      rv: num(controls.rv, BASAL.rv)/100,
+      ees: num(controls.ees, BASAL.ees),
+      rpt: num(controls.rpt, BASAL.rpt),
+      remod: !!controls.remod?.checked
+    };
+  }
+  function writeParams(p){
+    if(controls.fc) controls.fc.value = p.fc;
+    if(controls.rv) controls.rv.value = p.rv;
+    if(controls.ees) controls.ees.value = p.ees;
+    if(controls.rpt) controls.rpt.value = p.rpt;
+    if(controls.remod) controls.remod.checked = !!p.remod;
+  }
+  function updateControlLabels(){
+    const p = readParams();
+    els.fcLabel.textContent = `${fmt(p.fc)} bpm`;
+    els.rvLabel.textContent = `${fmt(p.rv*100)}%`;
+    els.eesLabel.textContent = `${fmt(p.ees,1)} mmHg/mL`;
+    els.rptLabel.textContent = `${fmt(p.rpt,2)} mmHg·s/mL`;
   }
 
-  function updateLoop(){
-    clampValues();
-    if(els.fcLabel) els.fcLabel.textContent = `${model.fc.toFixed(0)} bpm`;
-    if(els.edvLabel) els.edvLabel.textContent = `${model.edv.toFixed(0)} mL`;
-    if(els.esvLabel) els.esvLabel.textContent = `${model.esv.toFixed(0)} mL`;
-    if(els.fcVal) els.fcVal.textContent = model.fc.toFixed(0);
-    if(els.edvVal) els.edvVal.textContent = model.edv.toFixed(0);
-    if(els.esvVal) els.esvVal.textContent = model.esv.toFixed(0);
-    if(els.vsVal) els.vsVal.textContent = model.vs.toFixed(0);
-    if(els.efVal) els.efVal.textContent = model.ef.toFixed(0);
-    if(els.dcVal) els.dcVal.textContent = model.dc.toFixed(1);
-    updateCircuitStatus();
-    updateHeartVisual();
-    updateLungsVisual();
+  function phaseAt(i){
+    const r = model.res; if(!r || !r.ejected) return 'fill';
+    if(i < r.ix.ao) return 'ivc';
+    if(i < r.ix.ac) return 'ej';
+    if(i < r.ix.mo) return 'ivr';
+    return 'fill';
   }
 
-  function setLoop(fc, edv, esv){
-    if(controls.fc) controls.fc.value = fc;
-    if(controls.edv) controls.edv.value = edv;
-    if(controls.esv) controls.esv.value = esv;
-    updateLoop();
+  // ===== Cálculo e saídas =====
+  function recompute(){
+    const p = readParams();
+    const r = solveState(p, model.warm);
+    model.warm = {w:r.w, lap:r.lap};
+    model.res = r;
+    renderOutputs();
+    drawPV();
+    drawTime();
+    renderFrame();
   }
-
-  function cssVar(name){
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  function scheduleRecompute(){
+    updateControlLabels();
+    if(model.pending) return;
+    model.pending = true;
+    requestAnimationFrame(()=>{ model.pending = false; recompute(); });
   }
 
   function setSvgLine(textEl, parts){
     if(!textEl) return;
-    const baseX = textEl.getAttribute('x') || '18';
     while(textEl.firstChild) textEl.removeChild(textEl.firstChild);
     parts.forEach((part, index)=>{
-      const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
-      tspan.setAttribute('fill', part.color || '#17324d');
-      if(index === 0){
-        tspan.setAttribute('x', baseX);
-      }
+      const tspan = document.createElementNS(SVGNS, 'tspan');
+      tspan.setAttribute('fill', part.color || '#b6ccd9');
+      if(index === 0) tspan.setAttribute('x', textEl.getAttribute('x') || '18');
       tspan.textContent = part.text;
       textEl.appendChild(tspan);
     });
   }
 
-  function updateCircuitStatus(){
-    setSvgLine(statusText1, [
-      {text:'EDV ', color:cssVar('--c-edv')},
-      {text:`${model.edv.toFixed(0)} mL`, color:cssVar('--c-edv')},
-      {text:' − ', color:'#5c7086'},
-      {text:'ESV ', color:cssVar('--c-esv')},
-      {text:`${model.esv.toFixed(0)} mL`, color:cssVar('--c-esv')}
+  function renderOutputs(){
+    const r = model.res, p = readParams();
+    els.fcVal.textContent = fmt(p.fc);
+    els.edvVal.textContent = fmt(r.edv);
+    els.esvVal.textContent = fmt(r.esv);
+    els.vsVal.textContent = fmt(r.sv);
+    els.efVal.textContent = fmt(r.ef);
+    els.dcVal.textContent = fmt(r.co,1);
+    els.paVal.textContent = `${fmt(r.pas)}/${fmt(r.pad)}`;
+    els.pdfVal.textContent = fmt(r.pdf);
+    els.eaVal.textContent = fmt(r.ea,1);
+    els.fVs.textContent = `${fmt(r.sv)} mL = ${fmt(r.edv)} − ${fmt(r.esv)} mL`;
+    els.fEf.textContent = `${fmt(r.ef)}% = ${fmt(r.sv)} / ${fmt(r.edv)} × 100`;
+    els.fDc.textContent = `${fmt(r.co,1)} L/min = ${fmt(p.fc)} × ${fmt(r.sv)} / 1000`;
+    els.fCpl.textContent = `Pressão sistólica final ≈ ${fmt(r.pes)} mmHg · Ees efetiva ${fmt(r.Ees,1)}${r.Ees > p.ees + 0.05 ? ' (com efeito escada)' : ''} · Ea ${fmt(r.ea,1)} mmHg/mL · Ea/Ees ${fmt(r.ea/r.Ees,2)}`;
+
+    const s = fmt; const T = r.T;
+    const tFill = r.ejected ? T - r.cyc.t[Math.min(r.ix.mo, r.N-1)] : T;
+    els.sysDur.textContent = r.ejected ? `${s(r.tSys,2)} s` : '';
+    els.diaDur.textContent = r.ejected ? `${s(T - r.tSys,2)} s` : '';
+    els.durIvc.textContent = `${s(r.tIVC,2)} s`;
+    els.durEj.textContent = `${s(r.tEj,2)} s`;
+    els.durIvr.textContent = `${s(r.tIVR,2)} s`;
+    els.durFill.textContent = `${s(tFill,2)} s`;
+    const segW = {ivc:r.tIVC||0, ej:r.tEj||0, ivr:r.tIVR||0, fill:tFill};
+    $$('#cycleBar .seg').forEach(seg=>{ seg.style.flex = `${Math.max(0.0001, segW[seg.dataset.ph])} 0 0`; });
+    if(r.ejected){
+      els.grpSys.style.flex = `${r.tSys} 0 0`;
+      els.grpDia.style.flex = `${T - r.tSys} 0 0`;
+    }
+
+    setSvgLine(els.statusText1, [
+      {text:`VDF ${fmt(r.edv)} `, color:'#70bcff'}, {text:'− ', color:'#b6ccd9'}, {text:`VSF ${fmt(r.esv)} mL`, color:'#87d29e'}
     ]);
-    setSvgLine(statusText2, [
-      {text:'VS ', color:cssVar('--c-vs')},
-      {text:`${model.vs.toFixed(0)} mL`, color:cssVar('--c-vs')},
-      {text:' · ', color:'#5c7086'},
-      {text:'FE ', color:cssVar('--c-ef')},
-      {text:`${model.ef.toFixed(0)}%`, color:cssVar('--c-ef')}
+    setSvgLine(els.statusText2, [
+      {text:`VS ${fmt(r.sv)} mL`, color:'#ffb45f'}, {text:' · ', color:'#b6ccd9'}, {text:`FE ${fmt(r.ef)}%`, color:'#f2d77c'}
     ]);
-    setSvgLine(statusText3, [
-      {text:'FC ', color:cssVar('--c-fc')},
-      {text:`${model.fc.toFixed(0)} bpm`, color:cssVar('--c-fc')},
-      {text:' → ', color:'#5c7086'},
-      {text:'DC ', color:cssVar('--c-dc')},
-      {text:`${model.dc.toFixed(1)} L/min`, color:cssVar('--c-dc')}
+    setSvgLine(els.statusText3, [
+      {text:`FC ${fmt(p.fc)} bpm`, color:'#9ce4ed'}, {text:' → ', color:'#b6ccd9'}, {text:`DC ${fmt(r.co,1)} L/min`, color:'#ff8990'}
     ]);
+
+    // Faixa fisiológica
+    const w = [];
+    if(!r.ejected || r.sv < 20) w.push('volume sistólico muito baixo: o ventrículo quase não consegue abrir a valva aórtica');
+    if(r.ef > 85) w.push('fração de ejeção acima do limite fisiológico (~85%)');
+    if(r.pas > 220 || r.pad > 130) w.push('pressão arterial acima da faixa compatível com o organismo');
+    if(r.pas < 75) w.push('pressão arterial sistólica muito baixa (perfusão comprometida)');
+    if(r.pdf > 25) w.push('pressão diastólica final muito alta (congestão pulmonar)');
+    if(r.edv < 60) w.push('enchimento ventricular insuficiente (VDF muito baixo)');
+    if(r.co < 2.5) w.push('débito cardíaco muito baixo (choque)');
+    if(r.co > 25) w.push('débito cardíaco acima do alcançado mesmo por atletas');
+    if(els.warn){
+      els.warn.hidden = !w.length;
+      els.warn.innerHTML = w.length ? `<strong>Fora da faixa fisiológica:</strong> ${w.join('; ')}. Combine os controles de forma mais moderada.` : '';
+    }
   }
 
-
-  function svgEl(tag, attrs={}){
-    const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
-    Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,String(v)));
+  // ===== Gráficos =====
+  function svgEl(tag, attrs={}, parent){
+    const el = document.createElementNS(SVGNS, tag);
+    Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k, String(v)));
+    if(parent) parent.appendChild(el);
     return el;
   }
+  const narrowMQ = window.matchMedia ? window.matchMedia('(max-width:650px)') : {matches:false};
+  const fz = n => Math.round(n*(narrowMQ.matches ? 1.6 : 1));
+  function niceMax(v, step, min){ return Math.max(min, Math.ceil(v/step)*step); }
+  function axes(svg, box, xMax, yMax, xStep, yStep, xLabel, yLabel, xFmt){
+    const g = svgEl('g', {}, svg);
+    for(let x=0; x<=xMax+1e-9; x+=xStep){
+      const px = box.x + x/xMax*box.w;
+      svgEl('line', {x1:px, y1:box.y, x2:px, y2:box.y+box.h, stroke:'#23394a', 'stroke-width':1}, g);
+      svgEl('text', {x:px, y:box.y+box.h+fz(11)+5, fill:'#94acbd', 'font-size':fz(11), 'text-anchor':'middle'}, g).textContent = xFmt ? xFmt(x) : fmt(x);
+    }
+    for(let y=0; y<=yMax+1e-9; y+=yStep){
+      const py = box.y + box.h - y/yMax*box.h;
+      svgEl('line', {x1:box.x, y1:py, x2:box.x+box.w, y2:py, stroke:'#23394a', 'stroke-width':1}, g);
+      svgEl('text', {x:box.x-6, y:py+fz(4), fill:'#94acbd', 'font-size':fz(11), 'text-anchor':'end'}, g).textContent = fmt(y);
+    }
+    svgEl('rect', {x:box.x, y:box.y, width:box.w, height:box.h, fill:'none', stroke:'#466175'}, g);
+    if(xLabel) svgEl('text', {x:box.x+box.w/2, y:box.y+box.h+fz(11)+fz(12)+10, fill:'#c2dbea', 'font-size':fz(12), 'font-weight':600, 'text-anchor':'middle'}, g).textContent = xLabel;
+    if(yLabel) svgEl('text', {x:14, y:box.y+box.h/2, fill:'#c2dbea', 'font-size':fz(12), 'font-weight':600, 'text-anchor':'middle', transform:`rotate(-90 14 ${box.y+box.h/2})`}, g).textContent = yLabel;
+    return g;
+  }
+  const pathFrom = (pts) => pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
 
-  function createMolecule(pathD, colorUrl, dur, delay, size=7.2){
-    // Esfera limpa: sem texto, sem contorno e sem margem externa.
-    const g = svgEl('g', {opacity:'0.96'});
-    const circle = svgEl('circle', {
-      cx:0,
-      cy:0,
-      r:size,
-      fill:colorUrl,
-      stroke:'none',
-      'stroke-width':0
+  const pv = {svg:$('#pvChart'), box:{x:56, y:14, w:448, h:318}, dot:null, sx:null, sy:null};
+  function drawPV(){
+    const r = model.res, ref = model.ref, svg = pv.svg; if(!svg || !r) return;
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const vMax = niceMax(Math.max(r.edv, ref.edv) + 25, 50, 250);
+    const pMax = niceMax(Math.max(r.plvMax, ref.plvMax) + 12, 40, 200);
+    pv.box = narrowMQ.matches ? {x:68, y:14, w:436, h:290} : {x:56, y:14, w:448, h:318};
+    const b = pv.box;
+    const sx = v => b.x + Math.max(0, Math.min(vMax, v))/vMax*b.w;
+    const sy = pr => b.y + b.h - Math.max(0, Math.min(pMax, pr))/pMax*b.h;
+    pv.sx = sx; pv.sy = sy;
+    axes(svg, b, vMax, pMax, 50, pMax > 240 ? 60 : 40, 'Volume do VE (mL)', 'Pressão do VE (mmHg)');
+    const clip = svgEl('clipPath', {id:'pvClip'}, svgEl('defs', {}, svg));
+    svgEl('rect', {x:b.x, y:b.y, width:b.w, height:b.h}, clip);
+    const plot = svgEl('g', {'clip-path':'url(#pvClip)'}, svg);
+    // ESPVR e EDPVR
+    const es = [], ed = [];
+    for(let v=r.V0; v<=vMax; v+=1){ const pr = espvr(r.Ees, v, r.V0); if(pr > pMax){ es.push([sx(r.V0 + (v-1-r.V0) + (pMax - espvr(r.Ees, v-1, r.V0))/Math.max(1e-6, pr - espvr(r.Ees, v-1, r.V0))), sy(pMax)]); break; } es.push([sx(v), sy(pr)]); }
+    for(let v=Math.max(0, r.Vd-5); v<=vMax; v+=2){ const pr = edpvr(v, r.Vd); if(pr > pMax*1.2) break; ed.push([sx(v), sy(Math.max(0, pr))]); }
+    svgEl('path', {d:pathFrom(es), fill:'none', stroke:'#ff8990', 'stroke-width':2, opacity:.75}, plot);
+    svgEl('path', {d:pathFrom(ed), fill:'none', stroke:'#70bcff', 'stroke-width':2, opacity:.75}, plot);
+    // loop basal de referência
+    const refPts = ref.cyc.V.map((v,i)=>[sx(v), sy(ref.cyc.Plv[i])]);
+    svgEl('path', {d:pathFrom(refPts)+'Z', fill:'none', stroke:'#7f95a6', 'stroke-width':1.6, 'stroke-dasharray':'5 4', opacity:.8}, plot);
+    // Ea: da (VDF, 0) à (VSF, Pfs)
+    if(r.ejected) svgEl('line', {x1:sx(r.edv), y1:sy(0), x2:sx(r.esv), y2:sy(r.pes), stroke:'#f8c16b', 'stroke-width':1.8, 'stroke-dasharray':'6 4'}, plot);
+    // loop atual por fase
+    const segs = r.ejected ? [['ivc',0,r.ix.ao],['ej',r.ix.ao,r.ix.ac],['ivr',r.ix.ac,r.ix.mo],['fill',r.ix.mo,r.N-1]] : [['fill',0,r.N-1]];
+    segs.forEach(([ph,a,z])=>{
+      const pts = []; for(let i=a;i<=Math.min(z, r.N-1);i++) pts.push([sx(r.cyc.V[i]), sy(r.cyc.Plv[i])]);
+      if(ph === 'fill') pts.push([sx(r.cyc.V[0]), sy(r.cyc.Plv[0])]);
+      svgEl('path', {d:pathFrom(pts), fill:'none', stroke:PH_COLOR[ph], 'stroke-width':3.2, 'stroke-linejoin':'round', 'stroke-linecap':'round'}, plot);
     });
+    // eventos valvares
+    if(r.ejected){
+      const ev = [
+        [0, 'Fecha mitral (VDF)', ['ne','nw','n','se']],
+        [r.ix.ao, 'Abre aórtica', ['e','ne','se','w','nw']],
+        [r.ix.ac, 'Fecha aórtica (VSF)', ['se','ne','sw','w','nw','s']],
+        [Math.min(r.ix.mo, r.N-1), 'Abre mitral', ['nw','ne','n','sw']]
+      ];
+      const fs = fz(11), cw = fs*0.56;
+      const offs = {ne:[8,-8,'start'], nw:[-8,-8,'end'], se:[8,fs+6,'start'], sw:[-8,fs+6,'end'], e:[9,fs*0.35,'start'], w:[-9,fs*0.35,'end'], n:[0,-11,'middle'], s:[0,fs+9,'middle']};
+      const pts = ev.map(([i])=>[sx(r.cyc.V[i]), sy(r.cyc.Plv[i])]);
+      const placed = [];
+      const hit = (a, c) => !(a.x2 < c.x1 || c.x2 < a.x1 || a.y2 < c.y1 || c.y2 < a.y1);
+      pts.forEach(([x,y])=>svgEl('circle', {cx:x, cy:y, r:4.5, fill:'#0b1925', stroke:'#fff', 'stroke-width':2}, svg));
+      ev.forEach(([, label, prefs], k)=>{
+        const [x, y] = pts[k], w = label.length*cw;
+        let best = null;
+        for(const c of prefs){
+          const [dx, dy, an] = offs[c];
+          const tx = x + dx, ty = y + dy;
+          const x1 = an === 'start' ? tx : an === 'end' ? tx - w : tx - w/2;
+          const box = {x1, x2:x1 + w, y1:ty - fs*0.85, y2:ty + fs*0.25};
+          let score = 0;
+          score += 10*Math.max(0, b.x + 2 - box.x1) + 10*Math.max(0, box.x2 - (b.x + b.w - 2));
+          score += 10*Math.max(0, b.y + 2 - box.y1) + 10*Math.max(0, box.y2 - (b.y + b.h - 2));
+          placed.forEach(o=>{ if(hit(box, o)) score += 1000; });
+          pts.forEach(([px,py])=>{ if(px > box.x1-5 && px < box.x2+5 && py > box.y1-5 && py < box.y2+5) score += 300; });
+          if(!best || score < best.score) best = {score, tx, ty, an, box};
+          if(score === 0) break;
+        }
+        // mantém o texto dentro da área do gráfico
+        let shift = 0;
+        if(best.box.x2 > b.x + b.w - 2) shift = b.x + b.w - 2 - best.box.x2;
+        if(best.box.x1 + shift < b.x + 2) shift = b.x + 2 - best.box.x1;
+        const ty = Math.max(b.y + fs, Math.min(b.y + b.h - 3, best.ty));
+        placed.push({x1:best.box.x1 + shift, x2:best.box.x2 + shift, y1:ty - fs*0.85, y2:ty + fs*0.25});
+        svgEl('text', {x:best.tx + shift, y:ty, fill:'#e7f1f7', 'font-size':fs, 'font-weight':600, 'text-anchor':best.an, 'paint-order':'stroke', stroke:'#0b1925', 'stroke-width':3}, svg).textContent = label;
+      });
+    }
+    pv.dot = svgEl('circle', {r:7, fill:'#fff', stroke:'#0b1925', 'stroke-width':2.5}, svg);
+  }
+
+  const tc = {svg:$('#timeChart'), pBox:{x:52, y:30, w:490, h:200}, vBox:{x:52, y:262, w:490, h:78}, cursor:null, dots:null};
+  function drawTime(){
+    const r = model.res, svg = tc.svg; if(!svg || !r) return;
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    if(narrowMQ.matches){ tc.pBox = {x:64, y:36, w:478, h:178}; tc.vBox = {x:64, y:238, w:478, h:74}; }
+    else { tc.pBox = {x:52, y:30, w:490, h:200}; tc.vBox = {x:52, y:262, w:490, h:78}; }
+    const T = r.T, pb = tc.pBox, vb = tc.vBox;
+    const pMax = niceMax(r.plvMax + 12, 40, 160);
+    const vMin = Math.max(0, Math.floor((r.esv - 15)/25)*25), vMax = Math.ceil((r.edv + 10)/25)*25;
+    const tx = t => pb.x + t/T*pb.w;
+    const py = v => pb.y + pb.h - Math.max(0, Math.min(pMax, v))/pMax*pb.h;
+    const vy = v => vb.y + vb.h - (v - vMin)/(vMax - vMin)*vb.h;
+    tc.tx = tx; tc.py = py; tc.vy = vy;
+    // faixas de fase
+    const bands = r.ejected ? [['ivc',0,r.ix.ao],['ej',r.ix.ao,r.ix.ac],['ivr',r.ix.ac,r.ix.mo],['fill',r.ix.mo,r.N]] : [['fill',0,r.N]];
+    const abbr = {ivc:'CIV', ej:'Ejeção', ivr:'RIV', fill:'Enchimento'};
+    bands.forEach(([ph,a,z])=>{
+      const x0 = tx(a/r.N*T), x1 = tx(Math.min(z, r.N)/r.N*T);
+      svgEl('rect', {x:x0, y:pb.y, width:Math.max(0, x1-x0), height:vb.y+vb.h-pb.y, fill:PH_COLOR[ph], opacity:.1}, svg);
+      if(x1 - x0 > abbr[ph].length*fz(11)*0.6 + 4) svgEl('text', {x:(x0+x1)/2, y:pb.y+fz(11)+2, fill:PH_COLOR[ph], 'font-size':fz(11), 'font-weight':700, 'text-anchor':'middle'}, svg).textContent = abbr[ph];
+    });
+    // sístole / diástole
+    if(r.ejected){
+      const xs = tx(r.tSys);
+      svgEl('text', {x:(pb.x+xs)/2, y:pb.y-10, fill:'#e7f1f7', 'font-size':fz(11), 'font-weight':700, 'letter-spacing':1, 'text-anchor':'middle'}, svg).textContent = 'SÍSTOLE';
+      svgEl('text', {x:(xs+pb.x+pb.w)/2, y:pb.y-10, fill:'#e7f1f7', 'font-size':fz(11), 'font-weight':700, 'letter-spacing':1, 'text-anchor':'middle'}, svg).textContent = 'DIÁSTOLE';
+      svgEl('line', {x1:xs, y1:pb.y-20, x2:xs, y2:vb.y+vb.h, stroke:'#9ce4ed', 'stroke-width':1, 'stroke-dasharray':'3 3', opacity:.7}, svg);
+    }
+    const tStep = T > 1 ? (narrowMQ.matches ? 0.5 : 0.25) : (narrowMQ.matches && T > 0.5 ? 0.2 : 0.1);
+    axes(svg, pb, T, pMax, 1e9, pMax > 200 ? 60 : 40, '', 'mmHg', ()=>'');
+    const g = svgEl('g', {}, svg);
+    for(let t=0; t<=T+1e-9; t+=tStep){ svgEl('text', {x:tx(t), y:vb.y+vb.h+fz(11)+4, fill:'#94acbd', 'font-size':fz(11), 'text-anchor':'middle'}, g).textContent = fmt(t, tStep < 0.2 ? 1 : 2); }
+    svgEl('text', {x:pb.x+pb.w/2, y:vb.y+vb.h+fz(11)+fz(12)+9, fill:'#c2dbea', 'font-size':fz(12), 'font-weight':600, 'text-anchor':'middle'}, g).textContent = 'Tempo desde o fechamento da mitral (s)';
+    svgEl('rect', {x:vb.x, y:vb.y, width:vb.w, height:vb.h, fill:'none', stroke:'#466175'}, g);
+    [vMin, vMax].forEach(v=>svgEl('text', {x:vb.x-6, y:vy(v)+fz(4), fill:'#94acbd', 'font-size':fz(11), 'text-anchor':'end'}, g).textContent = fmt(v));
+    svgEl('text', {x:14, y:vb.y+vb.h/2, fill:'#c2dbea', 'font-size':fz(12), 'font-weight':600, 'text-anchor':'middle', transform:`rotate(-90 14 ${vb.y+vb.h/2})`}, g).textContent = 'mL';
+    const line = (arr, map, color, w) => svgEl('path', {d:pathFrom(arr.map((v,i)=>[tx(r.cyc.t[i]), map(v)])), fill:'none', stroke:color, 'stroke-width':w, 'stroke-linejoin':'round'}, svg);
+    line(r.cyc.Pla, py, '#87d29e', 2);
+    line(r.cyc.Pao, py, '#ff8990', 2.4);
+    line(r.cyc.Plv, py, '#f4f8fb', 2.6);
+    line(r.cyc.V, vy, '#70bcff', 2.6);
+    svgEl('text', {x:vb.x+vb.w-4, y:vy(r.edv)-5, fill:'#70bcff', 'font-size':fz(11), 'font-weight':700, 'text-anchor':'end'}, svg).textContent = `VDF ${fmt(r.edv)}`;
+    if(r.ejected) svgEl('text', {x:tx(r.cyc.t[r.ix.ac])+4, y:vy(r.esv)+fz(11)+3, fill:'#87d29e', 'font-size':fz(11), 'font-weight':700}, svg).textContent = `VSF ${fmt(r.esv)}`;
+    tc.cursor = svgEl('line', {y1:pb.y, y2:vb.y+vb.h, stroke:'#fff', 'stroke-width':1.5, opacity:.9}, svg);
+    tc.dots = ['#f4f8fb','#ff8990','#70bcff'].map(c=>svgEl('circle', {r:4, fill:c, stroke:'#0b1925', 'stroke-width':1.5}, svg));
+  }
+
+  // ===== Animação =====
+  function svgPt(d, p){
+    const q = 1-p;
+    return [q*q*q*d[0]+3*q*q*p*d[2]+3*q*p*p*d[4]+p*p*p*d[6], q*q*q*d[1]+3*q*q*p*d[3]+3*q*p*p*d[5]+p*p*p*d[7]];
+  }
+  function setLeaflets(g, openFrac){
+    if(!g) return;
+    const [l, rr] = $$('.leaflet', g);
+    const w = Math.abs(Number(l.getAttribute('x1')));
+    const L = w - 1, th = (8 + 70*openFrac)*Math.PI/180;
+    l.setAttribute('x2', (-w + L*Math.cos(th)).toFixed(2)); l.setAttribute('y2', (L*Math.sin(th)).toFixed(2));
+    rr.setAttribute('x2', (w - L*Math.cos(th)).toFixed(2)); rr.setAttribute('y2', (L*Math.sin(th)).toFixed(2));
+  }
+  const valveState = {mit:0, ao:0};
+
+  function renderFrame(){
+    const r = model.res; if(!r) return;
+    const T = r.T;
+    const frac = ((model.time % T) + T) % T / T;
+    const i = Math.min(r.N-1, Math.floor(frac*r.N));
+    const V = r.cyc.V[i], ph = phaseAt(i);
+    // cavidade: área ∝ volume, limitada à moldura
+    const s = Math.sqrt(Math.min(1, Math.max(0.02, V/260)));
+    if(ventricleVolume){ ventricleVolume.setAttribute('rx', (25*s).toFixed(2)); ventricleVolume.setAttribute('ry', (45*s).toFixed(2)); }
+    const ej = r.edv > 0 ? Math.max(0, (r.edv - V)/r.edv) : 0;   // fração já ejetada (chega à FE)
+    if(heartMain) heartMain.setAttribute('transform', `translate(490 505) scale(${(1-0.09*ej).toFixed(4)} ${(1-0.13*ej).toFixed(4)}) translate(-490 -505)`);
+    // valvas (abertura suavizada)
+    const mitOpen = r.cyc.Qmv[i] > 0 ? 1 : 0, aoOpen = r.cyc.Qav[i] > 0 ? 1 : 0;
+    const k = model.running ? 0.35 : 1;
+    valveState.mit += (mitOpen - valveState.mit)*k; valveState.ao += (aoOpen - valveState.ao)*k;
+    setLeaflets(mitralValve, valveState.mit); setLeaflets(aorticValve, valveState.ao);
+    // pulso de ejeção
+    if(ejectionPulse){
+      if(ph === 'ej'){
+        const p = (i - r.ix.ao)/Math.max(1, r.ix.ac - r.ix.ao);
+        const [x,y] = svgPt([561,627,606,730,688,840,776,920], p);
+        ejectionPulse.setAttribute('cx', x.toFixed(1)); ejectionPulse.setAttribute('cy', y.toFixed(1)); ejectionPulse.setAttribute('opacity', '.8');
+      } else ejectionPulse.setAttribute('opacity', '0');
+    }
+    // rótulos de fase
+    if(model.lastPhase !== ph){
+      model.lastPhase = ph;
+      const info = PH[ph];
+      if(els.heartPhaseLabel) els.heartPhaseLabel.textContent = info.short;
+      if(els.heartValveLabel) els.heartValveLabel.textContent = info.sub;
+      els.cyclePhase.textContent = `${info.sys ? 'Sístole' : 'Diástole'} — ${info.name}`;
+      els.cycleValves.textContent = info.valves.charAt(0).toUpperCase() + info.valves.slice(1);
+      $$('#cycleBar .seg, .cycle-legend li').forEach(el=>el.classList.toggle('on', el.dataset.ph === ph));
+      els.grpSys.classList.toggle('on', info.sys); els.grpDia.classList.toggle('on', !info.sys);
+    }
+    if(els.cycleCursor) els.cycleCursor.style.left = `${(frac*100).toFixed(2)}%`;
+    // gráficos
+    if(pv.dot && pv.sx){ pv.dot.setAttribute('cx', pv.sx(V).toFixed(1)); pv.dot.setAttribute('cy', pv.sy(r.cyc.Plv[i]).toFixed(1)); }
+    if(tc.cursor && tc.tx){
+      const x = tc.tx(r.cyc.t[i]).toFixed(1);
+      tc.cursor.setAttribute('x1', x); tc.cursor.setAttribute('x2', x);
+      const ys = [tc.py(r.cyc.Plv[i]), tc.py(r.cyc.Pao[i]), tc.vy(V)];
+      tc.dots.forEach((d, j)=>{ d.setAttribute('cx', x); d.setAttribute('cy', ys[j].toFixed(1)); });
+    }
+  }
+
+  function updateLungsVisual(){
+    const breath = (Math.sin(model.time*Math.PI*2*.22)+1)/2;
+    [['lungLeft',302],['lungRight',312]].forEach(([id,x])=>{
+      const lung = $('#'+id);
+      if(lung) lung.setAttribute('transform','translate('+x+' 40) translate(250 100) scale('+(1+.025*breath)+' '+(1+.04*breath)+') translate(-250 -100) scale(.72 .62)');
+    });
+  }
+
+  function createMolecule(pathD, colorUrl, dur, delay, size){
+    const g = svgEl('g', {opacity:'0.96'});
+    const circle = svgEl('circle', {cx:0, cy:0, r:size, fill:colorUrl, stroke:'none'});
     const motion = svgEl('animateMotion', {path:pathD, dur:dur+'s', begin:delay+'s', repeatCount:'indefinite', rotate:'auto'});
     g.append(circle, motion);
     return g;
   }
-
   function setupBloodParticles(){
     if(!bloodParticles || bloodParticles.dataset.ready === '1') return;
     bloodParticles.dataset.ready = '1';
-
-    // Circulação pulmonar corrigida:
-    // artéria pulmonar (vaso vermelho) leva sangue venoso azul do coração aos pulmões.
-    // veia pulmonar (vaso azul) traz sangue arterial vermelho dos pulmões ao coração.
-    const pulmonaryVeinToHeart = 'M430 250 C450 320 470 405 485 490';      // pulmões → coração, sangue arterial
-    const pulmonaryArteryToLungs = 'M495 490 C510 405 530 320 550 250';   // coração → pulmões, sangue venoso
-
-    // Circulação sistêmica.
-    const heartToTissues = 'M542 580 C606 730 688 840 776 920';           // coração → tecidos, sangue arterial
-    const tissuesToVenousReturn = 'M858 1018 C680 1104 300 1104 110 1018';// tecidos → retorno venoso
-    const venousReturnToHeart = 'M204 920 C320 840 396 730 438 580';      // retorno venoso → coração
-
+    // artéria pulmonar (azul): sangue venoso do coração aos pulmões; veia pulmonar (vermelha): sangue oxigenado ao átrio esquerdo
+    const pulmonaryVeinToHeart = 'M430 250 C450 320 470 405 485 490';
+    const pulmonaryArteryToLungs = 'M495 490 C510 405 530 320 550 250';
+    const heartToTissues = 'M542 580 C606 730 688 840 776 920';
+    const tissuesToVenousReturn = 'M858 1018 C680 1104 300 1104 110 1018';
+    const venousReturnToHeart = 'M204 920 C320 840 396 730 438 580';
     function addStream(pathD, kind, pathIndex){
       const isArterial = kind === 'arterial';
       const dominant = isArterial ? 'url(#arterialMolecule3D)' : 'url(#venousMolecule3D)';
       const minor = isArterial ? 'url(#venousMolecule3D)' : 'url(#arterialMolecule3D)';
-      const dominantCount = isArterial ? 4 : 3; // arterial: 4 O₂ : 1 CO₂ | venoso: 3 CO₂ : 1 O₂
-      const baseDur = isArterial ? 4.25 : 4.85;
-      const dur = baseDur + pathIndex * 0.22;
+      const dominantCount = isArterial ? 4 : 3;
+      const dur = (isArterial ? 4.25 : 4.85) + pathIndex*0.22;
       let k = 0;
-      for(let i=0; i<dominantCount; i++, k++){
-        bloodParticles.appendChild(createMolecule(pathD, dominant, dur, -(k * dur/(dominantCount + 1) + pathIndex*.28), 7.2));
-      }
-      bloodParticles.appendChild(createMolecule(pathD, minor, dur, -(k * dur/(dominantCount + 1) + pathIndex*.28), 6.4));
+      for(let i=0; i<dominantCount; i++, k++) bloodParticles.appendChild(createMolecule(pathD, dominant, dur, -(k*dur/(dominantCount+1) + pathIndex*.28), 7.2));
+      bloodParticles.appendChild(createMolecule(pathD, minor, dur, -(k*dur/(dominantCount+1) + pathIndex*.28), 6.4));
     }
-
     addStream(pulmonaryVeinToHeart, 'arterial', 0);
     addStream(heartToTissues, 'arterial', 1);
     addStream(tissuesToVenousReturn, 'venous', 2);
@@ -775,23 +1231,13 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
     addStream(pulmonaryArteryToLungs, 'venous', 4);
   }
 
-  function updateLungsVisual(){
-    const breath=(Math.sin(model.time*Math.PI*2*.22)+1)/2;
-    [['lungLeft',302],['lungRight',312]].forEach(([id,x])=>{
-      const lung=$('#'+id);if(lung)lung.setAttribute('transform','translate('+x+' 40) translate(250 100) scale('+(1+.025*breath)+' '+(1+.04*breath)+') translate(-250 -100) scale(.72 .62)');
-    });
-  }
-
   function setAnimationSpeed(speed){
     model.speed = Number(speed) || 1;
-    if(speedVal) speedVal.textContent = model.speed.toFixed(1)+'×';
+    if(speedVal) speedVal.textContent = fmt(model.speed,1)+'×';
     $$('animate, animateTransform, animateMotion').forEach(anim=>{
-      if(!anim.dataset.baseDur){
-        const dur = anim.getAttribute('dur');
-        if(dur && dur.endsWith('s')) anim.dataset.baseDur = parseFloat(dur);
-      }
+      if(!anim.dataset.baseDur){ const dur = anim.getAttribute('dur'); if(dur && dur.endsWith('s')) anim.dataset.baseDur = parseFloat(dur); }
       const base = parseFloat(anim.dataset.baseDur || '');
-      if(Number.isFinite(base) && base > 0) anim.setAttribute('dur', (base / model.speed).toFixed(3)+'s');
+      if(Number.isFinite(base) && base > 0) anim.setAttribute('dur', (base/model.speed).toFixed(3)+'s');
     });
   }
 
@@ -800,111 +1246,109 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
     model.lastTs = null;
     if(model.running){
       try{ svgRoot?.unpauseAnimations?.(); }catch(e){}
-      setStage(stageStatus?.textContent === 'Pausado' ? 'Em execução' : (stageStatus?.textContent || 'Em execução'));
-      startBtn?.classList.add('active');
-      if(!model.raf) model.raf = requestAnimationFrame(tick);
+      if(model.stepIndex >= 0){ model.stepIndex = -1; clearStepHighlight(); if(els.stepExplain) els.stepExplain.hidden = true; }
+      setStage('Em execução');
     }else{
       try{ svgRoot?.pauseAnimations?.(); }catch(e){}
-      setStage('Pausado');
-      startBtn?.classList.remove('active');
     }
-  }
-
-  function updateHeartVisual(){
-    const phase=(model.time%(60/Math.max(40,model.fc)))/(60/Math.max(40,model.fc));
-    const smooth=x=>x*x*(3-2*x);
-    const ejection=phase<.12?0:phase<.42?smooth((phase-.12)/.30):phase<.52?1:1-smooth((phase-.52)/.48);
-    const volume=model.edv-(model.edv-model.esv)*ejection;
-    const size=Math.sqrt(Math.max(1,volume)/120);
-    if(heartMain)heartMain.setAttribute('transform','translate(490 505) scale('+(1-.055*ejection).toFixed(4)+' '+(1-.085*ejection).toFixed(4)+') translate(-490 -505)');
-    if(ventricleVolume){
-      ventricleVolume.setAttribute('rx',(24*size).toFixed(2));
-      ventricleVolume.setAttribute('ry',(42*size).toFixed(2));
-    }
-    const label=$('#heartPhaseLabel');
-    if(label)label.textContent=phase<.12?'CONTRAÇÃO':phase<.42?'EJEÇÃO':phase<.52?'RELAXAMENTO':'ENCHIMENTO';
-    const pulse=$('#ejectionPulse');
-    if(pulse){const p=Math.max(0,Math.min(1,(phase-.12)/.3));const q=1-p;
-      const x=q*q*q*542+3*q*q*p*606+3*q*p*p*688+p*p*p*776;
-      const y=q*q*q*580+3*q*q*p*730+3*q*p*p*840+p*p*p*920;
-      pulse.setAttribute('cx',x);pulse.setAttribute('cy',y);pulse.setAttribute('opacity',phase>=.12&&phase<.42?'.75':'0');}
   }
 
   function tick(ts){
-    model.raf = null;
     if(model.lastTs == null) model.lastTs = ts;
-    const dt = Math.min(0.05, (ts - model.lastTs) / 1000);
+    const dt = Math.min(0.05, (ts - model.lastTs)/1000);
     model.lastTs = ts;
-    if(model.running){
-      model.time += dt * model.speed;
-    }
-    updateHeartVisual();
-    updateLungsVisual();
+    if(model.running){ model.time += dt*model.speed; updateLungsVisual(); }
+    renderFrame();
     model.raf = requestAnimationFrame(tick);
   }
 
+  // ===== Modo por etapas: percorre o ciclo sem alterar nenhum determinante =====
+  const stepSequence = [
+    {name:'Enchimento', formula:null, nodes:['edv'], at:r=>r.N-2,
+      text:r=>`<strong>Diástole — enchimento (mitral aberta, aórtica fechada).</strong> A pressão do átrio esquerdo supera a do VE e o sangue entra no ventrículo; no fim, a contração atrial completa o enchimento. O volume chega ao <strong>VDF = ${fmt(r.edv)} mL</strong>, com pressão diastólica final de ${fmt(r.pdf)} mmHg.`},
+    {name:'Contração isovolumétrica', formula:null, nodes:['edv'], at:r=>Math.round(r.ix.ao*0.6),
+      text:r=>`<strong>Sístole — contração isovolumétrica (mitral e aórtica fechadas).</strong> A pressão do VE supera a do átrio e a mitral fecha. Com as duas valvas fechadas, a pressão sobe de ${fmt(r.pdf)} para ${fmt(r.pad)} mmHg em ${fmt(r.tIVC,2)} s sem mudar o volume (continua no VDF).`},
+    {name:'Ejeção', formula:'vs', nodes:['edv','esv','vs'], at:r=>Math.round(r.ix.ao + 0.8*(r.ix.ac - r.ix.ao)),
+      text:r=>`<strong>Sístole — ejeção (aórtica aberta).</strong> Quando a pressão do VE supera a aórtica (${fmt(r.pad)} mmHg), a valva aórtica abre. O volume cai do VDF (${fmt(r.edv)} mL) até o <strong>VSF (${fmt(r.esv)} mL)</strong>: <strong>VS = VDF − VSF = ${fmt(r.sv)} mL</strong>. A pressão atinge ${fmt(r.pas)} mmHg.`},
+    {name:'Relaxamento isovolumétrico', formula:'ef', nodes:['edv','vs'], at:r=>Math.round((r.ix.ac + r.ix.mo)/2),
+      text:r=>`<strong>Diástole — relaxamento isovolumétrico (valvas fechadas).</strong> A pressão do VE cai abaixo da aórtica e a aórtica fecha; o volume fica no VSF enquanto a pressão despenca, até cair abaixo da atrial e a mitral abrir. Fração ejetada: <strong>FE = VS / VDF = ${fmt(r.ef)}%</strong>.`},
+    {name:'Débito cardíaco', formula:'dc', nodes:['vs'], at:r=>Math.min(r.N-1, r.ix.mo + 5),
+      text:r=>`<strong>A cada minuto o ciclo se repete FC vezes.</strong> A mitral acabou de abrir e um novo enchimento começa. <strong>DC = FC × VS = ${fmt(readParams().fc)} × ${fmt(r.sv)} mL = ${fmt(r.co,1)} L/min</strong>. Nenhum controle foi alterado durante as etapas.`}
+  ];
   function clearStepHighlight(){ $$('.active-step').forEach(el=>el.classList.remove('active-step')); }
   function highlightStep(step){
     clearStepHighlight();
-    if(!step) return;
-    $(`[data-step="${step.formula}"]`)?.classList.add('active-step');
+    if(step.formula) $(`[data-step="${step.formula}"]`)?.classList.add('active-step');
     (step.nodes||[]).forEach(n=>$(`[data-step-node="${n}"]`)?.classList.add('active-step'));
+  }
+  function goToStep(idx){
+    const r = model.res; if(!r) return;
+    if(!r.ejected){ setStage('Sem ejeção: ajuste os controles'); return; }
+    const step = stepSequence[idx];
+    const T = r.T, i = Math.max(0, Math.min(r.N-1, step.at(r)));
+    model.time = Math.floor(model.time/T)*T + (i + 0.5)/r.N*T;
+    valveState.mit = r.cyc.Qmv[i] > 0 ? 1 : 0; valveState.ao = r.cyc.Qav[i] > 0 ? 1 : 0;
+    highlightStep(step);
+    if(els.stepExplain){ els.stepExplain.hidden = false; els.stepExplain.innerHTML = step.text(r); }
+    setStage(`Etapa ${idx+1}/${stepSequence.length} · ${step.name}`);
+    renderFrame();
+  }
+
+  function markPreset(key){ $$('[data-state]').forEach(b=>b.classList.toggle('selected', b.dataset.state === key)); }
+  function applyPreset(key){
+    const pr = presets[key]; if(!pr) return;
+    const p = {...BASAL, ...pr.set};
+    writeParams(p);
+    markPreset(key);
+    if(els.presetExplain) els.presetExplain.innerHTML = pr.text;
+    clearStepHighlight(); model.stepIndex = -1; if(els.stepExplain) els.stepExplain.hidden = true;
+    updateControlLabels();
+    recompute();
+    setStage(pr.label);
   }
 
   function resetAll(){
-    setLoop(70,120,50);
-    clearStepHighlight();
-    model.stepIndex = -1;
-    model.time = 0;
+    model.time = 0; model.stepIndex = -1;
+    applyPreset('normal');
     setStage('Condição basal');
-    updateHeartVisual();
     try{ svgRoot?.setCurrentTime?.(0); }catch(e){}
   }
 
   Object.values(controls).forEach(input=>{
-    input?.addEventListener('input',()=>{
-      updateLoop();
-      clearStepHighlight();
+    input?.addEventListener('input', ()=>{
+      markPreset(null);
+      if(els.presetExplain) els.presetExplain.innerHTML = '';
+      clearStepHighlight(); model.stepIndex = -1; if(els.stepExplain) els.stepExplain.hidden = true;
+      scheduleRecompute();
       setStage('Ajuste manual');
     });
   });
-
-  $$('[data-state]').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      const preset = presets[btn.dataset.state];
-      if(!preset) return;
-      setLoop(preset.fc, preset.edv, preset.esv);
-      clearStepHighlight();
-      setStage(preset.label);
-    });
-  });
-
-  startBtn?.addEventListener('click',()=>setRunning(true));
-  pauseBtn?.addEventListener('click',()=>setRunning(false));
-  resetBtn?.addEventListener('click',()=>{ resetAll(); setRunning(false); });
-  labelsBtn?.addEventListener('click',()=>{
+  $$('[data-state]').forEach(btn=>btn.addEventListener('click', ()=>applyPreset(btn.dataset.state)));
+  startBtn?.addEventListener('click', ()=>setRunning(true));
+  pauseBtn?.addEventListener('click', ()=>{ setRunning(false); setStage('Pausado'); });
+  resetBtn?.addEventListener('click', ()=>{ setRunning(false); resetAll(); });
+  labelsBtn?.addEventListener('click', ()=>{
     model.labelsVisible = !model.labelsVisible;
     appRoot?.classList.toggle('labels-hidden', !model.labelsVisible);
     labelsBtn.textContent = model.labelsVisible ? 'Ocultar rótulos' : 'Mostrar rótulos';
   });
-  stepBtn?.addEventListener('click',()=>{
+  stepBtn?.addEventListener('click', ()=>{
     setRunning(false);
     model.stepIndex = (model.stepIndex + 1) % stepSequence.length;
-    const step = stepSequence[model.stepIndex];
-    setLoop(step.fc, step.edv, step.esv);
-    highlightStep(step);
-    setStage(step.name);
+    goToStep(model.stepIndex);
   });
-  speedInput?.addEventListener('input',()=>setAnimationSpeed(speedInput.value));
+  speedInput?.addEventListener('input', ()=>setAnimationSpeed(speedInput.value));
 
+  const onMQ = () => { if(model.res){ drawPV(); drawTime(); renderFrame(); } };
+  if(narrowMQ.addEventListener) narrowMQ.addEventListener('change', onMQ); else if(narrowMQ.addListener) narrowMQ.addListener(onMQ);
+
+  // Estado inicial: condição basal, parado, rótulos visíveis.
+  model.ref = solveState({...BASAL, rv:BASAL.rv/100});
   setupBloodParticles();
-
-  // Estado inicial: parado, pronto para o botão Iniciar. Rótulos visíveis.
   if(labelsBtn) labelsBtn.textContent = 'Ocultar rótulos';
   setAnimationSpeed(speedInput?.value || 1);
   resetAll();
   setRunning(false);
-  if(model.raf) cancelAnimationFrame(model.raf);
   model.raf = requestAnimationFrame(tick);
 })();
 </script>
@@ -922,5 +1366,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=11"></script>
-<script src="tutor-widget.js?v=16"></script>
+<script src="tutor-ef-data.js?v=18"></script>
+<script src="tutor-widget.js?v=20"></script>

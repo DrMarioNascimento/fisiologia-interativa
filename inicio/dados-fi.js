@@ -21,13 +21,13 @@ window.FI_DADOS = {
     {
      "t": "Osmose e equilíbrio hidroeletrolítico",
      "cat": "Fisiologia celular",
-     "obj": "Comparar tonicidade, osmolaridade e distribuição de água entre LIC e LEC.",
+     "obj": "Comparar osmolalidade e tonicidade entre LIC e LEC, a ureia como osmol ineficaz, distúrbios do sódio e da água e os efeitos de NaCl 0,9%, NaCl 3% e SG 5%.",
      "href": "../osmose-equilibrio-hidroeletrolitico.html?percurso=fisioterapia"
     },
     {
      "t": "Homeostase integrada tricompartimentada",
      "cat": "Fisiologia celular",
-     "obj": "Relacionar plasma, líquido intersticial e LIC em um modelo integrado de transporte e distribuição de água.",
+     "obj": "Relacionar plasma, interstício e célula — osmose, forças de Starling, potencial de membrana e regulação por rim, ADH e sede — nas respostas a sal, água, K⁺, perdas e hemorragia.",
      "href": "../homeostase-integrada-tricompartimental.html?percurso=fisioterapia"
     },
     {
@@ -79,7 +79,7 @@ window.FI_DADOS = {
     {
      "t": "Contração muscular esquelética",
      "cat": "Músculo",
-     "obj": "Acompanhar do potencial de ação ao relaxamento: ACh, placa motora, Ca²⁺, pontes cruzadas, ATP e sarcômero.",
+     "obj": "Do potencial de ação no sarcolema ao relaxamento pela SERCA: DHPR–RyR1, Ca²⁺ na troponina C, ciclo das pontes cruzadas (Pi e ATP) e sarcômero em escala com zona H e banda I; compara abalo, tétano, rigor e bloqueios.",
      "href": "../contracao-muscular-esqueletica.html?percurso=fisioterapia"
     },
     {
@@ -91,7 +91,7 @@ window.FI_DADOS = {
     {
      "t": "Contração muscular e sarcômero",
      "cat": "Músculo",
-     "obj": "Relacionar a organização do músculo aos filamentos com as etapas de Ca²⁺, pontes cruzadas e retorno.",
+     "obj": "Do músculo aos filamentos em sete etapas: motoneurônio α, ACh na placa motora, túbulos T (DHPR–RyR1), Ca²⁺ na troponina C, pontes cruzadas e relaxamento pela SERCA.",
      "href": "../contracao-muscular-sarcomero.html?percurso=fisioterapia"
     },
     {
@@ -165,7 +165,7 @@ window.FI_DADOS = {
     {
      "t": "Loop cardíaco funcional",
      "cat": "Cardiovascular",
-     "obj": "Relacionar volumes diastólico e sistólico finais, volume sistólico, fração de ejeção e débito cardíaco.",
+     "obj": "Acompanhar sístole e diástole do ventrículo esquerdo, a abertura e o fechamento das valvas mitral e aórtica e o loop pressão-volume, relacionando FC, pré-carga, contratilidade e pós-carga a VDF, VSF, VS, FE e DC.",
      "href": "../loop-cardiaco-funcional.html?percurso=fisioterapia"
     },
     {

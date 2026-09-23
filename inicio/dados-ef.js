@@ -19,6 +19,18 @@ window.FI_DADOS = {
    ],
    "sims": [
     {
+     "t": "Osmose e equilíbrio hidroeletrolítico",
+     "cat": "Fisiologia celular",
+     "obj": "Comparar osmolalidade e tonicidade entre LIC e LEC, a ureia como osmol ineficaz, distúrbios do sódio e da água e os efeitos de NaCl 0,9%, NaCl 3% e SG 5%.",
+     "href": "osmose-equilibrio-hidroeletrolitico.html"
+    },
+    {
+     "t": "Homeostase integrada tricompartimentada",
+     "cat": "Fisiologia celular",
+     "obj": "Relacionar plasma, interstício e célula — osmose, forças de Starling, potencial de membrana e regulação por rim, ADH e sede — nas respostas a sal, água, K⁺, perdas e hemorragia.",
+     "href": "homeostase-integrada-tricompartimental.html"
+    },
+    {
      "t": "Potencial de ação na membrana",
      "cat": "Fisiologia celular",
      "obj": "Acompanhar em sete etapas as mudanças de permeabilidade, os fluxos de Na⁺ e K⁺ e a variação do potencial de membrana.",
@@ -46,7 +58,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "A Célula Sitiada",
     "img": "assets/salas/celular.webp",
-  "grande": "assets/salas/grande/celular.webp",
+    "grande": "assets/salas/grande/celular.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/celular?origem=site"
    }
   },
@@ -67,8 +79,8 @@ window.FI_DADOS = {
     {
      "t": "Contração muscular esquelética",
      "cat": "Músculo",
-     "obj": "Acompanhar do potencial de ação ao relaxamento: ACh, placa motora, Ca²⁺, pontes cruzadas, ATP e sarcômero.",
-     "href": "contracao-muscular-sarcomero.html"
+     "obj": "Do potencial de ação no sarcolema ao relaxamento pela SERCA: DHPR–RyR1, Ca²⁺ na troponina C, ciclo das pontes cruzadas (Pi e ATP) e sarcômero em escala com zona H e banda I; compara abalo, tétano, rigor e bloqueios.",
+     "href": "contracao-muscular-esqueletica.html"
     },
     {
      "t": "Acoplamento excitação–contração",
@@ -79,8 +91,8 @@ window.FI_DADOS = {
     {
      "t": "Contração muscular e sarcômero",
      "cat": "Músculo",
-     "obj": "Explorar o ciclo das pontes cruzadas, o consumo de ATP e as alterações da zona H durante a contração.",
-     "href": "contracao-muscular-esqueletica.html"
+     "obj": "Do músculo aos filamentos em sete etapas: motoneurônio α, ACh na placa motora, túbulos T (DHPR–RyR1), Ca²⁺ na troponina C, pontes cruzadas e relaxamento pela SERCA.",
+     "href": "contracao-muscular-sarcomero.html"
     },
     {
      "t": "Contrações musculares interativas",
@@ -112,7 +124,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "O Músculo em Silêncio",
     "img": "assets/salas/muscular.webp",
-  "grande": "assets/salas/grande/muscular.webp",
+    "grande": "assets/salas/grande/muscular.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/muscular?origem=site"
    }
   },
@@ -146,7 +158,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "O Osso que Se Reconstrói",
     "img": "assets/salas/osteoarticular.webp",
-  "grande": "assets/salas/grande/osteoarticular.webp",
+    "grande": "assets/salas/grande/osteoarticular.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/osteoarticular?origem=site"
    }
   },
@@ -187,7 +199,7 @@ window.FI_DADOS = {
     {
      "t": "Loop cardíaco funcional",
      "cat": "Cardiovascular",
-     "obj": "Integrar enchimento, ejeção, volumes ventriculares e abertura e fechamento das válvulas ao longo do ciclo cardíaco.",
+     "obj": "Acompanhar sístole e diástole do ventrículo esquerdo, a abertura e o fechamento das valvas mitral e aórtica e o loop pressão-volume, relacionando FC, pré-carga, contratilidade e pós-carga a VDF, VSF, VS, FE e DC.",
      "href": "loop-cardiaco-funcional.html"
     },
     {
@@ -200,7 +212,7 @@ window.FI_DADOS = {
      "t": "Sangue",
      "cat": "Cardiovascular",
      "obj": "Integrar hematopoiese, transporte de oxigênio, viscosidade, débito cardíaco e respostas fisiológicas em cenários clínicos e de exercício.",
-     "href": "sangue.html?percurso=fisioterapia",
+     "href": "sangue.html",
      "deep": "módulo de aprofundamento",
      "leitura": "assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260823"
     }
@@ -208,7 +220,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "A Prova do Débito",
     "img": "assets/salas/cardiovascular.webp",
-  "grande": "assets/salas/grande/cardiovascular.webp",
+    "grande": "assets/salas/grande/cardiovascular.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/cardiovascular?origem=site"
    }
   },
@@ -257,12 +269,20 @@ window.FI_DADOS = {
      "cat": "Respiratório",
      "obj": "Relacionar PO₂, saturação da hemoglobina e deslocamentos da curva provocados por pH, temperatura e 2,3-BPG.",
      "href": "curva-dissociacao-hemoglobina.html"
+    },
+    {
+     "t": "Ventilação Pulmonar Neonatal",
+     "cat": "Respiratório",
+     "obj": "Relacionar idade gestacional ao nascimento, idade pós-natal, massa corporal e maturidade pulmonar à mecânica ventilatória neonatal.",
+     "href": "ventilacao-pulmonar-neonatal.html",
+     "deep": "módulo de aprofundamento",
+     "leitura": "assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260902-2"
     }
    ],
    "sala": {
     "nome": "O Fôlego Perdido",
     "img": "assets/salas/respiratorio.webp",
-  "grande": "assets/salas/grande/respiratorio.webp",
+    "grande": "assets/salas/grande/respiratorio.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/respiratorio?origem=site"
    }
   },
@@ -309,7 +329,7 @@ window.FI_DADOS = {
    "sala": {
     "nome": "A Marcha do Oxigênio",
     "img": "assets/salas/sala-base.webp",
-  "grande": "assets/salas/grande/sala-base.webp",
+    "grande": "assets/salas/grande/sala-base.webp",
     "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/integracao?origem=site"
    }
   }

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<meta name="description" content="Simulador interativo de osmose, osmolaridade, tonicidade, permeabilidade de membrana e pressão osmótica." />
+<meta name="description" content="Simulador interativo de osmose entre os líquidos intracelular e extracelular de um adulto de 70 kg: osmolalidade, tonicidade, osmóis ineficazes, soluções intravenosas e distúrbios do sódio e da água." />
 <meta name="sim-category" content="celular" />
 <meta name="sim-author" content="Prof. Mário César Nascimento. PhD" />
 <style>
@@ -30,6 +30,9 @@
     --k:  #ef6f8c;
     --glu:#e7d24b;
     --prot:#7aa2ff;
+    --hco3:#8fd46b;
+    --urea:#c99bf0;
+    --outros:#7aa2ff;
     --radius: 14px;
   }
   * { box-sizing: border-box; }
@@ -307,7 +310,7 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 <header>
   <h1>Osmose e Equilíbrio Hidroeletrolítico</h1>
-  <p class="subtitle">Fisiologia Interativa — modelo quantitativo de osmolaridade, tonicidade e permeabilidade de membrana</p>
+  <p class="subtitle">Fisiologia Interativa — modelo quantitativo de osmolalidade, tonicidade e distribuição da água entre LIC e LEC (adulto de 70 kg)</p>
 </header>
 
 <div class="layout">
@@ -321,6 +324,11 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
     <div class="states-wrap">
       <p class="states-title">ESTADOS RÁPIDOS</p>
       <div class="scenarios" id="scenarios"></div>
+    </div>
+    <div class="infusion-row" id="infusionRow" hidden>
+      <label for="infSol">Solução de reposição</label>
+      <select id="infSol"></select>
+      <div class="speed"><span>Volume</span><b id="infVolVal">2,0 L</b><input type="range" id="infVol" min="0.5" max="3" step="0.5" value="2" aria-label="Volume infundido" /></div>
     </div>
   </section>
 
@@ -336,9 +344,12 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
       </table>
       <div class="eq">
     <div style="text-align: justify;">
-    <div><b style="color:var(--osm);">Osmolaridade:</b> <code>Osm = Σ (i · C)</code> — soma de cada soluto (mOsm/L), onde <i>i</i> = fator de van't Hoff.</div>
-    <div style="margin-top:6px;"><b style="color:var(--pressure);">Pressão osmótica (van't Hoff):</b> <code>π = i · C · R · T</code>, com R = 0,0821 L·atm·mol⁻¹·K⁻¹ e T = 310 K (37 °C).</div>
-    <div style="margin-top:6px;"><b style="color:var(--accent-2);">Fluxo de água:</b> move-se do meio <i>hipotônico</i> (menor Osm) para o <i>hipertônico</i> (maior Osm) até o equilíbrio.</div>
+    <div><b style="color:var(--osm);">Osmolalidade (medida):</b> <code>Osm = φ·Σ íons + glicose + ureia + outros</code> — todas as partículas por kg de água; eletrólitos com coeficiente osmótico φ ≈ 0,93. Basal: 290 mOsm/kg H₂O em todos os compartimentos.</div>
+    <div style="margin-top:6px;"><b style="color:var(--tonicity);">Tonicidade (osmolalidade efetiva):</b> <code>Σ σ·φ·C</code> — só os solutos impermeantes (σ = 1). A ureia atravessa a membrana (σ ≈ 0): eleva a osmolalidade, mas não a tonicidade.</div>
+    <div style="margin-top:6px;"><b style="color:var(--osm);">Osmolalidade calculada do plasma:</b> <code>2·Na⁺ + glicose + ureia</code> (mmol/L). Em mg/dL: <code>2·Na⁺ + glicose/18 + BUN/2,8</code> (ou ureia/6).</div>
+    <div style="margin-top:6px;"><b style="color:var(--pressure);">Pressão osmótica:</b> <code>π ≈ 19,3 mmHg por mOsm/kg</code> (37 °C). Um gradiente efetivo de apenas 1 mOsm/kg equivale a ~19 mmHg; a pressão oncótica do plasma (~25–28 mmHg) corresponde a pouco mais de 1 mOsm/kg de proteínas.</div>
+    <div style="margin-top:6px;"><b style="color:var(--accent-2);">Fluxo de água:</b> <code>J ∝ Tonicidade(LIC) − Tonicidade(LEC)</code> — a água vai do meio de menor para o de maior tonicidade até que LIC = LEC.</div>
+</div>
 </div>
       </div>
 
@@ -349,7 +360,7 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
   <div>
     <div class="card">
       <div class="stage-wrap">
-        <svg id="stage" viewBox="0 0 760 380" role="img" aria-label="Dois compartimentos separados por membrana semipermeável">
+        <svg id="stage" viewBox="0 0 760 380" role="img" aria-label="Líquido intracelular e extracelular separados pela membrana celular">
           <!-- preenchido dinamicamente -->
         </svg>
       </div>
@@ -358,17 +369,20 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
       <section class="perm-section" aria-labelledby="permTitle">
         <h2 id="permTitle">Ajustes da membrana</h2>
-        <p class="perm-intro">A água sempre atravessa. Selecione os solutos que também podem atravessar a membrana.</p>
+        <p class="perm-intro">A água sempre atravessa. Selecione os solutos que também atravessam a membrana celular (a ureia atravessa; Na⁺ e K⁺ são mantidos pela Na⁺/K⁺-ATPase).</p>
         <div class="perm-toggles" id="permToggles"></div>
       </section>
 
       <div class="legend" data-tab="graficos">
         <span><i class="dot" style="--dot-color:var(--na)"></i> Na⁺</span>
-        <span><i class="dot" style="--dot-color:var(--cl)"></i> Cl⁻</span>
         <span><i class="dot" style="--dot-color:var(--k)"></i> K⁺</span>
+        <span><i class="dot" style="--dot-color:var(--cl)"></i> Cl⁻</span>
+        <span><i class="dot" style="--dot-color:var(--hco3)"></i> HCO₃⁻</span>
         <span><i class="dot" style="--dot-color:var(--glu)"></i> Glicose</span>
-        <span><i class="dot" style="--dot-color:var(--prot)"></i> Proteína</span>
+        <span><i class="dot" style="--dot-color:var(--urea)"></i> Ureia</span>
+        <span><i class="dot" style="--dot-color:var(--outros)"></i> Outros osmóis</span>
         <span><i class="dot" style="--dot-color:var(--water-top)"></i> Água (H₂O)</span>
+        <span>1 esfera ≈ 60 mmol</span>
       </div>
     </div>
 
@@ -377,10 +391,12 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
         <summary>Como interpretar</summary>
         <div>
 <p style="text-align: justify;">
-    <b style="color:var(--osm);">1. Observe a osmolaridade:</b> ela conta todas as partículas dissolvidas. A água se move do meio com menor Osm para o de maior Osm.
-    <b style="color:var(--tonicity);">2. Compare a tonicidade:</b> ela considera somente os solutos <i>impermeantes</i>. Solutos que atravessam a membrana se equilibram e deixam de sustentar movimento líquido de água.
-    <b style="color:var(--accent-2);">3. Teste a permeabilidade:</b> marque a glicose como “atravessa” e compare o resultado com o mesmo cenário em que ela fica impermeante.
-    <b style="color:var(--tonicity);">4. Use paredes rígidas:</b> o volume não muda; em seu lugar, surge a diferença de pressão osmótica (Δπ), útil para discutir osmose e pressão oncótica das proteínas.
+    <b style="color:var(--accent-2);">Compartimentos:</b> LIC = 28 L e LEC = 14 L (plasma 3,5 L + interstício 10,5 L) de um adulto de 70 kg, com ACT de 42 L; os volumes estão em escala real. Cada cenário aplica o distúrbio ao LEC; a simulação mostra a água cruzando a membrana celular.
+    <b style="color:var(--osm);">1. Osmolalidade × tonicidade:</b> a osmolalidade conta todas as partículas; a tonicidade conta só as que não atravessam a membrana. Só a tonicidade move água entre LIC e LEC.
+    <b style="color:var(--tonicity);">2. Ureia:</b> no cenário “Ureia elevada”, a osmolalidade medida sobe, mas a ureia se distribui na água total e o volume celular não muda.
+    <b style="color:var(--accent-2);">3. SG 5%:</b> isosmótico na bolsa, mas a glicose é metabolizada e sobra água livre, que entra nas células. Desligue “Glicose metabolizada” para comparar.
+    <b style="color:var(--tonicity);">4. Paredes rígidas:</b> o volume não muda; em seu lugar surge a diferença de pressão osmótica efetiva (Δπ).
+    <b style="color:var(--osm);">Outros osmóis:</b> no LIC, ânions orgânicos impermeantes (proteínas, fosfatos orgânicos); no LEC, Ca²⁺, Mg²⁺, fosfato, sulfato, ânions orgânicos e proteínas.
 </p>
         </div>
       </details>
@@ -403,216 +419,286 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 "use strict";
 
 /* ============================================================
-   CONSTANTES DO MODELO
+   TABELA DE REFERÊNCIA — adulto de 70 kg (valores comuns aos
+   simuladores de líquidos corporais)
    ============================================================ */
-const R = 0.0821;          // L·atm·mol⁻¹·K⁻¹
-const T = 310;             // K (37 °C)
-const MMHG_PER_ATM = 760;
+const REF = {
+  massaKg: 70,
+  ACT_L: 42,            // água corporal total (60% do peso)
+  LIC_L: 28,            // 2/3 da ACT
+  LEC_L: 14,            // 1/3 da ACT
+  plasma_L: 3.5,        // 1/4 do LEC
+  intersticio_L: 10.5,  // 3/4 do LEC
+  osmBasal: 290,        // mOsm/kg H2O, igual em todos os compartimentos
+  phi: 0.93,            // coeficiente osmótico dos eletrólitos
+  mmHgPorMOsm: 19.3,    // π a 37 °C por mOsm/kg H2O
+  oncoticaPlasma_mmHg: [25, 28],
+  // mmol/L de água; "outros" é calculado abaixo para fechar exatamente 290
+  LEC: { na:142, k:4,   cl:104, hco3:24, glic:5, ureia:5 },
+  LIC: { na:14,  k:140, cl:4,   hco3:10, glic:1, ureia:5 },
+  SOLUCOES: {
+    nacl09: { nome:"NaCl 0,9%", na:154, cl:154, glic:0,   mOsmNominal:308,  mOsmEfetivo:286 },
+    nacl3:  { nome:"NaCl 3%",   na:513, cl:513, glic:0,   mOsmNominal:1026, mOsmEfetivo:954 },
+    sg5:    { nome:"SG 5%",     na:0,   cl:0,   glic:278, mOsmNominal:278,  mOsmEfetivo:278 },
+    agua:   { nome:"Água pura", na:0,   cl:0,   glic:0,   mOsmNominal:0,    mOsmEfetivo:0 },
+  },
+};
 
-// Definição dos solutos: fator de van't Hoff (i), cor e limites de UI
+// Solutos do modelo. phi = coeficiente osmótico (eletrólitos 0,93; não eletrólitos 1).
+// "outros" é expresso diretamente em mOsm/kg: no LIC, ânions impermeantes e osmóis
+// orgânicos (proteínas, fosfatos orgânicos); no LEC, Ca²⁺, Mg²⁺, fosfato, sulfato,
+// ânions orgânicos e proteínas. É sempre impermeante.
 const SOLUTES = [
-  { key:"na",   name:"Na⁺",      i:1, color:"var(--na)",   hex:"#f4a742", max:220 },
-  { key:"cl",   name:"Cl⁻",      i:1, color:"var(--cl)",   hex:"#33c2a6", max:220 },
-  { key:"k",    name:"K⁺",       i:1, color:"var(--k)",    hex:"#ef6f8c", max:200 },
-  { key:"glu",  name:"Glicose",  i:1, color:"var(--glu)",  hex:"#e7d24b", max:100 },
-  { key:"prot", name:"Proteína", i:1, color:"var(--prot)", hex:"#7aa2ff", max:120 },
+  { key:"na",     name:"Na⁺",           phi:REF.phi, hex:"#f4a742", color:"var(--na)",     max:250, unit:"mmol/L" },
+  { key:"k",      name:"K⁺",            phi:REF.phi, hex:"#ef6f8c", color:"var(--k)",      max:200, unit:"mmol/L" },
+  { key:"cl",     name:"Cl⁻",           phi:REF.phi, hex:"#33c2a6", color:"var(--cl)",     max:250, unit:"mmol/L" },
+  { key:"hco3",   name:"HCO₃⁻",         phi:REF.phi, hex:"#8fd46b", color:"var(--hco3)",   max:60,  unit:"mmol/L" },
+  { key:"glic",   name:"Glicose",       phi:1,       hex:"#e7d24b", color:"var(--glu)",    max:60,  unit:"mmol/L" },
+  { key:"ureia",  name:"Ureia",         phi:1,       hex:"#c99bf0", color:"var(--urea)",   max:60,  unit:"mmol/L" },
+  { key:"outros", name:"Outros osmóis", phi:1,       hex:"#7aa2ff", color:"var(--outros)", max:200, unit:"mOsm/kg", fixed:true },
 ];
+const SOL = Object.fromEntries(SOLUTES.map(s=>[s.key, s]));
 
-// Permeabilidade padrão da membrana (proteína nunca atravessa por padrão)
-const defaultPerm = { na:false, cl:false, k:false, glu:false, prot:false };
+function contribOsm(c){ let s = 0; for(const k in c) if(SOL[k] && k!=="outros") s += SOL[k].phi * c[k]; return s; }
+REF.LEC.outros = +(REF.osmBasal - contribOsm(REF.LEC)).toFixed(2);   // ≈ 25,2 mOsm/kg
+REF.LIC.outros = +(REF.osmBasal - contribOsm(REF.LIC)).toFixed(2);   // ≈ 127,8 mOsm/kg
+
+// Permeabilidade padrão da membrana celular: ureia atravessa (osmol ineficaz);
+// Na⁺/K⁺/Cl⁻/HCO₃⁻ comportam-se como impermeantes efetivos (Na⁺/K⁺-ATPase); glicose
+// é tratada como impermeante enquanto não for metabolizada.
+const defaultPerm = { na:false, k:false, cl:false, hco3:false, glic:false, ureia:true };
 
 /* ============================================================
    ESTADO
    ============================================================ */
-// Cada compartimento guarda V (litros) e n (mmol) de cada soluto.
+// Cada compartimento guarda V (litros de água) e n (mmol; mOsm para "outros").
 let state = null;          // { A:{V,n:{}}, B:{V,n:{}}, labelA, labelB }
+let initialSnap = null;    // cópia do estado no início da simulação
 let perm = { ...defaultPerm };
 let rigidWalls = false;
+let metabGlic = false;
 let running = false;
 let speed = 1.4;
 let currentScenario = "iso";
-let ionPositions = { A:{}, B:{} };  // posições cacheadas dos pontos
+let ionPositions = { A:{}, B:{} };
+let infusion = { sol:"nacl09", vol:2 };
 
-const Vmax = 3.0;          // litros — usado para escala visual da altura
+const Vmax = 45;           // litros — escala visual da altura dos béqueres
+const minV = 1;            // litros — limite inferior de segurança
 
 /* ============================================================
-   CENÁRIOS (concentrações em mmol/L, volumes em L)
-   Cada cenário define A e B, rótulos, permeabilidade e paredes.
+   OPERAÇÕES SOBRE OS COMPARTIMENTOS
+   ============================================================ */
+function makeComp(V, c){
+  const comp = { V, n:{} };
+  for(const s of SOLUTES) comp.n[s.key] = (c[s.key] || 0) * V;
+  return comp;
+}
+function basalState(){
+  return {
+    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC)",
+    A: makeComp(REF.LIC_L, REF.LIC),
+    B: makeComp(REF.LEC_L, REF.LEC),
+  };
+}
+function addWater(comp, L){ comp.V = Math.max(minV, comp.V + L); }
+function addSolute(comp, key, mmol){ comp.n[key] = Math.max(0, comp.n[key] + mmol); }
+function addSolution(comp, solKey, L){
+  const s = REF.SOLUCOES[solKey];
+  comp.V += L;
+  comp.n.na += s.na * L; comp.n.cl += s.cl * L; comp.n.glic += s.glic * L;
+}
+// Equilíbrio analítico (usado para montar estados prévios já equilibrados)
+function equilibrateInstant(st){
+  const A = st.A, B = st.B, W = A.V + B.V;
+  let eA = 0, eB = 0;
+  for(const s of SOLUTES) if(!isPerm(s.key)){ eA += s.phi*A.n[s.key]; eB += s.phi*B.n[s.key]; }
+  A.V = W * eA / (eA + eB); B.V = W - A.V;
+  for(const s of SOLUTES) if(isPerm(s.key)){
+    const tot = A.n[s.key] + B.n[s.key];
+    A.n[s.key] = tot * A.V / W; B.n[s.key] = tot - A.n[s.key];
+  }
+}
+
+/* ============================================================
+   CENÁRIOS — partem do estado basal (LIC 28 L, LEC 14 L, 290 mOsm/kg).
+   O distúrbio é aplicado ao LEC; a simulação mostra a redistribuição
+   de água através da membrana celular.
    ============================================================ */
 const SCENARIOS = {
   iso: {
-    label:"Isotônico (equilíbrio)",
-    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC)",
-    A:{ V:1.0, na:15,  cl:10,  k:140, glu:10, prot:80 },
-    B:{ V:1.0, na:142, cl:103, k:4,   glu:5,  prot:1  },
-    perm:{...defaultPerm}, rigid:false,
-    note:"Osmolaridades iguais (255 mOsm/L dos dois lados): não há movimento líquido de água."
+    label:"Isotônico (basal)",
+    build(){},
+    note:()=>"Estado basal: LIC 28 L e LEC 14 L, ambos com osmolalidade de 290 mOsm/kg H₂O (a ureia, permeante, não entra na tonicidade)."
   },
   hipo: {
-    label:"Meio hipotônico (incha)",
-    labelA:"Célula", labelB:"Meio externo",
-    A:{ V:1.0, na:15, cl:10, k:140, glu:10, prot:20 },
-    B:{ V:1.5, na:40, cl:40, k:2,   glu:0,  prot:0  },
-    perm:{...defaultPerm}, rigid:false,
-    note:"Meio externo com baixa osmolaridade → água entra na célula → ela incha."
+    label:"LEC hipotônico (+2 L de água)",
+    build(st){ addWater(st.B, 2); },
+    note:()=>"Ganho de 2 L de água pura no LEC (ingestão rápida, sem tempo para excreção renal). O LEC fica hipotônico → a água entra nas células, que incham. No equilíbrio, ~2/3 da água ganha estão no LIC."
   },
   hiper: {
-    label:"Meio hipertônico (murcha)",
-    labelA:"Célula", labelB:"Meio externo",
-    A:{ V:1.0, na:15, cl:10, k:140, glu:10, prot:20 },
-    B:{ V:1.5, na:220, cl:200, k:5, glu:40, prot:0 },
-    perm:{...defaultPerm}, rigid:false,
-    note:"Meio externo hipertônico → água sai da célula → ela murcha (crenação)."
+    label:"LEC hipertônico (NaCl 3%)",
+    build(st){ addSolution(st.B, "nacl3", 1); },
+    note:()=>"Infusão de 1 L de NaCl 3% (1026 mOsm/L) no LEC. O LEC fica hipertônico → a água sai das células, que se retraem. O LEC expande mais que o volume infundido."
   },
   desidratacao: {
-    label:"Desidratação",
-    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC)",
-    A:{ V:1.0, na:15, cl:10, k:140, glu:5, prot:20 },
-    B:{ V:0.6, na:160, cl:125, k:4, glu:6, prot:1 },
-    perm:{...defaultPerm}, rigid:false,
-    note:"Perda de água do LEC eleva sua osmolaridade → água sai da célula para o LEC."
+    label:"Desidratação (−2 L de água)",
+    build(st){ addWater(st.B, -2); },
+    note:()=>"Perda de 2 L de água pura pelo LEC (perdas insensíveis sem reposição). O LEC fica hipertônico → a água sai das células, que se retraem. O déficit se divide ~2/3 no LIC e ~1/3 no LEC; o Na⁺ plasmático sobe."
   },
   hiponatremia: {
     label:"Hiponatremia",
-    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC)",
-    A:{ V:1.0, na:15, cl:10, k:140, glu:5, prot:20 },
-    B:{ V:1.2, na:115, cl:85, k:4, glu:5, prot:1 },
-    perm:{...defaultPerm}, rigid:false,
-    note:"Na⁺ baixo no LEC → LEC hipotônico → água entra na célula (edema celular)."
+    build(st){ addWater(st.B, 3); addSolute(st.B, "na", -150); addSolute(st.B, "cl", -150); },
+    note:()=>"Retenção de 3 L de água livre com perda urinária de 150 mmol de NaCl (padrão da secreção inapropriada de ADH). O Na⁺ do LEC cai e o LEC fica hipotônico → a água entra nas células (edema celular). Parte da água deixa o LEC, e o Na⁺ se estabiliza em ~129 mmol/L."
   },
   hipernatremia: {
     label:"Hipernatremia",
-    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC)",
-    A:{ V:1.0, na:15, cl:10, k:140, glu:5, prot:20 },
-    B:{ V:1.2, na:170, cl:135, k:4, glu:6, prot:1 },
-    perm:{...defaultPerm}, rigid:false,
-    note:"Na⁺ alto no LEC → LEC hipertônico → água sai da célula (desidratação celular)."
+    build(st){ addSolute(st.B, "na", 252); addSolute(st.B, "cl", 252); },
+    note:()=>"Ganho de 252 mmol de NaCl sem água (Na⁺ do LEC sobe para 160 mmol/L). O LEC fica hipertônico → a água sai das células (desidratação celular) e expande o LEC; o Na⁺ se estabiliza em ~149 mmol/L."
+  },
+  ureia: {
+    label:"Ureia elevada",
+    build(st){ addSolute(st.B, "ureia", 35 * REF.LEC_L); },
+    note:()=>"A ureia do LEC sobe de 5 para 40 mmol/L. A osmolalidade medida do LEC aumenta, mas a ureia atravessa a membrana celular (osmol ineficaz): ela se distribui na água total e o volume celular não muda."
+  },
+  nacl09: {
+    label:"Infusão NaCl 0,9%",
+    build(st){ addSolution(st.B, "nacl09", 2); },
+    note:()=>"Infusão de 2 L de NaCl 0,9% (308 mOsm/L nominais; ~286 efetivos, φ ≈ 0,93). A solução é praticamente isotônica: permanece no LEC e o volume celular quase não muda."
+  },
+  sg5: {
+    label:"Infusão SG 5%",
+    build(st){ addSolution(st.B, "sg5", 1); }, metab:true,
+    note:()=>"Infusão de 1 L de SG 5% (278 mOsm/L): isosmótico na bolsa, mas a glicose é captada e metabolizada (CO₂ + H₂O). Sobra água livre: o LEC fica hipotônico e a água entra nas células, que incham."
   },
   reidratacao: {
-    label:"Reidratação c/ soro",
-    labelA:"Intracelular (LIC)", labelB:"Extracelular (LEC) + soro",
-    A:{ V:1.0, na:15, cl:10, k:140, glu:5, prot:20 },
-    B:{ V:1.8, na:154, cl:154, k:0, glu:0, prot:0 },
-    perm:{...defaultPerm}, rigid:false,
-    note:"Soro fisiológico (NaCl 0,9% ≈ 154 mmol/L de cada íon) expande o LEC de forma ~isotônica."
-  },
-  hemacia: {
-    label:"Hemácia (osmose clássica)",
-    labelA:"Hemácia", labelB:"Plasma / solução",
-    A:{ V:1.0, na:15, cl:10, k:140, glu:10, prot:20 },
-    B:{ V:2.0, na:80, cl:70, k:4, glu:5, prot:0 },
-    perm:{...defaultPerm}, rigid:false,
-    note:"Clássico: em solução hipotônica a hemácia sofre hemólise; em hipertônica, crenação."
+    label:"Reidratação",
+    build(st, opt){
+      addWater(st.B, -2); equilibrateInstant(st);          // desidratação já redistribuída
+      addSolution(st.B, opt.sol, opt.vol);                 // reposição misturada ao LEC
+    },
+    metab:true, infusion:true,
+    note:(opt)=>{
+      const s = REF.SOLUCOES[opt.sol], v = fmt(opt.vol, 1);
+      const base = `Desidratação prévia (−2 L de água, já redistribuída: células retraídas, Na⁺ ~149 mmol/L) + ${v} L de ${s.nome} misturados ao LEC. `;
+      if(opt.sol==="nacl09") return base + "O NaCl 0,9% é isotônico ao plasma normal e hipotônico só em relação ao LEC concentrado: expande o LEC, mas quase não devolve água às células. O déficit de água livre persiste.";
+      if(opt.sol==="nacl3")  return base + "O NaCl 3% agrava a hipertonia: retira ainda mais água das células (reposição inadequada para déficit de água).";
+      if(opt.sol==="sg5")    return base + "O SG 5% chega isosmótico, mas a glicose é metabolizada e sobra água livre: a tonicidade cai e as células recuperam volume.";
+      return base + "A água pura é hipotônica: dilui o LEC e reidrata as células (por via venosa, só seria usada como SG 5%, para evitar hemólise).";
+    }
   },
 };
 
 /* ============================================================
    INICIALIZAÇÃO A PARTIR DE UM CENÁRIO
    ============================================================ */
+function snapshot(){ return JSON.parse(JSON.stringify({ A:state.A, B:state.B })); }
+
 function loadScenario(key){
   const s = SCENARIOS[key];
   currentScenario = key;
-  perm = { ...s.perm };
-  rigidWalls = !!s.rigid;
-
-  state = {
-    labelA: s.labelA, labelB: s.labelB,
-    A:{ V:s.A.V, n:{} }, B:{ V:s.B.V, n:{} },
-  };
-  for(const sol of SOLUTES){
-    state.A.n[sol.key] = s.A[sol.key] * s.A.V;   // mmol = conc × V
-    state.B.n[sol.key] = s.B[sol.key] * s.B.V;
-  }
+  perm = { ...defaultPerm };
+  rigidWalls = false;
+  metabGlic = !!s.metab;
+  const st = basalState();
+  s.build(st, infusion);
+  state = st;
+  initialSnap = snapshot();
   running = false;
-  document.getElementById("playBtn").textContent = "▶ Iniciar";
+  setPlayLabel("▶ Iniciar");
   regenIonPositions();
   buildCompControls();
   buildPermToggles();
-  document.getElementById("rigidWalls").checked = rigidWalls;
   syncScenarioButtons();
+  syncInfusionRow();
   render();
-  setStatus(s.note);
+  setStatus(s.note(infusion) + " " + tonicityText());
 }
 
 /* ============================================================
    CÁLCULOS
    ============================================================ */
-function conc(comp, key){ return comp.n[key] / comp.V; }           // mmol/L
-function osmolarity(comp){                                          // mOsm/L
+function isPerm(k){ return k !== "outros" && !!perm[k]; }
+function conc(comp, k){ return comp.n[k] / comp.V; }                 // mmol/L de água
+function osmTotal(comp){                                            // osmolalidade (medida)
   let sum = 0;
-  for(const sol of SOLUTES) sum += sol.i * conc(comp, key(sol));
+  for(const s of SOLUTES) sum += s.phi * conc(comp, s.key);
   return sum;
 }
-function key(sol){ return sol.key; }
-// tonicidade = osmolaridade apenas dos solutos IMPERMEANTES
-function effectiveOsm(comp){
+function osmEfetiva(comp){                                          // tonicidade: Σ σ·φ·C (σ=1 impermeante, 0 permeante)
   let sum = 0;
-  for(const sol of SOLUTES){ if(!perm[sol.key]) sum += sol.i * conc(comp, sol.key); }
+  for(const s of SOLUTES) if(!isPerm(s.key)) sum += s.phi * conc(comp, s.key);
   return sum;
 }
-function osmoticPressure(osmMol){ return osmMol/1000 * R * T; }     // atm (recebe mOsm/L)
+function osmCalculada(comp){ return 2*conc(comp,"na") + conc(comp,"glic") + conc(comp,"ureia"); }
+function piMmHg(osm){ return osm * REF.mmHgPorMOsm; }
+function fmt(x, d){ return (Math.abs(x) < 0.5*Math.pow(10,-d) ? 0 : x).toFixed(d).replace(".", ","); }
+function fmtS(x, d){ return (x > 0 ? "+" : x < 0 ? "−" : "") + fmt(Math.abs(x), d); }
 
 /* ============================================================
-   PASSO DE SIMULAÇÃO (integração numérica)
+   PASSO DE SIMULAÇÃO (integração explícita)
    ============================================================ */
-const kW = 0.00018;   // permeabilidade hidráulica (L por (mOsm/L) por passo)
-const kS = 0.0016;    // taxa de difusão de solutos permeantes
+const KW = 0.033;  // condutância hidráulica (L · s⁻¹ por mOsm/kg)  → τ ≈ 1 s
+const KS = 6.2;    // permeabilidade × área dos solutos permeantes (L/s) → τ ≈ 1,5 s
+const KM = 0.45;   // captação/metabolismo da glicose acima do basal (s⁻¹)
 
 function step(dt){
   const A = state.A, B = state.B;
 
-  // 1) Fluxo de água (se paredes não forem rígidas)
-  if(!rigidWalls){
-    const dOsm = osmolarity(A) - osmolarity(B);   // >0 → água entra em A
-    let dV = kW * dOsm * dt;
-    // limites: manter volumes positivos e conservar água total
-    const minV = 0.15;
-    if(A.V + dV < minV) dV = minV - A.V;
-    if(B.V - dV < minV) dV = (B.V - minV);
-    A.V += dV; B.V -= dV;
+  // 1) Metabolismo da glicose excedente (glicose → CO₂ + H₂O): some como osmol
+  if(metabGlic){
+    for(const [comp, base] of [[A, REF.LIC.glic], [B, REF.LEC.glic]]){
+      const excess = conc(comp, "glic") - base;
+      if(excess > 0) comp.n.glic -= Math.min(excess, KM * excess * dt) * comp.V;
+    }
   }
 
-  // 2) Difusão dos solutos permeantes (do lado concentrado ao diluído)
-  for(const sol of SOLUTES){
-    if(!perm[sol.key]) continue;
-    const cA = conc(A, sol.key), cB = conc(B, sol.key);
-    let j = kS * (cA - cB) * dt;          // mmol/L·... → aproximação
-    // converter em mmol movidos, limitado para não inverter o gradiente
-    let moved = j * Math.min(A.V, B.V);
-    const maxMove = (cA - cB) * (A.V * B.V) / (A.V + B.V); // quantidade p/ igualar
+  // 2) Fluxo de água dirigido pela diferença de TONICIDADE (osmóis efetivos)
+  if(!rigidWalls){
+    let dV = KW * (osmEfetiva(A) - osmEfetiva(B)) * dt;   // >0 → água entra no LIC
+    if(A.V + dV < minV) dV = minV - A.V;
+    if(B.V - dV < minV) dV = B.V - minV;
+    A.V += dV; B.V -= dV;                                 // água total conservada
+  }
+
+  // 3) Difusão dos solutos permeantes (massa conservada, sem ultrapassar o equilíbrio)
+  for(const s of SOLUTES){
+    if(!isPerm(s.key)) continue;
+    const cA = conc(A, s.key), cB = conc(B, s.key);
+    let moved = KS * (cA - cB) * dt;
+    const maxMove = (cA - cB) * (A.V * B.V) / (A.V + B.V);
     if(Math.abs(moved) > Math.abs(maxMove)) moved = maxMove;
-    A.n[sol.key] -= moved; B.n[sol.key] += moved;
+    A.n[s.key] -= moved; B.n[s.key] += moved;
   }
 }
 
 function atEquilibrium(){
-  if(rigidWalls){
-    // equilíbrio quando solutos permeantes já igualaram
-    for(const sol of SOLUTES){
-      if(perm[sol.key] && Math.abs(conc(state.A,sol.key)-conc(state.B,sol.key))>0.05) return false;
-    }
-    return true;
+  if(!rigidWalls && Math.abs(osmEfetiva(state.A) - osmEfetiva(state.B)) > 0.05) return false;
+  for(const s of SOLUTES){
+    if(isPerm(s.key) && Math.abs(conc(state.A, s.key) - conc(state.B, s.key)) > 0.02) return false;
   }
-  return Math.abs(osmolarity(state.A) - osmolarity(state.B)) < 0.15;
+  if(metabGlic){
+    if(conc(state.A,"glic") - REF.LIC.glic > 0.02) return false;
+    if(conc(state.B,"glic") - REF.LEC.glic > 0.02) return false;
+  }
+  return true;
 }
 
 /* ============================================================
    LOOP DE ANIMAÇÃO
    ============================================================ */
-let lastGen = 0;
+let frameCount = 0;
+function setPlayLabel(t){ document.getElementById("playBtn").textContent = t; }
 function tick(){
   if(!running) return;
-  // vários sub-passos por frame para convergência suave
-  const sub = 6;
-  const dt = speed;
+  const sub = 6, dt = speed / 360;        // velocidade 1× ≈ 1 s de modelo por segundo
   for(let s=0; s<sub; s++) step(dt);
-
   render();
-
+  if((++frameCount % 15) === 0) setStatus("Simulando... " + tonicityText());
   if(atEquilibrium()){
     running = false;
-    document.getElementById("playBtn").textContent = "▶ Iniciar";
-    setStatus("<b>Equilíbrio atingido.</b> " + tonicityText());
+    setPlayLabel("▶ Iniciar");
+    setStatus(equilibriumSummary());
     return;
   }
   requestAnimationFrame(tick);
@@ -622,13 +708,33 @@ function tick(){
    TEXTO DE TONICIDADE / STATUS
    ============================================================ */
 function tonicityText(){
-  const eA = effectiveOsm(state.A), eB = effectiveOsm(state.B);
+  const eA = osmEfetiva(state.A), eB = osmEfetiva(state.B);
   const diff = eB - eA;
   let rel;
-  if(Math.abs(diff) < 1.5) rel = `O meio B é <b>isotônico</b> em relação a A — sem movimento líquido de água.`;
-  else if(diff > 0) rel = `O meio B é <b>hipertônico</b> em relação a A → água sai de A (A murcha / perde volume).`;
-  else rel = `O meio B é <b>hipotônico</b> em relação a A → água entra em A (A incha / ganha volume).`;
+  if(Math.abs(diff) < 0.5) rel = `LEC e LIC com a mesma tonicidade (${fmt(eB,0)} mOsm/kg): <b>isotônicos</b>, sem fluxo líquido de água.`;
+  else if(diff > 0) rel = `O LEC está <b>hipertônico</b> em relação ao LIC (${fmt(eB,0)} × ${fmt(eA,0)} mOsm/kg efetivos) → a água <b>sai das células</b> (retração celular).`;
+  else rel = `O LEC está <b>hipotônico</b> em relação ao LIC (${fmt(eB,0)} × ${fmt(eA,0)} mOsm/kg efetivos) → a água <b>entra nas células</b> (edema celular).`;
+  // Glicose excedente em metabolização: o LEC pode estar isosmótico agora, mas cada
+  // mmol metabolizado deixa água livre → hipotonicidade progressiva.
+  const excLEC = conc(state.B,"glic") - REF.LEC.glic;
+  if(metabGlic && excLEC > 0.5){
+    // tonicidade final esperada: osmóis efetivos restantes / água total
+    const eAfter = (eA*state.A.V + (eB - excLEC)*state.B.V) / (state.A.V + state.B.V);
+    const agora = Math.abs(diff) < 0.5 ? "isosmótico (≈ isotônico) ao LIC neste momento" : (diff > 0 ? "hipertônico ao LIC neste momento" : "hipotônico ao LIC neste momento");
+    rel = `Glicose excedente no LEC: ${fmt(excLEC,1)} mmol/L. O LEC está ${agora} (${fmt(eB,0)} × ${fmt(eA,0)} mOsm/kg efetivos)${diff < -0.5 ? "; além disso," : ", mas"} a glicose está sendo metabolizada (CO₂ + H₂O) e deixa água livre: o LEC ${diff < -0.5 ? "fica ainda mais" : "fica"} <b>hipotônico</b> e a água <b>entra nas células</b> até a tonicidade cair para ~${fmt(eAfter,0)} mOsm/kg.`;
+  }
+  if(rigidWalls && Math.abs(diff) >= 0.5) rel += ` Com paredes rígidas, o volume não muda e o gradiente aparece como Δπ = ${fmt(piMmHg(Math.abs(diff)),0)} mmHg.`;
   return rel;
+}
+function equilibriumSummary(){
+  const i = initialSnap, A = state.A, B = state.B;
+  const pct = (A.V - i.A.V) / i.A.V * 100;
+  const osm0 = osmTotal(i.B), osm1 = osmTotal(B);
+  let t = `<b>Equilíbrio atingido.</b> LIC ${fmt(i.A.V,1)} → ${fmt(A.V,1)} L (${fmtS(pct,1)}%); LEC ${fmt(i.B.V,1)} → ${fmt(B.V,1)} L. `;
+  t += `Osmolalidade do LEC ${fmt(osm0,0)} → ${fmt(osm1,0)} mOsm/kg; tonicidade LIC = LEC = ${fmt(osmEfetiva(B),0)} mOsm/kg. `;
+  t += `[Na⁺] do LEC ${fmt(i.B.n.na/i.B.V,0)} → ${fmt(conc(B,"na"),0)} mmol/L.`;
+  if(rigidWalls) t = `<b>Equilíbrio dos solutos permeantes.</b> Paredes rígidas: volumes fixos; Δπ efetiva = ${fmt(piMmHg(Math.abs(osmEfetiva(A)-osmEfetiva(B))),0)} mmHg.`;
+  return t;
 }
 function setStatus(html){ document.getElementById("status").innerHTML = html; }
 
@@ -636,6 +742,7 @@ function setStatus(html){ document.getElementById("status").innerHTML = html; }
    RENDERIZAÇÃO SVG
    ============================================================ */
 const STAGE = { w:760, h:380, beakerW:230, beakerH:300, top:40, gap:60, bottomY:340 };
+const MMOL_POR_ESFERA = 60;
 
 function beakerX(side){
   const totalW = STAGE.beakerW*2 + STAGE.gap;
@@ -672,81 +779,69 @@ function render(){
     const w = STAGE.beakerW;
     const baseY = STAGE.bottomY;
     const topY = baseY - STAGE.beakerH;
-    const rimRy = 9;              // "profundidade" da elipse de topo/base
-    // altura da água proporcional ao volume
+    const rimRy = 9;
     const fillH = Math.max(20, Math.min(STAGE.beakerH, (comp.V / Vmax) * STAGE.beakerH));
     const waterY = baseY - fillH;
     const cx = x + w/2;
 
-    // sombra projetada na bancada (dá o "chão" 3D)
     parts.push(`<ellipse cx="${cx+5}" cy="${baseY+8}" rx="${w/2+13}" ry="10" fill="#020611" opacity=".58" filter="url(#softShadow)"/>`);
-
-    // vidro: corpo cilíndrico (fundo)
     parts.push(`<path d="M ${x} ${topY} L ${x} ${baseY} A ${w/2} ${rimRy} 0 0 0 ${x+w} ${baseY} L ${x+w} ${topY}"
       fill="url(#glassBody)" stroke="#6381af" stroke-opacity=".72" stroke-width="1.7"/>`);
-    // base elíptica do vidro
     parts.push(`<ellipse cx="${cx}" cy="${baseY}" rx="${w/2}" ry="${rimRy}" fill="url(#glassBase)" stroke="#6381af" stroke-opacity=".72" stroke-width="1.7"/>`);
 
-    // água (corpo do líquido com menisco elíptico no topo)
     parts.push(`<path d="M ${x+3} ${waterY}
       L ${x+3} ${baseY} A ${w/2-3} ${rimRy-1} 0 0 0 ${x+w-3} ${baseY}
       L ${x+w-3} ${waterY} A ${w/2-3} ${rimRy-1} 0 0 1 ${x+3} ${waterY} Z"
       fill="url(#waterGrad)"/>`);
-    // curvatura/brilho do líquido (cilindro)
     parts.push(`<rect x="${x+3}" y="${waterY}" width="${w-6}" height="${fillH}" fill="url(#waterCurve)"/>`);
-    // superfície da água (elipse superior)
     parts.push(`<ellipse cx="${cx}" cy="${waterY}" rx="${w/2-3}" ry="${rimRy-1}" fill="var(--water-top)" opacity="0.85"/>`);
     parts.push(`<ellipse cx="${cx}" cy="${waterY}" rx="${w/2-3}" ry="${rimRy-1}" fill="url(#surfaceSheen)"/>`);
 
-    // íons como esferas (quantidade proporcional à quantidade em mmol, com teto)
+    // partículas: 1 esfera ≈ 60 mmol (ou mOsm) do soluto no compartimento
     for(const sol of SOLUTES){
       const amount = comp.n[sol.key];
-      const nDots = Math.min(70, Math.round(amount / 4)); // 1 esfera por ~4 mmol
+      const nDots = Math.min(70, Math.round(amount / MMOL_POR_ESFERA));
       const pos = ionPositions[side][sol.key];
       for(let i=0;i<nDots;i++){
         const p = pos[i % pos.length];
         const ix = x + 12 + p.rx * (w-24);
-        const iy = waterY + rimRy + 6 + p.ry * (fillH - rimRy - 14);
+        const iy = waterY + rimRy + 6 + p.ry * Math.max(0, fillH - rimRy - 14);
         parts.push(`<circle cx="${(ix+1.2).toFixed(1)}" cy="${(iy+1.7).toFixed(1)}" r="4.8" fill="#020611" opacity=".30"/>`);
         parts.push(`<circle cx="${ix.toFixed(1)}" cy="${iy.toFixed(1)}" r="4.6" fill="url(#sph_${sol.key})" stroke="#ffffff" stroke-opacity=".16" stroke-width=".45"/>`);
       }
     }
 
-    // vidro: reflexo frontal + borda do topo (frente, por cima da água)
     parts.push(`<path d="M ${x} ${topY} L ${x} ${baseY} A ${w/2} ${rimRy} 0 0 0 ${x+w} ${baseY} L ${x+w} ${topY}"
       fill="url(#glassSheen)" stroke="none"/>`);
     parts.push(`<path d="M ${x+13} ${topY+16} L ${x+13} ${baseY-20}" stroke="#ffffff" stroke-opacity=".20" stroke-width="4" stroke-linecap="round"/>`);
-    // abertura elíptica do topo (rim)
     parts.push(`<ellipse cx="${cx}" cy="${topY}" rx="${w/2}" ry="${rimRy}" fill="url(#glassRim)" stroke="#7d9fce" stroke-opacity=".85" stroke-width="1.9"/>`);
 
-    // rótulo e volume
     parts.push(`<text x="${cx}" y="${topY-14}" text-anchor="middle" fill="var(--text)" font-size="14" font-weight="600">${side==="A"?state.labelA:state.labelB}</text>`);
-    parts.push(`<text x="${cx}" y="${baseY+26}" text-anchor="middle" fill="var(--muted)" font-size="12.5">V = ${comp.V.toFixed(2)} L · ${osmolarity(comp).toFixed(0)} mOsm/L</text>`);
+    parts.push(`<text x="${cx}" y="${baseY+26}" text-anchor="middle" fill="var(--muted)" font-size="12.5">V = ${fmt(comp.V,1)} L · ${fmt(osmTotal(comp),0)} mOsm/kg</text>`);
   }
 
-  // membrana no meio
+  // membrana celular no meio
   const mx = STAGE.w/2;
   parts.push(`<line x1="${mx}" y1="${STAGE.bottomY-STAGE.beakerH}" x2="${mx}" y2="${STAGE.bottomY}" stroke="var(--accent)" stroke-width="3" stroke-dasharray="6 5" opacity="0.8"/>`);
-  parts.push(`<text x="${mx}" y="${STAGE.bottomY-STAGE.beakerH-12}" text-anchor="middle" fill="var(--accent)" font-size="11">membrana semipermeável</text>`);
+  parts.push(`<text x="${mx}" y="${STAGE.bottomY-STAGE.beakerH-12}" text-anchor="middle" fill="var(--accent)" font-size="11">membrana celular</text>`);
 
-  // seta de fluxo de água
-  const dOsm = osmolarity(A) - osmolarity(B);
-  if(!rigidWalls && Math.abs(dOsm) > 0.4 && running){
-    const dir = dOsm > 0 ? -1 : 1; // dOsm>0 água entra em A → seta aponta p/ A (esquerda)
+  // seta de fluxo de água (sentido dado pela tonicidade)
+  const dE = osmEfetiva(A) - osmEfetiva(B);
+  if(!rigidWalls && Math.abs(dE) > 0.3 && running){
+    const dir = dE > 0 ? -1 : 1; // dE>0: água entra no LIC → seta para a esquerda
     const y = STAGE.bottomY - STAGE.beakerH/2;
     const x1 = mx + (dir* -1)*18, x2 = mx + dir*38;
     parts.push(`<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="var(--water-top)" stroke-width="4" marker-end="url(#arrow)"/>`);
     parts.push(`<text x="${mx}" y="${y-14}" text-anchor="middle" fill="var(--water-top)" font-size="11">H₂O</text>`);
   }
   if(rigidWalls){
-    const dp = (osmoticPressure(osmolarity(A))-osmoticPressure(osmolarity(B)));
+    const dp = piMmHg(Math.abs(dE));
     const y = STAGE.bottomY - STAGE.beakerH/2;
-    parts.push(`<text x="${mx}" y="${y-16}" text-anchor="middle" fill="var(--warn)" font-size="11">Pressão osmótica</text>`);
-    parts.push(`<text x="${mx}" y="${y}" text-anchor="middle" fill="var(--warn)" font-size="12">Δπ = ${Math.abs(dp).toFixed(2)} atm (${(Math.abs(dp)*MMHG_PER_ATM).toFixed(0)} mmHg)</text>`);
+    parts.push(`<text x="${mx}" y="${y-16}" text-anchor="middle" fill="var(--warn)" font-size="11">Δπ efetiva</text>`);
+    parts.push(`<text x="${mx}" y="${y}" text-anchor="middle" fill="var(--warn)" font-size="12">${fmt(dp,0)} mmHg</text>`);
     parts.push(`<text x="${mx}" y="${y+16}" text-anchor="middle" fill="var(--warn)" font-size="10.5">(paredes rígidas)</text>`);
   }
 
-  // defs — gradientes que dão o aspecto 3D
   const darken = (hex, f)=>{
     const n = parseInt(hex.slice(1),16);
     let r=(n>>16)&255, g=(n>>8)&255, b=n&255;
@@ -827,18 +922,16 @@ function updateReadout(){
   document.getElementById("hB").textContent = state.labelB;
   const A = state.A, B = state.B;
   const rows = [];
-  const row = (label, va, vb) => rows.push(`<tr><td>${label}</td><td data-comp="${state.labelA}">${va}</td><td data-comp="${state.labelB}">${vb}</td></tr>`);
+  const row = (color, label, va, vb) => rows.push(`<tr style="--reading:${color}"><td>${label}</td><td data-comp="${state.labelA}">${va}</td><td data-comp="${state.labelB}">${vb}</td></tr>`);
 
-  row("Volume (L)", A.V.toFixed(2), B.V.toFixed(2));
+  row("var(--volume)", "Volume de água (L)", fmt(A.V,2), fmt(B.V,2));
   for(const sol of SOLUTES){
-    row(sol.name + " (mmol/L)", conc(A,sol.key).toFixed(1), conc(B,sol.key).toFixed(1));
+    row(sol.color, `${sol.name} (${sol.unit})`, fmt(conc(A,sol.key),1), fmt(conc(B,sol.key),1));
   }
-  const osA = osmolarity(A), osB = osmolarity(B);
-  row("<b>Osmolaridade (mOsm/L)</b>", `<b>${osA.toFixed(1)}</b>`, `<b>${osB.toFixed(1)}</b>`);
-  const piA = osmoticPressure(osA), piB = osmoticPressure(osB);
-  row("<b>Pressão osmótica π (atm)</b>", `<b>${piA.toFixed(2)}</b>`, `<b>${piB.toFixed(2)}</b>`);
-  row("Pressão osmótica π (mmHg)", (piA*MMHG_PER_ATM).toFixed(0), (piB*MMHG_PER_ATM).toFixed(0));
-  row("Tonicidade efetiva (mOsm/L)", effectiveOsm(A).toFixed(1), effectiveOsm(B).toFixed(1));
+  row("var(--osm)", "<b>Osmolalidade total (mOsm/kg H₂O)</b>", `<b>${fmt(osmTotal(A),1)}</b>`, `<b>${fmt(osmTotal(B),1)}</b>`);
+  row("var(--tonicity)", "<b>Tonicidade — osmóis efetivos (mOsm/kg)</b>", `<b>${fmt(osmEfetiva(A),1)}</b>`, `<b>${fmt(osmEfetiva(B),1)}</b>`);
+  row("var(--pressure)", "π osmótica efetiva (mmHg)", fmt(piMmHg(osmEfetiva(A)),0), fmt(piMmHg(osmEfetiva(B)),0));
+  row("var(--osm)", "Osm calculada 2·Na⁺ + glicose + ureia (mmol/L)", "—", fmt(osmCalculada(B),0));
 
   document.getElementById("readoutBody").innerHTML = rows.join("");
 }
@@ -855,25 +948,22 @@ function buildCompControls(){
     const div = document.createElement("div");
     div.className = "comp";
     let html = `<h3><span class="dot" style="--dot-color:var(--accent)"></span>${label} <span class="tag">${side}</span></h3>`;
-    // Volume
-    html += fieldHTML(side, "V", "Volume", "L", comp.V, 0.15, Vmax, 0.05);
-    // Solutos (concentração)
+    html += fieldHTML(side, "V", "Volume de água", "L", comp.V, minV, Vmax, 0.1, "var(--volume)");
     for(const sol of SOLUTES){
-      html += fieldHTML(side, sol.key, sol.name, "mmol/L", conc(comp, sol.key), 0, sol.max, 1);
+      html += fieldHTML(side, sol.key, sol.name, sol.unit, conc(comp, sol.key), 0, sol.max, 1, sol.color);
     }
     div.innerHTML = html;
     cont.appendChild(div);
   }
-  // listeners
   cont.querySelectorAll("input[type=range]").forEach(inp=>{
     inp.addEventListener("input", onControlChange);
   });
 }
 
-function fieldHTML(side, k, name, unit, value, min, max, stepv){
+function fieldHTML(side, k, name, unit, value, min, max, stepv, color){
   const id = `ctl-${side}-${k}`;
-  const disp = k==="V" ? value.toFixed(2) : value.toFixed(0);
-  return `<div class="field" style="--field:var(--${k==='V'?'volume':k})">
+  const disp = fmt(value, k==="V" ? 1 : 0);
+  return `<div class="field" style="--field:${color}">
     <label for="${id}">${name} <span class="val"><span id="val-${side}-${k}">${disp}</span> ${unit}</span></label>
     <input type="range" id="${id}" data-side="${side}" data-key="${k}" min="${min}" max="${max}" step="${stepv}" value="${value}" />
   </div>`;
@@ -885,17 +975,14 @@ function onControlChange(e){
   const v = parseFloat(e.target.value);
   const comp = state[side];
   if(k==="V"){
-    // manter concentrações? Ao mexer no volume, mantemos as quantidades (n) e a concentração muda,
-    // EXCETO: para facilitar o uso didático, ajustamos n para preservar concentração atual.
-    const factor = v / comp.V;
-    for(const sol of SOLUTES) comp.n[sol.key] *= factor;
+    // Mudar o volume = adicionar/retirar água pura: a QUANTIDADE de cada soluto
+    // (n = C·V) é conservada e as concentrações mudam na proporção inversa.
     comp.V = v;
-    document.getElementById(`val-${side}-V`).textContent = v.toFixed(2);
-    // atualizar displays de concentração (mantidos)
   } else {
-    comp.n[k] = v * comp.V;  // conc → mmol
-    document.getElementById(`val-${side}-${k}`).textContent = v.toFixed(0);
+    comp.n[k] = v * comp.V;  // concentração escolhida → mmol no volume atual
   }
+  refreshControlValues();
+  initialSnap = snapshot();
   regenIonPositions();
   render();
   setStatus("Configuração ajustada manualmente. Clique em <b>Iniciar</b> para simular. " + tonicityText());
@@ -905,21 +992,22 @@ function refreshControlValues(){
   for(const side of ["A","B"]){
     const comp = state[side];
     const vEl = document.getElementById(`ctl-${side}-V`);
-    if(vEl){ vEl.value = comp.V; document.getElementById(`val-${side}-V`).textContent = comp.V.toFixed(2); }
+    if(vEl){ vEl.value = comp.V; document.getElementById(`val-${side}-V`).textContent = fmt(comp.V,1); }
     for(const sol of SOLUTES){
       const el = document.getElementById(`ctl-${side}-${sol.key}`);
-      if(el){ const c = conc(comp,sol.key); el.value = c; document.getElementById(`val-${side}-${sol.key}`).textContent = c.toFixed(0); }
+      if(el){ const c = conc(comp,sol.key); el.value = c; document.getElementById(`val-${side}-${sol.key}`).textContent = fmt(c,0); }
     }
   }
 }
 
 /* ============================================================
-   TOGGLES DE PERMEABILIDADE
+   TOGGLES DE PERMEABILIDADE / MODO
    ============================================================ */
 function buildPermToggles(){
   const cont = document.getElementById("permToggles");
   cont.innerHTML = "";
   for(const sol of SOLUTES){
+    if(sol.fixed) continue;
     const id = `perm-${sol.key}`;
     const lab = document.createElement("label");
     lab.style.setProperty("--solute-color", sol.hex);
@@ -929,20 +1017,22 @@ function buildPermToggles(){
     lab.querySelector("input").addEventListener("change", (e)=>{
       perm[sol.key] = e.target.checked;
       render();
+      setStatus(tonicityText());
     });
   }
-  const walls = document.createElement("label");
-  walls.className = "mode-row";
-  walls.innerHTML = `<input type="checkbox" id="rigidWalls" ${rigidWalls ? "checked" : ""}/> Paredes rígidas`;
-  cont.appendChild(walls);
-  walls.querySelector("input").addEventListener("change", e=>{
-    rigidWalls = e.target.checked;
-    render();
-  });
+  const mk = (id, text, checked, onChange)=>{
+    const l = document.createElement("label");
+    l.className = "mode-row";
+    l.innerHTML = `<input type="checkbox" id="${id}" ${checked ? "checked" : ""}/> ${text}`;
+    cont.appendChild(l);
+    l.querySelector("input").addEventListener("change", e=>{ onChange(e.target.checked); render(); setStatus(tonicityText()); });
+  };
+  mk("rigidWalls", "Paredes rígidas", rigidWalls, v=>{ rigidWalls = v; });
+  mk("metabGlic", "Glicose metabolizada", metabGlic, v=>{ metabGlic = v; });
 }
 
 /* ============================================================
-   BOTÕES DE CENÁRIO
+   BOTÕES DE CENÁRIO E REPOSIÇÃO
    ============================================================ */
 function buildScenarioButtons(){
   const cont = document.getElementById("scenarios");
@@ -960,6 +1050,22 @@ function syncScenarioButtons(){
     b.classList.toggle("active", b.dataset.key === currentScenario);
   });
 }
+function syncInfusionRow(){
+  document.getElementById("infusionRow").hidden = !SCENARIOS[currentScenario].infusion;
+}
+(function buildInfusionRow(){
+  const sel = document.getElementById("infSol");
+  sel.innerHTML = Object.entries(REF.SOLUCOES).map(([k,s])=>
+    `<option value="${k}">${s.nome} — ${s.mOsmNominal} mOsm/L</option>`).join("");
+  sel.value = infusion.sol;
+  sel.addEventListener("change", ()=>{ infusion.sol = sel.value; loadScenario("reidratacao"); });
+  const vol = document.getElementById("infVol");
+  vol.addEventListener("input", ()=>{
+    infusion.vol = parseFloat(vol.value);
+    document.getElementById("infVolVal").textContent = fmt(infusion.vol,1) + " L";
+    loadScenario("reidratacao");
+  });
+})();
 
 /* ============================================================
    CONTROLES GERAIS
@@ -967,10 +1073,11 @@ function syncScenarioButtons(){
 document.getElementById("playBtn").addEventListener("click", ()=>{
   if(running){
     running = false;
-    document.getElementById("playBtn").textContent = "▶ Continuar";
+    setPlayLabel("▶ Continuar");
   } else {
+    if(atEquilibrium()){ setStatus(equilibriumSummary()); return; }
     running = true;
-    document.getElementById("playBtn").textContent = "❚❚ Pausar";
+    setPlayLabel("❚❚ Pausar");
     setStatus("Simulando... " + tonicityText());
     requestAnimationFrame(tick);
   }
@@ -1028,4 +1135,4 @@ loadScenario("iso");
 })();
 </script>
 <script src="osmose-visual.js?v=20260908"></script></body>
-</html>
+</html>
