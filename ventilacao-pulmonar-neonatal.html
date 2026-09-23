@@ -1,5 +1,6 @@
 <!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ventilação Pulmonar Neonatal · Laboratório interativo</title>
 <link rel="icon" href="brand/orientador.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
 <link rel="stylesheet" href="tutor-widget.css?v=4"><meta name="theme-color" content="#080e18"><style>
 :root{color-scheme:dark;--bg:#080e18;--panel:#111d2d;--line:#9dbddb22;--text:#e9f1fa;--muted:#93a5bc;--phase:#70b8ff;--lung:#e49cac;--bronchus:#a7b7c7;--trachea:#c1cfda;--diaphragmTop:#edaf91;--diaphragmBottom:#743845;--pleuraVisceral:#62e5bd;--pleuraParietal:#afa0ff;--intrapulmonar:#f2c986;--intrapleural:#79bcff;--atm:#8096ae;--c-fase:#79bcff;--c-volume:#80c4ff;--c-palv:#f2c986;--c-ppl:#79bcff;--c-comp:#7ee0b5;--c-res:#ffb985;--c-sao2:#c2a3ff;--c-rv:#7acfc1}
 *{box-sizing:border-box}body{margin:0;padding:26px 34px 36px;font-family:Inter,'Segoe UI',Arial,sans-serif;background:radial-gradient(ellipse at 45% 0,#1e3c574f,transparent 55%),var(--bg);color:var(--text)}body:before{content:'';position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(#9ab6d003 1px,transparent 1px),linear-gradient(90deg,#9ab6d003 1px,transparent 1px);background-size:46px 46px}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:2px solid #8ae5d5;outline-offset:4px}button{transition:transform .18s,background .18s,box-shadow .18s;color:var(--text)}button:hover{transform:translateY(-2px)}button:active{transform:translateY(1px)}button:disabled{cursor:default;opacity:.45;transform:none}.masthead,.hero,.controls,.mode-panel,.state-section,.settings-panel,.status-grid,.layout,.legend,.mode-line{max-width:1440px;margin-left:auto;margin-right:auto}.masthead{display:flex;align-items:center;justify-content:space-between;gap:15px;border-bottom:1px solid var(--line);padding:0 0 19px;margin-bottom:30px}.brand{display:flex;gap:11px;align-items:center;font-size:12px;letter-spacing:2px;font-weight:600}.brand-mark{display:grid;place-items:center;width:35px;height:35px;border:1px solid #84dec64d;border-radius:10px;color:#84dec6;background:linear-gradient(135deg,#254650,#132435);box-shadow:inset 0 1px 0 #ffffff20,0 5px 15px #0003;font-size:24px}.edition{font:10px Consolas,monospace;letter-spacing:1.3px;color:var(--muted)}.edition:before{content:'';display:inline-block;height:6px;width:6px;border-radius:50%;background:#81ddbd;margin-right:9px;box-shadow:0 0 10px #81ddbd55}.hero{display:flex;align-items:center;justify-content:space-between;gap:25px;margin-bottom:27px}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:2.2px;color:#8fafc6;font-weight:600}h1{font-size:clamp(29px,3.4vw,48px);letter-spacing:-1.8px;font-weight:500;margin:9px 0 10px}h1 span{color:#8cdcca}.subtitle{color:var(--muted);font-size:13px;margin:0;line-height:1.8;max-width:750px}.hero-note{font-size:11px;text-align:right;line-height:1.9;color:#90a8bb}.hero-note strong{display:block;color:#d6e4ee;font-size:12px;font-weight:500}.controls,.mode-panel,.settings-panel,.panel,.legend{border:1px solid var(--line);border-radius:16px;background:linear-gradient(130deg,#192a3bc9,#0f1a29e8);box-shadow:0 18px 40px #0003,inset 0 1px 0 #ffffff09}.controls{display:flex;align-items:center;flex-wrap:wrap;gap:9px;padding:14px 17px;margin-bottom:16px}.controls button,.tool-button{border:1px solid #9cb6cb30;background:linear-gradient(#2a3b4f,#1b2a3c);border-radius:9px;padding:11px 15px;font-size:12px;box-shadow:0 3px 0 #050b1366,inset 0 1px 0 #ffffff0e;font-weight:500;min-height:41px}#btnStart{background:linear-gradient(#99e6d6,#62bcae);border-color:#c1fff144;color:#0b302d;box-shadow:0 3px 0 #326e67,0 6px 20px #68d5bd16}#btnPause{color:#f5cb96}#btnReset{color:#eda5ab}.controls label{display:flex;align-items:center;gap:7px;font-size:11px;color:#adbed0;padding:8px 6px}.controls label:last-child{margin-left:auto;white-space:nowrap}.controls input[type=range]{width:95px}input[type=checkbox]{appearance:none;width:30px;height:18px;border-radius:12px;background:#3c4a5d;position:relative;margin:0;cursor:pointer;flex-shrink:0;transition:background .18s}input[type=checkbox]:before{content:'';position:absolute;left:3px;top:3px;height:12px;width:12px;border-radius:50%;background:#e9f0f8;box-shadow:0 1px 3px #0007;transition:transform .18s}input[type=checkbox]:checked{background:#52b99f}input[type=checkbox]:checked:before{transform:translateX(12px)}input[type=range]{accent-color:#89d5c8;cursor:pointer;height:20px;min-width:0}.mode-panel{display:flex;align-items:center;gap:25px;padding:13px 18px;margin-bottom:18px}.mode-title,.settings-title{font-size:10px;text-transform:uppercase;letter-spacing:1.7px;color:#a1b7c9;font-weight:600}.vent-mode-native{display:none}.vent-segment{display:grid;grid-template-columns:1fr 1fr;gap:5px;background:#07101cb3;padding:5px;border:1px solid #819eb72b;border-radius:12px;width:370px;box-shadow:inset 0 2px 8px #0004}.vent-seg-btn{border:1px solid transparent;border-radius:8px;background:transparent;color:#96abc0;font-size:12px;padding:10px 14px;display:flex;justify-content:center;align-items:center;gap:9px}.vent-seg-btn.active{background:linear-gradient(#30485b,#24394c);color:#b8f1e2;border-color:#8fcbbc33;box-shadow:0 3px 8px #0006,inset 0 1px 0 #ffffff0d}.vent-seg-icon{font-size:15px}.mode-help{margin-left:auto;font-size:11px;color:var(--muted)}.state-section{margin-bottom:22px}.section-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px;gap:15px}.section-label small{font-size:10px;color:#859bb0}.state-row{display:flex;flex-wrap:wrap;gap:7px}.state-btn{font-size:11px;line-height:1.4;padding:9px 13px;min-height:35px;border-radius:8px;background:linear-gradient(#162539,#111c2b);border:1px solid #9dbddb22;box-shadow:0 3px 7px #0002;color:#a9bed2}.state-btn.active{border-color:#81d4c784;background:linear-gradient(#254d50,#183637);color:#b1f3df;box-shadow:0 0 15px #74d9c00a,inset 0 1px 0 #ffffff0d}.layout{display:grid;grid-template-columns:1.07fr 1fr;gap:18px;margin-bottom:18px}.panel{padding:18px 16px 14px;min-width:0;overflow:hidden;position:relative;box-shadow:0 22px 45px #0005,0 2px 2px #0005,inset 0 1px 0 #c4dff515}.panel-header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;padding:0 5px}.panel-header h2{font-size:14px;font-weight:500;margin:6px 0 0}.panel-header .eyebrow{font-size:9px;letter-spacing:1.7px}.panel-chip{font:9px Consolas,monospace;letter-spacing:1px;color:#89cfbf;border:1px solid #89cfbf30;background:#89cfbf07;border-radius:5px;padding:6px 8px}.canvas-stage{perspective:1000px;background:radial-gradient(ellipse at 50% 42%,#29405455,#080f1900 70%);border-radius:13px;border:1px solid #8faac616;overflow:hidden}canvas{display:block;width:100%;height:auto;border-radius:12px;background:#091321;transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg));transition:transform .22s ease-out;transform-origin:center;box-shadow:inset 0 0 40px #0003}#graphCanvas{transform:none}.panel-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:9px;color:#819cb5;margin:13px 5px 0;letter-spacing:.3px;line-height:1.5}.panel-foot strong{color:#b2cadb;font-weight:500}.mode-line{margin-top:8px;margin-bottom:12px;text-align:right}.mode-badge{display:inline-block;color:#9ab6ca;background:#16263888;border:1px solid var(--line);border-radius:6px;font-size:10px;padding:7px 10px;line-height:1.5}.status-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:24px}.card{--card-color:var(--c-volume);min-width:0;position:relative;overflow:hidden;background:linear-gradient(125deg,#1a293ac4,#101c2aee);border:1px solid #9dbddb20;border-top:2px solid color-mix(in srgb,var(--card-color) 65%,transparent);border-radius:11px;padding:16px 17px;box-shadow:0 8px 20px #0003,inset 0 1px 0 #ffffff06;transition:transform .2s,border-color .2s}.card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--card-color) 40%,transparent)}.card:after{content:'';position:absolute;right:-45px;top:-50px;width:145px;height:145px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--card-color) 10%,transparent),transparent 65%);pointer-events:none}.card-title{font-size:9px;color:#a4b9cb;text-transform:uppercase;letter-spacing:1.1px;line-height:1.6;margin-bottom:9px}.phase{font:29px Consolas,monospace;letter-spacing:-1px;color:var(--card-color);line-height:1.2;position:relative}.phase small{display:block;margin-top:7px;font:10px/1.6 'Segoe UI',Arial,sans-serif;letter-spacing:0;color:#8ba4bc}#phaseCard .phase{font:22px/1.25 'Segoe UI',Arial,sans-serif;letter-spacing:-.6px}#phaseCard{--card-color:var(--phase)}#valueCard{--card-color:var(--c-volume)}#palvCard{--card-color:var(--c-palv)}#pplCard{--card-color:var(--c-ppl)}#compCard{--card-color:var(--c-comp)}#resCard{--card-color:var(--c-res)}#sao2Card{--card-color:var(--c-sao2)}#rvCard{--card-color:var(--c-rv)}#veCard{--card-color:#eeb883}#vaCard{--card-color:#eb9bcb}#vdCard{--card-color:#a6bad2}#vdPhysCard{--card-color:#77d1c2}.settings-panel{padding:21px;margin-bottom:23px}.settings-title{margin-bottom:16px}.settings-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.settings-grid label{display:grid;grid-template-columns:1fr auto;grid-template-areas:'name name' 'range value';align-items:center;gap:12px;min-width:0;min-height:95px;border:1px solid #8faac625;background:linear-gradient(#16253799,#101b2baa);box-shadow:inset 0 1px 0 #ffffff05;border-radius:10px;padding:15px}.setting-name{grid-area:name;font-size:12px;line-height:1.5;color:#b6cadb;min-width:0}.settings-grid input{grid-area:range;width:100%}.setting-value{grid-area:value;font:12px Consolas,monospace;color:#98ddce;white-space:nowrap}.settings-grid select{grid-area:range;width:100%;min-width:0;border:1px solid #465b70;background:#0d1b2b;color:#cfdeeb;border-radius:7px;padding:8px;font-size:11px}.settings-grid .control-select{grid-template-areas:'name' 'range';grid-template-columns:1fr}.mech-only{display:none!important}body.mech-mode .settings-grid .mech-only{display:grid!important}.legend{padding:23px 25px;font-size:12px;line-height:1.95;color:#9db1c7}.legend>b:first-child{color:#d5e6f3}.signature{font-size:10px;color:#869bb1;border-top:1px solid var(--line);padding-top:15px;margin-top:19px;text-align:right;line-height:1.8}.signature strong{font-weight:400}.pill{display:inline-block;padding:2px 9px;font-size:9px;border-radius:6px;border:1px solid #91a9bf25;background:#0a1726;color:#96acc0;margin:8px 4px 0 0}.var-fr,.var-ppl{color:#88c5ff}.var-vt,.var-rv{color:#8bdbc0}.var-ve,.var-palv{color:#f0c895}.var-va{color:#eaa2c8}.var-vd{color:#aebed3}.var-vdf{color:#7ad3c7}.var-peep,.var-sao2{color:#c7adfa}.var-pinsp{color:#f2a9a4}.view-tools{display:flex;gap:8px;align-items:center}.view-tools label{font-size:10px;display:flex;align-items:center;gap:8px;color:#96acc0}.cycle-track{width:75px;height:3px;background:#2a4054;border-radius:3px;overflow:hidden}.cycle-track span{height:100%;display:block;background:#8fdac8;width:0}.scene-detail{color:#82d6bd!important}
@@ -97,11 +98,102 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
 .app .metric.fc,.app .metric.edv,.app .metric.esv,.app .metric.vs,.app .metric.ef,.app .metric.dc{border-left-color:var(--metric-strong)}
 .app .metric.fc{--metric-strong:var(--c-fc)}.app .metric.edv{--metric-strong:var(--c-edv)}.app .metric.esv{--metric-strong:var(--c-esv)}.app .metric.vs{--metric-strong:var(--c-vs)}.app .metric.ef{--metric-strong:var(--c-ef)}.app .metric.dc{--metric-strong:var(--c-dc)}
 .app .metric.fc small,.app .metric.edv small,.app .metric.esv small,.app .metric.vs small,.app .metric.ef small,.app .metric.dc small{color:var(--metric-strong)}
-</style></head><body>
+</style>
+<style>
+/* Variáveis adicionais, alertas fisiológicos e controles desabilitados. */
+#pawCard{--card-color:#f2a9a4}#paco2Card{--card-color:#ecb48e}#vdAlvCard{--card-color:#c9b6ef}#vdvtCard{--card-color:#9fd0e8}
+.card.card-alert{border-color:#ff9aa27a}
+.phase small{overflow-wrap:anywhere}
+.physio-alerts{max-width:1440px;margin:0 auto 14px;display:grid;gap:6px}
+.physio-alerts[hidden]{display:none}
+.physio-alerts p{margin:0;padding:9px 13px;border-radius:9px;font-size:12px;line-height:1.55;border:1px solid #9dbddb26;background:#0f1c2bd9;color:#c8d8e6;border-left:4px solid #8fb5d6}
+.physio-alerts .alert-crit{border-left-color:#ff8f98;color:#ffdfe2}
+.physio-alerts .alert-warn{border-left-color:#f2c986}
+.physio-alerts .alert-info{border-left-color:#7ee0b5}
+input[type=range]:disabled{opacity:.45;cursor:not-allowed}
+.spont-only{display:grid}
+body.mech-mode .settings-grid .spont-only{display:none!important}
+.mobile-sticky{display:none}
+@media(max-width:760px){
+ html{overflow-x:hidden}
+ body{overflow-x:clip}
+ body{padding:0 12px 28px}
+ .masthead,.hero,.mode-help{display:none}
+ .mobile-sticky{display:block;position:sticky;top:0;z-index:60;margin:0 -12px 14px;background:linear-gradient(180deg,#0d1a29f5,#0a1522f5);border-bottom:1px solid #9dbddb2e;box-shadow:0 8px 18px #0007;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+ .mobile-topbar{display:flex;align-items:center;gap:8px;padding:8px 12px 4px}
+ .mt-title{flex:1;min-width:0;font-size:15px;font-weight:600;letter-spacing:-.2px;line-height:1.2;color:#e9f1fa}
+ .mt-title span{color:#8cdcca}
+ .mt-mode{display:flex;gap:4px;padding:3px;border-radius:12px;background:#07101cb3;border:1px solid #819eb72b}
+ .mt-mode-btn{min-height:46px;min-width:58px;border-radius:9px;border:1px solid transparent;background:transparent;color:#a9bed2;font-size:12px;font-weight:600;padding:4px 8px;display:flex;align-items:center;justify-content:center}
+ .mt-mode-btn.active{background:linear-gradient(160deg,#4e8986,#204b48);color:#d1ffed;border-color:#9bddc77a}
+ .mobile-playtoggle{min-width:48px;min-height:44px;border-radius:12px;border:1px solid #8bd6bd;background:linear-gradient(160deg,#d0fff0,#5eb39f);color:#0b302d;font-size:17px;font-weight:700}
+ .mobile-readout{padding:0 12px 6px;font-size:12px;line-height:1.4;color:#b8cadb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .mobile-tabnav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:0 12px 9px}
+ .mobile-tabnav button{min-height:46px;border-radius:10px;border:1px solid #9cb6cb30;background:linear-gradient(#22344a,#16263a);color:#a9bed2;font-size:13px;font-weight:600}
+ .mobile-tabnav button.active{background:linear-gradient(160deg,#4e8986,#204b48);color:#d1ffed;border-color:#9bddc77a}
+ [data-tab]{display:none!important}
+ [data-tab].tab-active{display:block!important}
+ .status-grid[data-tab].tab-active,.physio-alerts[data-tab].tab-active{display:grid!important}
+ .controls[data-tab].tab-active,.mode-panel[data-tab].tab-active{display:flex!important}
+ .physio-alerts[data-tab].tab-active[hidden]{display:none!important}
+ .layout{margin-bottom:12px;gap:12px}
+ .panel{padding:10px 6px 10px}
+ .panel-header{flex-wrap:wrap;gap:8px}
+ .panel-header h2{font-size:15px}
+ .eyebrow,.panel-header .eyebrow{font-size:11px;letter-spacing:1.2px}
+ .mode-title,.settings-title{font-size:11px}
+ input[type=range]{height:44px}
+ .panel-chip{font-size:11px}
+ .panel-foot{font-size:11px;flex-wrap:wrap}
+ .view-tools label{font-size:12px;min-height:44px}
+ .view-tools{flex-wrap:wrap}
+ .controls label{font-size:12px;min-height:44px}
+ .controls button{min-height:44px}
+ .mode-badge{font-size:11px}
+ .status-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .card{padding:12px 11px}
+ .card-title{font-size:11px;letter-spacing:.4px}
+ .phase{font-size:23px}
+ #phaseCard .phase{font-size:18px}
+ .phase small{font-size:11px;line-height:1.45}
+ .settings-grid{grid-template-columns:1fr}
+ .settings-grid select{min-height:44px;font-size:13px}
+ .setting-name{font-size:12px}
+ .settings-section-title{font-size:12px}
+ .state-btn{min-height:44px;font-size:12px}
+ .section-label small{display:none}
+ .legend{font-size:13px;padding:16px}
+ .pill{font-size:11px}
+ .signature{font-size:11px}
+ .interpret-equation{font-size:13px}
+ .physio-alerts p{font-size:12px}
+ input[type=checkbox]{width:36px;height:22px}
+ input[type=checkbox]:before{height:16px;width:16px}
+ input[type=checkbox]:checked:before{transform:translateX(14px)}
+}
+</style>
+<style>.mech-legend{display:none}body.mech-mode .mech-legend{display:inline}</style>
+</head><body>
+<div class="mobile-sticky">
+  <div class="mobile-topbar">
+    <div class="mt-title">Ventilação <span>neonatal</span></div>
+    <div class="mt-mode" role="group" aria-label="Modo ventilatório">
+      <button type="button" class="mt-mode-btn active" data-mode="spont" aria-pressed="true">Espont.</button>
+      <button type="button" class="mt-mode-btn" data-mode="mech" aria-pressed="false">Mecân.</button>
+    </div>
+    <button type="button" class="mobile-playtoggle" id="mobilePlayToggle" aria-label="Iniciar">▶</button>
+  </div>
+  <div class="mobile-readout" id="mobileReadout" aria-live="off"></div>
+  <nav class="mobile-tabnav" aria-label="Seções do simulador">
+    <button type="button" data-tabnav="animacao" class="active">Animação</button>
+    <button type="button" data-tabnav="controles">Controles</button>
+    <button type="button" data-tabnav="graficos">Gráficos</button>
+  </nav>
+</div>
 <header class="masthead"><div class="brand"><span class="brand-mark" aria-hidden="true">✳</span> FISIOLOGIA INTERATIVA</div><span class="edition">LABORATÓRIO NEONATAL</span></header>
 <section class="hero"><div><div class="eyebrow">Explore / Observe / Compreenda</div><h1>Ventilação <span>Neonatal</span></h1><p class="subtitle">Explore a respiração do recém-nascido. Relacione maturidade pulmonar, idade gestacional e suporte ventilatório em uma simulação integrada.</p></div><div class="hero-note"><strong>Da pressão ao movimento.</strong>Do nascimento ao desenvolvimento.<br>Simulação didática interativa.</div></section>
 
-  <div class="controls">
+  <div class="controls" data-tab="controles">
     <button id="btnStart" class="primary">▶ Iniciar</button>
     <button id="btnPause">Ⅱ Pausar</button>
     <button id="btnStep">↦ Próxima etapa</button>
@@ -115,7 +207,7 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
     </label>
   </div>
 
-  <div class="mode-panel">
+  <div class="mode-panel" data-tab="controles">
     <div class="mode-title">Modo ventilatório</div>
     <select id="ventMode" class="vent-mode-native" aria-hidden="true" tabindex="-1">
       <option value="spont" selected="selected">Ventilação espontânea</option>
@@ -129,68 +221,35 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
       </button>
     </div><span class="mode-help">Dois modos. A mesma mecânica em perspectiva.</span></div>
 
-<section class="state-section"><div class="section-label"><span class="eyebrow">01 / Cenários neonatais</span><small>Selecione um cenário para explorar suas respostas</small></div><div class="state-row" id="stateRow"></div></section>
+<section class="state-section" data-tab="controles"><div class="section-label"><span class="eyebrow">01 / Cenários neonatais</span><small>Selecione um cenário para explorar suas respostas</small></div><div class="state-row" id="stateRow"></div></section>
 
 <div class="layout">
-<section class="panel"><header class="panel-header"><div><div class="eyebrow">02 / Mecânica em movimento</div><h2>Anatomia funcional</h2></div><div class="view-tools"><label><input type="checkbox" id="depthToggle" checked>Efeito 3D</label><label><input type="checkbox" id="pleuraToggle">Pleuras</label></div></header><div class="canvas-stage" id="anatomyStage"><canvas id="sceneCanvas" width="860" height="540" role="img" aria-label="Pulmões, pleuras e diafragma animados conforme o ciclo respiratório. Representação didática volumétrica."></canvas></div><div class="panel-foot"><span><strong class="scene-detail">●</strong> Pulmões &nbsp; <strong style="color:#62e5bd">●</strong> Pleura visceral &nbsp; <strong style="color:#afa0ff">●</strong> Pleura parietal</span><span>ILUSTRAÇÃO SEM ESCALA</span></div></section>
-<section class="panel"><header class="panel-header"><div><div class="eyebrow">03 / Sinais sincronizados</div><h2>Pressões durante o ciclo</h2></div><span class="panel-chip" id="playbackBadge">EM PAUSA</span></header><div class="canvas-stage"><canvas id="graphCanvas" width="860" height="540" role="img" aria-label="Gráfico sincronizado das pressões alveolar e pleural ao longo das fases respiratórias."></canvas></div><div class="panel-foot"><span><strong style="color:#f2c986">●</strong> Palv &nbsp; <strong style="color:#79bcff">●</strong> Ppl &nbsp; · &nbsp; cmH₂O</span><div class="cycle-track" aria-hidden="true"><span id="cycleProgress"></span></div><span id="cycleLabel">0% do ciclo</span></div></section>
+<section class="panel" data-tab="animacao"><header class="panel-header"><div><div class="eyebrow">02 / Mecânica em movimento</div><h2>Anatomia funcional</h2></div><div class="view-tools"><label><input type="checkbox" id="depthToggle" checked>Efeito 3D</label><label><input type="checkbox" id="pleuraToggle">Pleuras</label></div></header><div class="canvas-stage" id="anatomyStage"><canvas id="sceneCanvas" width="860" height="540" role="img" aria-label="Pulmões, pleuras e diafragma animados conforme o ciclo respiratório. Representação didática volumétrica."></canvas></div><div class="panel-foot"><span><strong class="scene-detail">●</strong> Pulmões &nbsp; <strong style="color:#62e5bd">●</strong> Pleura visceral &nbsp; <strong style="color:#afa0ff">●</strong> Pleura parietal</span><span>ILUSTRAÇÃO SEM ESCALA</span></div></section>
+<section class="panel" data-tab="graficos"><header class="panel-header"><div><div class="eyebrow">03 / Sinais sincronizados</div><h2>Pressões durante o ciclo</h2></div><span class="panel-chip" id="playbackBadge">EM PAUSA</span></header><div class="canvas-stage"><canvas id="graphCanvas" width="860" height="540" role="img" aria-label="Gráfico sincronizado das pressões na via aérea, alveolar e pleural ao longo das fases respiratórias, em cmH₂O."></canvas></div><div class="panel-foot"><span><strong style="color:#f2c986">●</strong> Palv &nbsp; <strong style="color:#79bcff">●</strong> Ppl &nbsp; <strong class="mech-legend" style="color:#f2a9a4">●</strong><span class="mech-legend"> Paw</span> &nbsp; · &nbsp; cmH₂O</span><div class="cycle-track" aria-hidden="true"><span id="cycleProgress"></span></div><span id="cycleLabel">0% do ciclo</span></div></section>
 </div>
-  <div class="mode-line"><div id="modeBadge" class="mode-badge">Ventilação espontânea · contínuo</div></div>
+  <div class="mode-line" data-tab="animacao"><div id="modeBadge" class="mode-badge">Ventilação espontânea · contínuo</div></div>
+  <div class="physio-alerts" id="physioAlerts" data-tab="animacao" aria-live="polite" hidden></div>
 
-  <div class="status-grid">
-    <div class="card" id="phaseCard">
-      <div class="card-title">Fase atual</div>
-      <div class="phase" id="phaseText">Repouso inicial<small id="phaseDesc">Ponto inicial do ciclo ventilatório.</small></div>
-    </div>
-    <div class="card" id="valueCard">
-      <div class="card-title">Volume pulmonar relativo</div>
-      <div class="phase" id="valueText">34%<small id="valueDesc">Volume pulmonar relativo determinado por complacência, resistência e modo ventilatório.</small></div>
-    </div>
-    <div class="card" id="palvCard">
-      <div class="card-title">Palv · pressão alveolar</div>
-      <div class="phase" id="palvText">0.0<small>cmH₂O</small></div>
-    </div>
-    <div class="card" id="pplCard">
-      <div class="card-title">Ppl · pressão pleural</div>
-      <div class="phase" id="pplText">-5.0<small>cmH₂O</small></div>
-    </div>
-    <div class="card" id="compCard">
-      <div class="card-title">Complacência</div>
-      <div class="phase" id="compText">1.00<small>relativa</small></div>
-    </div>
-    <div class="card" id="resCard">
-      <div class="card-title">Resistência vias aéreas</div>
-      <div class="phase" id="resText">1.00<small>relativa</small></div>
-    </div>
-    <div class="card" id="sao2Card">
-      <div class="card-title">SaO₂ estimada</div>
-      <div class="phase" id="sao2Text">88%<small>oxigenação</small></div>
-    </div>
-    <div class="card" id="rvCard">
-      <div class="card-title">Trabalho respiratório estimado</div>
-      <div class="phase" id="rvText">18<small>%</small></div>
-    </div>
-    <div class="card" id="veCard">
-      <div class="card-title">VE · ventilação minuto</div>
-      <div class="phase" id="veText">589<small>mL/min</small></div>
-    </div>
-    <div class="card" id="vaCard">
-      <div class="card-title">VA · ventilação alveolar</div>
-      <div class="phase" id="vaText">269<small>mL/min</small></div>
-    </div>
-    <div class="card" id="vdCard">
-      <div class="card-title">VDa · espaço morto anatômico</div>
-      <div class="phase" id="vdText">8<small>mL · vias condutoras</small></div>
-    </div>
-    <div class="card" id="vdPhysCard">
-      <div class="card-title">VDf · espaço morto fisiológico</div>
-      <div class="phase" id="vdPhysText">8<small>mL · VDa + VDalv</small></div>
-    </div>
+  <div class="status-grid" data-tab="animacao">
+    <div class="card" id="phaseCard"><div class="card-title">Fase atual</div><div class="phase" id="phaseText">Repouso inicial<small id="phaseDesc">Ponto inicial do ciclo ventilatório.</small></div></div>
+    <div class="card" id="valueCard"><div class="card-title">Vt · volume corrente</div><div class="phase">18 mL<small>mL/kg</small></div></div>
+    <div class="card" id="palvCard"><div class="card-title">Palv · pressão alveolar</div><div class="phase">0,0<small>cmH₂O</small></div></div>
+    <div class="card" id="pplCard"><div class="card-title">Ppl · pressão pleural</div><div class="phase">-2,0<small>cmH₂O</small></div></div>
+    <div class="card" id="pawCard"><div class="card-title" id="pawTitle">CPAP / PEEP intrínseca</div><div class="phase">0/0<small>cmH₂O</small></div></div>
+    <div class="card" id="compCard"><div class="card-title">Crs · complacência do sistema respiratório</div><div class="phase">1,20<small>mL/cmH₂O/kg</small></div></div>
+    <div class="card" id="resCard"><div class="card-title">R · resistência</div><div class="phase">35<small>cmH₂O/L/s</small></div></div>
+    <div class="card" id="sao2Card"><div class="card-title">SaO₂ estimada</div><div class="phase">97%<small>oxigenação</small></div></div>
+    <div class="card" id="paco2Card"><div class="card-title">PaCO₂ estimada</div><div class="phase">38<small>mmHg</small></div></div>
+    <div class="card" id="rvCard"><div class="card-title">Trabalho respiratório estimado</div><div class="phase">1,0×<small>índice</small></div></div>
+    <div class="card" id="veCard"><div class="card-title">VE · ventilação minuto</div><div class="phase">756<small>mL/min</small></div></div>
+    <div class="card" id="vaCard"><div class="card-title">VA · ventilação alveolar</div><div class="phase">475<small>mL/min</small></div></div>
+    <div class="card" id="vdCard"><div class="card-title">VDa · espaço morto anatômico</div><div class="phase">6,4<small>mL · vias condutoras</small></div></div>
+    <div class="card" id="vdAlvCard"><div class="card-title">VDalv · espaço morto alveolar</div><div class="phase">0,3<small>mL</small></div></div>
+    <div class="card" id="vdPhysCard"><div class="card-title">VDf · espaço morto fisiológico</div><div class="phase">6,7<small>mL · VDa + VDalv</small></div></div>
+    <div class="card" id="vdvtCard"><div class="card-title">VD/VT · fração de espaço morto</div><div class="phase">0,37<small>Bohr–Enghoff</small></div></div>
   </div>
 
-
-
-  <div class="settings-panel">
+  <div class="settings-panel" data-tab="controles">
     <div class="settings-title">04 / Ajustes do cenário</div>
     <div class="settings-grid">
       <div class="settings-section-title">Perfil neonatal</div>
@@ -206,30 +265,52 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
         <output class="setting-value" id="postmenstrualAgeLabel">40 sem + 1 dia</output>
       </label>
       <label><span class="setting-name">Massa corporal atual</span>
-        <input id="massRange" type="range" min="0.4" max="5.0" step="0.1" value="3.2">
+        <input id="massRange" type="range" min="0.5" max="5.0" step="0.1" value="3.2">
         <span class="setting-value" id="massLabel">3,2 kg</span>
+      </label>
+      <label class="control-select"><span class="setting-name">Surfactante</span>
+        <select id="surfSelect">
+          <option value="deficiente">Deficiente</option>
+          <option value="adequado" selected="selected">Adequado (endógeno)</option>
+          <option value="exogeno">Exógeno administrado</option>
+        </select>
       </label>
 
       <div class="settings-section-title">Ventilação e mecânica</div>
       <label><span class="setting-name">Frequência respiratória (FR)</span>
-        <input id="freqRange" type="range" min="20" max="80" step="1" value="40">
-        <span class="setting-value" id="freqLabel">40 irpm</span>
+        <input id="freqRange" type="range" min="20" max="80" step="1" value="42">
+        <span class="setting-value" id="freqLabel">42 irpm</span>
       </label>
-      <label><span class="setting-name">Volume corrente (Vt)</span>
-        <input id="vtRange" type="range" min="1" max="40" step="0.5" value="16">
-        <span class="setting-value" id="vtLabel">16 mL · 5 mL/kg</span>
+      <label><span class="setting-name" id="vtName">Volume corrente (Vt)</span>
+        <input id="vtRange" type="range" min="1" max="40" step="0.1" value="18">
+        <span class="setting-value" id="vtLabel">18 mL · 5,6 mL/kg</span>
       </label>
       <label><span class="setting-name">Espaço morto alveolar adicional (VDalv)</span>
         <input id="vdPhysRange" type="range" min="0" max="12" step="0.5" value="0">
         <span class="setting-value" id="vdPhysLabel">0 mL</span>
       </label>
-      <label><span class="setting-name">Complacência pulmonar</span>
-        <input id="complianceRange" type="range" min="0.35" max="1.60" step="0.05" value="1.00">
-        <span class="setting-value" id="complianceLabel">1.00</span>
+      <label><span class="setting-name">Complacência do sistema respiratório</span>
+        <input id="complianceRange" type="range" min="0.15" max="2.00" step="0.05" value="1.20">
+        <span class="setting-value" id="complianceLabel">1,20 mL/cmH₂O/kg</span>
       </label>
       <label><span class="setting-name">Resistência das vias aéreas</span>
-        <input id="resistanceRange" type="range" min="0.60" max="2.40" step="0.05" value="1.00">
-        <span class="setting-value" id="resistanceLabel">1.00</span>
+        <input id="resistanceRange" type="range" min="15" max="250" step="5" value="35">
+        <span class="setting-value" id="resistanceLabel">35 cmH₂O/L/s</span>
+      </label>
+      <label><span class="setting-name">Fração inspirada de O₂ (FiO₂)</span>
+        <input id="fio2Range" type="range" min="21" max="100" step="1" value="21">
+        <span class="setting-value" id="fio2Label">21%</span>
+      </label>
+      <label class="spont-only"><span class="setting-name">CPAP</span>
+        <input id="cpapRange" type="range" min="0" max="10" step="0.5" value="0">
+        <span class="setting-value" id="cpapLabel">sem CPAP</span>
+      </label>
+      <label class="spont-only control-select"><span class="setting-name">Padrão de apneia</span>
+        <select id="apneaSelect">
+          <option value="none" selected="selected">Sem pausas</option>
+          <option value="short">Pausas de 12 s com dessaturação</option>
+          <option value="long">Pausas de 20 s</option>
+        </select>
       </label>
 
       <div class="settings-section-title mech-only">Suporte ventilatório</div>
@@ -248,45 +329,62 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
           <option value="breath_stacking">Empilhamento</option>
         </select>
       </label>
-      <label class="mech-only"><span class="setting-name">Tempo inspiratório</span>
+      <label class="mech-only"><span class="setting-name">Tempo inspiratório (Ti)</span>
         <input id="tiRange" type="range" min="0.2" max="1.0" step="0.05" value="0.35">
         <span class="setting-value" id="tiLabel">0,35 s</span>
       </label>
-      <label class="mech-only"><span class="setting-name">PEEP positiva</span>
-        <input id="mechPeepRange" type="range" min="0" max="10" step="0.5" value="0">
-        <span class="setting-value" id="mechPeepLabel">0 cmH₂O</span>
+      <label class="mech-only"><span class="setting-name">PEEP</span>
+        <input id="mechPeepRange" type="range" min="0" max="10" step="0.5" value="5">
+        <span class="setting-value" id="mechPeepLabel">5 cmH₂O</span>
       </label>
-      <label class="mech-only"><span class="setting-name">Pinsp / limite de pressão</span>
-        <input id="mechPinspRange" type="range" min="5" max="30" step="1" value="5">
-        <span class="setting-value" id="mechPinspLabel">0 cmH₂O</span>
+      <label class="mech-only"><span class="setting-name" id="mechPinspName">ΔP acima da PEEP (pressão inspiratória)</span>
+        <input id="mechPinspRange" type="range" min="3" max="30" step="1" value="6">
+        <span class="setting-value" id="mechPinspLabel">6 cmH₂O</span>
       </label>
     </div>
   </div>
 
-
-  <div class="legend">
+  <div class="legend" data-tab="graficos">
     <b>Como interpretar:</b> a <span class="var-ig">idade gestacional ao nascimento</span> determina o grau de maturação pulmonar com que o bebê nasceu. A <span class="var-postnatal">idade pós-natal</span> mostra por quanto tempo esse pulmão continua se desenvolvendo fora do útero. A combinação das duas resulta na <span class="var-ipm">idade pós-menstrual</span>:
     <span class="interpret-equation"><span class="var-ipm">Idade pós-menstrual</span> = <span class="var-ig">idade gestacional ao nascimento</span> + <span class="var-postnatal">idade pós-natal</span></span>
-    Dois bebês com a mesma <span class="var-ipm">idade pós-menstrual</span> não apresentam necessariamente a mesma maturidade pulmonar: parte do desenvolvimento pode ter ocorrido dentro do útero ou após um nascimento prematuro. <span class="var-fr">FR</span> e <span class="var-vt">Vt</span> determinam a <span class="var-ve">ventilação minuto</span>. O <span class="var-vt">Vt</span> também é apresentado em <span class="var-vt">mL/kg</span>. A <span class="var-mass">massa corporal</span> e a prematuridade estimam o <span class="var-vd">espaço morto anatômico (VDa)</span>, correspondente às vias condutoras, inclusive traqueia e brônquios. O calibre reduzido eleva principalmente a <span class="var-res">resistência das vias aéreas</span>; já o <span class="var-vd">espaço morto fisiológico (VDf)</span> soma VDa ao componente alveolar ventilado com pouca ou nenhuma perfusão: <span class="interpret-equation">VDf = VDa + VDalv</span> Recrutar unidades perfundidas pode reduzir VDalv, enquanto sobredistensão e compressão capilar podem aumentá-lo. Alvéolos fechados, isoladamente, produzem comportamento semelhante a shunt, e não espaço morto. <span class="var-comp">Complacência pulmonar</span>, resistência e maturidade modificam o volume entregue, o <span class="var-work">trabalho respiratório</span> e a <span class="var-sao2">oxigenação</span>. Na ventilação mecânica, <span class="var-peep">PEEP</span> e <span class="var-pinsp">pressão inspiratória</span> alteram recrutamento, pressões e volume corrente.
+    Dois bebês com a mesma <span class="var-ipm">idade pós-menstrual</span> não apresentam necessariamente a mesma maturidade pulmonar: parte do desenvolvimento pode ter ocorrido dentro do útero ou após um nascimento prematuro. A maturidade modifica a <span class="var-comp">complacência</span>, a <span class="var-res">resistência</span> e a caixa torácica, que no prematuro é muito complacente e se retrai durante o esforço. <span class="var-fr">FR</span> e <span class="var-vt">Vt</span> determinam a <span class="var-ve">ventilação minuto</span>; o <span class="var-vt">Vt</span> também é apresentado em <span class="var-vt">mL/kg</span>. A <span class="var-mass">massa corporal</span> define a escala do <span class="var-vd">espaço morto anatômico (VDa)</span>, cerca de 2 mL/kg, correspondente às vias condutoras, inclusive traqueia e brônquios; na ventilação mecânica, a cânula desvia a via aérea superior (essa parte do VDa deixa de contar), mas acrescenta o espaço morto instrumental da própria cânula, do conector e do sensor de fluxo; por isso o total pode subir ou descer conforme o tamanho do bebê. O calibre reduzido eleva principalmente a <span class="var-res">resistência das vias aéreas</span>; já o <span class="var-vd">espaço morto fisiológico (VDf)</span> soma VDa ao componente alveolar ventilado com pouca ou nenhuma perfusão: <span class="interpret-equation">VDf = VDa + VDalv &nbsp;·&nbsp; VA = (Vt − VDf) × FR &nbsp;·&nbsp; VD/VT = (PaCO₂ − PĒCO₂) / PaCO₂</span> A <span class="var-va">ventilação alveolar</span> determina a PaCO₂ (PaCO₂ = 0,863 × VCO₂ / VA). Recrutar unidades perfundidas pode reduzir VDalv, enquanto sobredistensão e compressão capilar podem aumentá-lo. Alvéolos fechados e perfundidos produzem shunt, e não espaço morto: <span class="var-peep">PEEP/CPAP</span> e surfactante podem reabri-los, enquanto o aumento da <span class="var-sao2">FiO₂</span> corrige bem as áreas de baixa relação V/Q, mas pouco o shunt verdadeiro. Na ventilação mecânica, a <span class="var-pinsp">pressão inspiratória</span> é ajustada como ΔP acima da <span class="var-peep">PEEP</span> (PIP = PEEP + ΔP); na pressão controlada, o <span class="var-vt">Vt</span> resulta de ΔP, complacência, resistência e tempo inspiratório, pois a constante de tempo τ = R × C define quanto do enchimento se completa.
     <span class="pill">ventilação</span>
     <span class="pill">mecânica respiratória</span>
     <span class="pill">pressões</span>
     <span class="pill">VE/VA</span>
     <span class="pill">espaço morto</span>
+    <span class="pill">shunt</span>
     <div class="signature"><strong>Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Mário César Nascimento, PhD ©</strong></div>
   </div>
 
 <script>
 (() => {
   const TOTAL = 400;
-  const stages = [
-    { name:'Repouso inicial', start:0, end:35, color:'#9aabc0', desc:'Ponto inicial do ciclo ventilatório.', event:'Equilíbrio', eventDesc:'Palv próxima de 0 e Ppl basal.' },
-    { name:'Inspiração', start:36, end:190, color:'#79bcff', desc:'Entrada de ar e expansão pulmonar.', event:'Entrada de ar', eventDesc:'Palv fica negativa e Ppl torna-se mais negativa.' },
-    { name:'Transição inspiratória', start:191, end:215, color:'#c3a2f7', desc:'Fim da inspiração. Fluxo mínimo.', event:'Equilíbrio transitório', eventDesc:'Palv retorna em direção a 0.' },
-    { name:'Expiração', start:216, end:365, color:'#f2979d', desc:'Saída de ar e retração pulmonar.', event:'Saída de ar', eventDesc:'Palv fica positiva durante a saída de ar.' },
-    { name:'Repouso final', start:366, end:400, color:'#9aabc0', desc:'Novo ponto de equilíbrio do ciclo.', event:'Estabilização', eventDesc:'Sem fluxo significativo de ar.' }
+  const STAGE_COLORS = {rest:'#9aabc0', insp:'#79bcff', trans:'#c3a2f7', exp:'#f2979d'};
+  const STAGE_TEXT = {
+    spont:{
+      rest0:'Fim da expiração: volume expiratório final mantido, fluxo mínimo.',
+      insp:'O diafragma contrai: Ppl fica mais negativa, Palv fica negativa e o ar entra.',
+      trans:'Fim da inspiração: fluxo próximo de zero e maior volume do ciclo.',
+      exp:'Recolhimento elástico: Palv positiva e saída de ar, frenada pela glote e pelo diafragma.',
+      rest1:'Fluxo mínimo antes do próximo esforço inspiratório.'
+    },
+    mech:{
+      rest0:'Fim da expiração: a Paw está na PEEP ajustada.',
+      insp:'O ventilador eleva a Paw; a Palv sobe conforme a constante de tempo e a Ppl aumenta pouco.',
+      trans:'Fim do tempo inspiratório: a Paw retorna à PEEP.',
+      exp:'Expiração passiva até a PEEP; se o tempo expiratório for curto, sobra volume (auto-PEEP).',
+      rest1:'Volume expiratório final atingido antes do próximo ciclo.'
+    }
+  };
+  let stages = [
+    { name:'Repouso inicial', start:0, end:15, color:STAGE_COLORS.rest, desc:STAGE_TEXT.spont.rest0 },
+    { name:'Inspiração', start:16, end:170, color:STAGE_COLORS.insp, desc:STAGE_TEXT.spont.insp },
+    { name:'Transição inspiratória', start:171, end:195, color:STAGE_COLORS.trans, desc:STAGE_TEXT.spont.trans },
+    { name:'Expiração', start:196, end:365, color:STAGE_COLORS.exp, desc:STAGE_TEXT.spont.exp },
+    { name:'Repouso final', start:366, end:400, color:STAGE_COLORS.rest, desc:STAGE_TEXT.spont.rest1 }
   ];
-  const pauseFrames = stages.map(s => s.end);
+  let pauseFrames = stages.map(s => s.end);
 
   const sceneCanvas = document.getElementById('sceneCanvas');
   const graphCanvas = document.getElementById('graphCanvas');
@@ -298,6 +396,18 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
     canvas.width = Math.round(860 * pixelScale); canvas.height = Math.round(540 * pixelScale);
     canvas.getContext('2d').setTransform(pixelScale, 0, 0, pixelScale, 0, 0);
   });
+  const FONT = "Inter, 'Segoe UI', Arial, sans-serif";
+  const MONO = "Consolas, 'SFMono-Regular', Menlo, monospace";
+  const mobileMQ = matchMedia('(max-width:760px)');
+  function isMobile(){ return mobileMQ.matches; }
+  // No celular, o canvas é reduzido: o tamanho mínimo garante ~11,5 px efetivos na tela.
+  function fz(ctx, px){
+    if(!isMobile()) return px;
+    const w = ctx.canvas.clientWidth || 860;
+    return Math.max(px, 11.5 * 860 / Math.max(200, w));
+  }
+  function setFont(ctx, px, weight, family){ ctx.font = `${weight ? weight + ' ' : ''}${fz(ctx, px).toFixed(1)}px ${family || FONT}`; }
+
   const depthToggle = document.getElementById('depthToggle');
   const anatomyStage = document.getElementById('anatomyStage');
   const motionPreference = matchMedia('(prefers-reduced-motion: reduce)');
@@ -313,207 +423,56 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
   depthToggle.addEventListener('change', () => { resetPerspective(); render(); });
   document.getElementById('pleuraToggle').addEventListener('change', render);
 
-  const btnStart = document.getElementById('btnStart');
-  const btnPause = document.getElementById('btnPause');
-  const btnStep = document.getElementById('btnStep');
-  const btnReset = document.getElementById('btnReset');
-  const speedRange = document.getElementById('speedRange');
-  const speedLabel = document.getElementById('speedLabel');
-  const loopToggle = document.getElementById('loopToggle');
-  const stepModeToggle = document.getElementById('stepModeToggle');
-  const labelsToggle = document.getElementById('labelsToggle');
-  const ventMode = document.getElementById('ventMode');
-  const freqRange = document.getElementById('freqRange');
-  const freqLabel = document.getElementById('freqLabel');
-  const vtRange = document.getElementById('vtRange');
-  const vtLabel = document.getElementById('vtLabel');
-  const gestAgeRange = document.getElementById('gestAgeRange');
-  const gestAgeLabel = document.getElementById('gestAgeLabel');
-  const postnatalAgeRange = document.getElementById('postnatalAgeRange');
-  const postnatalAgeLabel = document.getElementById('postnatalAgeLabel');
-  const postmenstrualAgeLabel = document.getElementById('postmenstrualAgeLabel');
-  const massRange = document.getElementById('massRange');
-  const massLabel = document.getElementById('massLabel');
-  const vdPhysRange = document.getElementById('vdPhysRange');
-  const vdPhysLabel = document.getElementById('vdPhysLabel');
-  const complianceRange = document.getElementById('complianceRange');
-  const complianceLabel = document.getElementById('complianceLabel');
-  const resistanceRange = document.getElementById('resistanceRange');
-  const resistanceLabel = document.getElementById('resistanceLabel');
-  const mechPeepRange = document.getElementById('mechPeepRange');
-  const mechPeepLabel = document.getElementById('mechPeepLabel');
-  const mechPinspRange = document.getElementById('mechPinspRange');
-  const mechPinspLabel = document.getElementById('mechPinspLabel');
-  const ventStrategySelect = document.getElementById('ventStrategySelect');
-  const asynchronySelect = document.getElementById('asynchronySelect');
-  const tiRange = document.getElementById('tiRange');
-  const tiLabel = document.getElementById('tiLabel');
-  const stateRow = document.getElementById('stateRow');
-  const modeBadge = document.getElementById('modeBadge');
+  const $ = id => document.getElementById(id);
+  const btnStart = $('btnStart'), btnPause = $('btnPause'), btnStep = $('btnStep'), btnReset = $('btnReset');
+  const speedRange = $('speedRange'), speedLabel = $('speedLabel');
+  const loopToggle = $('loopToggle'), stepModeToggle = $('stepModeToggle'), labelsToggle = $('labelsToggle');
+  const ventMode = $('ventMode');
+  const freqRange = $('freqRange'), freqLabel = $('freqLabel');
+  const vtRange = $('vtRange'), vtLabel = $('vtLabel'), vtName = $('vtName');
+  const gestAgeRange = $('gestAgeRange'), gestAgeLabel = $('gestAgeLabel');
+  const postnatalAgeRange = $('postnatalAgeRange'), postnatalAgeLabel = $('postnatalAgeLabel');
+  const postmenstrualAgeLabel = $('postmenstrualAgeLabel');
+  const massRange = $('massRange'), massLabel = $('massLabel');
+  const surfSelect = $('surfSelect');
+  const vdPhysRange = $('vdPhysRange'), vdPhysLabel = $('vdPhysLabel');
+  const complianceRange = $('complianceRange'), complianceLabel = $('complianceLabel');
+  const resistanceRange = $('resistanceRange'), resistanceLabel = $('resistanceLabel');
+  const fio2Range = $('fio2Range'), fio2Label = $('fio2Label');
+  const cpapRange = $('cpapRange'), cpapLabel = $('cpapLabel');
+  const apneaSelect = $('apneaSelect');
+  const mechPeepRange = $('mechPeepRange'), mechPeepLabel = $('mechPeepLabel');
+  const mechPinspRange = $('mechPinspRange'), mechPinspLabel = $('mechPinspLabel'), mechPinspName = $('mechPinspName');
+  const ventStrategySelect = $('ventStrategySelect'), asynchronySelect = $('asynchronySelect');
+  const tiRange = $('tiRange'), tiLabel = $('tiLabel');
+  const stateRow = $('stateRow'), modeBadge = $('modeBadge');
+  const alertsBox = $('physioAlerts');
 
-  const phaseText = document.getElementById('phaseText');
-  const phaseDesc = document.getElementById('phaseDesc');
-  const valueText = document.getElementById('valueText');
-  const valueDesc = document.getElementById('valueDesc');
-  const palvText = document.getElementById('palvText');
-  const pplText = document.getElementById('pplText');
-  const compText = document.getElementById('compText');
-  const resText = document.getElementById('resText');
-  const sao2Text = document.getElementById('sao2Text');
-  const rvText = document.getElementById('rvText');
-  const veText = document.getElementById('veText');
-  const vaText = document.getElementById('vaText');
-  const vdText = document.getElementById('vdText');
-  const vdPhysText = document.getElementById('vdPhysText');
-  const phaseCard = document.getElementById('phaseCard');
-  const valueCard = document.getElementById('valueCard');
-  const palvCard = document.getElementById('palvCard');
-  const pplCard = document.getElementById('pplCard');
-  const compCard = document.getElementById('compCard');
-  const resCard = document.getElementById('resCard');
-  const sao2Card = document.getElementById('sao2Card');
-  const rvCard = document.getElementById('rvCard');
-  const veCard = document.getElementById('veCard');
-  const vaCard = document.getElementById('vaCard');
-  const vdCard = document.getElementById('vdCard');
-  const vdPhysCard = document.getElementById('vdPhysCard');
+  const cardIds = ['phaseCard','valueCard','palvCard','pplCard','pawCard','compCard','resCard','sao2Card','paco2Card','rvCard','veCard','vaCard','vdCard','vdAlvCard','vdPhysCard','vdvtCard'];
+  const cards = cardIds.map(id => $(id));
 
   let running = false;
   let frame = 0;
   let raf = null;
   let lastTs = 0;
   let stepAwaitPlay = false;
+  // Apneia: pausas respiratórias intercaladas aos ciclos (tempo simulado em segundos).
+  const apneaRt = {burstT:0, inPause:false, t:0, recover:99, nadir:null, startSat:0};
 
   const model = {
     mode:'spont',
-    compliance:1.0,
-    resistance:1.0,
-    freq:40,
-    vtTarget:0.016,
-    vtML:16,
-    gestWeeksAtBirth:40,
-    postnatalHours:24,
-    massKg:3.2,
-    vdPhysML:0,
-    mechPeep:5,
-    mechPinsp:16,
-    ventStrategy:'pcv',
-    asynchrony:'none',
-    tiSec:0.35,
-    state:'termo_estavel'
+    state:'termo_estavel',
+    C:1.2, R:35, freq:42, vtML:18,
+    gestWeeks:40, postnatalHours:24, massKg:3.2,
+    surf:'adequado', vdAddML:0, fio2:21, cpap:0, apnea:'none',
+    peep:5, dp:6, pipLimit:25, tiSec:0.40,
+    strategy:'pcv', asynchrony:'none'
   };
-
-  const STATE_TO_DATA = {
-    termo_estavel:'termo_estavel',
-    prematuro_estavel:'prematuro_estavel',
-    sdr_neonatal:'sdr_neonatal',
-    taquipneia_transitoria:'taquipneia_transitoria',
-    aspiracao_meconial:'aspiracao_meconial',
-    apnea_prematuridade:'apnea_prematuridade',
-    dbp:'dbp',
-    termo_ventilado:'termo_ventilado',
-    prematuro_ventilado:'prematuro_estavel',
-    pos_surfactante:'pos_surfactante',
-    atelectasia_neonatal:'atelectasia_neonatal',
-    desmame_neonatal:'desmame_neonatal'
-  };
-
-
-  function getDataKey(state){
-    return STATE_TO_DATA[state] || STATE_TO_DATA[String(state).toLowerCase()] || 'termo_estavel';
-  }
-
-  function getPressureAxisRange(){
-    // Escala dinâmica baseada nas curvas didáticas ativas + referência normal.
-    // Mantém a referência neonatal normal sem cortar os extremos dos cenários clínicos.
-    const normalRef = model.mode === 'mech' ? 'termo_ventilado' : 'termo_estavel';
-    const states = model.state === normalRef ? [normalRef] : [model.state, normalRef];
-    let minV = 0, maxV = 0;
-    states.forEach(st => {
-      for(let j=0; j<=240; j++){
-        const ff = (j/240) * TOTAL;
-        const palv = getPressure(ff, st);
-        const ppl  = getPleuralPressure(ff, st);
-        minV = Math.min(minV, palv, ppl);
-        maxV = Math.max(maxV, palv, ppl);
-      }
-    });
-    let span = maxV - minV;
-    if(span < 6){
-      const mid = (maxV + minV) / 2;
-      minV = mid - 3;
-      maxV = mid + 3;
-      span = 6;
-    }
-    const pad = Math.max(0.8, span * 0.08);
-    return {min:minV - pad, max:maxV + pad};
-  }
-
 
   function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
-  function lerp(a, b, t){ return a + (b - a) * t; }
-  function ease(t){ t = clamp(t, 0, 1); return 0.5 - 0.5 * Math.cos(Math.PI * t); }
   function getSpeed(){ return parseFloat(speedRange.value); }
   function getStage(f){ return stages.find(s => f >= s.start && f <= s.end) || stages[0]; }
-
-  function getBaseLungInflation(f){
-    if (f <= 130) return lerp(0.22, 1.00, ease(f / 130));
-    if (f <= 180) return lerp(1.00, 0.92, ease((f - 130) / 50));
-    if (f <= 320) return lerp(0.92, 0.18, ease((f - 180) / 140));
-    if (f <= 360) return lerp(0.18, 0.26, ease((f - 320) / 40));
-    return lerp(0.26, 0.30, ease((f - 360) / 40));
-  }
-
-  function phaseU(f){
-    return clamp(f / TOTAL, 0, 1);
-  }
-
-  function bell(u, start, end){
-    if(u <= start || u >= end) return 0;
-    return Math.sin(Math.PI * (u - start) / (end - start));
-  }
-
-  function smoothStep01(x){
-    x = clamp(x, 0, 1);
-    return x*x*(3 - 2*x);
-  }
-
-  function doubleTriggerGate(u){
-    // Duplo disparo verdadeiro: duas inspirações grudadas, com queda rasa entre elas.
-    // Não há expiração completa entre os disparos, então a pressão/volume não volta ao basal.
-    const rise1 = smoothStep01((u - 0.06) / 0.10);
-    const fall1 = 1 - smoothStep01((u - 0.32) / 0.08);
-    const first = clamp(rise1 * fall1, 0, 1);
-    const bridge = 0.52 * bell(u, 0.30, 0.45);
-    const rise2 = smoothStep01((u - 0.36) / 0.09);
-    const fall2 = 1 - smoothStep01((u - 0.60) / 0.13);
-    const second = clamp(rise2 * fall2, 0, 1);
-    return clamp(Math.max(first, second, bridge), 0, 1);
-  }
-
-  function doubleTriggerVolumeShape(u){
-    // Volume empilhado: sobe, perde pouco, sobe de novo, depois esvazia lentamente.
-    const up1 = smoothStep01((u - 0.06) / 0.22);
-    const smallDrop = 0.16 * smoothStep01((u - 0.30) / 0.07);
-    const up2 = 0.42 * smoothStep01((u - 0.36) / 0.18);
-    const empty = smoothStep01((u - 0.63) / 0.30);
-    const stacked = clamp(up1 - smallDrop + up2, 0, 1.28);
-    return clamp(lerp(stacked, 0.08, empty), 0, 1.15);
-  }
-
-  function smoothPoints(points, u){
-    // Interpolação cúbica suave entre pontos [tempo, valor].
-    // Não usa módulo, não fecha a curva e não conecta o último ponto ao primeiro.
-    if(u <= points[0][0]) return points[0][1];
-    for(let i=0; i<points.length-1; i++){
-      const a = points[i], b = points[i+1];
-      if(u <= b[0]){
-        const tt = smoothStep01((u - a[0]) / Math.max(0.0001, b[0]-a[0]));
-        return lerp(a[1], b[1], tt);
-      }
-    }
-    return points[points.length-1][1];
-  }
+  const nf = (v, d = 1) => Number(v).toLocaleString('pt-BR', {minimumFractionDigits:d, maximumFractionDigits:d});
 
   const STATE_LABELS = {
     termo_estavel:'RN a termo',
@@ -529,611 +488,610 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
     atelectasia_neonatal:'Atelectasia neonatal',
     desmame_neonatal:'Desmame ventilatório'
   };
-
   const STATE_SETS = {
     spont:['termo_estavel','prematuro_estavel','sdr_neonatal','taquipneia_transitoria','aspiracao_meconial','apnea_prematuridade','dbp'],
     mech:['termo_ventilado','prematuro_ventilado','sdr_neonatal','pos_surfactante','aspiracao_meconial','atelectasia_neonatal','dbp','desmame_neonatal']
   };
 
-  const CLINICAL_PRESETS = {
-    termo_estavel:{compliance:1.00,resistance:1.00,freq:40,vtML:16,massKg:3.2,gestWeeks:40,postnatalHours:24,peep:0,pinsp:0},
-    prematuro_estavel:{compliance:0.72,resistance:1.30,freq:52,vtML:7,massKg:1.4,gestWeeks:31,postnatalHours:48,peep:0,pinsp:0},
-    sdr_neonatal:{compliance:0.38,resistance:1.35,freq:64,vtML:5,massKg:1.0,gestWeeks:28,postnatalHours:12,peep:6,pinsp:20},
-    taquipneia_transitoria:{compliance:0.72,resistance:1.25,freq:66,vtML:14,massKg:3.2,gestWeeks:38,postnatalHours:6,peep:0,pinsp:0},
-    aspiracao_meconial:{compliance:0.62,resistance:2.15,freq:58,vtML:15,massKg:3.4,gestWeeks:40,postnatalHours:6,peep:6,pinsp:22},
-    apnea_prematuridade:{compliance:0.65,resistance:1.25,freq:24,vtML:5,massKg:1.0,gestWeeks:27,postnatalHours:72,peep:0,pinsp:0},
-    dbp:{compliance:0.58,resistance:1.85,freq:54,vtML:8,massKg:1.8,gestWeeks:27,postnatalHours:1008,peep:6,pinsp:20},
-    termo_ventilado:{compliance:1.00,resistance:1.00,freq:40,vtML:16,massKg:3.2,gestWeeks:40,postnatalHours:24,peep:5,pinsp:16},
-    prematuro_ventilado:{compliance:0.58,resistance:1.35,freq:50,vtML:7,massKg:1.4,gestWeeks:30,postnatalHours:24,peep:5,pinsp:18},
-    pos_surfactante:{compliance:0.72,resistance:1.20,freq:48,vtML:6,massKg:1.0,gestWeeks:28,postnatalHours:14,peep:5,pinsp:16},
-    atelectasia_neonatal:{compliance:0.46,resistance:1.25,freq:55,vtML:7,massKg:1.5,gestWeeks:32,postnatalHours:48,peep:7,pinsp:20},
-    desmame_neonatal:{compliance:0.84,resistance:1.12,freq:42,vtML:9,massKg:1.8,gestWeeks:33,postnatalHours:168,peep:5,pinsp:12}
+  // Doença/condição: propriedades independentes do modo ventilatório.
+  const CONDITIONS = {
+    termo:{gestWeeks:40, postnatalHours:24, massKg:3.2, C:1.20, R:35, rexpMult:1.0, surf:'adequado', grunt:0.15, tiTtot:0.40, vdalv:0.10, relief:0, fsFixed:0.03, fsRec:0.02, pRec:4, recGain:0.03, pOpt:5, fl:0.04, hb:16.5},
+    prematuro:{gestWeeks:31, postnatalHours:48, massKg:1.4, C:0.90, R:60, rexpMult:1.0, surf:'adequado', grunt:0.40, tiTtot:0.40, vdalv:0.20, relief:0.2, fsFixed:0.07, fsRec:0.06, pRec:4, recGain:0.08, pOpt:5, fl:0.12, hb:15.5},
+    sdr:{gestWeeks:28, postnatalHours:12, massKg:1.0, C:0.35, R:90, rexpMult:1.0, surf:'deficiente', grunt:1.00, tiTtot:0.38, vdalv:0.60, relief:0.5, fsFixed:0.04, fsRec:0.45, pRec:6, recGain:0.50, pOpt:7, fl:0.12, hb:15.0},
+    ttrn:{gestWeeks:38, postnatalHours:6, massKg:3.2, C:0.80, R:50, rexpMult:1.0, surf:'adequado', grunt:0.50, tiTtot:0.40, vdalv:0.35, relief:0.2, fsFixed:0.06, fsRec:0.08, pRec:4, recGain:0.15, pOpt:5, fl:0.30, hb:16.5},
+    meconio:{gestWeeks:41, postnatalHours:6, massKg:3.4, C:0.55, R:80, rexpMult:2.0, surf:'adequado', grunt:0.30, tiTtot:0.36, vdalv:1.20, relief:0.1, fsFixed:0.20, fsRec:0.10, pRec:6, recGain:0.10, pOpt:6, fl:0.22, hb:17.0},
+    apneia:{gestWeeks:27, postnatalHours:120, massKg:1.0, C:0.80, R:80, rexpMult:1.0, surf:'adequado', grunt:0.40, tiTtot:0.40, vdalv:0.20, relief:0.2, fsFixed:0.04, fsRec:0.04, pRec:4, recGain:0.08, pOpt:5, fl:0.08, hb:14.5},
+    dbp:{gestWeeks:27, postnatalHours:1008, massKg:1.8, C:0.55, R:110, rexpMult:1.4, surf:'adequado', grunt:0.30, tiTtot:0.38, vdalv:1.00, relief:0.1, fsFixed:0.05, fsRec:0.05, pRec:6, recGain:0.10, pOpt:7, fl:0.24, hb:10.5},
+    atelectasia:{gestWeeks:32, postnatalHours:48, massKg:1.5, C:0.45, R:70, rexpMult:1.0, surf:'adequado', grunt:0.60, tiTtot:0.40, vdalv:0.50, relief:0.4, fsFixed:0.04, fsRec:0.25, pRec:5, recGain:0.50, pOpt:7, fl:0.12, hb:15.0},
+    desmame:{gestWeeks:33, postnatalHours:168, massKg:1.8, C:0.90, R:60, rexpMult:1.0, surf:'adequado', grunt:0.30, tiTtot:0.40, vdalv:0.30, relief:0.2, fsFixed:0.04, fsRec:0.04, pRec:4, recGain:0.08, pOpt:5, fl:0.08, hb:13.0}
   };
+  const SPONT_PRESETS = {
+    termo_estavel:{cond:'termo', freq:42, vtML:18, fio2:21, cpap:0},
+    prematuro_estavel:{cond:'prematuro', freq:50, vtML:7.5, fio2:21, cpap:0},
+    sdr_neonatal:{cond:'sdr', freq:75, vtML:4, fio2:21, cpap:0},
+    taquipneia_transitoria:{cond:'ttrn', freq:78, vtML:14, fio2:21, cpap:0},
+    aspiracao_meconial:{cond:'meconio', freq:65, vtML:17, fio2:21, cpap:0},
+    apnea_prematuridade:{cond:'apneia', freq:55, vtML:5.5, fio2:21, cpap:0, apnea:'long'},
+    dbp:{cond:'dbp', freq:60, vtML:9, fio2:21, cpap:0}
+  };
+  const MECH_PRESETS = {
+    termo_ventilado:{cond:'termo', C:1.0, freq:40, tiSec:0.40, peep:5, dp:6, vtML:18, pipLimit:25, fio2:21},
+    prematuro_ventilado:{cond:'prematuro', C:0.55, freq:50, tiSec:0.35, peep:5, dp:9, vtML:7, pipLimit:25, fio2:21},
+    sdr_neonatal:{cond:'sdr', freq:60, tiSec:0.30, peep:6, dp:13, vtML:5, pipLimit:28, fio2:30},
+    pos_surfactante:{cond:'sdr', C:0.55, R:85, surf:'exogeno', fsRec:0.19, postnatalHours:14, freq:50, tiSec:0.30, peep:6, dp:13, vtML:5, pipLimit:28, fio2:21},
+    aspiracao_meconial:{cond:'meconio', C:0.50, postnatalHours:12, freq:55, tiSec:0.40, peep:6, dp:12, vtML:17, pipLimit:30, fio2:35},
+    atelectasia_neonatal:{cond:'atelectasia', freq:55, tiSec:0.35, peep:5, dp:11, vtML:7.5, pipLimit:28, fio2:25},
+    dbp:{cond:'dbp', C:0.50, freq:35, tiSec:0.45, peep:7, dp:12, vtML:11, pipLimit:30, fio2:30},
+    desmame_neonatal:{cond:'desmame', freq:40, tiSec:0.35, peep:5, dp:6, vtML:9, pipLimit:25, fio2:21, trigger:3.0}
+  };
+  // Apneia: períodos de respiração regular intercalados com pausas (tempo simulado, em segundos).
+  const APNEA_PATTERNS = {
+    none:{pauseSec:0, burstSec:0},
+    short:{pauseSec:12, burstSec:45},
+    long:{pauseSec:20, burstSec:60}
+  };
+  function getPreset(mode, key){
+    const table = mode === 'mech' ? MECH_PRESETS : SPONT_PRESETS;
+    const sp = table[key] || (mode === 'mech' ? MECH_PRESETS.termo_ventilado : SPONT_PRESETS.termo_estavel);
+    const base = CONDITIONS[sp.cond];
+    const out = Object.assign({}, base, sp);
+    out.cpap = out.cpap || 0; out.peep = out.peep || 0; out.apnea = out.apnea || 'none';
+    out.trigger = out.trigger || 1.0;
+    out.dp = out.dp || 8; out.tiSec = out.tiSec || 0.35; out.pipLimit = out.pipLimit || 25;
+    return out;
+  }
+  // ===================== Motor fisiológico =====================
+  // Modelo monocompartimental (C, R) integrado no tempo: um único Vt, pressões derivadas da mecânica.
+  const N_SAMPLES = 400;
+  const SURF = {
+    deficiente:{c:0.55, s:1.00},
+    adequado:{c:1.00, s:0.15},
+    exogeno:{c:0.95, s:0.35}
+  };
+  const VCO2_KG = 6.5;   // mL/kg/min (STPD)
+  const VO2_KG = 7.5;    // mL/kg/min
+  const Q_KG = 0.18;     // débito cardíaco, L/kg/min
+  const PB = 760, PH2O = 47, RQ = 0.85;
+  const PACO2_CAP = 120; // acima disso: hipoventilação grave (valor exibido como > 120)
+  const PMUS_MAX = 25;   // esforço inspiratório máximo sustentável (cmH2O)
 
+  function maturityIndex(igWeeks, pnaHours){
+    // Desenvolvimento extrauterino conta, mas não equivale semana a semana ao intrauterino.
+    return clamp((igWeeks + 0.5 * (pnaHours / 168) - 24) / 16, 0, 1);
+  }
+  const matC = M => 0.40 + 0.60 * M;          // complacência do sistema respiratório
+  const matR = M => 1.25 - 0.25 * M;          // resistência das vias aéreas
+  const chestWallSpec = M => 4.0 + 2.5 * (1 - M); // mL/cmH2O/kg: caixa torácica mais complacente no prematuro
+  const lungRecoilFRC = M => 1.0 + 1.0 * M;   // recolhimento pulmonar no volume de relaxamento (cmH2O)
+  function recruitedFraction(p, pRec){ return 1 - Math.exp(-Math.max(0, p) / Math.max(0.5, pRec)); }
+  function peepComplianceFactor(p, d){
+    // Recrutamento aumenta a complacência; a perda por sobredistensão vem da curva P–V não linear.
+    return 1 + d.recGain * recruitedFraction(p, d.pRec);
+  }
+  function endotrachealTube(mass){
+    if(mass <= 1.0) return {id:2.5, R:75, vd:0.55};
+    if(mass <= 2.0) return {id:3.0, R:40, vd:0.85};
+    return {id:3.5, R:25, vd:1.25};
+  }
+  const SENSOR_VD = 0.7; // mL: sensor de fluxo + peça em Y
+
+  function derivedMechanics(s){
+    const p = s.preset;
+    const M = maturityIndex(s.gestWeeks, s.postnatalHours);
+    const Mp = maturityIndex(p.gestWeeks, p.postnatalHours);
+    const setP = s.mode === 'mech' ? s.peep : s.cpap;
+    const setPp = s.mode === 'mech' ? p.peep : (p.cpap || 0);
+    const surfF = SURF[s.surf].c / SURF[p.surf].c;
+    const peepF = peepComplianceFactor(setP, p) / peepComplianceFactor(setPp, p);
+    const matF = matC(M) / matC(Mp);
+    const cSpec = s.C * matF * surfF * peepF;
+    const Crs = Math.max(0.05, cSpec * s.massKg);
+    const Ccw = chestWallSpec(M) * s.massKg;
+    const CL = 1 / Math.max(1e-6, 1 / Crs - 1 / Ccw);
+    const Raw = s.R * matR(M) / matR(Mp);
+    const tube = endotrachealTube(s.massKg);
+    let Rin, Rex;
+    if(s.mode === 'mech'){
+      // A cânula contorna a via aérea superior (~45% da resistência) e acrescenta a própria resistência.
+      Rin = 0.55 * Raw + tube.R;
+      Rex = 0.55 * Raw * p.rexpMult + tube.R;
+    } else {
+      Rin = Raw;
+      Rex = Raw * p.rexpMult;
+    }
+    // Curva P–V: acima do joelho superior (volume aerado disponível), a complacência cai (sobredistensão).
+    const vKnee = (6 + 12 * cSpec) * s.massKg;
+    const kOver = 4 / (Crs * vKnee);
+    return {M, Mp, cSpec, Crs, Ccw, CL, Raw, Rin, Rex, tube, PL0: lungRecoilFRC(M), setP, matF, surfF, peepF, vKnee, kOver};
+  }
+  function elasticP(V, d){ const x = Math.max(0, V - d.vKnee); return V / d.Crs + d.kOver * x * x; }
+
+  function smooth01(x){ x = clamp(x, 0, 1); return x * x * (3 - 2 * x); }
+
+  // Integra um ciclo respiratório até o regime estacionário.
+  function runCycles(s, d, amp){
+    const p = s.preset;
+    const mech = s.mode === 'mech';
+    const async = mech ? (s.asynchrony || 'none') : 'none';
+    const Ttot = 60 / s.freq;
+    const dt = Ttot / N_SAMPLES;
+    const t0 = 0.04 * Ttot;
+    const tiMax = 0.80 * Ttot;
+    let Ti = mech ? Math.min(s.tiSec, tiMax) : p.tiTtot * Ttot;
+    const tiLimited = mech && s.tiSec > tiMax;
+    // Disparos extras dentro do ciclo: duplo disparo (sem expiração entre eles) e empilhamento (expiração incompleta).
+    let starts = [t0];
+    if(async === 'double_trigger'){
+      Ti = Math.min(Ti, 0.40 * Ttot);
+      Ti = Math.min(Ti, 0.32 * Ttot);
+      starts = [t0, t0 + Ti + 0.03 * Ttot];
+    } else if(async === 'breath_stacking'){
+      Ti = Math.min(Ti, 0.22 * Ttot);
+      const gapS = Math.max(0.04 * Ttot, Math.min(0.10 * Ttot, 0.35 * d.Crs * d.Rex / 1000));
+      starts = [t0, t0 + Ti + gapS, t0 + 2 * (Ti + gapS)];
+    }
+    const tInspEnd = starts[starts.length - 1] + Ti;
+    const Te = Ttot - tInspEnd;
+    const Rin = d.Rin / 1000, Rex = d.Rex / 1000; // cmH2O/(mL/s)
+    const setP = mech ? s.peep : s.cpap;
+    // Frenagem glótica (gemido): defesa contra o colapso que diminui e desaparece com CPAP/PEEP.
+    const grunt = mech ? 0 : (p.grunt || 0) * clamp(1 - setP / 5, 0, 1);
+    const baseP = setP;
+    const vtSet = s.vtML;
+    const starve = async === 'flow_starvation';
+    // Em PCV o fluxo é livre; a “fome de fluxo” aparece como subida lenta da pressão (rise time longo).
+    const rampRise = starve && s.strategy === 'pcv' ? 0.9 * Ti : 0.04;
+
+    function breathStart(t){ let st = -1; for(const b of starts){ if(t >= b && t < b + Ti) st = b; } return st; }
+    function pmusAt(t){
+      if(!mech){
+        // Esforço inspiratório crescente, com atividade pós-inspiratória (frenagem) no início da expiração.
+        if(t < t0) return 0;
+        if(t < t0 + Ti) return amp * 0.5 * (1 - Math.cos(Math.PI * (t - t0) / Ti));
+        const y = (t - t0 - Ti) / Math.max(0.02, 0.50 * Te);
+        return y < 1 ? amp * 0.5 * (1 + Math.cos(Math.PI * y)) : 0;
+      }
+      // Modo assistido: esforço de disparo em cada ciclo entregue; desmame com participação maior.
+      let pm = 0;
+      const trig = p.trigger || 1.0;
+      for(const b of starts){
+        const x = (t - (b - 0.03)) / Math.max(0.05, 0.5 * Ti);
+        if(x > 0 && x < 1) pm += trig * Math.sin(Math.PI * x);
+      }
+      if(async === 'ineffective'){
+        const xe = (t - (tInspEnd + 0.35 * Te)) / Math.max(0.05, 0.30 * Te);
+        if(xe > 0 && xe < 1) pm += 3.0 * Math.sin(Math.PI * xe);
+      }
+      if(starve){
+        // O bebê “puxa” mais fluxo do que o ventilador oferece: esforço sustentado durante a inspiração.
+        const xi = (t - t0) / Math.max(0.05, Ti);
+        if(xi > 0 && xi < 1) pm += (s.strategy === 'pcv' ? 2.0 : 4.0) * Math.sin(Math.PI * xi);
+      }
+      return pm;
+    }
+    const pGlottic = 3.0 * grunt;
+    let V = (baseP + pGlottic) * d.Crs;
+    const SUB = 8;
+    const arr = {V:new Float64Array(N_SAMPLES + 1), flow:new Float64Array(N_SAMPLES + 1), paw:new Float64Array(N_SAMPLES + 1), pmus:new Float64Array(N_SAMPLES + 1)};
+    let limited = false;
+    for(let cyc = 0; cyc < 40; cyc++){
+      const vStart = V;
+      limited = false;
+      for(let i = 0; i <= N_SAMPLES; i++){
+        const t = i * dt;
+        arr.V[i] = V;
+        arr.pmus[i] = pmusAt(t);
+        for(let k = 0; k < SUB; k++){
+          const tt = t + (k / SUB) * dt;
+          const pm = pmusAt(tt);
+          const palv = elasticP(V, d) - pm;
+          const bs = mech ? breathStart(tt) : -1;
+          let paw = baseP, flow;
+          if(bs >= 0){
+            if(s.strategy === 'vcv'){
+              flow = vtSet / Ti;
+              paw = palv + Rin * flow;
+              if(starve) paw = Math.max(baseP, paw); // a Paw “afunda” quando o esforço do bebê supera o fluxo fixo
+              if(paw > s.pipLimit){ paw = s.pipLimit; flow = (paw - palv) / Rin; limited = true; }
+            } else {
+              paw = baseP + s.dp * smooth01((tt - bs) / rampRise);
+              flow = paw >= palv ? (paw - palv) / Rin : (paw - palv) / Rex;
+            }
+          } else if(palv < paw){
+            flow = (paw - palv) / Rin;
+          } else if(palv > paw + pGlottic){
+            flow = (paw + pGlottic - palv) / Rex;
+          } else flow = (paw - palv) / (Rex * 15); // glote estreitada: escoamento lento abaixo do limiar
+          if(k === 0){ arr.flow[i] = flow; arr.paw[i] = paw; }
+          if(i < N_SAMPLES) V += flow * dt / SUB;
+        }
+      }
+      V = arr.V[N_SAMPLES];
+      if(Math.abs(V - vStart) < 1e-4 * Math.max(1, d.Crs) && cyc > 1) break;
+    }
+    return {arr, Ttot, dt, t0, Ti, Te, tInspEnd, starts, frEff:s.freq, limited, baseP, tiLimited, gruntEff:grunt};
+  }
+
+  function vtOfRun(r){ let mx = -1e9, mn = 1e9; r.arr.V.forEach(v => { mx = Math.max(mx, v); mn = Math.min(mn, v); }); return mx - mn; }
+  function solveEffort(s, d, target){
+    // Amplitude de esforço que produz o Vt alvo com a mecânica d (secante multiplicativa).
+    let amp = 5, v = vtOfRun(runCycles(s, d, amp));
+    amp = target / Math.max(1e-6, v / amp);
+    for(let it = 0; it < 8; it++){
+      const vv = vtOfRun(runCycles(s, d, Math.min(amp, 60)));
+      if(Math.abs(vv - target) < 0.002) break;
+      amp *= target / Math.max(1e-6, vv);
+    }
+    return amp;
+  }
+
+  function simulateBreath(s){
+    const d = derivedMechanics(s);
+    const p = s.preset;
+    let run, amp = 0, effortLimited = false, ampNeeded = 0, ampRef = 0;
+    if(s.mode === 'mech'){
+      run = runCycles(s, d, 0);
+    } else {
+      // O controle respiratório ajusta o esforço para o Vt alvo, mas compensa só parcialmente a carga:
+      // com mecânica pior o esforço sobe e o Vt cai; com mecânica melhor (ex.: CPAP que recruta) o Vt sobe.
+      ampNeeded = solveEffort(s, d, s.vtML);
+      const ref = Object.assign({}, s, {C:p.C, R:p.R, gestWeeks:p.gestWeeks, postnatalHours:p.postnatalHours, surf:p.surf, cpap:p.cpap || 0});
+      ampRef = solveEffort(ref, derivedMechanics(ref), s.vtML);
+      amp = ampRef * Math.pow(ampNeeded / Math.max(1e-6, ampRef), 0.75);
+      if(amp > PMUS_MAX){ amp = PMUS_MAX; effortLimited = true; }
+      run = runCycles(s, d, amp);
+    }
+    const {arr} = run;
+    const n = N_SAMPLES + 1;
+    const palv = new Float64Array(n), ppl = new Float64Array(n);
+    let vMax = -1e9, vMin = 1e9, iMax = 0;
+    for(let i = 0; i < n; i++){
+      palv[i] = elasticP(arr.V[i], d) - arr.pmus[i];
+      ppl[i] = -d.PL0 + arr.V[i] / d.Ccw - arr.pmus[i];
+      if(arr.V[i] > vMax){ vMax = arr.V[i]; iMax = i; }
+      if(arr.V[i] < vMin) vMin = arr.V[i];
+    }
+    const VT = vMax - vMin;
+    const i0 = Math.round(run.t0 / run.dt);
+    const vEE = arr.V[i0];
+    let intrinsicPEEP = Math.max(0, vEE / d.Crs - run.baseP);
+    if(run.starts.length > 2){
+      // Empilhamento: o próximo disparo começa antes do fim da expiração; volume retido = auto-PEEP.
+      const iS = Math.round(run.starts[run.starts.length - 1] / run.dt);
+      intrinsicPEEP = Math.max(intrinsicPEEP, arr.V[iS] / d.Crs - run.baseP);
+    }
+    let wMus = 0, peakExp = 0;
+    for(let i = 0; i < N_SAMPLES; i++){
+      const w = arr.pmus[i] * arr.flow[i];
+      if(w > 0) wMus += w * run.dt;
+      if(arr.flow[i] < peakExp) peakExp = arr.flow[i];
+    }
+    // No fluxo insuficiente, o esforço isométrico contra o fluxo fixo também consome energia.
+    if(s.mode === 'mech' && s.asynchrony === 'flow_starvation'){
+      let isoW = 0; for(let i = 0; i < N_SAMPLES; i++) isoW += arr.pmus[i] * run.dt;
+      wMus += 0.35 * isoW * d.Crs;
+    }
+    // Volume exalado em cada expiração (disparos múltiplos têm expirações parciais entre eles).
+    const exhaled = [];
+    let acc = 0;
+    for(let i = 0; i < N_SAMPLES; i++){
+      if(arr.flow[i] < 0) acc += -arr.flow[i] * run.dt;
+      else if(acc > 0 && arr.flow[i] > 0){ exhaled.push(acc); acc = 0; }
+    }
+    if(acc > 0) exhaled.push(acc);
+    let iEE = N_SAMPLES - 6;
+    for(let i = iMax + 4; i < N_SAMPLES; i++){ if(arr.flow[i] > 0.06 * peakExp){ iEE = i; break; } }
+    let pawMax = -1e9, pawSum = 0, pplMin = 1e9, pplMax = -1e9, palvMin = 1e9, palvMax = -1e9;
+    for(let i = 0; i < n; i++){
+      pawMax = Math.max(pawMax, arr.paw[i]); pawSum += arr.paw[i];
+      pplMin = Math.min(pplMin, ppl[i]); pplMax = Math.max(pplMax, ppl[i]);
+      palvMin = Math.min(palvMin, palv[i]); palvMax = Math.max(palvMax, palv[i]);
+    }
+    const pplSwing = Math.max(0, ppl[i0] - pplMin);
+    const vDistortion = pplSwing * d.Ccw * 0.05;
+    const efficiency = VT / Math.max(1e-6, VT + vDistortion);
+    const overFrac = Math.max(0, vMax - d.vKnee) / d.vKnee;
+    // Complacência dinâmica (quase estática): Vt / variação de pressão elástica no ciclo.
+    const cDyn = VT / Math.max(0.1, elasticP(vMax, d) - elasticP(vMin, d)) / s.massKg;
+    return {
+      d, run, V:arr.V, flow:arr.flow, paw:arr.paw, pmus:arr.pmus, palv, ppl,
+      VT, vEE, vMax, iMax, i0, iEE, intrinsicPEEP, amp, ampNeeded, ampRef, effortLimited, pressureLimited: run.limited,
+      pip: pawMax, pawMean: pawSum / n, pplMin, pplMax, palvMin, palvMax, pplSwing,
+      wMus, efficiency, vDistortion, overFrac, cDyn, exhaled
+    };
+  }
+
+  // Oxigenação: compartimentos ideal, baixo V/Q e shunt verdadeiro; HbF desloca a curva para a esquerda.
+  function hbSat(po2, p50){
+    const x = Math.max(0.1, po2) * 26.8 / p50;
+    return 1 / (23400 / (x * x * x + 150 * x) + 1);
+  }
+  function o2Content(po2, hb, p50){ return 1.36 * hb * hbSat(po2, p50) + 0.003 * Math.max(0, po2); }
+  function po2FromContent(c, hb, p50){
+    let lo = 0.5, hi = 700;
+    for(let k = 0; k < 60; k++){ const mid = (lo + hi) / 2; if(o2Content(mid, hb, p50) < c) lo = mid; else hi = mid; }
+    return (lo + hi) / 2;
+  }
+  function oxygenation(o){
+    const {fio2, fs, fl, hb, p50, qFactor} = o;
+    const paco2 = Math.min(PACO2_CAP, o.paco2);
+    const pio2 = fio2 * (PB - PH2O);
+    const gasF = fio2 + (1 - fio2) / RQ;
+    const pAO2 = Math.max(20, pio2 - paco2 * gasF);
+    const pio2Low = Math.max(20, pio2 - (paco2 + 3) * gasF);
+    const vqLow = 0.12;
+    const avDiff = VO2_KG / (10 * Q_KG * (qFactor || 1)); // mL/dL
+    const cIdeal = o2Content(pAO2, hb, p50);
+    let cv = o2Content(38, hb, p50), ca = cv + avDiff, pLow = 30;
+    for(let it = 0; it < 60; it++){
+      let lo = 0.5, hi = Math.max(1, pio2Low);
+      for(let k = 0; k < 50; k++){
+        const mid = (lo + hi) / 2;
+        const g = 10 * (o2Content(mid, hb, p50) - cv) - (vqLow / 0.863) * (pio2Low - mid);
+        if(g < 0) lo = mid; else hi = mid;
+      }
+      pLow = (lo + hi) / 2;
+      const cLow = o2Content(pLow, hb, p50);
+      ca = (1 - fs - fl) * cIdeal + fl * cLow + fs * cv;
+      const cvNew = Math.max(4, ca - avDiff);
+      if(Math.abs(cvNew - cv) < 1e-5){ cv = cvNew; break; }
+      cv = 0.5 * cv + 0.5 * cvNew;
+    }
+    const pao2 = po2FromContent(ca, hb, p50);
+    return {pAO2, pao2, sao2: 100 * hbSat(pao2, p50), svo2: 100 * hbSat(po2FromContent(cv, hb, p50), p50), pLow};
+  }
+
+  function computeMetrics(s, sim){
+    const p = s.preset, d = sim.d, mass = s.massKg;
+    const mech = s.mode === 'mech';
+    const VT = sim.VT;
+    const fr = s.freq;
+    const vtKg = VT / mass;
+    const vdaSpontKg = 2.0 + 0.2 * (1 - d.M);
+    const vdaSpont = vdaSpontKg * mass;
+    // Intubado: a cânula desvia a via aérea superior (~45% do VDa) e acrescenta o espaço instrumental.
+    const vdAnat = mech ? 0.55 * vdaSpont : vdaSpont;
+    const vdInstr = mech ? d.tube.vd + SENSOR_VD : 0;
+    const peepSet = mech ? s.peep : s.cpap;
+    const eep = peepSet + sim.intrinsicPEEP;
+    const rec = recruitedFraction(eep, p.pRec);
+    // Sobredistensão: PEEP acima do ótimo em pulmão já recrutado e volume acima do joelho da curva P–V (efeito moderado, com teto).
+    const overP = Math.max(0, eep - p.pOpt) * rec;
+    const vdAlvDisease = p.vdalv * mass * (1 - p.relief * rec);
+    const vdAlvOver = mass * Math.min(1.2, 0.08 * overP + 1.0 * sim.overFrac);
+    const vdAlv = Math.max(0, vdAlvDisease + vdAlvOver + (Number(s.vdAddML) || 0));
+    const vdPhys = vdAnat + vdInstr + vdAlv;
+    const vdvt = vdPhys / Math.max(1e-6, VT);
+    // Em disparos múltiplos (duplo disparo/empilhamento), cada ciclo exibido tem uma única expiração do volume total.
+    const multi = mech && sim.run.starts.length > 1;
+    const veBurst = multi ? sim.exhaled.reduce((a, v) => a + v, 0) * fr : VT * fr;
+    const vaBurst = multi ? sim.exhaled.reduce((a, v) => a + Math.max(0, v - vdPhys), 0) * fr : Math.max(0, VT - vdPhys) * fr;
+    // Apneia: pausas reduzem VE e VA médias na mesma base de tempo.
+    const ap = APNEA_PATTERNS[s.apnea || 'none'];
+    const duty = (!mech && ap.pauseSec) ? ap.burstSec / (ap.burstSec + ap.pauseSec) : 1;
+    const ve = veBurst * duty;
+    const va = vaBurst * duty;
+    const vco2 = VCO2_KG * mass;
+    const paco2Raw = va > 0 ? 0.863 * vco2 / (va / 1000) : Infinity;
+    const paco2 = Math.min(PACO2_CAP, paco2Raw);
+    const petco2 = paco2 * (1 - Math.min(1, vdvt));
+    // Shunt verdadeiro: componente fixo + componente recrutável (surfactante e pressão expiratória).
+    const surfS = SURF[s.surf].s / SURF[p.surf].s;
+    const fsRec = p.fsRec * surfS;
+    const fs = clamp(p.fsFixed + fsRec * (1 - rec) + 0.005 * overP + 0.05 * sim.overFrac, 0, 0.8);
+    const fl = clamp(p.fl * (1 - 0.30 * rec), 0, 0.8);
+    const pnaW = s.postnatalHours / 168;
+    const p50 = 19.5 + 4 * clamp(pnaW / 10, 0, 1);
+    // Pressão intratorácica média alta reduz o retorno venoso e o débito cardíaco (efeito moderado).
+    const pMean = mech ? sim.pawMean : s.cpap;
+    const qFactor = 1 - clamp(0.03 * Math.max(0, pMean - 8), 0, 0.3);
+    const oxIn = {paco2, fs, fl, hb: p.hb, p50, qFactor};
+    const oxy = oxygenation(Object.assign({fio2: s.fio2 / 100}, oxIn));
+    const oxy100 = oxygenation(Object.assign({fio2: 1.0}, oxIn));
+    const wob = sim.wMus * fr * duty / mass / Math.max(0.2, sim.efficiency);
+    const retr = sim.vDistortion / Math.max(1e-6, VT);
+    return {
+      VT, vtKg, fr, ve, va, veBurst, vaBurst, duty, vdAnat, vdInstr, vdAlv, vdPhys, vdvt, paco2, paco2Raw, petco2,
+      fs, fl, rec, eep, p50, oxy, oxy100, sao2: oxy.sao2, sao2At100: oxy100.sao2, qFactor, wob, retr,
+      tau: d.Crs * d.Rin / 1000, tauExp: d.Crs * d.Rex / 1000
+    };
+  }
+
+  // ===================== Estado → simulação =====================
+  function snapshotFrom(src, mode, key){
+    return {
+      mode, preset:getPreset(mode, key),
+      C:src.C, R:src.R, freq:src.freq, vtML:src.vtML, massKg:src.massKg,
+      gestWeeks:src.gestWeeks, postnatalHours:src.postnatalHours, surf:src.surf,
+      vdAddML:src.vdAddML || 0, fio2:src.fio2, cpap:src.cpap || 0, apnea:src.apnea || 'none',
+      peep:src.peep || 0, dp:src.dp, pipLimit:src.pipLimit, tiSec:src.tiSec,
+      strategy:src.strategy || 'pcv', asynchrony:src.asynchrony || 'none'
+    };
+  }
+  function presetSnapshot(mode, key, strategy){
+    const p = getPreset(mode, key);
+    return snapshotFrom(Object.assign({}, p, {vdAddML:0, strategy:strategy || 'pcv', asynchrony:'none'}), mode, key);
+  }
+  const simCache = new Map();
+  function evaluate(s){
+    const k = JSON.stringify(Object.assign({}, s, {preset:undefined, key:s.preset && s.preset.cond}));
+    const kk = s.mode + '|' + k + '|' + JSON.stringify(s.preset);
+    if(simCache.has(kk)) return simCache.get(kk);
+    const sim = simulateBreath(s);
+    const met = computeMetrics(s, sim);
+    const out = {s, sim, met};
+    if(simCache.size > 60) simCache.clear();
+    simCache.set(kk, out);
+    return out;
+  }
+  const WOB_REF = evaluate(presetSnapshot('spont','termo_estavel')).met.wob;
+  function current(){ return evaluate(snapshotFrom(model, model.mode, model.state)); }
+  function referenceKey(){ return model.mode === 'mech' ? 'termo_ventilado' : 'termo_estavel'; }
+  function reference(){ return evaluate(presetSnapshot(model.mode, referenceKey(), model.strategy)); }
+  function isPathologicalState(){ return model.state !== referenceKey(); }
+
+  function sampleArr(arr, f){
+    const x = clamp(f, 0, TOTAL);
+    const i = Math.floor(x), j = Math.min(TOTAL, i + 1), t = x - i;
+    return arr[i] + (arr[j] - arr[i]) * t;
+  }
+  function inPauseNow(){ return model.mode === 'spont' && apneaRt.inPause; }
+  // Durante a apneia não há esforço: o sistema relaxa até o volume de equilíbrio com a pressão na via aérea.
+  function pauseValues(c){ const d = c.sim.d, pb = c.sim.run.baseP; return {palv:pb, ppl:-d.PL0 + pb * d.Crs / d.Ccw, v:pb * d.Crs - c.sim.vEE}; }
+  function getPressure(f){ const c = current(); return inPauseNow() ? pauseValues(c).palv : sampleArr(c.sim.palv, f); }
+  function getPleuralPressure(f){ const c = current(); return inPauseNow() ? pauseValues(c).ppl : sampleArr(c.sim.ppl, f); }
+  function getAirwayPressure(f){ const c = current(); return inPauseNow() ? c.sim.run.baseP : sampleArr(c.sim.paw, f); }
+  function getVolumeAboveEE(f){ const c = current(); return inPauseNow() ? pauseValues(c).v : sampleArr(c.sim.V, f) - c.sim.vEE; }
+
+  function getLungInflation(f){
+    // Escala visual didática (ilustração sem escala): nível expiratório final + excursão proporcional ao Vt/kg.
+    const c = current(), sim = c.sim, m = c.met, mass = c.s.massKg;
+    const eelvKg = sim.vEE / mass;
+    const base = clamp(0.26 + 0.035 * eelvKg - 0.35 * Math.max(0, m.fs - 0.04), 0.14, 0.62);
+    const exc = clamp(0.30 * (m.vtKg / 6), 0.05, 0.50);
+    const vmin = Math.min(...sim.V);
+    const v = inPauseNow() ? Math.min(...sim.V) - m.VT * 0.08 : sampleArr(sim.V, f);
+    return clamp(base + exc * (v - vmin) / Math.max(1e-6, m.VT), 0.04, 1.05);
+  }
+
+  function getFlowDirection(f){
+    if(inPauseNow()) return 'none';
+    const c = current();
+    let peak = 0; c.sim.flow.forEach(q => { peak = Math.max(peak, Math.abs(q)); });
+    const q = sampleArr(c.sim.flow, f);
+    if(q > 0.06 * peak) return 'in';
+    if(q < -0.06 * peak) return 'out';
+    return 'none';
+  }
+
+  function updateStages(){
+    const c = current(), sim = c.sim;
+    const txt = STAGE_TEXT[model.mode === 'mech' ? 'mech' : 'spont'];
+    const tw = 10;
+    const i0 = clamp(sim.i0, 4, 40);
+    const inspEnd = clamp(sim.iMax - tw, i0 + 20, TOTAL - 80);
+    const transEnd = clamp(sim.iMax + tw, inspEnd + 8, TOTAL - 60);
+    const expEnd = clamp(sim.iEE, transEnd + 30, TOTAL - 8);
+    stages = [
+      { name:'Repouso inicial', start:0, end:i0, color:STAGE_COLORS.rest, desc:txt.rest0 },
+      { name:'Inspiração', start:i0 + 1, end:inspEnd, color:STAGE_COLORS.insp, desc:txt.insp },
+      { name:'Transição inspiratória', start:inspEnd + 1, end:transEnd, color:STAGE_COLORS.trans, desc:txt.trans },
+      { name:'Expiração', start:transEnd + 1, end:expEnd, color:STAGE_COLORS.exp, desc:txt.exp },
+      { name:'Repouso final', start:expEnd + 1, end:TOTAL, color:STAGE_COLORS.rest, desc:txt.rest1 }
+    ];
+    pauseFrames = stages.map(s => s.end);
+  }
+
+  // ===================== Apneia: dessaturação durante a pausa =====================
+  // Relógio simulado: 4 ciclos animados representam o período de respiração regular (tempo acelerado),
+  // de modo que a animação e as médias usam o mesmo padrão (burstSec de respiração + pauseSec de pausa).
+  const APNEA_CYCLES_SHOWN = 4;
+  function apneaPattern(){ return APNEA_PATTERNS[model.mode === 'spont' ? (model.apnea || 'none') : 'none']; }
+  function desaturationDrop(t){
+    // Reserva de O2 pequena (CRF baixa, VO2 alto): latência curta e queda rápida; FiO2 maior prolonga a latência.
+    const fio2 = model.fio2 / 100;
+    const lag = 4 + 25 * (fio2 - 0.21);
+    const rate = 1.3 * Math.sqrt(0.21 / fio2);
+    return Math.max(0, t - lag) * rate;
+  }
+  function dynamicSaO2(base){
+    if(model.mode !== 'spont' || !apneaPattern().pauseSec) return base;
+    if(apneaRt.inPause) return Math.max(40, apneaRt.startSat - desaturationDrop(apneaRt.t));
+    if(apneaRt.nadir === null) return base;
+    return base - Math.max(0, base - apneaRt.nadir) * Math.exp(-apneaRt.recover / 5);
+  }
+
+  // ===================== Botões e rótulos =====================
   function renderStateButtons(){
     const list = STATE_SETS[model.mode === 'mech' ? 'mech' : 'spont'];
-    stateRow.innerHTML = list.map(key => `<button class="state-btn${key===model.state?' active':''}" data-state="${key}">${STATE_LABELS[key] || key}</button>`).join('');
+    stateRow.innerHTML = list.map(key => `<button class="state-btn${key===model.state?' active':''}" data-state="${key}" aria-pressed="${key===model.state}">${STATE_LABELS[key] || key}</button>`).join('');
   }
 
   function updateControlLabels(){
+    const c = current(), m = c.met, d = c.sim.d;
     freqLabel.textContent = `${model.freq} irpm`;
-    vtLabel.textContent = `${Number(model.vtML).toLocaleString('pt-BR', {maximumFractionDigits:1})} mL · ${(model.vtML/model.massKg).toLocaleString('pt-BR', {maximumFractionDigits:1})} mL/kg`;
-    gestAgeLabel.textContent = `${model.gestWeeksAtBirth} semanas`;
+    const mech = model.mode === 'mech';
+    const pcv = mech && model.strategy === 'pcv';
+    vtRange.disabled = pcv;
+    if(pcv) vtRange.value = clamp(Math.round(m.VT * 2) / 2, 1, 40);
+    vtName.textContent = pcv ? 'Volume corrente (Vt) · resultado de ΔP, C, R e Ti' : mech ? 'Volume corrente programado (Vt)' : 'Vt alvo do controle respiratório';
+    const vtTxt = `${nf(m.VT, 1)} mL · ${nf(m.vtKg, 1)} mL/kg`;
+    if(!mech) vtLabel.textContent = Math.abs(m.VT - model.vtML) < 0.05 ? vtTxt : `alvo ${nf(model.vtML,1)} mL → obtido ${vtTxt}` + (c.sim.effortLimited ? ' (esforço máximo)' : '');
+    else if(model.strategy === 'vcv' && Math.abs(m.VT - model.vtML) >= 0.05) vtLabel.textContent = `programado ${nf(model.vtML,1)} mL → entregue ${vtTxt}`;
+    else vtLabel.textContent = vtTxt;
+    gestAgeLabel.textContent = `${model.gestWeeks} semanas`;
     const postDays = model.postnatalHours / 24;
     postnatalAgeLabel.textContent = model.postnatalHours < 48
       ? `${model.postnatalHours} h`
       : postDays < 14
         ? `${postDays.toLocaleString('pt-BR', {maximumFractionDigits:1})} dias`
         : `${(postDays/7).toLocaleString('pt-BR', {maximumFractionDigits:1})} semanas`;
-    const pmTotalDays = model.gestWeeksAtBirth * 7 + postDays;
+    const pmTotalDays = model.gestWeeks * 7 + postDays;
     const pmWeeks = Math.floor(pmTotalDays / 7);
     const pmDays = Math.floor(pmTotalDays % 7);
     postmenstrualAgeLabel.textContent = `${pmWeeks} sem${pmDays ? ` + ${pmDays} dia${pmDays > 1 ? 's' : ''}` : ''}`;
-    massLabel.textContent = `${Number(model.massKg).toLocaleString('pt-BR', {minimumFractionDigits:1, maximumFractionDigits:1})} kg`;
-    vdPhysLabel.textContent = `${model.vdPhysML} mL`;
-    mechPeepLabel.textContent = `${model.mechPeep} cmH₂O`;
-    mechPinspLabel.textContent = `${model.mechPinsp} cmH₂O`;
-    tiLabel.textContent = `${Number(model.tiSec).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})} s`;
-    if (ventStrategySelect) ventStrategySelect.value = model.ventStrategy;
-    if (asynchronySelect) asynchronySelect.value = model.asynchrony || 'none';
-    complianceLabel.textContent = Number(model.compliance).toFixed(2);
-    resistanceLabel.textContent = Number(model.resistance).toFixed(2);
-  }
-
-  function applyGestationalMaturity(){
-    const preset = CLINICAL_PRESETS[model.state] || CLINICAL_PRESETS.termo_estavel;
-    const maturity = clamp((model.gestWeeksAtBirth - 22) / 18, 0.08, 1);
-    model.compliance = clamp(preset.compliance * (0.52 + 0.48 * maturity), 0.25, 1.60);
-    model.resistance = clamp(preset.resistance * (1.35 - 0.35 * maturity), 0.60, 3.00);
-    complianceRange.value = model.compliance.toFixed(2);
-    resistanceRange.value = model.resistance.toFixed(2);
-  }
-
-  const CURVE_SPECS = {
-      termo_estavel:{
-        // Ciclo basal: inspiração suave, pausa curta, expiração passiva e retorno limpo ao repouso.
-        vol:[[0,0.46],[0.10,0.54],[0.22,0.72],[0.36,0.88],[0.48,0.86],[0.62,0.66],[0.78,0.48],[0.92,0.46],[1,0.46]],
-        palv:[[0,0],[0.10,-0.35],[0.24,-1.00],[0.38,-0.45],[0.50,0],[0.62,0.55],[0.76,1.00],[0.90,0.25],[1,0]],
-        ppl:[[0,-5.0],[0.12,-5.7],[0.26,-7.1],[0.40,-8.0],[0.50,-7.4],[0.64,-6.6],[0.80,-5.4],[0.94,-5.0],[1,-5.0]]
-      },
-      aspiracao_meconial:{
-        // Resistência alta: expiração prolongada, aprisionamento e Ppl mais negativa pelo esforço.
-        vol:[[0,0.48],[0.12,0.56],[0.26,0.71],[0.40,0.78],[0.52,0.77],[0.68,0.66],[0.86,0.52],[0.96,0.48],[1,0.48]],
-        palv:[[0,0],[0.12,-0.90],[0.26,-2.40],[0.42,-0.55],[0.52,0],[0.62,1.70],[0.76,3.00],[0.90,1.00],[1,0]],
-        ppl:[[0,-6.0],[0.14,-8.0],[0.30,-12.0],[0.44,-13.8],[0.54,-12.2],[0.70,-9.5],[0.88,-6.9],[1,-6.0]]
-      },
-      dbp:{
-        // Alta complacência: volume basal alto, pequena pressão motriz e esvaziamento lento.
-        vol:[[0,0.66],[0.12,0.72],[0.26,0.88],[0.40,0.99],[0.52,0.98],[0.70,0.86],[0.88,0.70],[1,0.66]],
-        palv:[[0,0],[0.14,-0.20],[0.30,-0.55],[0.46,-0.12],[0.56,0],[0.70,0.50],[0.88,0.30],[1,0]],
-        ppl:[[0,-4.0],[0.16,-4.35],[0.32,-5.15],[0.46,-5.45],[0.58,-5.1],[0.76,-4.55],[0.92,-4.10],[1,-4.0]]
-      },
-      prematuro_estavel:{
-        // Baixa complacência: grande esforço pleural com pouco ganho de volume.
-        vol:[[0,0.42],[0.12,0.46],[0.28,0.58],[0.42,0.64],[0.52,0.62],[0.68,0.52],[0.84,0.43],[1,0.42]],
-        palv:[[0,0],[0.12,-1.80],[0.28,-5.00],[0.44,-1.20],[0.52,0],[0.64,2.90],[0.78,5.00],[0.92,0.90],[1,0]],
-        ppl:[[0,-10.0],[0.14,-13.2],[0.30,-21.5],[0.44,-24.0],[0.54,-22.0],[0.70,-17.0],[0.86,-12.0],[1,-10.0]]
-      },
-      taquipneia_transitoria:{
-        // Frequência alta e excursão menor: curva curta, limpa e repetível.
-        vol:[[0,0.48],[0.10,0.53],[0.24,0.64],[0.38,0.68],[0.50,0.66],[0.64,0.57],[0.80,0.49],[1,0.48]],
-        palv:[[0,0],[0.12,-0.65],[0.26,-1.70],[0.42,-0.35],[0.52,0],[0.64,0.95],[0.78,1.60],[0.92,0.35],[1,0]],
-        ppl:[[0,-5.0],[0.14,-6.0],[0.30,-8.4],[0.44,-8.8],[0.54,-8.0],[0.70,-6.7],[0.86,-5.4],[1,-5.0]]
-      },
-      apnea_prematuridade:{
-        // Baixa frequência, baixo volume corrente e variações discretas de pressão.
-        vol:[[0,0.47],[0.14,0.50],[0.32,0.59],[0.48,0.61],[0.62,0.58],[0.82,0.48],[1,0.47]],
-        palv:[[0,0],[0.16,-0.18],[0.32,-0.45],[0.48,-0.08],[0.58,0],[0.72,0.38],[0.90,0.10],[1,0]],
-        ppl:[[0,-5.0],[0.18,-5.25],[0.38,-6.0],[0.52,-5.9],[0.72,-5.4],[0.90,-5.05],[1,-5.0]]
-      },
-      termo_ventilado:{
-        vol:[[0,0.40],[0.10,0.54],[0.24,0.80],[0.42,0.82],[0.54,0.72],[0.70,0.50],[0.90,0.40],[1,0.40]],
-        palv:[[0,5],[0.08,12],[0.22,20],[0.42,20],[0.54,12],[0.70,6],[0.90,5],[1,5]],
-        ppl:[[0,-3.0],[0.10,-0.8],[0.26,2.8],[0.44,2.6],[0.58,0.6],[0.78,-2.2],[1,-3.0]]
-      },
-      pos_surfactante:{
-        vol:[[0,0.36],[0.12,0.45],[0.28,0.62],[0.44,0.66],[0.58,0.57],[0.76,0.42],[1,0.36]],
-        palv:[[0,8],[0.08,15],[0.24,24],[0.44,24],[0.58,15],[0.78,9],[1,8]],
-        ppl:[[0,-2.0],[0.12,0.2],[0.30,3.8],[0.48,3.6],[0.64,1.0],[0.84,-1.4],[1,-2.0]]
-      },
-      sdr_neonatal:{
-        vol:[[0,0.32],[0.12,0.37],[0.30,0.47],[0.48,0.50],[0.62,0.45],[0.82,0.35],[1,0.32]],
-        palv:[[0,12],[0.08,22],[0.24,32],[0.48,32],[0.62,22],[0.82,13],[1,12]],
-        ppl:[[0,0.0],[0.12,2.0],[0.30,6.5],[0.52,6.2],[0.68,3.2],[0.88,0.6],[1,0.0]]
-      },
-      atelectasia_neonatal:{
-        vol:[[0,0.34],[0.12,0.39],[0.28,0.51],[0.46,0.56],[0.60,0.50],[0.78,0.39],[1,0.34]],
-        palv:[[0,10],[0.08,17],[0.24,25],[0.46,25],[0.60,17],[0.80,11],[1,10]],
-        ppl:[[0,-1.6],[0.12,0.4],[0.30,4.2],[0.50,4.0],[0.66,1.4],[0.86,-1.0],[1,-1.6]]
-      },
-      desmame_neonatal:{
-        vol:[[0,0.40],[0.12,0.50],[0.28,0.68],[0.44,0.74],[0.58,0.66],[0.76,0.48],[1,0.40]],
-        palv:[[0,5],[0.10,8],[0.26,12],[0.44,12],[0.56,7],[0.74,5.5],[1,5]],
-        ppl:[[0,-4.0],[0.12,-4.9],[0.30,-6.0],[0.48,-5.6],[0.62,-4.8],[0.82,-4.1],[1,-4.0]]
-      },
-      peep:{
-        // Pressão positiva de base, preservando o retorno contínuo.
-        vol:[[0,0.58],[0.12,0.66],[0.26,0.86],[0.40,0.94],[0.52,0.92],[0.68,0.76],[0.84,0.60],[1,0.58]],
-        palv:[[0,6],[0.10,7.5],[0.24,10.8],[0.40,9.4],[0.52,8.0],[0.66,6.7],[0.82,5.5],[1,6]],
-        ppl:[[0,-2.0],[0.12,-0.6],[0.28,1.5],[0.44,1.2],[0.58,0.4],[0.76,-1.1],[1,-2.0]]
-      },
-      mecanica:{
-        // Ventilação mecânica: pressão positiva inspiratória e Ppl deslocada para cima.
-        vol:[[0,0.40],[0.10,0.54],[0.22,0.82],[0.36,0.94],[0.50,0.92],[0.66,0.66],[0.82,0.42],[1,0.40]],
-        palv:[[0,0],[0.08,6.0],[0.20,16.0],[0.34,18.0],[0.50,8.0],[0.66,2.0],[0.82,0],[1,0]],
-        ppl:[[0,-3.0],[0.10,-0.5],[0.24,4.5],[0.40,4.0],[0.54,2.0],[0.72,-1.2],[1,-3.0]]
-      }
-  };
-
-  function normalizeCurvePoints(points){
-    // Garante pontos válidos, ordenados e ciclo fechado sem conectar final→início por improviso.
-    const cleaned = points
-      .map(p => [clamp(Number(p[0]), 0, 1), Number(p[1])])
-      .filter(p => Number.isFinite(p[0]) && Number.isFinite(p[1]))
-      .sort((a,b) => a[0] - b[0]);
-    if (!cleaned.length) return [[0,0],[1,0]];
-    if (cleaned[0][0] > 0) cleaned.unshift([0, cleaned[0][1]]);
-    else cleaned[0][0] = 0;
-    const last = cleaned[cleaned.length - 1];
-    if (last[0] < 1) cleaned.push([1, cleaned[0][1]]);
-    else last[0] = 1;
-    cleaned[cleaned.length - 1][1] = cleaned[0][1];
-    return cleaned;
-  }
-
-  Object.keys(CURVE_SPECS).forEach(key => {
-    ['vol','palv','ppl'].forEach(kind => {
-      CURVE_SPECS[key][kind] = normalizeCurvePoints(CURVE_SPECS[key][kind]);
-    });
-  });
-
-  function getCurveSpec(state){
-    const key = getDataKey(state || model.state);
-    return CURVE_SPECS[key] || CURVE_SPECS.termo_estavel;
-  }
-
-  function getActiveMode(state){
-    return model.mode === 'mech' ? 'mech' : 'spont';
-  }
-
-  function getMechanicalShape(kind, u, state){
-    const key = getDataKey(state || model.state);
-    const spec = CURVE_SPECS[key] || CURVE_SPECS.termo_ventilado;
-    return smoothPoints(spec[kind], u);
-  }
-
-  function getEffectiveU(u, state){
-    // Calibração fina: resistência absoluta altera a distribuição do tempo.
-    // R alta = expiração mais lenta e retorno tardio ao repouso.
-    const absR = clamp(Number(model.resistance) || 1, 0.35, 3.5);
-    const expStart = 0.52;
-    if(u <= expStart) {
-      const inspT = u / expStart;
-      const inspPower = clamp(1 + Math.max(0, absR - 1) * 0.08, 0.85, 1.18);
-      return expStart * Math.pow(inspT, inspPower);
+    massLabel.textContent = `${nf(model.massKg, 1)} kg`;
+    vdPhysLabel.textContent = `${nf(model.vdAddML, 1)} mL`;
+    fio2Label.textContent = `${model.fio2}%`;
+    cpapLabel.textContent = model.cpap > 0 ? `${nf(model.cpap, 1)} cmH₂O` : 'sem CPAP';
+    mechPeepLabel.textContent = `${nf(model.peep, 1)} cmH₂O`;
+    if(model.strategy === 'vcv'){
+      mechPinspName.textContent = 'Limite de PIP (pressão absoluta)';
+      mechPinspRange.min = 10; mechPinspRange.max = 40; mechPinspRange.value = model.pipLimit;
+      mechPinspLabel.textContent = `${model.pipLimit} cmH₂O`;
+    } else {
+      mechPinspName.textContent = 'ΔP acima da PEEP (pressão inspiratória)';
+      mechPinspRange.min = 3; mechPinspRange.max = 30; mechPinspRange.value = model.dp;
+      mechPinspLabel.textContent = `${model.dp} cmH₂O → PIP ${nf(model.peep + model.dp, 0)} cmH₂O`;
     }
-    const e = (u - expStart) / (1 - expStart);
-    const expPower = clamp(1 + Math.max(0, absR - 1) * 1.35, 0.70, 3.15);
-    return expStart + Math.pow(e, expPower) * (1 - expStart);
+    tiLabel.textContent = c.sim.run.tiLimited ? `${nf(model.tiSec, 2)} s → limitado a ${nf(c.sim.run.Ti, 2)} s (80% do ciclo)` : `${nf(model.tiSec, 2)} s`;
+    ventStrategySelect.value = model.strategy;
+    asynchronySelect.value = model.asynchrony || 'none';
+    surfSelect.value = model.surf;
+    apneaSelect.value = model.apnea || 'none';
+    const cEff = d.cSpec;
+    complianceLabel.textContent = `${nf(model.C, 2)} mL/cmH₂O/kg` + (Math.abs(cEff - model.C) > 0.005 ? ` → ${nf(cEff, 2)} efetiva` : '');
+    resistanceLabel.textContent = `${nf(model.R, 0)} cmH₂O/L/s` + (Math.abs(d.Raw - model.R) > 0.5 ? ` → ${nf(d.Raw, 0)} efetiva` : '');
   }
 
-
-  function getInspiratoryFraction(state){
-    // UTI real: em ventilação mecânica, o tempo inspiratório definido pelo operador determina I:E.
-    const key = getDataKey(state || model.state);
-    const absR = clamp(Number(model.resistance) || 1, 0.35, 3.5);
-    if(model.mode === 'mech'){
-      const freq = clamp(Number(model.freq) || 40, 20, 80);
-      const cycleTime = 60 / freq;
-      const ti = clamp(Number(model.tiSec) || 0.35, 0.2, 1.0);
-      let frac = ti / Math.max(0.4, cycleTime);
-      if(key === 'desmame_neonatal') frac = Math.max(frac, 0.38);
-      // Em obstrução, manter expiração longa é didático: reduzimos um pouco a inspiração efetiva.
-      frac -= Math.max(0, absR - 1) * 0.010;
-      return clamp(frac, 0.18, 0.56);
-    }
-    let inspFrac = 0.42;
-    if(key === 'aspiracao_meconial' || key === 'dbp') inspFrac -= 0.04;
-    inspFrac -= Math.max(0, absR - 1) * 0.018;
-    return clamp(inspFrac, 0.24, 0.46);
+  function syncRanges(){
+    freqRange.value = model.freq;
+    vtRange.value = model.vtML;
+    massRange.value = model.massKg;
+    gestAgeRange.value = model.gestWeeks;
+    postnatalAgeRange.value = model.postnatalHours;
+    complianceRange.value = model.C;
+    resistanceRange.value = model.R;
+    vdPhysRange.value = model.vdAddML;
+    fio2Range.value = model.fio2;
+    cpapRange.value = model.cpap;
+    mechPeepRange.value = model.peep;
+    tiRange.value = model.tiSec;
   }
 
-  function getAutoPEEP(state){
-    // Auto-PEEP simplificada: aparece quando há resistência alta, FR alta e pouco tempo expiratório.
-    // Não é arbitrária: depende do tempo expiratório disponível versus tempo necessário para esvaziar.
-    if(model.mode !== 'mech') return 0;
-    const key = getDataKey(state || model.state);
-    const absR = clamp(Number(model.resistance) || 1, 0.35, 3.5);
-    const absC = clamp(Number(model.compliance) || 1, 0.20, 2.20);
-    const freq = clamp(Number(model.freq) || 40, 20, 80);
-    const vt = Number(model.vtML) || 16;
-    const cycleTime = 60 / freq;
-    const expTime = cycleTime * (1 - getInspiratoryFraction(state));
-    const obstructiveBonus = (key === 'aspiracao_meconial' || key === 'dbp') ? 0.18 : 0;
-    const requiredExp = 0.24 + absR * 0.18 + Math.max(0, absC - 1) * 0.10 + obstructiveBonus;
-    const timeDeficit = Math.max(0, requiredExp - expTime);
-    const vtLoad = Math.max(0, (vt / Math.max(0.4, model.massKg)) - 6) / 3;
-    const asyncType = model.asynchrony || 'none';
-    const asyncPeep = asyncType === 'breath_stacking' ? 3.2 : asyncType === 'double_trigger' ? 1.5 : 0;
-    const autoPeep = timeDeficit * 6.0 + Math.max(0, absR - 1) * 0.50 + vtLoad * 0.65 + asyncPeep;
-    return clamp(autoPeep, 0, 10);
-  }
-
-  function getTotalPEEP(state){
-    return (model.mode === 'mech' ? (Number(model.mechPeep) || 0) : 0) + getAutoPEEP(state);
-  }
-
-  function getAsynchronyEffect(state, u){
-    const type = (model.mode === 'mech') ? (model.asynchrony || 'none') : 'none';
-    const pinsp = Number(model.mechPinsp) || 16;
-    const totalPeep = getTotalPEEP(state);
-    const effU = clamp(u, 0, 1);
-    const labels = {
-      none:'Sem assincronia',
-      ineffective:'Esforço ineficaz',
-      flow_starvation:'Fluxo insuficiente',
-      double_trigger:'Duplo disparo',
-      breath_stacking:'Empilhamento'
-    };
-    let e = {type, label:labels[type] || 'Sem assincronia', pressureAdd:0, effortAdd:0, vtFactor:1, eevAdd:0, peepAdd:0, satPenalty:0, rvPenalty:0};
-    if(type === 'ineffective'){
-      // Esforço do paciente na expiração que não dispara o ventilador: Ppl cai, Palv quase não muda.
-      e.effortAdd = -2.6 * bell(effU, 0.58, 0.92);
-      e.vtFactor = 0.92;
-      e.satPenalty = 3.0;
-    } else if(type === 'flow_starvation'){
-      // Paciente tenta inspirar mais fluxo do que o ventilador entrega: Ppl fica mais negativa durante a inspiração.
-      e.effortAdd = -3.2 * bell(effU, 0.08, 0.42);
-      e.pressureAdd = -0.8 * bell(effU, 0.10, 0.36);
-      e.vtFactor = 0.95;
-      e.satPenalty = 2.0;
-    } else if(type === 'double_trigger'){
-      // Duplo disparo real: o segundo ciclo entra antes da expiração completar.
-      // O formato principal é gerado em getPressure/getLungInflation; aqui ficam os efeitos sistêmicos.
-      e.pressureAdd = 0;
-      e.vtFactor = 1.32;
-      e.eevAdd = 0.115;
-      e.peepAdd = 2.4;
-      e.rvPenalty = 0.05;
-      e.satPenalty = 1.0;
-    } else if(type === 'breath_stacking'){
-      // Empilhamento: retenção de volume/auto-PEEP, pressão expiratória não retorna ao basal.
-      e.pressureAdd = totalPeep * 0.18 * bell(effU, 0.50, 1.00);
-      e.vtFactor = 1.08;
-      e.eevAdd = 0.095;
-      e.peepAdd = 3.0;
-      e.rvPenalty = 0.08;
-      e.satPenalty = 4.0;
-    }
-    return e;
-  }
-  function getNormalizedVolumeShape(state, u){
-    const key = getDataKey(state || model.state);
-    const spec = getCurveSpec(key);
-    const vals = spec.vol.map(p => p[1]);
-    const minV = Math.min(...vals);
-    const maxV = Math.max(...vals);
-    const raw = smoothPoints(spec.vol, getEffectiveU(u, state));
-    return clamp((raw - minV) / Math.max(0.001, maxV - minV), 0, 1);
-  }
-
-  function getPhysiologyFactors(state){
-    const rawState = state || model.state;
-    const key = getDataKey(rawState);
-    const preset = CLINICAL_PRESETS[rawState] || CLINICAL_PRESETS.termo_estavel;
-    const relC = clamp(model.compliance / Math.max(0.30, preset.compliance || 1), 0.22, 3.2);
-    const relR = clamp(model.resistance / Math.max(0.55, preset.resistance || 1), 0.35, 3.5);
-    return {key, preset, relC, relR};
-  }
-
-  function getEffectiveVTML(state){
-    const target = Number(model.vtML) || 16;
-    const absC = clamp(Number(model.compliance) || 1, 0.20, 2.20);
-    const absR = clamp(Number(model.resistance) || 1, 0.35, 3.50);
-    const birthMaturity = clamp((model.gestWeeksAtBirth - 22) / 18, 0.08, 1.0);
-    const postnatalAdaptation = 0.88 + 0.12 * clamp(model.postnatalHours / 72, 0, 1);
-
-    if(getActiveMode(state) === 'mech'){
-      const asyncEff = getAsynchronyEffect(state, phaseU(frame));
-      // PCV: pressão controla o volume. VCV: volume é alvo, mas respeita limite de pressão.
-      const pressureLimit = Number(model.mechPinsp) || 16;
-      const pressureLimitedVT = pressureLimit * Math.pow(absC, 1.10) * model.massKg * 0.50;
-      const resistanceLoss = clamp(1 - Math.max(0, absR - 1) * 0.095, 0.68, 1.04);
-      if(model.ventStrategy === 'vcv'){
-        const limitFactor = clamp(pressureLimitedVT / Math.max(1, target), 0.35, 1.10);
-        return clamp(target * Math.min(1, limitFactor) * resistanceLoss * asyncEff.vtFactor, 1, 60);
-      }
-      const delivered = Math.min(target, pressureLimitedVT) * resistanceLoss * asyncEff.vtFactor;
-      return clamp(delivered, 1, 60);
-    }
-
-    // Modo espontâneo: complacência absoluta manda no volume entregue.
-    // C=0.45 deve reduzir fortemente a excursão; C alta aumenta volume sem explodir a anatomia.
-    const complianceDelivery = clamp(Math.pow(absC, 1.58) * (0.82 + 0.18 * birthMaturity) * postnatalAdaptation, 0.16, 1.55);
-    const resistanceLoss = clamp(1 - Math.max(0, absR - 1) * 0.13, 0.62, 1.08);
-    return clamp(target * complianceDelivery * resistanceLoss, 1, 60);
-  }
-  function getEndExpiratoryLevel(state){
-    const key = getDataKey(state || model.state);
-    const absC = clamp(Number(model.compliance) || 1, 0.20, 2.20);
-    const absR = clamp(Number(model.resistance) || 1, 0.35, 3.50);
-    let eelv = 0.34;
-    if(key === 'dbp') eelv += 0.10;
-    if(key === 'aspiracao_meconial') eelv += 0.035;
-    if(key === 'prematuro_estavel' || key === 'sdr_neonatal') eelv -= 0.055;
-    if(key === 'atelectasia') eelv -= 0.06;
-    eelv += clamp((absC - 1) * 0.070, -0.09, 0.12);
-    eelv += clamp(Math.max(0, absR - 1) * 0.026, 0, 0.070);
-    if(getActiveMode(state) === 'mech'){
-      const totalPeep = getTotalPEEP(state);
-      eelv += clamp(totalPeep * 0.0155, 0, 0.24);
-      // aprisionamento aéreo visível no modo UTI real
-      eelv += clamp(getAutoPEEP(state) * 0.018, 0, 0.16);
-      eelv += getAsynchronyEffect(state, phaseU(frame)).eevAdd;
-    }
-    return clamp(eelv, 0.14, 0.68);
-  }
-  function getLungInflation(f, state){
-    const u = phaseU(f);
-    let shape = getNormalizedVolumeShape(state, u);
-    if(getActiveMode(state) === 'mech' && (model.asynchrony || 'none') === 'double_trigger'){
-      shape = doubleTriggerVolumeShape(u);
-    }
-    const effVT = getEffectiveVTML(state);
-    const eelv = getEndExpiratoryLevel(state);
-    const vtPerKg = effVT / Math.max(0.4, model.massKg);
-    const excursion = clamp((vtPerKg / 6) * 0.34, 0.055, 0.62);
-    return clamp(eelv + shape * excursion, 0.04, 1.05);
-  }
-
-  function getPressure(f, state){
-    const u = phaseU(f);
-    const key = getDataKey(state || model.state);
-    const effU = getEffectiveU(u, state);
-    const absC = clamp(Number(model.compliance) || 1, 0.20, 2.20);
-    const absR = clamp(Number(model.resistance) || 1, 0.35, 3.50);
-
-    if(getActiveMode(state) === 'mech'){
-      const totalPeep = getTotalPEEP(state);
-      const asyncEff = getAsynchronyEffect(state, effU);
-      const inspStart = 0.06;
-      const inspFrac = getInspiratoryFraction(state);
-      const inspEnd = clamp(inspStart + inspFrac, 0.24, 0.72);
-      const riseDur = model.ventStrategy === 'vcv' ? 0.22 : 0.13;
-      const fallDur = 0.12;
-      const rise = smoothStep01((effU - inspStart) / riseDur);
-      const fall = 1 - smoothStep01((effU - inspEnd) / fallDur);
-      const gate = clamp(rise * fall, 0, 1);
-      const vt = getEffectiveVTML(state);
-      const pinspLimit = Number(model.mechPinsp) || 16;
-
-      if((model.asynchrony || 'none') === 'double_trigger'){
-        const dg = doubleTriggerGate(effU);
-        if(model.ventStrategy === 'vcv'){
-          const vtScale = (vt / Math.max(0.4, model.massKg)) / 6;
-          const elastic = vtScale * 9.5 / Math.pow(absC, 0.92);
-          const resistive = vtScale * (1.6 + absR * 2.1) + Math.max(0, (model.freq || 40) - 40) * 0.04;
-          const targetPeak = Math.min(totalPeep + elastic + resistive, totalPeep + pinspLimit);
-          return Math.max(0, totalPeep + (targetPeak - totalPeep) * dg);
-        }
-        return Math.max(0, totalPeep + pinspLimit * dg);
-      }
-
-      if(model.ventStrategy === 'vcv'){
-        // Volume controlado: pressão sobe conforme complacência/resistência para entregar Vt.
-        const inspProg = clamp((effU - inspStart) / Math.max(0.001, inspEnd - inspStart), 0, 1);
-        const vtScale = (vt / Math.max(0.4, model.massKg)) / 6;
-        const elastic = vtScale * 9.5 / Math.pow(absC, 0.92);
-        const resistive = vtScale * (1.6 + absR * 2.1) + Math.max(0, (model.freq || 40) - 40) * 0.04;
-        const targetPeak = totalPeep + elastic + resistive;
-        const limitedPeak = Math.min(targetPeak, totalPeep + pinspLimit);
-        const ramp = totalPeep + (limitedPeak - totalPeep) * (0.22 + 0.78 * inspProg);
-        return Math.max(0, (gate > 0.02 ? ramp : totalPeep) + asyncEff.pressureAdd);
-      }
-
-      // Pressão controlada: subida rápida e platô inspiratório. Pinsp define o delta sobre a PEEP total.
-      return Math.max(0, totalPeep + pinspLimit * gate + asyncEff.pressureAdd);
-    }
-
-    const spec = getCurveSpec(state || model.state);
-    let raw = smoothPoints(spec.palv, effU);
-    const isForced = false;
-    // Palv é pressão de fluxo. Ela aumenta com resistência e com pulmão rígido,
-    // mas não acompanha Ppl diretamente.
-    let scale = clamp(0.78 + Math.max(0, absR - 1) * 0.42 + Math.max(0, 1 - absC) * 0.30, 0.55, isForced ? 1.25 : 1.70);
-    let palv = raw * scale;
-    if(!isForced){
-      const limit = key === 'prematuro_estavel' ? 3.0 : key === 'aspiracao_meconial' ? 3.6 : 2.2;
-      palv = clamp(palv, -limit, limit);
-    }
-    return palv;
-  }
-
-  function getPleuralPressure(f, state){
-    const u = phaseU(f);
-    const key = getDataKey(state || model.state);
-    const effU = getEffectiveU(u, state);
-    const absC = clamp(Number(model.compliance) || 1, 0.20, 2.20);
-    const absR = clamp(Number(model.resistance) || 1, 0.35, 3.50);
-
-    if(getActiveMode(state) === 'mech'){
-      // Ventilação mecânica: Palv é o driver, Ppl acompanha passivamente.
-      // Travamos a fisiologia para não voltar ao padrão espontâneo muito negativo.
-      const totalPeep = getTotalPEEP(state);
-      const palvNow = getPressure(f, state);
-      const deltaPaw = Math.max(0, palvNow - totalPeep);
-      // Acoplamento pressão-via aérea → pleura/hemodinâmica calibrado.
-      // A Ppl NÃO deve copiar Palv: a transmissão é amortecida pela caixa torácica e pelo parênquima.
-      // Em PCV basal com PEEP 5, a Ppl deve ficar perto de -1 a 0; no duplo disparo, não deve explodir positiva.
-      const baseline = -4.2 + totalPeep * 0.62;
-      const transmissionFactor = clamp(0.32 + absC * 0.10, 0.36, 0.55);
-      const desmameEffort = key === 'desmame_neonatal' ? -1.2 * bell(effU, 0.05, 0.50) : 0;
-      const asyncEff = getAsynchronyEffect(state, effU);
-      let ppl = baseline + deltaPaw * transmissionFactor + desmameEffort + asyncEff.effortAdd + asyncEff.peepAdd * 0.18;
-      if(asyncEff.type === 'double_trigger'){
-        // Duplo disparo mantém pressão pleural elevada, mas com amortecimento fisiológico.
-        ppl += 0.32 * doubleTriggerGate(effU) + 0.20 * bell(effU, 0.30, 0.66);
-      }
-      return clamp(ppl, -5.8, 6.5);
-    }
-
-    const spec = getCurveSpec(state || model.state);
-    const raw = smoothPoints(spec.ppl, effU);
-    const baseline = spec.ppl[0]?.[1] ?? -5;
-    const swing = raw - baseline;
-    // C baixa = muito mais esforço negativo; C alta = menos esforço.
-    const effort = clamp(Math.pow(1 / Math.max(0.20, absC), 0.98) * (1 + Math.max(0, absR - 1) * 0.22), 0.36, 3.80);
-    return baseline + swing * effort;
-  }
-
-  function getFlowDirection(f){
-    // Sincronização final da mecânica ventilatória:
-    // a direção do fluxo visual deve seguir a variação do volume pulmonar,
-    // não apenas o sinal da Palv. Isso é essencial no modo mecânico,
-    // pois a inspiração ocorre com Palv positiva.
-    const step = 2.0;
-    const before = getLungInflation(Math.max(0, f - step));
-    const after = getLungInflation(Math.min(TOTAL, f + step));
-    const dv = after - before;
-    if (dv > 0.004) return 'in';
-    if (dv < -0.004) return 'out';
-
-    // fallback apenas para transições muito planas
-    if(getActiveMode(model.state) === 'spont'){
-      const p = getPressure(f);
-      if (p < -0.12) return 'in';
-      if (p > 0.12) return 'out';
-    }
-    return 'none';
-  }
-
-  function getVentilationMetrics(){
-    const infl = getLungInflation(frame);
-    const palv = getPressure(frame);
-    const ppl = getPleuralPressure(frame);
-    const key = model.state;
-    const freq = model.freq;
-    const vtSetML = model.vtML;
-    const vtEffectiveML = getEffectiveVTML(model.state);
-
-    // VDa neonatal: as vias condutoras representam maior volume por kg no prematuro.
-    // O calibre estreito atua principalmente na resistência (aproximação de Poiseuille),
-    // enquanto massa e maturidade definem a escala do volume anatômico.
-    const gestMaturity = clamp((model.gestWeeksAtBirth - 22) / 18, 0, 1);
-    const vdAnatPerKg = 2.5 + (1 - gestMaturity) * 1.2;
-    const vdAnatML = vdAnatPerKg * model.massKg;
-    const diseaseVDPerKg = ({sdr_neonatal:1.0, taquipneia_transitoria:0.5, aspiracao_meconial:1.3, dbp:1.1, atelectasia_neonatal:0.8}[key] || 0);
-    const diseaseVDBase = diseaseVDPerKg * model.massKg;
-    const autoPeep = getAutoPEEP(model.state);
-    const totalPeep = model.mode === 'mech' ? getTotalPEEP(model.state) : 0;
-    const recruitability = ({sdr_neonatal:0.75, taquipneia_transitoria:0.35, atelectasia_neonatal:0.90, pos_surfactante:0.45}[key] || 0.12);
-    const recruitmentRelief = diseaseVDBase * recruitability * clamp((totalPeep - 3) / 5, 0, 0.72);
-    const diseaseVD = Math.max(0, diseaseVDBase - recruitmentRelief);
-    // PEEP excessiva pode aumentar VDalv por sobredistensão e redução da perfusão capilar.
-    const overdistensionVD = model.mode === 'mech' ? Math.max(0, totalPeep - 7) * model.massKg * 0.24 : 0;
-    // O slider representa componente alveolar/patológico adicional. Para fins didáticos, ele é limitado
-    // para evitar VD funcional maior que quase todo o Vt, mantendo alerta fisiológico sem zerar tudo.
-    const sliderVD = clamp(Number(model.vdPhysML) || 0, 0, Math.max(0, vtEffectiveML * 0.50));
-    const vdAlveolarRawML = sliderVD + diseaseVD + overdistensionVD;
-    const vdRawTotalML = Math.max(0, vdAnatML + vdAlveolarRawML);
-    const vdPhysTotalML = Math.min(vdRawTotalML, Math.max(vdAnatML, vtEffectiveML * 0.85));
-
-    const minuteVent = freq * vtEffectiveML;
-    const alveolarBreathML = vtEffectiveML - vdPhysTotalML;
-    const alveolarFloorML = Math.max(0.5, vtEffectiveML * 0.12);
-    const cycleTime = 60 / Math.max(1, freq);
-    const ti = model.mode === 'mech' ? clamp(Number(model.tiSec) || 0.35, 0.2, 1.0) : cycleTime * getInspiratoryFraction(model.state);
-    const te = Math.max(0.05, cycleTime - ti);
-    const expNeed = 0.24 + (Number(model.resistance) || 1) * 0.18 + Math.max(0, (Number(model.compliance) || 1) - 1) * 0.10;
-    const expFactor = clamp(te / expNeed, 0.22, 1.0);
-    const alveolarVent = freq * Math.max(alveolarBreathML, alveolarFloorML) * expFactor;
-    const severeDeadSpaceFlag = alveolarBreathML <= alveolarFloorML;
-
-    const expectedVA = (model.mode === 'mech' ? 150 : 130) * model.massKg;
-    const diseasePenalty = ({sdr_neonatal:12, taquipneia_transitoria:4, aspiracao_meconial:9, dbp:7, atelectasia_neonatal:8}[key] || 0);
-    const vaDeficit = Math.max(0, (expectedVA - alveolarVent) / Math.max(1, expectedVA));
-    const deadSpacePenalty = Math.max(0, (vdPhysTotalML / Math.max(1, vtEffectiveML)) - 0.34) * 18 + (severeDeadSpaceFlag ? 10 : 0);
-    const peepBenefit = model.mode === 'mech' ? Math.min(4.0, model.mechPeep * 0.22) : 0;
-    const asyncEff = getAsynchronyEffect(model.state, phaseU(frame));
-    const saO2 = clamp(
-      98 - vaDeficit * 18 - deadSpacePenalty - Math.max(0, model.resistance - 1) * 1.8 - Math.max(0, 1 - model.compliance) * 5.5 - diseasePenalty - asyncEff.satPenalty + peepBenefit,
-      62, 99
-    );
-
-    const immaturityLoad = (1 - clamp((model.gestWeeksAtBirth - 22) / 18, 0, 1)) * 28;
-    const mechanicsLoad = Math.max(0, 1 - model.compliance) * 36 + Math.max(0, model.resistance - 1) * 18;
-    const supportRelief = model.mode === 'mech' ? Math.min(18, getTotalPEEP(model.state) * 1.8) : 0;
-    const workOfBreathing = clamp(18 + immaturityLoad + mechanicsLoad - supportRelief, 5, 100);
-
-    return {
-      infl, palv, ppl,
-      vtML: vtSetML,
-      vtEffectiveML,
-      vdAnatML,
-      vdAlveolarML: vdAlveolarRawML,
-      vdPhysML: vdPhysTotalML,
-      vdTotalML: vdPhysTotalML,
-      minuteVent,
-      alveolarVent,
-      saO2,
-      rv:workOfBreathing,
-      autoPeep,
-      expFactor,
-      asynchrony: asyncEff.type
-    };
-  }
+  function resetApnea(){ apneaRt.burstT = 0; apneaRt.inPause = false; apneaRt.t = 0; apneaRt.recover = 99; apneaRt.nadir = null; apneaRt.startSat = 0; }
 
   function applyState(state){
     const wasRunning = running;
     if (raf) { cancelAnimationFrame(raf); raf = null; }
     running = false;
-    frame = 0;
-    lastTs = 0;
-    stepAwaitPlay = false;
+    frame = 0; lastTs = 0; stepAwaitPlay = false;
     model.state = state;
-    const preset = CLINICAL_PRESETS[state] || CLINICAL_PRESETS.termo_estavel;
-    model.compliance = preset.compliance;
-    model.resistance = preset.resistance;
-    model.freq = preset.freq;
-    model.vtML = preset.vtML;
-    model.vtTarget = model.vtML / 1000;
-    model.massKg = preset.massKg;
-    model.gestWeeksAtBirth = preset.gestWeeks;
-    model.postnatalHours = preset.postnatalHours;
-    if(model.mode === 'mech'){
-      model.mechPeep = preset.peep ?? 5;
-      model.mechPinsp = preset.pinsp ?? 16;
-    } else {
-      model.mechPeep = 0;
-      model.mechPinsp = 0;
-    }
-    freqRange.value = model.freq;
-    vtRange.value = model.vtML;
-    massRange.value = model.massKg;
-    gestAgeRange.value = model.gestWeeksAtBirth;
-    postnatalAgeRange.value = model.postnatalHours;
-    mechPeepRange.value = model.mechPeep;
-    mechPinspRange.value = model.mechPinsp;
-    tiRange.value = model.tiSec;
-    if (ventStrategySelect) ventStrategySelect.value = model.ventStrategy;
-    if (asynchronySelect) asynchronySelect.value = model.asynchrony || 'none';
+    const p = getPreset(model.mode, state);
+    ['C','R','freq','vtML','massKg','gestWeeks','postnatalHours','surf','fio2','cpap','apnea','peep','dp','pipLimit','tiSec'].forEach(k => { model[k] = p[k]; });
+    model.vdAddML = 0;
+    resetApnea();
     ventMode.value = model.mode;
     document.body.classList.toggle('mech-mode', model.mode === 'mech');
     syncVentSegment();
-    complianceRange.value = model.compliance.toFixed(2);
-    resistanceRange.value = model.resistance.toFixed(2);
-    updateControlLabels();
+    syncRanges();
     renderStateButtons();
     render();
-    if (wasRunning && !stepModeToggle.checked) {
-      running = true;
-      raf = requestAnimationFrame(loop);
-    }
+    if (wasRunning && !stepModeToggle.checked) { running = true; raf = requestAnimationFrame(loop); }
   }
 
-
   function syncVentSegment(){
-    document.querySelectorAll('.vent-seg-btn').forEach(function(btn){
+    document.querySelectorAll('.vent-seg-btn, .mt-mode-btn').forEach(function(btn){
       const active = btn.dataset.mode === model.mode;
       btn.classList.toggle('active', active);
       btn.setAttribute('aria-pressed', active ? 'true' : 'false');
@@ -1145,72 +1103,111 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
     if (raf) { cancelAnimationFrame(raf); raf = null; }
     running = false;
     model.mode = mode === 'mech' ? 'mech' : 'spont';
-    if(model.mode === 'mech' && !model.ventStrategy) model.ventStrategy = 'pcv';
     ventMode.value = model.mode;
     document.body.classList.toggle('mech-mode', model.mode === 'mech');
     syncVentSegment();
     const allowed = STATE_SETS[model.mode];
     if(!allowed.includes(model.state)) model.state = model.mode === 'mech' ? 'termo_ventilado' : 'termo_estavel';
     lastTs = 0;
-    renderStateButtons();
     applyState(model.state);
-    if (wasRunning && !stepModeToggle.checked) {
-      running = true;
-      raf = requestAnimationFrame(loop);
-    }
+    if (wasRunning && !stepModeToggle.checked) { running = true; raf = requestAnimationFrame(loop); }
   }
 
+  // ===================== Painel de variáveis =====================
+  function setCard(id, value, small){
+    const el = $(id).querySelector('.phase');
+    el.firstChild.textContent = value;
+    if(small !== undefined){ const sm = el.querySelector('small'); if(sm) sm.textContent = small; }
+  }
+  function retractionLabel(r){ return r < 0.2 ? 'retrações ausentes ou discretas' : r < 0.45 ? 'retrações moderadas' : 'retrações intensas'; }
 
-  function setCardsColor(color){
-    [phaseCard,valueCard,palvCard,pplCard,compCard,resCard,sao2Card,rvCard,veCard,vaCard,vdCard,vdPhysCard].forEach(card => card.style.setProperty('--phase', color));
+  function paco2Text(v){ return v > PACO2_CAP ? '>120' : Math.round(v) < 15 ? '<15' : nf(v, 0); }
+  function sao2Text(v){ return v < 50 ? '<50%' : Math.round(v) + '%'; }
+
+  function buildAlerts(c, sao2){
+    const m = c.met, sim = c.sim, mech = model.mode === 'mech';
+    const out = [];
+    const pmaWeeks = model.gestWeeks + model.postnatalHours / 168;
+    const pc = Math.round(m.paco2Raw);
+    if(m.vdPhys >= m.VT) out.push(['crit', 'VDf ≥ Vt: pela equação clássica, VA = (Vt − VDf) × FR = 0. Com FR muito alta e Vt pequeno ainda há alguma troca por dispersão e difusão do gás (princípio da VAF), mecanismo não representado nesse número.']);
+    else if(m.vdvt >= 0.6) out.push(['warn', `VD/VT ${nf(m.vdvt,2)}: a maior parte de cada Vt não participa das trocas.`]);
+    if(m.vdAlv > m.vdAnat + m.vdInstr) out.push(['warn', 'VDalv maior que o espaço morto de condução: predominam unidades ventiladas e pouco perfundidas.']);
+    if(!mech && sim.effortLimited) out.push(['crit', 'Esforço inspiratório máximo atingido: a mecânica limita o Vt.']);
+    if(mech && model.strategy === 'vcv' && sim.pressureLimited) out.push(['warn', 'Limite de PIP atingido: o Vt entregue é menor que o programado.']);
+    if(mech && m.vtKg > 8) out.push(['crit', `Vt ${nf(m.vtKg,1)} mL/kg: acima de 8 mL/kg há risco de volutrauma.`]);
+    else if(mech && m.vtKg > 6.5) out.push(['warn', `Vt ${nf(m.vtKg,1)} mL/kg: acima da faixa-alvo usual de 4–6 mL/kg.`]);
+    if(mech && m.vtKg < 4) out.push(['warn', `Vt ${nf(m.vtKg,1)} mL/kg: abaixo de 4 mL/kg favorece hipoventilação e colapso.`]);
+    if(sim.overFrac > 0.05) out.push(['warn', `Sobredistensão no fim da inspiração: a complacência dinâmica cai para ${nf(sim.cDyn,2)} mL/cmH₂O/kg e o VDalv aumenta.`]);
+    if(sim.intrinsicPEEP >= 1) out.push(['info', mech ? `Auto-PEEP ${nf(sim.intrinsicPEEP,1)} cmH₂O: o tempo expiratório não basta para esvaziar (constante de tempo expiratória ${nf(m.tauExp,2)} s).` : `PEEP intrínseca ${nf(sim.intrinsicPEEP,1)} cmH₂O: frenagem glótica (gemido) e/ou esvaziamento incompleto mantêm volume ao fim da expiração.` + (model.cpap > 0 ? '' : ' A CPAP substitui essa defesa e o gemido diminui.')]);
+    if(m.paco2Raw > PACO2_CAP) out.push(['crit', 'PaCO₂ acima de 120 mmHg: hipoventilação grave.']);
+    else if(pc > 55) out.push(['crit', `PaCO₂ ${pc} mmHg: hipoventilação alveolar.`]);
+    else if(pc < 35) out.push(['warn', `PaCO₂ ${paco2Text(m.paco2Raw)} mmHg: hipocapnia por hiperventilação (reduz o fluxo sanguíneo cerebral).`]);
+    if(Math.round(sao2) < 90 && !inPauseNow()){
+      const gain = m.sao2At100 - sao2;
+      let txt = `Hipoxemia (SaO₂ ${sao2Text(sao2)}, shunt ${nf(m.fs*100,0)}%, baixo V/Q ${nf(m.fl*100,0)}%). `;
+      if(gain < 5) txt += `Com FiO₂ 100% a SaO₂ iria só a ${sao2Text(m.sao2At100)}: hipoxemia refratária ao O₂, predomínio de shunt verdadeiro. Recrutamento (PEEP/CPAP) ou surfactante atuam sobre o shunt.`;
+      else if(m.fs >= 0.2) txt += `Com FiO₂ 100% a SaO₂ chegaria a ${sao2Text(m.sao2At100)}, mas a PaO₂ ficaria em ~${nf(m.oxy100.pao2,0)} mmHg: o O₂ corrige o baixo V/Q e compensa parte do shunt (a HbF satura em PaO₂ menor); reabrir alvéolos trata a causa.`;
+      else txt += `Com FiO₂ 100% a SaO₂ chegaria a ${sao2Text(m.sao2At100)}: hipoxemia responsiva ao O₂ (predomínio de baixo V/Q).`;
+      out.push(['crit', txt]);
+    }
+    if(pmaWeeks < 37 && model.fio2 > 21 && Math.round(sao2) > 95) out.push(['warn', 'SaO₂ acima de 95% com O₂ suplementar em prematuro: risco de hiperóxia.']);
+    if(m.retr >= 0.45 && !mech) out.push(['warn', 'Retrações intensas: parte do esforço deforma a caixa torácica em vez de expandir o pulmão.']);
+    if(mech && model.state === 'pos_surfactante' && (m.vtKg > 6 || pc < 35)) out.push(['info', 'Após o surfactante a complacência melhora: com a mesma ΔP o Vt aumenta e a PaCO₂ cai. O esperado é reduzir a ΔP progressivamente, num ajuste dinâmico guiado pelo Vt e pela PaCO₂.']);
+    if(mech && model.asynchrony === 'flow_starvation' && model.strategy === 'pcv') out.push(['info', 'Em pressão controlada o fluxo é livre: a “fome de fluxo” aparece com subida lenta da pressão, e o custo é maior esforço do bebê, não maior Vt.']);
+    const ap = apneaPattern();
+    if(inPauseNow()) out.push(['crit', `Apneia: ${nf(apneaRt.t,0)} s sem fluxo. Pausa ≥ 20 s, ou mais curta com bradicardia ou dessaturação, caracteriza apneia clinicamente significativa.`]);
+    else if(ap.pauseSec) out.push(['info', `Padrão de apneia: ${ap.burstSec} s de respiração regular e pausas de ${ap.pauseSec} s. Respiração há ${nf(apneaRt.burstT,0)} s (intervalo acelerado na animação); VE, VA e PaCO₂ são médias que incluem as pausas.`]);
+    return out;
   }
 
   function updateStatus(){
     const st = getStage(frame);
-    const m = getVentilationMetrics();
-    document.getElementById('playbackBadge').textContent = running ? 'EM MOVIMENTO' : 'EM PAUSA';
-    document.getElementById('cycleProgress').style.width = (frame / TOTAL * 100) + '%';
-    document.getElementById('cycleLabel').textContent = Math.round(frame / TOTAL * 100) + '% do ciclo';
-    phaseText.firstChild.textContent = st.name;
-    phaseDesc.textContent = st.desc;
-    valueText.firstChild.textContent = Math.min(100, Math.round(m.infl * 100)) + '%';
-    valueDesc.textContent = model.mode === 'mech' && model.asynchrony && model.asynchrony !== 'none' ? 'Assincronia ativa: volume depende do modo, pressão, tempo expiratório e interação paciente-ventilador.' : 'Volume pulmonar relativo determinado por complacência, resistência e modo ventilatório.';
-    palvText.firstChild.textContent = m.palv.toFixed(1);
-    pplText.firstChild.textContent = m.ppl.toFixed(1);
-    compText.firstChild.textContent = Number(model.compliance).toFixed(2);
-    resText.firstChild.textContent = Number(model.resistance).toFixed(2);
-    sao2Text.firstChild.textContent = Math.round(m.saO2) + '%';
-    rvText.firstChild.textContent = Math.round(m.rv).toString();
-    veText.firstChild.textContent = Math.round(m.minuteVent).toString();
-    vaText.firstChild.textContent = Math.round(m.alveolarVent).toString();
-    vdText.firstChild.textContent = Math.round(m.vdAnatML).toString();
-    vdPhysText.firstChild.textContent = Math.round(m.vdPhysML).toString();
-    setCardsColor(st.color);
-    const asyncLabel = (model.mode === 'mech' && model.asynchrony && model.asynchrony !== 'none') ? (' · ' + getAsynchronyEffect(model.state, phaseU(frame)).label) : '';
-    modeBadge.textContent = (model.mode === 'mech' ? ('Ventilação mecânica · ' + (model.ventStrategy === 'vcv' ? 'VCV' : 'PCV') + asyncLabel) : 'Ventilação espontânea') + ' · ' + (stepModeToggle.checked ? (stepAwaitPlay ? 'etapas pausado' : 'etapas') : 'contínuo');
-  }
-
-  function drawArrow(ctx, x1, y1, x2, y2, color, lw){
-    const angle = Math.atan2(y2 - y1, x2 - x1);
-    ctx.strokeStyle = color;
-    ctx.lineWidth = lw || 4;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x2, y2);
-    ctx.lineTo(x2 - 12 * Math.cos(angle - Math.PI / 6), y2 - 12 * Math.sin(angle - Math.PI / 6));
-    ctx.lineTo(x2 - 12 * Math.cos(angle + Math.PI / 6), y2 - 12 * Math.sin(angle + Math.PI / 6));
-    ctx.closePath();
-    ctx.fillStyle = color;
-    ctx.fill();
-  }
-
-  function drawLabel(ctx, text, x, y){
-    ctx.fillStyle = '#9fb5ca';
-    ctx.font = '17px Arial';
-    ctx.fillText(text, x, y);
+    const c = current(), m = c.met, sim = c.sim, d = sim.d;
+    const mech = model.mode === 'mech';
+    const mass = model.massKg;
+    $('playbackBadge').textContent = running ? 'EM MOVIMENTO' : 'EM PAUSA';
+    $('cycleProgress').style.width = (frame / TOTAL * 100) + '%';
+    $('cycleLabel').textContent = Math.round(frame / TOTAL * 100) + '% do ciclo';
+    if(inPauseNow()){
+      setCard('phaseCard', 'Apneia', `Pausa respiratória: ${nf(apneaRt.t,0)} de ${apneaPattern().pauseSec} s. Sem fluxo; a SaO₂ cai e pode surgir bradicardia.`);
+    } else setCard('phaseCard', st.name, st.desc);
+    const vNow = getVolumeAboveEE(frame);
+    setCard('valueCard', `${nf(m.VT,1)} mL`, `${nf(m.vtKg,1)} mL/kg · volume agora: ${nf(Math.max(0, vNow),1)} mL acima do fim da expiração`);
+    setCard('palvCard', nf(getPressure(frame),1), mech ? `cmH₂O · varia de ${nf(sim.palvMin,1)} a ${nf(sim.palvMax,1)}` : `cmH₂O · mín ${nf(sim.palvMin,1)} · máx ${nf(sim.palvMax,1)}`);
+    setCard('pplCard', nf(getPleuralPressure(frame),1), `cmH₂O · mín ${nf(sim.pplMin,1)} · máx ${nf(sim.pplMax,1)}`);
+    if(mech){
+      $('pawTitle').textContent = 'Paw · PIP / PEEP';
+      setCard('pawCard', `${nf(sim.pip,0)}/${nf(model.peep,0)}`, `cmH₂O · Paw agora ${nf(getAirwayPressure(frame),1)} · média ${nf(sim.pawMean,1)} · auto-PEEP ${nf(sim.intrinsicPEEP,1)}`);
+    } else {
+      $('pawTitle').textContent = 'CPAP / PEEP intrínseca';
+      setCard('pawCard', `${nf(model.cpap,0)}/${nf(sim.intrinsicPEEP,1)}`, model.cpap > 0 ? 'cmH₂O · CPAP ajustada / PEEP intrínseca (frenagem glótica e esvaziamento incompleto)' : 'cmH₂O · sem CPAP / PEEP intrínseca (frenagem glótica e esvaziamento incompleto)');
+    }
+    setCard('compCard', nf(d.cSpec,2), `mL/cmH₂O/kg · ${nf(d.Crs,2)} mL/cmH₂O · τ ${nf(m.tau,2)} s` + (sim.overFrac > 0.01 ? ` · dinâmica ${nf(sim.cDyn,2)} (sobredistensão)` : ''));
+    setCard('resCard', nf(d.Rin,0), mech ? `cmH₂O/L/s · inclui cânula ${nf(d.tube.id,1)} mm` + (d.Rex > d.Rin * 1.05 ? ` · expiratória ${nf(d.Rex,0)}` : '') : `cmH₂O/L/s · via aérea com nariz` + (d.Rex > d.Rin * 1.05 ? ` · expiratória ${nf(d.Rex,0)}` : ''));
+    const sao2 = dynamicSaO2(m.sao2);
+    const ap = apneaPattern();
+    setCard('sao2Card', sao2Text(sao2), ap.pauseSec ? `entre pausas ${sao2Text(m.sao2)} · nadir ≈ ${sao2Text(Math.max(40, m.sao2 - desaturationDrop(ap.pauseSec)))} · FiO₂ ${model.fio2}%` : `PaO₂ ≈ ${nf(m.oxy.pao2,0)} mmHg · FiO₂ ${model.fio2}% · shunt ${nf(m.fs*100,0)}%`);
+    setCard('paco2Card', paco2Text(m.paco2Raw), (m.paco2Raw > PACO2_CAP ? 'mmHg · hipoventilação grave' : 'mmHg · 0,863 × VCO₂ / VA') + (m.duty < 1 ? ' (média com pausas)' : ''));
+    const wobIdx = m.wob / WOB_REF;
+    setCard('rvCard', nf(wobIdx, 1) + '×', mech ? `trabalho do bebê (RN a termo = 1,0) · o ventilador realiza a maior parte` : `trabalho do bebê (RN a termo = 1,0) · ${retractionLabel(m.retr)}`);
+    const multi = mech && sim.run.starts.length > 1;
+    setCard('veCard', nf(m.ve,0), `mL/min · ${nf(m.ve/mass,0)} mL/kg/min · FR ${nf(m.fr,0)}` + (m.duty < 1 ? ' (média com pausas)' : multi ? ' · soma das expirações' : ''));
+    setCard('vaCard', nf(m.va,0), `mL/min · ${nf(m.va/mass,0)} mL/kg/min` + (m.duty < 1 ? ' (média com pausas)' : ''));
+    $('vdCard').querySelector('.card-title').textContent = mech ? 'VD anatômico + instrumental' : 'VDa · espaço morto anatômico';
+    setCard('vdCard', nf(m.vdAnat + m.vdInstr,1), mech ? `mL · VDa abaixo da cânula ${nf(m.vdAnat,1)} (via aérea superior desviada) + instrumental ${nf(m.vdInstr,1)} (cânula ${nf(d.tube.id,1)} mm, conector e sensor)` : `mL · vias condutoras · ${nf(m.vdAnat/mass,1)} mL/kg`);
+    setCard('vdAlvCard', nf(m.vdAlv,1), 'mL · alvéolos ventilados com pouca ou nenhuma perfusão');
+    setCard('vdPhysCard', nf(m.vdPhys,1), mech ? 'mL · VDa + instrumental + VDalv' : 'mL · VDa + VDalv');
+    setCard('vdvtCard', nf(m.vdvt,2), m.paco2Raw <= PACO2_CAP ? `Bohr–Enghoff: (PaCO₂ − PĒCO₂)/PaCO₂ · PĒCO₂ ≈ ${nf(m.petco2,0)} mmHg` : 'Bohr–Enghoff: (PaCO₂ − PĒCO₂)/PaCO₂');
+    $('vdvtCard').classList.toggle('card-alert', m.vdvt >= 1);
+    $('sao2Card').classList.toggle('card-alert', Math.round(sao2) < 90);
+    cards.forEach(card => card.style.setProperty('--phase', st.color));
+    const asyncLabel = (mech && model.asynchrony !== 'none') ? (' · ' + asynchronySelect.options[asynchronySelect.selectedIndex].text) : '';
+    modeBadge.textContent = (mech ? ('Ventilação mecânica · ' + (model.strategy === 'vcv' ? 'VCV' : 'PCV') + asyncLabel) : ('Ventilação espontânea' + (model.cpap > 0 ? ' · CPAP' : '') + (ap.pauseSec ? ' · pausas de apneia' : ''))) + ' · ' + (stepModeToggle.checked ? (stepAwaitPlay ? 'etapas pausado' : 'etapas') : 'contínuo');
+    const alerts = buildAlerts(c, sao2);
+    alertsBox.innerHTML = alerts.map(([lvl, txt]) => `<p class="alert-${lvl}">${txt}</p>`).join('');
+    alertsBox.hidden = !alerts.length;
+    const ro = $('mobileReadout');
+    if(ro) ro.textContent = `${STATE_LABELS[model.state]} · SaO₂ ${sao2Text(sao2)} · PaCO₂ ${paco2Text(m.paco2Raw)} · Vt ${nf(m.vtKg,1)} mL/kg`;
   }
 
   function roundedBox(ctx, x, y, w, h, r){
@@ -1225,86 +1222,6 @@ input[type=checkbox]:before{background:radial-gradient(circle at 35% 25%,#fff,#d
     ctx.lineTo(x, y + r);
     ctx.quadraticCurveTo(x, y, x + r, y);
     ctx.closePath();
-  }
-
-  function cubicPoint(p0, p1, p2, p3, t){
-    const mt = 1 - t;
-    const mt2 = mt * mt;
-    const t2 = t * t;
-    return {
-      x: mt2 * mt * p0.x + 3 * mt2 * t * p1.x + 3 * mt * t2 * p2.x + t2 * t * p3.x,
-      y: mt2 * mt * p0.y + 3 * mt2 * t * p1.y + 3 * mt * t2 * p2.y + t2 * t * p3.y
-    };
-  }
-
-  function polygonSignedArea(points){
-    let area = 0;
-    for (let i = 0; i < points.length; i++) {
-      const a = points[i];
-      const b = points[(i + 1) % points.length];
-      area += a.x * b.y - b.x * a.y;
-    }
-    return area / 2;
-  }
-
-  function drawOffsetPolyline(points, offsetPx){
-    const area = polygonSignedArea(points);
-    const outwardSign = area > 0 ? -1 : 1;
-
-    const out = [];
-    for (let i = 0; i < points.length; i++) {
-      const prev = points[(i - 1 + points.length) % points.length];
-      const next = points[(i + 1) % points.length];
-      const tx = next.x - prev.x;
-      const ty = next.y - prev.y;
-      const len = Math.hypot(tx, ty) || 1;
-      const nx = outwardSign * (-ty / len);
-      const ny = outwardSign * (tx / len);
-      out.push({ x: points[i].x + nx * offsetPx, y: points[i].y + ny * offsetPx });
-    }
-
-    // suavização reforçada em 2 passes para eliminar ângulos residuais
-    function smoothPass(arr){
-      const n = arr.length;
-      const sm = [];
-      for (let i = 0; i < n; i++) {
-        const p0 = arr[(i - 2 + n) % n];
-        const p1 = arr[(i - 1 + n) % n];
-        const p2 = arr[i];
-        const p3 = arr[(i + 1) % n];
-        const p4 = arr[(i + 2) % n];
-        sm.push({
-          x: (p0.x + 2*p1.x + 4*p2.x + 2*p3.x + p4.x) / 10,
-          y: (p0.y + 2*p1.y + 4*p2.y + 2*p3.y + p4.y) / 10
-        });
-      }
-      return sm;
-    }
-
-    const smooth1 = smoothPass(out);
-    const smooth2 = smoothPass(smooth1);
-
-    sctx.beginPath();
-    sctx.lineJoin = 'round';
-    sctx.lineCap = 'round';
-
-    for (let i = 0; i < smooth2.length; i++) {
-      const p0 = smooth2[(i - 1 + smooth2.length) % smooth2.length];
-      const p1 = smooth2[i];
-      const p2 = smooth2[(i + 1) % smooth2.length];
-      const p3 = smooth2[(i + 2) % smooth2.length];
-
-      const cp1x = p1.x + (p2.x - p0.x) / 6;
-      const cp1y = p1.y + (p2.y - p0.y) / 6;
-      const cp2x = p2.x - (p3.x - p1.x) / 6;
-      const cp2y = p2.y - (p3.y - p1.y) / 6;
-
-      if (i === 0) sctx.moveTo(p1.x, p1.y);
-      sctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, p2.x, p2.y);
-    }
-
-    sctx.closePath();
-    sctx.stroke();
   }
 
 // Mesmos paths, proporções e cores do modelo da Operação Alvéolo Seguro.
@@ -1371,7 +1288,7 @@ function drawScene(){
  sctx.quadraticCurveTo(745+thoraxOpen,122,758+thoraxOpen,244);
  sctx.quadraticCurveTo(768+thoraxOpen,372,694+thoraxOpen,500);
  sctx.stroke();sctx.restore();
- sctx.fillStyle='#789eaa';sctx.font='11px Consolas';sctx.fillText('ANATOMIA FUNCIONAL / MODELO ILUSTRATIVO',22,26);
+ sctx.fillStyle='#789eaa';setFont(sctx,11,'',MONO);sctx.fillText(isMobile()?'ANATOMIA FUNCIONAL':'ANATOMIA FUNCIONAL / MODELO ILUSTRATIVO',22,isMobile()?34:26);
  escapeLungPaths.forEach((path,i)=>{
   sctx.save();sctx.translate(lungs[i].tx,lungs[i].ty);sctx.scale(scaleX,scaleY);
   if(document.getElementById('pleuraToggle').checked){
@@ -1432,14 +1349,25 @@ function drawScene(){
  const muscle=sctx.createLinearGradient(0,apex,0,edge+12);muscle.addColorStop(0,'#d5a593');muscle.addColorStop(1,'#78494d');
  sctx.fillStyle=muscle;sctx.fill();sctx.strokeStyle='#e6b4a356';sctx.lineWidth=1;sctx.stroke();sctx.restore();
  if(labelsToggle.checked){
-  sctx.fillStyle=flow==='in'?'#a3e8d1':flow==='out'?'#edb6a5':'#91b4be';sctx.font='13px Segoe UI';
-  sctx.fillText(flow==='in'?'Inspiração · entrada de ar':flow==='out'?'Expiração · saída de ar':'Transição · equilíbrio do fluxo',22,50);
-  sctx.fillStyle='#c9a99a';sctx.font='10px Consolas';sctx.fillText('DIAFRAGMA',659,450);
+  sctx.fillStyle=inPauseNow()?'#ffb3b8':flow==='in'?'#a3e8d1':flow==='out'?'#edb6a5':'#91b4be';setFont(sctx,13);
+  sctx.fillText(inPauseNow()?'Apneia · sem fluxo de ar':flow==='in'?'Inspiração · entrada de ar':flow==='out'?'Expiração · saída de ar':'Transição · fluxo mínimo',22,isMobile()?70:50);
+  sctx.fillStyle='#c9a99a';setFont(sctx,10,'',MONO);sctx.fillText('DIAFRAGMA',isMobile()?640:659,isMobile()?438:450);
  }
- roundedBox(sctx,20,478,820,43,10);sctx.fillStyle='#0c1b2bcc';sctx.fill();sctx.strokeStyle='#8cbab42b';sctx.lineWidth=1;sctx.stroke();
- sctx.font='13px Segoe UI';sctx.fillStyle='#f2c986';sctx.fillText('Palv '+getPressure(frame).toFixed(1)+' cmH₂O',38,504);
- sctx.fillStyle='#79bcff';sctx.fillText('Ppl '+getPleuralPressure(frame).toFixed(1)+' cmH₂O',270,504);
- sctx.fillStyle='#a1dac9';sctx.fillText('Volume relativo '+Math.min(100,Math.round(infl*100))+'%',536,504);
+ const readouts=[];
+ if(model.mode==='mech')readouts.push(['#f2a9a4','Paw '+nf(getAirwayPressure(frame),1)]);
+ readouts.push(['#f2c986','Palv '+nf(getPressure(frame),1)]);
+ readouts.push(['#79bcff','Ppl '+nf(getPleuralPressure(frame),1)]);
+ readouts.push(['#a1dac9','V +'+nf(Math.max(0,getVolumeAboveEE(frame)),1)+' mL']);
+ if(isMobile()){
+  roundedBox(sctx,14,452,832,84,10);sctx.fillStyle='#0c1b2bdd';sctx.fill();sctx.strokeStyle='#8cbab42b';sctx.lineWidth=1;sctx.stroke();
+  setFont(sctx,13);
+  readouts.forEach((r,i)=>{sctx.fillStyle=r[0];sctx.fillText(r[1],30+(i%2)*420,484+Math.floor(i/2)*38);});
+ } else {
+  roundedBox(sctx,20,478,820,43,10);sctx.fillStyle='#0c1b2bcc';sctx.fill();sctx.strokeStyle='#8cbab42b';sctx.lineWidth=1;sctx.stroke();
+  setFont(sctx,13);
+  const colW=800/readouts.length;
+  readouts.forEach((r,i)=>{sctx.fillStyle=r[0];sctx.fillText(r[1]+(i<readouts.length-1?' cmH₂O':''),38+i*colW,504);});
+ }
 }
 
 function drawVentilator(airwayX,airwayY,flow){
@@ -1467,299 +1395,233 @@ function drawVentilator(airwayX,airwayY,flow){
  sctx.fillStyle=post;sctx.fillRect(740,300,17,88);
  sctx.strokeStyle='#708b9f';sctx.lineWidth=7;sctx.beginPath();sctx.moveTo(748,380);sctx.lineTo(704,399);sctx.moveTo(748,380);sctx.lineTo(799,399);sctx.stroke();
  [704,799].forEach(x=>{sctx.beginPath();sctx.arc(x,405,8,0,Math.PI*2);sctx.fillStyle='#08111d';sctx.fill();sctx.strokeStyle='#6c8596';sctx.lineWidth=2;sctx.stroke();});
- // Face latérale et boîtier biseauté.
+ // Face lateral e gabinete chanfrado.
  sctx.beginPath();sctx.moveTo(814,140);sctx.lineTo(829,153);sctx.lineTo(829,307);sctx.lineTo(814,319);sctx.closePath();sctx.fillStyle='#1b3042';sctx.fill();
  const shell=sctx.createLinearGradient(678,133,824,325);shell.addColorStop(0,'#8ba5b0');shell.addColorStop(.12,'#576f7f');shell.addColorStop(.5,'#354d60');shell.addColorStop(1,'#1c3041');
  sctx.save();if(depthToggle.checked){sctx.shadowColor='#020711a6';sctx.shadowBlur=17;sctx.shadowOffsetY=9;}
  roundedBox(sctx,678,136,140,184,13);sctx.fillStyle=shell;sctx.fill();sctx.restore();
  sctx.strokeStyle='#b8d5df55';sctx.lineWidth=1; sctx.stroke();
- sctx.fillStyle='#d2e1e9';sctx.font='9px Segoe UI';sctx.fillText('VENTILADOR NEONATAL',687,153);
+ const small=!isMobile();
+ if(small){sctx.fillStyle='#d2e1e9';setFont(sctx,9);sctx.fillText('VENTILADOR NEONATAL',687,153);}
  sctx.beginPath();sctx.arc(803,149,2.5,0,Math.PI*2);sctx.fillStyle=running?'#89f0c3':'#edc68e';sctx.fill();
  roundedBox(sctx,687,163,122,101,7);sctx.fillStyle='#060f1a';sctx.fill();sctx.strokeStyle='#88a6bc55';sctx.stroke();
- sctx.fillStyle='#85d9cd';sctx.font='bold 10px Consolas';sctx.fillText(model.ventStrategy==='vcv'?'VCV':'PCV',695,178);
- sctx.fillStyle='#8b9fae';sctx.font='8px Consolas';sctx.fillText('Palv / cmH₂O',726,177);
- // Trace identique à la pression calculée dans le graphique principal.
+ if(small){sctx.fillStyle='#85d9cd';setFont(sctx,10,'bold',MONO);sctx.fillText(model.strategy==='vcv'?'VCV':'PCV',695,178);
+ sctx.fillStyle='#8b9fae';setFont(sctx,8,'',MONO);sctx.fillText('Paw / cmH₂O',726,177);}
+ // Traçado idêntico à Paw calculada no gráfico principal.
  sctx.save();sctx.beginPath();sctx.rect(694,185,108,37);sctx.clip();
- const axis=getPressureAxisRange();sctx.strokeStyle='#81d7c4';sctx.lineWidth=1.2;sctx.beginPath();
+ const axis=graphAxis||computeAxis();sctx.strokeStyle='#81d7c4';sctx.lineWidth=1.2;sctx.beginPath();
  for(let i=0;i<=70;i++){
   const f=Math.max(0,frame-110+i*110/70),x=694+i*108/70;
-  const y=221-(clamp(getPressure(f),axis.min,axis.max)-axis.min)/(axis.max-axis.min)*34;
+  const y=221-(clamp(getAirwayPressure(f),axis.min,axis.max)-axis.min)/(axis.max-axis.min)*34;
   if(i===0)sctx.moveTo(x,y);else sctx.lineTo(x,y);
  }sctx.stroke();sctx.restore();
- sctx.font='8px Consolas';sctx.fillStyle='#92aaba';sctx.fillText('PEEP',695,236);sctx.fillText('FR',754,236);
- sctx.font='bold 13px Consolas';sctx.fillStyle='#b5def4';sctx.fillText(String(model.mechPeep),695,252);sctx.fillText(String(model.freq),754,252);
- sctx.fillStyle='#93abba';sctx.font='8px Segoe UI';sctx.fillText('AJUSTES DO CENÁRIO',688,280);
+ if(small){
+  const simNow=current().sim;
+  setFont(sctx,8,'',MONO);sctx.fillStyle='#92aaba';sctx.fillText('PIP',695,236);sctx.fillText('PEEP',733,236);sctx.fillText('FR',778,236);
+  setFont(sctx,13,'bold',MONO);sctx.fillStyle='#b5def4';sctx.fillText(nf(simNow.pip,0),695,252);sctx.fillText(nf(model.peep,0),733,252);sctx.fillText(String(model.freq),778,252);
+  sctx.fillStyle='#93abba';setFont(sctx,8);sctx.fillText('AJUSTES DO CENÁRIO',688,280);
+ }
  const dial=sctx.createRadialGradient(790,290,1,795,294,12);dial.addColorStop(0,'#deeceb');dial.addColorStop(.4,'#94b2bd');dial.addColorStop(1,'#263d52');
  sctx.beginPath();sctx.arc(795,294,11,0,Math.PI*2);sctx.fillStyle=dial;sctx.fill();
  sctx.strokeStyle='#7e97a6';sctx.lineWidth=1;for(let i=0;i<5;i++){sctx.beginPath();sctx.moveTo(692,290+i*4);sctx.lineTo(758,290+i*4);sctx.stroke();}
- if(labelsToggle.checked){sctx.fillStyle='#90a8bb';sctx.font='9px Consolas';sctx.fillText('CIRCUITO ESQUEMÁTICO',674,429);}
+ if(labelsToggle.checked&&small){sctx.fillStyle='#90a8bb';setFont(sctx,9,'',MONO);sctx.fillText('CIRCUITO ESQUEMÁTICO',674,429);}
  sctx.restore();
 }
 
-
-  function pressureToY(v){
-    const axis = getPressureAxisRange();
-    const top = 72;
-    const bottom = 398;
-    const vv = clamp(v, axis.min, axis.max);
-    return bottom - ((vv - axis.min) / (axis.max - axis.min)) * (bottom - top);
+  // ===================== Gráfico de pressões =====================
+  let graphAxis = null;
+  const GX0 = 85, GW = 680, GTOP = 72, GBOT = 398;
+  function computeAxis(){
+    const c = current(), r = reference();
+    const series = [c.sim.palv, c.sim.ppl];
+    if(model.mode === 'mech') series.push(c.sim.paw);
+    if(isPathologicalState()) series.push(r.sim.palv, r.sim.ppl);
+    let minV = 0, maxV = 0;
+    series.forEach(a => a.forEach(v => { minV = Math.min(minV, v); maxV = Math.max(maxV, v); }));
+    let span = maxV - minV;
+    if(span < 6){ const mid = (maxV + minV) / 2; minV = Math.min(minV, mid - 3); maxV = Math.max(maxV, mid + 3); span = maxV - minV; }
+    const pad = Math.max(0.8, span * 0.08);
+    return {min:minV - pad, max:maxV + pad};
   }
+  function pressureToY(v){
+    const axis = graphAxis || computeAxis();
+    const vv = clamp(v, axis.min, axis.max);
+    return GBOT - ((vv - axis.min) / (axis.max - axis.min)) * (GBOT - GTOP);
+  }
+  function frameToX(f){ return GX0 + (f / TOTAL) * GW; }
 
   function drawGraphBase(){
+    const mob = isMobile();
     gctx.clearRect(0,0,860,540);
-    const graphBg=gctx.createLinearGradient(0,0,0,540);
-    graphBg.addColorStop(0,'#111f31');graphBg.addColorStop(1,'#0a1423');
-    gctx.fillStyle=graphBg;gctx.fillRect(0,0,860,540);
-    gctx.save();gctx.strokeStyle='#8daec419';gctx.lineWidth=.6;
-    for(let x=85;x<=795;x+=34){gctx.beginPath();gctx.moveTo(x,72);gctx.lineTo(x,398);gctx.stroke();}
-    for(let y=72;y<=398;y+=32.6){gctx.beginPath();gctx.moveTo(85,y);gctx.lineTo(795,y);gctx.stroke();}
+    const graphBg = gctx.createLinearGradient(0,0,0,540);
+    graphBg.addColorStop(0,'#111f31'); graphBg.addColorStop(1,'#0a1423');
+    gctx.fillStyle = graphBg; gctx.fillRect(0,0,860,540);
+    gctx.save(); gctx.strokeStyle = '#8daec419'; gctx.lineWidth = .6;
+    for(let x = GX0; x <= 795; x += 34){ gctx.beginPath(); gctx.moveTo(x,GTOP); gctx.lineTo(x,GBOT); gctx.stroke(); }
     gctx.restore();
-    gctx.fillStyle = '#f2c986';
-    gctx.font = 'bold 24px Arial';
-    gctx.fillStyle='#7794ad';gctx.font='12px Consolas';gctx.fillText('PRESSÃO RELATIVA / TEMPO DO CICLO', 22, 28);
+    const c = current();
+    gctx.fillStyle = '#7794ad'; setFont(gctx, 12, '', MONO);
+    gctx.fillText(mob ? 'PRESSÃO (cmH₂O)' : `PRESSÃO (cmH₂O) / TEMPO DO CICLO (${nf(c.sim.run.Ttot, 2)} s)`, 22, mob ? 36 : 28);
 
-    gctx.strokeStyle = '#9fb5ca';
-    gctx.lineWidth = 1.8;
-    gctx.beginPath();
-    gctx.moveTo(85, 72);
-    gctx.lineTo(85, 438);
-    gctx.lineTo(795, 438);
-    gctx.stroke();
+    gctx.strokeStyle = '#9fb5ca'; gctx.lineWidth = 1.8;
+    gctx.beginPath(); gctx.moveTo(GX0, GTOP); gctx.lineTo(GX0, 438); gctx.lineTo(795, 438); gctx.stroke();
+
+    // Eixo vertical com valores em cmH2O.
+    const axis = graphAxis;
+    const span = axis.max - axis.min;
+    const target = mob ? 4 : 7;
+    const steps = [1, 2, 5, 10, 20];
+    const step = steps.find(s => span / s <= target) || 20;
+    gctx.fillStyle = '#9aafc4'; setFont(gctx, 14);
+    gctx.textAlign = 'right';
+    for(let v = Math.ceil(axis.min / step) * step; v <= axis.max; v += step){
+      const y = pressureToY(v);
+      gctx.strokeStyle = '#8daec422'; gctx.lineWidth = .6;
+      gctx.beginPath(); gctx.moveTo(GX0, y); gctx.lineTo(795, y); gctx.stroke();
+      gctx.fillText(String(v).replace('-', '−'), GX0 - 8, y + (mob ? 9 : 5));
+    }
+    gctx.textAlign = 'left';
 
     const atmY = pressureToY(0);
     gctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--atm').trim();
     gctx.setLineDash([6, 5]);
-    gctx.beginPath();
-    gctx.moveTo(85, atmY);
-    gctx.lineTo(795, atmY);
-    gctx.stroke();
+    gctx.beginPath(); gctx.moveTo(GX0, atmY); gctx.lineTo(795, atmY); gctx.stroke();
     gctx.setLineDash([]);
+    if(!mob){
+      gctx.fillStyle = '#7f96ad'; setFont(gctx, 15, 'bold');
+      gctx.fillText('Pressão atmosférica (0)', 92, atmY - 8);
+      gctx.fillText('Tempo', 20, 438);
+    }
 
-    gctx.fillStyle = '#9aafc4';
-    gctx.font = '17px Arial';
-    gctx.fillText('+ pressão', 2, 92);
-    gctx.fillText('0', 62, atmY + 5);
-    gctx.fillText('- pressão', 2, 412);
-    gctx.fillStyle = '#7f96ad';
-    gctx.font = 'bold 15px Arial';
-    gctx.fillText('Pressão atmosférica (0)', 92, atmY - 8);
-    gctx.fillText('Tempo', 20, 438);
-
+    let labelEnd = [0, 0];
     stages.forEach((st, idx) => {
-      const sx = 85 + (st.start / TOTAL) * 680;
-      const ex = 85 + (st.end / TOTAL) * 680;
+      const sx = frameToX(st.start), ex = frameToX(st.end);
       gctx.fillStyle = st.color + '16';
       gctx.fillRect(sx, 446, ex - sx, 18);
       if (labelsToggle.checked) {
-        const baseY = idx % 2 === 0 ? 480 : 494;
+        const isMain = st.name === 'Inspiração' || st.name === 'Expiração';
+        if(mob && !isMain) return;
+        const baseY = mob ? 500 : (idx % 2 === 0 ? 480 : 494);
         gctx.fillStyle = st.color;
-        const phaseLabel = st.name.replace('Transição expiratória','Trans. expiratória').replace('Transição inspiratória','Trans. inspiratória');
-        if (st.name === 'Inspiração' || st.name === 'Expiração') {
-          gctx.font = 'bold 18px Arial';
-        } else {
-          gctx.font = '13px Arial';
-        }
+        const phaseLabel = st.name.replace('Transição inspiratória','Trans. inspiratória');
+        if(isMain) setFont(gctx, 18, 'bold'); else setFont(gctx, 13);
+        const row = mob ? 0 : idx % 2;
+        const w = gctx.measureText(phaseLabel).width;
+        if(sx + 2 < labelEnd[row] + 6) return; // evita sobreposição em fases curtas
         gctx.fillText(phaseLabel, sx + 2, baseY);
+        labelEnd[row] = sx + 2 + w;
       }
     });
-
-    // legenda compacta é desenhada depois das curvas para não ocupar a área do eixo X
   }
 
-  function isPathologicalState(){
-    // Exibe a referência normal pontilhada em todos os estados rápidos,
-    // exceto no RN a termo, cuja curva já representa a referência normal.
-    const normalRef = model.mode === 'mech' ? 'termo_ventilado' : 'termo_estavel';
-    return model.state !== normalRef;
-  }
-
-  function getNormalPressure(f){
-    return getPressure(f, model.mode === 'mech' ? 'termo_ventilado' : 'termo_estavel');
-  }
-
-  function getNormalPleuralPressure(f){
-    return getPleuralPressure(f, model.mode === 'mech' ? 'termo_ventilado' : 'termo_estavel');
-  }
-
-
-  function drawSubtleNormalCurve(){
-    if (!isPathologicalState()) return;
+  function strokeSeries(arr, color, width, dash, upTo){
     gctx.save();
-    gctx.setLineDash([5, 7]);
-    gctx.lineCap = 'round';
-
-    gctx.strokeStyle = 'rgba(242,201,134,0.32)';
-    gctx.lineWidth = 2.0;
+    gctx.strokeStyle = color; gctx.lineWidth = width; gctx.lineCap = 'round';
+    if(dash) gctx.setLineDash(dash);
     gctx.beginPath();
-    for (let i = 0; i <= TOTAL; i++) {
-      const x = 85 + (i / TOTAL) * 680;
-      const y = pressureToY(getNormalPressure(i));
-      if (i === 0) gctx.moveTo(x, y); else gctx.lineTo(x, y);
+    const last = upTo === undefined ? TOTAL : upTo;
+    for(let i = 0; i <= Math.floor(last); i++){
+      const x = frameToX(i), y = pressureToY(arr[i]);
+      if(i === 0) gctx.moveTo(x, y); else gctx.lineTo(x, y);
     }
-    gctx.stroke();
-
-    gctx.strokeStyle = 'rgba(121,188,255,0.32)';
-    gctx.lineWidth = 2.0;
-    gctx.beginPath();
-    for (let i = 0; i <= TOTAL; i++) {
-      const x = 85 + (i / TOTAL) * 680;
-      const y = pressureToY(getNormalPleuralPressure(i));
-      if (i === 0) gctx.moveTo(x, y); else gctx.lineTo(x, y);
-    }
+    if(last > Math.floor(last)) gctx.lineTo(frameToX(last), pressureToY(sampleArr(arr, last)));
     gctx.stroke();
     gctx.restore();
   }
 
   function drawGraphSphere(x,y,r,color){
     gctx.save();
-    function withAlpha(c, a){
-      if(c.startsWith('#')){
-        const hex=c.replace('#','');
-        const n=parseInt(hex.length===3 ? hex.split('').map(ch=>ch+ch).join('') : hex,16);
-        const rr=(n>>16)&255, gg=(n>>8)&255, bb=n&255;
-        return `rgba(${rr},${gg},${bb},${a})`;
-      }
-      if(c.startsWith('rgb(')) return c.replace('rgb(','rgba(').replace(')',`,`+a+`)`);
-      if(c.startsWith('rgba(')) return c.replace(/rgba\(([^,]+),([^,]+),([^,]+),[^)]+\)/,`rgba($1,$2,$3,${a})`);
-      return c;
-    }
+    const hex = color.replace('#','');
+    const n = parseInt(hex, 16);
+    const rgba = a => `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
     const halo = gctx.createRadialGradient(x, y, 1, x, y, r*3.2);
-    halo.addColorStop(0, withAlpha(color,0.45));
-    halo.addColorStop(0.55, withAlpha(color,0.15));
-    halo.addColorStop(1, 'rgba(255,255,255,0)');
-    gctx.beginPath();
-    gctx.arc(x, y, r*3.2, 0, Math.PI*2);
-    gctx.fillStyle = halo;
-    gctx.fill();
-
+    halo.addColorStop(0, rgba(0.45)); halo.addColorStop(0.55, rgba(0.15)); halo.addColorStop(1, 'rgba(255,255,255,0)');
+    gctx.beginPath(); gctx.arc(x, y, r*3.2, 0, Math.PI*2); gctx.fillStyle = halo; gctx.fill();
     const sph = gctx.createRadialGradient(x-r*0.38, y-r*0.42, 1, x, y, r);
-    sph.addColorStop(0, 'rgba(255,255,255,0.95)');
-    sph.addColorStop(0.24, 'rgba(255,255,255,0.55)');
-    sph.addColorStop(0.56, color);
-    sph.addColorStop(1, color);
-    gctx.shadowColor = color;
-    gctx.shadowBlur = 10;
-    gctx.beginPath();
-    gctx.arc(x, y, r, 0, Math.PI*2);
-    gctx.fillStyle = sph;
-    gctx.fill();
-    gctx.shadowBlur = 0;
-    gctx.strokeStyle = 'rgba(15,23,42,0.22)';
-    gctx.lineWidth = 1;
-    gctx.stroke();
+    sph.addColorStop(0, 'rgba(255,255,255,0.95)'); sph.addColorStop(0.24, 'rgba(255,255,255,0.55)');
+    sph.addColorStop(0.56, color); sph.addColorStop(1, color);
+    gctx.shadowColor = color; gctx.shadowBlur = 10;
+    gctx.beginPath(); gctx.arc(x, y, r, 0, Math.PI*2); gctx.fillStyle = sph; gctx.fill();
+    gctx.shadowBlur = 0; gctx.strokeStyle = 'rgba(15,23,42,0.22)'; gctx.lineWidth = 1; gctx.stroke();
     gctx.restore();
   }
 
   function drawGraphLegend(includeNormal){
-    const x = includeNormal ? 286 : 360;
-    const y = 418;
+    const mob = isMobile();
+    const items = [];
+    if(model.mode === 'mech') items.push(['#f2a9a4', 'Paw', false]);
+    items.push(['#f2c986', 'Palv', false], ['#79bcff', 'Ppl', false]);
+    if(includeNormal) items.push(['#a2b8cc', mob ? 'normal' : 'normal esperado', true]);
     gctx.save();
-    roundedBox(gctx, x-14, y-18, includeNormal ? 360 : 255, 30, 12);
-    gctx.fillStyle = 'rgba(13,26,43,0.94)';
-    gctx.fill();
-    gctx.strokeStyle = 'rgba(132,165,194,0.25)';
-    gctx.lineWidth = 1;
-    gctx.stroke();
-
-    gctx.lineCap='round';
-    gctx.font='bold 12px Arial';
-    gctx.textAlign='left';
-
-    gctx.setLineDash([]);
-    gctx.strokeStyle='#f2c986';
-    gctx.lineWidth=3.4;
-    gctx.beginPath(); gctx.moveTo(x, y); gctx.lineTo(x+30, y); gctx.stroke();
-    gctx.fillStyle='#f2c986';
-    gctx.fillText('Palv', x+38, y+4);
-
-    gctx.strokeStyle='#79bcff';
-    gctx.lineWidth=3.4;
-    gctx.beginPath(); gctx.moveTo(x+92, y); gctx.lineTo(x+122, y); gctx.stroke();
-    gctx.fillStyle='#79bcff';
-    gctx.fillText('Ppl', x+130, y+4);
-
-    if(includeNormal){
-      gctx.setLineDash([5,6]);
-      gctx.strokeStyle='rgba(162,184,204,0.65)';
-      gctx.lineWidth=2;
-      gctx.beginPath(); gctx.moveTo(x+178, y); gctx.lineTo(x+208, y); gctx.stroke();
+    setFont(gctx, 12, 'bold');
+    const seg = mob ? 34 : 30;
+    const widths = items.map(it => seg + 8 + gctx.measureText(it[1]).width + (mob ? 22 : 18));
+    const total = widths.reduce((a,b) => a + b, 0) + 14;
+    const x0 = mob ? Math.max(10, 850 - total) : clamp(430 - total / 2, 90, 800 - total);
+    const y = mob ? 54 : 418;
+    const h = mob ? fz(gctx, 12) + 16 : 30;
+    roundedBox(gctx, x0 - 8, y - h / 2 - 2, total, h, 12);
+    gctx.fillStyle = 'rgba(13,26,43,0.94)'; gctx.fill();
+    gctx.strokeStyle = 'rgba(132,165,194,0.25)'; gctx.lineWidth = 1; gctx.stroke();
+    gctx.lineCap = 'round';
+    let x = x0 + 6;
+    items.forEach((it, i) => {
+      gctx.setLineDash(it[2] ? [5,6] : []);
+      gctx.strokeStyle = it[2] ? 'rgba(162,184,204,0.65)' : it[0];
+      gctx.lineWidth = it[2] ? 2 : 3.4;
+      gctx.beginPath(); gctx.moveTo(x, y); gctx.lineTo(x + seg, y); gctx.stroke();
       gctx.setLineDash([]);
-      gctx.fillStyle='#a2b8cc';
-      gctx.fillText('normal esperado', x+216, y+4);
-    }
+      gctx.fillStyle = it[0];
+      gctx.fillText(it[1], x + seg + 8, y + fz(gctx, 12) * 0.36);
+      x += widths[i];
+    });
     gctx.restore();
   }
 
   function drawCurve(){
     const st = getStage(frame);
-    const currentStart = 85 + (st.start / TOTAL) * 680;
-    const currentEnd = 85 + (st.end / TOTAL) * 680;
     gctx.fillStyle = st.color + '10';
-    gctx.fillRect(currentStart, 72, currentEnd - currentStart, 326);
-
-    drawSubtleNormalCurve();
-
-    const atmY = pressureToY(0);
-    // Sem preenchimento poligonal: as curvas ficam como linhas abertas.
-    // Isso evita a impressão de curva fechada, principalmente na Ppl durante a expiração.
-
-    gctx.strokeStyle = '#f2c986';
-    gctx.lineWidth = 4;
-    gctx.beginPath();
-    for (let i = 0; i <= Math.floor(frame); i++) {
-      const x = 85 + (i / TOTAL) * 680;
-      const y = pressureToY(getPressure(i));
-      if (i === 0) gctx.moveTo(x, y); else gctx.lineTo(x, y);
+    gctx.fillRect(frameToX(st.start), GTOP, frameToX(st.end) - frameToX(st.start), GBOT - GTOP);
+    const c = current();
+    if(isPathologicalState()){
+      const r = reference();
+      strokeSeries(r.sim.palv, 'rgba(242,201,134,0.32)', 2, [5,7]);
+      strokeSeries(r.sim.ppl, 'rgba(121,188,255,0.32)', 2, [5,7]);
     }
-    if (frame > Math.floor(frame)) {
-      const x = 85 + (frame / TOTAL) * 680;
-      const y = pressureToY(getPressure(frame));
-      gctx.lineTo(x, y);
-    }
-    gctx.stroke();
+    const f = inPauseNow() ? TOTAL : frame;
+    if(model.mode === 'mech') strokeSeries(c.sim.paw, '#f2a9a4', 3, null, f);
+    strokeSeries(c.sim.palv, '#f2c986', 4, null, f);
+    strokeSeries(c.sim.ppl, '#79bcff', 4, null, f);
 
-    gctx.strokeStyle = '#79bcff';
-    gctx.lineWidth = 4;
-    gctx.beginPath();
-    for (let i = 0; i <= Math.floor(frame); i++) {
-      const x = 85 + (i / TOTAL) * 680;
-      const y = pressureToY(getPleuralPressure(i));
-      if (i === 0) gctx.moveTo(x, y); else gctx.lineTo(x, y);
-    }
-    if (frame > Math.floor(frame)) {
-      const x = 85 + (frame / TOTAL) * 680;
-      const y = pressureToY(getPleuralPressure(frame));
-      gctx.lineTo(x, y);
-    }
-    gctx.stroke();
-
-    gctx.strokeStyle = '#9ca3af';
-    gctx.setLineDash([4, 4]);
-    pauseFrames.forEach(f => {
-      const px = 85 + (f / TOTAL) * 680;
-      gctx.beginPath();
-      gctx.moveTo(px, 72);
-      gctx.lineTo(px, 398);
-      gctx.stroke();
-    });
+    gctx.strokeStyle = '#9ca3af'; gctx.setLineDash([4, 4]);
+    pauseFrames.forEach(pf => { const px = frameToX(pf); gctx.beginPath(); gctx.moveTo(px, GTOP); gctx.lineTo(px, GBOT); gctx.stroke(); });
     gctx.setLineDash([]);
 
-    const x = 85 + (frame / TOTAL) * 680;
-    const yIntra = pressureToY(getPressure(frame));
-    const yPleur = pressureToY(getPleuralPressure(frame));
-
-    drawGraphSphere(x, yIntra, 8.2, '#f2c986');
-    drawGraphSphere(x, yPleur, 7.2, '#79bcff');
-
-    if (labelsToggle.checked) {
-      gctx.fillStyle = '#f2c986';
-      gctx.font = '14px Arial';
+    if(inPauseNow()){
+      gctx.save();
+      gctx.fillStyle = 'rgba(8,16,28,0.72)'; gctx.fillRect(GX0 + 1, GTOP, 710, GBOT - GTOP);
+      gctx.fillStyle = '#ffb3b8'; setFont(gctx, 26, 'bold'); gctx.textAlign = 'center';
+      gctx.fillText(`APNEIA · ${nf(apneaRt.t, 0)} s`, GX0 + 355, (GTOP + GBOT) / 2);
+      setFont(gctx, 14); gctx.fillStyle = '#c9d8e6';
+      gctx.fillText('Sem esforço nem fluxo: Palv igual à pressão na via aérea, Ppl estável', GX0 + 355, (GTOP + GBOT) / 2 + fz(gctx, 14) + 14);
+      gctx.restore();
+    } else {
+      const x = frameToX(frame);
+      if(model.mode === 'mech') drawGraphSphere(x, pressureToY(getAirwayPressure(frame)), 6.5, '#f2a9a4');
+      drawGraphSphere(x, pressureToY(getPressure(frame)), 8.2, '#f2c986');
+      drawGraphSphere(x, pressureToY(getPleuralPressure(frame)), 7.2, '#79bcff');
+    }
+    if (labelsToggle.checked && !isMobile()) {
+      gctx.fillStyle = '#f2c986'; setFont(gctx, 14);
       gctx.fillText('Fases do ciclo', 700, 524);
     }
     drawGraphLegend(isPathologicalState());
   }
 
   function render(){
+    updateStages();
+    graphAxis = computeAxis();
+    updateControlLabels();
     updateStatus();
     drawScene();
     drawGraphBase();
@@ -1770,6 +1632,7 @@ function drawVentilator(airwayX,airwayY,flow){
     running = false;
     if (raf) cancelAnimationFrame(raf);
     if (markAwait) stepAwaitPlay = true;
+    syncMobilePlay();
     render();
   }
 
@@ -1779,20 +1642,18 @@ function drawVentilator(airwayX,airwayY,flow){
     stepAwaitPlay = false;
     lastTs = 0;
     raf = requestAnimationFrame(loop);
+    syncMobilePlay();
     render();
   }
 
   function nextStage(){
+    if(apneaRt.inPause){ apneaRt.inPause = false; apneaRt.recover = 0; apneaRt.burstT = 0; }
     if (frame >= TOTAL) {
       if (loopToggle.checked) frame = 0;
       else { render(); return; }
     }
     const next = pauseFrames.find(p => p > frame);
-    if (next == null) {
-      frame = loopToggle.checked ? 0 : TOTAL;
-      render();
-      return;
-    }
+    if (next == null) { frame = loopToggle.checked ? 0 : TOTAL; render(); return; }
     frame = next;
     stepAwaitPlay = true;
     render();
@@ -1803,6 +1664,8 @@ function drawVentilator(airwayX,airwayY,flow){
     if (raf) cancelAnimationFrame(raf);
     frame = 0;
     stepAwaitPlay = false;
+    resetApnea();
+    syncMobilePlay();
     render();
   }
 
@@ -1811,24 +1674,37 @@ function drawVentilator(airwayX,airwayY,flow){
     if (!lastTs) lastTs = ts;
     const rawDt = ts - lastTs;
     lastTs = ts;
-    const dt = Math.min(rawDt, 34);// trava saltos quando o navegador engasga ou troca de aba
+    const dt = Math.min(rawDt, 34); // trava saltos quando o navegador engasga ou troca de aba
+    const c = current();
+    const ap = apneaPattern();
+
+    if(apneaRt.inPause){
+      // A pausa é exibida de forma acelerada; o contador mostra o tempo simulado.
+      apneaRt.t += dt / 1000 * (ap.pauseSec / 6) * (getSpeed() / 1.2);
+      if(apneaRt.t >= ap.pauseSec){
+        apneaRt.t = ap.pauseSec;
+        apneaRt.nadir = dynamicSaO2(c.met.sao2);
+        apneaRt.inPause = false; apneaRt.recover = 0; apneaRt.t = 0; apneaRt.burstT = 0; frame = 0;
+      }
+      render();
+      raf = requestAnimationFrame(loop);
+      return;
+    }
 
     // A velocidade visual do ciclo acompanha a frequência respiratória do estado selecionado.
-    const activeFreq = model.freq;
-    const freqFactor = clamp(activeFreq / 40, 0.50, 2.00);
+    const freqFactor = clamp(model.freq / 40, 0.50, 2.00);
     const inc = Math.min(2.0, dt * 0.055 * getSpeed() * freqFactor);
     const prev = Math.floor(frame);
     frame += inc;
+    const simPerCycle = ap.pauseSec ? ap.burstSec / APNEA_CYCLES_SHOWN : c.sim.run.Ttot;
+    apneaRt.recover += inc / TOTAL * simPerCycle;
+    if(ap.pauseSec) apneaRt.burstT = Math.min(ap.burstSec, apneaRt.burstT + inc / TOTAL * simPerCycle);
     if (frame > TOTAL) frame = TOTAL;
     const cur = Math.floor(frame);
 
     if (stepModeToggle.checked) {
       const crossed = pauseFrames.find(p => p > prev && p <= cur);
-      if (crossed !== undefined) {
-        frame = crossed;
-        pauseNow(true);
-        return;
-      }
+      if (crossed !== undefined) { frame = crossed; pauseNow(true); return; }
     }
 
     render();
@@ -1836,12 +1712,14 @@ function drawVentilator(airwayX,airwayY,flow){
     if (frame >= TOTAL) {
       if (loopToggle.checked) {
         frame = 0;
-        if (stepModeToggle.checked) {
-          pauseNow(true);
-          return;
+        if(ap.pauseSec && !stepModeToggle.checked && apneaRt.burstT >= ap.burstSec - 1e-6){
+          apneaRt.startSat = dynamicSaO2(c.met.sao2);
+          apneaRt.inPause = true; apneaRt.t = 0;
         }
+        if (stepModeToggle.checked) { pauseNow(true); return; }
       } else {
         running = false;
+        syncMobilePlay();
         render();
         return;
       }
@@ -1849,28 +1727,49 @@ function drawVentilator(airwayX,airwayY,flow){
     raf = requestAnimationFrame(loop);
   }
 
+  // ===================== Eventos =====================
+  function onParam(fn){ return function(){ fn(this); render(); }; }
   btnStart.addEventListener('click', play);
   btnPause.addEventListener('click', function(){ pauseNow(false); });
   btnStep.addEventListener('click', nextStage);
   btnReset.addEventListener('click', resetAll);
   speedRange.addEventListener('input', function(){ speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x'; });
-  document.querySelectorAll('.vent-seg-btn').forEach(function(btn){
+  document.querySelectorAll('.vent-seg-btn, .mt-mode-btn').forEach(function(btn){
     btn.addEventListener('click', function(){ setVentilationMode(btn.dataset.mode); });
   });
   ventMode.addEventListener('change', function(){ setVentilationMode(ventMode.value); });
-  freqRange.addEventListener('input', function(){ model.freq = parseInt(freqRange.value,10); updateControlLabels(); render(); });
-  vtRange.addEventListener('input', function(){ model.vtML = parseFloat(vtRange.value); model.vtTarget = model.vtML/1000; updateControlLabels(); render(); });
-  gestAgeRange.addEventListener('input', function(){ model.gestWeeksAtBirth = parseInt(gestAgeRange.value,10); applyGestationalMaturity(); updateControlLabels(); render(); });
-  postnatalAgeRange.addEventListener('input', function(){ model.postnatalHours = parseInt(postnatalAgeRange.value,10); updateControlLabels(); render(); });
-  massRange.addEventListener('input', function(){ model.massKg = parseFloat(massRange.value); updateControlLabels(); render(); });
-  vdPhysRange.addEventListener('input', function(){ model.vdPhysML = parseFloat(vdPhysRange.value); updateControlLabels(); render(); });
-  complianceRange.addEventListener('input', function(){ model.compliance = parseFloat(complianceRange.value); updateControlLabels(); render(); });
-  resistanceRange.addEventListener('input', function(){ model.resistance = parseFloat(resistanceRange.value); updateControlLabels(); render(); });
-  mechPeepRange.addEventListener('input', function(){ model.mechPeep = parseFloat(mechPeepRange.value); updateControlLabels(); render(); });
-  mechPinspRange.addEventListener('input', function(){ model.mechPinsp = parseInt(mechPinspRange.value,10); updateControlLabels(); render(); });
-  if (ventStrategySelect) ventStrategySelect.addEventListener('change', function(){ model.ventStrategy = ventStrategySelect.value; updateControlLabels(); render(); });
-  if (asynchronySelect) asynchronySelect.addEventListener('change', function(){ model.asynchrony = asynchronySelect.value; updateControlLabels(); render(); });
-  if (tiRange) tiRange.addEventListener('input', function(){ model.tiSec = parseFloat(tiRange.value); updateControlLabels(); render(); });
+  freqRange.addEventListener('input', onParam(el => { model.freq = parseInt(el.value, 10); }));
+  vtRange.addEventListener('input', onParam(el => { model.vtML = parseFloat(el.value); }));
+  // Maturidade: altera apenas IG; C e R do aluno permanecem, e o efeito é reversível.
+  gestAgeRange.addEventListener('input', onParam(el => { model.gestWeeks = parseInt(el.value, 10); }));
+  postnatalAgeRange.addEventListener('input', onParam(el => { model.postnatalHours = parseInt(el.value, 10); }));
+  massRange.addEventListener('input', onParam(el => {
+    const m0 = model.massKg;
+    model.massKg = parseFloat(el.value);
+    // Na respiração espontânea o controle químico ajusta o Vt à demanda metabólica (∝ massa); no ventilador o Vt programado fica em mL.
+    if(model.mode === 'spont'){ model.vtML = clamp(Math.round(model.vtML * model.massKg / m0 * 10) / 10, 1, 40); vtRange.value = model.vtML; }
+  }));
+  surfSelect.addEventListener('change', onParam(el => { model.surf = el.value; }));
+  vdPhysRange.addEventListener('input', onParam(el => { model.vdAddML = parseFloat(el.value); }));
+  complianceRange.addEventListener('input', onParam(el => { model.C = parseFloat(el.value); }));
+  resistanceRange.addEventListener('input', onParam(el => { model.R = parseFloat(el.value); }));
+  fio2Range.addEventListener('input', onParam(el => { model.fio2 = parseInt(el.value, 10); }));
+  cpapRange.addEventListener('input', onParam(el => { model.cpap = parseFloat(el.value); }));
+  apneaSelect.addEventListener('change', onParam(el => { model.apnea = el.value; resetApnea(); }));
+  mechPeepRange.addEventListener('input', onParam(el => { model.peep = parseFloat(el.value); }));
+  mechPinspRange.addEventListener('input', onParam(el => { if(model.strategy === 'vcv') model.pipLimit = parseInt(el.value, 10); else model.dp = parseInt(el.value, 10); }));
+  ventStrategySelect.addEventListener('change', onParam(el => {
+    const before = current();
+    if(el.value === 'vcv' && model.strategy !== 'vcv'){
+      // Continuidade: o Vt programado parte do Vt que a PCV estava entregando.
+      model.vtML = clamp(Math.round(before.met.VT * 2) / 2, 1, 40);
+      vtRange.value = model.vtML;
+      model.pipLimit = Math.max(model.pipLimit, Math.ceil(before.sim.pip + 5));
+    }
+    model.strategy = el.value;
+  }));
+  asynchronySelect.addEventListener('change', onParam(el => { model.asynchrony = el.value; }));
+  tiRange.addEventListener('input', onParam(el => { model.tiSec = parseFloat(el.value); }));
   stateRow.addEventListener('click', function(e){ const btn = e.target.closest('.state-btn'); if(btn) applyState(btn.dataset.state); });
   stepModeToggle.addEventListener('change', function(){
     if (stepModeToggle.checked && running) pauseNow(true);
@@ -1880,15 +1779,33 @@ function drawVentilator(airwayX,airwayY,flow){
   labelsToggle.addEventListener('change', render);
   loopToggle.addEventListener('change', render);
 
+  // Abas e cabeçalho do celular.
+  const mobilePlay = $('mobilePlayToggle');
+  function syncMobilePlay(){
+    if(!mobilePlay) return;
+    mobilePlay.textContent = running ? 'Ⅱ' : '▶';
+    mobilePlay.setAttribute('aria-label', running ? 'Pausar' : 'Iniciar');
+  }
+  if(mobilePlay) mobilePlay.addEventListener('click', () => { if(running) pauseNow(false); else play(); });
+  const tabButtons = [...document.querySelectorAll('.mobile-tabnav button')];
+  const tabSections = [...document.querySelectorAll('[data-tab]')];
+  function setTab(name){
+    tabButtons.forEach(b => { const on = b.dataset.tabnav === name; b.classList.toggle('active', on); b.setAttribute('aria-selected', on ? 'true' : 'false'); });
+    tabSections.forEach(s => s.classList.toggle('tab-active', s.dataset.tab.split(' ').includes(name)));
+    requestAnimationFrame(render);
+  }
+  tabButtons.forEach(b => b.addEventListener('click', () => { setTab(b.dataset.tabnav); window.scrollTo({top:0}); }));
+  setTab('animacao');
+  mobileMQ.addEventListener('change', render);
+  window.addEventListener('resize', () => { if(isMobile()) render(); });
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(render);
+
   speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x';
-  complianceLabel.textContent = parseFloat(complianceRange.value).toFixed(2);
-  resistanceLabel.textContent = parseFloat(resistanceRange.value).toFixed(2);
   renderStateButtons();
   syncVentSegment();
-  updateControlLabels();
   applyState('termo_estavel');
 })();
-</script></body></html>
+</script>
 <style id="cards-referencia-aprovada">
 /* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
 :is(.status-grid .card):not(#cards-reference-reserved){--reference-accent:var(--card-color,#b6cad9);position:relative;isolation:isolate;overflow:hidden!important;
@@ -1901,5 +1818,6 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=12"></script>
-<script src="tutor-widget.js?v=17"></script>
+<script src="tutor-ef-data.js?v=18"></script>
+<script src="tutor-widget.js?v=20"></script>
+</body></html>
