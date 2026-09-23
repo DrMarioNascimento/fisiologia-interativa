@@ -269,14 +269,6 @@ window.FI_DADOS = {
      "cat": "Respiratório",
      "obj": "Relacionar PO₂, saturação da hemoglobina e deslocamentos da curva provocados por pH, temperatura e 2,3-BPG.",
      "href": "curva-dissociacao-hemoglobina.html"
-    },
-    {
-     "t": "Ventilação Pulmonar Neonatal",
-     "cat": "Respiratório",
-     "obj": "Relacionar idade gestacional ao nascimento, idade pós-natal, massa corporal e maturidade pulmonar à mecânica ventilatória neonatal.",
-     "href": "ventilacao-pulmonar-neonatal.html",
-     "deep": "módulo de aprofundamento",
-     "leitura": "assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260902-2"
     }
    ],
    "sala": {
