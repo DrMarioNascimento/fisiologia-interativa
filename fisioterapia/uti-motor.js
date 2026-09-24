@@ -29,6 +29,7 @@
   const PESO = 70;
   const DURACAO = 360;            // min: 6 h de plantão
   const DIVIDA_LETAL = 120;       // mL O₂/kg (ordem de grandeza de choque hemorrágico experimental)
+  const TAU_PH = 25;              // min: atraso do efeito cardiovascular da acidose
 
   // lactato se distribui no LEC e em parte do LIC
   const volLac = s => s.ecf + 0.5 * s.icf;
@@ -59,8 +60,9 @@
   const CENARIOS = {
     septico: {
       id: 'septico', nome: 'Choque séptico', sub: 'Pneumonia grave · 2º dia de internação',
-      historia: 'Homem, 58 anos, 70 kg, intubado por pneumonia. Febril, vasodilatado, capilares extravasando. Pressão caindo desde a madrugada e lactato subindo. O foco infeccioso ainda não foi tratado.',
+      historia: 'Homem, 58 anos, 70 kg, 1,72 m, intubado por pneumonia. Febril, vasodilatado, capilares extravasando. Pressão caindo desde a madrugada e lactato subindo. O foco infeccioso ainda não foi tratado.',
       pede: 'Volume, vasopressor, antibiótico com controle do foco, e ventilação que não piore o pulmão.',
+      sexo: 'M', altura: 172,
       ini: { pv: 3.0, isf: 13.6, na: 136, k: 4.0, cl: 104, hco3: 18, lac: 4.0, glic: 9, albg: 27, hct: 0.35, temp: 38.9,
              paco2: 34, S: 0.8, pcomp: 0 },
       dz: { vaso: 0.42, leak: 0.65, contr: 0.82, metab: 0.28, extr: 0.58, colapso: 0.14, compl: 45, sens: 0.8, estresse: 1.35, dor: 5, tempAlvo: 38.9, tfg: 1, liberaK: 0, sangra: 0 },
@@ -69,8 +71,9 @@
     },
     hemorragico: {
       id: 'hemorragico', nome: 'Choque hemorrágico', sub: 'Politrauma · fratura de pelve',
-      historia: 'Mulher, 34 anos, 70 kg, atropelamento. Já perdeu cerca de 1,5 L de sangue e continua sangrando pela pelve. Intubada no pronto-socorro, chegou fria à UTI. O centro cirúrgico leva 20 minutos para conter o sangramento depois de acionado.',
+      historia: 'Mulher, 34 anos, 70 kg, 1,65 m, atropelamento. Já perdeu cerca de 1,5 L de sangue e continua sangrando pela pelve. Intubada no pronto-socorro, chegou fria à UTI. O centro cirúrgico leva 20 minutos para conter o sangramento depois de acionado.',
       pede: 'Parar o sangramento, repor o que se perdeu com o fluido certo, e não diluir o sangue que resta.',
+      sexo: 'F', altura: 165,
       ini: { pv: 2.45, isf: 10.3, na: 139, k: 4.3, cl: 106, hco3: 19, lac: 4.5, glic: 8, albg: 36, hct: 0.33, rbcv: 1.2, temp: 35.8,
              paco2: 36, S: 0.9, pcomp: 0, ica: -0.08 },
       dz: { vaso: 1.0, leak: 0.1, contr: 1.0, metab: 0.0, extr: 0.72, colapso: 0.04, compl: 55, sens: 0.9, estresse: 1.25, dor: 18, tempAlvo: 35.8, tfg: 1, liberaK: 0, sangra: 40 },
@@ -79,25 +82,32 @@
     },
     sdra: {
       id: 'sdra', nome: 'Insuficiência respiratória (SDRA)', sub: 'Pneumonia bilateral · pulmão rígido',
-      historia: 'Homem, 45 anos, 70 kg. Pneumonia viral grave evoluiu para síndrome do desconforto respiratório agudo. Alvéolos colapsados e pulmão pouco complacente. O ventilador ainda está nos parâmetros de quando foi intubado.',
+      historia: 'Homem, 45 anos, 70 kg, 1,75 m. Pneumonia viral grave evoluiu para síndrome do desconforto respiratório agudo. Alvéolos colapsados, pulmão pouco complacente e espaço morto alto: mesmo com volume corrente grande, o CO₂ está retido. O ventilador ainda está nos parâmetros de quando foi intubado.',
       pede: 'Recrutar o pulmão sem machucá-lo e sem derrubar o retorno venoso. Controlar CO₂ e pH.',
+      sexo: 'M', altura: 175,
       ini: { pv: 2.8, isf: 11.6, na: 138, k: 4.2, cl: 103, hco3: 23, lac: 2.0, glic: 8, albg: 32, hct: 0.38, temp: 38.2,
              paco2: 52, S: 0.5, pcomp: 0 },
-      dz: { vaso: 0.85, leak: 0.35, contr: 0.95, metab: 0.12, extr: 0.68, colapso: 0.46, compl: 27, sens: 0.85, estresse: 1.2, dor: 8, tempAlvo: 38.2, tfg: 1, liberaK: 0, sangra: 0 },
+      dz: { vaso: 0.85, leak: 0.35, contr: 0.95, metab: 0.12, extr: 0.68, colapso: 0.46, compl: 27, sens: 0.85, estresse: 1.2, dor: 8, tempAlvo: 38.2, tfg: 1, liberaK: 0, sangra: 0, vdExtra: 0.13 },
       vent: { fio2: 0.50, peep: 5, vt: 620, fr: 14 },
       resolvivel: false, progrideSemPeep: true
     },
     hiperk: {
       id: 'hiperk', nome: 'Hipercalemia e lesão renal aguda', sub: 'Rabdomiólise · rim parado',
-      historia: 'Homem, 29 anos, 70 kg. Soterrado por 6 h e resgatado. Os músculos lesados liberam potássio, e o rim entupido de mioglobina quase não filtra. Chegou encharcado de volume, acidótico, com o ECG mudando.',
+      historia: 'Homem, 29 anos, 70 kg, 1,78 m. Soterrado por 6 h e resgatado. Os músculos lesados liberam potássio e fosfato e sequestram cálcio, e o rim entupido de mioglobina quase não filtra. Chegou encharcado de volume, acidótico, hipocalcêmico, com o ECG mudando.',
       pede: 'Proteger o coração agora, tirar o K⁺ do plasma, corrigir a acidose, e retirar o excesso de água e potássio de verdade.',
+      sexo: 'M', altura: 178,
       ini: { pv: 3.45, isf: 14.1, na: 130, k: 6.0, cl: 102, hco3: 14, lac: 1.8, glic: 6, albg: 34, hct: 0.38, temp: 37.2,
              paco2: 38, S: 0.2, pcomp: 0 },
-      dz: { vaso: 1.05, leak: 0.2, contr: 0.95, metab: 0.05, extr: 0.7, colapso: 0.10, compl: 42, sens: 0.95, estresse: 1.1, dor: 6, tempAlvo: 37.2, tfg: 0.07, liberaK: 1.8, sangra: 0 },
+      dz: { vaso: 1.05, leak: 0.2, contr: 0.95, metab: 0.05, extr: 0.7, colapso: 0.10, compl: 42, sens: 0.95, estresse: 1.1, dor: 6, tempAlvo: 37.2, tfg: 0.07, liberaK: 1.8, sangra: 0, icaDoenca: -0.26 },
       vent: { fio2: 0.40, peep: 5, vt: 480, fr: 14 },
       resolvivel: false
     }
   };
+
+  // Peso corporal predito (ARDSNet), em kg, a partir do sexo e da altura (cm)
+  function pesoPredito(sc) {
+    return (sc.sexo === 'F' ? 45.5 : 50) + 0.91 * (sc.altura - 152.4);
+  }
 
   // ------------------------------------------------------------ estado inicial
   function criar(idCenario) {
@@ -111,7 +121,7 @@
     const tonic = osmE / ecf;
     const icf = 28;
     const s = {
-      cenario: idCenario, t: 0, dz: JSON.parse(JSON.stringify(sc.dz)),
+      cenario: idCenario, t: 0, dz: JSON.parse(JSON.stringify(sc.dz)), pbw: pesoPredito(sc),
       // massas e volumes
       tbw: icf + ecf, ecf, icf, pv: I.pv, rbcv,
       naM: I.na * ecf, clM: I.cl * ecf, hco3M: I.hco3 * ecf, glicM: I.glic * ecf, lacM: I.lac * (ecf + 14),
@@ -120,7 +130,7 @@
       // estados lentos
       paco2: I.paco2, S: I.S, temp: I.temp, icaExtra: I.ica || 0,
       divida: 0, lesaoRenal: 0, isq: 0, co2Extra: 0,
-      eNe: 0, eDobu: 0, eFuro: 0, insDepot: 0, eIns: 0, eCa: 0,
+      eNe: 0, eDobu: 0, eFuro: 0, insDepot: 0, eIns: 0, eCa: 0, beta2Depot: 0, eBeta2: 0,
       vo2: 200, deficit: 0,
       // controles
       c: { manutTipo: 'rl', manutTaxa: 0, ne: 0, dobu: 0, kcl: 0, fio2: sc.vent.fio2, peep: sc.vent.peep, vt: sc.vent.vt, fr: sc.vent.fr, ufTaxa: 0 },
@@ -186,29 +196,34 @@
     v.ph = 6.1 + Math.log10(v.hco3 / (0.0307 * s.paco2));
     v.be = (v.hco3met - 24) * 1.2;
     v.ag = v.na - v.cl - v.hco3;
+    // compensação respiratória esperada da acidose metabólica (Winter): PaCO₂ = 1,5 × HCO₃⁻ + 8 ± 2.
+    // No ventilador em modo controlado ela não acontece sozinha: depende da FR × VT escolhidos.
+    v.paco2Winter = 1.5 * v.hco3 + 8;
 
     // --- potássio: massa no LEC + deslocamento transcelular
-    v.kShift = 4.8 * (7.4 - v.ph) - 1.1 * s.eIns - 0.25 * satura(s.eDobu / 6);
+    v.kShift = 4.8 * (7.4 - v.ph) - 1.1 * s.eIns - 1.2 * s.eBeta2 - 0.25 * satura(s.eDobu / 6);   // salbutamol: −0,5 a −1 mEq/L
     v.k = clamp(s.kM / s.ecf + v.kShift, 1.2, 12);
     // --- cálcio ionizado
-    v.ica = clamp(1.15 + s.icaExtra - 0.45 * (v.ph - 7.4), 0.4, 2.0);
+    v.ica = clamp(1.15 + s.icaExtra + (dz.icaDoenca || 0) - 0.45 * (v.ph - 7.4), 0.4, 2.0);
 
     // --- simpático e drogas
-    const acidBlunt = clamp(1 - (7.25 - v.ph) * 2.5, 0.35, 1);
+    // a perda de resposta vascular e miocárdica à acidose instala-se em minutos (pH "tecidual" com atraso)
+    const phT = s.phTecido != null ? s.phTecido : v.ph;
+    const acidBlunt = clamp(1 - (7.25 - phT) * 2.5, 0.35, 1);
     const ne = satura(s.eNe / 0.2);                // 0..1
     const db = satura(s.eDobu / 6);
     const S = s.S;
     v.ne = ne; v.db = db;
 
     // --- coração
-    const acidC = clamp(1 - Math.max(0, 7.2 - v.ph) * 1.4, 0.35, 1);
+    const acidC = clamp(1 - Math.max(0, 7.2 - phT) * 1.4, 0.35, 1);
     const caC = Math.pow(clamp(v.ica / 1.0, 0.45, 1), 0.7);
     const hipoxC = (s.v.sao2 != null && s.v.sao2 < 0.65) ? 0.7 : 1;
     const hipoT = clamp(1 - 0.06 * Math.max(0, 36 - s.temp), 0.7, 1);
     v.contr = dz.contr * (1 + 0.35 * S * acidBlunt) * (1 + 0.7 * db) * (1 + 0.1 * ne) * acidC * caC * hipoxC * hipoT * (1 - 0.45 * s.isq);
 
     const sao2prev = s.v.sao2 != null ? s.v.sao2 : 0.95;
-    let hr = 72 * (0.85 + 0.9 * S * acidBlunt) + 10 * (s.temp - 37) + 22 * db + 8 * ne + dz.dor
+    let hr = 72 * (0.85 + 0.9 * S * acidBlunt) + 10 * (s.temp - 37) + 22 * db + 8 * ne + 18 * s.eBeta2 + dz.dor
       + 0.8 * Math.max(0, 90 - sao2prev * 100) + 0.4 * Math.max(0, s.paco2 - 50);
     if (sao2prev < 0.55 || v.ph < 6.95 || v.k > 8.5) hr *= 0.55;
     v.fc = clamp(hr, 25, 185);
@@ -246,7 +261,7 @@
     // --- gases
     const vco2 = 0.8 * s.vo2 + s.co2Extra;
     const vdAnat = 0.15;
-    v.vd = vdAnat + vtL * (0.12 + 0.25 * Math.max(0, v.pplat - 28) / 10 + 0.2 * Math.max(0, 3.5 - v.dc) / 3.5 + 0.12 * colapso);
+    v.vd = Math.min(0.8 * vtL, vdAnat + vtL * (0.12 + (dz.vdExtra || 0) + 0.25 * Math.max(0, v.pplat - 28) / 10 + 0.2 * Math.max(0, 3.5 - v.dc) / 3.5 + 0.12 * colapso));   // SDRA: espaço morto alveolar alto
     v.vdvt = v.vd / vtL;
     v.va = c.fr * Math.max(0.02, vtL - v.vd);
     v.paco2Alvo = clamp(0.863 * vco2 / v.va, 12, 160);
@@ -313,7 +328,8 @@
     v.isqAlvo = clamp((v.razaoMio - 1.6) / 1.6, 0, 1);
 
     // --- efeito protetor do cálcio sobre a membrana
-    v.kEfetivo = v.k - 1.0 * clamp(s.eCa, 0, 1.2);
+    // a hipocalcemia estreita a margem entre o potencial de repouso e o limiar: soma-se ao efeito do K⁺ alto
+    v.kEfetivo = v.k - 1.0 * clamp(s.eCa, 0, 1.2) + 2.0 * Math.max(0, 1.1 - v.ica);
 
     // --- ritmo mostrado no monitor
     v.ritmo = ritmo(s);
@@ -389,6 +405,8 @@
     const absorvido = s.insDepot * (1 - Math.exp(-dt / 15));
     s.insDepot -= absorvido; s.eIns += absorvido; s.eIns *= Math.exp(-dt / 120);
     s.eCa *= Math.exp(-dt / 40);
+    const b2 = s.beta2Depot * (1 - Math.exp(-dt / 40));             // nebulização: início em ~30 min, pico em 60–90 min
+    s.beta2Depot -= b2; s.eBeta2 += b2; s.eBeta2 *= Math.exp(-dt / 150);   // efeito por 2–4 h
     s.icaExtra *= Math.exp(-dt / 180);
     s.co2Extra *= Math.exp(-dt / 8);
 
@@ -408,7 +426,7 @@
     // 4. saídas
     // sangramento: cresce com a pressão (hipotensão permissiva)
     if (dz.sangra > 0) {
-      const q = dz.sangra * clamp(v.pam / 65, 0.2, 1.8) * dt / 1000;   // L de sangue
+      const q = dz.sangra * clamp(Math.pow(Math.max(0, v.pam) / 65, 2.0), 0.03, 1.8) * dt / 1000;   // o fluxo pela lesão cai com a pressão   // L de sangue
       const hemacia = q * v.hct;
       s.rbcv = Math.max(0.2, s.rbcv - hemacia);
       const saiu = retirarPlasma(s, q - hemacia);
@@ -445,12 +463,15 @@
     const glicosuria = 0.12 * Math.max(0, v.glic - 10) * v.tfgFrac;
     s.glicM = Math.max(0.5, s.glicM + (prodG - consG - glicosuria) * dt);
     // lactato: produção basal + anaeróbia; depuração hepática depende de perfusão
-    const prodL = 1.17 + 0.12 * v.deficit + 4 * Math.max(0, dz.metab - 0.1);
+    // produção anaeróbia satura (~0,25 mmol/L/min no choque grave)
+    const prodL = 1.17 + 7 * satura(v.deficit / 60) + 4 * Math.max(0, dz.metab - 0.1);
     const perfHep = clamp(Math.min(v.dc / 5, v.pam / 65), 0.15, 1.2);
     const consL = 5.85 * perfHep * v.lac / (v.lac + 4) + 0.3 * v.tfgFrac * v.lac / (v.lac + 4);
     const dL = (prodL - consL) * dt;
     s.lacM = Math.max(0.2 * volLac(s), s.lacM + dL);
     s.hco3M -= 0.5 * dL;
+    // o HCO₃⁻ que tampona o ácido láctico sai como CO₂ (22,4 mL/mmol) e precisa ser ventilado
+    if (dL > 0) s.co2Extra += 0.5 * dL * 22.4 / 8;
     // ácido fixo e rim
     s.hco3M -= 0.05 * dt;
     const alvoH = 24 + 0.35 * (s.paco2 - 40);
@@ -475,7 +496,7 @@
     const albN = clamp(s.albM / s.pv / 40, 0.3, 1.6);
     const f = 0.214 * Math.pow(albN, 0.25) * (1 - 0.12 * dz.leak) * clamp(1 - 0.012 * Math.max(0, v.pvc - 8), 0.75, 1);
     const pvEq = f * s.ecf;
-    const tau = s.pv > pvEq ? 25 * (1 - 0.5 * dz.leak) : 90;
+    const tau = s.pv > pvEq ? 25 * (1 - 0.5 * dz.leak) : 40;   // hipovolemia: reenchimento transcapilar (autotransfusão)
     s.pv = clamp(relax(s.pv, pvEq, dt, tau), 0.6, s.ecf - 1);
 
     // 8. estados rápidos
@@ -485,6 +506,7 @@
     s.deficit = v.deficit;
     s.temp = relax(s.temp, dz.tempAlvo, dt, 90);
     s.isq = relax(s.isq, v.isqAlvo, dt, 4);
+    s.phTecido = relax(s.phTecido != null ? s.phTecido : v.ph, v.ph, dt, TAU_PH);
 
     
     // 9. danos acumulados
@@ -666,6 +688,10 @@
       s.fila.push({ tipo: 'glic50', ml: 50, total: 50, taxa: 10 });
       registrar(s, 'Insulina regular 10 U + glicose 50% 50 mL.', 'acao');
     },
+    salbutamol(s) {
+      s.beta2Depot += 1;
+      registrar(s, 'Salbutamol 10 mg por nebulização.', 'acao');
+    },
     glicose(s) {
       s.fila.push({ tipo: 'glic50', ml: 50, total: 50, taxa: 10 });
       registrar(s, 'Glicose 50% 50 mL.', 'acao');
@@ -703,5 +729,5 @@
     return s;
   }
 
-  return { criar, passo, executar, calcular, CENARIOS, FLUIDOS, CAUSAS, DURACAO, DIVIDA_LETAL, PESO, criterios, balanco, satO2 };
+  return { criar, passo, executar, calcular, CENARIOS, FLUIDOS, CAUSAS, DURACAO, DIVIDA_LETAL, PESO, criterios, balanco, satO2, pesoPredito };
 });

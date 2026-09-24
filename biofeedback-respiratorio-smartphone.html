@@ -38,6 +38,8 @@ body{min-width:0;-webkit-text-size-adjust:100%}
 @media(orientation:landscape) and (max-height:500px){.orbital{width:min(60svh,250px)}.display-time{font-size:40px}.display-phase{font-size:9px}}
 @media(hover:none){.icon-btn:hover:enabled,.protocol:hover{transform:none;filter:none}}
 
+
+.ritmo-nota{margin:12px 2px 0;font-size:12px;line-height:1.55;color:#a9c0cf}.ritmo-nota strong{color:#d9ebf5;font-weight:600}.ritmo-nota.ressonante{color:#9ce6b9}.reset-inline{display:block;width:100%;min-height:46px;margin-top:14px;border:1px solid #6f5560;border-radius:12px;background:linear-gradient(165deg,#4d3a45,#2c2029);color:#ffc2b6;font-size:13px;box-shadow:inset 0 1px 0 #ffffff26,0 4px 0 #120a0f}.indicators .section-title{order:-2}.indicators .metric:has(#rpm){order:-1}.app{padding-bottom:max(96px,env(safe-area-inset-bottom))}
 </style>
 <style>/* Shared teaching palette. Identical quantities retain identical colors across simulators. */
 :root{--c-rv:#dce9f3;--c-dc:#ff8990;--c-edv:#70bcff;--c-esv:#87d29e;--c-vs:#ffb45f;--c-ef:#f2d77c;--c-fc:#9ce4ed;--c-fr:#b1d4f4;--c-o2:#c4a2f6;--c-co2:#ecb48e;--c-pas:#84abff;--c-pad:#f892c1;--c-papm:#6cd8f3;--c-pam:#f8c16b;--c-pv:#93cfab;--c-palv:#f2c986;--c-ppl:#79bcff}
@@ -108,8 +110,8 @@ body{min-width:0;-webkit-text-size-adjust:100%}
 
         <div class="metric">
           <div class="metric-title">Respirações / min</div>
-          <div id="rpm" class="metric-value">5</div>
-          <div class="metric-sub">Frequência programada</div>
+          <div id="rpm" class="metric-value">5,0</div>
+          <div class="metric-sub" id="rpmSub">Frequência programada · I:E 1:1,5</div>
         </div>
 
         <div class="metric">
@@ -132,7 +134,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
           <span>Protocolos Respiratórios</span>
         </span>
         <span>
-          <span id="protocolCurrent" class="dropdown-current">Personalizado</span>
+          <span id="protocolCurrent" class="dropdown-current">Diafragmática</span>
           <span class="chevron">▼</span>
         </span>
       </button>
@@ -202,6 +204,10 @@ body{min-width:0;-webkit-text-size-adjust:100%}
             <input id="pausaVazia" aria-label="Pausa após expirar" type="range" min="0" max="5" value="1" step="1">
           </div>
         </div>
+        <p class="ritmo-nota" id="notaRitmo"></p>
+        <p class="ritmo-nota"><strong>Respiração ressonante:</strong> cerca de 5,5–6 respirações por minuto (≈ 0,1 Hz) maximiza a variabilidade da frequência cardíaca, porque a arritmia sinusal respiratória entra em ressonância com o barorreflexo. O protocolo Coerência (5-0-5-0) corresponde a 6 irpm.</p>
+        <p class="ritmo-nota"><strong>Diafragmática</strong> descreve o padrão muscular (o abdome se expande ao inspirar e o tórax quase não se move), não os tempos; 4-1-6-1 é apenas um ritmo de partida. <strong>I:E</strong> compara a duração da inspiração com a da expiração, sem as pausas.</p>
+        <button id="resetAllConfig" class="reset-inline" type="button">↻ Redefinir tudo</button>
       </div>
     </section>
 
@@ -254,7 +260,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
       "valorInspiracao","valorPausaCheia","valorExpiracao","valorPausaVazia",
       "ringProgress","sphereWrap","display","fase","tempoFase","instrucao",
       "faseCard","rpm","ciclos","tempoSessao","iniciar","pausar","resetar",
-      "telaCheia","protocolCurrent","fullscreenModal","closeFullscreenModal","understoodFullscreenModal"
+      "telaCheia","protocolCurrent","rpmSub","notaRitmo","fullscreenModal","closeFullscreenModal","understoodFullscreenModal"
     ];
     const r=Object.fromEntries(ids.map(id=>[id,document.getElementById(id)]));
 
@@ -315,7 +321,13 @@ body{min-width:0;-webkit-text-size-adjust:100%}
       r.valorExpiracao.textContent=r.expiracao.value;
       r.valorPausaVazia.textContent=r.pausaVazia.value;
       const v=valores(),total=v.inspiracao+v.pausaCheia+v.expiracao+v.pausaVazia;
-      r.rpm.textContent=Math.round(60/total).toString();
+      const fr=60/total,nf=(n,d)=>n.toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d});
+      r.rpm.textContent=nf(fr,1);
+      const ie=v.expiracao/v.inspiracao;
+      r.rpmSub.textContent=`Frequência programada · I:E 1:${nf(ie,1)}`;
+      const fr1=Math.round(fr*10)/10,ressonante=fr1>=5.5&&fr1<=6.5;
+      r.notaRitmo.textContent=`Ritmo atual: ${nf(fr,1)} irpm (${nf(fr/60,2)} Hz) · ciclo de ${total} s · I:E 1:${nf(ie,1)} (inspiração ${v.inspiracao} s : expiração ${v.expiracao} s)`+(ressonante?" · faixa de respiração ressonante.":".");
+      r.notaRitmo.classList.toggle("ressonante",ressonante);
       atualizarSliders();
     }
 
@@ -412,6 +424,20 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     function reconfigurarFase(){
       if(!executando){resetar();return;}
       faseAtual=0;inicioFase=performance.now();tempoAntesPausa=0;
+      if(pausado){
+        // Em pausa, o mostrador passa a refletir o início do novo ciclo configurado.
+        const f=fases()[0];
+        r.tempoFase.textContent=(modo()==="progressivo"?0:f.dur).toFixed(1).replace(".",",");
+        r.sphereWrap.style.transform=`scale(${f.a})`;
+        r.display.style.transform=`scale(${1/f.a})`;
+        r.ringProgress.style.setProperty("--angle","0deg");
+        r.instrucao.textContent="Ritmo alterado. Retome para começar pelo início do ciclo.";
+      }
+    }
+    const PRESETS={coerencia:[5,0,5,0],relaxamento:[4,0,6,0],"478":[4,7,8,0],diafragmatica:[4,1,6,1]};
+    function presetDosValores(){
+      const v=valores(),atual=[v.inspiracao,v.pausaCheia,v.expiracao,v.pausaVazia].join();
+      return Object.keys(PRESETS).find(k=>PRESETS[k].join()===atual)||null;
     }
     function marcarPreset(nome){
       presetAtivo=nome;
@@ -433,7 +459,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
       r.expiracao.value=6;
       r.pausaVazia.value=1;
       r.modoSwitch.checked=false;
-      marcarPreset(null);
+      marcarPreset(presetDosValores());
       aplicarPaleta();
       atualizarControles();
       resetar();
@@ -472,7 +498,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
 
     ["inspiracao","pausaCheia","expiracao","pausaVazia"].forEach(id=>{
       r[id].addEventListener("input",()=>{
-        marcarPreset(null);
+        marcarPreset(presetDosValores());
         atualizarControles();
         reconfigurarFase();
       });
@@ -495,6 +521,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     r.pausar.addEventListener("click",pausar);
     r.resetar.addEventListener("click",resetar);
     r.resetAll.addEventListener("click",resetTudo);
+    document.getElementById("resetAllConfig").addEventListener("click",resetTudo);
 
     function abrirFullscreenModal(){
       r.fullscreenModal.classList.add("open");
@@ -592,6 +619,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     });
 
     aplicarPaleta();
+    marcarPreset(presetDosValores());
     atualizarControles();
     resetar();
   </script>
@@ -609,5 +637,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 .metric:has(#rpm){--reference-accent:var(--c-fr,#b1d4f4)!important}
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>

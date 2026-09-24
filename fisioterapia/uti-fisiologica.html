@@ -485,6 +485,24 @@ select{
 .c-fc{color:#3dff7f}.c-pa{color:#ff6b5a}.c-sat{color:#39d5ff}.c-co2{color:#ffd23f}
 .c-pvc{color:#c29bff}.c-dc{color:#9ff0c7}.c-diur{color:#ffe08a}.c-lac{color:#ffb3b3}
 .c-k{color:#f0c36d}.c-na{color:#7ec8d0}.c-temp{color:#f2f2f2}.c-vs{color:#3dff7f}
+/* o monitor não pode alargar a coluna do grid no celular */
+.cel-mon,.cel-ctrl,.cel-labs,.painel,.monitor,#monitor{min-width:0;max-width:100%;box-sizing:border-box}
+.faixa{grid-template-columns:repeat(5,minmax(0,1fr))}
+.faixa div{min-width:0}
+.lab-winter{flex:2 1 180px}
+.lab-winter em{white-space:normal}
+@media(max-width:480px){
+  .canal{grid-template-columns:minmax(0,1fr) 112px}
+  .num{padding:6px 8px}
+  .num .g{font-size:28px}
+  .faixa div{padding:6px 5px}
+  .faixa .l{font-size:9.5px;letter-spacing:.02em}
+  .faixa .v{font-size:17px}
+  .faixa .v small{display:block;margin-left:0;font-size:9.5px}
+  .tendencias{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+.tend{min-width:0}
+.tend .l{flex-wrap:wrap;gap:0 4px}
 
 </style>
 </head>
@@ -585,6 +603,7 @@ select{
         <div class="drogaBtn"><div><b>Furosemida 40 mg</b><div class="dica">Bloqueia o NKCC2 na alça de Henle. Mais Na⁺, K⁺ e água na urina, e o rim perde a capacidade de concentrar. Precisa de filtração para agir.</div></div><button class="btn acao" data-acao="furosemida">Dar</button></div>
         <div class="drogaBtn"><div><b>Gluconato de cálcio 10%</b><div class="dica">Não baixa o K⁺: restaura a margem entre o potencial de repouso e o limiar e protege o miocárdio por 30–60 min. Também ↑ contratilidade.</div></div><button class="btn acao" data-acao="calcio">Dar</button></div>
         <div class="drogaBtn"><div><b>Insulina 10 U + glicose 50%</b><div class="dica">A insulina ativa a Na⁺/K⁺-ATPase e empurra K⁺ para dentro das células (−1 mEq/L em ~30 min). A glicose evita a hipoglicemia, mas dura menos que a insulina.</div></div><button class="btn acao" data-acao="insulinaGlicose">Dar</button></div>
+        <div class="drogaBtn"><div><b>Salbutamol 10 mg nebulizado</b><div class="dica">β₂-agonista: ativa a Na⁺/K⁺-ATPase e desloca K⁺ para dentro das células (−0,5 a −1 mEq/L; início em ~30 min, pico em 60–90 min, efeito por 2–4 h). Soma-se à insulina e não retira K⁺ do corpo. Causa taquicardia.</div></div><button class="btn acao" data-acao="salbutamol">Dar</button></div>
         <div class="drogaBtn"><div><b>Glicose 50% 50 mL</b><div class="dica">25 g de glicose.</div></div><button class="btn acao" data-acao="glicose">Dar</button></div>
         <div class="drogaBtn"><div><b>Bicarbonato de sódio 8,4% 50 mL</b><div class="dica">50 mEq de HCO₃⁻ e 50 mEq de Na⁺. O tampão libera CO₂: se a ventilação não aumentar, a PaCO₂ sobe.</div></div><button class="btn acao" data-acao="bicarbonato">Dar</button></div>
       </div>
@@ -723,6 +742,7 @@ select{
           <dt>HCO₃⁻</dt><dd>Bicarbonato. Componente metabólico do pH.</dd>
           <dt>BE</dt><dd>Excesso de base. Negativo = acidose metabólica.</dd>
           <dt>AG</dt><dd>Ânion gap = Na⁺ − Cl⁻ − HCO₃⁻. Sobe com lactato.</dd>
+          <dt>Winter</dt><dd>PaCO₂ esperada na acidose metabólica = 1,5 × HCO₃⁻ + 8 ± 2. Acima dela há acidose respiratória associada; abaixo, alcalose respiratória. No ventilador em modo controlado, quem compensa é o ajuste de FR × VT.</dd>
           <dt class="c-sat">P/F</dt><dd>PaO₂/FiO₂. Relação de oxigenação (SDRA quando cai).</dd>
           <dt class="c-co2">FiO₂</dt><dd>Fração inspirada de oxigênio no ventilador.</dd>
           <dt class="c-co2">VT</dt><dd>Volume corrente (mL por ciclo).</dd>
@@ -778,7 +798,9 @@ select{
 'use strict';
 const M = window.UTIMotor;
 const $ = id => document.getElementById(id);
-const fmt = (x, d = 0) => (x == null || !isFinite(x)) ? '--' : Number(x).toFixed(d).replace('.', ',');
+const fmt = (x, d = 0) => (x == null || !isFinite(x)) ? '--' : Number(x).toFixed(d).replace(/^-(0[.,]?0*)$/, '$1').replace('.', ',');
+// saída de líquido com sinal de menos, sem "−0,00" quando a saída arredonda para zero
+const saida = (x, d) => (Math.abs(x) < 0.5 * Math.pow(10, -d) ? '' : '−') + fmt(Math.abs(x), d);
 const hhmm = min => { const m = Math.max(0, Math.floor(min)); return String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 
@@ -883,7 +905,8 @@ function rotulosControles() {
   $('oVt').textContent = c.vt + ' mL';
   $('oFr').textContent = c.fr + ' irpm';
   $('oUf').textContent = c.ufTaxa + ' mL/h';
-  $('vtDica').textContent = `${fmt(c.vt / 65, 1)} mL/kg de peso predito (65 kg). Volume grande em pulmão rígido estoura a pressão de platô e lesa alvéolos.`;
+  const sc = M.CENARIOS[s.cenario];
+  $('vtDica').textContent = `${fmt(c.vt / s.pbw, 1)} mL/kg de peso predito (${fmt(s.pbw, 0)} kg: ${sc.sexo === 'F' ? 'mulher' : 'homem'} de ${fmt(sc.altura / 100, 2)} m, ARDSNet). Volume grande em pulmão rígido estoura a pressão de platô e lesa alvéolos.`;
 }
 document.querySelectorAll('[data-acao]').forEach(b => b.onclick = () => { if (!s) return; M.executar(s, b.dataset.acao); atualizarTudo(true); });
 document.querySelectorAll('#abas button').forEach(b => b.onclick = () => {
@@ -921,7 +944,18 @@ const LABS = [
 ];
 function montarLabs() {
   $('labs').innerHTML = LABS.map(([g, itens], gi) => `<div class="grupo"><h3>${g}</h3>${itens.map((it, i) =>
-    `<div class="lab"><b>${it[0]}</b><span id="lab${gi}_${i}">--</span><em>${it[3] != null ? 'ref ' + fmt(it[3], it[2]) + '–' + fmt(it[4], it[2]) + ' ' + it[7] : ''}</em></div>`).join('')}</div>`).join('');
+    `<div class="lab"><b>${it[0]}</b><span id="lab${gi}_${i}">--</span><em>${it[3] != null ? 'ref ' + fmt(it[3], it[2]) + '–' + fmt(it[4], it[2]) + ' ' + it[7] : ''}</em></div>`).join('')}${gi === 0 ? '<div class="lab lab-winter"><b>PaCO₂ esperada (Winter)</b><span id="labWinter">--</span><em id="labWinterTxt">1,5 × HCO₃⁻ + 8 ± 2</em></div>' : ''}</div>`).join('');
+}
+// Winter: só se aplica à acidose metabólica. No ventilador controlado a compensação não é espontânea.
+function atualizarWinter() {
+  const v = s.v, el = $('labWinter'), txt = $('labWinterTxt');
+  if (!el) return;
+  if (v.hco3 >= 22) { el.textContent = '—'; el.className = ''; txt.textContent = 'sem acidose metabólica'; return; }
+  const esp = v.paco2Winter, pa = s.paco2;
+  el.textContent = fmt(esp, 0) + ' ± 2';
+  if (pa > esp + 2) { el.className = 'alto'; txt.textContent = `PaCO₂ ${fmt(pa, 0)} acima: acidose respiratória associada (distúrbio misto) · ↑ volume-minuto`; }
+  else if (pa < esp - 2) { el.className = 'baixo'; txt.textContent = `PaCO₂ ${fmt(pa, 0)} abaixo: alcalose respiratória associada (distúrbio misto)`; }
+  else { el.className = ''; txt.textContent = `PaCO₂ ${fmt(pa, 0)}: compensação respiratória adequada`; }
 }
 function atualizarLabs() {
   const v = s.v;
@@ -936,6 +970,7 @@ function atualizarLabs() {
     el.textContent = fmt(x, it[2]) + seta;
     el.className = cls;
   }));
+  atualizarWinter();
 }
 
 // ============================================================ painéis fisiologia
@@ -953,11 +988,11 @@ function atualizarPaineis() {
   const bal = M.balanco(s);
   $('pAgua').innerHTML =
     par('Entradas', fmt(b.entrada / 1000, 2) + ' L') +
-    par('Diurese', '−' + fmt(b.diurese / 1000, 2) + ' L') +
-    par('Perdas insensíveis', '−' + fmt(b.insensivel / 1000, 2) + ' L') +
-    (b.sangue > 0 ? par('Sangramento', '−' + fmt(b.sangue / 1000, 2) + ' L') : '') +
-    (b.uf > 0 ? par('Ultrafiltração', '−' + fmt(b.uf / 1000, 2) + ' L') : '') +
-    par('Balanço do plantão', (bal >= 0 ? '+' : '') + fmt(bal / 1000, 2) + ' L') +
+    par('Diurese', saida(b.diurese / 1000, 2) + ' L') +
+    par('Perdas insensíveis', saida(b.insensivel / 1000, 2) + ' L') +
+    (b.sangue > 0 ? par('Sangramento', saida(b.sangue / 1000, 2) + ' L') : '') +
+    (b.uf > 0 ? par('Ultrafiltração', saida(b.uf / 1000, 2) + ' L') : '') +
+    par('Balanço do plantão', (bal / 1000 >= 0.005 ? '+' : '') + fmt(bal / 1000, 2) + ' L') +
     par('Volemia', fmt(v.vs, 2) + ' L', 'normal ~5 L; traço branco = normal');
   $('pCirc').innerHTML =
     par('P. média de enchimento', fmt(v.pmsf, 1) + ' mmHg', 'volume estressado ÷ complacência venosa') +

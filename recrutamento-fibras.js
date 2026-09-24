@@ -78,8 +78,8 @@ window.createMotorFiberResponse = function(root) {
           }
         }
       }
-      // A bounded, gradual sum preserves differences between isolated and repeated responses.
-      const level=(response/(.25+response))*Math.max(0,Math.min(1,peripheral));
+      // Soma temporal limitada: um abalo isolado chega a ~15% da resposta tetânica; disparos repetidos somam-se até a fusão.
+      const level=Math.min(1,.15*response)*Math.max(0,Math.min(1,peripheral));
       group.reaction.dataset.activation=level.toFixed(4);
       group.reaction.setAttribute('opacity',level>0?1:0);
       group.soma.setAttribute('opacity',reducedMotion.matches?0:(somaLevel*.45).toFixed(3));

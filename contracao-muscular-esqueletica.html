@@ -383,7 +383,7 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
 
     <label>Velocidade
       <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2">
-      <span id="speedLabel">1.2x</span>
+      <span id="speedLabel">1,2×</span>
     </label>
 
     <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
@@ -466,7 +466,7 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
 
   <div class="legend">
     <div class="legend-text">
-      <p><b>Leitura do gráfico:</b> as linhas são construídas durante a reprodução. O <span style="color:var(--c-ca)">Ca²⁺</span> sobe antes das <span style="color:var(--c-pontes)">pontes cruzadas</span>, que o acompanham com atraso; a força surge por último. Em um abalo isolado o <span style="color:var(--c-ca)">Ca²⁺</span> é recaptado antes que a força alcance o máximo; no tétano, estímulos repetidos mantêm o <span style="color:var(--c-ca)">Ca²⁺</span> alto e a força soma-se até cerca de 2–3× o pico do abalo. A contração tetânica fisiológica (voluntária) é essa mesma somação de PAs de alta frequência; o estado “Infecção por <em>Clostridium tetani</em>” mostra a somação desencadeada de forma patológica, pela perda da inibição sobre o motoneurônio α. Força e pontes usam 100 = máximo tetânico; o encurtamento mostrado no sarcômero é uma variável separada da força.</p>
+      <p><b>Leitura do gráfico:</b> as linhas são construídas durante a reprodução. O <span style="color:var(--c-ca)">Ca²⁺</span> sobe antes das <span style="color:var(--c-pontes)">pontes cruzadas</span>, que o acompanham com atraso; a força surge por último. A força medida fora da fibra depende do estiramento do <b>elemento elástico em série</b> (tendão, discos Z, filamentos e as próprias pontes): as pontes precisam primeiro estirá-lo. Em um abalo isolado o <span style="color:var(--c-ca)">Ca²⁺</span> é recaptado antes que esse estiramento se complete — as pontes chegam a ser bastante recrutadas, mas a força atinge só ≈ 15–20% da tetânica. No tétano, estímulos repetidos mantêm o <span style="color:var(--c-ca)">Ca²⁺</span> alto por tempo suficiente para estirar o elemento elástico e a força soma-se até ~5–7× o pico do abalo (abalo ≈ 15–20% da força tetânica); a relação força–frequência é sigmoide. A contração tetânica fisiológica (voluntária) é essa mesma somação de PAs de alta frequência; o estado “Infecção por <em>Clostridium tetani</em>” mostra a somação desencadeada de forma patológica, pela perda da inibição sobre o motoneurônio α. Força e pontes usam 100 = máximo tetânico; o encurtamento do sarcômero mostrado é o de uma contração com extremidades fixas (isométrica): os sarcômeros encurtam internamente à custa do estiramento do elemento elástico em série e, por isso, acompanham a força da fibra; com carga menor o encurtamento seria maior.</p>
       <p>Modelo esquemático em tempo relativo, com etapas ampliadas para ensino. Em um músculo real as etapas se sobrepõem e milhares de cabeças de miosina ciclam de forma assíncrona; o detalhe molecular acompanha um ciclo representativo. O sarcômero está em escala (músculo esquelético humano): filamento grosso 1,6 µm, filamento fino ≈ 1,27 µm de cada lado da linha Z, repouso ≈ 2,7 µm, dentro do platô de sobreposição ótima (≈ 2,64–2,81 µm). Zona H = sarcômero − 2 × filamento fino; banda I = sarcômero − 1,6 µm.</p>
       <b>Repouso:</b> <span style="color:var(--c-tropomiosina)">tropomiosina</span> cobre os sítios da <span style="color:var(--c-actina)">actina</span>; a cabeça de <span style="color:var(--c-miosina)">miosina</span> está engatilhada (ADP + Pi).
       <b>Excitação:</b> a ACh ativa receptores nicotínicos da placa motora; o potencial de placa dispara o PA no sarcolema, que entra nos túbulos T. O DHPR abre mecanicamente o RyR1 e o retículo sarcoplasmático libera <span style="color:var(--c-ca)">Ca²⁺</span>.
@@ -523,40 +523,40 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
 
   // Cada estágio corresponde a um marcador próprio na linha do tempo (mesmo índice).
   const stages = [
-    {name:"Repouso",short:"Repouso",start:0,end:60,color:STD_COLORS.fase,
+    {name:"Repouso",short:"Repouso",start:0,end:40,color:STD_COLORS.fase,
       desc:"Sem estímulo: a tropomiosina cobre os sítios de ligação da actina; as cabeças de miosina estão engatilhadas (ADP + Pi).",
       ca:"Ca²⁺ basal · ATP disponível",caDesc:"A SERCA mantém o Ca²⁺ citosólico baixo.",
       event:"Sarcômero em repouso",eventDesc:"Sem Ca²⁺ na troponina C, a miosina não alcança a actina."},
-    {name:"Potencial de ação no sarcolema",short:"PA",start:61,end:110,color:"#94a3b8",
+    {name:"Potencial de ação no sarcolema",short:"PA",start:41,end:75,color:"#94a3b8",
       desc:"A ACh liberada na placa motora abre os receptores nicotínicos; o potencial de placa atinge o limiar e dispara o PA, que se propaga pelo sarcolema.",
       ca:"Ca²⁺ ainda baixo · ATP disponível",caDesc:"O evento elétrico precede a resposta mecânica.",
       event:"Excitação da fibra",eventDesc:"Canais de Na⁺ dependentes de voltagem propagam o PA nos dois sentidos da fibra."},
-    {name:"Túbulos T: DHPR → RyR1",short:"Túbulos T",start:111,end:150,color:"#8b9fd8",
+    {name:"Túbulos T: DHPR → RyR1",short:"Túbulos T",start:76,end:105,color:"#8b9fd8",
       desc:"O PA penetra nos túbulos T; o receptor de di-hidropiridina (DHPR), sensor de voltagem, muda de conformação e abre mecanicamente o RyR1 do retículo sarcoplasmático.",
       ca:"Ca²⁺ ainda baixo · ATP disponível",caDesc:"No músculo esquelético o acoplamento DHPR–RyR1 é mecânico: não depende da entrada de Ca²⁺ extracelular.",
       event:"Acoplamento excitação–contração",eventDesc:"Na tríade, o túbulo T fica entre duas cisternas terminais do retículo sarcoplasmático."},
-    {name:"Liberação de Ca²⁺",short:"Ca²⁺",start:151,end:220,color:STD_COLORS.calcio,
+    {name:"Liberação de Ca²⁺",short:"Ca²⁺",start:106,end:150,color:STD_COLORS.calcio,
       desc:"Com o RyR1 aberto, o Ca²⁺ sai do retículo sarcoplasmático para o citosol.",
       ca:"Ca²⁺ subindo · ATP disponível",caDesc:"O Ca²⁺ citosólico aumenta muitas vezes em poucos milissegundos.",
       event:"Aumento do Ca²⁺ citosólico",eventDesc:"O Ca²⁺ difunde até os filamentos finos."},
-    {name:"Ca²⁺ liga-se à troponina C",short:"Troponina C",start:221,end:300,color:STD_COLORS.troponina,
+    {name:"Ca²⁺ liga-se à troponina C",short:"Troponina C",start:151,end:200,color:STD_COLORS.troponina,
       desc:"A troponina C muda de conformação e a tropomiosina se desloca, expondo os sítios de ligação da actina.",
       ca:"Ca²⁺ alto · ATP disponível",caDesc:"A troponina C é o sensor de Ca²⁺ do filamento fino.",
       event:"Sítios da actina expostos",eventDesc:"O bloqueio estérico exercido pela tropomiosina é removido."},
-    {name:"Ponte cruzada: ligação à actina",short:"Ligação",start:301,end:380,color:"#14b8a6",
+    {name:"Ponte cruzada: ligação à actina",short:"Ligação",start:201,end:250,color:"#14b8a6",
       desc:"A cabeça de miosina engatilhada (ADP + Pi) liga-se ao sítio exposto da actina.",
       ca:"Ca²⁺ alto, começando a cair · ATP disponível",caDesc:"O RyR1 fecha após o PA e a SERCA recapta o Ca²⁺ continuamente.",
       event:"Ligação actina–miosina",eventDesc:"Início do ciclo das pontes cruzadas."},
-    {name:"Golpe de força (liberação de Pi)",short:"Golpe (Pi)",start:381,end:470,color:STD_COLORS.miosina,
+    {name:"Golpe de força (liberação de Pi)",short:"Golpe (Pi)",start:251,end:300,color:STD_COLORS.miosina,
       desc:"A liberação do Pi desencadeia a rotação da cabeça, que puxa o filamento fino em direção à linha M; ao final, o ADP sai (estado de rigor momentâneo).",
       ca:"Ca²⁺ em queda · ATP disponível",caDesc:"A energia do golpe vem da hidrólise do ATP feita antes, no engatilhamento da cabeça.",
       event:"Deslizamento dos filamentos",eventDesc:"As linhas Z se aproximam: banda I e zona H encurtam; a banda A permanece constante."},
-    {name:"Ligação do ATP e recarga",short:"ATP / recarga",start:471,end:560,color:STD_COLORS.atp,
+    {name:"Ligação do ATP e recarga",short:"ATP / recarga",start:301,end:350,color:STD_COLORS.atp,
       desc:"Um novo ATP liga-se e desliga a cabeça da actina; a hidrólise (ATP → ADP + Pi) reengatilha a cabeça. O ciclo se repete enquanto houver Ca²⁺ na troponina C.",
       ca:"Ca²⁺ livre em queda · ATP consumido",caDesc:"O Ca²⁺ ainda ligado à troponina C sustenta novos ciclos; o ATP desliga a cabeça em cada ciclo, mas o relaxamento depende da remoção do Ca²⁺.",
       event:"Ciclos sucessivos das pontes",eventDesc:"Cabeças diferentes estão em fases diferentes do ciclo; a força é a soma delas."},
-    {name:"Recaptação de Ca²⁺ (SERCA) e relaxamento",short:"SERCA · relaxamento",start:561,end:900,color:STD_COLORS.actina,
-      desc:"A SERCA bombeia o Ca²⁺ de volta ao retículo gastando ATP; o Ca²⁺ sai da troponina C, a tropomiosina volta a cobrir os sítios e novas pontes não se formam.",
+    {name:"Recaptação de Ca²⁺ (SERCA) e relaxamento",short:"SERCA · relaxamento",start:351,end:900,color:STD_COLORS.actina,
+      desc:"A SERCA bombeia o Ca²⁺ de volta ao retículo gastando ATP; o Ca²⁺ sai da troponina C, a tropomiosina volta a cobrir os sítios e novas pontes não se formam. O pico de força do abalo ocorre logo no início desta fase, limitado pelo elemento elástico em série, e depois a força cai.",
       ca:"Ca²⁺ caindo ao basal · ATP usado pela SERCA",caDesc:"O relaxamento também depende de ATP: a SERCA gasta ATP para recaptar o Ca²⁺.",
       event:"Relaxamento",eventDesc:"Sem novas pontes, a força cai e o sarcômero retorna ao comprimento de repouso."}
   ];
@@ -588,38 +588,43 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
   // Ca²⁺ citosólico: sobe com a abertura do RyR1 e cai pela recaptação da SERCA.
   function calciumAt(f){
     if (noExcitation()) return CALCIUM_BASELINE;
-    const rise = smooth((f-150)/80);
+    const rise = smooth((f-106)/40);
     if (tetanoMode()){
       // PAs repetidos liberam Ca²⁺ antes de a SERCA removê-lo: Ca²⁺ sustentado (pequena ondulação).
-      const ripple = f > 150 ? 0.92 + 0.08*Math.cos(2*Math.PI*(f-150)/40) : 1;
+      const ripple = f > 106 ? 0.92 + 0.08*Math.cos(2*Math.PI*(f-106)/40) : 1;
       return CALCIUM_BASELINE + CALCIUM_SPAN*rise*ripple;
     }
     if (rigorMode()) return CALCIUM_BASELINE + CALCIUM_SPAN*rise; // sem ATP, a SERCA não recapta
-    const amplitude = ryrBlockMode() ? 0.8 : 1; // miastenia: Ca²⁺ normal nas fibras que disparam
-    const reuptake = smooth((f-300)/360);
+    const amplitude = ryrBlockMode() ? 0.28 : 1; // dantroleno: liberação ≈ 28% do normal; miastenia: Ca²⁺ normal nas fibras que disparam
+    const reuptake = smooth((f-220)/180);
     return CALCIUM_BASELINE + CALCIUM_SPAN*amplitude*rise*(1-reuptake);
   }
 
   function myastheniaFraction(){ return Math.max(0.2, 0.55*Math.pow(0.8, stimulusCount)); }
 
-  // Séries pré-calculadas: troponina C segue o Ca²⁺; pontes seguem a troponina com atraso
-  // (relação Ca²⁺–força cooperativa); a força sobe devagar (elementos elásticos em série) e cai
-  // mais depressa no relaxamento. Por isso um abalo isolado não atinge o máximo tetânico.
-  const DELAY = 40, TAU_TN = 40, TAU_BRIDGE = 45, COOPERATIVITY = 6, TAU_FORCE_UP = 280, TAU_FORCE_DOWN = 60;
+  // Séries pré-calculadas: troponina C segue o Ca²⁺; pontes seguem a troponina com atraso (relação
+  // Ca²⁺–força cooperativa). No abalo o Ca²⁺ é recaptado antes que o elemento elástico em série seja
+  // estirado: as pontes são bastante recrutadas, mas a força externa chega a ~15–20% da tetânica.
+  const DELAY = 25, TAU_TN = 25, TAU_BRIDGE = 25, COOPERATIVITY = 6, SEC_STAGES = 4, TAU_SEC = 80, K_TNC = 0.2;
   function rawSeries(){
     const n = TOTAL + 1, ca = new Float32Array(n), tn = new Float32Array(n), br = new Float32Array(n), fo = new Float32Array(n);
-    let t = 0, b = 0, F = 0;
+    let t = 0, b = 0; const sec = new Float64Array(SEC_STAGES);
     for (let f=0; f<n; f++){
       ca[f] = calciumAt(f);
-      const occ = clamp((ca[f]-CALCIUM_BASELINE)/(0.92*CALCIUM_SPAN), 0, 1);
+      // Ligação do Ca²⁺ à troponina C: saturável (hiperbólica), normalizada para 1 no Ca²⁺ máximo.
+      const c = clamp((ca[f]-CALCIUM_BASELINE)/(0.92*CALCIUM_SPAN), 0, 1);
+      const occ = c*(1+K_TNC)/(K_TNC + c);
       t += (occ - t)/TAU_TN; tn[f] = t;
       const drive = f >= DELAY ? Math.pow(tn[f-DELAY], COOPERATIVITY) : 0;
       if (rigorMode()) b = Math.max(b, b + (drive - b)/TAU_BRIDGE); // sem ATP as pontes não se desfazem
       else b += (drive - b)/TAU_BRIDGE;
       br[f] = b;
-      const target = rigorMode() ? 0.45*b : b;
-      F += (target - F)/(target > F ? TAU_FORCE_UP : TAU_FORCE_DOWN);
-      fo[f] = F;
+      // Elemento elástico em série: a tensão externa só aparece à medida que ele é estirado
+      // (cadeia de atrasos → subida sigmoide). A força nunca excede o que as pontes ligadas sustentam.
+      const cap = rigorMode() ? 0.45*b : b;
+      let x = cap;
+      for (let i=0; i<SEC_STAGES; i++){ sec[i] += (x - sec[i])/TAU_SEC; sec[i] = Math.min(sec[i], cap); x = sec[i]; }
+      fo[f] = x;
     }
     return {ca, tn, br, fo};
   }
@@ -644,7 +649,9 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
       br[f] = Math.min(100, 100*r.br[f]/norm);
       const F = Math.min(1, r.fo[f]/norm);
       fo[f] = 100*F*k;
-      sh[f] = clamp(rigorMode() ? Math.min(0.15, F) : F, 0, 1);
+      // Contração com extremidades fixas: os sarcômeros encurtam internamente estirando o elemento
+      // elástico em série; esse encurtamento é proporcional à força da fibra mostrada.
+      sh[f] = clamp(F, 0, 1);
     }
     series = {ca:r.ca, tn:r.tn, br, fo, sh}; seriesKey = key;
     return series;
@@ -707,10 +714,10 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
       v.eventDesc = 'A maquinaria contrátil está íntegra, mas não recebe o comando.';
     } else if (ryrBlockMode()){
       if (i >= 3){
-        v.name = [0,0,0,'Liberação de Ca²⁺ reduzida','Pouca troponina C ocupada','Poucas pontes cruzadas','Golpe de força em poucas pontes','Ciclo em poucas pontes','Recaptação de Ca²⁺ e relaxamento'][i];
+        v.name = [0,0,0,'Liberação de Ca²⁺ reduzida','Troponina C parcialmente ocupada','Poucas pontes cruzadas','Golpe de força em poucas pontes','Ciclo em poucas pontes','Recaptação de Ca²⁺ e relaxamento'][i];
         v.desc = 'O dantroleno inibe o RyR1: o PA e os túbulos T funcionam normalmente, mas pouco Ca²⁺ sai do retículo e poucos sítios da actina são expostos.';
         v.ca = 'Ca²⁺ pouco elevado · ATP disponível';
-        v.caDesc = 'Liberação de Ca²⁺ do retículo reduzida, com PA normal.';
+        v.caDesc = 'Liberação de Ca²⁺ do retículo reduzida a cerca de 28% do normal, com PA normal.';
         v.event = 'Força muito reduzida';
         v.eventDesc = 'Poucas pontes cruzadas se formam.';
       } else if (i >= 1){
@@ -737,7 +744,7 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
     } else if (tetanoMode()){
       if (i === 1){ v.name = 'PAs em série no sarcolema'; v.desc = 'A toxina tetânica bloqueia a liberação de GABA e glicina dos interneurônios inibitórios da medula: o motoneurônio α dispara em alta frequência.'; }
       if (i === 7){ v.name = 'Ciclo se repete: Ca²⁺ mantido por novos PAs'; }
-      if (i === 8){ v.name = 'Somação: sem relaxamento (contração tetânica)'; v.desc = 'Cada novo PA libera Ca²⁺ antes que a SERCA o remova: o Ca²⁺ permanece alto, as pontes continuam ciclando e a força soma-se até cerca de 2–3× a de um abalo. A contração voluntária usa a mesma somação; aqui ela é involuntária e patológica.'; }
+      if (i === 8){ v.name = 'Somação: sem relaxamento (contração tetânica)'; v.desc = 'Cada novo PA libera Ca²⁺ antes que a SERCA o remova: o Ca²⁺ permanece alto, as pontes continuam ciclando e, com tempo para estirar o elemento elástico em série, a força soma-se até ~5–7× a de um abalo (abalo ≈ 15–20% da força tetânica). A contração voluntária usa a mesma somação; aqui ela é involuntária e patológica.'; }
       if (i >= 3){ v.ca = 'Ca²⁺ sustentado · ATP consumido'; v.caDesc = 'A SERCA funciona, mas os PAs repetidos liberam Ca²⁺ continuamente.'; }
       if (i >= 5){ v.event = 'Contração tetânica (espasmo)'; v.eventDesc = 'Força e pontes permanecem elevadas enquanto os disparos continuam.'; }
     }
@@ -787,14 +794,17 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
   }
 
   // Um ciclo representativo de uma cabeça; no tétano o ciclo se repete enquanto o Ca²⁺ está alto.
+  const S = stages.map(st => st.start); // S[5] ligação, S[6] golpe, S[7] ATP, S[8] SERCA
+  const T_PI = S[6] + 0.6*(S[7]-S[6]), T_ATP_ON = S[7] + 0.45*(S[8]-S[7]);
   function molecularState(f){
-    if (tetanoMode() && f > 301) f = 301 + (f-301) % 260;
+    if (tetanoMode() && f > S[5]) f = S[5] + (f-S[5]) % (S[8]-S[5]);
     const blocked = noExcitation();
-    const activation = blocked ? 0 : clamp(getTroponin(frame)/0.6, 0, 1);
-    const bind = blocked ? 0 : clamp((f-301)/45, 0, 1);
-    const stroke = blocked ? 0 : clamp((f-381)/60, 0, 1);
-    const release = rigorMode() ? 0 : clamp((f-471)/40, 0, 1);
-    const attached = !blocked && f >= 346 && (rigorMode() || f <= 491);
+    // Deslocamento efetivo da tropomiosina: cooperativo em relação à ocupação da troponina C.
+    const activation = blocked ? 0 : clamp(Math.pow(getTroponin(frame), 3)/0.6, 0, 1);
+    const bind = blocked ? 0 : clamp((f-S[5])/(0.6*(S[6]-S[5])), 0, 1);
+    const stroke = blocked ? 0 : clamp((f-S[6])/(0.7*(S[7]-S[6])), 0, 1);
+    const release = rigorMode() ? 0 : clamp((f-S[7])/(0.45*(S[8]-S[7])), 0, 1);
+    const attached = !blocked && f >= S[5] + 0.6*(S[6]-S[5]) && (rigorMode() || f <= S[7] + 0.25*(S[8]-S[7]));
     return {activation, bind, stroke, release, attached, blocked, localFrame:f};
   }
 
@@ -864,7 +874,7 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
     box(20,328,880,265);
     // Coordenadas materiais: o mesmo sítio da actina move-se com o filamento fino durante o golpe.
     const f=m.localFrame;
-    const recovery=rigorMode()||tetanoMode()?0:smooth((frame-600)/220);
+    const recovery=rigorMode()||tetanoMode()?0:smooth((frame-S[8]-60)/200);
     const slide=24*m.stroke*(1-recovery);
     const base=75+slide,actinY=407,spacing=18;
     const helix=x=>Math.sin(x/spacing*Math.PI/3.5)*6;
@@ -907,16 +917,16 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
       heads.push({attached:!disabled&&m.attached,siteX,tipX,tipY,siteY:face,leverLength:Math.hypot(dx,wristY-pivotY)});
     }
     window.__muscleGeometry={heads,activation:m.activation,slide,zL,zR,sarcomereLength:SL,hZone:hUm,iBand:SL-1.6,aBand:1.6};
-    const relaxing=!rigorMode()&&!tetanoMode()&&frame>560;
+    const relaxing=!rigorMode()&&!tetanoMode()&&frame>S[8];
     let energy;
     if(m.blocked) energy='ADP + Pi · cabeça engatilhada, sem ligação';
-    else if(rigorMode()&&f>=471) energy='ADP liberado e sem ATP · cabeça presa no estado de rigor';
+    else if(rigorMode()&&f>=S[7]) energy='ADP liberado e sem ATP · cabeça presa no estado de rigor';
     else if(relaxing) energy='ADP + Pi · cabeça engatilhada, aguardando novo estímulo';
-    else if(f<301) energy='ADP + Pi · cabeça engatilhada (ATP já hidrolisado)';
-    else if(f<381) energy='ADP + Pi na cabeça · ligação à actina';
-    else if(f<441) energy='Pi é liberado → golpe de força';
-    else if(f<471) energy='ADP é liberado · rigor momentâneo';
-    else if(f<511) energy='ATP liga-se → cabeça desliga-se da actina';
+    else if(f<S[5]) energy='ADP + Pi · cabeça engatilhada (ATP já hidrolisado)';
+    else if(f<S[6]) energy='ADP + Pi na cabeça · ligação à actina';
+    else if(f<T_PI) energy='Pi é liberado → golpe de força';
+    else if(f<S[7]) energy='ADP é liberado · rigor momentâneo';
+    else if(f<T_ATP_ON) energy='ATP liga-se → cabeça desliga-se da actina';
     else energy='ATP → ADP + Pi · hidrólise reengatilha a cabeça';
     let energyX=40;
     energy.split(/(ADP|ATP|Pi)/).forEach(part=>{const color=part==='ATP'?STD_COLORS.atp:part==='ADP'?'#a6c5ee':part==='Pi'?'#d8cb9a':'#d8e5ef';text(part,energyX,MOB?540:536,color,fs(14));energyX+=ctx.measureText(part).width;});
@@ -927,13 +937,13 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
     }
     let caption;
     if(m.blocked) caption='Sem Ca²⁺ na troponina C: sítios cobertos · sem pontes cruzadas';
-    else if(rigorMode()&&f>=471) caption='Sem ATP: a cabeça permanece ligada; sem relaxamento';
+    else if(rigorMode()&&f>=S[7]) caption='Sem ATP: a cabeça permanece ligada; sem relaxamento';
     else if(relaxing) caption='SERCA recapta o Ca²⁺: a tropomiosina volta a cobrir os sítios';
-    else if(f<151) caption='Repouso: a tropomiosina cobre os sítios de ligação da actina';
-    else if(f<221) caption='O Ca²⁺ liberado pelo retículo aproxima-se do filamento fino';
-    else if(f<301) caption='Ca²⁺ na troponina C desloca a tropomiosina e expõe os sítios';
-    else if(f<381) caption='Ligação: a cabeça encontra um sítio exposto';
-    else if(f<471) caption='Golpe: o sítio e a cabeça ligada deslocam-se juntos';
+    else if(f<S[3]) caption='Repouso: a tropomiosina cobre os sítios de ligação da actina';
+    else if(f<S[4]) caption='O Ca²⁺ liberado pelo retículo aproxima-se do filamento fino';
+    else if(f<S[5]) caption='Ca²⁺ na troponina C desloca a tropomiosina e expõe os sítios';
+    else if(f<S[6]) caption='Ligação: a cabeça encontra um sítio exposto';
+    else if(f<S[7]) caption='Golpe: o sítio e a cabeça ligada deslocam-se juntos';
     else caption='Novo ciclo: repete-se enquanto houver Ca²⁺ na troponina C';
     text(caption,40,MOB?578:567,'#d0e1ec',fs(14));
     text(MOB?'Sarcômero em escala; detalhe molecular ampliado.':'Ampliação esquemática: sarcômero em escala (290 px = 1 µm); detalhe molecular em outra escala.',24,MOB?626:616,'#8da9bc',fs(12));
@@ -1056,12 +1066,12 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
       gctx.textAlign = 'start';
     };
     if (rigorMode()) note('Sem ATP: as pontes não se desfazem e a SERCA não recapta o Ca²⁺ — sem relaxamento.', '#f87171');
-    else if (ryrBlockMode()) note('RyR1 bloqueado: PA normal, pouca liberação de Ca²⁺ → poucas pontes e força baixa.', '#ff9b42');
+    else if (ryrBlockMode()) note('Dantroleno: PA normal, liberação de Ca²⁺ ≈ 28% do normal → poucas pontes e força muito baixa.', '#ff9b42');
     else if (myastheniaMode()) note(`Miastenia: Ca²⁺ e pontes normais nas fibras que disparam; só ~${Math.round(myastheniaFraction()*100)}% disparam → força menor.`, '#70bcff');
     else if (botulismoMode()) note('Toxina botulínica: sem liberação de ACh → sem PA, Ca²⁺ basal e força nula.', '#c4a2f6');
-    else if (tetanoMode()) note('Tétano: PAs repetidos mantêm o Ca²⁺ alto → força somada acima do pico de um abalo.', '#ff8990');
+    else if (tetanoMode()) note('Tétano: Ca²⁺ sustentado estira o elemento elástico em série → força ~5–7× a de um abalo.', '#ff8990');
     else if (curareMode()) note('Curare: receptores nicotínicos bloqueados → sem PA, Ca²⁺ basal e força nula.', '#ff9b42');
-    else note('Abalo isolado: a força atinge só parte do máximo, pois o Ca²⁺ é recaptado antes.', '#a9c3d4');
+    else note('Abalo: Ca²⁺ recaptado antes de estirar o elemento elástico em série → força ≈ 15–20% da tetânica.', '#a9c3d4');
   }
 
   function render(){ updateStatus(); drawScene(); drawGraph(); }
@@ -1132,7 +1142,7 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
   btnPause.addEventListener('click', () => pauseNow(false));
   btnStep.addEventListener('click', nextStage);
   btnReset.addEventListener('click', resetAll);
-  speedRange.addEventListener('input', () => { speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x'; });
+  speedRange.addEventListener('input', () => { speedLabel.textContent = parseFloat(speedRange.value).toFixed(1).replace('.', ',') + '×'; });
   stepModeToggle.addEventListener('change', () => { if (stepModeToggle.checked && running) pauseNow(true); else stepAwaitPlay = false; render(); });
   labelsToggle.addEventListener('change', render);
   loopToggle.addEventListener('change', render);
@@ -1147,7 +1157,7 @@ h1{color:#e1eff7}.subtitle,.signature{color:#aec3d2}
 
   window.__muscleModel = {stages, pauseFrames, getCalcium, getCrossBridges, getForce, getShortening, setState:s=>{pathologyState=s;stimulusCount=0;frame=0;render();}, setFrame:f=>{frame=f;render();}};
 
-  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x';
+  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1).replace('.', ',') + '×';
   syncPathology();
   render();
 })();
@@ -1167,5 +1177,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 .status-grid .card .phase{color:#dce9f3!important}.status-grid .card .phase small,.status-grid .card .card-title{color:#adc5d7!important}
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>

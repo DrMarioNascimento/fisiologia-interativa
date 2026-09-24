@@ -215,7 +215,7 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
   <div class="selector-block">
     <div class="selector-head">
       <div class="selector-title">Selecione até 3 variáveis</div>
-      <div class="selector-sub">A variável não selecionada será calculada automaticamente para manter a coerência fisiológica.</div>
+      <div class="selector-sub">A variável não selecionada é calculada por RPT = (PAM − PVC)/DC. É uma relação algébrica instantânea: não inclui barorreflexo nem outras compensações.</div>
     </div>
     <div class="checks">
       <label class="pick"><input type="checkbox" id="pickPAS" checked> PAS</label>
@@ -242,23 +242,28 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
 
 <div class="controls">
   <label class="control"><span class="control-name">PAS</span>
-    <input id="pasRange" type="range" min="80" max="220" step="1" value="120">
-    <span id="pasLabel" class="control-value">120 mmHg</span>
+    <input id="pasRange" type="range" min="80" max="220" step="1" value="119">
+    <span id="pasLabel" class="control-value">119 mmHg</span>
   </label>
 
   <label class="control"><span class="control-name">PAD</span>
-    <input id="padRange" type="range" min="40" max="140" step="1" value="80">
-    <span id="padLabel" class="control-value">80 mmHg</span>
+    <input id="padRange" type="range" min="40" max="140" step="1" value="75">
+    <span id="padLabel" class="control-value">75 mmHg</span>
   </label>
 
   <label class="control"><span class="control-name">DC</span>
-    <input id="dcRange" type="range" min="2.0" max="20.0" step="0.1" value="5.0">
-    <span id="dcLabel" class="control-value">5.0 L/min</span>
+    <input id="dcRange" type="range" min="2.0" max="25.0" step="0.1" value="5.1">
+    <span id="dcLabel" class="control-value">5,1 L/min</span>
   </label>
 
   <label class="control"><span class="control-name">RPT</span>
-    <input id="rptRange" type="range" min="8" max="40" step="0.1" value="18.7">
-    <span id="rptLabel" class="control-value">18.7 mmHg·min/L</span>
+    <input id="rptRange" type="range" min="4" max="40" step="0.1" value="17.2">
+    <span id="rptLabel" class="control-value">17,2 mmHg·min/L</span>
+  </label>
+
+  <label class="control" title="Pressão venosa central ≈ pressão no átrio direito"><span class="control-name">PVC</span>
+    <input id="pvcRange" type="range" min="0" max="20" step="1" value="2">
+    <span id="pvcLabel" class="control-value">2 mmHg</span>
   </label>
 </div>
 
@@ -266,10 +271,9 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
 
 <div class="controls" id="quickStates" style="justify-content:flex-start;">
   <strong style="margin-right:4px">Estados rápidos:</strong>
-  <button id="presetShock">Choque</button>
+  <button id="presetShock">Choque hemorrágico (hipovolêmico)</button>
   <button id="presetExercise">Exercício</button>
   <button id="presetHT">Hipertensão</button>
-  <button id="btnNormalize">Normalizar</button>
   <button id="presetRest">Repouso</button>
   <button id="presetVasoC">Vasoconstrição</button>
   <button id="presetVasoD">Vasodilatação</button>
@@ -281,15 +285,15 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
   <div class="card" id="cardPAS">
     <div class="card-title">PAS <span id="badgePAS" class="auto-badge" style="display:none">auto</span></div>
     <div class="phase" id="pasText">
-      <div class="card-value" id="pasValue">120</div>
+      <div class="card-value" id="pasValue">119</div>
       <div class="card-unit">mmHg</div>
       <small id="pasDesc">Pressão arterial sistólica.</small>
     </div>
   </div>
   <div class="card" id="cardPAD">
-    <div class="card-title">PAD <span id="badgePAD" class="auto-badge" style="display:none">auto</span></div>
+    <div class="card-title"><abbr title="Pressão arterial diastólica">PAD</abbr> <span id="badgePAD" class="auto-badge" style="display:none">auto</span></div>
     <div class="phase" id="padText">
-      <div class="card-value" id="padValue">80</div>
+      <div class="card-value" id="padValue">75</div>
       <div class="card-unit">mmHg</div>
       <small id="padDesc">Pressão arterial diastólica.</small>
     </div>
@@ -297,7 +301,7 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
   <div class="card" id="cardDC">
     <div class="card-title"><abbr title="Débito cardíaco">DC</abbr> <span id="badgeDC" class="auto-badge" style="display:none">auto</span></div>
     <div class="phase" id="dcText">
-      <div class="card-value" id="dcValue">5.0</div>
+      <div class="card-value" id="dcValue">5,1</div>
       <div class="card-unit">L/min</div>
       <small id="dcDesc">Fluxo global impulsionado pelo coração.</small>
     </div>
@@ -305,7 +309,7 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
   <div class="card" id="cardRPT">
     <div class="card-title">RPT <span id="badgeRPT" class="auto-badge" style="display:none">auto</span></div>
     <div class="phase" id="rptText">
-      <div class="card-value" id="rptValue">18.7</div>
+      <div class="card-value" id="rptValue">17,2</div>
       <div class="card-unit">mmHg·min/L</div>
       <small id="rptDesc">Resistência periférica total.</small>
     </div>
@@ -313,9 +317,9 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
   <div class="card" id="cardDER">
     <div class="card-title">Derivadas</div>
     <div class="phase" id="derText">
-      <div class="card-value" id="derValue">PAM 93</div>
+      <div class="card-value" id="derValue">PAM 90</div>
       <div class="card-unit">mmHg</div>
-      <small id="derDesc">PP 40 mmHg · PAM ≈ PAD + 1/3(PAS − PAD)</small>
+      <small id="derDesc">PP 44 mmHg · DC × RPT + PVC = 90 mmHg</small>
     </div>
   </div>
 </div>
@@ -331,9 +335,11 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
     <b ><span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span>:</b> representam a pressão arterial sistólica e diastólica.
     <b ><span class="v-PAM">PAM</span>:</b> é calculada automaticamente pela relação clínica aproximada <b><span class="v-PAM">PAM</span> ≈ <span class="v-PAD">PAD</span> + 1/3(<span class="v-PAS">PAS</span> − <span class="v-PAD">PAD</span>)</b>.
     <b ><span class="v-DC">DC</span>:</b> representa o fluxo global impulsionado pelo coração.
-    <b ><span class="v-RPT">RPT</span>:</b> sintetiza a oposição global oferecida pelo leito vascular sistêmico.
-    <b >Coerência do modelo:</b> você pode selecionar somente três variáveis por vez; a quarta é calculada automaticamente para manter a consistência fisiológica.
-    <b >Relação central:</b> neste simulador, a lógica integra a relação hemodinâmica <b><span class="v-PAM">PAM</span> ≈ <span class="v-DC">DC</span> × <span class="v-RPT">RPT</span></b> com a leitura clínica baseada em <b><span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span></b>.
+    <b ><span class="v-RPT">RPT</span>:</b> sintetiza a oposição global oferecida pelo leito vascular sistêmico, principalmente pelas arteríolas. É expressa em mmHg·min/L (unidades Wood); 1 unidade Wood ≈ 80 dyn·s·cm⁻⁵, e o valor basal (~17) corresponde a ~1370 dyn·s·cm⁻⁵.
+    <b >PVC:</b> pressão venosa central, praticamente igual à pressão no átrio direito (basal ~2 mmHg; faixa normal ~0–5 mmHg). É a pressão de saída do circuito sistêmico, por isso entra na equação.
+    <b >Relação central:</b> <b><span class="v-RPT">RPT</span> = (<span class="v-PAM">PAM</span> − PVC) / <span class="v-DC">DC</span></b>, ou seja, <b><span class="v-PAM">PAM</span> = <span class="v-DC">DC</span> × <span class="v-RPT">RPT</span> + PVC</b>. Você escolhe três variáveis; a quarta é calculada para fechar a equação.
+    <b >Limites do modelo:</b> é uma relação algébrica instantânea, sem barorreflexo. Mantendo <span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span> fixas, subir o <span class="v-DC">DC</span> obriga a <span class="v-RPT">RPT</span> a cair; no organismo, o barorreflexo e a autorregulação ajustam várias variáveis ao mesmo tempo. Para ver o efeito isolado do <span class="v-DC">DC</span> ou da <span class="v-RPT">RPT</span> sobre a pressão, deixe uma pressão como variável calculada (padrão no repouso). Nesse modo, <span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span> sobem ou descem juntas, mantendo a pressão de pulso (<span class="v-PP">PP</span>), e os dois controles de pressão ficam bloqueados. Para mudar a <span class="v-PP">PP</span>, calcule o <span class="v-DC">DC</span> ou a <span class="v-RPT">RPT</span> e ajuste <span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span>. É uma simplificação: no organismo, aumentos do volume sistólico elevam mais a <span class="v-PAS">PAS</span> (a <span class="v-PP">PP</span> aumenta), e aumentos da <span class="v-RPT">RPT</span> elevam mais a <span class="v-PAD">PAD</span>.
+    <b >Fator 1/3:</b> a estimativa <span class="v-PAM">PAM</span> ≈ <span class="v-PAD">PAD</span> + 1/3 da pressão de pulso vale para FC de repouso. Com FC alta, a diástole encurta e a PAM se aproxima da média aritmética entre <span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span>; no exercício, o simulador subestima um pouco a PAM.
   </div>
   <div class="signature"><strong>Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</strong></div>
 </div>
@@ -354,6 +360,8 @@ const pasRange=document.getElementById('pasRange');
 const padRange=document.getElementById('padRange');
 const dcRange=document.getElementById('dcRange');
 const rptRange=document.getElementById('rptRange');
+const pvcRange=document.getElementById('pvcRange');
+const pvcLabel=document.getElementById('pvcLabel');
 const speedRange=document.getElementById('speedRange');
 
 const pasLabel=document.getElementById('pasLabel');
@@ -374,7 +382,6 @@ const presetRest=document.getElementById('presetRest');
 const presetExercise=document.getElementById('presetExercise');
 const presetVasoC=document.getElementById('presetVasoC');
 const presetVasoD=document.getElementById('presetVasoD');
-const btnNormalize=document.getElementById('btnNormalize');
 const presetHT=document.getElementById('presetHT');
 const presetShock=document.getElementById('presetShock');
 const badgePAS=document.getElementById('badgePAS');
@@ -399,7 +406,7 @@ const rptValue=document.getElementById('rptValue');
 const derValue=document.getElementById('derValue');
 const derDesc=document.getElementById('derDesc');
 
-let PAS=120, PAD=80, DC=5.0, RPT=18.7;
+let PAS=119, PAD=75, DC=5.1, RPT=17.2, PVC=2, PPref=44;
 let running=false, raf=null, lastTs=0, t=0;
 let vesselScale=1.0;
 let heartScale=1.0;
@@ -413,6 +420,7 @@ const stepPresets=['rest','exercise','ht','vasoc','vasod','shock'];
 
 function clamp(v,min,max){return Math.max(min,Math.min(max,v));}
 function round1(v){return Math.round(v*10)/10;}
+function fmt(v,d=0){return Number(v).toFixed(d).replace('.',',').replace(/^-/,'−');}
 function PAMfromPressures(pas,pad){return pad + (pas-pad)/3;}
 function PP(pas,pad){return pas-pad;}
 function selectedCount(){return [pickPAS,pickPAD,pickDC,pickRPT].filter(el=>el.checked).length;}
@@ -440,15 +448,17 @@ function enforceThree(target){
 }
 
 function syncSliderState(){
-  pasRange.disabled = !pickPAS.checked;
-  padRange.disabled = !pickPAD.checked;
+  const pressureCalc = selectedCount()===3 && (!pickPAS.checked || !pickPAD.checked);
+  pasRange.disabled = !pickPAS.checked || pressureCalc;
+  padRange.disabled = !pickPAD.checked || pressureCalc;
   dcRange.disabled  = !pickDC.checked;
   rptRange.disabled = !pickRPT.checked;
 
   [ ['PAS',pickPAS,cardPAS,badgePAS], ['PAD',pickPAD,cardPAD,badgePAD], ['DC',pickDC,cardDC,badgeDC], ['RPT',pickRPT,cardRPT,badgeRPT] ].forEach(row=>{
     const checked = row[1].checked;
-    row[2].classList.toggle('auto', !checked);
-    row[3].style.display = checked ? 'none' : 'inline-block';
+    const auto = !checked || (pressureCalc && (row[0]==='PAS' || row[0]==='PAD'));
+    row[2].classList.toggle('auto', auto);
+    row[3].style.display = auto ? 'inline-block' : 'none';
   });
 }
 
@@ -458,19 +468,18 @@ function deriveAll(){
 
   if(miss==='RPT'){
     const pam = PAMfromPressures(PAS,PAD);
-    RPT = clamp(pam / DC, 8, 40);
+    RPT = clamp((pam - PVC) / DC, 4, 40);
   }else if(miss==='DC'){
     const pam = PAMfromPressures(PAS,PAD);
-    DC = clamp(pam / RPT, 2.0, 20.0);
-  }else if(miss==='PAS'){
-    const pam = DC * RPT;
-    PAS = clamp(3*pam - 2*PAD, 80, 220);
-    if(PAS <= PAD + 10) PAS = clamp(PAD + 10, 80, 220);
-  }else if(miss==='PAD'){
-    const pam = DC * RPT;
-    PAD = clamp((3*pam - PAS)/2, 40, 140);
-    if(PAD >= PAS - 10) PAD = clamp(PAS - 10, 40, 140);
+    DC = clamp((pam - PVC) / RPT, 2.0, 25.0);
+  }else if(miss==='PAS' || miss==='PAD'){
+    // Pressão calculada: PAS e PAD se deslocam juntas, mantendo a pressão de pulso (PPref).
+    const pam = DC * RPT + PVC;
+    PAD = clamp(pam - PPref/3, 40, 140);
+    PAS = clamp(PAD + PPref, 80, 220);
   }
+
+  if(miss==='DC' || miss==='RPT') PPref = PAS - PAD;
 
   // secondary coherence pass
   if(PAD >= PAS - 10){
@@ -492,14 +501,17 @@ function setActivePreset(id){
   if(el) el.classList.add('active-preset');
 }
 
+// Valores fisiológicos que fecham RPT = (PAM − PVC)/DC; 'calc' é a variável calculada em cada estado.
+const PRESETS={
+  rest:     {PAS:119, PAD:75,  DC:5.1,  RPT:17.2, PVC:2, calc:'PAS', vesselScale:1.0,  heartScale:1.0},
+  exercise: {PAS:180, PAD:72,  DC:18.0, RPT:5.8,  PVC:4, calc:'RPT', vesselScale:1.3,  heartScale:1.22},
+  vasoc:    {PAS:149, PAD:97,  DC:5.1,  RPT:22.0, PVC:2, calc:'PAD', vesselScale:0.78, heartScale:1.0},
+  vasod:    {PAS:97,  PAD:54,  DC:5.1,  RPT:13.0, PVC:2, calc:'PAD', vesselScale:1.36, heartScale:1.0},
+  ht:       {PAS:160, PAD:100, DC:5.1,  RPT:22.7, PVC:4, calc:'RPT', vesselScale:0.9,  heartScale:1.05},
+  shock:    {PAS:84,  PAD:60,  DC:2.8,  RPT:23.9, PVC:1, calc:'RPT', vesselScale:0.85, heartScale:0.95}
+};
 function presetTarget(name){
-  if(name==='rest') return {PAS:120, PAD:80, DC:5.0, RPT:18.7, vesselScale:1.0, heartScale:1.0};
-  if(name==='exercise') return {PAS:170, PAD:75, DC:18.0, RPT:8.0, vesselScale:1.0, heartScale:1.22};
-  if(name==='vasoc') return {PAS:155, PAD:100, DC:5.0, RPT:17.0, vesselScale:0.78, heartScale:1.0};
-  if(name==='vasod') return {PAS:105, PAD:60, DC:5.0, RPT:13.0, vesselScale:1.36, heartScale:1.0};
-  if(name==='ht') return {PAS:160, PAD:100, DC:5.2, RPT:20.5, vesselScale:0.9, heartScale:1.05};
-  if(name==='shock') return {PAS:80, PAD:50, DC:2.8, RPT:28.0, vesselScale:0.85, heartScale:0.95};
-  return {PAS:120, PAD:80, DC:5.0, RPT:18.7, vesselScale:1.0, heartScale:1.0};
+  return Object.assign({}, PRESETS[name] || PRESETS.rest);
 }
 
 function easeInOutCubic(x){
@@ -507,7 +519,7 @@ function easeInOutCubic(x){
 }
 
 function startValueTransition(target){
-  transitionFrom={PAS, PAD, DC, RPT, vesselScale, heartScale};
+  transitionFrom={PAS, PAD, DC, RPT, PVC, vesselScale, heartScale};
   transitionTo=target;
   transitionStart=performance.now();
   transitionActive=true;
@@ -526,62 +538,75 @@ function updateTransition(now){
   PAD=transitionFrom.PAD + (transitionTo.PAD-transitionFrom.PAD)*k;
   DC=transitionFrom.DC + (transitionTo.DC-transitionFrom.DC)*k;
   RPT=transitionFrom.RPT + (transitionTo.RPT-transitionFrom.RPT)*k;
+  PVC=transitionFrom.PVC + (transitionTo.PVC-transitionFrom.PVC)*k;
   vesselScale=transitionFrom.vesselScale + (transitionTo.vesselScale-transitionFrom.vesselScale)*k;
   heartScale=transitionFrom.heartScale + (transitionTo.heartScale-transitionFrom.heartScale)*k;
   if(raw>=1){
     transitionActive=false;
-    PAS=transitionTo.PAS; PAD=transitionTo.PAD; DC=transitionTo.DC; RPT=transitionTo.RPT;
+    PAS=transitionTo.PAS; PAD=transitionTo.PAD; DC=transitionTo.DC; RPT=transitionTo.RPT; PVC=transitionTo.PVC;
     vesselScale=transitionTo.vesselScale; heartScale=transitionTo.heartScale;
     document.querySelectorAll('.card').forEach(c=>c.classList.remove('updating'));
   }
 }
 
 function applyPreset(name, smooth=true){
-  pickPAS.checked=true; pickPAD.checked=true; pickDC.checked=true; pickRPT.checked=false;
   setNotice('');
   const map={rest:'presetRest',exercise:'presetExercise',vasoc:'presetVasoC',vasod:'presetVasoD',ht:'presetHT',shock:'presetShock',normal:'btnNormalize'};
   setActivePreset(map[name]);
   const target=presetTarget(name);
+  PPref = target.PAS - target.PAD;
+  pickPAS.checked=target.calc!=='PAS'; pickPAD.checked=target.calc!=='PAD'; pickDC.checked=target.calc!=='DC'; pickRPT.checked=target.calc!=='RPT';
+  syncSliderState();
   if(smooth){
     startValueTransition(target);
   }else{
     transitionActive=false;
-    PAS=target.PAS; PAD=target.PAD; DC=target.DC; RPT=target.RPT; vesselScale=target.vesselScale; heartScale=target.heartScale;
+    PAS=target.PAS; PAD=target.PAD; DC=target.DC; RPT=target.RPT; PVC=target.PVC; vesselScale=target.vesselScale; heartScale=target.heartScale;
     render();
   }
 }
 
 function renderLabels(){
-  pasRange.value=PAS; padRange.value=PAD; dcRange.value=DC; rptRange.value=RPT;
-  pasLabel.textContent=`${PAS.toFixed(0)} mmHg`;
-  padLabel.textContent=`${PAD.toFixed(0)} mmHg`;
-  dcLabel.textContent=`${DC.toFixed(1)} L/min`;
-  rptLabel.textContent=`${RPT.toFixed(1)} mmHg·min/L`;
-  speedLabel.textContent=`${parseFloat(speedRange.value).toFixed(1)}x`;
+  pasRange.value=PAS; padRange.value=PAD; dcRange.value=DC; rptRange.value=RPT; pvcRange.value=PVC;
+  pasLabel.textContent=`${fmt(PAS)} mmHg`;
+  padLabel.textContent=`${fmt(PAD)} mmHg`;
+  dcLabel.textContent=`${fmt(DC,1)} L/min`;
+  rptLabel.textContent=`${fmt(RPT,1)} mmHg·min/L`;
+  pvcLabel.textContent=`${fmt(PVC)} mmHg`;
+  speedLabel.textContent=`${fmt(parseFloat(speedRange.value),1)}×`;
 }
 
 function updateStatus(){
   const pamPress = PAMfromPressures(PAS,PAD);
-  const pamHem   = DC * RPT;
+  const pamHem   = DC * RPT + PVC;
   const pp = PP(PAS,PAD);
   const delta = Math.abs(pamPress-pamHem);
+  const coherent = delta <= 1.0;
 
-  pasValue.textContent = `${PAS.toFixed(0)}`;
-  padValue.textContent = `${PAD.toFixed(0)}`;
-  dcValue.textContent  = `${DC.toFixed(1)}`;
-  rptValue.textContent = `${RPT.toFixed(1)}`;
+  pasValue.textContent = `${fmt(PAS)}`;
+  padValue.textContent = `${fmt(PAD)}`;
+  dcValue.textContent  = `${fmt(DC,1)}`;
+  rptValue.textContent = `${fmt(RPT,1)}`;
 
-  pasText.querySelector('small').textContent = pickPAS.checked ? 'Livre' : 'Auto';
-  padText.querySelector('small').textContent = pickPAD.checked ? 'Livre' : 'Auto';
+  const pressCalc = selectedCount()===3 && (!pickPAS.checked || !pickPAD.checked);
+  pasText.querySelector('small').textContent = pickPAS.checked && !pressCalc ? 'Livre' : 'Auto';
+  padText.querySelector('small').textContent = pickPAD.checked && !pressCalc ? 'Livre' : 'Auto';
   dcText.querySelector('small').textContent  = pickDC.checked  ? 'Livre' : 'Auto';
   rptText.querySelector('small').textContent = pickRPT.checked ? 'Livre' : 'Auto';
 
-  derValue.textContent = `PAM ${pamPress.toFixed(0)}`;
-  derDesc.innerHTML = `<span class="v-PP">PP ${pp.toFixed(0)} mmHg</span> · <span class="v-DC">DC</span>×<span class="v-RPT">RPT</span> = <span class="v-PAM">${pamHem.toFixed(0)} mmHg</span> · Δ = ${delta.toFixed(1)} mmHg`;
+  derValue.textContent = `PAM ${fmt(pamPress)}`;
+  derDesc.innerHTML = `<span class="v-PP">PP ${fmt(pp)} mmHg</span> · <span class="v-DC">DC</span> × <span class="v-RPT">RPT</span> + PVC = <span class="v-PAM">${fmt(pamHem)} mmHg</span> · <span class="v-RPT">RPT</span> ≈ ${fmt(Math.round(RPT*8)*10)} dyn·s·cm⁻⁵${coherent ? '' : ` · Δ = ${fmt(delta,1)} mmHg`}`;
 
-  modeBadge.textContent = selectedCount()===3
-    ? `Modo: coerente | calculada: ${missingVar()}`
-    : `Modo: incompleto | selecione 3 variáveis`;
+  if(selectedCount()!==3){
+    modeBadge.textContent = 'Modo: incompleto | selecione 3 variáveis';
+  }else if(coherent){
+    modeBadge.textContent = `Modo: coerente | calculada: ${(missingVar()==='PAS'||missingVar()==='PAD') ? 'PAS e PAD (PP mantida)' : missingVar()}`;
+    if(notice.dataset.limit){ setNotice(''); delete notice.dataset.limit; }
+  }else{
+    modeBadge.textContent = `Modo: fora da faixa | ${missingVar()} atingiu o limite do controle`;
+    setNotice(`A variável calculada (${missingVar()}) atingiu o limite da faixa e a equação não fecha (Δ = ${fmt(delta,1)} mmHg). Ajuste as outras variáveis.`);
+    notice.dataset.limit='1';
+  }
 }
 
 function roundedBox(ctx,x,y,w,h,r){
@@ -712,8 +737,8 @@ function drawScene(){
   sctx.save();sctx.translate(0,50);
   const pp = PP(PAS,PAD);
   const pam = PAMfromPressures(PAS,PAD);
-  const vesselTone = clamp((RPT-8)/(40-8),0,1);
-  const flowSpeed = clamp((DC-2)/(20-2),0,1);
+  const vesselTone = clamp((RPT-4)/(40-4),0,1);
+  const flowSpeed = clamp((DC-2)/(25-2),0,1);
   const pulseAmp = clamp((pp-20)/(100-20),0,1);
   const arteryWidth = 64 - vesselTone*26;
 
@@ -734,10 +759,10 @@ function drawScene(){
   sctx.fillStyle='#84abff';
   sctx.fillText('PAM ≈ PAD + 1/3(PAS − PAD)', 230, 85);
   sctx.fillStyle='#f8c16b';
-  sctx.fillText('PAM ≈ DC × RPT', 610, 85);
+  sctx.fillText('PAM − PVC = DC × RPT', 610, 85);
   sctx.fillStyle='#cadce8';
   sctx.font='14px Arial';
-  sctx.fillText('O simulador usa 3 variáveis livres e calcula automaticamente a quarta.', 48, 116);
+  sctx.fillText('Três variáveis livres; a quarta é calculada. Relação algébrica, sem barorreflexo.', 48, 116);
 
   // arterial tree — linhas tubulares 3D
   const x0=240, y0=345;
@@ -833,27 +858,29 @@ function drawScene(){
 
   // linha 1 (mesma ordem do painel superior)
   sctx.fillStyle='#ff8990';
-  sctx.fillText(`DC: ${DC.toFixed(1)} L/min`, col1, row1);
+  sctx.fillText(`DC: ${fmt(DC,1)} L/min`, col1, row1);
 
   sctx.fillStyle='#d8b8a0';
-  sctx.fillText(`RPT: ${RPT.toFixed(1)} mmHg·min/L`, col2, row1);
+  sctx.fillText(`RPT: ${fmt(RPT,1)} mmHg·min/L`, col2, row1);
 
   sctx.fillStyle='#6cd8f3';
-  sctx.fillText(`PP: ${pp.toFixed(0)} mmHg`, col3, row1);
+  sctx.fillText(`PP: ${fmt(pp)} mmHg`, col3, row1);
 
   // sobra (última coluna)
   sctx.fillStyle='#cadce8';
-  sctx.fillText(`DC × RPT = ${(DC*RPT).toFixed(0)} mmHg`, col4, row1);
+  sctx.fillText(`PVC: ${fmt(PVC)} mmHg`, col4, row1);
 
   // linha 2 (mesma ordem do painel inferior)
   sctx.fillStyle='#f892c1';
-  sctx.fillText(`PAD: ${PAD.toFixed(0)} mmHg`, col1, row2);
+  sctx.fillText(`PAD: ${fmt(PAD)} mmHg`, col1, row2);
 
   sctx.fillStyle='#f8c16b';
-  sctx.fillText(`PAM: ${pam.toFixed(0)} mmHg`, col2, row2);
+  sctx.fillText(`PAM: ${fmt(pam)} mmHg`, col2, row2);
 
   sctx.fillStyle='#84abff';
-  sctx.fillText(`PAS: ${PAS.toFixed(0)} mmHg`, col3, row2);
+  sctx.fillText(`PAS: ${fmt(PAS)} mmHg`, col3, row2);
+  sctx.fillStyle='#cadce8';
+  sctx.fillText(`DC × RPT + PVC = ${fmt(DC*RPT+PVC)} mmHg`, col4-40, row2);
 sctx.restore();
 }
 
@@ -878,7 +905,6 @@ function drawGraph(){
   const pam = PAMfromPressures(PAS,PAD);
   const pp = PP(PAS,PAD);
   const maxPP = Math.max(100, Math.ceil((pp*1.18)/20)*20);
-  const base = {PAD:80, PAM:(80 + (120-80)/3), PAS:120, DC:5.0, RPT:18.7, PP:40};
 
   // painel superior
   const left=110, right=900, top=132, bottom=418, width=right-left, height=bottom-top, barW=122;
@@ -907,7 +933,7 @@ function drawGraph(){
   gctx.fillStyle='#6cd8f3';
   gctx.fillText(`PP: escala dinâmica até ${maxPP} mmHg`, left+430, top-34);
   const topItems = [
-    {x:240,label:'DC',value:DC,color:'#ff8990',unit:'L/min',max:20},
+    {x:240,label:'DC',value:DC,color:'#ff8990',unit:'L/min',max:25},
     {x:450,label:'RPT',value:RPT,color:'#d8b8a0',unit:'mmHg·min/L',max:40},
     {x:660,label:'PP',value:pp,color:'#6cd8f3',unit:'mmHg',max:maxPP}
   ];
@@ -920,7 +946,7 @@ function drawGraph(){
     gctx.fillStyle=item.color;
     gctx.font='bold 13px Arial';
     gctx.textAlign='center';
-    gctx.fillText(item.label==='DC' ? item.value.toFixed(1)+' L/min' : item.label==='RPT' ? item.value.toFixed(1)+' mmHg·min/L' : item.value.toFixed(0)+' mmHg', item.x+barW/2, y-14);
+    gctx.fillText(item.label==='DC' ? fmt(item.value,1)+' L/min' : item.label==='RPT' ? fmt(item.value,1)+' mmHg·min/L' : fmt(item.value)+' mmHg', item.x+barW/2, y-14);
 
     gctx.fillStyle=item.color;
     gctx.font='bold 14px Arial';
@@ -947,9 +973,9 @@ function drawGraph(){
   gctx.fillText('Pressões (mmHg)', left, top2-12);
 
   const bottomItems = [
-    {x:240,w:122,h:(PAD/220)*height2,color:'#f892c1',label:'PAD',txt:`${PAD.toFixed(0)} mmHg`},
-    {x:450,w:122,h:(pam/220)*height2,color:'#f8c16b',label:'PAM',txt:`${pam.toFixed(0)} mmHg`},
-    {x:660,w:122,h:(PAS/220)*height2,color:'#84abff',label:'PAS',txt:`${PAS.toFixed(0)} mmHg`}
+    {x:240,w:122,h:(PAD/220)*height2,color:'#f892c1',label:'PAD',txt:`${fmt(PAD)} mmHg`},
+    {x:450,w:122,h:(pam/220)*height2,color:'#f8c16b',label:'PAM',txt:`${fmt(pam)} mmHg`},
+    {x:660,w:122,h:(PAS/220)*height2,color:'#84abff',label:'PAS',txt:`${fmt(PAS)} mmHg`}
   ];
 
   bottomItems.forEach(item=>{
@@ -975,7 +1001,7 @@ function drawGraph(){
   gctx.fillStyle='#cadce8';
   gctx.font='bold 15px Arial';
   gctx.textAlign='center';
-  gctx.fillText(`PAM clínica ≈ ${pam.toFixed(0)} mmHg | PAM hemodinâmica = DC × RPT = ${(DC*RPT).toFixed(0)} mmHg`, 490, 801);
+  gctx.fillText(`PAM clínica ≈ ${fmt(pam)} mmHg | PAM hemodinâmica = DC × RPT + PVC = ${fmt(DC*RPT+PVC)} mmHg`, 490, 801);
 }
 
 function render(){
@@ -997,7 +1023,7 @@ function pause(){
 }
 function resetAll(){
   pause();
-  applyPreset('normal', false);
+  applyPreset('rest', false);
 }
 function loop(ts){
   if(!running && !transitionActive){ raf=null; return; }
@@ -1027,6 +1053,7 @@ pasRange.addEventListener('input', e=>{ transitionActive=false; document.querySe
 padRange.addEventListener('input', e=>{ transitionActive=false; document.querySelectorAll('.card').forEach(c=>c.classList.remove('updating')); PAD=Number(e.target.value); if(PAD>=PAS-10) PAD=PAS-10; render(); });
 dcRange.addEventListener('input', e=>{ transitionActive=false; document.querySelectorAll('.card').forEach(c=>c.classList.remove('updating')); DC=Number(e.target.value); render(); });
 rptRange.addEventListener('input', e=>{ transitionActive=false; document.querySelectorAll('.card').forEach(c=>c.classList.remove('updating')); RPT=Number(e.target.value); render(); });
+pvcRange.addEventListener('input', e=>{ transitionActive=false; document.querySelectorAll('.card').forEach(c=>c.classList.remove('updating')); PVC=Number(e.target.value); render(); });
 speedRange.addEventListener('input', render);
 labelsToggle.addEventListener('change', render);
 btnStart.addEventListener('click', play);
@@ -1037,7 +1064,6 @@ presetRest.addEventListener('click', ()=>applyPreset('rest'));
 presetExercise.addEventListener('click', ()=>applyPreset('exercise'));
 presetVasoC.addEventListener('click', ()=>applyPreset('vasoc'));
 presetVasoD.addEventListener('click', ()=>applyPreset('vasod'));
-btnNormalize.addEventListener('click', ()=>applyPreset('normal'));
 presetHT.addEventListener('click', ()=>applyPreset('ht'));
 presetShock.addEventListener('click', ()=>applyPreset('shock'));
 
@@ -1061,5 +1087,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 #cardPAS{--reference-accent:var(--PAS)!important}#cardPAD{--reference-accent:var(--PAD)!important}#cardDC{--reference-accent:var(--DC)!important}#cardRPT{--reference-accent:var(--RPT)!important}#cardDER{--reference-accent:var(--PAM)!important}
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>

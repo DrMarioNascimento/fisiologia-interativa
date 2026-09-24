@@ -832,52 +832,107 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
     </div>
     <div class="panel">
       <div class="figure-heading"><h2>Gráfico principal</h2><button data-expand="barGraph">Ampliar</button></div>
-      <div class="panel-sub">Comparação entre conteúdo arterial de O₂, conteúdo venoso de O₂, diferença arterio-venosa e VO₂.</div>
+      <div class="panel-sub">Comparação entre conteúdo arterial de O₂, conteúdo venoso de O₂, diferença arteriovenosa e VO₂.</div>
       <canvas id="barGraph" width="720" height="560"></canvas>
       <div class="graph-legend"><div class="item"><span class="dot arterial"></span>CaO₂</div><div class="item"><span class="dot venous"></span>CvO₂</div><div class="item"><span class="dot delta"></span>Δ a-v O₂</div><div class="item"><span class="dot vo2"></span>VO₂ relativo</div></div>
       <div class="statusline" id="graphStatus"></div>
-      <div style="margin-top:10px"><div class="equation" id="equationBox"></div></div>
+      <div style="margin-top:10px"><div class="equation" id="equationBox"></div><div id="fickNotice" role="status" aria-live="polite" style="color:#f8c16b;font-size:13px;line-height:1.5;font-weight:600;margin-top:8px"></div></div>
     </div>
   </div>
   <div class="footer-box" style="max-width:1460px;margin:0 auto 4px"><strong>Como interpretar</strong><br><span id="interpretText"></span><div class="footer-signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div></div>
   <script>const FICK_COLORS={"vo2":"#e7a3d0","rel":"#f2d77c","q":"#ff8990","delta":"#d6a9ff","cao2":"#f0a7aa","cvo2":"#b4bada","sao2":"#e2b6fa","svo2":"#a69cf1","hb":"#70bcff","pao2":"#84abff","pvo2":"#93cfab","mass":"#d9c99a","extraction":"#65d5cc","demand":"#ffb45f","o2":"#c4a2f6","co2":"#ecb48e"};
 
+    // Estados: Q, Hb, PaO₂, massa e demanda (MET) são as entradas; SaO₂/SvO₂/PvO₂, extração e VO₂ são calculados.
+    // qRest/qSlope: resposta do débito à demanda (≈5–6 L/min por L/min de VO₂); svRest/svMax: perfil de volume sistólico para estimar a FC.
     const stateProfiles={
-      repouso:{nome:'Repouso',debitoCardiaco:5.0,hemoglobina:15,sao2:98,pao2:100,svo2:75,pvo2:40,massa:70,extracao:25,demanda:1.0,leitura:'Em repouso, o débito cardíaco e a diferença arterio-venosa de O₂ sustentam um VO₂ compatível com metabolismo basal.'},
-      exercicioLeve:{nome:'Exercício Leve',debitoCardiaco:8.0,hemoglobina:15,sao2:98,pao2:100,svo2:65,pvo2:34,massa:70,extracao:35,demanda:1.4,leitura:'No exercício leve, há aumento discreto do débito cardíaco e da extração periférica, com elevação moderada do consumo de O₂.'},
-      exercicioModerado:{nome:'Exercício Moderado',debitoCardiaco:12.0,hemoglobina:15,sao2:98,pao2:100,svo2:50,pvo2:28,massa:70,extracao:52,demanda:2.0,leitura:'No exercício moderado, o débito cardíaco e a extração tecidual aumentam de forma importante para sustentar maior demanda metabólica.'},
-      exercicioPesado:{nome:'Exercício Pesado',debitoCardiaco:18.0,hemoglobina:15,sao2:98,pao2:100,svo2:28,pvo2:22,massa:70,extracao:72,demanda:3.0,leitura:'No exercício pesado, o sistema cardiovascular trabalha próximo a altas exigências, com grande extração periférica e VO₂ elevado.'},
-      atleta:{nome:'Atleta de resistência (Maratona)',debitoCardiaco:22.0,hemoglobina:16.5,sao2:99,pao2:102,svo2:30,pvo2:22,massa:70,extracao:75,demanda:3.2,leitura:'Durante a maratona, o atleta de resistência apresenta alto débito cardíaco, elevada extração periférica e grande consumo de oxigênio, refletindo alta eficiência cardiovascular e metabólica.'},
-      anemia:{nome:'Anemia',debitoCardiaco:5.8,hemoglobina:9,sao2:98,pao2:100,svo2:60,pvo2:32,massa:70,extracao:38,demanda:1.1,leitura:'Na anemia, a redução da hemoglobina diminui o conteúdo arterial de O₂ mesmo com saturação preservada.'},
-      hipoxemia:{nome:'Hipoxemia',debitoCardiaco:5.2,hemoglobina:15,sao2:82,pao2:55,svo2:52,pvo2:28,massa:70,extracao:46,demanda:1.2,leitura:'Na hipoxemia, a queda da saturação e da PaO₂ reduz o conteúdo arterial de oxigênio e limita a oferta aos tecidos.'},
-      choque:{nome:'Choque',debitoCardiaco:3.2,hemoglobina:15,sao2:94,pao2:82,svo2:42,pvo2:24,massa:70,extracao:56,demanda:1.5,leitura:'No choque, a queda do débito cardíaco reduz a entrega de O₂ e força maior extração periférica.'}
+      repouso:{nome:'Repouso',hemoglobina:15,pao2:100,massa:70,demanda:1.02,qRest:5.0,qSlope:5.5,svRest:70,svMax:110,leitura:'Em repouso (≈1 MET), um débito cardíaco de ~5 L/min e uma diferença arteriovenosa de ~5 mL/dL sustentam um VO₂ basal de ~250 mL/min, com extração de ~25%.'},
+      exercicioLeve:{nome:'Exercício Leve',hemoglobina:15,pao2:98,massa:70,demanda:3.0,qRest:5.0,qSlope:5.5,svRest:70,svMax:110,leitura:'No exercício leve (~3 MET), o débito cardíaco e a extração periférica sobem juntos, elevando moderadamente o consumo de O₂.'},
+      exercicioModerado:{nome:'Exercício Moderado',hemoglobina:15,pao2:96,massa:70,demanda:6.0,qRest:5.0,qSlope:5.5,svRest:70,svMax:110,leitura:'No exercício moderado (~6 MET), o débito cardíaco passa de 10 L/min e a extração se aproxima de 60%, sustentando maior demanda metabólica.'},
+      exercicioPesado:{nome:'Exercício Pesado',hemoglobina:15,pao2:95,massa:70,demanda:12.5,qRest:5.0,qSlope:5.5,svRest:70,svMax:110,leitura:'Próximo do esforço máximo de um adulto não treinado (~44 mL/kg/min), o débito cardíaco chega a ~20 L/min e a extração a ~75%, com SvO₂ em torno de 25%.'},
+      atleta:{nome:'Atleta de resistência (maratona, esforço submáximo)',hemoglobina:15,pao2:100,massa:65,demanda:16.0,qRest:5.0,qSlope:6.0,svRest:100,svMax:160,leitura:'Na maratona o atleta trabalha em esforço submáximo (~80% de um VO₂máx de ~70 mL/kg/min): o grande volume sistólico permite débito cardíaco acima de 25 L/min e alto consumo de O₂.'},
+      anemia:{nome:'Anemia',hemoglobina:9,pao2:100,massa:70,demanda:1.02,qRest:6.5,qSlope:5.5,svRest:80,svMax:115,leitura:'Na anemia, a redução da hemoglobina diminui o conteúdo arterial de O₂ mesmo com saturação preservada; o débito cardíaco em repouso sobe para manter a oferta.'},
+      hipoxemia:{nome:'Hipoxemia',hemoglobina:15,pao2:55,massa:70,demanda:1.02,qRest:5.8,qSlope:5.5,svRest:70,svMax:110,leitura:'Na hipoxemia, a PaO₂ de 55 mmHg reduz a SaO₂ para ~88% (curva de dissociação) e o conteúdo arterial de oxigênio; o débito cardíaco sobe discretamente para compensar.'},
+      choque:{nome:'Choque',hemoglobina:15,pao2:85,massa:70,demanda:1.02,qRest:2.8,qSlope:5.5,svRest:22,svMax:40,leitura:'No choque, a queda do débito cardíaco reduz a entrega de O₂ e obriga os tecidos a extrair uma fração muito maior do O₂ que chega.'}
     };
-    const model=JSON.parse(JSON.stringify(stateProfiles.repouso)); const fick={caO2:0,cvO2:0,deltaAvO2:0,vo2AbsolutoMlMin:0,vo2AbsolutoLMin:0,vo2Relativo:0}; let playing=true,last=performance.now(),elapsed=0,activeState='repouso';
+    const Q_MIN=2, Q_MAX=30, E_MIN=0.05, E_MAX=0.85, MET=3.5, FC_MAX=190;
+    let notes=[];
+    const model={debitoCardiaco:5,hemoglobina:15,sao2:97.7,pao2:100,svo2:75,pvo2:40,massa:70,extracao:25,demanda:1.0,qRest:5,qSlope:5.5,svRest:70,svMax:110,vo2Target:245,supplyLimited:false};
+    const fick={caO2:0,cvO2:0,deltaAvO2:0,vo2AbsolutoMlMin:0,vo2AbsolutoLMin:0,vo2Relativo:0}; let playing=true,last=performance.now(),elapsed=0,activeState='repouso';
     const metricsConfig=[['VO₂ absoluto','vo2Abs','L/min'],['VO₂ relativo','vo2Rel','mL/kg/min'],['Q / débito cardíaco','q','L/min'],['Δ a-v O₂','delta','mL/dL'],['CaO₂','cao2','mL/dL'],['CvO₂','cvo2','mL/dL'],['SaO₂','sao2','%'],['SvO₂','svo2','%']];
-    const sliderConfig=[['debitoCardiaco','Débito cardíaco',2,25,0.1,1],['hemoglobina','Hemoglobina',5,20,0.1,1],['sao2','SaO₂',50,100,1,0],['pao2','PaO₂',30,110,1,0],['svo2','SvO₂',15,90,1,0],['pvo2','PvO₂',15,60,1,0],['massa','Massa corporal',40,140,1,0],['extracao','Extração tecidual',5,85,1,0],['demanda','Demanda metabólica',0.5,3.5,0.1,1]];
+    const sliderConfig=[['debitoCardiaco','Débito cardíaco',Q_MIN,Q_MAX,0.1,1],['hemoglobina','Hemoglobina',5,20,0.1,1],['sao2','SaO₂',58,98,0.1,1],['pao2','PaO₂',30,110,1,0],['svo2','SvO₂',15,90,0.1,0],['pvo2','PvO₂',13,60,1,0],['massa','Massa corporal',40,150,1,0],['extracao','Extração tecidual',5,85,1,0],['demanda','Demanda metabólica',0.8,20,0.1,1]];
     const columnMap={hemoglobina:'col-left',sao2:'col-left',pao2:'col-left',debitoCardiaco:'col-mid',massa:'col-mid',demanda:'col-mid',svo2:'col-right',pvo2:'col-right',extracao:'col-right'};
     function clamp(v,min,max){return Math.max(min,Math.min(max,v))} function formatPt(v,d=1){return Number(v).toFixed(d).replace('.',',')}
-    function calcCaO2(){return (1.34*model.hemoglobina*(model.sao2/100))+(0.003*model.pao2)} function calcCvO2(){return (1.34*model.hemoglobina*(model.svo2/100))+(0.003*model.pvo2)}
-    function updateFick(){fick.caO2=calcCaO2();fick.cvO2=calcCvO2();fick.deltaAvO2=Math.max(0,fick.caO2-fick.cvO2);fick.vo2AbsolutoMlMin=model.debitoCardiaco*fick.deltaAvO2*10;fick.vo2AbsolutoLMin=fick.vo2AbsolutoMlMin/1000;fick.vo2Relativo=model.massa>0?fick.vo2AbsolutoMlMin/model.massa:0;return fick}
-    function syncVenousByExtraction(){model.svo2=clamp(98-model.extracao*.92+(model.demanda-1)*-4,15,90);model.pvo2=clamp(20+(model.svo2-20)*.42,15,60);document.getElementById('slider-svo2').value=model.svo2;document.getElementById('slider-pvo2').value=model.pvo2}
+    // Curva de dissociação da Hb (Severinghaus, P50 ≈ 26,8 mmHg): a saturação decorre da PO₂.
+    function satFromPO2(P){P=Math.max(P,0.1);return 100/(23400/(P*P*P+150*P)+1)}
+    function po2FromSat(S){let lo=0.5,hi=700;S=clamp(S,0.5,99.9);for(let i=0;i<60;i++){const m=(lo+hi)/2;if(satFromPO2(m)<S)lo=m;else hi=m}return(lo+hi)/2}
+    function o2Content(hb,sat,po2){return 1.34*hb*sat/100+0.003*po2}
+    function calcCaO2(){model.sao2=satFromPO2(model.pao2);return o2Content(model.hemoglobina,model.sao2,model.pao2)}
+    function setVenousFromExtraction(E){const ca=calcCaO2(),cv=ca*(1-E);let lo=0.5,hi=Math.max(1,model.pao2);for(let i=0;i<60;i++){const m=(lo+hi)/2;if(o2Content(model.hemoglobina,satFromPO2(m),m)<cv)lo=m;else hi=m}model.pvo2=(lo+hi)/2;model.svo2=satFromPO2(model.pvo2);model.extracao=E*100}
+    function calcCvO2(){return o2Content(model.hemoglobina,model.svo2,model.pvo2)}
+    function vo2Rest(){return MET*model.massa}
+    function qHeartMax(){return Math.min(Q_MAX,FC_MAX*model.svMax/1000)}
+    function qForDemand(vo2){const q=model.qRest+model.qSlope*(vo2-vo2Rest())/1000,qm=qHeartMax();if(q>qm)notes.push(`Débito cardíaco máximo atingido (FCmáx ~${FC_MAX} bpm × VS máximo ≈ ${formatPt(qm,1)} L/min): acima disso só a extração pode aumentar.`);return clamp(q,Q_MIN,qm)}
+    // O VO₂ segue a demanda; a extração ajusta-se ao fluxo e ao CaO₂ até o limite (~85%), a partir do qual o VO₂ fica limitado pela oferta.
+    function eMax(){return Math.min(E_MAX,1-o2Content(model.hemoglobina,15,po2FromSat(15))/calcCaO2())}
+    function solveFromDemand(){const ca=calcCaO2(),em=eMax();const qLow=model.vo2Target/(ca*E_MIN*10);if(model.debitoCardiaco>qLow){model.debitoCardiaco=Math.max(Q_MIN,qLow);notes.push(`Fluxo muito acima da demanda: a extração não cai abaixo de ~5%, então o débito foi limitado a ${formatPt(model.debitoCardiaco,1)} L/min.`)}let E=model.vo2Target/(model.debitoCardiaco*ca*10);model.supplyLimited=E>em;if(model.supplyLimited)notes.push('VO₂máx atingido: com o débito e a extração no limite (SvO₂ ~15%), a oferta de O₂ não atende à demanda.');setVenousFromExtraction(clamp(E,E_MIN,em))}
+    // Quando o aluno fixa o lado venoso (SvO₂, PvO₂ ou extração), o VO₂ passa a ser consequência e a demanda é relida.
+    function adoptVenousState(){const ca=calcCaO2();const em=eMax();let E=1-calcCvO2()/ca;if(E<E_MIN||E>em){setVenousFromExtraction(clamp(E,E_MIN,em))}else model.extracao=E*100;model.supplyLimited=false;model.vo2Target=model.debitoCardiaco*ca*(model.extracao/100)*10;model.demanda=model.vo2Target/(MET*model.massa)}
+    function updateFick(){fick.caO2=calcCaO2();fick.cvO2=calcCvO2();fick.deltaAvO2=fick.caO2-fick.cvO2;fick.vo2AbsolutoMlMin=model.debitoCardiaco*fick.deltaAvO2*10;fick.vo2AbsolutoLMin=fick.vo2AbsolutoMlMin/1000;fick.vo2Relativo=model.massa>0?fick.vo2AbsolutoMlMin/model.massa:0;return fick}
+    function heartEstimate(){const q=model.debitoCardiaco;let sv=q>=model.qRest?model.svRest+(model.svMax-model.svRest)*(1-Math.exp(-(q-model.qRest)/4)):model.svRest*Math.sqrt(q/model.qRest);const fc=clamp(q*1000/sv,40,FC_MAX);return{fc,sv:q*1000/fc}}
+    function applySlider(k,v){
+      notes=[];
+      if(k==='debitoCardiaco'){const qm=qHeartMax();if(v>qm){notes.push(`Débito cardíaco máximo para este perfil: FCmáx ~${FC_MAX} bpm × VS máximo ≈ ${formatPt(qm,1)} L/min.`);v=qm}model.debitoCardiaco=v;solveFromDemand();return}
+      if(k==='sao2'){model.pao2=clamp(po2FromSat(v),30,110);solveFromDemand();return}
+      if(k==='pao2'){model.pao2=v;solveFromDemand();return}
+      if(k==='svo2'){model.svo2=v;model.pvo2=po2FromSat(v);adoptVenousState();return}
+      if(k==='pvo2'){model.pvo2=v;model.svo2=satFromPO2(v);adoptVenousState();return}
+      if(k==='extracao'){setVenousFromExtraction(Math.min(v/100,eMax()));adoptVenousState();return}
+      if(k==='demanda'){model.demanda=v;model.vo2Target=v*MET*model.massa;model.debitoCardiaco=qForDemand(model.vo2Target);solveFromDemand();return}
+      if(k==='massa'){model.massa=v;model.demanda=model.vo2Target/(MET*v);return}
+      model[k]=v;solveFromDemand();
+    }
     function buildMetrics(){document.getElementById('metrics').innerHTML=metricsConfig.map(([n,k,u])=>`<div class="metric metric-${k}"><div class="name">${n}</div><div><span class="value" id="metric-${k}">0</span><span class="unit">${u}</span></div></div>`).join('')}
-    function buildSliders(){const htmlFor=([k,l,min,max,step])=>`<label class="control"><span class="control-name">${l}</span><input type="range" id="slider-${k}" aria-label="${l}" min="${min}" max="${max}" step="${step}" value="${model[k]}"><span class="control-value" id="label-${k}"></span></label>`; sliderConfig.forEach(cfg=>document.getElementById(columnMap[cfg[0]]).insertAdjacentHTML('beforeend',htmlFor(cfg))); sliderConfig.forEach(([k])=>document.getElementById(`slider-${k}`).addEventListener('input',e=>{model[k]=parseFloat(e.target.value); if(k==='extracao'||k==='demanda')syncVenousByExtraction(); activeState=''; updateStateButtons(); updateUI()}))}
+    function buildSliders(){const htmlFor=([k,l,min,max,step])=>`<label class="control"><span class="control-name">${l}</span><input type="range" id="slider-${k}" aria-label="${l}" min="${min}" max="${max}" step="${step}" value="${model[k]}"><span class="control-value" id="label-${k}"></span></label>`; sliderConfig.forEach(cfg=>document.getElementById(columnMap[cfg[0]]).insertAdjacentHTML('beforeend',htmlFor(cfg))); sliderConfig.forEach(([k])=>document.getElementById(`slider-${k}`).addEventListener('input',e=>{applySlider(k,parseFloat(e.target.value)); activeState=''; updateStateButtons(); updateUI()}))}
     function buildStates(){const order=[
       ['repouso','Repouso'],
       ['exercicioLeve','Exercício Leve'],
       ['exercicioModerado','Exercício Moderado'],
       ['exercicioPesado','Exercício Pesado'],
-      ['atleta','Atleta de resistência (Maratona)'],
+      ['atleta','Atleta (maratona, submáximo)'],
       ['anemia','Anemia'],
       ['hipoxemia','Hipoxemia'],
       ['choque','Choque']
     ]; document.getElementById('states').innerHTML=order.map(([k,l])=>`<button class="state-btn" data-state="${k}">${l}</button>`).join(''); document.querySelectorAll('.state-btn').forEach(btn=>btn.addEventListener('click',()=>applyState(btn.dataset.state)))}
     function updateStateButtons(){document.querySelectorAll('.state-btn').forEach(btn=>btn.classList.toggle('active',btn.dataset.state===activeState))}
-    function applyState(k){Object.assign(model,JSON.parse(JSON.stringify(stateProfiles[k]))); activeState=k; updateStateButtons(); updateUI()}
+    function applyState(k){notes=[];const st=JSON.parse(JSON.stringify(stateProfiles[k]));delete st.nome;delete st.leitura;Object.assign(model,st);model.vo2Target=model.demanda*MET*model.massa;model.debitoCardiaco=Math.round(qForDemand(model.vo2Target)*10)/10;solveFromDemand(); activeState=k; updateStateButtons(); updateUI()}
     function updateMetrics(){const map={vo2Abs:[fick.vo2AbsolutoLMin,2],vo2Rel:[fick.vo2Relativo,1],q:[model.debitoCardiaco,1],delta:[fick.deltaAvO2,2],cao2:[fick.caO2,2],cvo2:[fick.cvO2,2],sao2:[model.sao2,0],svo2:[model.svo2,0]}; Object.entries(map).forEach(([k,[v,d]])=>document.getElementById(`metric-${k}`).textContent=formatPt(v,d))}
-    function updateSliderLabels(){sliderConfig.forEach(([k,_l,_min,_max,_step,d])=>{const suffix={debitoCardiaco:' L/min',hemoglobina:' g/dL',sao2:' %',pao2:' mmHg',svo2:' %',pvo2:' mmHg',massa:' kg',extracao:' %',demanda:' x'}[k]||''; document.getElementById(`label-${k}`).textContent=formatPt(model[k],d)+suffix; document.getElementById(`slider-${k}`).value=model[k]}); document.getElementById('speedLabel').textContent=formatPt(document.getElementById('speed').value,1)+'x'}
-    function getSemanticClass(){let score=0; if(fick.vo2Relativo>=25)score+=1.3; else if(fick.vo2Relativo<=6)score-=.6; if(fick.caO2>=18)score+=.8; else if(fick.caO2<=13)score-=1.2; if(model.debitoCardiaco<=4)score-=1; if(model.sao2<=88)score-=1; if(score>=1)return'good'; if(score<=-1.2)return'bad'; return'warn'}
-    function buildDynamicTexts(){const tags=[]; if(fick.caO2>=18)tags.push('O conteúdo arterial de O₂ está elevado, favorecendo a oferta sistêmica de oxigênio.'); else if(fick.caO2<=13)tags.push('O conteúdo arterial de O₂ está reduzido, limitando a oferta tecidual mesmo com fluxo preservado.'); else tags.push('O conteúdo arterial de O₂ está em faixa intermediária, compatível com oferta moderada.'); if(model.debitoCardiaco>=10)tags.push('O débito cardíaco elevado amplia a entrega global de O₂ ao leito tecidual.'); else if(model.debitoCardiaco<=4)tags.push('O débito cardíaco reduzido limita a entrega de O₂ aos tecidos.'); else tags.push('O débito cardíaco permanece em faixa basal/intermediária.'); if(model.extracao>=55)tags.push('A extração periférica está alta, reduzindo o conteúdo venoso e ampliando a diferença arterio-venosa.'); else if(model.extracao<=20)tags.push('A extração periférica está baixa, mantendo conteúdo venoso relativamente elevado.'); else tags.push('A extração periférica está em faixa intermediária.'); let interpret='Pelo princípio de Fick, o VO₂ depende do débito cardíaco e da diferença arterio-venosa de O₂. '; if(fick.vo2Relativo>=20)interpret+='O sistema está em condição de alta demanda metabólica, com extração periférica importante e maior consumo de oxigênio. '; else if(fick.vo2Relativo<=6)interpret+='O consumo global de oxigênio está reduzido, compatível com menor demanda metabólica ou limitação de oferta. '; else interpret+='O consumo global de oxigênio está em faixa compatível com metabolismo de repouso ou esforço leve. '; if(model.hemoglobina<11)interpret+='A hemoglobina baixa reduz CaO₂ e pode limitar a oferta de O₂ mesmo que a saturação arterial esteja preservada. '; if(model.sao2<90)interpret+='A saturação arterial reduzida diminui diretamente o conteúdo arterial de O₂. '; if(model.debitoCardiaco<4.2)interpret+='Neste momento, o principal limitante da oferta global é o baixo fluxo. '; else if(model.extracao>60)interpret+='Neste momento, o tecido compensa com maior extração de O₂. '; else interpret+='Neste momento, a relação entre fluxo e extração mantém a entrega tecidual em equilíbrio relativo. '; return{reading:(activeState&&stateProfiles[activeState]?stateProfiles[activeState].leitura+' ':'')+tags.slice(0,3).join(' '),interpret}}
+    function updateSliderLabels(){sliderConfig.forEach(([k,_l,_min,_max,_step,d])=>{const suffix={debitoCardiaco:' L/min',hemoglobina:' g/dL',sao2:' %',pao2:' mmHg',svo2:' %',pvo2:' mmHg',massa:' kg',extracao:' %',demanda:' MET'}[k]||''; document.getElementById(`label-${k}`).textContent=formatPt(model[k],d)+suffix; document.getElementById(`slider-${k}`).value=model[k]}); document.getElementById('speedLabel').textContent=formatPt(document.getElementById('speed').value,1)+'x'}
+    function buildDynamicTexts(){const tags=[],E=fick.deltaAvO2/fick.caO2*100,rel=fick.vo2Relativo,q=model.debitoCardiaco;
+      if(fick.caO2>22)tags.push('O conteúdo arterial de O₂ está acima do habitual (Hb elevada), ampliando a oferta sistêmica de oxigênio.');
+      else if(fick.caO2>=18)tags.push('O conteúdo arterial de O₂ está na faixa normal (~18–21 mL/dL).');
+      else if(fick.caO2>=13)tags.push('O conteúdo arterial de O₂ está moderadamente reduzido, o que diminui a oferta a cada litro de sangue.');
+      else tags.push('O conteúdo arterial de O₂ está reduzido, limitando a oferta tecidual mesmo com fluxo preservado.');
+      if(q<4)tags.push('O débito cardíaco reduzido limita a entrega de O₂ aos tecidos.');
+      else if(q<=7)tags.push('O débito cardíaco está em faixa de repouso ou discretamente elevado (4–7 L/min).');
+      else if(q<=15)tags.push('O débito cardíaco elevado amplia a entrega global de O₂ ao leito tecidual.');
+      else tags.push('O débito cardíaco está muito elevado, típico de esforço intenso.');
+      if(E<20)tags.push('A extração periférica está baixa, mantendo conteúdo venoso relativamente elevado.');
+      else if(E<=35)tags.push('A extração periférica está em faixa de repouso (~25%).');
+      else if(E<=70)tags.push('A extração periférica está aumentada, reduzindo o conteúdo venoso e ampliando a diferença arteriovenosa.');
+      else tags.push('A extração periférica está alta, próxima do limite fisiológico (~75–85%).');
+      let interpret='Pelo princípio de Fick, o VO₂ depende do débito cardíaco e da diferença arteriovenosa de O₂. ';
+      if(rel<3)interpret+='O consumo global de oxigênio está abaixo do repouso (1 MET ≈ 3,5 mL/kg/min). ';
+      else if(rel<4.5)interpret+='O consumo global de oxigênio é compatível com o repouso (≈1 MET = 3,5 mL/kg/min). ';
+      else if(rel<20)interpret+='O consumo global de oxigênio corresponde a esforço leve a moderado. ';
+      else if(rel<40)interpret+='O sistema está em alta demanda metabólica, com maior consumo de oxigênio. ';
+      else interpret+='O consumo de oxigênio é alto: está na faixa do máximo de um adulto não treinado (35–45 mL/kg/min) ou acima dela, como em atletas de resistência. ';
+      if(model.hemoglobina<11)interpret+='A hemoglobina baixa reduz CaO₂ e pode limitar a oferta de O₂ mesmo que a saturação arterial esteja preservada. ';
+      if(model.sao2<90)interpret+='A saturação arterial reduzida diminui diretamente o conteúdo arterial de O₂. ';
+      if(model.supplyLimited)interpret+='A demanda não é atendida: mesmo com extração máxima (~85%), a oferta de O₂ limita o VO₂. ';
+      else if(q<4.2)interpret+='Neste momento, o principal limitante da oferta global é o baixo fluxo, compensado por maior extração. ';
+      else if(E>50)interpret+='Neste momento, o tecido depende de extração periférica importante para sustentar o VO₂. ';
+      else interpret+='Neste momento, a relação entre fluxo e extração mantém a entrega tecidual em equilíbrio. ';
+      return{reading:(activeState&&stateProfiles[activeState]?stateProfiles[activeState].leitura+' ':'')+tags.slice(0,3).join(' '),interpret}}
     function colorizeInterpret(text){
       return text
         .replaceAll('VO₂','<span class="var-vo2">VO₂</span>')
@@ -885,19 +940,20 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
         .replaceAll('Débito cardíaco','<span class="var-q">Débito cardíaco</span>')
         .replaceAll('CaO₂','<span class="var-cao2">CaO₂</span>')
         .replaceAll('CvO₂','<span class="var-cvo2">CvO₂</span>')
-        .replaceAll('diferença arterio-venosa de O₂','<span class="var-delta">diferença arterio-venosa de O₂</span>')
+        .replaceAll('diferença arteriovenosa de O₂','<span class="var-delta">diferença arteriovenosa de O₂</span>')
         .replaceAll('extração periférica','<span class="var-extraction">extração periférica</span>')
         .replaceAll('saturação arterial','<span class="var-sao2">saturação arterial</span>')
         .replaceAll('hemoglobina','<span class="var-hb">hemoglobina</span>');
     }
     function updateTexts(){
-      const texts=buildDynamicTexts();
+      const texts=buildDynamicTexts(),hr=heartEstimate();
       const reading=document.getElementById('readingText');
       reading.innerHTML=colorizeInterpret(texts.reading);
       reading.classList.remove('good','warn','bad');
       
       document.getElementById('interpretText').innerHTML=colorizeInterpret(texts.interpret);
-      document.getElementById('equationBox').innerHTML=`<div class="fick-formula"><span class="var-vo2">VO₂</span> = <span class="var-q">Q</span> × (<span class="var-cao2">CaO₂</span> − <span class="var-cvo2">CvO₂</span>)</div><div><span class="var-vo2">${formatPt(fick.vo2AbsolutoMlMin,0)} mL/min</span> = <span class="var-q">${formatPt(model.debitoCardiaco,1)} L/min</span> × <span class="var-delta">${formatPt(fick.deltaAvO2,2)} mL/dL</span> × 10</div><small>O fator 10 converte litros em decilitros. VO₂ relativo = VO₂ absoluto (mL/min) ÷ massa (kg).</small>`;
+      document.getElementById('equationBox').innerHTML=`<div class="fick-formula"><span class="var-vo2">VO₂</span> = <span class="var-q">Q</span> × (<span class="var-cao2">CaO₂</span> − <span class="var-cvo2">CvO₂</span>) × 10</div><div><span class="var-vo2">${formatPt(fick.vo2AbsolutoMlMin,0)} mL/min</span> = <span class="var-q">${formatPt(model.debitoCardiaco,1)} L/min</span> × <span class="var-delta">${formatPt(fick.deltaAvO2,2)} mL/dL</span> × 10</div><div><span class="var-q">Q</span> = FC × VS ≈ ${formatPt(hr.fc,0)} bpm × ${formatPt(hr.sv,0)} mL (FC e VS estimados)</div><small>O fator 10 converte o débito de L/min para dL/min, pois a Δ a-v O₂ está em mL/dL. VO₂ relativo = VO₂ absoluto (mL/min) ÷ massa (kg).</small>`;
+      const nt=[...new Set(notes)];if(fick.vo2Relativo<3)nt.push('VO₂ abaixo do metabolismo basal (1 MET = 3,5 mL/kg/min): combinação não sustentável.');document.getElementById('fickNotice').textContent=nt.join(' ');
       document.getElementById('graphStatus').innerHTML=`<span class="var-cao2">CaO₂</span> ${formatPt(fick.caO2,2)} mL/dL, <span class="var-cvo2">CvO₂</span> ${formatPt(fick.cvO2,2)} mL/dL e <span class="var-rel">VO₂ relativo</span> ${formatPt(fick.vo2Relativo,1)} mL/kg/min.`;
       document.getElementById('modeBadge').textContent=playing?'Modo: animação contínua':'Modo: pausado';
     }
@@ -932,8 +988,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
       const artFlow = art ? art.querySelector('.flow-art') : null;
       const venFlow = ven ? ven.querySelector('.flow-ven') : null;
 
-      const heartDur = Math.max(0.38, 1.45 - (q/25)*0.95) / speed;
-      const artDur = Math.max(1.4, 4.1 - (q/25)*1.6) / speed;
+      const heartDur = Math.max(0.38, 1.45 - (q/30)*0.95) / speed;
+      const artDur = Math.max(1.4, 4.1 - (q/30)*1.6) / speed;
       const venDur = artDur;
       const tissueDur = Math.max(0.9, 2.25 - (extraction/100)*0.8) / speed;
       const co2Dur = Math.max(1.0, 2.55 - (extraction/100)*0.7) / speed;
@@ -990,7 +1046,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
     syncToggleButton('btnToggleMito','toggleMito','Captação: ligada','Captação: desligada');
 
     function updateUI(){updateFick(); updateSliderLabels(); updateMetrics(); updateTexts(); updateScene(); drawGraph()}
-    buildMetrics(); buildSliders(); buildStates(); updateStateButtons(); syncVenousByExtraction(); updateUI();
+    buildMetrics(); buildSliders(); buildStates(); applyState('repouso');
     document.getElementById('btnStart').addEventListener('click',()=>{playing=true; updateUI()}); document.getElementById('btnPause').addEventListener('click',()=>{playing=false; updateUI()}); document.getElementById('btnReset').addEventListener('click',()=>{applyState(activeState||'repouso'); updateUI()}); document.getElementById('speed').addEventListener('input',updateUI); document.getElementById('toggleLabels').addEventListener('change',updateScene); document.getElementById('toggleParticles').addEventListener('change',updateScene); document.getElementById('toggleMito').addEventListener('change',updateScene);
 document.querySelectorAll('[data-expand]').forEach(button=>{
  const el=document.getElementById(button.dataset.expand),placeholder=document.createComment('figure-home'),dialog=document.createElement('dialog'),wrap=document.createElement('div'),close=document.createElement('button');
@@ -1046,5 +1102,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
-<script src="tutor-widget.js?v=20"></script>
+<script src="tutor-ef-data.js?v=20"></script>
+<script src="tutor-widget.js?v=20"></script>

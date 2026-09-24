@@ -345,8 +345,11 @@
   .card:nth-child(1) .phase{color:var(--c-na)}
   .card:nth-child(2) .phase{color:var(--c-atp)}
   .card:nth-child(3) .phase{color:var(--c-glucose)}
-  .panel:first-of-type::before{content:"Animação integrada";display:block;font-size:18px;font-weight:900;padding:0 2px 10px;color:#184a72;}
-  .panel:nth-of-type(2)::before{content:"Gráfico funcional";display:block;font-size:18px;font-weight:900;padding:0 2px 10px;color:#245f27;}
+  .status-grid .card .phase{min-height:0}
+  .status-grid .card .phase small{height:auto;overflow:visible}
+  #isoform{background:#102635;color:#c7dce9;border:1px solid #3b576b;border-radius:8px;padding:6px 8px;font:inherit;font-weight:700;max-width:100%}
+  .panel:first-of-type::before{content:"Animação integrada";display:block;font-size:18px;font-weight:900;padding:0 2px 10px;color:#9ec9ef;}
+  .panel:nth-of-type(2)::before{content:"Gráfico funcional";display:block;font-size:18px;font-weight:900;padding:0 2px 10px;color:#a9e1c0;}
 </style>
 <style>.topbar{grid-template-columns:minmax(0,1fr);padding:22px;gap:20px}.topbar .title{min-width:0;width:100%}.topbar .title h1{font-size:clamp(24px,3vw,34px);line-height:1.25}.topbar .title .subtitle{font-size:15px;line-height:1.65;max-width:85ch;margin-top:10px}.topbar .controls{min-width:0;width:100%;justify-content:flex-start;box-sizing:border-box}.topbar .controls .pill{max-width:100%;min-width:0}@media(max-width:650px){.topbar{padding:15px}.topbar .controls{padding:10px}.topbar .controls .pill{width:100%}}</style><style>:root{color-scheme:dark;--bg:#0a1722;--panel:#142a3a;--line:#385466;--text:#dcebf5;--ink:#dcebf5;--muted:#a0b8c9;--na:#70bcff;--k:#ff8990;--ca:#f4e76a;--curve-primary:#e0edf5}
 *{box-sizing:border-box}body{margin:0;padding:24px;background:radial-gradient(ellipse at 15% 0,#1c3b4c,transparent 60%),#091620;color:var(--text);font-family:Segoe UI,Arial,sans-serif}h1{color:#e5f2fa;font-size:clamp(24px,3vw,34px);letter-spacing:-.035em;line-height:1.2}.subtitle,.title p{color:var(--muted);line-height:1.6}.app{padding:0;max-width:1400px;margin:auto}.controls,.scenario-row,.timeline,.card,.panel,.legend,.stage-map,.topbar{background:linear-gradient(145deg,#223b4d,#112432);border:1px solid #385466;box-shadow:inset 0 1px 0 #ffffff20,0 10px 25px #0005;border-radius:19px}.controls,.status-grid,.layout,.legend,.timeline,.stage-map,.mode-line,.scenario-row,.pro-graph-note{max-width:1400px;margin-left:auto;margin-right:auto}.controls{padding:15px;gap:12px;display:flex;flex-wrap:wrap}.controls label,.controls .pill,.scenario-label{min-height:46px;padding:10px 12px;border:1px solid #3b576b;background:#102635;color:#c7dce9;border-radius:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.controls button,button{min-height:46px;border:1px solid #638398;border-radius:12px;padding:11px 16px;color:#eaf8ff;background:linear-gradient(165deg,#55778e,#2d4a60 50%,#193345);box-shadow:inset 0 2px 1px #ffffff50,inset 0 -2px 1px #0006,0 4px 0 #06111a,0 7px 10px #0006;cursor:pointer;font-size:14px}button.primary,#playBtn{background:linear-gradient(#559886,#255c53);border-color:#8fbfb1}button:active{transform:translateY(3px);box-shadow:inset 0 2px 4px #0006,0 1px 0 #06111a}button:focus-visible,input:focus-visible,.figure-scroll:focus-visible{outline:3px solid #8de0d3;outline-offset:4px}input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:#75c9b4;flex:none}input[type=range]{appearance:none;width:140px;max-width:100%;height:12px;border-radius:20px;background:#061521;border:1px solid #58798d;box-shadow:inset 0 3px 5px #0009,0 1px 0 #fff2;margin:12px 0}input[type=range]::-webkit-slider-thumb{appearance:none;width:29px;height:29px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:inset 0 1px 2px #fff,0 3px 0 #07111b,0 6px 9px #0008}input[type=range]::-moz-range-thumb{width:27px;height:27px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:0 4px 7px #0008}.status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.status-grid .card{height:auto;min-height:155px;overflow:visible;padding:17px 20px}.card .phase{font-size:23px;min-height:0;color:#dcebf5;line-height:1.3}.card .phase small,.card-title{color:#a5bdce;line-height:1.5}.card-title{font-size:11px}.mode-badge,.pill{background:#112a3a;border-color:#385466;color:#b9cedc}.layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.layout .panel{min-width:0;overflow:hidden;padding:12px;height:auto}.panel canvas{display:block;max-width:100%;width:100%;height:auto;background:#0d2030;border:1px solid #37566a;border-radius:12px}.legend{color:#c4d7e4;line-height:1.75;text-align:left;padding:22px;font-size:15px}.signature,.mini-note,.pro-graph-note{color:#9eb7c8}.timeline-step,.stage-chip,.stage-item{background:#142c3c;color:#a9c4d7;border-color:#3b596e}.timeline-step.active,.stage-chip.active,.stage-item.active,.pharm-label.active{background:#20483f!important;color:#eafff7!important;border-color:#7dc5ad!important;box-shadow:inset 4px 0 #80c5af!important}.scenario-label:has(input:checked),.controls label:has(input[type=radio]:checked){background:#20483f;border-color:#7dc5ad}.ion-key{max-width:1400px;margin:16px auto;display:flex;gap:10px;flex-wrap:wrap}.ion-key span{padding:7px 10px;border:1px solid #385466;border-radius:8px;background:#102838;font-size:13px}.figure-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap;color:#bfd7e5;font-size:13px}.figure-toolbar button{font-size:12px;min-height:44px}.figure-scroll{max-width:100%;overflow:auto;overscroll-behavior-x:contain;border-radius:12px}.figure-hint{display:none;color:#a4c0d1;font-size:12px;line-height:1.5;margin:8px 0}.figure-scroll.detail canvas{width:var(--figure-width);max-width:none}.card#valueCard .phase,.card#mvCard .phase{color:#e0edf5}.card#valueCard,.card#mvCard{--phase:#e0edf5!important}
@@ -368,6 +371,7 @@
     <span class="pill">Velocidade <input id="speed" type="range" min="0.5" max="1.8" step="0.1" value="1"></span>
     <span class="pill">Gradiente de Na⁺ <input id="gradient" type="range" min="20" max="100" step="1" value="82"></span>
     <span class="pill">ATPase <input id="atpase" type="checkbox" checked> ativa</span>
+    <span class="pill">Isoforma <select id="isoform" aria-label="Isoforma do SGLT"><option value="sglt1" selected>SGLT1 (2 Na⁺ : 1 glicose)</option><option value="sglt2">SGLT2 (1 Na⁺ : 1 glicose)</option></select></span>
     <span class="pill">Mostrar energia <input id="energy" type="checkbox" checked></span>
     </div>
   </div>
@@ -376,15 +380,15 @@
     <label class="scenario-label"><input type="radio" name="scenario" id="scNormal" value="normal" checked> Normal</label>
     <label class="scenario-label"><input type="radio" name="scenario" id="scGlycosides" value="glycosides"> Glicosídeos cardíacos / Digitálico</label>
     <label class="scenario-label"><input type="radio" name="scenario" id="scHypoxia" value="hypoxia"> Hipóxia / Isquemia</label>
-    <label class="scenario-label"><input type="radio" name="scenario" id="scGliflozin" value="gliflozin"> Gliflozinas</label>
-    <label class="scenario-label"><input type="radio" name="scenario" id="scHypoinsulinemia" value="hypoinsulinemia"> Hipoinsulinemia</label>
+    <label class="scenario-label"><input type="radio" name="scenario" id="scGliflozin" value="gliflozin"> Inibidor de SGLT2 (gliflozina)</label>
+    <label class="scenario-label"><input type="radio" name="scenario" id="scHyperglycemia" value="hyperglycemia"> Hiperglicemia (carga filtrada ↑, Tmáx, glicosúria)</label>
   </div>
 
   <div class="status-grid">
     <div class="card" id="phaseCard">
       <div class="card-title">Fase atual</div>
       <div class="phase" id="phaseText">Gradiente de Na⁺
-        <small id="phaseDesc">A Na⁺/K⁺ ATPase extrude Na⁺ e cria energia potencial armazenada no gradiente eletroquímico.</small>
+        <small id="phaseDesc">A Na⁺/K⁺ ATPase usa 1 ATP para expulsar 3 Na⁺ e trazer 2 K⁺, criando energia potencial armazenada no gradiente eletroquímico.</small>
       </div>
     </div>
     <div class="card" id="caCard">
@@ -416,11 +420,11 @@
   <div class="ion-key" aria-label="Cores dos componentes"><span class="ion-na">Na⁺</span><span class="ion-k">K⁺</span><span class="ion-glucose">Glicose</span><span class="ion-atp">ATP</span><span class="ion-adp">ADP</span><span class="ion-pi">Pi</span><span class="ion-sglt">SGLT</span><span class="ion-pump">Na⁺/K⁺-ATPase</span></div><div class="layout">
     <div class="panel">
       <div class="figure-toolbar"><strong>Animação</strong><button type="button" data-figure="view-sceneCanvas" aria-controls="view-sceneCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-sceneCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Animação ampliável" style="--figure-width:920px"><canvas id="sceneCanvas" width="920" height="760"></canvas></div><div class="glucose-fixed-key" style="display:flex;align-items:center;gap:10px;padding:14px 16px;margin-top:10px;border:1px solid #385466;border-radius:12px;background:#102838;color:#87d29e;font-size:19px;font-weight:650;flex-wrap:wrap"><span aria-hidden="true" style="display:inline-block;width:24px;height:24px;border-radius:50%;flex:none;background:radial-gradient(circle at 32% 25%,#eefbf2,#87d29e 45%,#234b33 95%);box-shadow:0 2px 4px #0009;border:1px solid #87d29e"></span>Glicose<span class="ion-pump" style="margin-left:16px">Na⁺/K⁺ ATPase</span><span style="flex-basis:100%;font-size:18px;line-height:1.65;color:#dcebf5"><span class="ion-atp">ATP</span> → <span class="ion-gradient">gradiente de Na⁺</span> → <span class="ion-flux">entrada de glicose</span></span></div>
-      <div class="mini-note">Meio extracelular acima · citossol abaixo · Na⁺ e glicose entram pela face extracelular (topo do transportador)</div>
+      <div class="mini-note">Meio extracelular (luz intestinal ou tubular) acima · citosol abaixo · Na⁺ e glicose entram pela face extracelular (topo do transportador)</div>
     </div>
     <div class="panel">
       <div class="figure-toolbar"><strong>Gráfico</strong><button type="button" data-figure="view-graphCanvas" aria-controls="view-graphCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-graphCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Gráfico ampliável" style="--figure-width:920px"><canvas id="graphCanvas" width="920" height="760"></canvas></div>
-      <div class="mini-note">O transporte de glicose depende do gradiente de Na⁺ criado pela Na⁺/K⁺ ATPase.</div>
+      <div class="mini-note">O fluxo de glicose depende do gradiente de Na⁺ mantido pela Na⁺/K⁺ ATPase e satura com a concentração de glicose (Michaelis-Menten).</div>
     </div>
   </div>
 
@@ -428,11 +432,13 @@
     <b>Gradiente de <span class="ion-na">Na⁺</span>:</b> a <span class="ion-na">Na⁺</span>/<span class="ion-k">K⁺</span> <span class="ion-atp">ATP</span>ase consome <span class="ion-atp">ATP</span> para extrudir <span class="ion-na">Na⁺</span>, tornando a concentração de <span class="ion-na">Na⁺</span> maior no meio extracelular e menor no citosol. 
     <b>Transporte ativo secundário:</b> o cotransportador <span class="ion-sglt">SGLT</span> não usa <span class="ion-atp">ATP</span> diretamente; ele aproveita a energia do <span class="ion-na">Na⁺</span> retornando a favor de seu gradiente para trazer <span class="ion-glucose">glicose</span> para dentro da célula. 
     <b>Simporte:</b> <span class="ion-na">Na⁺</span> e <span class="ion-glucose">glicose</span> atravessam a membrana na mesma direção. 
-    <b>Interpretação:</b> <span class="ion-atp">ATP</span> → gradiente de <span class="ion-na">Na⁺</span> → entrada acoplada de <span class="ion-glucose">glicose</span>. Se a <span class="ion-atp">ATP</span>ase for desligada, o gradiente cai e o transporte secundário diminui progressivamente. 
-    <b>Glicosídeos cardíacos / Digitálico:</b> inibem a <span class="ion-na">Na⁺</span>/<span class="ion-k">K⁺</span> <span class="ion-atp">ATP</span>ase, reduzem o gradiente de <span class="ion-na">Na⁺</span> e tendem a diminuir o transporte ativo secundário dependente desse gradiente. 
-    <b>Hipóxia / Isquemia:</b> a queda do <span class="ion-atp">ATP</span> compromete a <span class="ion-atp">ATP</span>ase, colapsa progressivamente o gradiente de <span class="ion-na">Na⁺</span> e reduz intensamente o simporte de <span class="ion-glucose">glicose</span>. 
-    <b>Gliflozinas:</b> bloqueiam o <span class="ion-sglt">SGLT</span>; a <span class="ion-atp">ATP</span>ase pode permanecer ativa, mas a entrada acoplada de <span class="ion-na">Na⁺</span> + <span class="ion-glucose">glicose</span> cai acentuadamente. 
-    <b>Hipoinsulinemia:</b> não bloqueia diretamente o <span class="ion-sglt">SGLT</span>, mas nesta animação é representada como redução indireta da captação/aproveitamento global da <span class="ion-glucose">glicose</span>, com menor entrada efetiva.
+    <b>Isoformas:</b> o <span class="ion-sglt">SGLT1</span> (intestino delgado e final do túbulo proximal) acopla 2 <span class="ion-na">Na⁺</span> a 1 <span class="ion-glucose">glicose</span>, tem alta afinidade e baixa capacidade; o <span class="ion-sglt">SGLT2</span> (início do túbulo proximal) acopla 1 <span class="ion-na">Na⁺</span> a 1 <span class="ion-glucose">glicose</span>, tem baixa afinidade e alta capacidade e reabsorve a maior parte da glicose filtrada. Com 2 <span class="ion-na">Na⁺</span> por ciclo, o <span class="ion-sglt">SGLT1</span> aproveita mais energia do gradiente e concentra mais a glicose.
+    <b>Interpretação:</b> <span class="ion-atp">ATP</span> → gradiente de <span class="ion-na">Na⁺</span> → entrada acoplada de <span class="ion-glucose">glicose</span>. O fluxo de <span class="ion-glucose">glicose</span> cresce com o gradiente de <span class="ion-na">Na⁺</span> e satura com a concentração de <span class="ion-glucose">glicose</span> (cinética de Michaelis-Menten). Se a <span class="ion-atp">ATP</span>ase for desligada, o gradiente se dissipa ao longo do tempo e o transporte secundário diminui progressivamente; com a <span class="ion-atp">ATP</span>ase ativa, o gradiente se mantém em estado estacionário.
+    <b>Glicosídeos cardíacos / Digitálico:</b> inibem a <span class="ion-na">Na⁺</span>/<span class="ion-k">K⁺</span> <span class="ion-atp">ATP</span>ase, reduzem o gradiente de <span class="ion-na">Na⁺</span> e tendem a diminuir o transporte ativo secundário dependente desse gradiente.
+    <b>Hipóxia / Isquemia:</b> a queda do <span class="ion-atp">ATP</span> compromete a <span class="ion-atp">ATP</span>ase, colapsa progressivamente o gradiente de <span class="ion-na">Na⁺</span> e reduz intensamente o simporte de <span class="ion-glucose">glicose</span>.
+    <b>Inibidor de SGLT2 (gliflozina):</b> bloqueia seletivamente o <span class="ion-sglt">SGLT2</span>; a <span class="ion-atp">ATP</span>ase permanece ativa, mas a reabsorção de <span class="ion-glucose">glicose</span> no início do túbulo proximal cai e surge glicosúria mesmo com glicemia normal. O <span class="ion-sglt">SGLT1</span> quase não é afetado e compensa parte da reabsorção.
+    <b>Hiperglicemia:</b> o <span class="ion-sglt">SGLT</span> não depende de insulina. Com a glicemia elevada, a carga filtrada (TFG × glicemia) aumenta e a reabsorção cresce até o transporte máximo (Tmáx ≈ 375 mg/min). A glicosúria começa no limiar renal (~180 mg/dL), antes de a carga alcançar o Tmáx, por causa do <i>splay</i>: os néfrons são heterogêneos e saturam em cargas diferentes, e a reabsorção total se aproxima do Tmáx de forma gradual.
+    <b>Modelo:</b> fluxo relativo = disponibilidade do transportador × força motriz do <span class="ion-na">Na⁺</span> × [<span class="ion-glucose">glicose</span>]/(Km + [<span class="ion-glucose">glicose</span>]); valores semiquantitativos para fins didáticos.
     <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
   </div>
 </div>
@@ -483,6 +489,7 @@ const MembraneArt=(()=>{
   const gradientSlider = document.getElementById('gradient');
   const atpaseToggle = document.getElementById('atpase');
   const energyToggle = document.getElementById('energy');
+  const isoformSelect = document.getElementById('isoform');
 
   const phaseText = document.getElementById('phaseText');
   const energyText = document.getElementById('energyText');
@@ -490,31 +497,90 @@ const MembraneArt=(()=>{
   const timelineSteps = [...document.querySelectorAll('.timeline-step')];
   const scenarioInputs = [...document.querySelectorAll('input[name="scenario"]')];
 
+  // Isoformas: estequiometria, afinidade aparente pela glicose (Km, mM) e localização.
+  const ISOFORMS = {
+    sglt1:{label:'SGLT1', na:2, km:0.5, stoich:'2 Na⁺ : 1 glicose', where:'intestino delgado e final do túbulo proximal', profile:'alta afinidade, baixa capacidade'},
+    sglt2:{label:'SGLT2', na:1, km:3,   stoich:'1 Na⁺ : 1 glicose', where:'início do túbulo proximal', profile:'baixa afinidade, alta capacidade'}
+  };
+  const getIsoform = () => ISOFORMS[isoformSelect.value] || ISOFORMS.sglt1;
+
   const getScenario = () => (scenarioInputs.find(el => el.checked)?.value || 'normal');
+  // atpase: fração da atividade da bomba; avail: fração de transportadores funcionais; glucose: glicose no lado de entrada (mg/dL).
   function getScenarioConfig(){
-    const sc = getScenario();
     const cfg = {
-      normal:{atpase:1, sglt:1, glucose:1, label:'Normal'},
-      glycosides:{atpase:0.36, sglt:0.48, glucose:0.55, label:'Digitálico'},
-      hypoxia:{atpase:0.18, sglt:0.24, glucose:0.22, label:'Hipóxia / Isquemia'},
-      gliflozin:{atpase:1, sglt:0.08, glucose:0.08, label:'Gliflozinas'},
-      hypoinsulinemia:{atpase:0.88, sglt:0.82, glucose:0.62, label:'Hipoinsulinemia'}
+      normal:{atpase:1, avail:{sglt1:1, sglt2:1}, glucose:90, label:'Normal'},
+      glycosides:{atpase:0.36, avail:{sglt1:1, sglt2:1}, glucose:90, label:'Digitálico'},
+      hypoxia:{atpase:0.15, avail:{sglt1:1, sglt2:1}, glucose:90, label:'Hipóxia / Isquemia'},
+      gliflozin:{atpase:1, avail:{sglt1:0.95, sglt2:0.08}, glucose:90, label:'Inibidor de SGLT2'},
+      hyperglycemia:{atpase:1, avail:{sglt1:1, sglt2:1}, glucose:350, label:'Hiperglicemia'}
     };
-    return cfg[sc] || cfg.normal;
+    return cfg[getScenario()] || cfg.normal;
+  }
+
+  // Força motriz do Na⁺ (0–1, normalizada ao gradiente máximo), com dependência de ordem n = nº de Na⁺ acoplados.
+  const K_NA = 50;
+  function naDrive(G, n){
+    const h = g => Math.pow(g, n) / (Math.pow(K_NA, n) + Math.pow(g, n));
+    return h(Math.max(0, G)) / h(100);
+  }
+  // Fluxo relativo de glicose (fração do Jmáx da isoforma): cinética saturável de Michaelis-Menten.
+  function glucoseFlux(G, isoKey = isoformSelect.value, sc = getScenarioConfig()){
+    const iso = ISOFORMS[isoKey] || ISOFORMS.sglt1;
+    const S = sc.glucose / 18;                       // mg/dL → mM
+    return sc.avail[isoKey] * naDrive(G, iso.na) * S / (iso.km + S);
+  }
+  const pumpActivity = () => atpaseToggle.checked ? getScenarioConfig().atpase : 0;
+  const gradientTarget = () => Math.max(3, Number(gradientSlider.value) * pumpActivity());
+
+  // Rim: carga filtrada = TFG × glicemia. Reabsorção completa até o limiar renal (~180 mg/dL);
+  // acima dele, "splay" (néfrons heterogêneos saturam em cargas diferentes) até atingir o Tmáx.
+  const TFG = 125, TMAX = 375, LIMIAR_RENAL = 180;
+  function renal(glicemia, tmax = TMAX){
+    const L = TFG * glicemia / 100, Lth = TFG * LIMIAR_RENAL / 100, Lsat = 2 * tmax - Lth;
+    let R;
+    if (L <= Lth) R = L;
+    else if (L >= Lsat) R = tmax;
+    else R = L - (L - Lth) ** 2 / (2 * (Lsat - Lth));
+    return {load:L, reabs:R, excr:L - R};
   }
 
   const TOTAL = 660;
-  let frame = 0, running = true, raf = 0, lastTs = 0;
+  let frame = 0, running = true, raf = 0, lastTs = 0, pumpPhase = 0;
+  let G = gradientTarget();                         // gradiente de Na⁺ atual (estado)
+  const hist = {g:new Float32Array(TOTAL + 1), j:new Float32Array(TOTAL + 1), a:new Float32Array(TOTAL + 1)};
+  function fillHistory(){ const j = glucoseFlux(G) * 100, a = pumpActivity() * 100; hist.g.fill(G); hist.j.fill(j); hist.a.fill(a); }
+  function equilibrate(){ G = gradientTarget(); fillHistory(); }
+  fillHistory();
+
+  function stepState(dFrame){
+    const target = gradientTarget();
+    const tau = target > G ? 60 : 320;               // a ATPase recarrega rápido; sem ela o gradiente dissipa devagar
+    G += (target - G) * (1 - Math.exp(-dFrame / tau));
+    pumpPhase += dFrame * (0.45 + 0.55 * pumpActivity()) * (pumpActivity() > 0 ? 1 : 0);
+  }
+  function recordRange(fromFrame, toFrame){
+    const j = glucoseFlux(G) * 100, a = pumpActivity() * 100;
+    let i = Math.floor(fromFrame) + 1;
+    const end = Math.floor(toFrame);
+    if (i > end) return;
+    let guard = 0;
+    while (guard++ <= TOTAL + 1){
+      const idx = ((i % (TOTAL + 1)) + TOTAL + 1) % (TOTAL + 1);
+      hist.g[idx] = G; hist.j[idx] = j; hist.a[idx] = a;
+      if (i >= end) break;
+      i++;
+    }
+  }
 
   const stages = [
     {name:"ATPase expulsa Na⁺", start:0,   end:110, color:"#ff9b42",
-     phase:"Gradiente de Na⁺", phaseDesc:"A Na⁺/K⁺ ATPase usa ATP para expulsar Na⁺ e deixar o meio extracelular mais rico nesse íon.",
+     phase:"Gradiente de Na⁺", phaseDesc:"A Na⁺/K⁺ ATPase usa 1 ATP para expulsar 3 Na⁺ e trazer 2 K⁺, mantendo o meio extracelular rico em Na⁺.",
      energy:"ATP direto", energyDesc:"Aqui o ATP é consumido diretamente pela bomba Na⁺/K⁺ ATPase.",
-     event:"Na⁺ sai da célula", eventDesc:"A ATPase move Na⁺ para fora e K⁺ para dentro, criando o gradiente que alimentará o transporte secundário."},
+     event:"Na⁺ sai da célula", eventDesc:"A ATPase move 3 Na⁺ para fora e 2 K⁺ para dentro, criando o gradiente que alimentará o transporte secundário."},
     {name:"Gradiente estabelecido", start:111, end:210, color:"#70bcff",
      phase:"Energia potencial", phaseDesc:"O Na⁺ acumulado fora da célula representa energia armazenada no gradiente eletroquímico.",
      energy:"Gradiente alto", energyDesc:"Quanto maior o gradiente de Na⁺, maior a força que favorece o retorno do Na⁺ para o citosol.",
-     event:"Na⁺ quer voltar", eventDesc:"O Na⁺ tende a entrar novamente na célula a favor do seu gradiente."},
+     event:"Na⁺ quer voltar", eventDesc:"O Na⁺ tende a entrar novamente na célula a favor do seu gradiente eletroquímico."},
     {name:"Na⁺ liga-se ao SGLT", start:211, end:300, color:"#18A7A7",
      phase:"Ligação do Na⁺", phaseDesc:"O Na⁺ liga-se primeiro ao cotransportador SGLT na face extracelular.",
      energy:"Gradiente acopla", energyDesc:"O SGLT começa a capturar a energia do Na⁺ a favor do gradiente.",
@@ -524,12 +590,12 @@ const MembraneArt=(()=>{
      energy:"Simporte", energyDesc:"Na⁺ e glicose passam a ocupar a mesma proteína transportadora.",
      event:"Carga completa", eventDesc:"O cotransportador agora contém Na⁺ + glicose e está pronto para mudar de conformação."},
     {name:"Mudança conformacional", start:391, end:520, color:"#ff8990",
-     phase:"Mudança conformacional", phaseDesc:"O SGLT inverte sua abertura para o lado citosólico, carregando os dois solutos através da membrana.",
+     phase:"Mudança conformacional", phaseDesc:"O SGLT inverte sua abertura para o lado citosólico, carregando os solutos através da membrana.",
      energy:"ATP indireto", energyDesc:"A energia continua vindo do gradiente de Na⁺, e não de ATP hidrolisado no SGLT.",
      event:"Translocação", eventDesc:"A proteína muda de forma e leva Na⁺ e glicose para o interior celular."},
     {name:"Entrada no citosol", start:521, end:660, color:"#E31A1C",
      phase:"Entrada celular", phaseDesc:"Na⁺ e glicose são liberados no citosol; a glicose entra contra seu gradiente graças ao acoplamento com Na⁺.",
-     energy:"Transporte ativo secundário", energyDesc:"A glicose subiu “indiretamente” às custas da energia que veio do gradiente criado pela ATPase.",
+     energy:"Transporte ativo secundário", energyDesc:"A glicose sobe “indiretamente” às custas da energia do gradiente criado pela ATPase.",
      event:"Na⁺ + glicose entram", eventDesc:"O ciclo termina com liberação no citosol e o transportador pronto para reiniciar."},
   ];
 
@@ -538,16 +604,14 @@ const MembraneArt=(()=>{
   const ease = t => -(Math.cos(Math.PI * clamp(t,0,1)) - 1) / 2;
   const curStage = ()=>stages.find(s=>frame>=s.start && frame<=s.end) || stages[stages.length-1];
   const progressIn = (a,b)=>ease((frame-a)/(b-a));
+  const fmt = (v, d=0) => v.toFixed(d).replace('.', ',');
 
   function updateStatus() {
     const st = curStage();
     const sc = getScenario();
+    const iso = getIsoform();
     const scenarioNotes = {
-      normal: {
-        phase: '',
-        energy: '',
-        event: ''
-      },
+      normal: {phase:'', energy:'', event:''},
       glycosides: {
         phase: ' · ATPase parcialmente inibida',
         energy: ' · gradiente reduzido',
@@ -556,28 +620,44 @@ const MembraneArt=(()=>{
       hypoxia: {
         phase: ' · ATP reduzido',
         energy: ' · falência energética',
-        event: 'A queda do ATP compromete a ATPase e reduz acentuadamente o transporte secundário.'
+        event: 'A queda do ATP compromete a ATPase; o gradiente de Na⁺ se dissipa e o transporte secundário cai.'
       },
       gliflozin: {
-        phase: ' · SGLT bloqueado',
+        phase: iso.label === 'SGLT2' ? ' · SGLT2 bloqueado' : ' · SGLT1 pouco afetado',
         energy: ' · ATPase preservada',
-        event: 'As gliflozinas bloqueiam diretamente o SGLT e limitam a entrada de glicose.'
+        event: iso.label === 'SGLT2'
+          ? 'A gliflozina bloqueia o SGLT2 do início do túbulo proximal: menos glicose reabsorvida e glicosúria.'
+          : 'As gliflozinas são seletivas para o SGLT2; o SGLT1 quase não é afetado.'
       },
-      hypoinsulinemia: {
-        phase: ' · captação reduzida',
-        energy: ' · efeito indireto',
-        event: 'A hipoinsulinemia é representada aqui como menor entrada/aproveitamento efetivo da glicose.'
+      hyperglycemia: {
+        phase: ' · carga filtrada ↑',
+        energy: ' · SGLT perto da saturação',
+        event: 'Glicemia alta aumenta a carga filtrada; acima de ~180 mg/dL a reabsorção se aproxima do Tmáx e surge glicosúria.'
       }
     }[sc];
+    let eventDesc = scenarioNotes.event || st.eventDesc;
+    let phase = st.phase + scenarioNotes.phase, phaseDesc = st.phaseDesc, energy = st.energy + scenarioNotes.energy, energyDesc = st.energyDesc;
+    const idx = stages.indexOf(st);
+    if (idx === 1) energy = (G > 60 ? 'Gradiente alto' : G > 30 ? 'Gradiente reduzido' : 'Gradiente baixo') + scenarioNotes.energy;
+    if (!atpaseToggle.checked){
+      eventDesc = 'Sem a ATPase, o gradiente de Na⁺ se dissipa com o tempo e o cotransporte de glicose diminui.';
+      if (idx === 0){ phase = 'Bomba parada'; phaseDesc = 'A Na⁺/K⁺ ATPase está desligada: não há extrusão de Na⁺ e o gradiente se dissipa aos poucos.'; energy = 'Sem consumo de ATP'; energyDesc = 'Nada repõe a energia armazenada no gradiente de Na⁺.'; }
+    } else if (idx === 0 && sc === 'hypoxia'){
+      phaseDesc = 'Com pouco ATP disponível, a Na⁺/K⁺ ATPase funciona a cerca de 15% e mal sustenta o gradiente de Na⁺.'; energy = 'ATP escasso'; energyDesc = 'A falta de ATP limita a bomba (1 ATP para 3 Na⁺ e 2 K⁺).';
+    } else if (idx === 0 && sc === 'glycosides'){
+      phaseDesc = 'Inibida pelo digitálico, a Na⁺/K⁺ ATPase extrui menos Na⁺ (1 ATP para 3 Na⁺ e 2 K⁺ por ciclo).'; energyDesc = 'Menos ciclos da bomba: menos ATP consumido e gradiente menor.';
+    }
 
-    phaseText.innerHTML = semanticHTML(st.phase + scenarioNotes.phase + `<small>${st.phaseDesc}</small>`);
-    energyText.innerHTML = semanticHTML(st.energy + scenarioNotes.energy + `<small>${st.energyDesc}</small>`);
-    eventText.innerHTML = semanticHTML(st.event + `<small>${scenarioNotes.event || st.eventDesc}</small>`);
+    phaseText.innerHTML = semanticHTML(phase + `<small>${phaseDesc}</small>`);
+    energyText.innerHTML = semanticHTML(energy + `<small>${energyDesc}</small>`);
+    eventText.innerHTML = semanticHTML(st.event + `<small>${eventDesc}</small>`);
     document.documentElement.style.setProperty('--phaseColor', st.color);
     timelineSteps.forEach((el, idx)=>{
       if (idx === stages.indexOf(st)) el.classList.add('active');
       else el.classList.remove('active');
     });
+    graphCanvas.dataset.gradient = G.toFixed(1);
+    graphCanvas.dataset.flux = (glucoseFlux(G) * 100).toFixed(1);
   }
 
   function sphere(ctx, x, y, r, c1, c2, edge=null){
@@ -600,17 +680,6 @@ const MembraneArt=(()=>{
     ctx.fill();
   }
 
-  function rod(ctx, x1,y1,x2,y2,w,base,hi){
-    ctx.strokeStyle = base; ctx.lineWidth = w; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
-
-    ctx.strokeStyle = hi; ctx.lineWidth = Math.max(2,w*0.30);
-    ctx.beginPath(); ctx.moveTo(x1-1.4,y1-1.4); ctx.lineTo(x2-1.4,y2-1.4); ctx.stroke();
-
-    ctx.strokeStyle = 'rgba(15,23,42,.14)'; ctx.lineWidth = Math.max(1.5,w*0.22);
-    ctx.beginPath(); ctx.moveTo(x1+1.2,y1+1.2); ctx.lineTo(x2+1.2,y2+1.2); ctx.stroke();
-  }
-
   function roundRect(ctx, x,y,w,h,r){
     ctx.beginPath();
     ctx.moveTo(x+r,y);
@@ -623,28 +692,35 @@ const MembraneArt=(()=>{
 
   function drawBilayer(){MembraneArt.bilayer(sctx,90,263,740,134);}
 
-  function drawATPase(gradLevel){
-    const scCfg = getScenarioConfig();
+  function naBall(x, y, r=15, font='bold 12px Inter, Arial'){
+    sphere(sctx, x, y, r, '#70bcff', '#8fc5ff');
+    sctx.fillStyle = '#eff6ff'; sctx.font = font; sctx.fillText('Na⁺', x - r*0.75, y + 4);
+  }
+
+  function drawATPase(){
+    const A = pumpActivity();
+    const on = A > 0;
     // ATPase mais baixa para alinhar visualmente com a proteína SGLT
     const x = 150, y = 305;
     sctx.save();
     sctx.translate(x,y);
 
-    const cyc = ((frame * (0.45 + 0.55 * scCfg.atpase)) % 220) / 220;
-    const e12 = Math.sin(cyc * Math.PI);
+    const cyc = (pumpPhase % 220) / 220;
+    const e12 = on ? Math.sin(cyc * Math.PI) : 0;
     const bodyW = lerp(96, 108, e12 * 0.42);
     const bodyX = -bodyW/2;
     const bodyY = -88;
 
     MembraneArt.protein(sctx,bodyX,bodyY,bodyW,266,'#ff9b42',e12,true);
-    if (energyToggle.checked){
+    if (energyToggle.checked && on){
       const approach = Math.min(cyc / 0.42, 1);
       const convert = clamp((cyc - 0.42) / 0.16, 0, 1);
       const fadeOut = clamp((cyc - 0.78) / 0.22, 0, 1);
+      const vis = 0.35 + 0.65 * A;
 
       const atpX = lerp(-96, -50, approach);
       const atpY = lerp(18, 38, approach);
-      const alphaATP = (1 - convert * 0.85 - fadeOut * 0.15) * (0.35 + 0.65 * scCfg.atpase);
+      const alphaATP = (1 - convert * 0.85 - fadeOut * 0.15) * vis;
       if (alphaATP > 0.03){
         sctx.save();
         sctx.globalAlpha = alphaATP;
@@ -657,7 +733,7 @@ const MembraneArt=(()=>{
       const adpAppear = convert;
       const adpX = lerp(-50, -70, adpAppear);
       const adpY = lerp(38, 62, adpAppear);
-      const alphaADP = adpAppear * (1 - fadeOut) * (0.35 + 0.65 * scCfg.atpase);
+      const alphaADP = adpAppear * (1 - fadeOut) * vis;
       if (alphaADP > 0.03){
         sctx.save();
         sctx.globalAlpha = alphaADP;
@@ -669,7 +745,7 @@ const MembraneArt=(()=>{
 
       const piX = adpX;
       const piY = adpY + 24;
-      const alphaPi = adpAppear * (1 - fadeOut) * (0.35 + 0.65 * scCfg.atpase);
+      const alphaPi = adpAppear * (1 - fadeOut) * vis;
       if (alphaPi > 0.03){
         sctx.save();
         sctx.globalAlpha = alphaPi;
@@ -679,17 +755,15 @@ const MembraneArt=(()=>{
         sctx.restore();
       }
     }
-    // 3 Na+ saindo em sequência curta e bem separada
+    // 3 Na+ saindo em sequência curta e bem separada (parados se a bomba está desligada)
     const naSeq = [0.00, 0.16, 0.32];
     const naLanes = [-18, 0, 18];
     naSeq.forEach((offset, k)=>{
-      let tt = (cyc - offset) / 0.62;
-      tt = clamp(tt, 0, 1);
+      const tt = on ? clamp((cyc - offset) / 0.62, 0, 1) : 0;
       const yy = lerp(152, -118, tt);
       const xx = naLanes[k];
-      const alpha = atpaseToggle.checked ? (0.24 + 0.76 * tt) * scCfg.atpase : 0.10;
       sctx.save();
-      sctx.globalAlpha = alpha;
+      sctx.globalAlpha = on ? (0.24 + 0.76 * tt) * (0.35 + 0.65 * A) : 0.10;
       sphere(sctx, xx, yy, 15, '#70bcff', '#8fc5ff');
       sctx.fillStyle = '#eff6ff';
       sctx.font = 'bold 13px Inter, Arial';
@@ -701,13 +775,11 @@ const MembraneArt=(()=>{
     const kSeq = [0.00, 0.18];
     const kLanes = [-12, 12];
     kSeq.forEach((offset, k)=>{
-      let tt = (cyc - offset) / 0.44;
-      tt = clamp(tt, 0, 1);
+      const tt = on ? clamp((cyc - offset) / 0.44, 0, 1) : 0;
       const yy = lerp(-102, 156, tt);
       const xx = kLanes[k];
-      const alpha = atpaseToggle.checked ? (0.22 + 0.78 * tt) * scCfg.atpase : 0.10;
       sctx.save();
-      sctx.globalAlpha = alpha;
+      sctx.globalAlpha = on ? (0.22 + 0.78 * tt) * (0.35 + 0.65 * A) : 0.10;
       sphere(sctx, xx, yy, 14, '#ff8990', '#cfbdf4');
       sctx.fillStyle = '#faf5ff';
       sctx.font = 'bold 12px Inter, Arial';
@@ -719,42 +791,38 @@ const MembraneArt=(()=>{
     sphere(sctx, -126, 210, 14, '#ff8990', '#cfbdf4');
     sctx.fillStyle = '#faf5ff'; sctx.font = 'bold 12px Inter, Arial'; sctx.fillText('K⁺', -135, 214);
 
-    // Rótulo alinhado mais baixo, próximo ao SGLT
-    sctx.fillStyle = '#794322';
-    sctx.font = 'bold 15px Inter, Arial';
-    sctx.textAlign = 'center';
-    
-    sctx.textAlign = 'start';
+    if (!on){
+      sctx.fillStyle = '#ff8990'; sctx.font = 'bold 13px Inter, Arial'; sctx.textAlign = 'center';
+      sctx.fillText('ATPase parada', 0, -104);
+      sctx.textAlign = 'start';
+    }
     sctx.restore();
 
-    // Extracellular Na+ pool: 10 molecules spread out + 5 subtle emerging molecules
+    // Extracellular Na+ pool: 10 molecules spread out + emerging molecules from the pump
     const naOutsideFixed = [
       [304, 126],[392, 94],[486, 118],[580, 104],[674, 128],
       [336, 182],[430, 160],[526, 188],[620, 170],[714, 198]
     ];
-    naOutsideFixed.forEach(([bx,by], i)=>{
+    const visibleOut = Math.max(3, Math.round(naOutsideFixed.length * clamp(G / 85, 0, 1)));
+    naOutsideFixed.slice(0, visibleOut).forEach(([bx,by], i)=>{
       const driftX = Math.sin(frame/45 + i*0.7) * 8;
       const driftY = Math.cos(frame/55 + i*0.9) * 6;
-      const xx = bx + driftX;
-      const yy = by + driftY;
-      sphere(sctx, xx, yy, 15, '#70bcff', '#8fc5ff');
-      sctx.fillStyle = '#eff6ff'; sctx.font = 'bold 12px Inter, Arial'; sctx.fillText('Na⁺', xx-11, yy+4);
+      naBall(bx + driftX, by + driftY);
     });
 
-    for(let i=0;i<5;i++){
-      const cyc2 = ((frame/95) + i*0.2) % 1;
-      const pathEase = Math.sin(cyc2 * Math.PI / 2);
-      const xx = 236 + i*12 + pathEase * 42 + Math.sin(frame/55 + i)*1.4;
-      const yy = 146 - pathEase * 56 + Math.cos(frame/70 + i)*1.6;
-      let alpha = 0.35 + 0.65 * scCfg.atpase;
-      if (cyc2 < 0.25) alpha = cyc2/0.25;
-      sctx.save();
-      sctx.globalAlpha = alpha;
-      sphere(sctx, xx, yy, 15, '#70bcff', '#8fc5ff');
-      sctx.fillStyle = '#eff6ff';
-      sctx.font = 'bold 10px Inter, Arial';
-      sctx.fillText('Na⁺', xx-9, yy+3);
-      sctx.restore();
+    if (on){
+      for(let i=0;i<5;i++){
+        const cyc2 = ((pumpPhase/95) + i*0.2) % 1;
+        const pathEase = Math.sin(cyc2 * Math.PI / 2);
+        const xx = 236 + i*12 + pathEase * 42 + Math.sin(frame/55 + i)*1.4;
+        const yy = 146 - pathEase * 56 + Math.cos(frame/70 + i)*1.6;
+        let alpha = 0.35 + 0.65 * A;
+        if (cyc2 < 0.25) alpha *= cyc2/0.25;
+        sctx.save();
+        sctx.globalAlpha = alpha;
+        naBall(xx, yy, 15, 'bold 10px Inter, Arial');
+        sctx.restore();
+      }
     }
 
     const kOutside = [[250,92],[662,96],[742,152]];
@@ -763,29 +831,28 @@ const MembraneArt=(()=>{
       sctx.fillStyle = '#faf5ff'; sctx.font = 'bold 12px Inter, Arial'; sctx.fillText('K⁺', xx-9, yy+4);
     });
 
-    const inCount = Math.max(2, Math.round(12 - gradLevel/10));
+    const inCount = Math.max(2, Math.round(12 - G/10));
     for(let i=0;i<inCount;i++){
       const baseX = 278 + (i%5)*72 + ((i*13)%17);
       const baseY = 522 + Math.floor(i/5)*42;
       const driftX = Math.cos(frame/52 + i*0.6) * 10;
       const driftY = Math.sin(frame/48 + i*0.8) * 7;
-      const xx = baseX + driftX;
-      const yy = baseY + driftY;
-      sphere(sctx, xx, yy, 15, '#70bcff', '#8fc5ff');
-      sctx.fillStyle = '#eff6ff'; sctx.font = 'bold 12px Inter, Arial'; sctx.fillText('Na⁺', xx-11, yy+4);
+      naBall(baseX + driftX, baseY + driftY);
     }
   }
 
-  function drawSGLT(gradLevel){
-    const scCfg = getScenarioConfig();
+  function drawSGLT(){
+    const iso = getIsoform();
+    const J = glucoseFlux(G);
+    // O ciclo avança menos quando o fluxo é pequeno (gradiente dissipado ou transportador bloqueado).
+    const gain = clamp(J / 0.3, 0, 1);
     const x = 625, y = 330;
     sctx.save();
     sctx.translate(x,y);
 
-    const bindNa = progressIn(211, 300) * scCfg.sglt;
-    const bindGlu = progressIn(301, 390) * scCfg.glucose;
-    const flip = progressIn(391, 520) * Math.min(scCfg.sglt, scCfg.glucose);
-    const release = progressIn(521, 650) * Math.min(scCfg.sglt, scCfg.glucose);
+    const bindNa = progressIn(211, 300) * gain;
+    const bindGlu = progressIn(301, 390) * gain;
+    const flip = progressIn(391, 520) * gain;
 
     const morph=flip;MembraneArt.protein(sctx,-62,-138,124,276,'#60d2c5',morph,true);
     const dockY = -96;
@@ -808,15 +875,14 @@ const MembraneArt=(()=>{
     }
     sctx.stroke();
 
-    const naOutsideX = lerp(-54, -10, bindNa);
-    const naOutsideY = lerp(-242, dockY, bindNa);
-    const gluOutsideX = lerp(56, 12, bindGlu);
+    // Na⁺ acoplados: 2 no SGLT1, 1 no SGLT2.
+    const naPaths = iso.na === 2
+      ? [{from:[-54,-242], dock:[-14,dockY-8], to:[42,236]}, {from:[-104,-214], dock:[-36,dockY+18], to:[78,206]}]
+      : [{from:[-54,-242], dock:[-10,dockY], to:[42,236]}];
+    const naR = iso.na === 2 ? 17 : 21;
+    const gluOutsideX = lerp(56, 14, bindGlu);
     const gluOutsideY = lerp(-256, dockY + 16, bindGlu);
-
-    // after release, both "walk" a bit more into cytosol
-    const coupledNaX = lerp(-10, 42, flip);
-    const coupledNaY = lerp(dockY, 236, flip);
-    const coupledGluX = lerp(12, -44, flip);
+    const coupledGluX = lerp(14, -44, flip);
     const coupledGluY = lerp(dockY + 16, 262, flip);
 
     if (bindNa > 0.1 && bindGlu > 0.1 && flip < 0.25){
@@ -828,9 +894,14 @@ const MembraneArt=(()=>{
       sctx.stroke();
     }
 
-    sphere(sctx, lerp(naOutsideX, coupledNaX, flip), lerp(naOutsideY, coupledNaY, flip), 21, '#70bcff', '#8fc5ff');
-    sctx.fillStyle = '#eff6ff'; sctx.font = 'bold 15px Inter, Arial';
-    sctx.fillText('Na⁺', lerp(naOutsideX, coupledNaX, flip)-14, lerp(naOutsideY, coupledNaY, flip)+5);
+    naPaths.forEach(p => {
+      const ox = lerp(p.from[0], p.dock[0], bindNa), oy = lerp(p.from[1], p.dock[1], bindNa);
+      const cx = lerp(p.dock[0], p.to[0], flip), cy = lerp(p.dock[1], p.to[1], flip);
+      const xx = lerp(ox, cx, flip), yy = lerp(oy, cy, flip);
+      sphere(sctx, xx, yy, naR, '#70bcff', '#8fc5ff');
+      sctx.fillStyle = '#eff6ff'; sctx.font = iso.na === 2 ? 'bold 13px Inter, Arial' : 'bold 15px Inter, Arial';
+      sctx.fillText('Na⁺', xx - naR*0.68, yy + 5);
+    });
 
     const glucoseX=lerp(gluOutsideX,coupledGluX,flip),glucoseY=lerp(gluOutsideY,coupledGluY,flip);
     sctx.save();const glucoseMaterial=sctx.createRadialGradient(glucoseX-8,glucoseY-9,1,glucoseX,glucoseY,24);
@@ -838,19 +909,20 @@ const MembraneArt=(()=>{
     sctx.shadowColor='#0009';sctx.shadowBlur=6;sctx.shadowOffsetY=4;sctx.fillStyle=glucoseMaterial;sctx.beginPath();sctx.arc(glucoseX,glucoseY,24,0,Math.PI*2);sctx.fill();sctx.restore();
 
     sctx.fillStyle = '#794322'; sctx.font = 'bold 15px Inter, Arial';
-    sctx.textAlign = 'center'; sctx.fillText('SGLT (Na⁺/glicose)', 58, 178); sctx.textAlign = 'start';
+    sctx.textAlign = 'center'; sctx.fillText(`${iso.label} (${iso.stoich})`, 58, 178); sctx.textAlign = 'start';
 
     sctx.fillStyle = '#334155'; sctx.font = '13px Inter, Arial';
-    const eff = Math.round(gradLevel * (atpaseToggle.checked ? 1 : 0.35));
-    sctx.textAlign = 'center'; sctx.fillText('Eficiência ≈ ' + eff + '%', 58, 196); sctx.textAlign = 'start';
-    sctx.textAlign = 'center'; sctx.fillText('Acoplamento no topo extracelular', 58, 214); sctx.textAlign = 'start';
+    sctx.textAlign = 'center';
+    sctx.fillText(`Força motriz do Na⁺ ≈ ${Math.round(naDrive(G, iso.na) * 100)}% do máximo`, 58, 196);
+    sctx.fillText(`Fluxo ≈ ${Math.round(J * 100)}% do Jmáx do ${iso.label}`, 58, 214);
+    sctx.textAlign = 'start';
 
     sctx.restore();
   }
 
   function drawScene(){
     sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);
-sceneCanvas.getContext('2d').fillStyle='#0d2030';sceneCanvas.getContext('2d').fillRect(0,0,sceneCanvas.width,sceneCanvas.height);
+    sctx.fillStyle='#0d2030'; sctx.fillRect(0,0,sceneCanvas.width,sceneCanvas.height);
     sctx.fillStyle = '#c4d8e6'; sctx.font = 'bold 22px Inter, Arial';
     sctx.fillText('Membrana plasmática, ATPase e cotransportador SGLT', 18, 30);
 
@@ -861,30 +933,40 @@ sceneCanvas.getContext('2d').fillStyle='#0d2030';sceneCanvas.getContext('2d').fi
     sctx.fillStyle = '#334155'; sctx.font = 'bold 14px Inter, Arial';
     sctx.fillText('Bomba primária', 73, 116);
     sctx.fillText('Transportador secundário', 570, 116);
+    sctx.fillStyle = '#a0b8c9'; sctx.font = '13px Inter, Arial';
+    sctx.fillText(`${getIsoform().label}: ${getIsoform().where} (${getIsoform().profile})`, 34, 158);
 
     // desce toda a animação para ganhar distância dos textos superiores
     sctx.save();
     sctx.translate(0, 110);
 
-    const gradLevel = atpaseToggle.checked ? Number(gradientSlider.value) : Math.max(18, Number(gradientSlider.value)*0.35);
     drawBilayer();
-    drawATPase(gradLevel);
-    drawSGLT(gradLevel);
+    drawATPase();
+    drawSGLT();
 
     sctx.fillStyle = '#64748b'; sctx.font = '13px Inter, Arial';
     sctx.fillText('Bicamada lipídica', 392, 334);
 
     sctx.restore();
+  }
 
-    sctx.fillStyle = '#334155'; sctx.font = 'bold 14px Inter, Arial';
-    
+  function wrapText(ctx, text, x, y, maxW, lh){
+    const words = text.split(' '); let line = '';
+    for (const w of words){
+      const test = line ? line + ' ' + w : w;
+      if (ctx.measureText(test).width > maxW && line){ ctx.fillText(line, x, y); y += lh; line = w; }
+      else line = test;
+    }
+    if (line) ctx.fillText(line, x, y);
+    return y + lh;
   }
 
   function drawGraph(){
     const sc = getScenario();
     const scCfg = getScenarioConfig();
+    const iso = getIsoform();
     gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
-graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fillRect(0,0,graphCanvas.width,graphCanvas.height);
+    gctx.fillStyle='#0d2030'; gctx.fillRect(0,0,graphCanvas.width,graphCanvas.height);
     gctx.fillStyle = '#c4d8e6'; gctx.font = 'bold 22px Inter, Arial';
     gctx.fillText('Gradiente de Na⁺, fluxo de glicose e dependência da ATPase', 18, 30);
 
@@ -893,8 +975,8 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
     gctx.beginPath(); gctx.moveTo(x0, 84); gctx.lineTo(x0, y0); gctx.lineTo(x0+w, y0); gctx.stroke();
 
     gctx.fillStyle = '#c4d8e6'; gctx.font = '14px Inter, Arial';
-    gctx.fillText('Intensidade relativa', 18, 74); 
-    gctx.fillText('Tempo', 790, 736);
+    gctx.fillText('Intensidade relativa (%)', 18, 74);
+    gctx.fillText('Tempo', x0 + w + 6, y0 + 5);
 
     stages.forEach((st, i) => {
       const sx = x0 + (st.start/TOTAL)*w, ex = x0 + (st.end/TOTAL)*w;
@@ -907,10 +989,6 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
       gctx.textAlign = 'right'; gctx.fillText(st.name, sx + 120, 655 + stepOffset); gctx.textAlign = 'start';
     });
 
-    const grayStart = x0 + (stages[stages.length - 1].end/TOTAL)*w;
-    gctx.fillStyle = '#d1d5db';
-    gctx.fillRect(grayStart, 614, (x0+w)-grayStart, 18);
-
     [0,20,40,60,80,100].forEach(v=>{
       const yy = y0 - (v/100)*(h-50);
       gctx.strokeStyle = '#e5e7eb'; gctx.lineWidth = 1;
@@ -919,100 +997,80 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
       gctx.fillText(String(v), x0-24, yy+4);
     });
 
-    const grad = [], glucose = [], atpdep = [];
-    const gradientBase = Number(gradientSlider.value);
-    for(let f=0; f<=TOTAL; f+=4){
-      let gVal;
-      if (!atpaseToggle.checked){
-        gVal = lerp(gradientBase*0.35, 12, f/TOTAL);
-      } else if (f <= 110) gVal = lerp(45, gradientBase * scCfg.atpase, f/110);
-      else if (f <= 390) gVal = gradientBase * scCfg.atpase;
-      else if (f <= 520) gVal = lerp(gradientBase * scCfg.atpase, gradientBase*0.92 * scCfg.atpase, (f-390)/130);
-      else gVal = lerp(gradientBase*0.92 * scCfg.atpase, gradientBase*0.88 * scCfg.atpase, (f-520)/140);
-
-      let glucoseVal;
-      if (f <= 210) glucoseVal = 0;
-      else if (f <= 300) glucoseVal = lerp(0, 28 * scCfg.glucose, (f-210)/90);
-      else if (f <= 390) glucoseVal = lerp(28 * scCfg.glucose, 54 * scCfg.glucose, (f-300)/90);
-      else if (f <= 520) glucoseVal = lerp(54 * scCfg.glucose, (atpaseToggle.checked ? 96 : 34) * scCfg.glucose, (f-390)/130);
-      else glucoseVal = (atpaseToggle.checked ? lerp(96, 82, (f-520)/140) : lerp(34, 18, (f-520)/140)) * scCfg.glucose;
-
-      let atpaseVal = (atpaseToggle.checked ? 90 : 8) * scCfg.atpase;
-
-      grad.push([f, clamp(gVal,0,100)]);
-      glucose.push([f, clamp(glucoseVal,0,100)]);
-      atpdep.push([f, atpaseVal]);
-    }
-
     const toX = f => x0 + (f/TOTAL)*w;
-    const toY = v => y0 - (v/100)*(h-50);
-
-    function plot(series, color, width){
-      gctx.strokeStyle = color; gctx.lineWidth = width;
-      gctx.beginPath();
-      series.forEach(([f,v],i)=>{
-        const x = toX(f), y = toY(v);
-        if (i===0) gctx.moveTo(x,y); else gctx.lineTo(x,y);
-      });
-      MembraneArt.curve(gctx);
-    }
+    const toY = v => y0 - (clamp(v,0,100)/100)*(h-50);
 
     const cur = curStage();
     const cs = x0 + (cur.start/TOTAL)*w, ce = x0 + (cur.end/TOTAL)*w;
     gctx.fillStyle = cur.color + '16';
     gctx.fillRect(cs, 84, ce - cs, h + 20);
 
-    plot(grad, '#b3d6ef', 4);
-    plot(glucose, '#a9e1c0', 4);
-    plot(atpdep, '#d4c095', 3.4);
+    // Varredura contínua: à esquerda do cursor, o ciclo atual; à direita, o ciclo anterior (esmaecido).
+    const fNow = Math.floor(frame);
+    function plot(arr, color, width){
+      [[0, fNow, 1], [fNow + 1, TOTAL, 0.35]].forEach(([a, b, alpha]) => {
+        if (b <= a) return;
+        gctx.save(); gctx.globalAlpha = alpha;
+        gctx.strokeStyle = color; gctx.lineWidth = width;
+        gctx.beginPath();
+        for (let f = a; f <= b; f += 2){ const x = toX(f), y = toY(arr[f]); if (f === a) gctx.moveTo(x,y); else gctx.lineTo(x,y); }
+        gctx.lineTo(toX(b), toY(arr[b]));
+        MembraneArt.curve(gctx);
+        gctx.restore();
+      });
+    }
 
-    const curGrad = grad.find(([f])=>f>=frame) || grad[grad.length-1];
-    const curGlu = glucose.find(([f])=>f>=frame) || glucose[glucose.length-1];
-    const curATP = atpdep.find(([f])=>f>=frame) || atpdep[atpdep.length-1];
+    plot(hist.g, '#b3d6ef', 4);
+    plot(hist.j, '#a9e1c0', 4);
+    plot(hist.a, '#d4c095', 3.4);
 
-    [[curGrad,'#b3d6ef'],[curGlu,'#a9e1c0'],[curATP,'#d4c095']].forEach(([p,c])=>{
-      MembraneArt.marker(gctx,toX(p[0]),toY(p[1]),8,c);
+    [[hist.g,'#b3d6ef'],[hist.j,'#a9e1c0'],[hist.a,'#d4c095']].forEach(([arr,c])=>{
+      MembraneArt.marker(gctx,toX(fNow),toY(arr[fNow]),8,c);
     });
 
     const items = [
       ['Gradiente de Na⁺', '#b3d6ef'],
-      ['Entrada de glicose', '#a9e1c0'],
+      ['Entrada de glicose (% Jmáx)', '#a9e1c0'],
       ['ATPase ativa', '#d4c095']
     ];
-    let lx = 110;
+    let lx = 100;
     items.forEach(([label, color])=>{
       gctx.strokeStyle = color; gctx.lineWidth = 4;
       gctx.beginPath(); gctx.moveTo(lx, 54); gctx.lineTo(lx+28, 54); gctx.stroke();
       gctx.fillStyle = color; gctx.font = 'bold 13px Inter, Arial';
       gctx.fillText(label, lx+36, 59);
-      lx += gctx.measureText(label).width + 108;
+      lx += gctx.measureText(label).width + 80;
     });
 
-    if (!atpaseToggle.checked){
-      gctx.fillStyle = '#991b1b'; gctx.font = 'bold 16px Inter, Arial';
-      gctx.fillText('ATPase desligada: o gradiente de Na⁺ cai e o transporte secundário enfraquece.', 100, 695);
-    }
-
+    const msgs = [];
+    msgs.push([`${iso.label} (${iso.stoich}) · gradiente ${fmt(G, 0)}% · fluxo ≈ ${fmt(glucoseFlux(G) * 100, 0)}% do Jmáx`, '#a9e1c0']);
+    if (!atpaseToggle.checked) msgs.push(['ATPase desligada: o gradiente de Na⁺ se dissipa com o tempo e o transporte secundário enfraquece.', '#ff8990']);
     const scenarioMsg = {
       glycosides: 'Digitálico: inibição parcial da Na⁺/K⁺ ATPase, com redução do gradiente de Na⁺.',
       hypoxia: 'Hipóxia/Isquemia: queda de ATP, falência da ATPase e forte redução do transporte secundário.',
-      gliflozin: 'Gliflozinas: bloqueio do SGLT, com preservação relativa da ATPase.',
-      hypoinsulinemia: 'Hipoinsulinemia: redução indireta da captação/aproveitamento efetivo da glicose.'
+      gliflozin: iso.label === 'SGLT2'
+        ? `Inibidor de SGLT2: glicosúria mesmo com glicemia normal (cerca de 30–50% da carga filtrada; o SGLT1 do final do túbulo compensa parte).`
+        : 'Gliflozinas são seletivas para o SGLT2: o SGLT1 (intestino e final do túbulo proximal) quase não é afetado.',
+      hyperglycemia: (() => { const r = renal(scCfg.glucose), n = renal(90); return `Hiperglicemia (${scCfg.glucose} mg/dL): carga filtrada ≈ ${Math.round(r.load)} mg/min; reabsorção ≈ ${Math.round(r.reabs)} mg/min (ainda abaixo do Tmáx ≈ ${TMAX} mg/min pelo splay entre néfrons) → glicosúria ≈ ${Math.round(r.excr)} mg/min. Com 90 mg/dL: carga ${Math.round(n.load)} mg/min, glicosúria ${Math.round(n.excr)}; limiar renal ~${LIMIAR_RENAL} mg/dL. O SGLT independe de insulina.`; })()
     }[sc];
-    if (scenarioMsg){
-      gctx.fillStyle = '#7c2d12';
-      gctx.font = 'bold 15px Inter, Arial';
-      gctx.fillText(scenarioMsg, 100, 715);
-    }
+    if (scenarioMsg) msgs.push([scenarioMsg, '#ffb4a8']);
+    let yMsg = 702;
+    gctx.font = 'bold 13px Inter, Arial';
+    msgs.forEach(([text, color]) => { gctx.fillStyle = color; yMsg = wrapText(gctx, text, 30, yMsg, 860, 17); });
   }
 
   function loop(ts){
     if (!running){ render(); return; }
     if (!lastTs) lastTs = ts;
-    const dt = ts - lastTs;
-    if (dt > 1000/60){
-      frame += Number(speedSlider.value) * 1.6;
-      if (frame >= TOTAL) frame = 0;
+    const dt = Math.min(64, ts - lastTs);
+    if (dt > 0){
+      // Passo proporcional ao tempo real (≈1,6 quadro a cada 16,7 ms na velocidade 1), independente da taxa de quadros.
+      const dFrame = dt * 0.096 * Number(speedSlider.value);
+      const prev = frame;
+      stepState(dFrame);
+      frame += dFrame;
+      if (frame >= TOTAL){ recordRange(prev, TOTAL); frame -= TOTAL; recordRange(-1, frame); }
+      else recordRange(prev, frame);
       lastTs = ts;
     }
     render();
@@ -1025,14 +1083,19 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
     drawGraph();
   }
 
+  const onSetting = () => { if (!running && atpaseToggle.checked) equilibrate(); render(); };
   playBtn.onclick = ()=>{ if (!running){ running = true; lastTs = 0; raf = requestAnimationFrame(loop);} };
   pauseBtn.onclick = ()=>{ running = false; if (raf) cancelAnimationFrame(raf); render(); };
-  resetBtn.onclick = ()=>{ running = false; if (raf) cancelAnimationFrame(raf); frame = 0; lastTs = 0; render(); };
+  resetBtn.onclick = ()=>{ running = false; if (raf) cancelAnimationFrame(raf); frame = 0; lastTs = 0; pumpPhase = 0; G = Math.max(3, Number(gradientSlider.value) * getScenarioConfig().atpase); fillHistory(); render(); };
   speedSlider.oninput = render;
-  gradientSlider.oninput = render;
+  gradientSlider.oninput = onSetting;
   atpaseToggle.onchange = render;
   energyToggle.onchange = render;
-  scenarioInputs.forEach(el => el.onchange = render);
+  isoformSelect.onchange = () => { fillHistory(); render(); };
+  scenarioInputs.forEach(el => el.onchange = () => {
+    if ((el.value === 'gliflozin' || el.value === 'hyperglycemia') && el.checked) isoformSelect.value = 'sglt2';
+    onSetting();
+  });
 
   render();
   raf = requestAnimationFrame(loop);
@@ -1061,5 +1124,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>

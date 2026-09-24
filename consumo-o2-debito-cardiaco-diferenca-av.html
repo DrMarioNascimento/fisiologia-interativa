@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VO2, débito cardíaco e diferença arterio-venosa – fisiologia interativa</title>
+<title>VO2, débito cardíaco e diferença arteriovenosa – fisiologia interativa</title>
 <link rel="icon" href="brand/orientador.webp">
 <link rel="stylesheet" href="tutor-widget.css?v=4">
 <style>
@@ -569,7 +569,7 @@ canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255
 </style>
 </head>
 <body>
-<h1>Consumo de oxigênio, débito cardíaco e diferença arterio-venosa de O₂</h1>
+<h1>Consumo de oxigênio, débito cardíaco e diferença arteriovenosa de O₂</h1>
 <p class="subtitle">Simulador interativo da equação de Fick para integrar VO2, débito cardíaco, extração tecidual e valor relativo por quilograma.</p>
 
 
@@ -581,7 +581,7 @@ canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255
   <label class="control"><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
   <label class="control"><span class="control-name">Velocidade</span>
     <input id="speedRange" type="range" min="0.5" max="2.4" step="0.1" value="1.0">
-    <span id="speedLabel" class="control-value speed">1.0x</span>
+    <span id="speedLabel" class="control-value speed">1,0x</span>
   </label>
 </div>
 
@@ -618,18 +618,18 @@ canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255
 <div class="controls controls-sliders section-card variables-controls">
   <div class="section-label">Variáveis principais</div>
   <label class="control var-vo2"><span class="control-name">VO2</span>
-    <input id="vo2Range" type="range" min="100" max="5000" step="10" value="250">
+    <input id="vo2Range" type="range" min="100" max="6000" step="10" value="250">
     <span id="vo2Label" class="control-value">0,25 L/min</span>
   </label>
 
   <label class="control var-q"><span class="control-name">Q</span>
     <input id="qRange" type="range" min="2.0" max="30.0" step="0.1" value="5.0">
-    <span id="qLabel" class="control-value">5.0 L/min</span>
+    <span id="qLabel" class="control-value">5,0 L/min</span>
   </label>
 
   <label class="control var-dav"><span class="control-name">Δ a-v O₂</span>
-    <input id="davRange" type="range" min="2.0" max="18.0" step="0.1" value="5.0">
-    <span id="davLabel" class="control-value">5.0 mL/dL</span>
+    <input id="davRange" type="range" min="2.0" max="16.9" step="0.1" value="5.0">
+    <span id="davLabel" class="control-value">5,0 mL/dL</span>
   </label>
 
   <label class="control var-mass"><span class="control-name">Massa</span>
@@ -646,7 +646,7 @@ canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255
     </label>
     <div>
       <div class="ios-toggle-text">Modo avançado</div>
-      <div class="ios-toggle-sub">Hb, SaO₂, SvO₂ e PaO₂ passam a determinar CaO₂, CvO₂ e VO₂.</div>
+      <div class="ios-toggle-sub">Hb, PaO₂ (e a SaO₂ que dela decorre) e SvO₂ passam a determinar CaO₂, CvO₂ e VO₂.</div>
     </div>
   </div>
 </div>
@@ -654,22 +654,22 @@ canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255
 <div class="controls controls-sliders section-card advanced-sliders" id="advancedControls"  style="display:none">
   <div class="section-label">Modo avançado</div>
   <label class="control var-hb"><span class="control-name">Hb</span>
-    <input id="hbRange" type="range" min="8" max="18" step="0.1" value="15">
+    <input id="hbRange" type="range" min="5" max="20" step="0.1" value="15">
     <span id="hbLabel" class="control-value">15,0 g/dL</span>
   </label>
 
   <label class="control var-sat"><span class="control-name">SaO₂ (%SO₂)</span>
-    <input id="sao2Range" type="range" min="70" max="100" step="1" value="98">
-    <span id="sao2Label" class="control-value">98%</span>
+    <input id="sao2Range" type="range" min="58" max="98" step="1" value="98">
+    <span id="sao2Label" class="control-value">97,7%</span>
   </label>
 
   <label class="control var-cv"><span class="control-name">SvO₂</span>
-    <input id="svo2Range" type="range" min="20" max="80" step="1" value="75">
+    <input id="svo2Range" type="range" min="15" max="90" step="1" value="75">
     <span id="svo2Label" class="control-value">75%</span>
   </label>
 
   <label class="control var-pao2"><span class="control-name">PaO₂</span>
-    <input id="pao2Range" type="range" min="40" max="120" step="1" value="100">
+    <input id="pao2Range" type="range" min="30" max="110" step="1" value="100">
     <span id="pao2Label" class="control-value">100 mmHg</span>
   </label>
 </div>
@@ -684,7 +684,7 @@ canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255
 <div class="readout-box" style="margin-top:10px">
       <div class="panel-title" style="font-size:16px;margin-bottom:8px">Leitura fisiológica imediata</div>
       <div id="instantRead" style="font-size:12px;color:#475569;line-height:1.55;text-align:justify">
-        O consumo de oxigênio resulta da interação entre débito cardíaco e extração tecidual. Na forma detalhada da equação de Fick, a diferença arterio-venosa pode ser lida como a diferença entre o conteúdo arterial de O₂ (CaO2) e o conteúdo venoso de O₂ (CvO2). No modo avançado, Hb, SaO₂, SvO₂ e PaO₂ passam a determinar automaticamente esses conteúdos. A normalização pela massa corporal permite comparar indivíduos de tamanhos corporais diferentes.
+        O consumo de oxigênio resulta da interação entre débito cardíaco e extração tecidual. Na forma detalhada da equação de Fick, a diferença arteriovenosa pode ser lida como a diferença entre o conteúdo arterial de O₂ (CaO2) e o conteúdo venoso de O₂ (CvO2). No modo avançado, Hb, SaO₂, SvO₂ e PaO₂ passam a determinar automaticamente esses conteúdos. A normalização pela massa corporal permite comparar indivíduos de tamanhos corporais diferentes.
       </div>
     </div>
   </div>
@@ -779,13 +779,13 @@ canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255
 <div class="interpret-block">
   <div class="interpret-title">Como interpretar</div>
   <div class="interpret-text">
-    <b>Equação de Fick:</b> este simulador usa a relação <b>VO2 = Q × Δ a-v O₂ × 10</b>, em que <b>Q</b> representa o débito cardíaco em L/min e <b>Δ a-v O₂</b> representa a diferença arterio-venosa de oxigênio em mL/dL.
+    <b>Equação de Fick:</b> este simulador usa a relação <b>VO2 = Q × Δ a-v O₂ × 10</b>, em que <b>Q</b> representa o débito cardíaco em L/min e <b>Δ a-v O₂</b> representa a diferença arteriovenosa de oxigênio em mL/dL.
     <b>Débito cardíaco:</b> quanto maior o fluxo sanguíneo enviado aos tecidos, maior tende a ser o potencial de oferta de oxigênio.
-    <b>Conteúdo arterial de O₂ (CaO2):</b> representa a quantidade de oxigênio disponível no sangue arterial para ser entregue aos tecidos. <b>Conteúdo venoso de O₂ (CvO2):</b> representa o oxigênio remanescente após a extração tecidual. <b>Diferença arterio-venosa:</b> corresponde à diferença entre CaO2 e CvO2; quanto maior essa diferença, maior foi a utilização de O₂ pelos tecidos.
+    <b>Conteúdo arterial de O₂ (CaO2):</b> representa a quantidade de oxigênio disponível no sangue arterial para ser entregue aos tecidos. <b>Conteúdo venoso de O₂ (CvO2):</b> representa o oxigênio remanescente após a extração tecidual. <b>Diferença arteriovenosa:</b> corresponde à diferença entre CaO2 e CvO2; quanto maior essa diferença, maior foi a utilização de O₂ pelos tecidos.
     <b>VO2 relativo:</b> é obtido dividindo o VO2 absoluto pela massa corporal, permitindo comparar indivíduos de massas diferentes.
     <b>Modo de cálculo:</b> a variável selecionada no topo é resolvida automaticamente; as demais permanecem manipuláveis por botão deslizável, preservando a coerência do modelo.
     <b>Leitura didática:</b> aumentos de <b>Q</b> e/ou de <b>Δ a-v O₂</b> elevam o VO2 absoluto; já a massa corporal altera apenas o valor relativo por quilograma.
-    <b>Equação alternativa:</b> na forma completa da equação de Fick, o consumo de oxigênio pode ser expresso como <b>VO2 = Q × (CaO2 − CvO2) × 10</b>, em que <b>CaO2</b> representa o conteúdo arterial de oxigênio e <b>CvO2</b> o conteúdo venoso. Essa abordagem evidencia que a diferença arterio-venosa decorre diretamente da quantidade de oxigênio entregue aos tecidos menos a quantidade que retorna, reforçando a integração entre oferta e extração de O₂.
+    <b>Equação alternativa:</b> na forma completa da equação de Fick, o consumo de oxigênio pode ser expresso como <b>VO2 = Q × (CaO2 − CvO2) × 10</b>, em que <b>CaO2</b> representa o conteúdo arterial de oxigênio e <b>CvO2</b> o conteúdo venoso. Essa abordagem evidencia que a diferença arteriovenosa decorre diretamente da quantidade de oxigênio entregue aos tecidos menos a quantidade que retorna, reforçando a integração entre oferta e extração de O₂.
 
   </div>
   <div class="interpret-footer">
@@ -850,7 +850,13 @@ const satCard=document.getElementById('satCard');
 const pao2Card=document.getElementById('pao2Card');
 const altEquationMain=document.getElementById('altEquationMain');
 
-let VO2=250, Q=5.0, DAV=5.0, MASS=70, HB=15.0, SaO2=98, SvO2=75, PaO2=100, advancedMode=false;
+let VO2=250, Q=5.0, DAV=5.0, MASS=70, HB=15.0, SaO2=97.7, SvO2=75, PaO2=100, PvO2=40, advancedMode=false;
+// Limites fisiológicos compartilhados com os demais simuladores de Fick do site.
+const Q_MIN=2.0, Q_MAX=30.0, DAV_MIN=2.0, SVO2_FLOOR=15, VO2_BASAL_MIN=150, VO2_REL_RECORD=90;
+let notices=[];
+// Valores pedidos pelo aluno (sliders/estados): a variável livre é sempre recalculada a partir deles, sem efeito catraca.
+let reqVO2=250, reqQ=5.0, reqDAV=5.0;
+function syncReq(){ reqVO2=VO2; reqQ=Q; reqDAV=DAV; }
 let solveFor='vo2';
 let running=false, raf=null, lastTs=0, t=0;
 
@@ -874,9 +880,20 @@ function r2(v){ return Math.round(v*100)/100; }
 function fmtPt(v){ return v.toFixed(2).replace('.',','); }
 function fmt1(v){ return v.toFixed(1).replace('.',','); }
 function clampSat(v){ return Math.max(0, Math.min(100, v)); }
+// Curva de dissociação da Hb (Severinghaus, P50 ≈ 26,8 mmHg): a saturação é sempre derivada da PO₂.
+function satFromPO2(P){ P=Math.max(P,0.1); return 100/(23400/(P*P*P+150*P)+1); }
+function po2FromSat(S){ let lo=0.5, hi=700; S=clamp(S,0.5,99.9); for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(satFromPO2(m)<S) lo=m; else hi=m; } return (lo+hi)/2; }
+function o2Content(hb,sat,po2){ return 1.34*hb*sat/100 + 0.003*po2; }
+function venousFromContent(cv){
+  let lo=0.5, hi=Math.max(1,PaO2);
+  for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(o2Content(HB,satFromPO2(m),m)<cv) lo=m; else hi=m; }
+  const p=(lo+hi)/2; return { pvo2:p, svo2:satFromPO2(p) };
+}
+function arterialContent(){ SaO2=satFromPO2(PaO2); return o2Content(HB,SaO2,PaO2); }
+function davMax(){ const pv=po2FromSat(SVO2_FLOOR); return arterialContent() - o2Content(HB,SVO2_FLOOR,pv); }
 function calcContents(){
-  const CaO2 = (1.34 * HB * (SaO2/100)) + (0.003 * PaO2);
-  const CvO2 = (1.34 * HB * (SvO2/100));
+  const CaO2 = arterialContent();
+  const CvO2 = o2Content(HB,SvO2,PvO2);
   return { CaO2, CvO2 };
 }
 function colorFromSat(sat){
@@ -925,41 +942,67 @@ function syncDisabled(){
 }
 
 function derive(){
+  notices=[];
+  const CaO2=arterialContent();
+  const maxDav=davMax();
   if(advancedMode){
-    const { CaO2, CvO2 } = calcContents();
-    DAV = Math.max(0, CaO2 - CvO2);
-    VO2 = clamp(Q * DAV * 10, 100, 5000);
-    VO2 = Math.round(VO2/10)*10;
-    Q = r1(Q);
-    DAV = r1(DAV);
+    Q=reqQ;
+    // SvO₂ é a variável livre do lado venoso; PvO₂ vem da curva e o O₂ dissolvido entra no CvO₂.
+    const svMax=venousFromContent(CaO2-DAV_MIN).svo2;
+    if(SvO2>svMax){ SvO2=svMax; notices.push('SvO₂ limitada: o sangue venoso precisa conter menos O₂ que o arterial (Δ a-v O₂ mínima de 2 mL/dL).'); }
+    if(SvO2<SVO2_FLOOR) SvO2=SVO2_FLOOR;
+    PvO2=po2FromSat(SvO2);
+    DAV=CaO2-o2Content(HB,SvO2,PvO2);
+    VO2=Q*DAV*10;
   }else{
+    VO2=reqVO2; Q=reqQ; DAV=reqDAV;
     if(solveFor==='vo2'){
-      VO2 = clamp(Q * DAV * 10, 100, 5000);
+      if(DAV>maxDav){ DAV=maxDav; notices.push(`Δ a-v O₂ limitada a ${fmt1(maxDav)} mL/dL: com esta Hb, uma extração maior exigiria SvO₂ abaixo de ${SVO2_FLOOR}%.`); }
+      DAV=Math.max(DAV_MIN,DAV);
+      VO2=Q*DAV*10;
     }else if(solveFor==='q'){
-      Q = clamp(VO2 / (DAV * 10), 2.0, 30.0);
+      DAV=clamp(DAV,DAV_MIN,maxDav);
+      const qReq=VO2/(DAV*10);
+      if(qReq>Q_MAX||qReq<Q_MIN){
+        Q=clamp(qReq,Q_MIN,Q_MAX);
+        const asked=VO2; VO2=Q*DAV*10;
+        notices.push(`O VO₂ pedido (${fmtPt(asked/1000)} L/min) exigiria Q de ${fmt1(qReq)} L/min, fora da faixa fisiológica (${fmt1(Q_MIN)}–${fmt1(Q_MAX)} L/min). O VO₂ foi recalculado para ${fmtPt(VO2/1000)} L/min com Q = ${fmt1(Q)} L/min.`);
+      }else Q=qReq;
     }else if(solveFor==='dav'){
-      DAV = clamp(VO2 / (Q * 10), 2.0, 18.0);
+      const davReq=VO2/(Q*10);
+      if(davReq>maxDav||davReq<DAV_MIN){
+        DAV=clamp(davReq,DAV_MIN,maxDav);
+        const asked=VO2; VO2=Q*DAV*10;
+        notices.push(`O VO₂ pedido (${fmtPt(asked/1000)} L/min) exigiria Δ a-v O₂ de ${fmt1(davReq)} mL/dL, fora do possível para este sangue (${fmt1(DAV_MIN)}–${fmt1(maxDav)} mL/dL). O VO₂ foi recalculado para ${fmtPt(VO2/1000)} L/min.`);
+      }else DAV=davReq;
     }
-    VO2 = Math.round(VO2/10)*10;
-    Q = r1(Q);
-    DAV = r1(DAV);
+    const ven=venousFromContent(CaO2-DAV);
+    PvO2=ven.pvo2; SvO2=ven.svo2;
   }
+  if(VO2<VO2_BASAL_MIN) notices.push('VO₂ abaixo do metabolismo basal de um adulto (~150–250 mL/min): esta combinação de Q e Δ a-v O₂ não sustenta o organismo.');
+  if(VO2/MASS>VO2_REL_RECORD) notices.push('VO₂ relativo acima dos maiores valores já medidos em humanos (~90 mL/kg/min).');
 }
 
 function renderLabels(){
+  davRange.max = (Math.floor(davMax()*10)/10).toFixed(1);
   vo2Range.value = VO2;
   qRange.value = Q;
   davRange.value = DAV;
   massRange.value = MASS;
+  hbRange.value = HB;
+  sao2Range.value = Math.round(SaO2);
+  svo2Range.value = Math.round(SvO2);
+  pao2Range.value = Math.round(PaO2);
   vo2Label.textContent = `${fmtPt(VO2/1000)} L/min`;
-  qLabel.textContent = `${Q.toFixed(1)} L/min`;
-  davLabel.textContent = `${DAV.toFixed(1)} mL/dL`;
+  qLabel.textContent = `${fmt1(Q)} L/min`;
+  davLabel.textContent = `${fmt1(DAV)} mL/dL`;
   massLabel.textContent = `${Math.round(MASS)} kg`;
-  speedLabel.textContent = `${parseFloat(speedRange.value).toFixed(1)}x`;
+  speedLabel.textContent = `${fmt1(parseFloat(speedRange.value))}x`;
   hbLabel.textContent = `${fmt1(HB)} g/dL`;
-  sao2Label.textContent = `${Math.round(SaO2)}%`;
+  sao2Label.textContent = `${fmt1(SaO2)}%`;
   svo2Label.textContent = `${Math.round(SvO2)}%`;
   pao2Label.textContent = `${Math.round(PaO2)} mmHg`;
+  setNotice(notices.join(' '));
   advancedControls.style.display = advancedMode ? 'flex' : 'none';
 }
 
@@ -967,7 +1010,7 @@ function updateEquation(){
   if(advancedMode){
     equationMain.textContent = 'VO2 = Q × (CaO2 − CvO2) × 10';
     equationSub.textContent = 'Modo avançado: CaO2 e CvO2 são calculados automaticamente a partir de Hb, SaO₂, SvO₂ e PaO₂.';
-    altEquationMain.textContent = 'CaO2 = (1,34 × Hb × SaO₂) + (0,003 × PaO₂) | CvO2 = 1,34 × Hb × SvO₂';
+    altEquationMain.textContent = 'CaO2 = (1,34 × Hb × SaO₂) + (0,003 × PaO₂) | CvO2 = (1,34 × Hb × SvO₂) + (0,003 × PvO₂)';
     calcMain.textContent = `${fmtPt(VO2/1000)}`;
     calcSub.textContent = 'L/min';
     modeBadge.textContent = 'Modo: avançado';
@@ -982,14 +1025,14 @@ function updateEquation(){
     equationMain.textContent = 'Q = VO2 ÷ (Δ a-v O₂ × 10)';
     equationSub.textContent = 'O débito cardíaco passa a ser a incógnita resolvida automaticamente.';
     altEquationMain.textContent = 'VO2 = Q × (CaO2 − CvO2) × 10';
-    calcMain.textContent = `${Q.toFixed(1)}`;
+    calcMain.textContent = `${fmt1(Q)}`;
     calcSub.textContent = 'L/min';
     modeBadge.textContent = 'Modo: calcular Q';
   }else{
     equationMain.textContent = 'Δ a-v O₂ = VO2 ÷ (Q × 10)';
     equationSub.textContent = 'A extração tecidual passa a ser a incógnita resolvida automaticamente.';
     altEquationMain.textContent = 'VO2 = Q × (CaO2 − CvO2) × 10';
-    calcMain.textContent = `${DAV.toFixed(1)}`;
+    calcMain.textContent = `${fmt1(DAV)}`;
     calcSub.textContent = 'mL/dL';
     modeBadge.textContent = 'Modo: calcular Δ a-v O₂';
   }
@@ -998,8 +1041,8 @@ function updateEquation(){
 function updateReadouts(){
   const rel = VO2 / MASS;
   const { CaO2, CvO2 } = calcContents();
-  const currentCa = advancedMode ? CaO2 : 20.0;
-  const currentCv = advancedMode ? CvO2 : clamp(20.0 - DAV, 2, 18);
+  const currentCa = CaO2;
+  const currentCv = CvO2;
 
   vo2Label.textContent = `${fmtPt(VO2/1000)} L/min`;
   relMain.textContent = `${fmtPt(rel)}`;
@@ -1013,12 +1056,14 @@ function updateReadouts(){
   if(altCvO2) altCvO2.textContent = currentCv.toFixed(1).replace('.',',');
   if(hbCard) hbCard.textContent = fmt1(HB);
   if(satCard) satCard.innerHTML = `<span class="o2-sat">${Math.round(SaO2)}</span> / <span class="o2-sv">${Math.round(SvO2)}</span>`;
+  // Conferência interna: o VO₂ exibido sempre fecha Q × (CaO₂ − CvO₂) × 10.
+  sceneCanvas.dataset.fick = JSON.stringify({vo2:VO2,q:Q,ca:currentCa,cv:currentCv,sa:SaO2,sv:SvO2,pao2:PaO2,pvo2:PvO2,hb:HB,mass:MASS});
   if(pao2Card) pao2Card.textContent = `${Math.round(PaO2)}`;
 
   if(advancedMode){
-    instantRead.textContent = `No modo avançado, o VO₂ passa a depender do débito cardíaco e da diferença entre conteúdo arterial e venoso de oxigênio. Quedas de Hb ou SaO₂ reduzem CaO2; quedas de SvO₂ refletem maior extração; PaO₂ exerce impacto pequeno no conteúdo total, por contribuir apenas com a fração dissolvida.`;
+    instantRead.textContent = `No modo avançado, o VO₂ passa a depender do débito cardíaco e da diferença entre conteúdo arterial e venoso de oxigênio. Quedas de Hb ou da PaO₂ (e, pela curva de dissociação, da SaO₂) reduzem CaO2; quedas de SvO₂ refletem maior extração. A PaO₂ age sobretudo pela saturação da hemoglobina; sua fração dissolvida (0,003 × PaO₂) é pequena.`;
   }else{
-    instantRead.textContent = `O consumo de oxigênio resulta da interação entre débito cardíaco e extração tecidual. Na forma detalhada da equação de Fick, a diferença arterio-venosa pode ser lida como a diferença entre o conteúdo arterial de O₂ (CaO2) e o conteúdo venoso de O₂ (CvO2). A normalização pela massa corporal permite comparar indivíduos de tamanhos corporais diferentes.`;
+    instantRead.textContent = `O consumo de oxigênio resulta da interação entre débito cardíaco e extração tecidual. Na forma detalhada da equação de Fick, a diferença arteriovenosa pode ser lida como a diferença entre o conteúdo arterial de O₂ (CaO2) e o conteúdo venoso de O₂ (CvO2). A normalização pela massa corporal permite comparar indivíduos de tamanhos corporais diferentes.`;
   }
 }
 
@@ -1137,7 +1182,7 @@ function drawScene(){
   if(!advancedMode && solveFor==='dav') sctx.fillText('Δ a-v O₂ = VO2 ÷ (Q × 10)', 220, 74);
   sctx.fillStyle='#cadce8';
   sctx.font='14px Arial';
-  sctx.fillText(advancedMode?'Modo avançado: Hb, SaO₂, SvO₂ e PaO₂ determinam os conteúdos arterial e venoso.':'Modo básico: conteúdo arterial de referência; conteúdo venoso estimado pela diferença a-v.',48,106);
+  sctx.fillText(advancedMode?'Modo avançado: Hb, PaO₂ (SaO₂) e SvO₂ determinam os conteúdos arterial e venoso.':'Modo básico: CaO2 calculado de Hb e PaO₂ do estado; CvO2 = CaO2 − Δ a-v O₂.',48,106);
 
   // labels
   if(labelsToggle.checked){
@@ -1453,7 +1498,7 @@ function pause(){
 }
 function resetAll(){
   pause();
-  VO2=250; Q=5.0; DAV=5.0; MASS=70; HB=15.0; SaO2=98; SvO2=75; PaO2=100; advancedMode=false; advancedModeToggle.checked=false; solveFor='vo2';
+  VO2=250; Q=5.0; DAV=5.0; MASS=70; HB=15.0; PaO2=100; advancedMode=false; advancedModeToggle.checked=false; solveFor='vo2'; syncReq();
   document.querySelector('input[name="solveFor"][value="vo2"]').checked=true;
   setNotice('');
   updateActiveButtons();
@@ -1470,14 +1515,18 @@ function loop(ts){
 
 function applyPreset(name){
   quickButtons.forEach(btn=>btn.classList.toggle('active', btn.dataset.preset===name));
-  if(name==='rest'){ VO2=250; Q=5.0; DAV=5.0; MASS=70; HB=15.0; SaO2=98; SvO2=75; PaO2=100; solveFor='vo2'; }
-  if(name==='light'){ VO2=700; Q=9.0; DAV=7.8; MASS=70; HB=15.0; SaO2=97; SvO2=60; PaO2=98; solveFor='vo2'; }
-  if(name==='moderate'){ VO2=1500; Q=12.5; DAV=12.0; MASS=70; HB=15.0; SaO2=96; SvO2=45; PaO2=95; solveFor='vo2'; }
-  if(name==='intense'){ VO2=3200; Q=22.0; DAV=14.5; MASS=70; HB=15.0; SaO2=94; SvO2=25; PaO2=90; solveFor='vo2'; }
-  if(name==='athlete'){ VO2=4200; Q=28.0; DAV=15.0; MASS=68; HB=16.5; SaO2=98; SvO2=28; PaO2=100; solveFor='vo2'; }
-  if(name==='hf'){ VO2=700; Q=3.5; DAV=20.0/2.4; MASS=78; HB=13.0; SaO2=90; SvO2=40; PaO2=70; solveFor='vo2'; } // ~8.3
-  if(name==='anemia'){ VO2=900; Q=7.0; DAV=6.0; MASS=70; HB=9.0; SaO2=96; SvO2=55; PaO2=92; solveFor='vo2'; }
-  if(name==='normal'){ VO2=250; Q=5.0; DAV=5.0; MASS=70; HB=15.0; SaO2=98; SvO2=75; PaO2=100; solveFor='vo2'; }
+  // Estados definidos por Hb, PaO₂, Q e Δ a-v O₂; VO₂, SaO₂, SvO₂ e CvO₂ são sempre calculados (Fick fechado).
+  const P={
+    rest:    {Q:5.0,  DAV:5.0,  MASS:70, HB:15.0, PaO2:100},
+    light:   {Q:9.0,  DAV:8.0,  MASS:70, HB:15.0, PaO2:98},
+    moderate:{Q:13.0, DAV:11.5, MASS:70, HB:15.0, PaO2:96},
+    intense: {Q:20.5, DAV:15.0, MASS:70, HB:15.0, PaO2:95},
+    athlete: {Q:28.0, DAV:16.0, MASS:70, HB:15.0, PaO2:100},
+    hf:      {Q:3.5,  DAV:7.7,  MASS:78, HB:13.0, PaO2:70},
+    anemia:  {Q:7.0,  DAV:3.6,  MASS:70, HB:9.0,  PaO2:95},
+    normal:  {Q:5.0,  DAV:5.0,  MASS:70, HB:15.0, PaO2:100}
+  }[name];
+  if(P){ ({Q,DAV,MASS,HB,PaO2}=P); solveFor='vo2'; VO2=Q*DAV*10; SvO2=venousFromContent(arterialContent()-DAV).svo2; syncReq(); }
   document.querySelector(`input[name="solveFor"][value="${solveFor}"]`).checked=true;
   updateActiveButtons();
   setNotice('');
@@ -1485,14 +1534,14 @@ function applyPreset(name){
 }
 
 radioSolve.forEach(r=>r.addEventListener('change', e=>{
-  solveFor = e.target.value;
+  solveFor = e.target.value; syncReq();
   updateActiveButtons();
   render();
 }));
 
-vo2Range.addEventListener('input', e=>{ VO2=Number(e.target.value); render(); });
-qRange.addEventListener('input', e=>{ Q=Number(e.target.value); render(); });
-davRange.addEventListener('input', e=>{ DAV=Number(e.target.value); render(); });
+vo2Range.addEventListener('input', e=>{ reqVO2=Number(e.target.value); render(); });
+qRange.addEventListener('input', e=>{ reqQ=Number(e.target.value); render(); });
+davRange.addEventListener('input', e=>{ reqDAV=Number(e.target.value); render(); });
 massRange.addEventListener('input', e=>{ MASS=Number(e.target.value); render(); });
 speedRange.addEventListener('input', render);
 labelsToggle.addEventListener('change', render);
@@ -1502,11 +1551,11 @@ btnReset.addEventListener('click', resetAll);
 quickButtons.forEach(btn=>btn.addEventListener('click', ()=>applyPreset(btn.dataset.preset)));
 
 advancedModeToggle.addEventListener('change', e=>{
-  advancedMode = e.target.checked;
+  advancedMode = e.target.checked; syncReq();
   render();
 });
 hbRange.addEventListener('input', e=>{ HB=Number(e.target.value); render(); });
-sao2Range.addEventListener('input', e=>{ SaO2=Number(e.target.value); render(); });
+sao2Range.addEventListener('input', e=>{ PaO2=clamp(po2FromSat(Number(e.target.value)),30,110); render(); });
 svo2Range.addEventListener('input', e=>{ SvO2=Number(e.target.value); render(); });
 pao2Range.addEventListener('input', e=>{ PaO2=Number(e.target.value); render(); });
 
@@ -1560,5 +1609,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>

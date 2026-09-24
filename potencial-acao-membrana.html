@@ -224,7 +224,7 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
 
     <label>Velocidade
       <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2">
-      <span id="speedLabel">1.2x</span>
+      <span id="speedLabel">1,2x</span>
     </label>
 
     <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
@@ -268,7 +268,7 @@ canvas{border-radius:16px;border:1px solid #d7e1ec;box-shadow:inset 0 1px 0 rgba
   </div>
 
   <div class="legend">
-    <b>Como interpretar:</b> a cena à esquerda mostra a <b>bicamada lipídica</b> com proteínas integrais, canais e movimento iônico ao longo das <b>etapas didáticas sincronizadas</b>. O gráfico à direita acompanha o <b>potencial de membrana</b> em eixo fixo ao longo do tempo, com contraste reforçado para projeção em sala. Quando <b>Potencial sub-limiar</b> está ativo, o estímulo não alcança o limiar e o gráfico mostra uma despolarização local discreta, sem disparo do potencial de ação. Em <b>Tetrodotoxina (TTX - Baiacu)</b> e <b>Lidocaína</b>, os canais de <span class="ion-na">Na⁺</span> dependentes de voltagem são bloqueados e, neste modelo didático, resta apenas uma resposta local sem potencial de ação. <b>TEA (tetraetilamônio)</b> é um bloqueador experimental de canais de <span class="ion-k">K⁺</span> usado para estudar a repolarização da membrana. A saída de <span class="ion-k">K⁺</span> fica prejudicada e a repolarização torna-se mais lenta. O eixo usa tempo relativo: a velocidade controla apenas a reprodução. As aberturas dos canais são esquemáticas, sem calibração quantitativa. O limiar e o pico são eventos pontuais; a hiperpolarização corresponde ao trecho abaixo do repouso, incluindo a recuperação.
+    <b>Como interpretar:</b> a cena à esquerda mostra a <b>bicamada lipídica</b> com proteínas integrais, canais e movimento iônico ao longo das <b>etapas didáticas sincronizadas</b>. O gráfico à direita acompanha o <b>potencial de membrana</b> em eixo fixo ao longo do tempo, com contraste reforçado para projeção em sala. Quando <b>Potencial sub-limiar</b> está ativo, o estímulo não alcança o limiar e o gráfico mostra uma despolarização local discreta, sem disparo do potencial de ação. Em <b>Tetrodotoxina (TTX - Baiacu)</b> e <b>Lidocaína</b>, os canais de <span class="ion-na">Na⁺</span> dependentes de voltagem são bloqueados: o estímulo ainda produz a mesma despolarização local passiva, mas sem a abertura regenerativa de <span class="ion-na">Na⁺</span> não há potencial de ação. <b>TEA (tetraetilamônio)</b> é um bloqueador experimental de canais de <span class="ion-k">K⁺</span> usado para estudar a repolarização da membrana. A saída de <span class="ion-k">K⁺</span> fica prejudicada e a repolarização torna-se mais lenta. O eixo usa tempo relativo: a velocidade controla apenas a reprodução. As aberturas dos canais são esquemáticas, sem calibração quantitativa. O limiar e o pico são eventos pontuais. A <b>hiperpolarização</b> corresponde à queda abaixo do repouso até o valor mínimo (−82 mV), enquanto a condutância ao <span class="ion-k">K⁺</span> segue elevada; a subida de volta a −70 mV, com o fechamento gradual desses canais, aparece como etapa separada (<b>Retorno</b>).
     <span class="pill">eletrofisiologia</span>
     <span class="pill">potencial de ação</span>
     <span class="pill">membrana plasmática</span>
@@ -402,16 +402,20 @@ function isTEA(){ return pharmMode === 'tea'; }
   const getStages = () => isLocal() ? localStages : isTEA() ? teaStages : actionStages;
   const getStage = f => {
     const stages = getStages();
-    return stages.find(s => s.start === f && s.end === f) || stages.find(s => f >= s.start && f <= s.end) || stages[stages.length-1];
+    // Intervalo semiaberto (start, end]: a pausa no fim de uma etapa mostra a etapa que terminou.
+    return stages.find(s => s.start === f && s.end === f) || (f <= 0 ? stages[0] : stages.find(s => f > s.start && f <= s.end)) || stages[stages.length-1];
   };
-  const getPauseFrames = () => [...new Set(getStages().map(s => s.end))];
+  // Se uma etapa termina junto com um evento pontual (Despolarização → Pico), pausa 1 quadro antes para exibi-la.
+  const getPauseFrames = () => { const st = getStages(); return [...new Set(st.map((s, i) => { const n = st[i+1]; return (s.start !== s.end && n && n.start === n.end && n.end === s.end) ? s.end - 1 : s.end; }))].sort((a,b)=>a-b); };
   const setCardsColor = color => { phaseCard.style.setProperty('--phase', color); valueCard.style.setProperty('--phase', color); flowCard.style.setProperty('--phase', color); };
   const pressureToY = v => 492 - ((v + 92) / 130) * 350;
 
   function getVm(f){
     const t = TIME;
     if (isLocal()) {
-      const amplitude = isTTX() ? 2 : isLido() ? 8 : 10;
+      // O estímulo produz a mesma despolarização passiva (eletrotônica) com ou sem
+      // bloqueio de Na⁺: TTX e lidocaína impedem apenas a resposta regenerativa.
+      const amplitude = 10;
       if (f <= t.stimulus) return -70;
       if (f <= 228) return lerp(-70, -70 + amplitude, ease((f-t.stimulus)/(228-t.stimulus)));
       return lerp(-70 + amplitude, -70, ease((f-228)/(TOTAL-228)));
@@ -466,10 +470,10 @@ function isTEA(){ return pharmMode === 'tea'; }
     stageTrack.innerHTML = stages.map((s, idx) => {
       const active = idx === currentStageIndex;
       return `
-      <div class="stage-node" style="border-color:${s.color};box-shadow:${active ? '0 0 0 2px ' + s.color + '55, 0 10px 24px ' + s.color + '22, inset 0 0 0 1px ' + s.color + '30' : 'inset 0 0 0 1px ' + s.color + '20'};background:${active ? s.color + '12' : '#fff'}">
-        <div class="stage-num" style="background:${active ? s.color : '#eef2ff'};color:${active ? '#fff' : '#1e3a8a'}">${idx+1}</div>
+      <div class="stage-node" style="border-color:${s.color};box-shadow:${active ? '0 0 0 2px ' + s.color + '55, 0 10px 24px ' + s.color + '22, inset 0 0 0 1px ' + s.color + '30' : 'inset 0 0 0 1px ' + s.color + '20'};background:${active ? s.color + '22' : '#142c3c'}">
+        <div class="stage-num" style="background:${active ? s.color : '#223b4d'};color:${active ? '#0a1722' : '#c4d8e6'}">${idx+1}</div>
         <div class="stage-name" style="color:${s.color}">${s.short}</div>
-        <div class="stage-mini" style="font-weight:${active ? '700' : '400'}">${s.event}</div>
+        <div class="stage-mini" style="font-weight:${active ? '700' : '400'};color:${active ? '#e5f2fa' : '#a9c4d7'}">${semanticHTML(s.event)}</div>
       </div>`;
     }).join('');
   }
@@ -721,18 +725,18 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
   function resetAll(){ running = false; if (raf) cancelAnimationFrame(raf); frame = 0; stepAwaitPlay = false; render(); }
 
   function loop(ts){
-    if (!running) return; if (!lastTs) lastTs = ts; const dt = ts - lastTs; lastTs = ts; const inc = dt * 0.055 * getSpeed(); const prev = Math.floor(frame); frame += inc; if (frame > TOTAL) frame = TOTAL; const cur = Math.floor(frame);
+    if (!running) return; if (!lastTs) lastTs = ts; const dt = Math.min(64, ts - lastTs); lastTs = ts; const inc = dt * 0.055 * getSpeed(); const prev = Math.floor(frame); frame += inc; if (frame > TOTAL) frame = TOTAL; const cur = Math.floor(frame);
     if (stepModeToggle.checked) { const crossed = getPauseFrames().find(p => p > prev && p <= cur); if (crossed !== undefined) { frame = crossed; pauseNow(true); return; } }
     render(); if (frame >= TOTAL) { if (loopToggle.checked) { frame = 0; if (stepModeToggle.checked) { pauseNow(true); return; } } else { running = false; render(); return; } } raf = requestAnimationFrame(loop);
   }
 
   [btnStart, btnPause, btnStep, btnReset].forEach(btn => btn.style.userSelect = 'none');
   btnStart.addEventListener('click', play); btnPause.addEventListener('click', () => pauseNow(false)); btnStep.addEventListener('click', nextStage); btnReset.addEventListener('click', resetAll);
-  speedRange.addEventListener('input', () => speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x');
+  speedRange.addEventListener('input', () => speedLabel.textContent = parseFloat(speedRange.value).toFixed(1).replace('.', ',') + 'x');
   stepModeToggle.addEventListener('change', () => { if (stepModeToggle.checked && running) pauseNow(true); else stepAwaitPlay = false; render(); });
   [labelsToggle, loopToggle].forEach(el => el.addEventListener('change', render));
   subthresholdToggle.addEventListener('change', () => { renderStageMap(); render(); });
-  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + 'x';
+  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1).replace('.', ',') + 'x';
   render();
 })();
 </script>
@@ -759,5 +763,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>

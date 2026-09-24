@@ -18,8 +18,9 @@
      3. Energia: gasto = VO₂ × equivalente calórico (+ tremor no frio). A fração
         de carboidrato sobe com a intensidade. Glicogênio muscular, glicose do
         sangue, fígado (glicogênio + gliconeogênese) e intestino.
-     4. Intestino: esvaziamento gástrico e absorção (glicose ~1 g/min pelo
-        SGLT1, frutose ~0,6 g/min pelo GLUT5, água acompanhando os solutos).
+     4. Intestino: esvaziamento gástrico e absorção (glicose ~1,0 g/min pelo
+        SGLT1, frutose ~0,5 g/min pelo GLUT5 — teto ~60 g/h só com glicose e
+        ~90 g/h com glicose + frutose —, água acompanhando os solutos).
      5. Calor: produção metabólica menos trabalho. Núcleo → pele pelo fluxo
         cutâneo; pele → ambiente por convecção e radiação através da roupa,
         sol, chuva e evaporação do suor. Na natação, condução para a água.
@@ -189,7 +190,7 @@
       historia: 'Homem, 34 anos, 78 kg, 1,80 m, VO₂máx 50 mL/kg/min. Treinou no inverno para 3h50 e quer o mesmo tempo hoje, no verão — sem nenhuma semana de aclimatação ao calor: começa a suar mais tarde, sua menos e perde mais sal que um atleta aclimatado. Largada às 7h30 com 25 °C e 85% de umidade; às 10 h, 31 °C. Bebe água quando tem sede e não gosta de gel.',
       pede: 'Aceitar que o ritmo do inverno não cabe no calor, resfriar a pele nos postos, e não deixar o glicogênio acabar no km 30.',
       atleta: { massa: 78, altura: 1.80, fracAgua: 0.6, vo2max: 50, lt: 0.78, fcMax: 188, fcRep: 58, sv: 160,
-                sud: 0.85, limiarSuor: 38.0, suorMax: 0.9, naSuor: 60, glyM: 440, glyL: 90, teimosia: 0.6, nado: 0.8, acordado: 3 },
+                sud: 0.85, limiarSuor: 38.0, suorMax: 1.1, naSuor: 60, glyM: 440, glyL: 90, teimosia: 0.6, nado: 0.8, acordado: 3 },
       plano: { intensidade: 0.80, hidratacao: 'sede', bebida: 'agua', taxa: 600, roupa: 0 },
       ambiente: {
         altBase: 0, tagua: 26, vento: 1.5, nuvens: 0.1, nascer: 5.5, por: 19,
@@ -292,8 +293,15 @@
     const ur = chuva ? 0.97 : clamp(tabela(am.ur, h) + 0.04 * dAlt, 0.1, 0.97);
     const sol = chuva ? 0 : clamp(Math.sin(Math.PI * (h - am.nascer) / (am.por - am.nascer)), 0, 1) * (1 - am.nuvens);
     const vento = am.vento + 2 * Math.max(0, dAlt);
-    const e = ur * psat(tar) * 10;
-    const wbgt = 0.567 * tar + 0.393 * e + 3.94 + 2.2 * sol;
+    // IBUTG ao sol (aproximação da abordagem de Liljegren): bulbo úmido psicrométrico (Stull, 2011),
+    // bulbo úmido natural um pouco acima dele com sol e pouco vento, e globo negro de 150 mm aquecido
+    // pela radiação solar absorvida contra a perda por convecção e radiação.
+    const rh = ur * 100, u = Math.max(0.5, vento), S = 950 * sol;
+    const tw = tar * Math.atan(0.151977 * Math.sqrt(rh + 8.313659)) + Math.atan(tar + rh) - Math.atan(rh - 1.676331)
+      + 0.00391838 * Math.pow(rh, 1.5) * Math.atan(0.023101 * rh) - 4.686035;
+    const tnwb = tw + (0.4 + 0.8 * S / 1000) / Math.sqrt(u);
+    const tg = tar + 0.31 * S / (13.5 * Math.pow(u, 0.6) + 6);
+    const wbgt = 0.7 * tnwb + 0.2 * tg + 0.1 * tar;
     return { habs, h, tar, ur, sol, vento, tagua: am.tagua, wbgt, chuva, alt, noite: sol <= 0 && !chuva ? true : sol <= 0 };
   }
 
@@ -426,7 +434,7 @@
 
     // ---------- 1. limites do ritmo
     const qRest = 2.2;
-    const svBase = a.sv * Math.pow(clamp(pvRel, 0.3, 1.2), 1.4);
+    const svBase = a.sv * Math.pow(clamp(pvRel, 0.3, 1.2), 1.0);
     const svEm = fc => svBase * (1 - 0.1 * clamp((fc - 140) / 45, 0, 1));
     const qMax = a.fcMax * svEm(a.fcMax) / 1000;
     const bonus = 0.03 * cafEf;
@@ -460,13 +468,14 @@
     let E = vo2 * (4.7 + 0.35 * fCHO);            // kcal/min
 
     // ---------- 3. intestino
-    const splanch = clamp(1 - 0.45 * clamp((pct - 0.55) / 0.35, 0, 1) - 0.3 * clamp((Tc - 38.5) / 1.5, 0, 1) - 0.2 * clamp((perdaAgua - 2) / 3, 0, 1), 0.3, 1);
+    // fluxo esplâncnico: preservado em intensidade moderada; cai com intensidade alta (> ~70% VO₂máx), calor no núcleo e desidratação
+    const splanch = clamp(1 - 0.5 * clamp((pct - 0.70) / 0.25, 0, 1) - 0.3 * clamp((Tc - 38.5) / 1.5, 0, 1) - 0.2 * clamp((perdaAgua - 2) / 3, 0, 1), 0.3, 1);
     const Es = s.est, I = s.int;
     const conc = (Es.glic + Es.fruc) / Math.max(50, Es.vol) * 100;       // g/100 mL
     const tauE = 14 * (1 + conc / 7) * (1 + Es.lento / 20) * (1 + 3 * Math.max(0, pct - 0.7))
       * (1 + 0.8 * Math.max(0, Tc - 38.8)) * (1 + 0.12 * Math.max(0, perdaAgua - 2)) * (s.gi > 0.6 ? 1.6 : 1);
-    const absGlic = Math.min(I.glic / DT, 1.2 * splanch * I.glic / (I.glic + 2));
-    const absFruc = Math.min(I.fruc / DT, 0.6 * splanch * I.fruc / (I.fruc + 2));
+    const absGlic = Math.min(I.glic / DT, 1.1 * splanch * I.glic / (I.glic + 1));   // SGLT1: teto efetivo ~1,0 g/min (~60 g/h)
+    const absFruc = Math.min(I.fruc / DT, 0.55 * splanch * I.fruc / (I.fruc + 1));  // GLUT5: ~0,5 g/min a mais (~90 g/h no total)
     const absNa = I.na / 15, absK = I.k / 15;
     const absLento = Math.min(I.lento / DT, 0.25 * splanch);
     const osmLuz = I.glic * 5.55 * 0.6 + I.fruc * 5.55 + 2 * I.na + 2 * I.k + I.lento * 2;    // mOsm (polímeros de glicose pesam menos)
@@ -494,7 +503,7 @@
     const fEvap = 1 / (1 + 1.2 * clo) * (dormindo ? 0.4 : 1);
     const trab = parado || tipo === 'transicao' ? 0 : mod.eff;
     const noSol = tipo !== 'nado' && !(parado && s.sombra);
-    const solar = noSol ? am.sol * a.area * 60 : 0;
+    const solar = noSol ? am.sol * a.area * 80 : 0;   // carga radiante do sol direto sobre a pele (~80 W/m² de área corporal ao meio-dia)
     const ar = Math.max(0.6, vel / 60 + 0.4 * am.vento);
     const hc = 8.3 * Math.sqrt(ar);
     const hSeco = 1 / (0.155 * clo + 1 / (hc + 4.7));
@@ -503,13 +512,14 @@
     const chuvaW = molhado ? 110 * a.area : 0;
     const ext = s.rEsp + s.rGelo + chuvaW;
     const pa = am.ur * psat(am.tar);
-    const srDe = tsk => clamp(a.sud * (0.15 + 1.0 * Math.max(0, Tc - (a.limiarSuor || 37.0)) + 0.15 * Math.max(0, tsk - 33.5)) * hidr * (Tc < 37 ? Math.max(0, (Tc - 36.5) * 2) : 1), 0, a.suorMax || 2.8);
+    const srDe = tsk => clamp(a.sud * (0.15 + 0.7 * Math.max(0, Tc - (a.limiarSuor || 37.0)) + 0.15 * Math.max(0, tsk - 33.5)) * hidr * (Tc < 37 ? Math.max(0, (Tc - 36.5) * 2) : 1), 0, a.suorMax || 2.8);
     const fluxos = tsk => {
       if (tipo === 'nado') return { seco: 200 * a.area * (tsk - am.tagua), evap: 0, sr: srDe(tsk) * 0.35, emax: 0 };
       const seco = hSeco * a.area * (tsk - am.tar);
       const emax = Math.max(0, 16.5 * hc * a.area * fEvap * (psat(tsk) - pa));
       const sr = srDe(tsk), srW = sr * 674;
-      return { seco, evap: emax > 1 ? emax * (1 - Math.exp(-1.6 * srW / emax)) : 0, sr, emax };
+      // o suor não evapora além do que é produzido; perto de Emax, parte escorre sem resfriar
+      return { seco, evap: emax > 1 ? Math.min(srW, emax * (1 - Math.exp(-1.6 * srW / emax))) : 0, sr, emax };
     };
     let lo = Math.min(am.tar, am.tagua) - 10, hi = Tc, f = null;
     for (let i = 0; i < 26; i++) {

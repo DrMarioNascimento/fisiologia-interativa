@@ -805,8 +805,8 @@ button.action{
     <span id="angleLabel" class="control-value">150°</span>
   </label>
   <label class="control"><span class="control-name">Velocidade angular</span>
-    <input id="velocityRange" type="range" min="10" max="60" step="5" value="10">
-    <span id="velocityLabel" class="control-value">90 °/s</span>
+    <input id="velocityRange" type="range" min="30" max="300" step="10" value="60">
+    <span id="velocityLabel" class="control-value">60 °/s</span>
   </label>
   <label class="control"><span class="control-name">Compr. inicial</span>
     <input id="lengthRange" type="range" min="0.70" max="1.30" step="0.01" value="1.00">
@@ -834,7 +834,7 @@ button.action{
   </div>
 
   <div class="activation-chip activation-chip-wide">
-    <b>Motoneurônio α:</b>&nbsp;<span id="mnAlphaLabel">frequência média</span>&nbsp;<span id="mnAlphaHz">(10–25 Hz)</span>
+    <b>Motoneurônio α:</b>&nbsp;<span id="mnAlphaLabel">tétano não fundido</span>&nbsp;<span id="mnAlphaHz">(8–24 Hz)</span>
   </div>
 </div>
 
@@ -876,14 +876,14 @@ button.action{
 </div>
 
 <div class="result-grid mechanics-dashboard" id="mechanicsDashboard">
-  <div class="result-pill force-pill card-output"><div class="lab" id="forceLab">Força</div><div id="forceOut" class="val dyn-number">0</div><div class="sub">% relativa</div></div>
-  <div class="result-pill velocity-pill card-output"><div class="lab">Velocidade</div><div id="velocityOut" class="val dyn-number">0</div><div class="sub">relativa / °/s</div></div>
-  <div class="result-pill torque-pill card-output"><div class="lab">Torque</div><div id="torqueOut" class="val dyn-number">0</div><div class="sub">relativo</div></div>
-  <div class="result-pill length-pill card-context"><div class="lab">Comprimento</div><div id="lengthOut" class="val dyn-number">0</div><div class="sub">L₀</div></div>
-  <div class="result-pill cg-pill card-context"><div class="lab">CG / braço</div><div id="cgOut" class="val dyn-number">0</div><div class="sub">distância relativa</div></div>
-  <div class="result-pill vm-pill card-context"><div class="lab">Vantagem mecânica</div><div id="vmOut" class="val dyn-number">—</div><div class="sub" id="vmClassOut">sem carga externa</div></div>
-  <div class="result-pill type-pill card-wide"><div class="lab" id="typeLab">Tipo</div><div id="typeOut" class="val dyn-number">Concêntrica</div><div class="sub">estática · dinâmica · isocinética</div></div>
-  <div class="result-pill condition-pill card-wide"><div class="lab">Condição didática <span id="conditionDynamicHint">(no modo dinâmico, compare concêntrica e excêntrica)</span></div><div id="conditionOut" class="val dyn-number">Força no mesmo sentido do movimento</div><div class="sub" id="conditionSubOut"></div></div>
+  <div class="result-pill force-pill card-output"><div class="lab" id="forceLab">Força</div><div id="forceOut" class="val dyn-number">0</div><div class="sub">% de F₀</div></div>
+  <div class="result-pill velocity-pill card-output"><div class="lab">Velocidade</div><div id="velocityOut" class="val dyn-number">0</div><div class="sub">°/s (+ flexão)</div></div>
+  <div class="result-pill torque-pill card-output"><div class="lab">Torque</div><div id="torqueOut" class="val dyn-number">0</div><div class="sub">% do máximo</div></div>
+  <div class="result-pill length-pill card-context"><div class="lab">Comprimento</div><div id="lengthOut" class="val dyn-number">0</div><div class="sub">L₀ (atual)</div></div>
+  <div class="result-pill cg-pill card-context"><div class="lab">Braço perpendicular</div><div id="cgOut" class="val dyn-number">0</div><div class="sub">cm · carga ao cotovelo</div></div>
+  <div class="result-pill vm-pill card-context"><div class="lab">Vantagem mecânica</div><div id="vmOut" class="val dyn-number">—</div><div class="sub" id="vmClassOut">braço de potência ÷ braço de resistência</div></div>
+  <div class="result-pill type-pill card-wide"><div class="lab" id="typeLab">Tipo</div><div id="typeOut" class="val dyn-number">Concêntrica</div><div class="sub">pelo balanço entre torque muscular e resistivo</div></div>
+  <div class="result-pill condition-pill card-wide"><div class="lab">Condição didática <span id="conditionDynamicHint">(compare concêntrica, isométrica e excêntrica)</span></div><div id="conditionOut" class="val dyn-number">Força no mesmo sentido do movimento</div><div class="sub" id="conditionSubOut"></div></div>
 </div>
 
 <div class="main-layout">
@@ -909,7 +909,7 @@ button.action{
 
     
       <div id="eqMain" class="eq-main"><span class="force-word">Força</span> <span class="neutral-word">muscular × braço de momento →</span> <span class="movement-word">movimento</span></div>
-      <div id="eqSub" class="eq-sub">Na versão dinâmica, a força muscular pode estar no mesmo sentido do movimento (concêntrica) ou no sentido oposto ao movimento (excêntrica). A posição articular, o comprimento inicial, a velocidade e o padrão de disparo modificam a resposta.</div>
+      <div id="eqSub" class="eq-sub">O tipo de contração decorre do balanço entre o torque muscular e o torque resistivo.</div>
     </div>
 
   </div>
@@ -918,7 +918,7 @@ button.action{
 <div class="interpret-block interpret-fullwidth">
       <div class="interpret-title">Como interpretar</div>
       <div id="interpretText" class="interpret-text">
-        <b>Estática:</b> há produção de força sem deslocamento angular relevante. <b>Dinâmica:</b> é o foco principal deste simulador; a contração <b>concêntrica</b> mostra a força muscular no mesmo sentido do movimento, enquanto a <b>excêntrica</b> mostra a força muscular no sentido oposto ao movimento. <b>Comprimento–Tensão:</b> o comprimento inicial altera a <span class="curve-active">força ativa clássica</span>, a <span class="curve-passive">força passiva</span> e a <span class="curve-total">força total</span>. <b>Força–Ângulo:</b> a posição articular modifica o braço de momento e o torque. <b>Força–Velocidade:</b> na contração concêntrica, velocidades maiores de encurtamento tendem a reduzir a força muscular; na contração excêntrica, a força pode aumentar com a velocidade de alongamento, pois o músculo atua freando o movimento. <b>Padrão de disparo:</b> abalo, somação e tetania modulam a força ativa por mudança na frequência de disparo do motoneurônio α. <b>Com vara / sem vara:</b> o mesmo peso pode gerar exigências muito diferentes quando a distância ao eixo articular aumenta. <b>Vantagem mecânica:</b> VM = torque muscular / torque resistivo; valores maiores que 1 indicam vantagem, menores que 1 indicam desvantagem.
+        <b>Dinâmica:</b> torque muscular maior que o resistivo: concêntrica; iguais: isométrica; menor, com ativação: excêntrica; sem ativação, o segmento apenas cai. <b>Vantagem mecânica:</b> braço de potência ÷ braço de resistência (no bíceps, menor que 1).
       </div>
       <div class="interpret-footer">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
     </div>
@@ -1020,73 +1020,31 @@ function forceWord(txt='Força'){ return `<span class="force-word">${txt}</span>
 function movementWord(txt='movimento'){ return `<span class="movement-word">${txt}</span>`; }
 function neutralWord(txt=''){ return `<span class="neutral-word">${txt}</span>`; }
 
-function getForceVelocitySignedTarget(s){
-  const maxAngle = Math.max(1, Number(angleRange.value) || 1);
-  const phase = clamp(Number(currentAngleValue) / maxAngle, 0, 1);
-  return displayDynamicType === 'ecc' ? -phase : phase;
-}
-
-function xMapSignedVelocity(xMap, signedU){
-  return xMap((signedU + 1) / 2);
-}
-
-function getForceVelocityTargetNorm(s){
-  return clamp(Math.abs(getForceVelocitySignedTarget(s)), 0, 1);
-}
-
-function updateForceVelocityMarker(s){
-  const targetSignedU = getForceVelocitySignedTarget(s);
-  const targetU = Math.abs(targetSignedU);
-
-  if(s.analysis !== 2){
-    fvMarkerInitialized = false;
-    return {u: targetU, signedU: targetSignedU};
-  }
-
-  if(!fvMarkerInitialized){
-    fvMarkerU = targetU;
-    fvMarkerSignedU = targetSignedU;
-    fvMarkerInitialized = true;
-    return {u: fvMarkerU, signedU: fvMarkerSignedU};
-  }
-
-  fvMarkerU = targetU;
-  fvMarkerSignedU = targetSignedU;
-  return {u: clamp(fvMarkerU, 0, 1), signedU: clamp(fvMarkerSignedU, -1, 1)};
-}
-
-function activeLenPct(L){ return Math.exp(-Math.pow((L-1.0)/0.22,2))*100; }
-function passiveLenPct(L){ return L<=1 ? 0 : Math.min(120, 3.2*Math.pow(L-1,2)*100); }
-function totalLenPct(L){ return activeLenPct(L) + passiveLenPct(L); }
-function getFiringMeta(modeValue){
-  if(modeValue==='twitch') return {factor:0.55, label:'baixa frequência', hz:'(5–10 Hz)', short:'Abalo'};
-  if(modeValue==='tetanus') return {factor:1.00, label:'alta frequência', hz:'(25–50 Hz)', short:'Tetania'};
-  return {factor:0.80, label:'frequência média', hz:'(10–25 Hz)', short:'Somação'};
-}
-function syncDisplayState(force=false){
-  displayDynamicType = dynamicType;
-  displayMovementDirection = movementDirection;
-  displayMetrics = computeState();
-  if(force) uiHoldMs = 0;
+function formulaBlock(){
+  return `<br><span class="curve-total"><b>F<sub>total</sub></b></span> = <span class="curve-active">ativação × f<sub>disparo</sub> × F(L) × F(v)</span> + <span class="curve-passive">F<sub>passiva</sub>(L)</span> · <b>Hill:</b> (F + a)(v + b) = (F<sub>0</sub> + a)b · <b>Torque</b> = força × braço de momento`;
 }
 function updateEquationDisplay(s){
-  if(mode==='dynamic'){
-    const forceDominant = s.totalForce >= s.externalDemand;
-    const forceCls = forceDominant ? 'eq-force eq-dominant' : 'eq-force';
-    const moveCls = forceDominant ? 'eq-move' : 'eq-move eq-dominant';
-    if(displayDynamicType==='ecc'){
+  const t = s.motionType;
+  if(mode==='dynamic' || mode==='static'){
+    if(t==='ecc'){
       eqMain.innerHTML = movementWord('Movimento') + '<span class="neutral-word">+ carga externa ←</span>' + forceWord('Força') + '<span class="neutral-word">de frenagem</span>';
-      eqSub.innerHTML=`Na versão dinâmica excêntrica, na contração excêntrica, a força muscular pode aumentar mesmo com maior velocidade, devido à resistência ao alongamento,  o segmento desce enquanto a ${forceWord('força')} muscular freia o ${movementWord('movimento')}. <b>Força–Velocidade:</b> na excêntrica, a força pode aumentar com a velocidade de alongamento. <b>Padrão de disparo:</b> ${s.firingMode} (${s.mnAlpha}).<br><span class="curve-active"><br><br><b>Força ativa clássica:</b></span> F<sub>ativa</sub> = ativação × f<sub>disparo</sub> × e<sup>-((L-1)/0,22)<sup>2</sup></sup> × 100<br><span class="curve-passive"><b>Força passiva:</b></span> F<sub>passiva</sub> = 0, para L ≤ 1; e F<sub>passiva</sub> = 3,2 × (L-1)<sup>2</sup> × 100, para L &gt; 1<br><span class="curve-total"><b>Força total:</b></span> F<sub>total</sub> = F<sub>ativa</sub> + F<sub>passiva</sub>`;
+    }else if(t==='iso'){
+      eqMain.innerHTML = '<span class="eq-force eq-dominant">Torque muscular</span><span class="neutral-word"> = torque resistivo →</span>' + movementWord('movimento') + '<span class="neutral-word">≈ 0</span>';
+    }else if(t==='passive' || t==='rest' || t==='passiveStretch'){
+      eqMain.innerHTML = '<span class="neutral-word">'+(t==='passiveStretch'?'Bíceps sem ativação →':'Ativação 0 →')+'</span>' + forceWord('força ativa') + '<span class="neutral-word">= 0</span>';
     }else{
       eqMain.innerHTML = forceWord('Força') + '<span class="neutral-word">× braço de momento →</span>' + movementWord('Movimento');
-      eqSub.innerHTML=`Na versão dinâmica concêntrica, na contração concêntrica, a força muscular diminui à medida que a velocidade de encurtamento aumenta,  a ${forceWord('força')} muscular acelera o ${movementWord('movimento')} no mesmo sentido do deslocamento. <b>Força–Velocidade:</b> velocidades maiores de encurtamento reduzem a força muscular disponível. <b>Padrão de disparo:</b> ${s.firingMode} (${s.mnAlpha}).<br><span class="curve-active"><br><br><br><b>Força ativa clássica:</b></span> F<sub>ativa</sub> = ativação × f<sub>disparo</sub> × e<sup>-((L-1)/0,22)<sup>2</sup></sup> × 100<br><span class="curve-passive"><b>Força passiva:</b></span> F<sub>passiva</sub> = 0, para L ≤ 1; e F<sub>passiva</sub> = 3,2 × (L-1)<sup>2</sup> × 100, para L &gt; 1<br><span class="curve-total"><b>Força total:</b></span> F<sub>total</sub> = F<sub>ativa</sub> + F<sub>passiva</sub>`;
     }
+    const fv = s.uSigned>0.0005 ? `na concêntrica, a ${forceWord('força')} cai com a velocidade de encurtamento` : s.uSigned<-0.0005 ? `na excêntrica, a ${forceWord('força')} sobe com a velocidade de alongamento até um platô (≈ 1,5–1,8 F<sub>0</sub>)` : 'na isometria (v = 0) a força é a isométrica';
+    eqSub.innerHTML = `Tipo pelo balanço entre torque muscular e resistivo. <b>Força–Velocidade:</b> ${fv}. <b>Padrão de disparo:</b> ${s.firingMode} (${s.mnAlpha}).` + formulaBlock();
   }else if(mode==='iso'){
     const forceCls = 'eq-force';
-    const moveCls = 'eq-move eq-dominant';
-    eqMain.innerHTML = displayDynamicType==='ecc'
-      ? movementWord('Movimento') + '<span class="neutral-word">controlado ←</span>' + '<span class="'+forceCls+'">Torque</span>' + '<span class="neutral-word">de frenagem</span>'
-      : '<span class="'+forceCls+'">Torque</span><span class="neutral-word">× velocidade →</span>' + movementWord('Movimento');
+    eqMain.innerHTML = t==='ecc'
+      ? movementWord('Movimento') + '<span class="neutral-word">imposto ←</span>' + '<span class="'+forceCls+'">Torque</span>' + '<span class="neutral-word">excêntrico</span>'
+      : t==='passiveIso'
+        ? movementWord('Movimento') + '<span class="neutral-word">imposto · torque muscular = 0</span>'
+        : '<span class="'+forceCls+'">Torque</span><span class="neutral-word">× velocidade = potência →</span>' + movementWord('Movimento');
+    eqSub.innerHTML = `Velocidade imposta pelo dinamômetro: ${s.vel} °/s (${fmt2(s.vel/W_MAX)} V<sub>máx</sub>). Torque = ativação × f<sub>disparo</sub> × F(ângulo) × F(v) × braço de momento. <b>Padrão de disparo:</b> ${s.firingMode} (${s.mnAlpha}).`;
   }
 }
 
@@ -1827,13 +1785,14 @@ function updateMovementDirection(currentAngle){
 }
 
 function syncLoadControl(){
-  const noLoad = mechanicsMode===0;
+  const noLoad = mechanicsMode===0 || mode==='iso';
   loadRange.disabled = noLoad;
   loadRange.style.opacity = noLoad ? '0.5' : '1';
   loadRange.style.cursor = noLoad ? 'not-allowed' : 'pointer';
   updateLabels();
 }
 
+const INTERPRET_COMMON='<b>Força–Ângulo:</b> o torque muscular varia com o braço de momento do bíceps (maior perto de 90°) e com o comprimento do músculo; o torque resistivo varia com a distância perpendicular da carga ao cotovelo. <b>Força–Velocidade (Hill):</b> na concêntrica a força cai de forma hiperbólica com a velocidade e a potência máxima ocorre perto de 30% da força isométrica e de 30% da velocidade máxima; na excêntrica a força sobe rapidamente até um platô de cerca de 1,5–1,8 vez a força isométrica. <b>Padrão de disparo:</b> a relação força–frequência é sigmoide; o abalo isolado vale cerca de 15% do tétano; somação (tétano não fundido, 8–24 Hz) e tetania (tétano fundido, ≥ 25 Hz) elevam a força. <b>Com vara / sem vara:</b> o mesmo peso gera torques muito diferentes quando a distância ao eixo articular aumenta. <b>Vantagem mecânica:</b> braço de potência ÷ braço de resistência, ambos medidos perpendicularmente no ângulo atual; no bíceps o braço de potência vai de cerca de 1 a 4,5 cm e o da carga na mão chega a 33 cm (a 90°), por isso a vantagem costuma ser bem menor que 1: o músculo produz forças muito maiores que a carga, em troca de amplitude e velocidade na mão. No dinamômetro, a almofada fica a cerca de 25 cm do cotovelo e empurra sempre perpendicularmente à alavanca.';
 function setMode(next){
   mode=next;
   if(analysisIndex===2) fvMarkerInitialized = false;
@@ -1850,21 +1809,15 @@ function setMode(next){
   if(mode==='static'){
     modeBadge.textContent='Modo atual: Estática — produção de força sem deslocamento angular relevante.';
     eqMain.style.color='#2563eb';
-    eqMain.innerHTML='<span class="eq-force eq-dominant">Tensão</span><span class="neutral-word">↑ com</span>' + movementWord('movimento') + '<span class="neutral-word">≈ 0</span>';
-    eqSub.innerHTML='Na contração estática, a '+forceWord('força')+' aumenta sem mudança angular importante. Serve para introduzir produção de '+forceWord('força')+' sem deslocamento.';
-    interpretText.innerHTML='<b>Estática:</b> há produção de força sem deslocamento angular relevante. O aluno observa aumento de tensão, sem mudança angular importante. Isso ajuda a separar força produzida de movimento visível.';
+    interpretText.innerHTML='<b>Estática (isométrica):</b> há produção de força sem deslocamento angular, porque o torque muscular iguala o torque resistivo. Se a carga exigir mais torque do que o músculo produz, o segmento desce (excêntrica) até um ângulo em que os torques se igualam. <b>Torque resistivo:</b> peso × distância perpendicular ao cotovelo; é nulo com o antebraço pendente e máximo com o antebraço horizontal. '+INTERPRET_COMMON;
   }else if(mode==='dynamic'){
     modeBadge.textContent='Modo atual: Dinâmica — diferencie concêntrica e excêntrica, além de comprimento–tensão, força–ângulo e força–velocidade.';
     eqMain.style.color='#2563eb';
-    eqMain.innerHTML=' '+forceWord('Força')+' × braço de momento → '+movementWord('Movimento');
-    eqSub.innerHTML='Na versão dinâmica, a '+forceWord('força')+' muscular pode estar no mesmo sentido do '+movementWord('movimento')+' (concêntrica) ou no sentido oposto ao '+movementWord('movimento')+' (excêntrica). A posição articular, o comprimento inicial, a velocidade e o padrão de disparo modificam a resposta.<br><span class="curve-active"><b>Força ativa clássica:</b></span> F<sub>ativa</sub> = e<sup>-((L-1)/0,22)<sup>2</sup></sup> × 100<br><span class="curve-passive"><b>Força passiva:</b></span> F<sub>passiva</sub> = 0, para L ≤ 1; e F<sub>passiva</sub> = 3,2 × (L-1)<sup>2</sup> × 100, para L &gt; 1<br><span class="curve-total"><b>Força total:</b></span> F<sub>total</sub> = F<sub>ativa</sub> + F<sub>passiva</sub>';
-    interpretText.innerHTML='<b>Dinâmica:</b> é o foco principal deste simulador; a contração <b>concêntrica</b> mostra a força muscular no mesmo sentido do movimento, enquanto a <b>excêntrica</b> mostra a força muscular no sentido oposto ao movimento. <b>Comprimento–Tensão:</b> até o comprimento ótimo (L ≈ 1), predomina a <span class="curve-active">força ativa clássica</span>; acima disso, a <span class="curve-active">força ativa</span> cai, mas a <span class="curve-passive">tensão passiva</span> cresce progressivamente. Por isso, em comprimentos maiores, a <span class="curve-total">força total</span> pode voltar a subir mesmo com menor contribuição contrátil. <b>Fórmulas:</b> <span class="curve-active">força ativa clássica</span>, <span class="curve-passive">força passiva</span> e <span class="curve-total">soma das duas</span> ficam mostradas no painel para reforçar essa leitura. <b>Força–Ângulo:</b> a posição articular modifica o braço de momento e o torque. <b>Força–Velocidade:</b> na contração concêntrica, velocidades maiores de encurtamento tendem a reduzir a força muscular; na contração excêntrica, a força pode aumentar com a velocidade de alongamento, pois o músculo atua freando o movimento. <b>Padrão de disparo:</b> abalo, somação e tetania modulam a força ativa por mudança na frequência de disparo do motoneurônio α. <b>Com vara / sem vara:</b> o mesmo peso pode gerar exigências muito diferentes quando a distância ao eixo articular aumenta. <b>Vantagem mecânica:</b> VM = torque muscular / torque resistivo; valores maiores que 1 indicam vantagem, menores que 1 indicam desvantagem.';
+    interpretText.innerHTML='<b>Dinâmica:</b> o tipo de contração decorre do balanço de torques. Torque muscular maior que o resistivo: <b>concêntrica</b> (o músculo encurta e a força atua no sentido do movimento). Torques iguais: <b>isométrica</b>. Torque muscular menor, com ativação: <b>excêntrica</b> (o músculo alonga-se sob tensão e freia o movimento). Sem ativação, o segmento apenas cai: não há contração. Na descida controlada, o comando neural diminui para que o torque muscular fique um pouco abaixo do resistivo. <b>Comprimento–Tensão:</b> a flexão do cotovelo encurta o bíceps; perto do comprimento ótimo predomina a <span class="curve-active">força ativa</span>; acima dele cresce a <span class="curve-passive">tensão passiva</span>, que se soma na <span class="curve-total">força total</span>. '+INTERPRET_COMMON;
   }else{
-    modeBadge.textContent='Modo atual: Isocinética — a velocidade é imposta e torque e potência tornam-se as saídas principais.';
+    modeBadge.textContent='Modo atual: Isocinética — a velocidade é imposta pelo dinamômetro e o torque é a resposta do músculo.';
     eqMain.style.color='#16a34a';
-    eqMain.innerHTML='<span class="eq-force">Torque</span> × velocidade = '+movementWord('Movimento');
-    eqSub.innerHTML='No modo isocinético, a velocidade é imposta. Torque e potência passam a ser as saídas principais ao longo do '+movementWord('movimento')+'.';
-    interpretText.innerHTML='<b>Isocinética:</b> a velocidade é imposta e controlada. O aluno observa como a ativação, a resistência e a amplitude alteram torque e potência em contexto aplicado de treinamento e reabilitação.';
+    interpretText.innerHTML='<b>Isocinética:</b> o dinamômetro mantém a velocidade angular constante (faixa típica de 30 a 300 °/s) e oferece uma resistência que se acomoda ao esforço; por isso não há carga fixa. O torque medido é a resposta do músculo: na fase <b>concêntrica</b> ele cai com a velocidade (Hill); na fase <b>excêntrica</b> o dinamômetro alonga o músculo ativo e o torque é maior e varia pouco com a velocidade. A potência (torque × velocidade) cresce com a velocidade enquanto o torque não cai demais. Sem ativação, o torque muscular é nulo. '+INTERPRET_COMMON;
   }
   const conditionDynamicHint = document.getElementById('conditionDynamicHint');
   if(conditionDynamicHint){
@@ -1873,20 +1826,91 @@ function setMode(next){
   updateReadouts();
 }
 
-function flCurve(L){ return Math.exp(-Math.pow((L-1.0)/0.22,2)); }
-function fpCurve(L){ return L<=1 ? 0 : Math.min(1.2, 3.2*Math.pow(L-1,2)); }
+// ===== Modelo biomecânico dos flexores do cotovelo (esquemático, unidades relativas) =====
+// Comprimento–tensão: ativa em sino (platô 0,97–1,03 L₀ ≈ sarcômero 2,64–2,81 µm) + passiva exponencial acima do ótimo.
+function flCurve(L){
+  // Abaixo de ≈ 0,65 L₀ a sobreposição dupla dos finos e o choque do grosso nas linhas Z levam a força a ≈ 0 perto de 0,5 L₀.
+  if(L<0.97){ const t=clamp((L-0.5)/0.15,0,1); return Math.exp(-Math.pow((L-0.97)/0.55,2))*t*t*(3-2*t); }
+  if(L>1.03) return Math.exp(-Math.pow((L-1.03)/0.32,2));
+  return 1;
+}
+function fpCurve(L){ return L<=1 ? 0 : 0.029*(Math.exp(8*(L-1))-1); }
 function activeLenPct(L){ return flCurve(L)*100; }
 function passiveLenPct(L){ return fpCurve(L)*100; }
 function totalLenPct(L){ return activeLenPct(L) + passiveLenPct(L); }
+// Força–frequência sigmoide: abalo ≈ 15% do tétano fundido.
 function getFiringMeta(modeValue){
-  if(modeValue==='twitch') return {factor:0.55, label:'baixa frequência', hz:'(5–10 Hz)', short:'Abalo'};
-  if(modeValue==='tetanus') return {factor:1.00, label:'alta frequência', hz:'(25–50 Hz)', short:'Tetania'};
-  return {factor:0.80, label:'frequência média', hz:'(10–25 Hz)', short:'Somação'};
+  if(modeValue==='twitch') return {factor:0.15, label:'abalos isolados', hz:'(1–7 Hz)', short:'Abalo'};
+  if(modeValue==='tetanus') return {factor:1.00, label:'tétano fundido', hz:'(≥ 25 Hz)', short:'Tetania'};
+  return {factor:0.60, label:'tétano não fundido', hz:'(8–24 Hz)', short:'Somação'};
 }
+// Hill: (F + a)(v + b) = (F0 + a)b, a/F0 = b/Vmáx = 0,25. Excêntrica: sobe rápido até platô ≈ 1,8 F0.
+const W_MAX = 1000;              // velocidade angular máxima sem carga (°/s), esquemática
+const K_HILL = 0.25, ECC_MAX = 1.8, ECC_K = 0.08;
+function fvConc(u){ u=clamp(u,0,1); return (1-u)/(1+u/K_HILL); }
+function fvEcc(u){ u=Math.max(0,u); return ECC_MAX-(ECC_MAX-1)/(1+u/ECC_K); }
+function fvSigned(u){ return u>=0 ? fvConc(u) : fvEcc(-u); }
+function hillSpeed(ratio){ ratio=clamp(ratio,0,1); return K_HILL*(1-ratio)/(ratio+K_HILL); }
+function eccSpeed(ratio){ if(ratio<=1) return 0; if(ratio>=ECC_MAX) return 1; return Math.min(1, ECC_K*((ECC_MAX-1)/(ECC_MAX-ratio)-1)); }
+const P_MAX_REF = (()=>{ let m=0; for(let i=0;i<=1000;i++){ const u=i/1000; m=Math.max(m,u*fvConc(u)); } return m; })();
+// Geometria: braço de momento do bíceps (cm) varia com o ângulo; a carga age a 33 cm do cotovelo (mão).
+const D_M90 = 4.45;
+function bicepsArmCm(angle){ return 1.2 + 3.3*Math.max(0, Math.sin((angle-10)*Math.PI/180)); }
+function loadArmCm(){ return mechanicsMode===2 ? 54 : mechanicsMode===1 ? 33 : 15; }
+// Flexão encurta o bíceps: comprimento inicial (cotovelo estendido) − 0,22 L₀ em 150°.
+function lengthAt(angle){ return Math.max(0.6, Number(lengthRange.value) - 0.22*clamp(angle,0,150)/150); }
+const SEG_TORQUE = 0.045;        // antebraço + mão, em frações do torque isométrico máximo
+function resistiveTorque(angle){
+  const load = mechanicsMode===0 ? 0 : Number(loadRange.value)/100*(mechanicsMode===2 ? 1.65 : 1);
+  return (load + SEG_TORQUE)*Math.sin(clamp(angle,0,180)*Math.PI/180);
+}
+// Estado instantâneo: o tipo de contração decorre do balanço entre torque muscular e torque resistivo.
+const ISO_TOL = 0.03;
+function evaluateMotion(angle, phase){
+  const act = Number(activationRange.value)/100, ff = getFiringMeta(firingMode.value).factor;
+  const L = lengthAt(angle), fl = flCurve(L), fp = fpCurve(L), arm = bicepsArmCm(angle)/D_M90;
+  const tr = mode==='iso' ? 0 : resistiveTorque(angle);
+  const drive = act*fl*ff;                              // força ativa isométrica (fração de F0)
+  const force = u => drive*fvSigned(u) + fp;
+  const base = {tr, drive, fp, arm, L, act, tIso:(drive+fp)*arm};
+  const vSel = Number(velocityRange.value);
+  if(act < 0.005){
+    if(mode==='iso'){ const sg = phase==='lower' ? -1 : 1; return {...base, type:'passiveIso', omega:sg*vSel, u:sg*vSel/W_MAX, F:fp}; }
+    const falling = angle > 0.5;
+    return {...base, type: falling ? 'passive' : 'rest', omega: falling ? -Math.max(150, vSel) : 0, u:0, F:fp};
+  }
+  if(mode==='iso'){
+    const sg = phase==='lower' ? -1 : 1, u = sg*vSel/W_MAX;
+    return {...base, type: sg>0 ? 'conc' : 'ecc', omega: sg*vSel, u, F: force(u)};
+  }
+  const tIso = force(0)*arm;
+  if(phase==='lower'){
+    const u = vSel/W_MAX, need = tr/Math.max(1e-6,arm);
+    // Descida controlada: o comando neural diminui e o músculo alonga-se ativo (a tensão passiva também freia).
+    if(fp >= 0.97*need) return {...base, type:'ecc', sub:'lowerPassive', omega:-vSel, u:-u, F:fp};
+    if(0.97*need <= force(-u)) return {...base, type:'ecc', sub:'lower', omega:-vSel, u:-u, F:0.97*need};
+    const u2 = Math.max(u, eccSpeed(tr/Math.max(1e-6,tIso)));
+    return {...base, type:'ecc', sub:'overload', omega:-Math.min(300,u2*W_MAX), u:-u2, F:force(-u2)};
+  }
+  const ratio = tr/Math.max(1e-6,tIso);
+  if(ratio > 1+ISO_TOL){
+    const u = eccSpeed(ratio);
+    return {...base, type:'ecc', sub:'overload', omega:-Math.min(300,Math.max(4,u*W_MAX)), u:-u, F:force(-u)};
+  }
+  // Isométrica: a força produzida é a necessária para equilibrar a carga; a capacidade aparece à parte.
+  if(ratio >= 1-ISO_TOL || mode==='static'){
+    const need = tr/Math.max(1e-6,arm);
+    return {...base, type:'iso', sub: fp > need*1.03 ? 'passiveHold' : '', omega:0, u:0, F:Math.min(force(0), Math.max(fp, need))};
+  }
+  const u = Math.min(vSel/W_MAX, hillSpeed(ratio));
+  return {...base, type:'conc', omega:u*W_MAX, u, F:force(u)};
+}
+const TYPE_TEXT = {conc:'Concêntrica', iso:'Isométrica', ecc:'Excêntrica', passive:'Queda passiva', rest:'Sem contração', passiveIso:'Movimento passivo', passiveStretch:'Estiramento passivo'};
+function currentPhase(){ return mode==='static' ? 'hold' : (motionPhaseDirection===-1 ? 'lower' : 'lift'); }
 function syncDisplayState(force=false){
-  displayDynamicType = dynamicType;
-  displayMovementDirection = movementDirection;
   displayMetrics = computeState();
+  displayDynamicType = displayMetrics.motionType;
+  displayMovementDirection = movementDirection;
   if(force) uiHoldMs = 0;
 }
 
@@ -1897,66 +1921,60 @@ function computeState(){
   const vel = Number(velocityRange.value);
   const L = Number(lengthRange.value);
   const firing = getFiringMeta(firingMode.value);
-  const withRod = mechanicsMode===2;
-  const hasLoad = mechanicsMode!==0;
+  const withRod = mechanicsMode===2 && mode!=='iso';
+  const hasLoad = mechanicsMode!==0 && mode!=='iso';
   const showCG = cgToggle.checked;
   const analysis = analysisIndex;
-
-  const armFactor = Math.sin((angle-10)*Math.PI/180);
-  const momentArm = clamp(0.35 + 0.7*Math.max(0,armFactor), 0.2, 1.1);
-  const rodFactor = withRod ? 1.65 : 1.0;
-  const cgDist = clamp(momentArm*rodFactor, 0.2, 2.0);
-
   const selectedAngle = Math.max(1, Number(angleRange.value));
   const angleFraction = clamp(angle / selectedAngle, 0, 1);
-  const effectiveLength = clamp(L + ((angleFraction - 0.5) * 0.22), 0.7, 1.3);
 
-  const active = act * activeLenPct(effectiveLength) * firing.factor;
-  const passive = passiveLenPct(effectiveLength);
-  const totalForce = active + passive;
-  const effectiveLoad = hasLoad ? load : 0;
-  const externalDemand = effectiveLoad * 100 * cgDist * 0.9;
-  let dynVelocity = 0;
-  let condition = '';
-  let typeText = '';
+  const m = evaluateMotion(angle, currentPhase());
+  const effectiveLength = m.L;
+  const passive = m.fp*100;
+  const totalForce = m.F*100;
+  const active = Math.max(0, totalForce - passive);
+  const momentArm = m.arm;
+  const muscularTorque = totalForce*momentArm;           // % do torque isométrico máximo
+  const resistiveTorquePct = m.tr*100;
+  const externalDemand = resistiveTorquePct;
+  const torque = muscularTorque;
+  const power = Math.max(0, m.F*m.u)/P_MAX_REF*100;
+  const dynVelocity = m.omega;
+  const motionType = m.type;
+  // Braços perpendiculares no ângulo atual. No dinamômetro, a almofada fica a 25 cm do cotovelo (perto do punho)
+  // e a força do aparelho é sempre perpendicular à alavanca: o braço de resistência é constante.
+  const powerArmCm = bicepsArmCm(angle);
+  const resistArmCm = mode==='iso' ? 25 : loadArmCm()*Math.sin(clamp(angle,0,180)*Math.PI/180);
+  const cgDist = resistArmCm;
+  const mechanicalAdvantage = resistArmCm >= 1 ? powerArmCm/resistArmCm : NaN;   // braço de potência ÷ braço de resistência
+  const mechanicalAdvantageClass = resistArmCm >= 1 ? `${fmt1(powerArmCm)} ÷ ${fmt1(resistArmCm)} cm` : 'carga alinhada ao eixo';
 
-  if(mode==='static'){
-    dynVelocity = 0;
-    typeText = 'Estática';
-    condition = '<span class="neutral-word">Produção de </span><span class="force-word">força</span><span class="neutral-word"> sem deslocamento angular relevante</span>';
-  }else if(mode==='dynamic'){
-    if(displayDynamicType==='conc'){
-      dynVelocity = clamp((totalForce - externalDemand)/55, 0, 1.8) * (1.4 - vel/260);
-      typeText = 'Concêntrica';
-      condition = '<span class="force-word">Força</span><span class="neutral-word"> no mesmo sentido do </span><span class="movement-word">movimento</span><span class="neutral-word"> — Na contração concêntrica, a força muscular diminui à medida que a velocidade de encurtamento aumenta.</span>';
-    }else{
-      dynVelocity = -clamp((externalDemand - totalForce + 15)/55, 0, 1.4) * (0.55 + vel/240);
-      typeText = 'Excêntrica';
-      condition = '<span class="force-word">Força</span><span class="neutral-word"> no sentido oposto ao </span><span class="movement-word">movimento</span><span class="neutral-word"> — Na contração excêntrica, a força muscular pode aumentar mesmo com maior velocidade, devido à resistência ao alongamento.</span>';
-    }
-  }else{
-    dynVelocity = vel;
-    typeText = 'Isocinética';
-    condition = '<span class="neutral-word">Velocidade imposta; torque e potência dependem da mecânica</span>';
-  }
+  let typeText = TYPE_TEXT[motionType];
+  if(mode==='static' && motionType==='iso') typeText = 'Estática (isométrica)';
+  if(mode==='iso' && (motionType==='conc'||motionType==='ecc')) typeText = TYPE_TEXT[motionType] + ' isocinética';
+  const tm = fmt1(muscularTorque), trs = fmt1(resistiveTorquePct), tav = fmt1(m.tIso*100);
+  const N = t=>`<span class="neutral-word">${t}</span>`, FW = t=>`<span class="force-word">${t}</span>`, MW = t=>`<span class="movement-word">${t}</span>`;
+  const cond = {
+    conc: mode==='iso'
+      ? FW('Torque')+N(' muscular move o braço do dinamômetro à velocidade imposta; o ')+FW('torque')+N(' concêntrico cai com a velocidade (Hill).')
+      : FW('Torque')+N(` isométrico disponível (${tav}) &gt; torque resistivo (${trs}): o músculo encurta e a `)+FW('força')+N(' atua no sentido do ')+MW('movimento')+N(`. Na velocidade atual, o torque produzido é ${tm}; quanto maior a velocidade, menor a força.`),
+    iso: m.sub==='passiveHold'
+      ? N(`A tensão passiva do músculo alongado (${tm}) já supera o torque resistivo (${trs}): a posição é mantida com a ação dos extensores, sem necessidade de `)+FW('força')+N(' ativa do bíceps.')
+      : FW('Torque')+N(` produzido (${tm}) ≈ torque resistivo (${trs}): há `)+FW('força')+N(` sem deslocamento angular. Torque isométrico disponível: ${tav}.`),
+    ecc: mode==='iso'
+      ? N('O dinamômetro alonga o músculo ativo à velocidade imposta; o ')+FW('torque')+N(' excêntrico é maior e mais estável que o concêntrico.')
+      : m.sub==='lowerPassive'
+        ? N(`Descida controlada com ativação mínima: o músculo alongado já tem tensão passiva (${tm}) próxima do torque resistivo (${trs}) e alonga-se freando o `)+MW('movimento')+N('.')
+      : m.sub==='overload'
+        ? FW('Torque')+N(` isométrico disponível (${tav}) &lt; torque resistivo (${trs}), com ativação: o músculo alonga-se sob tensão; o torque excêntrico (${tm}) freia o `)+MW('movimento')+N('.')
+        : N(`Descida controlada: o comando neural diminui e o torque produzido (${tm}) fica abaixo do resistivo (${trs}); o músculo alonga-se ativo e a `)+FW('força')+N(' freia o ')+MW('movimento')+N(`. Disponível: ${tav}.`),
+    passive: N('Sem ativação: não há ')+FW('força')+N(' ativa e o segmento cai pela ação da gravidade (não é contração excêntrica).'),
+    rest: N('Sem ativação e sem torque resistivo: o segmento permanece pendente, sem contração.'),
+    passiveIso: N('Sem ativação: o dinamômetro move o segmento e o ')+FW('torque')+N(' muscular é nulo.')
+  };
+  const condition = cond[motionType];
 
-  const torque = (mode==='iso')
-    ? (act * (1.18 - vel/320) * (1 - effectiveLoad*0.22) * momentArm * 120)
-    : totalForce * momentArm;
-  const power = mode==='iso' ? torque * vel / 260 : Math.max(0,totalForce*Math.max(0,dynVelocity))*0.9;
-  const muscularTorque = Math.max(0, totalForce * momentArm);
-  const resistiveTorque = hasLoad ? Math.max(0.01, externalDemand) : 0;
-  const mechanicalAdvantage = hasLoad ? muscularTorque / resistiveTorque : NaN;
-  let mechanicalAdvantageClass = 'sem carga externa';
-  if(hasLoad){
-    mechanicalAdvantageClass = mechanicalAdvantage > 1.05
-      ? 'vantagem mecânica'
-      : mechanicalAdvantage < 0.95
-        ? 'desvantagem mecânica'
-        : 'equilíbrio mecânico';
-  }
-
-  const deltaLengthPct = (effectiveLength - 1.0) * 100;
+  const deltaLengthPct = (effectiveLength - L) * 100;
 
   let muscleWidthFactor = 1.0;
   let muscleLengthFactor = 1.0;
@@ -1979,10 +1997,10 @@ function computeState(){
   }
 
   return {
-    act, load: effectiveLoad, angle, vel, L, effectiveLength, selectedAngle, angleFraction, withRod, hasLoad, showCG, analysis, firingMode: firing.short, firingFactor: firing.factor, mnAlpha: firing.label,
-    active, passive, totalForce, externalDemand, dynVelocity, torque, power, cgDist, momentArm,
-    muscularTorque, resistiveTorque, mechanicalAdvantage, mechanicalAdvantageClass,
-    typeText, condition,
+    act, load: hasLoad ? load : 0, angle, vel, L, effectiveLength, selectedAngle, angleFraction, withRod, hasLoad, showCG, analysis, firingMode: firing.short, firingFactor: firing.factor, mnAlpha: firing.label,
+    active, passive, totalForce, externalDemand, dynVelocity, torque, power, cgDist, momentArm, uSigned:m.u, drive:m.drive,
+    muscularTorque, resistiveTorque: resistiveTorquePct, mechanicalAdvantage, mechanicalAdvantageClass,
+    typeText, condition, motionType,
     deltaLengthPct, muscleWidthFactor, muscleLengthFactor, muscleToneFactor
   };
 }
@@ -1993,7 +2011,7 @@ function updateLabels(){
   const firing = getFiringMeta(firingMode.value);
   mnAlphaLabel.textContent=firing.label;
   if(mnAlphaHz) mnAlphaHz.textContent=firing.hz;
-  loadLabel.textContent = mechanicsMode===0 ? 'Sem carga' : `${loadRange.value}%`;
+  loadLabel.textContent = mode==='iso' ? 'Dinamômetro' : mechanicsMode===0 ? 'Sem carga' : `${loadRange.value}%`;
   angleLabel.textContent=`${angleRange.value}°`;
   velocityLabel.textContent=`${velocityRange.value} °/s`;
   lengthLabel.textContent=`${fmt2(lengthRange.value)} L₀`;
@@ -2001,13 +2019,13 @@ function updateLabels(){
 
 function updateReadouts(s){
   s = s || computeState();
-  typeOut.textContent=(mode==='iso' || mode==='dynamic') ? (displayDynamicType==='ecc' ? 'Excêntrica' : 'Concêntrica') : s.typeText;
+  typeOut.textContent=s.typeText;
   conditionOut.innerHTML=s.condition;
   forceOut.textContent=fmt1(s.totalForce);
   torqueOut.textContent=fmt1(s.torque);
-  lengthOut.textContent=fmt2(s.L);
-  velocityOut.textContent= mode==='iso' ? fmt1(s.vel) : fmt2(s.dynVelocity);
-  cgOut.textContent=fmt2(s.cgDist);
+  lengthOut.textContent=fmt2(s.effectiveLength);
+  velocityOut.textContent=`${s.dynVelocity>0.5?'+':''}${Math.round(s.dynVelocity)}`;
+  cgOut.textContent=fmt1(s.cgDist);
   if(vmOut){
     vmOut.textContent = Number.isFinite(s.mechanicalAdvantage) ? fmt2(s.mechanicalAdvantage) : '—';
   }
@@ -2087,11 +2105,11 @@ function drawAnalysisGraph(s){
       graphYUnit.textContent='Y = Força relativa (%)';
       graphXUnit.textContent='X = Comprimento (L₀)';
     }else if(s.analysis===1){
-      graphYUnit.textContent='Y = Torque relativo';
-      graphXUnit.textContent='X = Ângulo (°)';
+      graphYUnit.textContent='Y = Torque (% do máximo)';
+      graphXUnit.textContent='X = Ângulo do cotovelo (°)';
     }else{
-      graphYUnit.textContent='Y = Força / movimento (%)';
-      graphXUnit.textContent='X = Velocidade relativa (excêntrica ← 0 → concêntrica)';
+      graphYUnit.textContent='Y = Força (% F₀) · Potência (% máx.)';
+      graphXUnit.textContent='X = Velocidade relativa v/Vmáx (excêntrica ← 0 → concêntrica)';
     }
   }
   const ctx = gctx;
@@ -2156,7 +2174,8 @@ function drawAnalysisGraph(s){
   ctx.restore();
 
   const xMap = u => left + u*(right-left);
-  const yMap = v => bottom - (v/160)*(bottom-top);
+  const Y_MAX = 200;
+  const yMap = v => bottom - (clamp(v,0,Y_MAX)/Y_MAX)*(bottom-top);
 
   // Números dos eixos com recorte branco sutil para melhorar leitura.
   ctx.save();
@@ -2166,7 +2185,7 @@ function drawAnalysisGraph(s){
   ctx.fillStyle='#cadce8';
   ctx.font='700 12px Inter, Arial, Helvetica, sans-serif';
   ctx.textAlign='right';
-  [0,20,40,60,80,100,120,140,160].forEach(val=>ctx.fillText(String(val), left-8, yMap(val)));
+  [0,40,80,120,160,200].forEach(val=>ctx.fillText(String(val), left-8, yMap(val)));
   ctx.textBaseline='alphabetic';
   ctx.fillStyle='#cadce8';
   ctx.font='bold 12px Inter, Arial, Helvetica, sans-serif';
@@ -2180,161 +2199,61 @@ function drawAnalysisGraph(s){
   }
   ctx.restore();
 
-  const referenceForce = 100;
-  function totalVal(u){
-    if(s.analysis===0){
-      const L = 0.7 + 0.6*u;
-      return activeLenPct(L) * s.firingFactor + passiveLenPct(L);
-    }else if(s.analysis===1){
-      const ang = 150*u;
-      const ma = clamp(0.35 + 0.7*Math.max(0,Math.sin((ang-10)*Math.PI/180)), 0.2, 1.1);
-      return referenceForce * ma * 0.85;
-    }else{
-      // u aqui varia de 0..1 ao longo do eixo interno; convertido para velocidade assinada -1..1
-      const signedV = (u*2)-1;
-      if(signedV >= 0){
-        // concêntrica: força cai com a velocidade de encurtamento
-        return clamp(referenceForce * (1 - (signedV*220)/300), 8, 120);
-      }else{
-        // excêntrica: força cresce com a velocidade de alongamento até um platô
-        const ecc = Math.abs(signedV);
-        return clamp(referenceForce * (1.00 + 0.55*(1 - Math.exp(-ecc*2.6))), 100, 155);
-      }
-    }
+  const phase = currentPhase();
+  const ff = s.firingFactor, act = s.act;
+  // Capacidade ativa isométrica no ângulo atual (fração de F₀).
+  const driveHere = act*ff*flCurve(s.effectiveLength);
+  const passHere = fpCurve(s.effectiveLength);
+  function curveA(u){ // curva principal
+    if(s.analysis===0){ const L=0.7+0.6*u; return (act*ff*flCurve(L)*fvSigned(s.uSigned) + fpCurve(L))*100; }
+    if(s.analysis===1){ const ang=150*u; const L=lengthAt(ang); return (act*ff*flCurve(L)*fvSigned(s.uSigned) + fpCurve(L))*bicepsArmCm(ang)/D_M90*100; }
+    const v=u*2-1; return (driveHere*fvSigned(v) + passHere)*100;
   }
-  function passiveVal(u){
-    if(s.analysis===0){
-      const L = 0.7 + 0.6*u;
-      return passiveLenPct(L);
-    }else if(s.analysis===1){
-      const ang = 150*u;
-      return clamp((0.5 + 0.5*Math.sin((ang-20)*Math.PI/180))*85,0,120);
-    }else{
-      // proxy de movimento/potência: zero no isométrico, pico na concêntrica moderada, menor na excêntrica
-      const signedV = (u*2)-1;
-      if(signedV >= 0){
-        const forceAtV = clamp(referenceForce * (1 - (signedV*220)/300), 8, 120);
-        return Math.max(0, forceAtV * signedV * 1.1);
-      }else{
-        const ecc = Math.abs(signedV);
-        return Math.max(0, 18 + 20*ecc - 12*ecc*ecc);
-      }
-    }
+  function curveB(u){ // curva secundária
+    if(s.analysis===0){ const L=0.7+0.6*u; return fpCurve(L)*100; }
+    if(s.analysis===1){ return mode==='iso' ? null : resistiveTorque(150*u)*100; }
+    const v=u*2-1; if(v<0) return null; return driveHere*fvConc(v)*v/P_MAX_REF*100;
   }
-  function activeVal(u){
-    if(s.analysis===0){
-      const L = 0.7 + 0.6*u;
-      return activeLenPct(L) * s.firingFactor;
-    }
-    return null;
-  }
+  function activeVal(u){ const L=0.7+0.6*u; return act*ff*flCurve(L)*fvSigned(s.uSigned)*100; }
+
+  const pts=f=>{ const out=[]; for(let i=0;i<=180;i++){ const u=i/180, y=f(u); if(y!==null) out.push([xMap(u), yMap(y)]); } return out; };
+  const colorA = s.analysis===1 ? '#8cc9ee' : '#e0edf5';
+  const colorB = s.analysis===0 ? '#c4a2f6' : s.analysis===1 ? '#f0cc9d' : '#87d29e';
+  if(s.analysis===0) drawCurveTubeLocal(ctx, pts(activeVal), '#70bcff');
+  drawCurveTubeLocal(ctx, pts(curveA), colorA);
+  const ptsB = pts(curveB); if(ptsB.length) drawCurveTubeLocal(ctx, ptsB, colorB);
 
   if(s.analysis===0){
-    const activePts=[];
-    for(let i=0;i<=180;i++){
-      const u=i/180;
-      activePts.push([xMap(u), yMap(activeVal(u))]);
-    }
-    drawCurveTubeLocal(ctx, activePts, '#70bcff');
-  }
-
-  const totalPts=[];
-  const passivePts=[];
-  for(let i=0;i<=180;i++){
-    const u=i/180;
-    if(s.analysis===2){
-      totalPts.push([xMap(u), yMap(totalVal(u))]);
-      passivePts.push([xMap(u), yMap(passiveVal(u))]);
-    }else{
-      totalPts.push([xMap(u), yMap(totalVal(u))]);
-      passivePts.push([xMap(u), yMap(passiveVal(u))]);
-    }
-  }
-  drawCurveTubeLocal(ctx, totalPts, (s.analysis===1?'#8cc9ee':'#e0edf5'));
-  drawCurveTubeLocal(ctx, passivePts, (s.analysis===0?'#c4a2f6':s.analysis===1?'#b9db88':'#64d8d0'));
-
-  let uCurrent=0.5, yCurrent=0;
-  if(s.analysis===0){
-    uCurrent = (s.effectiveLength-0.7)/0.6;
-    yCurrent = totalVal(clamp(uCurrent,0,1));
-
-    const px = xMap(clamp(uCurrent,0,1));
-    const pyA = yMap(activeVal(clamp(uCurrent,0,1)));
-    const pyP = yMap(passiveVal(clamp(uCurrent,0,1)));
-    const pyT = yMap(totalVal(clamp(uCurrent,0,1)));
-
-    drawSphereMarker(ctx, px, pyA, 7.5, '#c4b5fd', '#6d28d9');
-    drawSphereMarker(ctx, px, pyP, 7.5, '#64d8d0', '#315e64');
-    drawSphereMarker(ctx, px, pyT, 9.5, (s.analysis===1?'#8cc9ee':'#e0edf5'), '#456273');
+    const u = clamp((s.effectiveLength-0.7)/0.6,0,1), px = xMap(u);
+    drawSphereMarker(ctx, px, yMap(activeVal(u)), 7.5, '#c4b5fd', '#6d28d9');
+    drawSphereMarker(ctx, px, yMap(curveB(u)), 7.5, '#64d8d0', '#315e64');
+    drawSphereMarker(ctx, px, yMap(s.totalForce), 9.5, colorA, '#456273');
   }else if(s.analysis===1){
-    uCurrent = s.angle/150;
-    yCurrent = totalVal(clamp(uCurrent,0,1));
+    const px = xMap(clamp(s.angle/150,0,1));
+    if(mode!=='iso') drawSphereMarker(ctx, px, yMap(s.resistiveTorque), 8, colorB, '#7a5a2a');
+    drawSphereMarker(ctx, px, yMap(s.muscularTorque), 10, colorA, '#456273');
   }else{
-    const marker = updateForceVelocityMarker(s);
-    uCurrent = marker.u;
-    yCurrent = totalVal(clamp((marker.signedU + 1)/2,0,1));
-    fvMarkerSignedU = marker.signedU;
-  }
-
-  if(s.analysis===2){
-    const stableSignedU = clamp(fvMarkerSignedU, -1, 1);
-    const stableU = clamp((stableSignedU + 1)/2,0,1);
-    const px = xMap(stableU);
-    const pyForce = yMap(totalVal(stableU));
-    const pyMovement = yMap(passiveVal(stableU));
-
-    drawSphereMarker(ctx, px, pyForce, 9.5, (s.analysis===1?'#8cc9ee':'#e0edf5'), '#456273');
-    drawSphereMarker(ctx, px, pyMovement, 8.5, '#64d8d0', '#315e64');
-
-    // continuidade visual segura: quando uma esfera está saindo,
-    // desenha a "chegada" do outro lado sem mexer na lógica central
-    const edgeBand = 0.10;
-
-    // sincronização do loop visual:
-    // a "chegada" do outro lado só aparece na transição de fase,
-    // aproveitando a pequena pausa de reversão do movimento.
-    if(stableU > 1 - edgeBand && motionPhaseDirection === -1){
-      // topo da concêntrica -> início da excêntrica
-      const loopU = (stableU - (1 - edgeBand)) / edgeBand;
-      const enterU = loopU * edgeBand;
-      const px2 = xMap(enterU);
-      const pyForce2 = yMap(totalVal(enterU));
-      const pyMovement2 = yMap(passiveVal(enterU));
-      ctx.save();
-      ctx.globalAlpha = 0.25 + 0.75*loopU;
-      drawSphereMarker(ctx, px2, pyForce2, 9.5, (s.analysis===1?'#8cc9ee':'#e0edf5'), '#456273');
-      drawSphereMarker(ctx, px2, pyMovement2, 8.5, '#64d8d0', '#315e64');
-      ctx.restore();
-    }else if(stableU < edgeBand && motionPhaseDirection === 1){
-      // fundo da excêntrica -> início da concêntrica
-      const loopU = (edgeBand - stableU) / edgeBand;
-      const enterU = 1 - (loopU * edgeBand);
-      const px2 = xMap(enterU);
-      const pyForce2 = yMap(totalVal(enterU));
-      const pyMovement2 = yMap(passiveVal(enterU));
-      ctx.save();
-      ctx.globalAlpha = 0.25 + 0.75*loopU;
-      drawSphereMarker(ctx, px2, pyForce2, 9.5, (s.analysis===1?'#8cc9ee':'#e0edf5'), '#456273');
-      drawSphereMarker(ctx, px2, pyMovement2, 8.5, '#64d8d0', '#315e64');
-      ctx.restore();
-    }
-  }else{
-    drawSphereMarker(ctx, xMap(clamp(uCurrent,0,1)), yMap(yCurrent), 10, (s.analysis===1?'#8cc9ee':'#e0edf5'), '#456273');
+    const u = clamp((s.uSigned+1)/2,0,1), px = xMap(u);
+    if(s.uSigned>=0) drawSphereMarker(ctx, px, yMap(s.power), 8.5, '#87d29e', '#2f6a44');
+    drawSphereMarker(ctx, px, yMap(s.totalForce), 9.5, colorA, '#456273');
   }
 
   ctx.textAlign='left';
+  ctx.font='13px Arial';
   if(s.analysis===0){
     ctx.fillStyle='#70bcff'; ctx.fillRect(gx+78, gy+gh-2, 18, 4);
-    ctx.fillStyle='#cadce8'; ctx.font='13px Arial'; ctx.fillText('Ativa clássica', gx+102, gy+gh+4);
-    ctx.fillStyle=(s.analysis===1?'#8cc9ee':'#e0edf5'); ctx.fillRect(gx+235, gy+gh-2, 18, 4);
+    ctx.fillStyle='#cadce8'; ctx.fillText('Ativa clássica', gx+102, gy+gh+4);
+    ctx.fillStyle=colorA; ctx.fillRect(gx+235, gy+gh-2, 18, 4);
     ctx.fillStyle='#cadce8'; ctx.fillText('Total', gx+259, gy+gh+4);
-    ctx.fillStyle=(s.analysis===0?'#c4a2f6':s.analysis===1?'#b9db88':'#64d8d0'); ctx.fillRect(gx+330, gy+gh-2, 18, 4);
+    ctx.fillStyle=colorB; ctx.fillRect(gx+330, gy+gh-2, 18, 4);
     ctx.fillStyle='#cadce8'; ctx.fillText('Passiva', gx+354, gy+gh+4);
   }else{
-    ctx.fillStyle=(s.analysis===1?'#8cc9ee':'#e0edf5'); ctx.fillRect(gx+150, gy+gh-2, 18, 4);
-    ctx.fillStyle = s.analysis===1 ? '#cadce8' : (s.analysis===1?'#8cc9ee':'#e0edf5'); ctx.font='13px Arial'; ctx.fillText(s.analysis===1 ? 'Torque' : 'Força', gx+174, gy+gh+4);
-    ctx.fillStyle=(s.analysis===0?'#c4a2f6':s.analysis===1?'#b9db88':'#64d8d0'); ctx.fillRect(gx+300, gy+gh-2, 18, 4);
-    ctx.fillStyle = s.analysis===1 ? '#cadce8' : '#64d8d0'; ctx.fillText(s.analysis===1 ? 'Ângulo' : 'Movimento', gx+324, gy+gh+4);
+    ctx.fillStyle=colorA; ctx.fillRect(gx+110, gy+gh-2, 18, 4);
+    ctx.fillStyle=colorA; ctx.fillText(s.analysis===1 ? 'Torque muscular' : 'Força', gx+134, gy+gh+4);
+    if(s.analysis===2 || mode!=='iso'){
+      ctx.fillStyle=colorB; ctx.fillRect(gx+290, gy+gh-2, 18, 4);
+      ctx.fillStyle=colorB; ctx.fillText(s.analysis===1 ? 'Torque resistivo' : 'Potência', gx+314, gy+gh+4);
+    }
   }
 }
 
@@ -2486,18 +2405,20 @@ function drawIntegratedAnimation(s){
   }else if(mode==='dynamic'){
     ctx.fillStyle='#2563eb';
     ctx.font='bold 16px Arial';
-    if(displayDynamicType==='conc'){
-      ctx.fillText('Na concêntrica, a força muscular atua no mesmo sentido do movimento', 212, 78);
-    }else{
-      ctx.fillText('Na excêntrica, a força muscular atua no sentido oposto ao movimento', 212, 78);
-    }
+    const central = {conc:'Na concêntrica, a força muscular atua no mesmo sentido do movimento',
+      ecc:'Na excêntrica, a força muscular atua no sentido oposto ao movimento',
+      iso:'Na isométrica, o torque muscular iguala o resistivo: não há movimento',
+      passive:'Sem ativação não há contração: o segmento cai pela gravidade',
+      rest:'Sem ativação não há contração: o segmento permanece pendente',
+      passiveStretch:'Na extensão, o bíceps alongado é estirado passivamente (sem contração)'}[s.motionType] || '';
+    ctx.fillText(central, 212, 78);
     ctx.fillStyle='#cadce8';
     ctx.font='14px Arial';
-    ctx.fillText('Comprimento inicial, ângulo articular, velocidade e distância da carga modificam a resposta mecânica.', 44, 104);
+    ctx.fillText('O tipo de contração decorre do balanço entre torque muscular e torque resistivo.', 44, 104);
   }else{
     ctx.fillStyle='#16a34a';
     ctx.font='bold 16px Arial';
-    ctx.fillText('A velocidade é imposta; torque e potência variam com ativação, resistência e amplitude', 212, 78);
+    ctx.fillText('A velocidade é imposta; o torque é a resposta do músculo (concêntrico cai com v)', 212, 78);
     ctx.fillStyle='#cadce8';
     ctx.font='14px Arial';
     ctx.fillText('A aplicação é clínica e esportiva: torque e potência são as saídas principais.', 44, 104);
@@ -2647,8 +2568,8 @@ function drawIntegratedAnimation(s){
   const labelHalf = 35;
   const labelGap = 46;
 
-  drawArrowSimple(arrowX, 200, 330, "#ff0000", true);
-  drawMovementArrow(arrowX, 350, 480, "#3b7f1e", displayMovementDirection);
+  if(s.totalForce >= 1) drawArrowSimple(arrowX, 200, 330, "#ff0000", true);
+  if(Math.abs(s.dynVelocity) > 0.5) drawMovementArrow(arrowX, 350, 480, "#3b7f1e", s.dynVelocity > 0 ? 'up' : 'down');
 
   ctx.textAlign = "center";
   ctx.font = "bold 15px Arial";
@@ -2737,8 +2658,8 @@ function drawIntegratedAnimation(s){
     ctx.fillStyle="#cadce8";
     ctx.font="bold 14px Arial";
     ctx.fillText(mechanicsMode===2 ? 'Com vara de pescar' : (mechanicsMode===1 ? 'Com carga' : 'Sem carga'), 42, 156);
-    ctx.fillText(mode==='dynamic' ? (displayDynamicType==='conc' ? 'Concêntrica' : 'Excêntrica') : (mode==='static' ? 'Estática' : 'Isocinética'), 42, 178);
-    ctx.fillText(`Velocidade de execução: ${fmt1(s.vel)} °/s`, 42, 200);
+    ctx.fillText(s.typeText, 42, 178);
+    ctx.fillText(`Velocidade angular: ${Math.round(Math.abs(s.dynVelocity))} °/s`, 42, 200);
     ctx.fillText(`Amplitude / ângulo: ${fmt1(s.angle)}°`, 42, 222);
   }
 
@@ -2778,159 +2699,99 @@ function render(){
 
 function applyPresetInterpretation(name){
   const presetTexts = {
-    fraqueza: '<b>Fraqueza muscular:</b> a queda da ativação neural e da capacidade de produzir força reduz o desempenho mesmo com cargas baixas. <b>Exemplos de situações/doenças:</b> pós-imobilização, descondicionamento, lesão muscular, neuropatias periféricas e fraqueza residual no pós-operatório.',
+    fraqueza: '<b>Fraqueza muscular:</b> a queda da ativação neural e da capacidade de produzir força reduz o torque muscular; mesmo cargas baixas exigem uma fração maior da capacidade e a elevação fica mais lenta. <b>Exemplos de situações/doenças:</b> pós-imobilização, descondicionamento, lesão muscular, neuropatias periféricas e fraqueza residual no pós-operatório.',
     espasticidade: '<b>Espasticidade:</b> há aumento do tônus e maior resistência ao movimento, com dificuldade para modular a força de modo fino. <b>Exemplos de situações/doenças:</b> acidente vascular encefálico, paralisia cerebral, traumatismo cranioencefálico e lesão medular de origem central.',
-    encurtamento: '<b>Encurtamento:</b> o músculo parte de um comprimento inicial menor, o que desloca a relação comprimento–tensão e pode reduzir a força ativa útil no movimento. <b>Exemplos de situações/doenças:</b> retrações após imobilização, desequilíbrios musculares, postura mantida por longos períodos e sequelas cicatriciais.',
-    alongamento: '<b>Alongamento excessivo:</b> o aumento exagerado do comprimento inicial reduz a contribuição da força ativa e aumenta proporcionalmente a tensão passiva. <b>Exemplos de situações/doenças:</b> hipermobilidade articular, frouxidão ligamentar, instabilidade articular e situações de alongamento passivo excessivo.',
+    encurtamento: '<b>Encurtamento:</b> o músculo parte de um comprimento inicial menor; com a flexão ele trabalha no ramo ascendente da curva comprimento–tensão, onde a força ativa disponível é menor. <b>Exemplos de situações/doenças:</b> retrações após imobilização, desequilíbrios musculares, postura mantida por longos períodos e sequelas cicatriciais.',
+    alongamento: '<b>Alongamento excessivo:</b> o comprimento inicial acima do ótimo reduz a sobreposição dos filamentos e a força ativa, enquanto a tensão passiva cresce de forma exponencial. <b>Exemplos de situações/doenças:</b> hipermobilidade articular, frouxidão ligamentar, instabilidade articular e situações de alongamento passivo excessivo.',
     sarcopenia: '<b>Sarcopenia:</b> ocorre redução progressiva da massa e da potência muscular, com menor capacidade de gerar força e responder rapidamente ao esforço. <b>Exemplos de situações/doenças:</b> envelhecimento, imobilidade prolongada, fragilidade clínica e perda funcional associada a doenças crônicas.',
+    exercicio: '<b>Exercício intenso:</b> ativação quase máxima e tétano fundido com carga elevada. O torque muscular supera o resistivo na subida (concêntrica), mas a velocidade possível é menor do que com cargas leves, como prevê a relação força–velocidade. Na descida, a mesma carga é controlada com menos ativação, porque a força excêntrica disponível é maior.',
+    fadiga: '<b>Fadiga:</b> a ativação e a frequência de disparo caem e a capacidade periférica diminui. Com a mesma carga, o torque muscular aproxima-se do resistivo: a elevação fica lenta e pode parar num ângulo em que os torques se igualam (isométrica). É o ponto de falha da série.',
+    potencia: '<b>Potência:</b> carga moderada e alta velocidade angular. A potência (força × velocidade) é máxima perto de 30% da força isométrica e de 30% da velocidade máxima; acima disso a força cai demais e, abaixo, a velocidade é pequena. É a faixa usada em gestos rápidos e no treino de potência.',
+    forcaMax: '<b>Força máxima:</b> ativação máxima, tétano fundido, comprimento próximo do ótimo e carga alta em baixa velocidade. A força concêntrica aproxima-se da isométrica máxima e a velocidade é pequena; na descida controlada a força excêntrica pode superar a isométrica (até cerca de 1,5–1,8 F₀).',
+    reabilitacao: '<b>Reabilitação inicial:</b> baixa ativação, carga leve e velocidade controlada. O torque exigido é uma fração pequena da capacidade, o que permite movimento concêntrico e excêntrico com baixa sobrecarga, adequado às fases iniciais de recuperação.',
   };
   if(presetTexts[name]){
     interpretText.innerHTML = presetTexts[name];
   }
 }
 
+const PRESETS = {
+  exercicio:     {act:95,  load:60, angle:150, vel:90,  L:1.02, fir:'tetanus', mech:1},
+  fadiga:        {act:65,  load:45, angle:140, vel:60,  L:1.00, fir:'sum',     mech:1},
+  potencia:      {act:92,  load:30, angle:150, vel:300, L:0.98, fir:'tetanus', mech:1},
+  forcaMax:      {act:100, load:85, angle:150, vel:30,  L:1.00, fir:'tetanus', mech:1},
+  fraqueza:      {act:50,  load:20, angle:120, vel:60,  L:1.00, fir:'sum',     mech:1},
+  espasticidade: {act:85,  load:35, angle:110, vel:30,  L:0.95, fir:'tetanus', mech:1},
+  reabilitacao:  {act:40,  load:10, angle:150, vel:30,  L:1.00, fir:'sum',     mech:1},
+  encurtamento:  {act:75,  load:30, angle:100, vel:60,  L:0.85, fir:'sum',     mech:1},
+  alongamento:   {act:70,  load:25, angle:140, vel:60,  L:1.22, fir:'sum',     mech:1},
+  sarcopenia:    {act:65,  load:25, angle:120, vel:60,  L:0.96, fir:'sum',     mech:1},
+};
 function applyPreset(name){
   document.querySelectorAll('.quick-btn').forEach(b=>b.classList.remove('active'));
   const btn = document.querySelector(`.quick-btn[data-preset="${name}"]`);
   if(btn) btn.classList.add('active');
-
-  if(name==='exercicio'){
-    setMode('dynamic'); dynamicType='conc';
-    activationRange.value=95; loadRange.value=60; angleRange.value=150; velocityRange.value=30; lengthRange.value=1.02; firingMode.value='tetanus'; mechanicsMode=1;
-  }else if(name==='fadiga'){
-    setMode('dynamic'); dynamicType='conc';
-    activationRange.value=65; loadRange.value=45; angleRange.value=140; velocityRange.value=15; lengthRange.value=1.00; firingMode.value='sum'; mechanicsMode=1;
-  }else if(name==='potencia'){
-    setMode('dynamic'); dynamicType='conc';
-    activationRange.value=92; loadRange.value=30; angleRange.value=150; velocityRange.value=40; lengthRange.value=0.98; firingMode.value='tetanus'; mechanicsMode=1;
-  }else if(name==='forcaMax'){
-    setMode('dynamic'); dynamicType='conc';
-    activationRange.value=100; loadRange.value=5; angleRange.value=150; velocityRange.value=10; lengthRange.value=1.00; firingMode.value='tetanus'; mechanicsMode=0;
-  }else if(name==='fraqueza'){
-    setMode('dynamic'); dynamicType='conc';
-    activationRange.value=50; loadRange.value=20; angleRange.value=120; velocityRange.value=10; lengthRange.value=1.00; firingMode.value='sum'; mechanicsMode=1;
-  }else if(name==='espasticidade'){
-    setMode('dynamic'); dynamicType='ecc';
-    activationRange.value=85; loadRange.value=35; angleRange.value=110; velocityRange.value=10; lengthRange.value=0.95; firingMode.value='tetanus'; mechanicsMode=1;
-  }else if(name==='reabilitacao'){
-    setMode('dynamic'); dynamicType='conc';
-    activationRange.value=40; loadRange.value=10; angleRange.value=150; velocityRange.value=10; lengthRange.value=1.00; firingMode.value='twitch'; mechanicsMode=1;
-  }else if(name==='encurtamento'){
-    setMode('dynamic'); dynamicType='conc';
-    activationRange.value=75; loadRange.value=30; angleRange.value=100; velocityRange.value=10; lengthRange.value=0.85; firingMode.value='sum'; mechanicsMode=1;
-  }else if(name==='alongamento'){
-    setMode('dynamic'); dynamicType='ecc';
-    activationRange.value=70; loadRange.value=25; angleRange.value=140; velocityRange.value=10; lengthRange.value=1.22; firingMode.value='sum'; mechanicsMode=1;
-  }else if(name==='sarcopenia'){
-    setMode('dynamic'); dynamicType='conc';
-    activationRange.value=65; loadRange.value=25; angleRange.value=120; velocityRange.value=10; lengthRange.value=0.96; firingMode.value='sum'; mechanicsMode=1;
+  const p = PRESETS[name];
+  if(p){
+    setMode('dynamic');
+    activationRange.value=p.act; loadRange.value=p.load; angleRange.value=p.angle; velocityRange.value=p.vel; lengthRange.value=p.L; firingMode.value=p.fir; mechanicsMode=p.mech;
   }
-  currentAngleValue = Number(angleRange.value);
-  prevAngleValue = currentAngleValue;
+  activePreset = name;
+  currentAngleValue = 0;
+  prevAngleValue = 0;
   motionPhaseDirection = 1;
-  currentAngleValue = (mode==='dynamic' || mode==='iso') ? 0 : Number(angleRange.value);
-  prevAngleValue = currentAngleValue;
-  motionPhaseDirection = 1;
+  holdClock = 0;
   syncLoadControl();
+  setMode(mode);
   syncDisplayState(true);
   applyPresetInterpretation(name);
   render();
 }
 
+// Movimento: a velocidade angular vem do balanço de torques (Hill); a animação apenas a comprime visualmente.
+let holdClock = 0;
+function visualSpeed(omega){ return Math.sign(omega)*1.5*Math.pow(Math.abs(omega),0.8); }
+function staticHoldAngle(){ return Math.min(90, Number(angleRange.value)); }
 function loop(ts){
   if(!running) return;
   if(!lastTs) lastTs=ts;
   const dt = ts-lastTs; lastTs=ts;
-  const dtSec = dt/1000;
+  const dtSec = Math.min(0.1, dt/1000);
   graphFrameDtSec = dtSec || (1/60);
   const speedMul=0.6;
+  const simDt = dtSec*speedMul;
   t += dt*0.03*speedMul;
-  timeSec += dtSec*speedMul;
-  phaseTime += dtSec*speedMul;
+  timeSec += simDt;
+  phaseTime += simDt;
 
-  if(mode==='dynamic' || mode==='iso'){
-    const minExecAngle = 0;
-    const maxExecAngle = Math.max(minExecAngle, Number(angleRange.value));
-    const visualAngularSpeed = (Number(velocityRange.value) / 10) * 24;
+  const maxAngle = Math.max(0, Number(angleRange.value));
+  const phase = currentPhase();
+  const m = evaluateMotion(currentAngleValue, phase);
+  let stop = false;
+  const switchPhase = next => {
+    motionPhaseDirection = next==='lower' ? -1 : 1;
+    holdClock = 0;
+    if(runningStep || !loopToggle.checked) stop = true;
+  };
+  prevAngleValue = currentAngleValue;
+  currentAngleValue += visualSpeed(m.omega)*simDt;
+  if(m.omega>0) movementDirection='up'; else if(m.omega<0) movementDirection='down';
+  dynamicType = m.type;
 
-    currentAngleValue += motionPhaseDirection * visualAngularSpeed * dtSec * speedMul;
-
-    if(runningStep && stepTargetAngle !== null){
-      if(motionPhaseDirection === 1 && currentAngleValue >= stepTargetAngle){
-        currentAngleValue = stepTargetAngle;
-        movementDirection = 'up';
-        dynamicType = 'conc';
-        updateMovementDirection(currentAngleValue);
-        running = false;
-        runningStep = false;
-        motionPhaseDirection = -1;
-        stepTargetAngle = null;
-      }else if(motionPhaseDirection === -1 && currentAngleValue <= stepTargetAngle){
-        currentAngleValue = stepTargetAngle;
-        movementDirection = 'down';
-        dynamicType = 'ecc';
-        updateMovementDirection(currentAngleValue);
-        running = false;
-        runningStep = false;
-        motionPhaseDirection = 1;
-        stepTargetAngle = null;
-      }else{
-        const nextDirection = motionPhaseDirection === 1 ? 'up' : 'down';
-        dynamicType = nextDirection === 'up' ? 'conc' : 'ecc';
-        movementDirection = nextDirection;
-        updateMovementDirection(currentAngleValue);
-      }
-    }else{
-      let boundary = '';
-      if(currentAngleValue >= maxExecAngle){
-        currentAngleValue = maxExecAngle;
-        boundary = 'top';
-      }else if(currentAngleValue <= minExecAngle){
-        currentAngleValue = minExecAngle;
-        boundary = 'bottom';
-      }
-
-      if(boundary){
-        movementDirection = boundary === 'top' ? 'up' : 'down';
-        dynamicType = movementDirection === 'up' ? 'conc' : 'ecc';
-        updateMovementDirection(currentAngleValue);
-
-        if(loopToggle.checked){
-          motionPhaseDirection = boundary === 'top' ? -1 : 1;
-        }else{
-          running = false;
-        }
-      }else{
-        const nextDirection = motionPhaseDirection === 1 ? 'up' : 'down';
-        dynamicType = nextDirection === 'up' ? 'conc' : 'ecc';
-        movementDirection = nextDirection;
-        updateMovementDirection(currentAngleValue);
-      }
-    }
+  if(mode==='static'){
+    currentAngleValue = clamp(currentAngleValue, 0, staticHoldAngle());
+    if(runningStep && phaseTime >= 1.2) stop = true;
+  }else if(phase==='lift'){
+    if(currentAngleValue >= maxAngle){ currentAngleValue = maxAngle; switchPhase('lower'); }
+    else if(currentAngleValue <= 0){ currentAngleValue = 0; }
+    if(!stop && m.type==='iso' && mode==='dynamic'){ holdClock += simDt; if(holdClock > 1.5) switchPhase('lower'); }
+    else if(m.type!=='iso') holdClock = 0;
+    if(!stop && m.type==='rest' && runningStep && phaseTime > 0.8) stop = true;
   }else{
-    const holdAngle = Math.min(90, Number(angleRange.value));
-    const pulseAmplitude = Math.min(8, Math.max(4, holdAngle * 0.05));
-    staticPulseClock += dtSec * speedMul;
-    const pulsePhase = staticPulseClock % 3;
-
-    if(pulsePhase < 0.42){
-      const p = pulsePhase / 0.42;
-      currentAngleValue = holdAngle - pulseAmplitude * Math.sin(Math.PI * p);
-      movementDirection = 'up';
-    }else{
-      currentAngleValue = holdAngle;
-      movementDirection = 'up';
-    }
-    dynamicType = 'conc';
-    updateMovementDirection(currentAngleValue);
-
-    if((runningStep || stepToggle.checked) && pulsePhase >= 0.42){
-      running = false;
-      runningStep = false;
-      staticPulseClock = 0;
-      currentAngleValue = holdAngle;
-    }
+    if(currentAngleValue <= 0){ currentAngleValue = 0; switchPhase('lift'); }
+    else if(currentAngleValue > maxAngle) currentAngleValue = maxAngle;
   }
+  if(stop){ running = false; runningStep = false; }
 
   render();
 
@@ -2955,47 +2816,19 @@ function syncExecutionMode(changed){
   }
 }
 
-function syncExecutionMode(changed){
-  if(changed === 'loop' && loopToggle.checked){
-    stepToggle.checked = false;
-  }else if(changed === 'step' && stepToggle.checked){
-    loopToggle.checked = false;
-  }
-  if(!loopToggle.checked && !stepToggle.checked){
-    loopToggle.checked = true;
-  }
-}
-
 function startAnimation(oneStep=false){
   syncExecutionMode(oneStep ? 'step' : 'loop');
-
-  if(mode==='dynamic' || mode==='iso'){
+  if(mode==='static'){
+    currentAngleValue = staticHoldAngle();
+  }else{
     const maxAngle = Number(angleRange.value);
     if(currentAngleValue < 0 || currentAngleValue > maxAngle){
       currentAngleValue = 0;
-      prevAngleValue = 0;
       motionPhaseDirection = 1;
     }
-
-    if(oneStep){
-      if(currentAngleValue <= 0.0001){
-        motionPhaseDirection = 1;
-        stepTargetAngle = maxAngle;
-      }else if(currentAngleValue >= maxAngle - 0.0001){
-        motionPhaseDirection = -1;
-        stepTargetAngle = 0;
-      }else{
-        stepTargetAngle = motionPhaseDirection === 1 ? maxAngle : 0;
-      }
-    }else{
-      stepTargetAngle = null;
-    }
-  }else{
-    currentAngleValue = Number(angleRange.value);
-    stepTargetAngle = null;
   }
-
   runningStep = oneStep;
+  phaseTime = 0;
   running = true;
   lastTs = 0;
   if(raf) cancelAnimationFrame(raf);
@@ -3003,30 +2836,38 @@ function startAnimation(oneStep=false){
 }
 
 function executeNextStep(){
-  if(mode==='static'){
-    stepToggle.checked = true;
-    loopToggle.checked = false;
-    syncExecutionMode('step');
-    runningStep = true;
-    running = true;
-    lastTs = 0;
-    staticPulseClock = 0;
-    if(raf) cancelAnimationFrame(raf);
-    raf=requestAnimationFrame(loop);
-    return;
-  }
-
   stepToggle.checked = true;
   loopToggle.checked = false;
   startAnimation(true);
 }
 
-tabStatic.addEventListener('click',()=>{ setMode('static'); syncDisplayState(true); render(); });
-tabDynamic.addEventListener('click',()=>{ setMode('dynamic'); currentAngleValue = 0; prevAngleValue = 0; syncDisplayState(true); render(); });
-tabIso.addEventListener('click',()=>{ setMode('iso'); currentAngleValue = 0; prevAngleValue = 0; syncDisplayState(true); render(); });
+function resetToInitial(){
+  running=false; runningStep=false; if(raf) cancelAnimationFrame(raf);
+  raf=null;
+  lastTs=0; t=0; timeSec=0;
+  mode='dynamic'; dynamicType='conc'; analysisIndex=0; mechanicsMode=0; activePreset='normal';
+  activationRange.value=75; loadRange.value=45; angleRange.value=150; velocityRange.value=60; lengthRange.value=1.00; firingMode.value='sum';
+  cgToggle.checked=true; labelsToggle.checked=true; loopToggle.checked = true; stepToggle.checked = false;
+  document.querySelectorAll('.quick-btn').forEach(b=>b.classList.remove('active'));
+  movementDirection = 'up';
+  phaseTime = 0;
+  holdClock = 0;
+  currentAngleValue = 0;
+  prevAngleValue = 0;
+  motionPhaseDirection = 1;
+  setMode('dynamic');
+  syncExecutionMode('loop');
+  syncLoadControl();
+  syncDisplayState(true);
+  render();
+}
+
+tabStatic.addEventListener('click',()=>{ setMode('static'); currentAngleValue = staticHoldAngle(); prevAngleValue = currentAngleValue; syncLoadControl(); syncDisplayState(true); render(); });
+tabDynamic.addEventListener('click',()=>{ setMode('dynamic'); currentAngleValue = 0; prevAngleValue = 0; motionPhaseDirection = 1; holdClock = 0; syncLoadControl(); syncDisplayState(true); render(); });
+tabIso.addEventListener('click',()=>{ setMode('iso'); currentAngleValue = 0; prevAngleValue = 0; motionPhaseDirection = 1; holdClock = 0; syncLoadControl(); syncDisplayState(true); render(); });
 analysisBtn0.addEventListener('click',()=>{ analysisIndex=0; setMode(mode); syncDisplayState(true); render(); });
 analysisBtn1.addEventListener('click',()=>{ analysisIndex=1; setMode(mode); syncDisplayState(true); render(); });
-analysisBtn2.addEventListener('click',()=>{ analysisIndex=2; fvMarkerInitialized = false; setMode(mode); syncDisplayState(true); render(); });
+analysisBtn2.addEventListener('click',()=>{ analysisIndex=2; setMode(mode); syncDisplayState(true); render(); });
 mechBtn0.addEventListener('click',()=>{ mechanicsMode=0; syncLoadControl(); setMode(mode); syncDisplayState(true); render(); });
 mechBtn1.addEventListener('click',()=>{ mechanicsMode=1; syncLoadControl(); setMode(mode); syncDisplayState(true); render(); });
 mechBtn2.addEventListener('click',()=>{ mechanicsMode=2; syncLoadControl(); setMode(mode); syncDisplayState(true); render(); });
@@ -3036,12 +2877,14 @@ firingMode.addEventListener('change', ()=>{ syncDisplayState(true); render(); })
 loopToggle.addEventListener('input', ()=>{ syncExecutionMode('loop'); render(); });
 stepToggle.addEventListener('input', ()=>{ syncExecutionMode('step'); render(); });
 angleRange.addEventListener('input',()=>{
-  if(!running || mode==='static'){
-    currentAngleValue = (mode==='dynamic' || mode==='iso') ? 0 : Number(angleRange.value);
-    prevAngleValue = currentAngleValue;
+  if(mode==='static'){
+    currentAngleValue = staticHoldAngle();
+  }else if(!running){
+    currentAngleValue = 0; motionPhaseDirection = 1;
   }else{
     currentAngleValue = Math.min(currentAngleValue, Number(angleRange.value));
   }
+  prevAngleValue = currentAngleValue;
   render();
 });
 
@@ -3059,42 +2902,9 @@ btnPause.addEventListener('click',()=>{
 btnNextStep.addEventListener('click',()=>{
   executeNextStep();
 });
-btnReset.addEventListener('click',()=>{
-  running=false; runningStep=false; if(raf) cancelAnimationFrame(raf);
-  raf=null;
-  lastTs=0; t=0; timeSec=0;
-  mode='dynamic'; dynamicType='conc'; analysisIndex=0; mechanicsMode=1;
-  activationRange.value=75; loadRange.value=5; angleRange.value=150; velocityRange.value=10; lengthRange.value=1.00; firingMode.value='sum';
-  cgToggle.checked=true; labelsToggle.checked=true; loopToggle.checked = true; stepToggle.checked = false;
-  document.querySelectorAll('.quick-btn').forEach(b=>b.classList.remove('active'));
-  prevAngleValue = 0;
-  movementDirection = 'up';
-  phaseTime = 0;
-  staticPulseClock = 0;
-  fvMarkerInitialized = false;
-  fvMarkerU = 0;
-  setMode('dynamic');
-  currentAngleValue = 0;
-  prevAngleValue = currentAngleValue;
-  motionPhaseDirection = 1;
-  syncExecutionMode('loop');
-  syncLoadControl();
-  syncDisplayState(true);
-  render();
-});
+btnReset.addEventListener('click', resetToInitial);
 
-setMode('dynamic');
-running = false;
-loopToggle.checked = true;
-stepToggle.checked = false;
-syncExecutionMode('loop');
-currentAngleValue = 0;
-prevAngleValue = 0;
-movementDirection = 'up';
-motionPhaseDirection = 1;
-syncLoadControl();
-syncDisplayState(true);
-render();
+resetToInitial();
 })();
 </script>
 
@@ -3561,10 +3371,10 @@ button.action{
   align-content:center;
 }
 .eq-sub{
-  height:190px;
+  height:auto;
   min-height:190px;
-  max-height:190px;
-  overflow:hidden;
+  max-height:none;
+  overflow:visible;
   line-height:1.42;
 }
 .graph-box{margin-bottom:12px;}
@@ -3722,5 +3532,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>

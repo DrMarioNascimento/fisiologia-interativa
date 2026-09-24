@@ -27,8 +27,11 @@ function conduta(i1, i2, o = {}) {
     if (o.extra) o.extra(s, t, g);
   };
 }
+// ironmanSal: com a evaporação limitada ao suor produzido, quem sua muito perde ~1,1–1,2 L/h no calor;
+// a reposição passa de 700/800 para 800/900 mL/h (ainda abaixo do suor, perda final de ~3,5% do peso).
+const SAL_BOA = { taxa: 800, taxa2: 900 };
 const BOA = {
-  ironmanSal: conduta(0.62, 0.60),
+  ironmanSal: conduta(0.62, 0.60, SAL_BOA),
   ironmanBebe: conduta(0.62, 0.60, { bebida: 'iso', taxa: 600, bebida2: 'iso', taxa2: 600, semSal: 1 })
 };
 
@@ -50,7 +53,9 @@ test('suor salgado sem carboidrato: o fígado esvazia e a glicemia cai no ciclis
 });
 
 test('beber 1,5 L/h de água: hiponatremia com peso ACIMA da largada e urina clara', () => {
-  const s = rodar('ironmanBebe', null);
+  // gel a cada 30 min no ciclismo só para isolar a água: sem nenhum carboidrato, a hipoglicemia
+  // (5 h) e a hiponatremia (~5 h) chegam juntas e disputam a causa do abandono
+  const s = rodar('ironmanBebe', (s, t) => { if (seg(s) === 'ciclismo' && t % 30 === 0) X(s, 'dar', 'gel'); });
   assert.equal(s.fim.causa, 'hiponatremia');
   assert.ok(s.v.perda < -2, 'peso ' + s.v.perda);
   assert.ok(s.eventos.some(e => /urina clara/.test(e.texto)));

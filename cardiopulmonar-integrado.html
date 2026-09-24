@@ -664,6 +664,7 @@
 }
 .eq-mini .op{color:#6c7f92;}
 .eq-mini .num{color:#425466;}
+.eq-mini .eq-units{margin:6px 0 0;font-size:11px;line-height:1.35;color:#9cb5c7;font-weight:600;}
 
 .interpret-inline{
   margin-top:8px;
@@ -957,7 +958,7 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
 <div class="speed-box">
 <label for="animSpeed">Velocidade</label>
 <input id="animSpeed" max="2.0" min="0.5" step="0.1" type="range" value="1.0"/>
-<span id="animSpeedVal">1.0×</span>
+<span id="animSpeedVal">1,0×</span>
 </div>
 </div>
 </div><div class="hero-grid"><div class="hero-left"><div class="panel global-controls-panel">
@@ -1917,20 +1918,21 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
     </div>
     <div class="eq-mini">
       <h3>Consumo de O₂</h3>
-      <code><span class="c-vo2">VO₂</span> <span class="op">=</span> <span class="c-dc">DC</span> <span class="op">×</span> <span class="c-avo2">Δa-vO₂</span></code>
+      <code><span class="c-vo2">VO₂</span> <span class="op">=</span> <span class="c-dc">DC</span> <span class="op">×</span> <span class="c-avo2">Δa-vO₂</span> <span class="op">×</span> <span class="num">10</span></code>
+      <p class="eq-units">VO₂ em mL/min; DC em L/min; Δa-vO₂ = CaO₂ − CvO₂ em mL O₂/dL; o fator 10 converte L em dL.</p>
     </div>
   </div>
 </div>
 <div class="interpret-inline">
   <div class="interpret-inline-title">Como interpretar</div>
-  <p><strong>Respiração:</strong> a inspiração torna a pressão intratorácica mais favorável ao retorno venoso, aumentando o enchimento cardíaco; <strong>loop cardíaco:</strong> maior <span class="c-rv">RV</span> tende a elevar o <span class="c-edv">EDV</span> e, com a contratilidade preservada, o <span class="c-esv">ESV</span> cai relativamente, aumentando o <span class="c-vs">VS</span> e a <span class="c-ef">FE</span>; <strong>débito cardíaco:</strong> o <span class="c-dc">DC</span> resulta da combinação entre frequência cardíaca e volume sistólico, embora <span class="c-fc">FC</span> muito alta possa reduzir o enchimento; <strong><span class="c-vo2">VO₂</span> e saturação:</strong> quando a demanda metabólica sobe, a extração aumenta e a <span class="c-satv">SvO₂</span> cai, enquanto a <span class="c-sata">SaO₂</span> permanece alta se a oxigenação pulmonar estiver preservada; <strong>equações ativas:</strong> <span class="c-vs">VS</span> resume a diferença entre <span class="c-edv">EDV</span> e <span class="c-esv">ESV</span>; <span class="c-ef">FE</span> expressa a proporção ejetada; <span class="c-dc">DC</span> integra <span class="c-fc">FC</span> e <span class="c-vs">VS</span> dividido por 1000; <span class="c-pam">PAM</span> é recalculada por <span class="c-pad">PAD</span> + 1/3(<span class="c-pas">PAS</span>−<span class="c-pad">PAD</span>); <span class="c-rvs">RVS</span> é estimada por <span class="c-pam">PAM</span>/<span class="c-dc">DC</span>; e <span class="c-vo2">VO₂</span> conecta fluxo sistêmico com <span class="c-avo2">Δa-vO₂</span>. <strong>Fechamento do sistema:</strong> o sangue venoso retorna ao pulmão, é reoxigenado e volta ao coração esquerdo, completando o circuito cardiopulmonar integrado.</p>
+  <p><strong>Respiração:</strong> a inspiração torna a pressão intratorácica mais favorável ao retorno venoso, aumentando o enchimento cardíaco; <strong>loop cardíaco:</strong> maior <span class="c-rv">RV</span> tende a elevar o <span class="c-edv">EDV</span> e, com a contratilidade preservada, o <span class="c-esv">ESV</span> cai relativamente, aumentando o <span class="c-vs">VS</span> e a <span class="c-ef">FE</span>; <strong>débito cardíaco:</strong> o <span class="c-dc">DC</span> resulta da combinação entre frequência cardíaca e volume sistólico, embora <span class="c-fc">FC</span> muito alta possa reduzir o enchimento; <strong><span class="c-vo2">VO₂</span> e saturação:</strong> quando a demanda metabólica sobe, a extração aumenta e a <span class="c-satv">SvO₂</span> cai, enquanto a <span class="c-sata">SaO₂</span> permanece alta se a oxigenação pulmonar estiver preservada; <strong>equações ativas:</strong> <span class="c-vs">VS</span> resume a diferença entre <span class="c-edv">EDV</span> e <span class="c-esv">ESV</span>; <span class="c-ef">FE</span> expressa a proporção ejetada; <span class="c-dc">DC</span> integra <span class="c-fc">FC</span> e <span class="c-vs">VS</span> dividido por 1000; <span class="c-pam">PAM</span> é recalculada por <span class="c-pad">PAD</span> + 1/3(<span class="c-pas">PAS</span>−<span class="c-pad">PAD</span>); <span class="c-rvs">RVS</span> é estimada por (<span class="c-pam">PAM</span> − <span class="c-pv">PV</span>)/<span class="c-dc">DC</span>; e <span class="c-vo2">VO₂</span> conecta fluxo sistêmico com <span class="c-avo2">Δa-vO₂</span>. <strong>Fechamento do sistema:</strong> o sangue venoso retorna ao pulmão, é reoxigenado e volta ao coração esquerdo, completando o circuito cardiopulmonar integrado.</p>
 </div>
 </div><div class="panel graph-summary-panel">
 <div class="panel-header"><h2>Variáveis centrais</h2><span>Resumo final do sistema</span></div>
 <div class="metric-grid">
-<div class="metric c-rv"><small>RV</small><strong id="rvVal">5.0</strong><em>L/min</em></div>
-<div class="metric c-dc"><small>DC</small><strong id="coVal">4.9</strong><em>L/min</em></div>
-<div class="metric c-eq" id="eqMetric"><small>Equilíbrio <span class="c-rv">RV</span>/<span class="c-dc">DC</span></small><strong id="eqVal">OK</strong><em id="eqDelta">Δ 0.0 L/min</em></div>
+<div class="metric c-rv"><small>RV</small><strong id="rvVal">5,0</strong><em>L/min</em></div>
+<div class="metric c-dc"><small>DC</small><strong id="coVal">5,0</strong><em>L/min</em></div>
+<div class="metric c-eq" id="eqMetric"><small>Equilíbrio <span class="c-rv">RV</span>/<span class="c-dc">DC</span></small><strong id="eqVal">OK</strong><em id="eqDelta">Δ 0,0 L/min</em></div>
 <div class="metric c-edv"><small>EDV</small><strong id="edvVal">120</strong><em>mL</em></div>
 <div class="metric c-esv"><small>ESV</small><strong id="esvVal">50</strong><em>mL</em></div>
 <div class="metric c-vs"><small>VS</small><strong id="svVal">70</strong><em>mL</em></div>
@@ -1944,8 +1946,11 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
 <div class="metric c-pas"><small>PAS</small><strong id="pasVal">120</strong><em>mmHg</em></div>
 <div class="metric c-pad"><small>PAD</small><strong id="padVal">80</strong><em>mmHg</em></div>
 <div class="metric c-vco2"><small>VCO₂</small><strong id="vco2Val">200</strong><em>mL/min</em></div>
-<div class="metric c-vo2"><small>VO₂</small><strong id="vo2Val">250</strong><em>mL/min</em></div>
+<div class="metric c-vo2"><small>VO₂</small><strong id="vo2Val">250</strong><em id="vo2Unit">mL/min</em></div>
+<div class="metric c-rvs"><small>RVS</small><strong id="rvsVal">17,9</strong><em>mmHg·min/L</em></div>
+<div class="metric c-vco2"><small>RER (VCO₂/VO₂)</small><strong id="rerVal">0,80</strong><em>adimensional</em></div>
 </div>
+<div id="cpAlert" role="status" aria-live="polite" style="color:#f8c16b;font-size:13px;line-height:1.5;font-weight:600;padding:0 14px 12px"></div>
 </div></div></div>
 
 
@@ -1957,6 +1962,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
 <script>
     const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
     const lerp = (a,b,t)=>a+(b-a)*t;
+    const fmtBR = (v, d=1) => Number(v).toFixed(d).replace('.', ',');
 
     const model = {
       running: true,
@@ -1980,13 +1986,15 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         compliance: 70,
         contractility: 60,
         afterload: 40,
-        extraction: 50,
-        pulmEfficiency: 92,
-        pasBoost: 0,
-        padBoost: 0,
-        ppulmBoost: 0,
-        pvenBoost: 0,
-        svMultiplier: 1
+        extraction: 25,
+        pulmEfficiency: 95,
+        metabolicVO2: 250,
+        exerciseDrive: 0,
+        thoracicLoad: 0,
+        metabolicAcidosis: 0,
+        breathHold: 0,
+        ventFixed: 0,
+        paCO2Set: 0
       },
       animSpeed: 1,
       values: {
@@ -1999,6 +2007,11 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         co: 4.9,
         vo2: 250,
         vco2: 200,
+        rer: 0.8,
+        rvs: 18,
+        avO2: 5,
+        extraction: 0.25,
+        supplyLimited: false,
         pulmO2Sat: 99,
         saO2: 98,
         svO2: 75,
@@ -2023,34 +2036,28 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         title: "Padrões respiratórios",
         items: [
           ["Eupneia (normal)", {
-            fr:12, breathDepth:55, hr:70, bloodVolume:70, venousTone:50, compliance:70, contractility:60, afterload:40, extraction:50, pulmEfficiency:92,
-            targetRV:4.9, targetEDV:120, targetESV:50, targetPAS:120, targetPAD:80, targetVO2:250, targetSaO2:98, targetSvO2:75,
-            targetPO2Pulm:104, targetPaO2:98, targetPvO2:40, targetPCO2Pulm:38, targetPaCO2:40, targetPvCO2:46, targetPAPm:18, targetPV:8
+            fr:12, breathDepth:55, hr:70, bloodVolume:70, venousTone:50, compliance:70, contractility:60, afterload:40, pulmEfficiency:95,
+            metabolicVO2:250, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Hiperventilação", {
-            fr:30, breathDepth:84, hr:62, bloodVolume:70, venousTone:50, compliance:70, contractility:60, afterload:32, extraction:42, pulmEfficiency:98,
-            targetRV:5.2, targetEDV:120, targetESV:50, targetPAS:112, targetPAD:72, targetVO2:250, targetSaO2:99, targetSvO2:78,
-            targetPO2Pulm:110, targetPaO2:104, targetPvO2:44, targetPCO2Pulm:26, targetPaCO2:28, targetPvCO2:34, targetPAPm:15, targetPV:7
+            fr:16, breathDepth:57, hr:80, bloodVolume:70, venousTone:50, compliance:70, contractility:60, afterload:40, pulmEfficiency:95,
+            metabolicVO2:260, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Hipoventilação", {
-            fr:6, breathDepth:32, hr:84, bloodVolume:70, venousTone:54, compliance:70, contractility:58, afterload:52, extraction:58, pulmEfficiency:82,
-            targetRV:4.5, targetEDV:120, targetESV:50, targetPAS:125, targetPAD:85, targetVO2:250, targetSaO2:90, targetSvO2:65,
-            targetPO2Pulm:85, targetPaO2:70, targetPvO2:34, targetPCO2Pulm:48, targetPaCO2:52, targetPvCO2:58, targetPAPm:23, targetPV:9
+            fr:10, breathDepth:53, hr:84, bloodVolume:70, venousTone:50, compliance:70, contractility:60, afterload:40, pulmEfficiency:92,
+            metabolicVO2:250, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Apneia", {
-            fr:0, breathDepth:20, hr:96, bloodVolume:70, venousTone:58, compliance:66, contractility:56, afterload:58, extraction:66, pulmEfficiency:72,
-            targetRV:3.8, targetEDV:110, targetESV:50, targetPAS:112, targetPAD:92, targetVO2:200, targetSaO2:80, targetSvO2:55,
-            targetPO2Pulm:72, targetPaO2:50, targetPvO2:28, targetPCO2Pulm:56, targetPaCO2:62, targetPvCO2:70, targetPAPm:28, targetPV:10
+            fr:0, breathDepth:20, hr:96, bloodVolume:70, venousTone:58, compliance:70, contractility:60, afterload:40, pulmEfficiency:95,
+            metabolicVO2:250, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0, breathHold:60
           }],
           ["Kussmaul", {
-            fr:32, breathDepth:95, hr:100, bloodVolume:70, venousTone:58, compliance:72, contractility:64, afterload:38, extraction:60, pulmEfficiency:94,
-            targetRV:6.5, targetEDV:128, targetESV:50, targetPAS:128, targetPAD:78, targetVO2:350, targetSaO2:97, targetSvO2:65,
-            targetPO2Pulm:104, targetPaO2:96, targetPvO2:34, targetPCO2Pulm:24, targetPaCO2:26, targetPvCO2:32, targetPAPm:20, targetPV:9
+            fr:14, breathDepth:66, hr:100, bloodVolume:70, venousTone:56, compliance:70, contractility:60, afterload:40, pulmEfficiency:95,
+            metabolicVO2:300, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:1
           }],
           ["Inspiração profunda", {
-            fr:9, breathDepth:100, hr:72, bloodVolume:72, venousTone:56, compliance:74, contractility:62, afterload:40, extraction:48, pulmEfficiency:95,
-            targetRV:6.1, targetEDV:128, targetESV:50, targetPAS:125, targetPAD:78, targetVO2:260, targetSaO2:98, targetSvO2:76,
-            targetPO2Pulm:106, targetPaO2:100, targetPvO2:41, targetPCO2Pulm:35, targetPaCO2:38, targetPvCO2:44, targetPAPm:20, targetPV:9
+            fr:8, breathDepth:64, hr:72, bloodVolume:70, venousTone:50, compliance:70, contractility:60, afterload:40, pulmEfficiency:95,
+            metabolicVO2:260, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }]
         ]
       },
@@ -2059,34 +2066,28 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         title: "Hemodinâmica / cardiovascular",
         items: [
           ["Hemorragia", {
-            fr:22, breathDepth:60, hr:122, bloodVolume:42, venousTone:84, compliance:54, contractility:52, afterload:70, extraction:72, pulmEfficiency:91,
-            targetRV:3.5, targetEDV:95, targetESV:55, targetPAS:90, targetPAD:60, targetVO2:200, targetSaO2:96, targetSvO2:50,
-            targetPO2Pulm:100, targetPaO2:92, targetPvO2:25, targetPCO2Pulm:38, targetPaCO2:42, targetPvCO2:52, targetPAPm:17, targetPV:5
+            fr:22, breathDepth:48, hr:115, bloodVolume:50, venousTone:80, compliance:66, contractility:66, afterload:46, pulmEfficiency:95,
+            metabolicVO2:250, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Choque circulatório", {
-            fr:28, breathDepth:62, hr:132, bloodVolume:36, venousTone:88, compliance:46, contractility:38, afterload:62, extraction:82, pulmEfficiency:88,
-            targetRV:2.8, targetEDV:82, targetESV:52, targetPAS:78, targetPAD:48, targetVO2:150, targetSaO2:94, targetSvO2:42,
-            targetPO2Pulm:96, targetPaO2:86, targetPvO2:22, targetPCO2Pulm:36, targetPaCO2:41, targetPvCO2:56, targetPAPm:15, targetPV:4
+            fr:28, breathDepth:44, hr:135, bloodVolume:34, venousTone:88, compliance:60, contractility:45, afterload:58, pulmEfficiency:90,
+            metabolicVO2:250, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:1
           }],
           ["Insuficiência cardíaca", {
-            fr:18, breathDepth:58, hr:102, bloodVolume:74, venousTone:68, compliance:62, contractility:32, afterload:64, extraction:62, pulmEfficiency:90,
-            targetRV:5.5, targetEDV:135, targetESV:90, targetPAS:100, targetPAD:90, targetVO2:220, targetSaO2:94, targetSvO2:55,
-            targetPO2Pulm:98, targetPaO2:86, targetPvO2:28, targetPCO2Pulm:40, targetPaCO2:45, targetPvCO2:55, targetPAPm:26, targetPV:16
+            fr:20, breathDepth:50, hr:96, bloodVolume:80, venousTone:68, compliance:85, contractility:32, afterload:46, pulmEfficiency:88,
+            metabolicVO2:250, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Valsalva", {
-            fr:10, breathDepth:22, hr:118, bloodVolume:70, venousTone:86, compliance:45, contractility:62, afterload:100, extraction:62, pulmEfficiency:88,
-            targetRV:2.6, targetEDV:105, targetESV:55, targetPAS:195, targetPAD:115, targetVO2:250, targetSaO2:97, targetSvO2:70,
-            targetPO2Pulm:100, targetPaO2:92, targetPvO2:37, targetPCO2Pulm:39, targetPaCO2:43, targetPvCO2:50, targetPAPm:24, targetPV:14
+            fr:0, breathDepth:20, hr:110, bloodVolume:70, venousTone:70, compliance:60, contractility:66, afterload:45, pulmEfficiency:95,
+            metabolicVO2:250, exerciseDrive:0, thoracicLoad:30, metabolicAcidosis:0, breathHold:15
           }],
           ["Taquicardia", {
-            fr:18, breathDepth:58, hr:160, bloodVolume:70, venousTone:60, compliance:58, contractility:66, afterload:44, extraction:58, pulmEfficiency:94,
-            targetRV:4.8, targetEDV:110, targetESV:55, targetPAS:135, targetPAD:80, targetVO2:300, targetSaO2:97, targetSvO2:70,
-            targetPO2Pulm:102, targetPaO2:94, targetPvO2:37, targetPCO2Pulm:36, targetPaCO2:40, targetPvCO2:48, targetPAPm:19, targetPV:8
+            fr:16, breathDepth:56, hr:160, bloodVolume:70, venousTone:50, compliance:70, contractility:62, afterload:40, pulmEfficiency:95,
+            metabolicVO2:280, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Taquicardia extrema", {
-            fr:24, breathDepth:56, hr:245, bloodVolume:55, venousTone:70, compliance:25, contractility:45, afterload:58, extraction:68, pulmEfficiency:90,
-            targetRV:3.5, targetEDV:85, targetESV:55, targetPAS:95, targetPAD:60, targetVO2:280, targetSaO2:95, targetSvO2:60,
-            targetPO2Pulm:96, targetPaO2:84, targetPvO2:30, targetPCO2Pulm:38, targetPaCO2:43, targetPvCO2:56, targetPAPm:20, targetPV:7
+            fr:22, breathDepth:47, hr:245, bloodVolume:70, venousTone:70, compliance:62, contractility:55, afterload:50, pulmEfficiency:92,
+            metabolicVO2:260, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }]
         ]
       },
@@ -2095,19 +2096,16 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         title: "Doenças pulmonares",
         items: [
           ["Asma", {
-            fr:24, breathDepth:46, hr:106, bloodVolume:70, venousTone:60, compliance:64, contractility:60, afterload:50, extraction:62, pulmEfficiency:78,
-            targetRV:4.6, targetEDV:119, targetESV:55, targetPAS:125, targetPAD:85, targetVO2:250, targetSaO2:92, targetSvO2:60,
-            targetPO2Pulm:90, targetPaO2:72, targetPvO2:30, targetPCO2Pulm:42, targetPaCO2:48, targetPvCO2:58, targetPAPm:24, targetPV:9
+            fr:26, breathDepth:46, hr:106, bloodVolume:70, venousTone:58, compliance:70, contractility:62, afterload:40, pulmEfficiency:82,
+            metabolicVO2:300, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Enfisema", {
-            fr:22, breathDepth:58, hr:104, bloodVolume:70, venousTone:56, compliance:94, contractility:58, afterload:42, extraction:64, pulmEfficiency:76,
-            targetRV:4.5, targetEDV:117, targetESV:55, targetPAS:120, targetPAD:80, targetVO2:200, targetSaO2:90, targetSvO2:60,
-            targetPO2Pulm:88, targetPaO2:68, targetPvO2:30, targetPCO2Pulm:43, targetPaCO2:50, targetPvCO2:60, targetPAPm:26, targetPV:9
+            fr:22, breathDepth:50, hr:96, bloodVolume:70, venousTone:50, compliance:70, contractility:60, afterload:44, pulmEfficiency:78,
+            metabolicVO2:280, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Fibrose", {
-            fr:26, breathDepth:42, hr:108, bloodVolume:70, venousTone:58, compliance:36, contractility:58, afterload:50, extraction:66, pulmEfficiency:74,
-            targetRV:4.0, targetEDV:110, targetESV:60, targetPAS:110, targetPAD:85, targetVO2:200, targetSaO2:85, targetSvO2:55,
-            targetPO2Pulm:82, targetPaO2:58, targetPvO2:28, targetPCO2Pulm:40, targetPaCO2:44, targetPvCO2:55, targetPAPm:25, targetPV:9
+            fr:28, breathDepth:44, hr:104, bloodVolume:70, venousTone:50, compliance:70, contractility:60, afterload:46, pulmEfficiency:78,
+            metabolicVO2:280, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0
           }]
         ]
       },
@@ -2116,29 +2114,24 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         title: "Exercício aeróbio",
         items: [
           ["Aeróbio leve", {
-            fr:18, breathDepth:68, hr:105, bloodVolume:72, venousTone:62, compliance:72, contractility:72, afterload:44, extraction:60, pulmEfficiency:95,
-            targetRV:7.0, targetEDV:135, targetESV:50, targetPAS:135, targetPAD:80, targetVO2:600, targetSaO2:98, targetSvO2:65,
-            targetPO2Pulm:106, targetPaO2:98, targetPvO2:34, targetPCO2Pulm:36, targetPaCO2:39, targetPvCO2:48, targetPAPm:22, targetPV:10
+            fr:20, breathDepth:71, hr:105, bloodVolume:72, venousTone:62, compliance:70, contractility:72, afterload:40, pulmEfficiency:95,
+            metabolicVO2:900, exerciseDrive:0.2, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Aeróbio moderado", {
-            fr:24, breathDepth:82, hr:128, bloodVolume:74, venousTone:72, compliance:74, contractility:82, afterload:48, extraction:68, pulmEfficiency:96,
-            targetRV:10.0, targetEDV:145, targetESV:50, targetPAS:150, targetPAD:80, targetVO2:1500, targetSaO2:97, targetSvO2:55,
-            targetPO2Pulm:106, targetPaO2:96, targetPvO2:28, targetPCO2Pulm:34, targetPaCO2:38, targetPvCO2:50, targetPAPm:24, targetPV:12
+            fr:26, breathDepth:80, hr:135, bloodVolume:72, venousTone:72, compliance:70, contractility:84, afterload:40, pulmEfficiency:95,
+            metabolicVO2:1700, exerciseDrive:0.55, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Aeróbio intenso", {
-            fr:32, breathDepth:94, hr:158, bloodVolume:78, venousTone:84, compliance:76, contractility:92, afterload:54, extraction:78, pulmEfficiency:97,
-            targetRV:12.0, targetEDV:145, targetESV:55, targetPAS:170, targetPAD:75, targetVO2:3000, targetSaO2:95, targetSvO2:40,
-            targetPO2Pulm:104, targetPaO2:90, targetPvO2:23, targetPCO2Pulm:32, targetPaCO2:36, targetPvCO2:52, targetPAPm:28, targetPV:14
+            fr:32, breathDepth:90, hr:165, bloodVolume:72, venousTone:84, compliance:70, contractility:94, afterload:40, pulmEfficiency:95,
+            metabolicVO2:2500, exerciseDrive:0.8, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Teste de carga máxima", {
-            fr:40, breathDepth:100, hr:195, bloodVolume:82, venousTone:92, compliance:78, contractility:100, afterload:86, extraction:88, pulmEfficiency:98,
-            targetRV:10.0, targetEDV:135, targetESV:60, targetPAS:190, targetPAD:70, targetVO2:4000, targetSaO2:92, targetSvO2:25,
-            targetPO2Pulm:100, targetPaO2:82, targetPvO2:18, targetPCO2Pulm:30, targetPaCO2:34, targetPvCO2:54, targetPAPm:30, targetPV:13
+            fr:40, breathDepth:96, hr:190, bloodVolume:72, venousTone:92, compliance:70, contractility:100, afterload:40, pulmEfficiency:95,
+            metabolicVO2:3200, exerciseDrive:1, thoracicLoad:0, metabolicAcidosis:1
           }],
           ["Recuperação", {
-            fr:14, breathDepth:60, hr:82, bloodVolume:68, venousTone:52, compliance:72, contractility:68, afterload:42, extraction:54, pulmEfficiency:94,
-            targetRV:5.8, targetEDV:125, targetESV:50, targetPAS:125, targetPAD:78, targetVO2:300, targetSaO2:98, targetSvO2:72,
-            targetPO2Pulm:104, targetPaO2:98, targetPvO2:39, targetPCO2Pulm:37, targetPaCO2:40, targetPvCO2:46, targetPAPm:19, targetPV:8
+            fr:16, breathDepth:60, hr:95, bloodVolume:70, venousTone:56, compliance:70, contractility:66, afterload:40, pulmEfficiency:95,
+            metabolicVO2:450, exerciseDrive:0.1, thoracicLoad:0, metabolicAcidosis:0
           }]
         ]
       },
@@ -2147,19 +2140,16 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         title: "Exercício resistido",
         items: [
           ["Resistido leve", {
-            fr:16, breathDepth:60, hr:96, bloodVolume:72, venousTone:66, compliance:66, contractility:70, afterload:58, extraction:58, pulmEfficiency:94,
-            targetRV:4.8, targetEDV:118, targetESV:50, targetPAS:145, targetPAD:90, targetVO2:350, targetSaO2:98, targetSvO2:70,
-            targetPO2Pulm:104, targetPaO2:96, targetPvO2:37, targetPCO2Pulm:38, targetPaCO2:42, targetPvCO2:50, targetPAPm:20, targetPV:9
+            fr:16, breathDepth:60, hr:96, bloodVolume:70, venousTone:66, compliance:70, contractility:70, afterload:42, pulmEfficiency:95,
+            metabolicVO2:450, exerciseDrive:0.05, thoracicLoad:1, metabolicAcidosis:0
           }],
           ["Resistido moderado", {
-            fr:20, breathDepth:66, hr:118, bloodVolume:74, venousTone:76, compliance:60, contractility:80, afterload:72, extraction:66, pulmEfficiency:93,
-            targetRV:4.4, targetEDV:115, targetESV:55, targetPAS:170, targetPAD:105, targetVO2:500, targetSaO2:97, targetSvO2:66,
-            targetPO2Pulm:102, targetPaO2:94, targetPvO2:34, targetPCO2Pulm:38, targetPaCO2:43, targetPvCO2:52, targetPAPm:22, targetPV:10
+            fr:20, breathDepth:64, hr:118, bloodVolume:70, venousTone:76, compliance:70, contractility:80, afterload:50, pulmEfficiency:95,
+            metabolicVO2:700, exerciseDrive:0.05, thoracicLoad:6, metabolicAcidosis:0
           }],
           ["Resistido pesado", {
-            fr:24, breathDepth:70, hr:142, bloodVolume:76, venousTone:86, compliance:52, contractility:88, afterload:88, extraction:76, pulmEfficiency:91,
-            targetRV:4.0, targetEDV:110, targetESV:60, targetPAS:205, targetPAD:125, targetVO2:650, targetSaO2:97, targetSvO2:65,
-            targetPO2Pulm:100, targetPaO2:92, targetPvO2:34, targetPCO2Pulm:38, targetPaCO2:44, targetPvCO2:54, targetPAPm:25, targetPV:11
+            fr:22, breathDepth:68, hr:140, bloodVolume:70, venousTone:86, compliance:70, contractility:88, afterload:56, pulmEfficiency:95,
+            metabolicVO2:900, exerciseDrive:0.05, thoracicLoad:12, metabolicAcidosis:0
           }]
         ]
       }
@@ -2182,7 +2172,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       ["compliance","Complacência ventricular",20,100,1,"%"],
       ["contractility","Contratilidade",10,100,1,"%"],
       ["afterload","Pós-carga",10,100,1,"%"],
-      ["extraction","Extração tecidual",20,90,1,"%"],
+      ["extraction","Extração tecidual de O₂",5,85,1,"%"],
       ["pulmEfficiency","Eficiência pulmonar",70,100,1,"%"]
     ];
 
@@ -2241,6 +2231,19 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const sync=()=>{ model.params[key]=Number(input.value); span.textContent=`${input.value} ${unit}`; };
       input.addEventListener('input',()=>{
         sync();
+        if(key==='fr' || key==='breathDepth'){
+          // O aluno passou a fixar a ventilação: acaba a apneia/Valsalva e cessa o acoplamento automático ao VCO₂.
+          model.params.breathHold=0; model.params.ventFixed=1;
+        }
+        if(key==='extraction' && typeof steadyState === 'function'){
+          // A extração tecidual é a fração do O₂ arterial captada: fixa DC e CaO₂, o VO₂ passa a ser DC × CaO₂ × extração × 10.
+          for(let i=0;i<4;i++){
+            const st=steadyState({...model.params});
+            model.params.metabolicVO2=clamp(st.co*st.caO2*(model.params.extraction/100)*10,80,6000);
+            coupleVentilation();
+          }
+        }
+        markActivePreset('');
         if(typeof updateModel === 'function') updateModel(0.001);
         if(typeof updateUI === 'function') updateUI();
         if(typeof renderScene === 'function') renderScene();
@@ -2250,14 +2253,27 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       sync();
     });
 
+    // Em regime, a ventilação alveolar acompanha o VCO₂ (quimiorreflexo) e mantém a PaCO₂ do estado,
+    // salvo se o aluno fixou FR/profundidade ou se o estado é uma apneia/Valsalva.
+    function coupleVentilation(){
+      const p=model.params;
+      if(p.ventFixed || p.breathHold>0 || !p.paCO2Set || typeof steadyState!=='function') return;
+      const st=steadyState({...p});
+      const vco2m=st.vco2Metabolic;
+      const vaNeed=0.863*vco2m/p.paCO2Set;
+      const vtOf=d=>0.2+2.8*Math.pow(clamp((d-20)/80,0,1),2.5);
+      const vaPerBreath=d=>{const vt=vtOf(d); return vt-(0.16+0.06*vt);};
+      let fr=Math.round(vaNeed/vaPerBreath(p.breathDepth));
+      if(fr>45){ fr=45; let d=p.breathDepth; while(d<100 && 45*vaPerBreath(d)<vaNeed) d++; p.breathDepth=d; }
+      p.fr=clamp(fr,6,45);
+      ['fr','breathDepth'].forEach(k=>{ const el=document.getElementById(k); if(el) el.value=p[k]; const lab=document.getElementById(`${k}Label`); const def=sliderDefs.find(d=>d[0]===k); if(lab&&def) lab.textContent=`${p[k]} ${def[5]}`; });
+    }
+
     function applyPreset(name){
       const preset=statePresets[name];
       if(!preset) return;
-      // Modificadores ocultos de alguns estados rápidos; sempre resetar antes de aplicar outro estado.
-      Object.keys(model.params).forEach(k=>{
-        if(k.startsWith('target')) delete model.params[k];
-      });
-      Object.assign(model.params, {pasBoost:0, padBoost:0, ppulmBoost:0, pvenBoost:0, svMultiplier:1});
+      // Contexto metabólico/mecânico do estado (demanda de O₂, exercício, carga intratorácica, acidose): sempre reiniciado.
+      Object.assign(model.params, {metabolicVO2:250, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0, breathHold:0, ventFixed:0, paCO2Set:0});
       Object.entries(preset).forEach(([k,v])=>{
         model.params[k]=v;
         const el=document.getElementById(k);
@@ -2268,6 +2284,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       });
       model.flowSmooth.rv=null;
       model.flowSmooth.co=null;
+      if(typeof steadyState === 'function' && !model.params.breathHold) model.params.paCO2Set=steadyState({...model.params}).paCO2;
       if(typeof updateModel === 'function' && typeof resetHistoriesFromCurrent === 'function'){
         updateModel(0.001);
         resetHistoriesFromCurrent(90);
@@ -2299,6 +2316,10 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       o2MmHg: document.getElementById('o2MmHgVal'),
       co2: document.getElementById('co2Val'),
       vco2: document.getElementById('vco2Val'),
+      rvs: document.getElementById('rvsVal'),
+      rer: document.getElementById('rerVal'),
+      vo2Unit: document.getElementById('vo2Unit'),
+      alert: document.getElementById('cpAlert'),
       animSpeed: document.getElementById('animSpeed'),
       animSpeedVal: document.getElementById('animSpeedVal'),
       phaseLabel: document.getElementById('phaseLabel'),
@@ -2316,87 +2337,157 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       oxygenParticles: document.getElementById('oxygenParticles')
     };
 
+    /*
+      Núcleo fisiológico em regime estável (todas as saídas derivam dos controles):
+      - Circulação: retorno venoso = (Pmsf − PAD_atrial)/RRV e DC = FC × VS se cruzam num único ponto,
+        logo RV = DC em regime. Volume sanguíneo e tônus venoso definem a pressão média de enchimento;
+        complacência e tempo de enchimento diastólico definem o VDF (Frank-Starling);
+        contratilidade e pós-carga definem o VSF (relação pressão-volume sistólica final).
+      - Ventilação: VA = FR × (VC − EM); PaCO₂ = 0,863 × VCO₂ / VA; PAO₂ pela equação do gás alveolar;
+        PaO₂ = PAO₂ − gradiente alvéolo-arterial; saturações pela curva de Severinghaus (P50 ≈ 26,8 mmHg).
+      - Fick: CaO₂ = 1,34·Hb·SaO₂ + 0,003·PaO₂; VO₂ = DC × (CaO₂ − CvO₂) × 10.
+    */
+    const HB_REF = 15;
+    const VO2_MAX_REF = 3200; // adulto não treinado, ~72 kg (≈44 mL/kg/min)
+    const PAM_SOFT = 140, PAM_CEIL = 60, PP_SOFT = 80, PP_CEIL = 40;
+    const EXTRACTION_MAX = 0.85;
+    const SVO2_FLOOR_PO2 = 13.0; // PO₂ correspondente a SvO₂ ≈ 15% na curva de Severinghaus
+    function satFromPO2(P){ P=Math.max(P,0.1); return 100/(23400/(P*P*P+150*P)+1); }
+    function o2Content(hb, sat, po2){ return 1.34*hb*sat/100 + 0.003*po2; }
+    function po2FromContent(hb, content, maxP){
+      let lo=0.5, hi=Math.max(1,maxP);
+      for(let i=0;i<50;i++){ const m=(lo+hi)/2; if(o2Content(hb,satFromPO2(m),m)<content) lo=m; else hi=m; }
+      return (lo+hi)/2;
+    }
+    function solveCirculation(p){
+      const ex=clamp(p.exerciseDrive||0,0,1), thor=p.thoracicLoad||0;
+      const v=p.bloodVolume/70, tone=p.venousTone/100;
+      const stressedVolume=(v<1?1.5*Math.exp(3.5*(v-1)):1.5+5*(v-1)) + 1.6*(tone-0.5);
+      const exP=Math.pow(ex,0.6);
+      const pmsf=Math.max(0.1,stressedVolume)/0.15 + 9.5*exP + 0.7*thor;
+      const rvr=1.4*(1-0.35*exP);
+      const hr=p.hr, c=p.contractility;
+      // Sístole não encurta abaixo de ~0,18–0,20 s; a diástole restante limita o enchimento em FC muito alta.
+      const tc=60/hr, td=Math.max(0.02, tc-Math.max(0.18+0.02*Math.pow(clamp(p.exerciseDrive||0,0,1),0.6),0.36*Math.sqrt(tc)));
+      const tau=0.12*Math.pow(60/Math.max(c,10),1.35)*(1-0.4*exP);
+      const fill=Math.pow(1-Math.exp(-td/tau),2);
+      // Taxa máxima de enchimento (mL/s), maior no exercício (sucção diastólica), mas finita: VS ≤ taxa × tempo diastólico.
+      const peakFill=600+700*exP;
+      const fillCap=peakFill*td;
+      const ees=c<=60 ? 0.35+1.85*Math.pow(c/60,1.5) : 2.2*(1+2.4*(c-60)/40);
+      const svr=18.4*Math.pow(p.afterload/40,0.7)*(1-0.73*Math.pow(ex,0.4));
+      const comp=p.compliance/70;
+      const venousReturn=(rap)=>Math.max(0,(pmsf-Math.max(rap,0))/rvr);
+      let pas=120, out=null;
+      for(let it=0;it<80;it++){
+        const esv=5+0.9*pas/ees;
+        const strokeAt=(rap)=>{ const edvFull=20+comp*169*(1-Math.exp(-Math.max(0,rap-thor+2)/5)); const a=Math.max(0,fill*(edvFull-esv)); return a/Math.pow(1+Math.pow(a/fillCap,8),0.125); };
+        let lo=thor-3, hi=pmsf+thor+5;
+        for(let i=0;i<50;i++){ const m=(lo+hi)/2; if(hr*strokeAt(m)/1000 > venousReturn(m)) hi=m; else lo=m; }
+        const rap=(lo+hi)/2;
+        // Piso de fluxo residual (0,5 L/min): abaixo disso já é parada circulatória, fora do escopo do modelo.
+        const co=Math.max(0.5, Math.min(hr*strokeAt(rap)/1000, venousReturn(rap)));
+        const sv=co*1000/hr, edv=esv+sv;
+        // Saturação fisiológica: a PAM e a pressão de pulso não crescem sem limite (distensibilidade arterial, autorregulação).
+        const pamRaw=co*svr+Math.max(rap,0)+0.8*thor;
+        const pam=pamRaw<=PAM_SOFT?pamRaw:PAM_SOFT+PAM_CEIL*Math.tanh((pamRaw-PAM_SOFT)/PAM_CEIL);
+        const ppRaw=sv*(0.62+0.0035*(hr-70));
+        const pp=ppRaw<=PP_SOFT?ppRaw:PP_SOFT+PP_CEIL*Math.tanh((ppRaw-PP_SOFT)/PP_CEIL);
+        const pasNew=pam+2*pp/3;
+        out={rap,co,sv,edv,esv,pam,pas:pasNew,pad:pam-pp/3,svr};
+        if(Math.abs(pasNew-pas)<0.05) break;
+        pas+=0.5*(pasNew-pas);
+      }
+      return out;
+    }
+    let steadyCache={key:'',value:null};
+    function steadyState(p){
+      const key=JSON.stringify(p);
+      if(steadyCache.key===key) return steadyCache.value;
+      const C=solveCirculation(p);
+      const hb=p.hb||HB_REF, ex=clamp(p.exerciseDrive||0,0,1), thor=p.thoracicLoad||0;
+      const vt=0.2+2.8*Math.pow(clamp((p.breathDepth-20)/80,0,1),2.5);
+      const hold=p.breathHold||0; // apneia voluntária/Valsalva: retrato após "hold" segundos, partindo da eupneia
+      const va=hold>0?4.33:Math.max(0,p.fr*(vt-(0.16+0.06*vt)));
+      const vo2Demand=Math.max(80,p.metabolicVO2||250);
+      const intensity=clamp((vo2Demand-250)/(VO2_MAX_REF-250),0,1.1);
+      const rerMetabolic=0.80+0.32*Math.pow(intensity,1.6);
+      const vco2Metabolic=vo2Demand*rerMetabolic;
+      const paCO2=clamp(0.863*vco2Metabolic/Math.max(va,0.01),18,90)+0.15*hold;
+      // Troca gasosa transitória: hiperventilação aguda "lava" CO₂ (VCO₂ exalado > produzido); retenção faz o inverso.
+      let washout=1;
+      if(!p.metabolicAcidosis && paCO2<38) washout=1+0.03*(38-paCO2);
+      if(paCO2>42) washout=Math.max(0.6,1-0.01*(paCO2-42));
+      const apnea=hold>0||va<0.3;
+      const eff=p.pulmEfficiency;
+      const po2Pulm=clamp(149.7-(paCO2-0.15*hold)/rerMetabolic-0.5*hold,30,140);
+      const aaGradient=2+0.75*(100-eff)+0.04*Math.pow(100-eff,2)+0.004*Math.max(0,vo2Demand-250);
+      const paO2=clamp(po2Pulm-aaGradient,25,po2Pulm-1);
+      const saO2=satFromPO2(paO2), pulmO2Sat=satFromPO2(po2Pulm);
+      const caO2=o2Content(hb,saO2,paO2);
+      // Limite de extração: ~85% ou SvO₂ mínima de ~15% (PvO₂ crítica), o que ocorrer primeiro.
+      const extractionMax=Math.min(EXTRACTION_MAX, 1-o2Content(hb,15,SVO2_FLOOR_PO2)/caO2);
+      let extraction=vo2Demand/(Math.max(C.co,0.05)*caO2*10), supplyLimited=false;
+      if(extraction>extractionMax){ extraction=extractionMax; supplyLimited=true; }
+      const vo2=C.co*caO2*extraction*10;
+      const cvO2=caO2*(1-extraction);
+      const pvO2=po2FromContent(hb,cvO2,paO2), svO2=satFromPO2(pvO2);
+      const vco2=apnea?0:clamp(vco2Metabolic*(vo2/vo2Demand)*washout,0.7*vo2,1.2*vo2);
+      // RER exibido limitado a 0,7–1,2 (fora disso só transitórios muito breves).
+      const rer=apnea?null:clamp(vco2/vo2,0.7,1.2);
+      const pvCO2=clamp(paCO2+0.15*vco2Metabolic/Math.max(C.co,0.5),20,95);
+      const lap=C.rap-thor+5+0.35*Math.max(0,55-p.contractility);
+      const pvr=1.4*(1-0.45*ex)*(1+0.02*Math.max(0,70-po2Pulm))*(1+0.02*Math.max(0,90-eff));
+      const ppulm=lap+C.co*pvr+0.5*thor;
+      const value={...C, va, hold, vco2Metabolic, paCO2, vco2, rer, po2Pulm, paO2, saO2, pulmO2Sat, caO2, cvO2, extraction, vo2, supplyLimited, pvO2, svO2, pvCO2, ppulm, avO2:caO2-cvO2};
+      steadyCache={key,value};
+      return value;
+    }
+
+    function respiratoryMode(p){
+      if(p.fr>0) return '';
+      return (p.breathHold>0 && p.thoracicLoad>0) ? 'Valsalva, fase 2 (expiração forçada com a glote fechada)' : 'Pausa/apneia';
+    }
     function updateModel(dt){
       const p=model.params;
       model.t += dt;
       const breathHz = p.fr/60;
       const heartHz = p.hr/60;
-      model.breathPhase = (model.breathPhase + dt*breathHz*2*Math.PI)%(2*Math.PI);
+      model.breathPhase = p.fr>0 ? (model.breathPhase + dt*breathHz*2*Math.PI)%(2*Math.PI) : 0;
       model.cardiacPhase = (model.cardiacPhase + dt*heartHz*2*Math.PI)%(2*Math.PI);
 
       const breathWave = Math.sin(model.breathPhase);
       const inspirationBoost = Math.max(0, breathWave);
-      const intrath = -2 - (p.breathDepth/100)*4*inspirationBoost + (1-inspirationBoost)*0.8;
+      const intrath = -2 - (p.breathDepth/100)*4*inspirationBoost + (1-inspirationBoost)*0.8 + (p.thoracicLoad||0);
 
       /*
-        Núcleo didático auditável.
-        As variáveis finais não são mais independentes: elas obedecem às equações ativas.
-        1) VS = EDV − ESV
-        2) FE = VS / EDV × 100
-        3) DC = FC × VS / 1000
-        4) PAM = PAD + 1/3(PAS − PAD)
-        5) VO₂ = DC × Δa-vO₂, em que Δa-vO₂ é recalculado a partir da demanda do estado.
+        Equações ativas (o regime estável é resolvido em steadyState):
+        1) VS = VDF − VSF   2) FE = VS / VDF × 100   3) DC = FC × VS / 1000
+        4) PAM = PAD + 1/3(PAS − PAD)   5) RVS = (PAM − PV) / DC
+        6) VO₂ = DC × (CaO₂ − CvO₂) × 10
+        O retorno venoso oscila discretamente com a respiração, mas sua média é igual ao DC.
       */
+      const st = steadyState({...p});
+      const breathing = p.fr > 0 ? 1 : 0;
+      const rv = st.co * (1 + 0.03*(p.breathDepth/100)*breathWave*breathing);
+      const edv = st.edv, esv = st.esv, sv = st.sv, co = st.co;
+      const ef = clamp((sv/Math.max(edv,1))*100, 0, 95);
+      const pas = st.pas, pad = st.pad, pam = pad + (pas - pad)/3;
+      const pven = Math.max(0, st.rap);
+      const rvs = (pam - pven)/Math.max(co, 0.1);
+      const ppulm = st.ppulm;
+      const vo2 = st.vo2, vco2 = st.vco2, rer = st.rer, avO2 = st.avO2;
+      const pulmO2Sat = st.pulmO2Sat, saO2 = st.saO2, svO2 = st.svO2;
+      const po2Pulm = st.po2Pulm, paO2 = st.paO2, pvO2 = st.pvO2;
+      const paCO2 = st.paCO2, pvCO2 = st.pvCO2;
+      const pco2Pulm = Math.max(16, paCO2 - 1 - 0.8*inspirationBoost*breathing);
+      p.extraction = Math.round(st.extraction*100);
 
-      const hr = p.hr;
-
-      // Retorno venoso: estados rápidos podem fixar um alvo; controles manuais usam relação fisiológica suave.
-      const vrBase = 2.5 + (p.bloodVolume/100)*2.4 + (p.venousTone/100)*1.6 + (p.breathDepth/100)*0.65*inspirationBoost;
-      const hrFillingPenalty = clamp((hr - 110)/90, 0, 0.72);
-      const rvComputed = clamp(vrBase - 0.75*hrFillingPenalty, 1.8, 12.5);
-      const rv = clamp(p.targetRV ?? rvComputed, 1.5, 14);
-
-      // EDV e ESV: se o estado rápido informa alvos, VS sempre sai da diferença EDV − ESV.
-      const contractilityFactor = p.contractility/100;
-      const afterloadFactor = p.afterload/100;
-      const edvComputed = clamp(58 + rv*7.2 + (p.compliance/100)*34 - hrFillingPenalty*26, 55, 220);
-      const esvComputed = clamp(23 + (1-contractilityFactor)*44 + afterloadFactor*24 - (rv-5)*1.1, 18, 140);
-
-      const edv = clamp(p.targetEDV ?? edvComputed, 50, 230);
-      const esv = clamp(p.targetESV ?? esvComputed, 15, edv - 5);
-      const sv = clamp(edv - esv, 5, 160);
-      const ef = clamp((sv/edv)*100, 5, 90);
-      const co = clamp((hr*sv)/1000, 0.5, 30);
-
-      // Pressões: PAS e PAD podem ser calibradas pelo estado; PAM é sempre derivada da fórmula.
-      const pasComputed = clamp(82 + sv*0.45 + p.contractility*0.12 + p.afterload*0.28 + (p.pasBoost || 0), 60, 240);
-      const padComputed = clamp(Math.min(pasComputed-10, 48 + p.afterload*0.42 + p.venousTone*0.13 + co*0.8 + (p.padBoost || 0)), 35, 145);
-      const pas = clamp(p.targetPAS ?? pasComputed, 50, 260);
-      const pad = clamp(Math.min(pas - 8, p.targetPAD ?? padComputed), 30, 150);
-      const pam = clamp(pad + (pas - pad)/3, 35, 190);
-
-      // RVS auditável, mesmo que não esteja em card: RVS ≈ PAM / DC.
-      const rvs = clamp(pam / Math.max(co, 0.1), 3, 80);
-
-      const ppulmComputed = clamp(10 + (p.breathDepth/100)*4 + (rv-5)*0.8 + inspirationBoost*2 + (p.ppulmBoost || 0), 6, 45);
-      const ppulm = clamp(p.targetPAPm ?? ppulmComputed, 4, 60);
-      const pvenComputed = clamp(2 + (rv-3)*1.25 + (p.venousTone/100)*3.5 - inspirationBoost*0.8 + (p.pvenBoost || 0), 0, 35);
-      const pven = clamp(p.targetPV ?? pvenComputed, 0, 40);
-
-      // Gases: estado define oxigenação/extração didática; valores livres usam eficiência pulmonar e extração.
-      const pulmO2Sat = clamp(p.targetPulmO2Sat ?? (90 + (p.pulmEfficiency/100)*10 + inspirationBoost*0.6 - Math.max(0,p.fr-32)*0.12), 75, 100);
-      const saO2 = clamp(p.targetSaO2 ?? (pulmO2Sat - 0.8 - (100-p.pulmEfficiency)*0.04), 55, 99);
-      const svO2 = clamp(p.targetSvO2 ?? (saO2 - (18 + (p.extraction/100)*32) + co*0.8), 15, 88);
-
-      // Fick didático: VO₂ fecha com DC por um Δa-vO₂ implícito do estado.
-      const vo2Computed = clamp(co * (35 + (p.extraction/100)*45), 100, 5000);
-      const vo2 = clamp(p.targetVO2 ?? vo2Computed, 80, 6000);
-      const avO2 = vo2 / Math.max(co, 0.1);
-      const vco2 = clamp(vo2*0.82, 70, 5000);
-
-      const po2Pulm = clamp(p.targetPO2Pulm ?? (80 + (pulmO2Sat-88)*2.2), 35, 125);
-      const paO2 = clamp(p.targetPaO2 ?? (po2Pulm - 6 - (100-p.pulmEfficiency)*0.10), 25, 115);
-      const pvO2 = clamp(p.targetPvO2 ?? (18 + (svO2-30)*0.52), 12, 65);
-
-      const paCO2 = clamp(p.targetPaCO2 ?? (46 - (p.fr-12)*0.45 - (p.breathDepth-55)*0.08 + (p.extraction-50)*0.12), 18, 75);
-      const pvCO2 = clamp(p.targetPvCO2 ?? (paCO2 + 4 + (p.extraction-50)*0.10 + Math.max(0,5-co)*0.9), 22, 85);
-      const pco2Pulm = clamp(p.targetPCO2Pulm ?? (paCO2 - 2 - inspirationBoost*1.0), 16, 70);
-
-      const breathText = breathWave >= 0 ? 'Inspiração' : 'Expiração';
+      const breathText = respiratoryMode(p) || (breathWave >= 0 ? 'Inspiração' : 'Expiração');
       const cardiacText = Math.sin(model.cardiacPhase) >= 0 ? 'Sístole' : 'Diástole';
 
       Object.assign(model.values,{
-        intrathoracic:intrath,rv,edv,esv,sv,ef,co,vo2,vco2,avO2,rvs,
+        intrathoracic:intrath,rv,edv,esv,sv,ef,co,vo2,vco2,rer,avO2,rvs,va:st.va,extraction:st.extraction,supplyLimited:st.supplyLimited,
         pulmO2Sat,saO2,svO2,po2Pulm,paO2,pvO2,pco2Pulm,paCO2,pvCO2,ppulm,pam,pven,pas,pad,
         phaseText:`Fase respiratória: ${breathText} | Batimento: ${cardiacText}`
       });
@@ -2478,29 +2569,48 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
 
     function updateUI(){
       const v=model.values;
-      ui.rv.textContent=v.rv.toFixed(1);
+      ui.rv.textContent=fmtBR(v.rv,1);
       ui.edv.textContent=Math.round(v.edv);
       ui.esv.textContent=Math.round(v.esv);
       ui.sv.textContent=Math.round(v.sv);
       ui.ef.textContent=Math.round(v.ef);
-      ui.co.textContent=v.co.toFixed(1);
+      ui.co.textContent=fmtBR(v.co,1);
       if(ui.eqMetric && ui.eqVal && ui.eqDelta){
+        // Em regime o RV médio é igual ao DC; a oscilação respiratória produz apenas diferenças transitórias pequenas.
         const diffRVDC = Math.abs(v.co - v.rv);
+        const rel = diffRVDC / Math.max(v.co, 0.1);
         ui.eqMetric.classList.remove('eq-watch','eq-off');
-        if(diffRVDC <= 0.2){
+        if(rel <= 0.05){
           ui.eqVal.textContent = 'OK';
-          ui.eqDelta.textContent = `Δ ${diffRVDC.toFixed(1)} L/min`;
-        }else if(diffRVDC <= 0.6){
+        }else if(rel <= 0.12){
           ui.eqMetric.classList.add('eq-watch');
           ui.eqVal.textContent = 'Transição';
-          ui.eqDelta.textContent = `Δ ${diffRVDC.toFixed(1)} L/min`;
         }else{
           ui.eqMetric.classList.add('eq-off');
           ui.eqVal.textContent = 'Diferença';
-          ui.eqDelta.textContent = `Δ ${diffRVDC.toFixed(1)} L/min`;
         }
+        ui.eqDelta.textContent = `Δ ${fmtBR(diffRVDC,1)} L/min`;
       }
       ui.vo2.textContent=Math.round(v.vo2);
+      if(ui.vo2Unit) ui.vo2Unit.textContent = v.supplyLimited ? 'mL/min · limitado pela oferta' : 'mL/min';
+      if(ui.rvs) ui.rvs.textContent = fmtBR(v.rvs,1);
+      if(ui.alert){
+        const al=[], pr=model.params;
+        if(v.pas>=200 || v.pad>=120) al.push('Hipertensão extrema (≥ 200/120 mmHg): pressões nesse nível só ocorrem de forma breve, como em esforço resistido máximo com Valsalva.');
+        if(v.pam<60 || v.co<2) al.push('Colapso circulatório: PAM abaixo de 60 mmHg ou DC abaixo de 2 L/min não mantêm a perfusão dos órgãos.');
+        if(v.vo2<200) al.push('VO₂ abaixo do metabolismo basal (~250 mL/min em adulto): combinação não sustentável.');
+        if(v.supplyLimited) al.push('A oferta de O₂ não atende à demanda: a extração chegou ao limite (SvO₂ ~15%).');
+        if(pr.fr>0 && ((v.va??99) < 1.5 || v.paCO2>=70) && !pr.breathHold) al.push('Hipoventilação extrema com hipercapnia grave: em regime estável seria incompatível com a vida; PaCO₂ e PaO₂ aparecem no limite do modelo.');
+        if(pr.fr===0 && !pr.breathHold) al.push('Sem ventilação: apneia mantida é incompatível com a vida; PaCO₂ e PaO₂ aparecem no limite do modelo.');
+        ui.alert.textContent = al.join(' ');
+      }
+      if(ui.rer) ui.rer.textContent = v.rer == null ? '—' : fmtBR(v.rer,2);
+      const extInput = document.getElementById('extraction');
+      if(extInput){
+        extInput.value = Math.round(v.extraction*100);
+        const extLab = document.getElementById('extractionLabel');
+        if(extLab) extLab.textContent = `${Math.round(v.extraction*100)} %`;
+      }
       ui.pas.textContent=Math.round(v.pas);
       ui.pad.textContent=Math.round(v.pad);
       ui.papm.textContent=Math.round(v.ppulm);
@@ -2511,8 +2621,10 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       ui.co2.innerHTML=`<span class="c-pco2p">${Math.round(v.pco2Pulm)}</span> / <span class="c-paco2">${Math.round(v.paCO2)}</span> / <span class="c-pvco2">${Math.round(v.pvCO2)}</span>`;
       ui.vco2.textContent=Math.round(v.vco2);
       ui.phaseLabel.textContent=v.phaseText;
+      const pr=model.params, valsalva=pr.fr===0 && pr.breathHold>0 && pr.thoracicLoad>0;
+      const respLead = valsalva ? 'Pressão intratorácica alta reduz o ' : (pr.fr===0 ? 'Apneia: sem oscilação respiratória do ' : `${Math.sin(model.breathPhase)>=0?'Inspiração':'Expiração'} ${Math.sin(model.breathPhase)>=0?'favorece':'reduz'} o `);
       setSvgRichLines(ui.status1, [[
-        {text:`${Math.sin(model.breathPhase)>=0?'Inspiração':'Expiração'} ${Math.sin(model.breathPhase)>=0?'favorece':'reduz'} o `, fill:'#8ccaff', weight:700},
+        {text:respLead, fill:'#8ccaff', weight:700},
         {text:'RV', fill:cssVar('--c-rv'), weight:900}
       ]], 18, 20);
       setSvgRichLines(ui.status2, [
@@ -2764,7 +2876,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         ctx.lineTo(chartRight,y);
         ctx.stroke();
         ctx.fillStyle='#a2b9ca';
-        ctx.fillText(val.toFixed(decimals), chartLeft - 8, y);
+        ctx.fillText(fmtBR(val,decimals), chartLeft - 8, y);
       }
       ctx.textAlign='start';
       ctx.textBaseline='alphabetic';
@@ -2999,7 +3111,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         const val = maxV - (maxV - minV) * frac;
         ctx.beginPath(); ctx.moveTo(left,y); ctx.lineTo(right,y); ctx.stroke();
         ctx.fillStyle='#a2b9ca';
-        ctx.fillText(val.toFixed(1), left - 8, y);
+        ctx.fillText(fmtBR(val,1), left - 8, y);
       }
 
       ctx.strokeStyle = '#9fb1c4';
@@ -3112,7 +3224,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         document.getElementById('gasPressureCombinedChart'),
         null,
         {
-          max: 120,
+          max: 140,
           pulmTitle: 'Pulmonar',
           arterialTitle: 'Arterial',
           venousTitle: 'Venoso',
@@ -3160,11 +3272,11 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
     document.getElementById('stepBtn').onclick=()=>{ model.running=false; updateModel(0.12); updateUI(); renderScene(); renderCharts(); triggerUXFeedback(null, 'Etapa executada'); };
     ui.animSpeed.addEventListener('input', ()=>{
       model.animSpeed = Number(ui.animSpeed.value);
-      ui.animSpeedVal.textContent = `${model.animSpeed.toFixed(1)}×`;
+      ui.animSpeedVal.textContent = `${fmtBR(model.animSpeed,1)}×`;
       triggerUXFeedback(ui.animSpeed.closest('.speed-box'), 'Velocidade ajustada');
     });
     model.animSpeed = Number(ui.animSpeed.value);
-    ui.animSpeedVal.textContent = `${model.animSpeed.toFixed(1)}×`;
+    ui.animSpeedVal.textContent = `${fmtBR(model.animSpeed,1)}×`;
 
     let last=performance.now();
     function tick(now){
@@ -3196,5 +3308,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>

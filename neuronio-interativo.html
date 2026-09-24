@@ -157,7 +157,7 @@
       font-weight:800;
       line-height:1.12;
       padding-left:4px;
-      height:78px;
+      min-height:78px;
       display:flex;
       flex-direction:column;
       justify-content:flex-start;
@@ -232,13 +232,14 @@
     }
 
     label:has(input[type="checkbox"]:checked){
-      border-color:#8fb3ff;
-      background:linear-gradient(180deg,#ffffff 0%, #e6f0ff 100%);
-      box-shadow:0 0 0 3px rgba(47,128,237,.15), 0 8px 18px rgba(15,23,42,.08);
+      border-color:#7dc5ad;
+      background:#20483f;
+      color:#eafff7;
+      box-shadow:0 0 0 3px rgba(125,197,173,.18), 0 8px 18px rgba(0,0,0,.25);
     }
     .controls{
-      background:linear-gradient(180deg,#fcfcfe 0%, #f7f9fc 100%) !important;
-      box-shadow:var(--shadow);
+      background:linear-gradient(145deg,#223b4d,#112432) !important;
+      box-shadow:inset 0 1px 0 #ffffff20,0 10px 25px #0005;
     }
     .legend{
       background:linear-gradient(180deg,#fcfcfe 0%, #f7f9fc 100%) !important;
@@ -270,7 +271,7 @@
 
     <label>Velocidade
       <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2">
-      <span id="speedLabel">1.2x</span>
+      <span id="speedLabel">1,2x</span>
     </label>
 
     <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
@@ -317,7 +318,10 @@
     <b>Limiar:</b> por volta de -55 mV, quando a abertura regenerativa dos canais rápidos de <span class="ion-na">Na⁺</span> se torna evidente.
     <b>Despolarização:</b> entrada predominante de <span class="ion-na">Na⁺</span>.
     <b>Repolarização:</b> saída predominante de <span class="ion-k">K⁺</span>.
-    <b>Hiperpolarização:</b> canais de <span class="ion-k">K⁺</span> ainda permanecem abertos por algum tempo.
+    <b>Hiperpolarização:</b> canais de <span class="ion-k">K⁺</span> ainda permanecem abertos por algum tempo e fecham lentamente (pós-hiperpolarização, cerca de −85 mV).
+    <b>Inativação:</b> no pico, o portão h fecha os canais de <span class="ion-na">Na⁺</span>; eles só se recuperam com a repolarização (períodos refratários absoluto e relativo).
+    <b>Mielina:</b> os fluxos iônicos ocorrem apenas nos nodos de Ranvier; sob a bainha a corrente é local, e o impulso “salta” de nodo em nodo (condução saltatória).
+    <b>Escala temporal esquemática:</b> fase ascendente de ~0,5 ms, repolarização de ~1–1,5 ms e pós-hiperpolarização de alguns milissegundos.
     <span class="pill">potencial de ação</span><span class="pill">neurônio</span><span class="pill">membrana excitável</span>
 
     <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
@@ -439,15 +443,19 @@ function drawNeuronAnatomy(c,showLabels){drawMotorNeuronAnatomy(c,showLabels);}
   const x0 = 85, xW = 680;
   const baseY = 458;
 
+  // Marcos temporais (quadros). Subida ≈ 1/3 da repolarização; o pico encerra a abertura do Na⁺.
+  const T = Object.freeze({ stim:70, thr:125, peak:160, repol:265, trough:370, end:460 });
   const phases = [
-    { name:"Repouso", start:0, end:70, desc:"Membrana em torno de -70 mV.", color:"#6b7280", flow:"Sem fluxo predominante", flowDesc:"Predomínio de correntes de repouso." },
-    { name:"Limiar", start:71, end:125, desc:"Atinge aproximadamente -55 mV.", color:"#d97706", flow:"Entrada inicial de Na+", flowDesc:"Abertura crescente dos canais rápidos de Na+." },
-    { name:"Despolarização", start:126, end:210, desc:"Entrada predominante de Na+.", color:"#70bcff", flow:"Entrada de Na+", flowDesc:"Grande influxo de sódio para o interior da célula." },
-    { name:"Repolarização", start:211, end:315, desc:"Saída predominante de K+.", color:"#ff8990", flow:"Saída de K+", flowDesc:"Efluxo de potássio reduzindo o potencial de membrana." },
-    { name:"Hiperpolarização", start:316, end:390, desc:"K+ ainda permanece aberto por algum tempo.", color:"#7c3aed", flow:"Saída residual de K+", flowDesc:"Os canais de K+ ainda permanecem abertos além do necessário." },
-    { name:"Retorno ao repouso", start:391, end:460, desc:"Volta gradual ao potencial basal.", color:"#059669", flow:"Redução do efluxo de K+", flowDesc:"A membrana retorna progressivamente ao estado basal." }
+    { name:"Repouso", start:0, end:T.stim, desc:"Membrana em torno de -70 mV.", color:"#6b7280", flow:"Sem fluxo predominante", flowDesc:"Correntes de vazamento em equilíbrio; a Na+/K+-ATPase mantém os gradientes." },
+    { name:"Limiar", start:T.stim+1, end:T.thr, desc:"O estímulo despolariza a membrana até cerca de -55 mV.", color:"#d97706", flow:"Entrada inicial de Na+", flowDesc:"Os primeiros canais rápidos de Na+ começam a abrir à medida que a membrana se aproxima do limiar." },
+    { name:"Despolarização", start:T.thr+1, end:T.peak, desc:"Fase ascendente rápida (~0,5 ms) por entrada de Na+.", color:"#70bcff", flow:"Entrada de Na+", flowDesc:"Abertura regenerativa dos canais de Na+; no pico eles inativam (portão h)." },
+    { name:"Repolarização", start:T.peak+1, end:T.repol, desc:"Saída predominante de K+.", color:"#ff8990", flow:"Saída de K+", flowDesc:"Canais de Na+ inativados (portão h) e canais de K+ abertos." },
+    { name:"Hiperpolarização", start:T.repol+1, end:T.trough, desc:"Canais de K+ ainda abertos; o potencial chega a cerca de -85 mV.", color:"#7c3aed", flow:"Saída residual de K+", flowDesc:"Os canais de K+ fecham lentamente e aproximam o potencial do equilíbrio do K+." },
+    { name:"Retorno ao repouso", start:T.trough+1, end:T.end, desc:"Volta gradual ao potencial basal.", color:"#059669", flow:"Canais de K+ fechados", flowDesc:"Os canais de vazamento restabelecem -70 mV; a Na+/K+-ATPase mantém os gradientes." }
   ];
-  const pauseFrames = [70, 125, 210, 315, 390, 460];
+  const pauseFrames = phases.map(p => p.end);
+  // Nodos de Ranvier desenhados no axônio (x), do segmento inicial aos terminais.
+  const NODES = [295, 383, 458, 533, 597];
 
   let running = false;
   let frame = 0;
@@ -458,31 +466,74 @@ function drawNeuronAnatomy(c,showLabels){drawMotorNeuronAnatomy(c,showLabels);}
 
   function getSpeed() { return parseFloat(speedRange.value); }
 
-  function interp(v, a, b, ya, yb){
-    const t = (v - a) / (b - a);
-    return ya + (yb - ya) * Math.max(0, Math.min(1, t));
+  const clamp01 = v => Math.max(0, Math.min(1, v));
+  const ease = t => 0.5 - 0.5 * Math.cos(Math.PI * clamp01(t));
+  function interp(v, a, b, ya, yb, shape = ease){
+    return ya + (yb - ya) * shape((v - a) / (b - a));
   }
 
+  // Hermite cúbico normalizado: m0/m1 = inclinações inicial/final (evita patamares nas junções).
+  const hermite = (m0, m1) => t => { t = clamp01(t); const t2 = t*t, t3 = t2*t; return (t3 - 2*t2 + t)*m0 + (-2*t3 + 3*t2) + (t3 - t2)*m1; };
+  const LIMIAR_SLOPE = 2 * 15 / (T.thr - T.stim);                 // mV/quadro ao atingir o limiar
+  const AHP_SLOPE = 15 * (Math.PI / 2) / (T.trough - T.repol);    // mV/quadro no início da pós-hiperpolarização
+  const RISE = hermite(LIMIAR_SLOPE * (T.peak - T.thr) / 85, 0);
+  const FALL = hermite(0, AHP_SLOPE * (T.repol - T.peak) / 100);
+
   function getPotential(f){
-    if (f <= 70) return -70;
-    if (f <= 125) return interp(f, 70, 125, -70, -55);
-    if (f <= 210) return interp(f, 125, 210, -55, 30);
-    if (f <= 315) return interp(f, 210, 315, 30, -70);
-    if (f <= 390) return interp(f, 315, 390, -70, -85);
-    return interp(f, 390, 460, -85, -70);
+    if (f <= T.stim) return -70;
+    if (f <= T.thr) return interp(f, T.stim, T.thr, -70, -55, t => clamp01(t) * clamp01(t));
+    if (f <= T.peak) return interp(f, T.thr, T.peak, -55, 30, RISE);
+    if (f <= T.repol) return interp(f, T.peak, T.repol, 30, -70, FALL);
+    if (f <= T.trough) return interp(f, T.repol, T.trough, -70, -85, t => Math.sin(clamp01(t) * Math.PI / 2));
+    return interp(f, T.trough, T.end, -85, -70);
+  }
+
+  // Canal de Na⁺: portão de ativação (m) e de inativação (h), esquemáticos.
+  function naGate(f){
+    let m = 0.08;
+    if (f > 95 && f <= T.thr) m = 0.08 + 0.42 * ease((f - 95) / (T.thr - 95));
+    else if (f > T.thr && f <= T.repol) m = f <= T.thr + 12 ? 0.5 + 0.5 * ease((f - T.thr) / 12) : 1;
+    if (f > T.peak && f <= T.repol) m = f < T.repol - 30 ? 1 : 1 - 0.92 * ease((f - (T.repol - 30)) / 30);
+    let h = 0; // fração inativada
+    if (f > T.peak - 4 && f <= T.repol) h = ease((f - (T.peak - 4)) / 4);
+    else if (f > T.repol && f <= T.trough) h = 1 - ease((f - T.repol) / (T.trough - T.repol));
+    return { m, h, conducting: m > 0.3 && h < 0.5 };
+  }
+  function naState(f){
+    const g = naGate(f);
+    if (g.h > 0.5 && f <= T.repol) return "inativado (portão h)";
+    if (g.h > 0.05) return "fechado, recuperando da inativação";
+    if (g.m > 0.9) return "aberto";
+    if (g.m > 0.12) return "abrindo";
+    return "fechado";
+  }
+  // Canal de K⁺ retificador tardio: abre perto do pico e fecha lentamente.
+  function kOpenAmt(f){
+    if (f <= 140) return 0.08;
+    if (f <= 175) return 0.08 + 0.92 * ease((f - 140) / 35);
+    if (f <= T.repol) return 1;
+    if (f <= T.trough) return 1 - 0.92 * ease((f - T.repol) / (T.trough - T.repol));
+    return 0.08;
+  }
+  function kState(f){
+    const k = kOpenAmt(f);
+    if (k > 0.9) return "aberto";
+    if (k > 0.12) return f < T.peak + 20 ? "abrindo" : "fechando lentamente";
+    return "fechado";
   }
 
   function getPhase(f){
-    return phases.find(p => f >= p.start && f <= p.end) || phases[0];
+    return phases.find(p => f >= p.start && f <= p.end) || phases[phases.length - 1];
   }
 
   function mvToY(mv){ return baseY - ((mv + 100) * 2.65); }
   function formatMV(mv){ return `${mv >= 0 ? "+" : ""}${mv.toFixed(0)} mV`; }
 
   function setCardsColor(color){
-    phaseCard.style.setProperty("--phase-color", color);
-    mvCard.style.setProperty("--phase-color", color);
-    flowCard.style.setProperty("--phase-color", color);
+    [phaseCard, mvCard, flowCard].forEach(card => {
+      card.style.setProperty("--phase-color", color);
+      card.style.setProperty("--phase", color);
+    });
   }
 
   function updateStatus(){
@@ -548,19 +599,9 @@ function drawNeuronAnatomy(c,showLabels){drawMotorNeuronAnatomy(c,showLabels);}
     ctx.restore();
   }
 
-  function drawGradientStrokeLine(ctx, x1, y1, x2, y2, stops){
-    const grad = ctx.createLinearGradient(x1, y1, x2, y2);
-    stops.forEach(s => grad.addColorStop(s[0], s[1]));
-    ctx.strokeStyle = grad;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-  }
-
   function drawNeuronBase(){
     nctx.clearRect(0,0,neuronCanvas.width, neuronCanvas.height);
-neuronCanvas.getContext('2d').fillStyle='#0d2030';neuronCanvas.getContext('2d').fillRect(0,0,neuronCanvas.width,neuronCanvas.height);
+    nctx.fillStyle='#0d2030'; nctx.fillRect(0,0,neuronCanvas.width,neuronCanvas.height);
 
     nctx.font = "bold 20px Arial";
     nctx.fillStyle = '#c4d8e6';
@@ -578,7 +619,7 @@ neuronCanvas.getContext('2d').fillStyle='#0d2030';neuronCanvas.getContext('2d').
 
     nctx.font = "bold 16px Arial";
     nctx.fillStyle = '#c4d8e6';
-    nctx.fillText("Detalhe ampliado da membrana do axônio", zx + 16, zy + 24);
+    nctx.fillText("Membrana do axônio no nodo de Ranvier", zx + 16, zy + 24);
 
     // membrane bilayer
     const topY = zy + 74;
@@ -593,19 +634,37 @@ neuronCanvas.getContext('2d').fillStyle='#0d2030';neuronCanvas.getContext('2d').
     drawChannels(zx, zy);
   }
 
-  function phaseOpenNa(){ return frame >= 120 && frame <= 230; }
-  function phaseOpenK(){ return frame >= 210 && frame <= 390; }
+  // Portão h: "bola e corrente" que ocluí a face intracelular do canal de Na⁺ inativado.
+  function drawInactivationPlug(cx, zy, amount){
+    if (amount <= 0.02) return;
+    nctx.save();
+    nctx.globalAlpha = amount;
+    const y = zy + 57 + 102 * 0.86 + (1 - amount) * 18;
+    nctx.strokeStyle = '#c7a6ff'; nctx.lineWidth = 2.2;
+    nctx.beginPath(); nctx.moveTo(cx + 22, zy + 57 + 102 * 0.92); nctx.quadraticCurveTo(cx + 18, y + 16, cx + 6, y + 4); nctx.stroke();
+    const g = nctx.createRadialGradient(cx - 3, y - 3, 1, cx, y, 10);
+    g.addColorStop(0, '#f3e8ff'); g.addColorStop(0.5, '#b69aff'); g.addColorStop(1, '#4c2f86');
+    nctx.fillStyle = g; nctx.beginPath(); nctx.arc(cx, y, 9, 0, Math.PI * 2); nctx.fill();
+    nctx.fillStyle = '#1b1035'; nctx.font = 'bold 10px Arial'; nctx.textAlign = 'center'; nctx.fillText('h', cx, y + 3.5); nctx.textAlign = 'left';
+    nctx.restore();
+  }
 
-  function drawChannelUnit(cx,zy,type,openAmt){const color=type==='Na'?'#70bcff':'#ff8990';MembraneArt.protein(nctx,cx-26,zy+57,52,102,color,openAmt);if(labelsToggle.checked){nctx.font='bold 12px Arial';nctx.fillStyle=color;nctx.fillText(type+'+',cx-9,zy+40);}}
+  function drawChannelUnit(cx,zy,type,openAmt,plug=0){const color=type==='Na'?'#70bcff':'#ff8990';MembraneArt.protein(nctx,cx-26,zy+57,52,102,color,openAmt);if(type==='Na')drawInactivationPlug(cx,zy,plug);if(labelsToggle.checked){nctx.font='bold 12px Arial';nctx.fillStyle=color;nctx.fillText(type+'+',cx-9,zy+40);}}
 
   function drawChannels(zx, zy){
     const naCenters = [zx + 260, zx + 342, zx + 424];
     const kCenters = [zx + 550, zx + 632];
-    const naOpen = phaseOpenNa() ? 1 : 0.08;
-    const kOpen = phaseOpenK() ? 1 : 0.08;
+    const na = naGate(frame);
+    const kOpen = kOpenAmt(frame);
 
-    naCenters.forEach(c => drawChannelUnit(c, zy, "Na", naOpen));
+    naCenters.forEach(c => drawChannelUnit(c, zy, "Na", na.m, na.h));
     kCenters.forEach(c => drawChannelUnit(c, zy, "K", kOpen));
+
+    nctx.font = "bold 12px Arial";
+    nctx.textAlign = "right";
+    nctx.fillStyle = '#70bcff'; nctx.fillText(`Na+: ${naState(frame)}`, zx + 756, zy + 20);
+    nctx.fillStyle = '#ff8990'; nctx.fillText(`K+: ${kState(frame)}`, zx + 756, zy + 38);
+    nctx.textAlign = "left";
 
     if (labelsToggle.checked){
       nctx.font = "13px Arial";
@@ -619,27 +678,29 @@ neuronCanvas.getContext('2d').fillStyle='#0d2030';neuronCanvas.getContext('2d').
     }
   }
 
+  // Condução saltatória: a excitação salta de nodo em nodo; a bainha não tem fluxo iônico.
+  const apActive = () => frame > T.thr && frame <= T.repol;
+  // Nodo excitado segundo o progresso do PA (do segmento inicial ao último nodo, sem voltar).
+  function saltatoryIndex(){ const p = (frame - T.thr) / (T.repol - T.thr); return Math.min(NODES.length - 1, Math.max(0, Math.floor(p * NODES.length))); }
+
   function drawActionPotentialWave(){
-    const p = getPhase(frame);
-    const waveX = 300 + ((frame * 2.0) % 320);
-    const y = 175;
-
-    nctx.save();nctx.beginPath();for(const [a,b]of [[280,310],[377,390],[452,465],[527,540],[602,625]])nctx.rect(a,140,b-a,70);nctx.clip();
-    if (frame >= 120 && frame <= 315){
-      const glow = nctx.createRadialGradient(waveX, y, 5, waveX, y, 34);
-      glow.addColorStop(0, p.name === "Despolarização" ? "rgba(59,130,246,0.95)" : "rgba(239,68,68,0.8)");
-      glow.addColorStop(1, "rgba(0,0,0,0)");
-      nctx.fillStyle = glow;
-      nctx.beginPath(); nctx.arc(waveX, y, 34, 0, Math.PI*2); nctx.fill();
-
-      nctx.strokeStyle = p.name === "Despolarização" ? "#70bcff" : "#ff8990";
-      nctx.lineWidth = 5;
-      nctx.beginPath();
-      nctx.moveTo(Math.max(300, waveX - 36), y);
-      nctx.quadraticCurveTo(waveX - 12, y - 27, waveX, y);
-      nctx.quadraticCurveTo(waveX + 12, y + 27, Math.min(605, waveX + 36), y);
-      nctx.stroke();
+    if (!apActive()) return;
+    const y = 175, i = saltatoryIndex(), x = NODES[i], prev = i > 0 ? NODES[i - 1] : null;
+    nctx.save();
+    const glow = nctx.createRadialGradient(x, y, 4, x, y, 30);
+    glow.addColorStop(0, "rgba(112,188,255,0.95)"); glow.addColorStop(1, "rgba(0,0,0,0)");
+    nctx.fillStyle = glow; nctx.beginPath(); nctx.arc(x, y, 30, 0, Math.PI * 2); nctx.fill();
+    if (prev !== null){
+      const g2 = nctx.createRadialGradient(prev, y, 4, prev, y, 24);
+      g2.addColorStop(0, "rgba(255,137,144,0.8)"); g2.addColorStop(1, "rgba(0,0,0,0)");
+      nctx.fillStyle = g2; nctx.beginPath(); nctx.arc(prev, y, 24, 0, Math.PI * 2); nctx.fill();
+      // salto da corrente local sob a bainha (sem fluxo transmembrana no internodo)
+      nctx.strokeStyle = "#b3d6ef"; nctx.lineWidth = 2; nctx.setLineDash([5,4]);
+      nctx.beginPath(); nctx.moveTo(prev + 6, y - 34); nctx.quadraticCurveTo((prev + x) / 2, y - 64, x - 8, y - 36); nctx.stroke();
+      nctx.setLineDash([]);
+      drawArrow(nctx, x - 16, y - 42, x - 7, y - 35, "#b3d6ef");
     }
+    if (labelsToggle.checked){ nctx.font = "bold 12px Arial"; nctx.fillStyle = "#b3d6ef"; nctx.fillText("Condução saltatória (nodos de Ranvier)", 330, 262); }
     nctx.restore();
   }
 
@@ -666,13 +727,13 @@ neuronCanvas.getContext('2d').fillStyle='#0d2030';neuronCanvas.getContext('2d').
     const zx = 44, zy = 286;
     const naCenters = [zx + 260, zx + 342, zx + 424];
     const kCenters = [zx + 550, zx + 632];
+    const na = naGate(frame);
 
-    // Fluxo no detalhe ampliado: as setas passam pelo eixo central dos canais,
-    // com rótulos deslocados para cima/lateral para não cobrir o trajeto iônico.
-    if (frame >= 126 && frame <= 230){
-      if (labelsToggle.checked) drawBadge(nctx, "Na+ entra", zx + 116, zy + 118, "#70bcff");
-
-      naCenters.forEach((cx, idx) => {
+    // Fluxo no detalhe ampliado: só atravessa canais abertos e não inativados.
+    if (na.conducting){
+      const partial = frame <= T.thr;
+      if (labelsToggle.checked) drawBadge(nctx, partial ? "Na+ começa a entrar" : "Na+ entra", zx + 60, zy + 118, "#70bcff");
+      (partial ? naCenters.slice(0, 1) : naCenters).forEach((cx, idx) => {
         const yStart = zy + 66;
         const yEnd = zy + 172;
         const yy = yStart + ((flowPhase + idx*24) % (yEnd - yStart - 10));
@@ -682,7 +743,7 @@ neuronCanvas.getContext('2d').fillStyle='#0d2030';neuronCanvas.getContext('2d').
       });
     }
 
-    if (frame >= 210 && frame <= 390){
+    if (kOpenAmt(frame) > 0.3){
       if (labelsToggle.checked) drawBadge(nctx, "K+ sai", zx + 674, zy + 118, "#ff8990");
 
       kCenters.forEach((cx, idx) => {
@@ -697,27 +758,21 @@ neuronCanvas.getContext('2d').fillStyle='#0d2030';neuronCanvas.getContext('2d').
   }
 
   function animateOnNeuron(){
-    if (frame >= 126 && frame <= 230){
-      const xs = [308, 342, 376, 410];
-      xs.forEach((x, i) => {
-        const y = 126 + ((flowPhase + i*15) % 36);
-        drawIonParticle(x, y, "Na+", "#70bcff");
-        nctx.strokeStyle = "#70bcff";
-        nctx.lineWidth = 2.5;
-        nctx.beginPath();
-        nctx.moveTo(x, 139); nctx.lineTo(x, 165); nctx.stroke();
-      });
-    }
-
-    if (frame >= 210 && frame <= 390){
-      const xs = [468, 508, 548, 588];
-      xs.forEach((x, i) => {
-        const y = 220 - ((flowPhase + i*17) % 36);
-        drawIonParticle(x, y, "K+", "#ff8990");
-        nctx.strokeStyle = "#ff8990";
-        nctx.lineWidth = 2.5;
-        nctx.beginPath();
-        nctx.moveTo(x, 181); nctx.lineTo(x, 207); nctx.stroke();
+    if (!apActive()) return;
+    // Íons apenas nos nodos: Na⁺ entra no nodo excitado; K⁺ sai no nodo anterior, em repolarização.
+    const i = saltatoryIndex(), x = NODES[i], prev = i > 0 ? NODES[i - 1] : null;
+    [-7, 7].forEach((dx, k) => {
+      const y = 124 + ((flowPhase * 0.8 + k * 18) % 34);
+      nctx.strokeStyle = "#70bcff"; nctx.lineWidth = 2.5;
+      nctx.beginPath(); nctx.moveTo(x + dx, 139); nctx.lineTo(x + dx, 162); nctx.stroke();
+      drawIonParticle(x + dx, y, "Na+", "#70bcff");
+    });
+    if (prev !== null){
+      [-7, 7].forEach((dx, k) => {
+        const y = 192 + ((flowPhase * 0.8 + k * 18) % 34);
+        nctx.strokeStyle = "#ff8990"; nctx.lineWidth = 2.5;
+        nctx.beginPath(); nctx.moveTo(prev + dx, 188); nctx.lineTo(prev + dx, 211); nctx.stroke();
+        drawIonParticle(prev + dx, y, "K+", "#ff8990");
       });
     }
   }
@@ -779,7 +834,7 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
       gctx.fillText("hiperpolarização", 104, graphBottom - 14);
     }
 
-    phases.forEach(ph => {
+    phases.forEach((ph, idx) => {
       const sx = x0 + (ph.start / TOTAL) * xW;
       const ex = x0 + (ph.end / TOTAL) * xW;
       gctx.fillStyle = ph.color + "22";
@@ -788,9 +843,19 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
         gctx.fillStyle = ph.color;
         gctx.font = "11px Arial";
         const label = ph.name === "Retorno ao repouso" ? "Retorno" : ph.name;
-        gctx.fillText(label, sx + 2, 499);
+        gctx.fillText(label, sx + 2, idx % 2 ? 513 : 499);
       }
     });
+
+    // Períodos refratários: absoluto (Na⁺ ativado ou inativado) e relativo (recuperação + K⁺ ainda aberto).
+    if (labelsToggle.checked){
+      const fx = f => x0 + (f / TOTAL) * xW;
+      const arpEnd = T.repol; // recuperação do portão h começa com a repolarização completa
+      [[T.thr, arpEnd, "#ffb86b", "Refratário absoluto"], [arpEnd, T.trough, "#b69aff", "Refratário relativo"]].forEach(([a, b, color, text]) => {
+        gctx.fillStyle = color + "55"; gctx.fillRect(fx(a), 62, fx(b) - fx(a), 7);
+        gctx.fillStyle = color; gctx.font = "bold 11px Arial"; gctx.fillText(text, fx(a) + 2, 57);
+      });
+    }
   }
 
   function drawCurve(){
@@ -880,7 +945,7 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
   function loop(ts){
     if (!running) return;
     if (!lastTs) lastTs = ts;
-    const dt = ts - lastTs;
+    const dt = Math.min(64, ts - lastTs);
     lastTs = ts;
 
     const inc = dt * 0.055 * getSpeed();
@@ -927,7 +992,7 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
   btnStep.addEventListener("click", nextStage);
 
   speedRange.addEventListener("input", () => {
-    speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + "x";
+    speedLabel.textContent = parseFloat(speedRange.value).toFixed(1).replace(".", ",") + "x";
   });
 
   stepModeToggle.addEventListener("change", () => {
@@ -942,7 +1007,7 @@ graphCanvas.getContext('2d').fillStyle='#0d2030';graphCanvas.getContext('2d').fi
   labelsToggle.addEventListener("change", render);
   loopToggle.addEventListener("change", render);
 
-  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1) + "x";
+  speedLabel.textContent = parseFloat(speedRange.value).toFixed(1).replace(".", ",") + "x";
   render();
 })();
 </script>
@@ -969,5 +1034,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>

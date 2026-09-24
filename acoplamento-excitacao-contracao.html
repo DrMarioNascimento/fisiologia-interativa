@@ -78,7 +78,7 @@ canvas{border:1px solid #d7e1ec;border-radius:16px;box-shadow:inset 0 1px 0 rgba
     <button id="btnPause">Pausar</button>
     <button id="btnStep">Próxima etapa</button>
     <button id="btnReset">Resetar</button>
-    <label>Velocidade <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2"><span id="speedLabel">1.2x</span></label>
+    <label>Velocidade <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2"><span id="speedLabel">1,2×</span></label>
     <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
     <label><input id="stepModeToggle" type="checkbox"> Executar por etapas</label>
     <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
@@ -91,8 +91,8 @@ canvas{border:1px solid #d7e1ec;border-radius:16px;box-shadow:inset 0 1px 0 rgba
     <button class="qbtn active" data-preset="normal">Normal</button>
     <button class="qbtn" data-preset="curare">Curare</button>
     <button class="qbtn" data-preset="botulismo">Botulismo</button>
-    <button class="qbtn" data-preset="tetano">Tétano</button>
-    <button class="qbtn" data-preset="semca">Bloqueio de Ca²⁺</button>
+    <button class="qbtn" data-preset="tetano">Toxina tetânica (C. tetani)</button>
+    <button class="qbtn" data-preset="semca">Bloqueio do RyR1 (dantroleno)</button>
   </div>
 
   
@@ -124,14 +124,20 @@ canvas{border:1px solid #d7e1ec;border-radius:16px;box-shadow:inset 0 1px 0 rgba
   </div>
 
   <div class="legend"><h2>Como interpretar</h2>
-    <b>Repouso:</b> terminal motor sem liberar ACh.
+    <b>Repouso:</b> terminal motor sem liberar ACh; a tropomiosina cobre os sítios da actina.
     <b>Impulso nervoso:</b> potencial de ação alcança o terminal.
     <b>Entrada de Ca²⁺ terminal:</b> o cálcio facilita a exocitose.
     <b>Liberação de ACh:</b> vesículas descarregam acetilcolina na fenda sináptica.
-    <b>Receptores nicotínicos:</b> abertura de canais, com entrada predominante de Na⁺.
-    <b>Potencial de placa motora:</b> inicia a despolarização do sarcolema.
-    <b>Túbulos T e retículo:</b> o sinal alcança regiões profundas e libera Ca²⁺.
-    <b>Deslizamento:</b> as actinas avançam com o aumento do cálcio e retornam conforme ele diminui; os filamentos mantêm seu comprimento e a banda A permanece constante.
+    <b>Receptores nicotínicos:</b> abertura de canais, com entrada predominante de Na⁺; o potencial de placa atinge o limiar e dispara o PA muscular, que é tudo ou nada.
+    <b>Túbulos T:</b> o PA desce pelos túbulos T; o DHPR, sensor de voltagem, abre mecanicamente o RyR1 do retículo sarcoplasmático.
+    <b>Ca²⁺ e troponina C:</b> o Ca²⁺ liberado liga-se à troponina C, que desloca a tropomiosina e expõe os sítios da actina.
+    <b>Ciclo das pontes cruzadas:</b> a cabeça engatilhada (ADP + Pi) liga-se à actina; a liberação do Pi produz o golpe de força; o ADP sai; um novo ATP desliga a cabeça e sua hidrólise a reengatilha. Os filamentos deslizam sem mudar de comprimento e a banda A permanece constante.
+    <b>Relaxamento:</b> a SERCA recapta o Ca²⁺ gastando ATP; a tropomiosina volta a cobrir os sítios e o sarcômero retorna ao repouso. Um único PA produz um abalo breve (≈ 15% da força tetânica); o encurtamento mantido exige disparos repetidos, cujas respostas se somam (tétano fisiológico, usado em toda contração voluntária).
+    <b>Curare:</b> antagonista competitivo dos receptores nicotínicos; a ACh é liberada, mas o potencial de placa fica abaixo do limiar: sem PA muscular, sem Ca²⁺ e sem força (paralisia flácida).
+    <b>Toxina botulínica:</b> cliva proteínas SNARE e impede a exocitose de ACh; o resultado na fibra é o mesmo: sem PA, sem Ca²⁺ e sem força.
+    <b>Toxina tetânica (C. tetani):</b> não age na placa motora; bloqueia a liberação de GABA e glicina dos interneurônios inibitórios da medula. O motoneurônio dispara em excesso, os PAs repetidos mantêm o Ca²⁺ elevado e a contração tetânica persiste de forma involuntária (espasmo). A doença tétano não é o mesmo que o tétano fisiológico, que é a somação controlada das contrações.
+    <b>Bloqueio do RyR1 (dantroleno):</b> o PA e os túbulos T funcionam, mas pouco Ca²⁺ sai do retículo; poucas pontes cruzadas se formam e a força cai muito.
+    <br><small>Escala do sarcômero: filamento grosso 1,6 µm; fino ≈ 1,27 µm; repouso ≈ 2,7 µm. Tempo ampliado para visualização.</small>
     
     <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
   </div>
@@ -172,39 +178,39 @@ canvas{border:1px solid #d7e1ec;border-radius:16px;box-shadow:inset 0 1px 0 rgba
     {name:"Repouso", start:0, end:90, color:"#cadce8",
       desc:"Sem liberação de ACh e sem ativação contrátil.",
       signal:"Sem transmissão", signalDesc:"Terminal axonal, sarcolema e sarcômero em repouso.",
-      effect:"Sem contração", effectDesc:"A tropomiosina ainda cobre os sítios da actina."},
+      effect:"Sem contração", effectDesc:"A tropomiosina cobre os sítios da actina; as cabeças de miosina estão engatilhadas (ADP + Pi)."},
     {name:"Impulso nervoso", start:91, end:170, color:"#e0edf5",
       desc:"O potencial de ação percorre o neurônio motor até o terminal.",
       signal:"Propagação axonal", signalDesc:"O impulso desloca-se em direção à placa motora.",
-      effect:"Terminal ativado", effectDesc:"O terminal pré-sináptico prepara-se para entrada de Ca²⁺."},
+      effect:"Terminal ativado", effectDesc:"O terminal pré-sináptico prepara-se para a entrada de Ca²⁺."},
     {name:"Entrada de Ca²⁺ terminal", start:171, end:250, color:"#ecb48e",
-      desc:"Canais de Ca²⁺ do terminal pré-sináptico se abrem.",
+      desc:"Canais de Ca²⁺ dependentes de voltagem do terminal pré-sináptico se abrem.",
       signal:"Ca²⁺ entra no terminal", signalDesc:"O cálcio aciona a exocitose das vesículas.",
-      effect:"Vesículas preparadas", effectDesc:"As vesículas com ACh aproximam-se da membrana."},
+      effect:"Vesículas preparadas", effectDesc:"As vesículas com ACh fundem-se com a membrana."},
     {name:"Liberação de ACh", start:251, end:340, color:"#87d29e",
       desc:"Vesículas liberam acetilcolina na fenda sináptica.",
       signal:"ACh na fenda", signalDesc:"O neurotransmissor difunde-se até os receptores nicotínicos.",
       effect:"Ativação sináptica", effectDesc:"A fibra muscular passa a receber o estímulo químico."},
     {name:"Receptores nicotínicos / Na⁺", start:341, end:430, color:"#70bcff",
-      desc:"A ACh abre receptores nicotínicos, favorecendo entrada de Na⁺.",
-      signal:"Na⁺ entra na placa motora", signalDesc:"Os canais-receptor ativados geram despolarização local.",
-      effect:"Potencial de placa motora", effectDesc:"O sarcolema começa a despolarizar."},
-    {name:"Túbulos T", start:431, end:520, color:"#c4a2f6",
-      desc:"A despolarização percorre o sarcolema e desce pelos túbulos T.",
-      signal:"Sinal elétrico profundo", signalDesc:"A fibra muscular profunda recebe o comando elétrico.",
-      effect:"Acoplamento ativado", effectDesc:"O retículo sarcoplasmático é recrutado."},
+      desc:"A ACh abre receptores nicotínicos, com entrada predominante de Na⁺.",
+      signal:"Potencial de placa acima do limiar", signalDesc:"O potencial de placa atinge o limiar e dispara o PA muscular (tudo ou nada).",
+      effect:"PA no sarcolema", effectDesc:"O PA propaga-se pelo sarcolema em ambas as direções."},
+    {name:"Túbulos T: DHPR → RyR1", start:431, end:520, color:"#c4a2f6",
+      desc:"O PA desce pelos túbulos T; o DHPR, sensor de voltagem, muda de conformação.",
+      signal:"Acoplamento DHPR–RyR1", signalDesc:"No músculo esquelético, o DHPR abre o RyR1 mecanicamente, sem depender do Ca²⁺ extracelular.",
+      effect:"RyR1 aberto", effectDesc:"O retículo sarcoplasmático passa a liberar Ca²⁺."},
     {name:"Liberação de Ca²⁺ do retículo", start:521, end:610, color:"#f4e76a",
-      desc:"O retículo sarcoplasmático libera Ca²⁺ no sarcoplasma.",
-      signal:"Ca²⁺ muscular alto", signalDesc:"O cálcio difunde-se em torno dos miofilamentos.",
-      effect:"Deslizamento iniciado", effectDesc:"As actinas avançam para o centro junto com o aumento do cálcio."},
-    {name:"Encurtamento mantido", start:611, end:760, color:"#64d8d0",
-      desc:"Com cálcio elevado, o sarcômero mantém o encurtamento.",
-      signal:"Cálcio elevado", signalDesc:"As actinas permanecem sobrepostas à miosina central.",
-      effect:"Sarcômero encurtado", effectDesc:"Linhas Z próximas e banda A com comprimento constante."},
-    {name:"Recaptação de Ca²⁺ / retorno",start:761,end:940,color:"#f28bc0",
-      desc:"O cálcio diminui enquanto o sarcômero retorna suavemente à posição inicial.",
-      signal:"Cálcio em queda",signalDesc:"As esferas desaparecem uma a uma.",
-      effect:"Retorno progressivo",effectDesc:"A última esfera desaparece quando o sarcômero chega à posição inicial."}
+      desc:"Pelo RyR1, o retículo sarcoplasmático libera Ca²⁺ no sarcoplasma.",
+      signal:"Ca²⁺ na troponina C", signalDesc:"A troponina C liga o Ca²⁺ e desloca a tropomiosina, expondo os sítios da actina.",
+      effect:"Pontes cruzadas se formam", effectDesc:"As cabeças engatilhadas (ADP + Pi) ligam-se à actina."},
+    {name:"Ciclo das pontes cruzadas", start:611, end:760, color:"#64d8d0",
+      desc:"Liberação de Pi → golpe de força; o ADP sai; o ATP desliga a cabeça e sua hidrólise a reengatilha.",
+      signal:"Ca²⁺ já em queda", signalDesc:"A SERCA começa a recaptar o Ca²⁺ logo após a liberação; um único PA gera um abalo breve.",
+      effect:"Abalo: encurtamento breve", effectDesc:"Os filamentos deslizam sem mudar de comprimento; a banda A permanece constante."},
+    {name:"Recaptação de Ca²⁺ (SERCA) / relaxamento",start:761,end:940,color:"#f28bc0",
+      desc:"A SERCA bombeia o Ca²⁺ de volta ao retículo, gastando ATP.",
+      signal:"Ca²⁺ volta ao basal",signalDesc:"O Ca²⁺ deixa a troponina C e a tropomiosina volta a cobrir os sítios da actina.",
+      effect:"Relaxamento",effectDesc:"Sem novas pontes, o sarcômero retorna ao comprimento de repouso pelos elementos elásticos."}
   ];
 
   let frame = 0, running = false, lastTs = 0, raf = null, pulse = 0, stepAwaitPlay = false;
@@ -214,19 +220,67 @@ canvas{border:1px solid #d7e1ec;border-radius:16px;box-shadow:inset 0 1px 0 rgba
   const getSpeed = () => parseFloat(speedRange.value);
   const lerp = (a,b,t) => a + (b-a)*t;
   const clamp = (v,a,b) => Math.max(a, Math.min(b,v));
+  const smooth = t => { t=clamp(t,0,1); return t*t*(3-2*t); };
   const getStage = f => stages.find(s => f >= s.start && f <= s.end) || stages[0];
 
-  function getNerve(f){ if(f<=90) return 0; if(f<=170) return lerp(0,100,(f-90)/80); return 100; }
-  function getTerminalCa(f){ if(f<=170) return 5; if(f<=250) return lerp(5,100,(f-170)/80); return lerp(100,15,clamp((f-250)/510,0,1)); }
-  function getACh(f){ let base; if(f<=250) base=0; else if(f<=340) base=lerp(0,100,(f-250)/90); else if(f<=430) base=lerp(100,55,(f-340)/90); else base=lerp(55,5,clamp((f-430)/330,0,1)); if(activePreset==="botulismo") base*=0.12; if(activePreset==="tetano") base=Math.max(base, f>250?78:base); return clamp(base,0,100); }
-  function getNaPlate(f){ let base; if(f<=340) base=0; else if(f<=430) base=lerp(0,100,(f-340)/90); else base=100; if(activePreset==="curare") base*=0.08; if(activePreset==="botulismo") base*=0.18; if(activePreset==="tetano") base=Math.max(base, f>340?90:base); return clamp(base,0,100); }
-  function getTTubule(f){ let base; if(f<=430) base=0; else if(f<=520) base=lerp(0,100,(f-430)/90); else base=100; if(activePreset==="curare") base*=0.08; if(activePreset==="botulismo") base*=0.18; if(activePreset==="tetano") base=Math.max(base, f>430?92:base); return clamp(base,0,100); }
-  function getFiberCa(f){
-    const smooth=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
-    const amplitude=activePreset==='semca'?.05:activePreset==='curare'?.08:activePreset==='botulismo'?.18:1;
-    return 100*amplitude*smooth((f-520)/90)*(1-smooth((f-760)/180));
+  // Modelo esquemático (tempo didático, sem escala em ms).
+  // Placa motora tudo ou nada: abaixo do limiar não há PA muscular, Ca²⁺ nem encurtamento.
+  const plateBlocked = () => activePreset==="curare" || activePreset==="botulismo";
+  const tetanusToxin = () => activePreset==="tetano";
+  const ryrBlocked = () => activePreset==="semca";
+  const PA_FIRST = 341, PA_WIDTH = 55, PA_PERIOD = 60;   // toxina tetânica: disparos repetidos
+  const TWITCH_SHORTENING = .17;                         // abalo: encurtamento breve e parcial (≈ 2,64 µm)
+  const RYR_CA = .28;                                    // dantroleno: liberação de Ca²⁺ reduzida (≈ 28%)
+  function muscleSpikes(){
+    if(plateBlocked()) return [];
+    if(!tetanusToxin()) return [PA_FIRST];
+    const out=[]; for(let t=PA_FIRST;t<=TOTAL;t+=PA_PERIOD) out.push(t); return out;
   }
-  function getActin(f){ return getFiberCa(f); }
+  // Fase (0–1) do PA mais recente que ainda está em trânsito, ou -1.
+  function travel(f, start, span){
+    let phase=-1;
+    for(const s of muscleSpikes()){ const t=(f-(s+start-PA_FIRST))/span; if(t>=0&&t<=1) phase=t; }
+    return phase;
+  }
+  function getNerve(f){
+    if(f<=90) return 0;
+    if(f<=170) return lerp(0,100,(f-90)/80);
+    if(tetanusToxin() && f>PA_FIRST){ const t=((f-PA_FIRST)%PA_PERIOD)/PA_PERIOD; return 100*t; }
+    return 100;
+  }
+  function getTerminalCa(f){ if(f<=170) return 5; if(f<=250) return lerp(5,100,(f-170)/80); if(tetanusToxin()) return 85; return lerp(100,15,clamp((f-250)/510,0,1)); }
+  function getACh(f){
+    let base; if(f<=250) base=0; else if(f<=340) base=lerp(0,100,(f-250)/90); else if(f<=430) base=lerp(100,55,(f-340)/90); else base=lerp(55,5,clamp((f-430)/330,0,1));
+    if(activePreset==="botulismo") base*=0.12;          // toxina botulínica: exocitose de ACh bloqueada
+    if(tetanusToxin() && f>250) base=Math.max(base,78); // liberação repetida a cada disparo
+    return clamp(base,0,100);
+  }
+  // Potencial de placa (local, graduado). Curare e botulismo: abaixo do limiar.
+  function getNaPlate(f){
+    let base; if(f<=340) base=0; else if(f<=430) base=lerp(0,100,(f-340)/90); else base=100;
+    if(activePreset==="curare") base*=0.08;
+    if(activePreset==="botulismo") base*=0.12;
+    if(tetanusToxin() && f>340) base=Math.max(base,90);
+    return clamp(base,0,100);
+  }
+  // PA do sarcolema e dos túbulos T: tudo ou nada.
+  function getSarcolemmaPA(f){ const t=travel(f,PA_FIRST,89); return t<0?0:100*t; }
+  function getTTubule(f){ const t=travel(f,431,89); return t<0?0:100*t; }
+  function getFiberCa(f){
+    if(plateBlocked()) return 0;
+    const rise=smooth((f-520)/65);
+    if(tetanusToxin()) return 100*rise*(f>585 ? .9+.1*Math.cos(2*Math.PI*(f-585)/PA_PERIOD) : 1);
+    const amp=ryrBlocked()?RYR_CA:1;
+    return 100*amp*rise*(1-smooth((f-585)/230));
+  }
+  // Encurtamento relativo (0 = repouso; 1 = encurtamento tetânico máximo).
+  function getShortening(f){
+    if(plateBlocked()) return 0;
+    if(tetanusToxin()) return 100*smooth((f-540)/170);
+    const amp=ryrBlocked()?RYR_CA*RYR_CA:1;
+    return 100*TWITCH_SHORTENING*amp*smooth((f-545)/125)*(1-smooth((f-690)/220));
+  }
+  function getActin(f){ return getShortening(f); }
 
   function drawRoundedRect(ctx,x,y,w,h,r){
     ctx.beginPath();
@@ -302,22 +356,66 @@ ctx.save();const g=ctx.createRadialGradient(x-r*.35,y-r*.4,.5,x,y,r);g.addColorS
     signalCard.style.setProperty("--phase", color); signalCard.style.setProperty("--c", color);
     effectCard.style.setProperty("--phase", color); effectCard.style.setProperty("--c", color);
   }
+  // Textos do estágio ajustados ao estado selecionado.
+  function stageView(){
+    const i=stages.indexOf(getStage(frame)), st=stages[i];
+    const v={name:st.name,desc:st.desc,signal:st.signal,signalDesc:st.signalDesc,effect:st.effect,effectDesc:st.effectDesc};
+    if(plateBlocked()){
+      const curare=activePreset==="curare";
+      if(curare && i===3){ v.effectDesc="A ACh é liberada normalmente, mas o curare ocupa os receptores nicotínicos."; }
+      if(!curare && i>=2 && i<=3){ v.name=i===2?"Entrada de Ca²⁺ terminal":"ACh não é liberada"; v.desc="A toxina botulínica cliva proteínas SNARE do terminal motor e impede a exocitose das vesículas de ACh."; v.signal="Exocitose bloqueada"; v.signalDesc="Quase não há ACh na fenda sináptica."; v.effect="Sem ativação da placa"; v.effectDesc="Os receptores nicotínicos permanecem fechados."; }
+      if(i>=4){
+        v.name=["Potencial de placa abaixo do limiar","Túbulos T sem despolarização","RyR1 fechado: sem liberação de Ca²⁺","Sem pontes cruzadas","Músculo em repouso"][i-4];
+        v.desc=curare?"O curare é antagonista competitivo dos receptores nicotínicos: a ACh chega, mas o potencial de placa não atinge o limiar.":"A toxina botulínica impede a liberação de ACh: o potencial de placa é mínimo e não atinge o limiar.";
+        v.signal="Sem PA muscular"; v.signalDesc="A placa motora é tudo ou nada: abaixo do limiar não há PA no sarcolema, o DHPR não abre o RyR1 e o Ca²⁺ permanece basal.";
+        v.effect="Paralisia flácida"; v.effectDesc="A maquinaria contrátil está íntegra, mas não recebe o comando: sem Ca²⁺ na troponina C, sem força.";
+      }
+    } else if(tetanusToxin()){
+      if(i>=1 && i<=4){ v.signal="Disparos repetidos do motoneurônio"; v.signalDesc="A toxina tetânica bloqueia a liberação de GABA e glicina dos interneurônios inibitórios da medula; a placa motora funciona normalmente."; }
+      if(i===4){ v.effect="PAs musculares em série"; v.effectDesc="Cada disparo do motoneurônio gera um novo PA muscular."; }
+      if(i>=6){ v.signal="Ca²⁺ sustentado"; v.signalDesc="Cada novo PA libera Ca²⁺ antes que a SERCA termine de recaptá-lo."; v.effect="Contração tetânica mantida (espasmo)"; v.effectDesc="As pontes cruzadas continuam ciclando e as forças somam-se: é o tétano fisiológico, porém involuntário e patológico."; }
+      if(i===7){ v.name="Ciclo das pontes cruzadas mantido"; v.desc="Liberação de Pi → golpe de força; o ADP sai; o ATP desliga a cabeça e a hidrólise a reengatilha, enquanto o Ca²⁺ continua alto."; }
+      if(i===8){ v.name="Sem relaxamento: novos PAs"; v.desc="A SERCA funciona, mas os PAs repetidos liberam Ca²⁺ continuamente: o músculo não relaxa enquanto os disparos continuam."; }
+    } else if(ryrBlocked()){
+      if(i>=4 && i<=5){ v.effectDesc="A excitação elétrica é normal; o bloqueio está no RyR1."; }
+      if(i>=6){ v.name=["Liberação de Ca²⁺ reduzida","Poucas pontes cruzadas","Recaptação de Ca²⁺ (SERCA) / relaxamento"][i-6]; v.desc="O dantroleno inibe o RyR1: o PA e os túbulos T funcionam, mas pouco Ca²⁺ sai do retículo."; v.signal="Pouco Ca²⁺ na troponina C"; v.signalDesc="A tropomiosina continua cobrindo a maior parte dos sítios da actina."; v.effect="Força muito reduzida"; v.effectDesc="Poucas pontes cruzadas se formam; o encurtamento é mínimo."; }
+    }
+    return {st,v};
+  }
   function updateStatus(){
-    const st = getStage(frame);
-    phaseText.firstChild.textContent = st.name;
-    phaseDesc.textContent = st.desc;
-    signalText.firstChild.textContent = st.signal;
-    signalDesc.textContent = st.signalDesc;
-    effectText.firstChild.textContent = st.effect;
-    effectDesc.textContent = st.effectDesc;
+    const {st,v} = stageView();
+    phaseText.firstChild.textContent = v.name;
+    phaseDesc.textContent = v.desc;
+    signalText.firstChild.textContent = v.signal;
+    signalDesc.textContent = v.signalDesc;
+    effectText.firstChild.textContent = v.effect;
+    effectDesc.textContent = v.effectDesc;
     setCardsColor(st.color);
     let badge = stepModeToggle.checked ? (stepAwaitPlay ? "Modo: etapas (pausado)" : "Modo: etapas") : "Modo: contínuo";
-    if(activePreset!=="normal") badge += " · " + {curare:"curare",botulismo:"botulismo",tetano:"tétano",semca:"bloqueio de Ca²⁺"}[activePreset];
+    if(activePreset!=="normal") badge += " · " + {curare:"curare",botulismo:"toxina botulínica",tetano:"toxina tetânica",semca:"RyR1 bloqueado"}[activePreset];
     modeBadge.textContent = badge;
-    if(activePreset==="curare"){ signalText.firstChild.textContent="Receptor nicotínico bloqueado"; signalDesc.textContent="ACh não consegue abrir canais de forma eficaz."; effectText.firstChild.textContent="Contração inibida"; effectDesc.textContent="Pouca entrada de Na⁺ e falha de propagação para túbulos T."; }
-    if(activePreset==="botulismo"){ signalText.firstChild.textContent="Liberação de ACh reduzida"; signalDesc.textContent="Bloqueio pré-sináptico da exocitose vesicular."; effectText.firstChild.textContent="Paralisia flácida"; effectDesc.textContent="Baixa ativação da placa motora e pouco Ca²⁺ muscular."; }
-    if(activePreset==="tetano" && frame<=760){ signalText.firstChild.textContent="Ativação sustentada"; signalDesc.textContent="Perda de inibição favorece descarga motora contínua."; effectText.firstChild.textContent="Contração espástica"; effectDesc.textContent="Ca²⁺ e exposição da actina permanecem elevados."; }
-    if(activePreset==="semca"){ signalText.firstChild.textContent="Ca²⁺ muscular bloqueado"; signalDesc.textContent="O sinal elétrico chega, mas a liberação do retículo falha."; effectText.firstChild.textContent="Actina pouco exposta"; effectDesc.textContent="Troponina/tropomiosina permanecem bloqueando os sítios."; }
+    // Valores do modelo expostos para leitura (sem efeito visual).
+    graphCanvas.dataset.pa = (getMuscleElectrical(frame)*100).toFixed(1);
+    graphCanvas.dataset.placa = getNaPlate(frame).toFixed(1);
+    graphCanvas.dataset.ca = getFiberCa(frame).toFixed(1);
+    graphCanvas.dataset.encurtamento = getShortening(frame).toFixed(1);
+    graphCanvas.dataset.sarcomero = sarcomereLength(frame).toFixed(2);
+  }
+  // Escala do músculo esquelético humano: grosso 1,6 µm; fino 1,27 µm; repouso 2,70 µm; tétano até 2,35 µm.
+  function sarcomereLength(f){ return 2.7 - 0.35*getShortening(f)/100; }
+  // Legenda molecular sincronizada com a fase.
+  function molecularCaption(){
+    if(plateBlocked()) return frame>430 ? "Sem PA muscular: DHPR e RyR1 em repouso · Ca²⁺ basal · sem pontes cruzadas" : "Tropomiosina cobre os sítios da actina · cabeças engatilhadas (ADP + Pi)";
+    if(frame<431) return "Repouso: tropomiosina cobre os sítios da actina · cabeças engatilhadas (ADP + Pi)";
+    if(frame<521) return "Túbulo T: o DHPR (sensor de voltagem) abre mecanicamente o RyR1 do retículo";
+    if(ryrBlocked()) return "RyR1 inibido: pouco Ca²⁺ na troponina C · poucos sítios expostos · poucas pontes";
+    if(frame<611) return "Ca²⁺ liga-se à troponina C · a tropomiosina desloca-se e expõe os sítios da actina";
+    if(frame<761 || tetanusToxin()){
+      const k=Math.floor((frame-611)/40)%3;
+      const cyc=["Liberação de Pi → golpe de força (filamento fino puxado para a linha M)","ADP sai · o ATP liga-se e desliga a cabeça da actina","Hidrólise do ATP (ADP + Pi) reengatilha a cabeça"][k];
+      return frame>=761 ? "Novos PAs mantêm o Ca²⁺ alto · "+cyc : cyc;
+    }
+    return "SERCA recapta o Ca²⁺ (gasta ATP) · a tropomiosina volta a cobrir os sítios";
   }
 
 function drawMotorNeuronAnatomy(c,showLabels){
@@ -381,7 +479,7 @@ function drawMotorNeuronAnatomy(c,showLabels){
 
     sctx.save();sctx.translate(-48,0);
     // exact same red impulse style as muscle propagation
-    if(nerve>0 && frame<=170){
+    if(nerve>0 && (frame<=170 || (tetanusToxin() && frame>PA_FIRST))){
       const signalX=282+(nerve/100)*258;
       const glow=sctx.createRadialGradient(signalX,175,4,signalX,175,28);
       glow.addColorStop(0,"#e0edf5f2");
@@ -474,7 +572,7 @@ function drawMotorNeuronAnatomy(c,showLabels){
     }
 
     // Na entry on end plate
-    if(ionToggle.checked && naPlate > 5){
+    if(ionToggle.checked && naPlate > 20){
       for(let i=0;i<7;i++){
         const x=655+i*22;
         const y=92+((pulse+i*9)%32);
@@ -496,7 +594,7 @@ function drawMotorNeuronAnatomy(c,showLabels){
   }
 
   function drawFiberAndSarcomere(){
-    const depol = getNaPlate(frame), tTub = getTTubule(frame), fiberCa = getFiberCa(frame), actin = getActin(frame);
+    const depol = getSarcolemmaPA(frame), tTub = getTTubule(frame), fiberCa = getFiberCa(frame);
 
     sctx.fillStyle="#102633"; sctx.strokeStyle="#d1d5db"; sctx.lineWidth=2;
     drawRoundedRect(sctx,24,308,932,374,16); sctx.fill(); sctx.stroke();
@@ -560,8 +658,9 @@ function drawMotorNeuronAnatomy(c,showLabels){
 {
     const ctx=sctx,STD_COLORS={actina:'#64d8d0',miosina:'#f0a7aa'};
     // O mesmo sinal controla o avanço, o retorno e o desaparecimento das esferas.
-    const c=getFiberCa(frame)/100;
-    const m={attached:c>0};
+    const ca=getFiberCa(frame)/100;
+    // Pontes ligadas enquanto há Ca²⁺ na troponina C e sobreposição dos filamentos.
+    const m={attached:ca>.08&&getShortening(frame)>1};
     ctx.save();ctx.translate(76,438);ctx.scale(.9,.9);
         const shade=(color,f)=>'#'+color.slice(1).match(/../g).map(v=>Math.round(parseInt(v,16)*f).toString(16).padStart(2,'0')).join('');
     const sphere=(x,y,r,color)=>{const g=ctx.createRadialGradient(x-r*.3,y-r*.4,r*.1,x,y,r);g.addColorStop(0,'#e5f4fa');g.addColorStop(.3,color);g.addColorStop(1,shade(color,.38));ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();};
@@ -569,7 +668,9 @@ function drawMotorNeuronAnatomy(c,showLabels){
     const tube=(x,y,xx,yy,color,w)=>{const d=Math.hypot(xx-x,yy-y)||1,nx=-(yy-y)/d,ny=(xx-x)/d;const g=ctx.createLinearGradient(x-nx*w/2,y-ny*w/2,x+nx*w/2,y+ny*w/2);g.addColorStop(0,shade(color,.38));g.addColorStop(.28,color);g.addColorStop(.4,'#dcecf2');g.addColorStop(.56,color);g.addColorStop(1,shade(color,.3));ctx.save();ctx.shadowColor='#0008';ctx.shadowBlur=3;ctx.shadowOffsetY=2;line(x,y,xx,yy,g,w);ctx.restore();};
     const text=(s,x,y,color='#c1d6e4',size=14)=>{ctx.fillStyle=color;ctx.font=`${size}px Segoe UI,Arial`;ctx.fillText(s,x,y);};
 
-        const zL=100+124*c,zR=820-124*c,mid=460;
+    // Escala: 275 px = 1 µm (grosso 1,6 µm = 440 px; fino 1,27 µm ≈ 349 px, 0,79 × grosso).
+    const PX=275, mid=460, THIN=1.27*PX, BARE=.08*PX, SL=sarcomereLength(frame);
+    const zL=mid-SL/2*PX, zR=mid+SL/2*PX;
     line(zL,84,zL,214,'#b9a2ee',7);line(zR,84,zR,214,'#b9a2ee',7);
     line(mid,84,mid,214,'#617d93',1);
     [119,181].forEach(y=>{
@@ -577,10 +678,10 @@ function drawMotorNeuronAnatomy(c,showLabels){
       for(const side of [-1,1]){
         const start=side<0?zL:zR;
         for(const yy of [y-22,y+22]){
-          tube(start,yy,start-side*224,yy,STD_COLORS.actina,7);
+          tube(start,yy,start-side*THIN,yy,STD_COLORS.actina,7);
           for(let x=262;x<=658;x+=32){
-            if(Math.sign(x-mid)!==side)continue;
-            const overlap=side<0?x<zL+224:x>zR-224;
+            if(Math.sign(x-mid)!==side||Math.abs(x-mid)<BARE)continue;
+            const overlap=side<0?x<zL+THIN:x>zR-THIN;
             const joined=overlap&&m.attached;
             const hx=x+(joined?-side*9:side*8),hy=joined?yy:lerp(y,yy,.55);
             tube(x,y,hx,hy,STD_COLORS.miosina,3.5);sphere(hx,hy,2.8,STD_COLORS.miosina);
@@ -592,14 +693,19 @@ function drawMotorNeuronAnatomy(c,showLabels){
     bracket(zL,240,229,'I',STD_COLORS.actina);bracket(240,680,229,'Banda A · comprimento constante',STD_COLORS.miosina);bracket(680,zR,229,'I',STD_COLORS.actina);
     if(labelsToggle.checked){text('Z',zL-5,76,'#b9a2ee',12);text('M',mid-5,76,'#90a7bb',12);text('Z',zR-5,76,'#b9a2ee',12);}
 
+    const fmtUm=v=>v.toFixed(2).replace('.',',');
+    text('Sarcômero '+fmtUm(SL)+' µm · banda A 1,60 µm',520,76,'#a9c3d4',12);
     ctx.restore();
     if(labelsToggle.checked){ctx.font='14px Arial';ctx.fillText('Actina',845,528);ctx.fillText('Miosina',845,552);}
+    ctx.fillStyle='#dcebf5';ctx.font='13px Arial';ctx.fillText(molecularCaption(),40,674);
     }
     if(labelsToggle.checked){
       sctx.fillStyle="#cadce8"; sctx.font="14px Arial";
       sctx.fillText("Sarcolema", 82, 352);
       sctx.fillText("Túbulo T", 214, 484);
       sctx.fillText("Retículo sarcoplasmático", 286, 352);
+      sctx.fillStyle="#c4a2f6"; sctx.fillText("Tríade: DHPR–RyR1", 482, 484);
+      if(!plateBlocked() && frame>585 && !tetanusToxin()){ sctx.fillStyle="#f28bc0"; sctx.fillText("SERCA: Ca²⁺ → retículo", 640, 352); }
       
       
       
@@ -616,14 +722,21 @@ function drawMotorNeuronAnatomy(c,showLabels){
   }
 
   // Pulso esquemático na ativação da fibra; eixo temporal didático, sem escala em ms/mV.
-  function getMuscleElectrical(f){
-    const t=(f-341)/89;
-    const amplitude=getNaPlate(430)/100;
+  // PA muscular tudo ou nada; com a placa bloqueada resta só um potencial de placa pequeno, abaixo do limiar.
+  const THRESHOLD = .3;
+  function paShape(t){
     if(t<=0||t>=1)return 0;
-    const smooth=v=>v*v*(3-2*v);
-    if(t<.22)return amplitude*smooth(t/.22);
-    if(t<.55)return amplitude*(1-1.12*smooth((t-.22)/.33));
-    return -.12*amplitude*(1-smooth((t-.55)/.45));
+    if(t<.22)return smooth(t/.22);
+    if(t<.55)return 1-1.12*smooth((t-.22)/.33);
+    return -.12*(1-smooth((t-.55)/.45));
+  }
+  function getMuscleElectrical(f){
+    if(plateBlocked()){
+      const t=(f-PA_FIRST)/89, amp=THRESHOLD*getNaPlate(430)/100*2.2; // potencial de placa local, subliminar
+      return t<=0||t>=1?0:amp*Math.sin(Math.PI*Math.min(1,t/.35))*(t<.35?1:1-smooth((t-.35)/.65));
+    }
+    let v=0; for(const s of muscleSpikes()) v+=paShape((f-s)/PA_WIDTH);
+    return v;
   }
   function drawGraph(){
     const ctx=gctx,x0=60,w=860,bandY=470;
@@ -635,8 +748,8 @@ function drawMotorNeuronAnatomy(c,showLabels){
     text('Resposta elétrica e encurtamento',18,28,'#e0edf5',20);
     text('Mesmo tempo da animação · representação esquemática',18,53,'#a9c2d2',14);
     text('Resposta elétrica da fibra',x0,91,electrical,17);
-    text('Ativação pela placa motora',x0,113,'#a9c2d2',13);
-    text('Encurtamento do sarcômero',x0,272,mechanical,17);
+    text(plateBlocked()?'Potencial de placa abaixo do limiar: sem PA muscular':tetanusToxin()?'PAs repetidos (disparos do motoneurônio)':'Um PA (tudo ou nada) a partir da placa motora',x0,113,'#a9c2d2',13);
+    text('Encurtamento do sarcômero',x0,272,mechanical,17);text(plateBlocked()?'Sem Ca²⁺: sem encurtamento':tetanusToxin()?'Contração tetânica mantida':ryrBlocked()?'Pouco Ca²⁺: encurtamento mínimo':'Abalo: encurtamento breve e parcial',x0,294,'#a9c2d2',13);
     // Duas faixas separadas, uma curva por faixa e apenas suas linhas de repouso.
     for(const y of [210,420]){
       ctx.strokeStyle='#486474';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x0,y);ctx.lineTo(x0+w,y);ctx.stroke();
@@ -657,12 +770,14 @@ function drawMotorNeuronAnatomy(c,showLabels){
       ctx.save();ctx.shadowColor='#0008';ctx.shadowBlur=5;ctx.shadowOffsetY=3;
       ctx.beginPath();ctx.arc(px,py,r,0,Math.PI*2);ctx.fillStyle=sphere;ctx.fill();ctx.restore();
     };
+    ctx.save();ctx.setLineDash([6,6]);ctx.strokeStyle='#f4e76a99';ctx.lineWidth=1.2;ctx.beginPath();ctx.moveTo(x0,210-85*THRESHOLD);ctx.lineTo(x0+w,210-85*THRESHOLD);ctx.stroke();ctx.restore();
+    if(labelsToggle.checked)text('Limiar',x0+w-52,210-85*THRESHOLD-6,'#f4e76a',12);
     trace(getMuscleElectrical,210,85,electrical);
     trace(f=>getActin(f)/100,420,120,mechanical);
     // O marcador compartilha o mesmo frame usado pelos túbulos, cálcio e sarcômero.
     ctx.strokeStyle='#a9c2d299';ctx.lineWidth=1;ctx.setLineDash([4,5]);
     ctx.beginPath();ctx.moveTo(x(frame),125);ctx.lineTo(x(frame),bandY);ctx.stroke();ctx.setLineDash([]);
-    const names=['Repouso','Impulso','Ca²⁺ terminal','ACh','Na⁺ / placa','Túbulos T','Ca²⁺ muscular','Encurtamento','Recaptação / retorno'];
+    const names=['Repouso','Impulso','Ca²⁺ terminal','ACh','Na⁺ / placa','DHPR → RyR1','Ca²⁺ / troponina C','Pontes cruzadas',tetanusToxin()?'Novos PAs: sem relaxamento':'SERCA / relaxamento'];
     const rows=[0,1,2,1,0,1,2,0,1];
     stages.forEach((st,i)=>{
       const sx=x(st.start),ex=x(st.end);
@@ -712,7 +827,7 @@ const labelColors={"Dendritos":"#65c9a0","Corpo celular":"#65c9a0","Axônio":"#d
   btnPause.addEventListener("click",()=>pauseNow(false));
   btnStep.addEventListener("click",nextStage);
   btnReset.addEventListener("click",resetAll);
-  speedRange.addEventListener("input",()=>{ speedLabel.textContent=parseFloat(speedRange.value).toFixed(1)+"x"; });
+  speedRange.addEventListener("input",()=>{ speedLabel.textContent=parseFloat(speedRange.value).toFixed(1).replace(".",",")+"×"; });
   stepModeToggle.addEventListener("change",()=>{ if(stepModeToggle.checked&&running) pauseNow(true); else stepAwaitPlay=false; render(); });
   labelsToggle.addEventListener("change",render);
   loopToggle.addEventListener("change",render);
@@ -724,7 +839,7 @@ const labelColors={"Dendritos":"#65c9a0","Corpo celular":"#65c9a0","Axônio":"#d
     frame=0; pulse=0; render();
   }));
 
-  speedLabel.textContent=parseFloat(speedRange.value).toFixed(1)+"x";
+  speedLabel.textContent=parseFloat(speedRange.value).toFixed(1).replace(".",",")+"×";
   render();
 })();
 </script>
@@ -762,7 +877,7 @@ input:disabled{opacity:.5}.controls-actions label.control{gap:9px;min-height:46p
 .controls input[type=checkbox]{appearance:none;position:relative;width:38px;height:23px;flex:0 0 38px;margin:0;border:1px solid #65818d;border-radius:20px;background:#071b27;box-shadow:inset 0 2px 4px #0007}.controls input[type=checkbox]:before{content:'';position:absolute;width:17px;height:17px;left:2px;top:2px;border-radius:50%;background:radial-gradient(circle at 28% 22%,#fff,#c2dfe8 55%,#7299aa);box-shadow:0 2px 3px #0009}.controls input[type=checkbox]:checked{background:#267568}.controls input[type=checkbox]:checked:before{transform:translateX(15px)}
 .status-grid{background:none!important;border:0!important;box-shadow:none!important;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 auto 14px}.status-grid .card{height:152px;min-height:152px;padding:12px 16px;border-radius:18px}.card-title{font-size:11px;color:#adc5d7;margin-bottom:7px}.phase{font-size:20px;line-height:1.2;min-height:0;color:var(--phase,#dce9f3)}.phase small{font-size:13px;line-height:1.5;color:#adc5d7;margin-top:8px}.layout{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:14px}.panel{display:flex;flex-direction:column}.panel-sub{font-size:13px;min-height:40px;line-height:1.5}.canvas-home{width:100%;min-width:0}.canvas-home canvas{width:100%;height:auto;background:#102633;border-color:#385365}.graph-legend-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.graph-legend-item{background:#102633;border:1px solid #385365;color:#dce9f3;font-size:12px;min-width:0;padding:8px;line-height:1.4}.legend-dot{width:14px;height:14px;flex-basis:14px;box-shadow:inset 0 -2px 3px #0006}.legend{background:linear-gradient(145deg,#213b4c,#102633);border:1px solid #385365;color:#dce9f3;text-align:left;line-height:1.75;padding:16px}.legend h2{font-size:20px;margin:0 0 8px}.legend b{color:#dce9f3}.signature{font-size:12px;color:#adc5d7;border-color:#385365}.quick strong{color:#dce9f3}.quick{background:linear-gradient(145deg,#213b4c,#102633)}
 @media(max-width:1100px){.layout{grid-template-columns:1fr}.status-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.status-grid .card{height:188px;min-height:188px}.phase{font-size:18px}.panel-sub{min-height:0}.canvas-home{max-width:980px;margin:auto}}
-@media(max-width:650px){.status-grid{grid-template-columns:1fr;gap:10px}.status-grid .card{height:128px;min-height:128px}.phase{font-size:19px}.phase small{font-size:13px;margin-top:6px}.controls{gap:9px}.controls label{font-size:12px}.controls-actions #modeBadge{margin-left:0}.graph-legend-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.quick{grid-template-columns:repeat(2,minmax(0,1fr))}.scene-heading h2{font-size:17px}.legend{font-size:14px}}
+@media(max-width:650px){.status-grid{grid-template-columns:1fr;gap:10px}.status-grid .card{height:auto;min-height:128px}.phase{font-size:19px}.phase small{font-size:13px;margin-top:6px}.controls{gap:9px}.controls label{font-size:12px}.controls-actions #modeBadge{margin-left:0}.graph-legend-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.quick{grid-template-columns:repeat(2,minmax(0,1fr))}.scene-heading h2{font-size:17px}.legend{font-size:14px}}
 </style><script>(()=>{document.querySelectorAll('[data-expand]').forEach(button=>{const canvas=document.getElementById(button.dataset.expand),home=canvas.parentNode;const dialog=document.createElement('dialog');dialog.className='hill-dialog';dialog.setAttribute('aria-label',button.previousElementSibling.textContent);const close=document.createElement('button');close.textContent='Fechar';close.type='button';close.className='hill-dialog-close';const wrap=document.createElement('div');wrap.className='figure-scroll';wrap.style.width='min(100%,calc((100dvh - 100px)*'+(canvas.width/canvas.height)+'))';dialog.append(close,wrap);document.body.appendChild(dialog);let overflow='';button.addEventListener('click',()=>{overflow=document.body.style.overflow;wrap.appendChild(canvas);dialog.showModal();document.body.style.overflow='hidden';close.focus();});close.addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{home.appendChild(canvas);document.body.style.overflow=overflow;button.focus();});});})();
 </script>
 <style id="cards-referencia-aprovada">
@@ -777,5 +892,5 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 
 </style>
 
-<script src="tutor-ef-data.js?v=19"></script>
+<script src="tutor-ef-data.js?v=20"></script>
 <script src="tutor-widget.js?v=20"></script>
