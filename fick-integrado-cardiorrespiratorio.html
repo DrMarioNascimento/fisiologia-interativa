@@ -271,7 +271,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
     <div class="top-col"><div class="top-title">Fluxo e demanda metabólica</div><div class="control-stack" id="col-mid"></div></div>
     <div class="top-col"><div class="top-title">Retorno venoso e extração</div><div class="control-stack" id="col-right"></div></div>
   </div>
-  <div class="states"><strong>Estados rápidos:</strong><div id="states" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
+  <div class="states"><strong>Estados rápidos (perfil padrão: adulto não treinado):</strong><div id="states" style="display:flex;flex-wrap:wrap;gap:8px"></div></div>
   <div class="metrics-wide"><div class="panel-title" style="font-size:16px;margin:0 0 6px">Painel de variáveis</div><div class="panel-grid" id="metrics"></div></div>
   <div class="main-layout">
     <div class="panel">
@@ -845,21 +845,22 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
     // Estados: Q, Hb, PaO₂, massa e demanda (MET) são as entradas; SaO₂/SvO₂/PvO₂, extração e VO₂ são calculados.
     // qRest/qSlope: resposta do débito à demanda (≈5–6 L/min por L/min de VO₂); svRest/svMax: perfil de volume sistólico para estimar a FC.
     const stateProfiles={
-      repouso:{nome:'Repouso',hemoglobina:15,pao2:100,massa:70,demanda:1.02,qRest:5.0,qSlope:5.5,svRest:70,svMax:110,leitura:'Em repouso (≈1 MET), um débito cardíaco de ~5 L/min e uma diferença arteriovenosa de ~5 mL/dL sustentam um VO₂ basal de ~250 mL/min, com extração de ~25%.'},
-      exercicioLeve:{nome:'Exercício Leve',hemoglobina:15,pao2:98,massa:70,demanda:3.0,qRest:5.0,qSlope:5.5,svRest:70,svMax:110,leitura:'No exercício leve (~3 MET), o débito cardíaco e a extração periférica sobem juntos, elevando moderadamente o consumo de O₂.'},
-      exercicioModerado:{nome:'Exercício Moderado',hemoglobina:15,pao2:96,massa:70,demanda:6.0,qRest:5.0,qSlope:5.5,svRest:70,svMax:110,leitura:'No exercício moderado (~6 MET), o débito cardíaco passa de 10 L/min e a extração se aproxima de 60%, sustentando maior demanda metabólica.'},
-      exercicioPesado:{nome:'Exercício Pesado',hemoglobina:15,pao2:95,massa:70,demanda:12.5,qRest:5.0,qSlope:5.5,svRest:70,svMax:110,leitura:'Próximo do esforço máximo de um adulto não treinado (~44 mL/kg/min), o débito cardíaco chega a ~20 L/min e a extração a ~75%, com SvO₂ em torno de 25%.'},
-      atleta:{nome:'Atleta de resistência (maratona, esforço submáximo)',hemoglobina:15,pao2:100,massa:65,demanda:16.0,qRest:5.0,qSlope:6.0,svRest:100,svMax:160,leitura:'Na maratona o atleta trabalha em esforço submáximo (~80% de um VO₂máx de ~70 mL/kg/min): o grande volume sistólico permite débito cardíaco acima de 25 L/min e alto consumo de O₂.'},
-      anemia:{nome:'Anemia',hemoglobina:9,pao2:100,massa:70,demanda:1.02,qRest:6.5,qSlope:5.5,svRest:80,svMax:115,leitura:'Na anemia, a redução da hemoglobina diminui o conteúdo arterial de O₂ mesmo com saturação preservada; o débito cardíaco em repouso sobe para manter a oferta.'},
-      hipoxemia:{nome:'Hipoxemia',hemoglobina:15,pao2:55,massa:70,demanda:1.02,qRest:5.8,qSlope:5.5,svRest:70,svMax:110,leitura:'Na hipoxemia, a PaO₂ de 55 mmHg reduz a SaO₂ para ~88% (curva de dissociação) e o conteúdo arterial de oxigênio; o débito cardíaco sobe discretamente para compensar.'},
-      choque:{nome:'Choque',hemoglobina:15,pao2:85,massa:70,demanda:1.02,qRest:2.8,qSlope:5.5,svRest:22,svMax:40,leitura:'No choque, a queda do débito cardíaco reduz a entrega de O₂ e obriga os tecidos a extrair uma fração muito maior do O₂ que chega.'}
+      repouso:{nome:'Repouso',hemoglobina:15,pao2:100,massa:70,demanda:1.02,qRest:5.0,qSlope:5.5,svRest:70,svMax:108,eMaxProfile:0.77,leitura:'Em repouso (≈1 MET), um débito cardíaco de ~5 L/min e uma diferença arteriovenosa de ~5 mL/dL sustentam um VO₂ basal de ~250 mL/min, com extração de ~25%.'},
+      exercicioLeve:{nome:'Exercício Leve',hemoglobina:15,pao2:98,massa:70,demanda:3.0,qRest:5.0,qSlope:5.5,svRest:70,svMax:108,eMaxProfile:0.77,leitura:'No exercício leve (~3 MET), o débito cardíaco e a extração periférica sobem juntos, elevando moderadamente o consumo de O₂.'},
+      exercicioModerado:{nome:'Exercício Moderado',hemoglobina:15,pao2:96,massa:70,demanda:6.0,qRest:5.0,qSlope:5.5,svRest:70,svMax:108,eMaxProfile:0.77,leitura:'No exercício moderado (~6 MET), o débito cardíaco passa de 10 L/min e a extração se aproxima de 60%, sustentando maior demanda metabólica.'},
+      exercicioPesado:{nome:'Exercício Pesado',hemoglobina:15,pao2:95,massa:70,demanda:12.5,qRest:5.0,qSlope:5.5,svRest:70,svMax:108,eMaxProfile:0.77,leitura:'No esforço máximo de um adulto não treinado (~44 mL/kg/min), o débito cardíaco chega a ~20 L/min e a extração a ~75% (limite do perfil ~77%), com SvO₂ em torno de 25%.'},
+      atleta:{nome:'Atleta de resistência (maratona, esforço submáximo)',hemoglobina:15,pao2:100,massa:65,demanda:16.0,qRest:5.0,qSlope:6.0,svRest:100,svMax:175,eMaxProfile:0.85,leitura:'Na maratona o atleta trabalha em esforço submáximo (~80% de um VO₂máx de ~70 mL/kg/min): o grande volume sistólico permite débito cardíaco acima de 25 L/min e alto consumo de O₂.'},
+      atletaMax:{nome:'Atleta de endurance no máximo',hemoglobina:15,pao2:95,massa:75,demanda:20.0,qRest:5.0,qSlope:5.5,svRest:100,svMax:175,eMaxProfile:0.85,leitura:'No esforço máximo, o atleta de endurance (VO₂máx ~70 mL/kg/min) combina volume sistólico de ~175 mL, débito cardíaco acima de 30 L/min e extração de ~80% (limite do perfil ~85%).'},
+      anemia:{nome:'Anemia',hemoglobina:9,pao2:100,massa:70,demanda:1.02,qRest:6.5,qSlope:5.5,svRest:80,svMax:112,eMaxProfile:0.77,leitura:'Na anemia, a redução da hemoglobina diminui o conteúdo arterial de O₂ mesmo com saturação preservada; o débito cardíaco em repouso sobe para manter a oferta.'},
+      hipoxemia:{nome:'Hipoxemia',hemoglobina:15,pao2:55,massa:70,demanda:1.02,qRest:5.8,qSlope:5.5,svRest:70,svMax:108,eMaxProfile:0.77,leitura:'Na hipoxemia, a PaO₂ de 55 mmHg reduz a SaO₂ para ~88% (curva de dissociação) e o conteúdo arterial de oxigênio; o débito cardíaco sobe discretamente para compensar.'},
+      choque:{nome:'Choque',hemoglobina:15,pao2:85,massa:70,demanda:1.02,qRest:2.8,qSlope:5.5,svRest:22,svMax:40,eMaxProfile:0.77,leitura:'No choque, a queda do débito cardíaco reduz a entrega de O₂ e obriga os tecidos a extrair uma fração muito maior do O₂ que chega.'}
     };
-    const Q_MIN=2, Q_MAX=30, E_MIN=0.05, E_MAX=0.85, MET=3.5, FC_MAX=190;
+    const Q_MIN=2, Q_MAX=35, E_MIN=0.05, MET=3.5, FC_MAX=190;
     let notes=[];
-    const model={debitoCardiaco:5,hemoglobina:15,sao2:97.7,pao2:100,svo2:75,pvo2:40,massa:70,extracao:25,demanda:1.0,qRest:5,qSlope:5.5,svRest:70,svMax:110,vo2Target:245,supplyLimited:false};
+    const model={debitoCardiaco:5,hemoglobina:15,sao2:97.7,pao2:100,svo2:75,pvo2:40,massa:70,extracao:25,demanda:1.0,qRest:5,qSlope:5.5,svRest:70,svMax:108,eMaxProfile:0.77,vo2Target:250,supplyLimited:false};
     const fick={caO2:0,cvO2:0,deltaAvO2:0,vo2AbsolutoMlMin:0,vo2AbsolutoLMin:0,vo2Relativo:0}; let playing=true,last=performance.now(),elapsed=0,activeState='repouso';
     const metricsConfig=[['VO₂ absoluto','vo2Abs','L/min'],['VO₂ relativo','vo2Rel','mL/kg/min'],['Q / débito cardíaco','q','L/min'],['Δ a-v O₂','delta','mL/dL'],['CaO₂','cao2','mL/dL'],['CvO₂','cvo2','mL/dL'],['SaO₂','sao2','%'],['SvO₂','svo2','%']];
-    const sliderConfig=[['debitoCardiaco','Débito cardíaco',Q_MIN,Q_MAX,0.1,1],['hemoglobina','Hemoglobina',5,20,0.1,1],['sao2','SaO₂',58,98,0.1,1],['pao2','PaO₂',30,110,1,0],['svo2','SvO₂',15,90,0.1,0],['pvo2','PvO₂',13,60,1,0],['massa','Massa corporal',40,150,1,0],['extracao','Extração tecidual',5,85,1,0],['demanda','Demanda metabólica',0.8,20,0.1,1]];
+    const sliderConfig=[['debitoCardiaco','Débito cardíaco',Q_MIN,Q_MAX,0.1,1],['hemoglobina','Hemoglobina',5,20,0.1,1],['sao2','SaO₂',58,98,0.1,1],['pao2','PaO₂',30,110,1,0],['svo2','SvO₂',15,90,0.1,0],['pvo2','PvO₂',13,60,1,0],['massa','Massa corporal',40,150,1,0],['extracao','Extração tecidual',5,85,1,0],['demanda','Demanda metabólica',0.8,23,0.1,1]];
     const columnMap={hemoglobina:'col-left',sao2:'col-left',pao2:'col-left',debitoCardiaco:'col-mid',massa:'col-mid',demanda:'col-mid',svo2:'col-right',pvo2:'col-right',extracao:'col-right'};
     function clamp(v,min,max){return Math.max(min,Math.min(max,v))} function formatPt(v,d=1){return Number(v).toFixed(d).replace('.',',')}
     // Curva de dissociação da Hb (Severinghaus, P50 ≈ 26,8 mmHg): a saturação decorre da PO₂.
@@ -873,8 +874,8 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
     function qHeartMax(){return Math.min(Q_MAX,FC_MAX*model.svMax/1000)}
     function qForDemand(vo2){const q=model.qRest+model.qSlope*(vo2-vo2Rest())/1000,qm=qHeartMax();if(q>qm)notes.push(`Débito cardíaco máximo atingido (FCmáx ~${FC_MAX} bpm × VS máximo ≈ ${formatPt(qm,1)} L/min): acima disso só a extração pode aumentar.`);return clamp(q,Q_MIN,qm)}
     // O VO₂ segue a demanda; a extração ajusta-se ao fluxo e ao CaO₂ até o limite (~85%), a partir do qual o VO₂ fica limitado pela oferta.
-    function eMax(){return Math.min(E_MAX,1-o2Content(model.hemoglobina,15,po2FromSat(15))/calcCaO2())}
-    function solveFromDemand(){const ca=calcCaO2(),em=eMax();const qLow=model.vo2Target/(ca*E_MIN*10);if(model.debitoCardiaco>qLow){model.debitoCardiaco=Math.max(Q_MIN,qLow);notes.push(`Fluxo muito acima da demanda: a extração não cai abaixo de ~5%, então o débito foi limitado a ${formatPt(model.debitoCardiaco,1)} L/min.`)}let E=model.vo2Target/(model.debitoCardiaco*ca*10);model.supplyLimited=E>em;if(model.supplyLimited)notes.push('VO₂máx atingido: com o débito e a extração no limite (SvO₂ ~15%), a oferta de O₂ não atende à demanda.');setVenousFromExtraction(clamp(E,E_MIN,em))}
+    function eMax(){return Math.min(model.eMaxProfile||0.77,1-o2Content(model.hemoglobina,15,po2FromSat(15))/calcCaO2())}
+    function solveFromDemand(){const ca=calcCaO2(),em=eMax();const qLow=model.vo2Target/(ca*E_MIN*10);if(model.debitoCardiaco>qLow){model.debitoCardiaco=Math.max(Q_MIN,qLow);notes.push(`Fluxo muito acima da demanda: a extração não cai abaixo de ~5%, então o débito foi limitado a ${formatPt(model.debitoCardiaco,1)} L/min.`)}let E=model.vo2Target/(model.debitoCardiaco*ca*10);model.supplyLimited=E>em;if(model.supplyLimited)notes.push('VO₂máx atingido: com o débito e a extração no limite do perfil (~77% no não treinado; ~85% no atleta de endurance), a oferta de O₂ não atende à demanda.');setVenousFromExtraction(clamp(E,E_MIN,em))}
     // Quando o aluno fixa o lado venoso (SvO₂, PvO₂ ou extração), o VO₂ passa a ser consequência e a demanda é relida.
     function adoptVenousState(){const ca=calcCaO2();const em=eMax();let E=1-calcCvO2()/ca;if(E<E_MIN||E>em){setVenousFromExtraction(clamp(E,E_MIN,em))}else model.extracao=E*100;model.supplyLimited=false;model.vo2Target=model.debitoCardiaco*ca*(model.extracao/100)*10;model.demanda=model.vo2Target/(MET*model.massa)}
     function updateFick(){fick.caO2=calcCaO2();fick.cvO2=calcCvO2();fick.deltaAvO2=fick.caO2-fick.cvO2;fick.vo2AbsolutoMlMin=model.debitoCardiaco*fick.deltaAvO2*10;fick.vo2AbsolutoLMin=fick.vo2AbsolutoMlMin/1000;fick.vo2Relativo=model.massa>0?fick.vo2AbsolutoMlMin/model.massa:0;return fick}
@@ -899,6 +900,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
       ['exercicioModerado','Exercício Moderado'],
       ['exercicioPesado','Exercício Pesado'],
       ['atleta','Atleta (maratona, submáximo)'],
+      ['atletaMax','Atleta de endurance no máximo'],
       ['anemia','Anemia'],
       ['hipoxemia','Hipoxemia'],
       ['choque','Choque']
@@ -919,7 +921,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
       if(E<20)tags.push('A extração periférica está baixa, mantendo conteúdo venoso relativamente elevado.');
       else if(E<=35)tags.push('A extração periférica está em faixa de repouso (~25%).');
       else if(E<=70)tags.push('A extração periférica está aumentada, reduzindo o conteúdo venoso e ampliando a diferença arteriovenosa.');
-      else tags.push('A extração periférica está alta, próxima do limite fisiológico (~75–85%).');
+      else tags.push('A extração periférica está alta, próxima do limite fisiológico (~77% no não treinado; ~85% no atleta de endurance).');
       let interpret='Pelo princípio de Fick, o VO₂ depende do débito cardíaco e da diferença arteriovenosa de O₂. ';
       if(rel<3)interpret+='O consumo global de oxigênio está abaixo do repouso (1 MET ≈ 3,5 mL/kg/min). ';
       else if(rel<4.5)interpret+='O consumo global de oxigênio é compatível com o repouso (≈1 MET = 3,5 mL/kg/min). ';
@@ -928,7 +930,7 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bor
       else interpret+='O consumo de oxigênio é alto: está na faixa do máximo de um adulto não treinado (35–45 mL/kg/min) ou acima dela, como em atletas de resistência. ';
       if(model.hemoglobina<11)interpret+='A hemoglobina baixa reduz CaO₂ e pode limitar a oferta de O₂ mesmo que a saturação arterial esteja preservada. ';
       if(model.sao2<90)interpret+='A saturação arterial reduzida diminui diretamente o conteúdo arterial de O₂. ';
-      if(model.supplyLimited)interpret+='A demanda não é atendida: mesmo com extração máxima (~85%), a oferta de O₂ limita o VO₂. ';
+      if(model.supplyLimited)interpret+='A demanda não é atendida: mesmo com a extração máxima do perfil (~77% no não treinado; ~85% no atleta de endurance), a oferta de O₂ limita o VO₂. ';
       else if(q<4.2)interpret+='Neste momento, o principal limitante da oferta global é o baixo fluxo, compensado por maior extração. ';
       else if(E>50)interpret+='Neste momento, o tecido depende de extração periférica importante para sustentar o VO₂. ';
       else interpret+='Neste momento, a relação entre fluxo e extração mantém a entrega tecidual em equilíbrio. ';
@@ -1103,4 +1105,4 @@ box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px 
 </style>
 
 <script src="tutor-ef-data.js?v=20"></script>
-<script src="tutor-widget.js?v=20"></script>
+<script src="tutor-widget.js?v=20"></script>

@@ -257,13 +257,13 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
   </label>
 
   <label class="control"><span class="control-name">RPT</span>
-    <input id="rptRange" type="range" min="4" max="40" step="0.1" value="17.2">
-    <span id="rptLabel" class="control-value">17,2 mmHg·min/L</span>
+    <input id="rptRange" type="range" min="4" max="40" step="0.1" value="17.6">
+    <span id="rptLabel" class="control-value">17,6 mmHg·min/L</span>
   </label>
 
   <label class="control" title="Pressão venosa central ≈ pressão no átrio direito"><span class="control-name">PVC</span>
-    <input id="pvcRange" type="range" min="0" max="20" step="1" value="2">
-    <span id="pvcLabel" class="control-value">2 mmHg</span>
+    <input id="pvcRange" type="range" min="0" max="20" step="1" value="0">
+    <span id="pvcLabel" class="control-value">0 mmHg</span>
   </label>
 </div>
 
@@ -309,7 +309,7 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
   <div class="card" id="cardRPT">
     <div class="card-title">RPT <span id="badgeRPT" class="auto-badge" style="display:none">auto</span></div>
     <div class="phase" id="rptText">
-      <div class="card-value" id="rptValue">17,2</div>
+      <div class="card-value" id="rptValue">17,6</div>
       <div class="card-unit">mmHg·min/L</div>
       <small id="rptDesc">Resistência periférica total.</small>
     </div>
@@ -335,8 +335,8 @@ input[type=checkbox]{appearance:none;flex:0 0 38px;width:38px;height:23px;border
     <b ><span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span>:</b> representam a pressão arterial sistólica e diastólica.
     <b ><span class="v-PAM">PAM</span>:</b> é calculada automaticamente pela relação clínica aproximada <b><span class="v-PAM">PAM</span> ≈ <span class="v-PAD">PAD</span> + 1/3(<span class="v-PAS">PAS</span> − <span class="v-PAD">PAD</span>)</b>.
     <b ><span class="v-DC">DC</span>:</b> representa o fluxo global impulsionado pelo coração.
-    <b ><span class="v-RPT">RPT</span>:</b> sintetiza a oposição global oferecida pelo leito vascular sistêmico, principalmente pelas arteríolas. É expressa em mmHg·min/L (unidades Wood); 1 unidade Wood ≈ 80 dyn·s·cm⁻⁵, e o valor basal (~17) corresponde a ~1370 dyn·s·cm⁻⁵.
-    <b >PVC:</b> pressão venosa central, praticamente igual à pressão no átrio direito (basal ~2 mmHg; faixa normal ~0–5 mmHg). É a pressão de saída do circuito sistêmico, por isso entra na equação.
+    <b ><span class="v-RPT">RPT</span>:</b> sintetiza a oposição global oferecida pelo leito vascular sistêmico, principalmente pelas arteríolas. É expressa em mmHg·min/L (unidades Wood); 1 unidade Wood ≈ 80 dyn·s·cm⁻⁵, e o valor basal (~17,5) corresponde a ~1400 dyn·s·cm⁻⁵.
+    <b >PVC:</b> pressão venosa central, praticamente igual à pressão no átrio direito (basal ~0–2 mmHg; faixa normal ~0–5 mmHg; no simulador de retorno venoso, o basal de Guyton é 0 mmHg). É a pressão de saída do circuito sistêmico, por isso entra na equação.
     <b >Relação central:</b> <b><span class="v-RPT">RPT</span> = (<span class="v-PAM">PAM</span> − PVC) / <span class="v-DC">DC</span></b>, ou seja, <b><span class="v-PAM">PAM</span> = <span class="v-DC">DC</span> × <span class="v-RPT">RPT</span> + PVC</b>. Você escolhe três variáveis; a quarta é calculada para fechar a equação.
     <b >Limites do modelo:</b> é uma relação algébrica instantânea, sem barorreflexo. Mantendo <span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span> fixas, subir o <span class="v-DC">DC</span> obriga a <span class="v-RPT">RPT</span> a cair; no organismo, o barorreflexo e a autorregulação ajustam várias variáveis ao mesmo tempo. Para ver o efeito isolado do <span class="v-DC">DC</span> ou da <span class="v-RPT">RPT</span> sobre a pressão, deixe uma pressão como variável calculada (padrão no repouso). Nesse modo, <span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span> sobem ou descem juntas, mantendo a pressão de pulso (<span class="v-PP">PP</span>), e os dois controles de pressão ficam bloqueados. Para mudar a <span class="v-PP">PP</span>, calcule o <span class="v-DC">DC</span> ou a <span class="v-RPT">RPT</span> e ajuste <span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span>. É uma simplificação: no organismo, aumentos do volume sistólico elevam mais a <span class="v-PAS">PAS</span> (a <span class="v-PP">PP</span> aumenta), e aumentos da <span class="v-RPT">RPT</span> elevam mais a <span class="v-PAD">PAD</span>.
     <b >Fator 1/3:</b> a estimativa <span class="v-PAM">PAM</span> ≈ <span class="v-PAD">PAD</span> + 1/3 da pressão de pulso vale para FC de repouso. Com FC alta, a diástole encurta e a PAM se aproxima da média aritmética entre <span class="v-PAS">PAS</span> e <span class="v-PAD">PAD</span>; no exercício, o simulador subestima um pouco a PAM.
@@ -406,7 +406,7 @@ const rptValue=document.getElementById('rptValue');
 const derValue=document.getElementById('derValue');
 const derDesc=document.getElementById('derDesc');
 
-let PAS=119, PAD=75, DC=5.1, RPT=17.2, PVC=2, PPref=44;
+let PAS=119, PAD=75, DC=5.1, RPT=17.6, PVC=0, PPref=44;
 let running=false, raf=null, lastTs=0, t=0;
 let vesselScale=1.0;
 let heartScale=1.0;
@@ -503,12 +503,12 @@ function setActivePreset(id){
 
 // Valores fisiológicos que fecham RPT = (PAM − PVC)/DC; 'calc' é a variável calculada em cada estado.
 const PRESETS={
-  rest:     {PAS:119, PAD:75,  DC:5.1,  RPT:17.2, PVC:2, calc:'PAS', vesselScale:1.0,  heartScale:1.0},
-  exercise: {PAS:180, PAD:72,  DC:18.0, RPT:5.8,  PVC:4, calc:'RPT', vesselScale:1.3,  heartScale:1.22},
-  vasoc:    {PAS:149, PAD:97,  DC:5.1,  RPT:22.0, PVC:2, calc:'PAD', vesselScale:0.78, heartScale:1.0},
-  vasod:    {PAS:97,  PAD:54,  DC:5.1,  RPT:13.0, PVC:2, calc:'PAD', vesselScale:1.36, heartScale:1.0},
-  ht:       {PAS:160, PAD:100, DC:5.1,  RPT:22.7, PVC:4, calc:'RPT', vesselScale:0.9,  heartScale:1.05},
-  shock:    {PAS:84,  PAD:60,  DC:2.8,  RPT:23.9, PVC:1, calc:'RPT', vesselScale:0.85, heartScale:0.95}
+  rest:     {PAS:119, PAD:75,  DC:5.1,  RPT:17.6, PVC:0, calc:'PAS', vesselScale:1.0,  heartScale:1.0},
+  exercise: {PAS:180, PAD:72,  DC:18.0, RPT:5.9,  PVC:2, calc:'RPT', vesselScale:1.3,  heartScale:1.22},
+  vasoc:    {PAS:147, PAD:95,  DC:5.1,  RPT:22.0, PVC:0, calc:'PAD', vesselScale:0.78, heartScale:1.0},
+  vasod:    {PAS:95,  PAD:52,  DC:5.1,  RPT:13.0, PVC:0, calc:'PAD', vesselScale:1.36, heartScale:1.0},
+  ht:       {PAS:160, PAD:100, DC:5.1,  RPT:23.1, PVC:2, calc:'RPT', vesselScale:0.9,  heartScale:1.05},
+  shock:    {PAS:84,  PAD:60,  DC:2.8,  RPT:24.3, PVC:0, calc:'RPT', vesselScale:0.85, heartScale:0.95}
 };
 function presetTarget(name){
   return Object.assign({}, PRESETS[name] || PRESETS.rest);

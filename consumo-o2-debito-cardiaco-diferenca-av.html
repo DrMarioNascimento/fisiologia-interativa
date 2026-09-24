@@ -586,12 +586,12 @@ canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255
 </div>
 
 <div class="quick" id="quickStates">
-  <strong style="margin-right:4px">Estados rápidos:</strong>
+  <strong style="margin-right:4px" id="profileLabel">Estados rápidos (perfil: adulto não treinado):</strong>
   <button data-preset="rest">Repouso</button>
   <button data-preset="light">Exercício leve</button>
   <button data-preset="moderate">Exercício moderado</button>
-  <button data-preset="intense">Exercício intenso</button>
-  <button data-preset="athlete">Atleta</button>
+  <button data-preset="intense">Esforço máximo (não treinado)</button>
+  <button data-preset="athlete">Atleta de endurance no máximo</button>
   <button data-preset="hf">Insuficiência cardíaca</button>
   <button data-preset="anemia">Anemia</button>
   <button data-preset="normal">Normalizar</button>
@@ -623,7 +623,7 @@ canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255
   </label>
 
   <label class="control var-q"><span class="control-name">Q</span>
-    <input id="qRange" type="range" min="2.0" max="30.0" step="0.1" value="5.0">
+    <input id="qRange" type="range" min="2.0" max="35.0" step="0.1" value="5.0">
     <span id="qLabel" class="control-value">5,0 L/min</span>
   </label>
 
@@ -852,7 +852,13 @@ const altEquationMain=document.getElementById('altEquationMain');
 
 let VO2=250, Q=5.0, DAV=5.0, MASS=70, HB=15.0, SaO2=97.7, SvO2=75, PaO2=100, PvO2=40, advancedMode=false;
 // Limites fisiológicos compartilhados com os demais simuladores de Fick do site.
-const Q_MIN=2.0, Q_MAX=30.0, DAV_MIN=2.0, SVO2_FLOOR=15, VO2_BASAL_MIN=150, VO2_REL_RECORD=90;
+const Q_MIN=2.0, DAV_MIN=2.0, SVO2_FLOOR=15, VO2_BASAL_MIN=150, VO2_REL_RECORD=90;
+// Perfis: o não treinado (padrão) extrai até ~77% do O₂ e tem DC máximo ~21 L/min (FC 190 × VS ~110 mL);
+// o atleta de endurance extrai até ~85% e alcança DC ~35 L/min (VS ~180 mL).
+const PROFILES={untrained:{emax:0.77,qmax:21.0,label:'adulto não treinado'},athlete:{emax:0.85,qmax:35.0,label:'atleta de endurance'}};
+let PROFILE='untrained';
+const prof=()=>PROFILES[PROFILE];
+let Q_MAX=PROFILES.untrained.qmax;
 let notices=[];
 // Valores pedidos pelo aluno (sliders/estados): a variável livre é sempre recalculada a partir deles, sem efeito catraca.
 let reqVO2=250, reqQ=5.0, reqDAV=5.0;
@@ -890,7 +896,7 @@ function venousFromContent(cv){
   const p=(lo+hi)/2; return { pvo2:p, svo2:satFromPO2(p) };
 }
 function arterialContent(){ SaO2=satFromPO2(PaO2); return o2Content(HB,SaO2,PaO2); }
-function davMax(){ const pv=po2FromSat(SVO2_FLOOR); return arterialContent() - o2Content(HB,SVO2_FLOOR,pv); }
+function davMax(){ const pv=po2FromSat(SVO2_FLOOR), ca=arterialContent(); return Math.min(ca*prof().emax, ca - o2Content(HB,SVO2_FLOOR,pv)); }
 function calcContents(){
   const CaO2 = arterialContent();
   const CvO2 = o2Content(HB,SvO2,PvO2);
@@ -946,18 +952,23 @@ function derive(){
   const CaO2=arterialContent();
   const maxDav=davMax();
   if(advancedMode){
-    Q=reqQ;
+    Q_MAX=prof().qmax;
+    Q=reqQ; if(Q>Q_MAX){ Q=Q_MAX; notices.push(`Débito cardíaco limitado a ${fmt1(Q_MAX)} L/min, o máximo do perfil (${prof().label}).`); }
     // SvO₂ é a variável livre do lado venoso; PvO₂ vem da curva e o O₂ dissolvido entra no CvO₂.
     const svMax=venousFromContent(CaO2-DAV_MIN).svo2;
     if(SvO2>svMax){ SvO2=svMax; notices.push('SvO₂ limitada: o sangue venoso precisa conter menos O₂ que o arterial (Δ a-v O₂ mínima de 2 mL/dL).'); }
     if(SvO2<SVO2_FLOOR) SvO2=SVO2_FLOOR;
+    const svMinProfile=venousFromContent(CaO2-maxDav).svo2;
+    if(SvO2<svMinProfile){ SvO2=svMinProfile; notices.push(`SvO₂ limitada a ${Math.round(svMinProfile)}%: a extração máxima do perfil (${prof().label}) é de ~${Math.round(prof().emax*100)}%.`); }
     PvO2=po2FromSat(SvO2);
     DAV=CaO2-o2Content(HB,SvO2,PvO2);
     VO2=Q*DAV*10;
   }else{
+    Q_MAX=prof().qmax;
     VO2=reqVO2; Q=reqQ; DAV=reqDAV;
+    if(solveFor!=='q' && Q>Q_MAX){ Q=Q_MAX; notices.push(`Débito cardíaco limitado a ${fmt1(Q_MAX)} L/min, o máximo do perfil (${prof().label}).`); }
     if(solveFor==='vo2'){
-      if(DAV>maxDav){ DAV=maxDav; notices.push(`Δ a-v O₂ limitada a ${fmt1(maxDav)} mL/dL: com esta Hb, uma extração maior exigiria SvO₂ abaixo de ${SVO2_FLOOR}%.`); }
+      if(DAV>maxDav){ DAV=maxDav; notices.push(`Δ a-v O₂ limitada a ${fmt1(maxDav)} mL/dL: extração máxima do perfil (${prof().label}, ~${Math.round(prof().emax*100)}%) ou SvO₂ mínima de ${SVO2_FLOOR}%.`); }
       DAV=Math.max(DAV_MIN,DAV);
       VO2=Q*DAV*10;
     }else if(solveFor==='q'){
@@ -1479,6 +1490,7 @@ sctx.fillText=function(text,x,y,...rest){const str=String(text),parts=str.split(
 
 function render(){
   derive();
+  const pl=document.getElementById('profileLabel'); if(pl) pl.textContent=`Estados rápidos (perfil: ${prof().label}):`;
   syncDisabled();
   renderLabels();
   updateEquation();
@@ -1498,7 +1510,7 @@ function pause(){
 }
 function resetAll(){
   pause();
-  VO2=250; Q=5.0; DAV=5.0; MASS=70; HB=15.0; PaO2=100; advancedMode=false; advancedModeToggle.checked=false; solveFor='vo2'; syncReq();
+  VO2=250; Q=5.0; DAV=5.0; MASS=70; HB=15.0; PaO2=100; PROFILE='untrained'; advancedMode=false; advancedModeToggle.checked=false; solveFor='vo2'; syncReq();
   document.querySelector('input[name="solveFor"][value="vo2"]').checked=true;
   setNotice('');
   updateActiveButtons();
@@ -1521,12 +1533,12 @@ function applyPreset(name){
     light:   {Q:9.0,  DAV:8.0,  MASS:70, HB:15.0, PaO2:98},
     moderate:{Q:13.0, DAV:11.5, MASS:70, HB:15.0, PaO2:96},
     intense: {Q:20.5, DAV:15.0, MASS:70, HB:15.0, PaO2:95},
-    athlete: {Q:28.0, DAV:16.0, MASS:70, HB:15.0, PaO2:100},
+    athlete: {Q:32.0, DAV:16.5, MASS:72, HB:15.0, PaO2:95},
     hf:      {Q:3.5,  DAV:7.7,  MASS:78, HB:13.0, PaO2:70},
     anemia:  {Q:7.0,  DAV:3.6,  MASS:70, HB:9.0,  PaO2:95},
     normal:  {Q:5.0,  DAV:5.0,  MASS:70, HB:15.0, PaO2:100}
   }[name];
-  if(P){ ({Q,DAV,MASS,HB,PaO2}=P); solveFor='vo2'; VO2=Q*DAV*10; SvO2=venousFromContent(arterialContent()-DAV).svo2; syncReq(); }
+  if(P){ ({Q,DAV,MASS,HB,PaO2}=P); PROFILE=name==='athlete'?'athlete':'untrained'; solveFor='vo2'; VO2=Q*DAV*10; SvO2=venousFromContent(arterialContent()-DAV).svo2; syncReq(); }
   document.querySelector(`input[name="solveFor"][value="${solveFor}"]`).checked=true;
   updateActiveButtons();
   setNotice('');

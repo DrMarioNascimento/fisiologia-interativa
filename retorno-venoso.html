@@ -890,31 +890,31 @@ label.control select{grid-column:1/-1;grid-row:2;width:100%;min-height:40px;marg
     // PSM = volume estressado / complacência; a PAD (átrio) é RESULTADO do cruzamento das curvas.
     const stateProfiles = {
       normal: { nome:'Normal', volume:5.0, tono:50, complacencia:70, resistencia:1.0, postura:'decubito', freqResp:14, profResp:3, bombaMuscular:20, cardiacStrength:100,
-        leitura:'Estado basal em decúbito: a curva de retorno venoso cruza a curva de função cardíaca com PAD (átrio) ≈ PVC ≈ 2 mmHg e débito cardíaco ≈ 5,1 L/min.' },
-      exercicio: { nome:'Exercício', volume:5.15, tono:78, complacencia:60, resistencia:0.8, postura:'decubito', freqResp:26, profResp:10, bombaMuscular:86, cardiacStrength:175,
+        leitura:'Estado basal em decúbito: a curva de retorno venoso cruza a curva de função cardíaca com PAD (átrio) ≈ PVC ≈ 0 mmHg, exatamente no início do platô, e retorno venoso = débito cardíaco ≈ 5,0 L/min (PSM 7 mmHg; RRV 1,4 mmHg·min/L).' },
+      exercicio: { nome:'Exercício', volume:5.15, tono:78, complacencia:60, resistencia:0.7, postura:'decubito', freqResp:26, profResp:10, bombaMuscular:86, cardiacStrength:175,
         leitura:'No exercício, a bomba muscular e a venoconstrição simpática elevam a pressão média de enchimento sistêmico, a vasodilatação muscular reduz a resistência ao retorno venoso e o coração simpaticamente estimulado acompanha: retorno venoso e débito cardíaco sobem juntos, sem grande aumento da PAD (átrio).' },
-      hemorragia: { nome:'Hemorragia', volume:4.1, tono:74, complacencia:64, resistencia:1.1, postura:'decubito', freqResp:22, profResp:4, bombaMuscular:20, cardiacStrength:115,
-        leitura:'A perda de ~900 mL reduz o volume estressado e a pressão média de enchimento sistêmico; mesmo com venoconstrição e estímulo cardíaco reflexos, o retorno venoso e o débito cardíaco caem, e a PAD (átrio) cai para perto de zero; perdas maiores levam o cruzamento ao platô (PAD < 0).' },
+      hemorragia: { nome:'Hemorragia', volume:4.2, tono:74, complacencia:64, resistencia:1.1, postura:'decubito', freqResp:22, profResp:4, bombaMuscular:20, cardiacStrength:115,
+        leitura:'A perda de ~800 mL reduz o volume estressado e a pressão média de enchimento sistêmico; mesmo com venoconstrição e estímulo cardíaco reflexos, o retorno venoso e o débito cardíaco caem, e o cruzamento passa para o platô, com PAD (átrio) negativa.' },
       venoconstricao: { nome:'Venoconstrição simpática', volume:5.0, tono:72, complacencia:66, resistencia:1.0, postura:'decubito', freqResp:14, profResp:3, bombaMuscular:20, cardiacStrength:100,
         leitura:'A venoconstrição simpática desloca volume não estressado para volume estressado, eleva a pressão média de enchimento sistêmico e aumenta moderadamente o retorno venoso.' },
       venodilatacao: { nome:'Venodilatação', volume:5.0, tono:32, complacencia:80, resistencia:1.0, postura:'decubito', freqResp:14, profResp:3, bombaMuscular:20, cardiacStrength:100,
         leitura:'A venodilatação aumenta a capacitância venosa: mais sangue fica como volume não estressado, a pressão média de enchimento sistêmico cai e o retorno venoso diminui.' },
-      insuficiencia: { nome:'Insuficiência cardíaca', volume:6.0, tono:60, complacencia:66, resistencia:1.05, postura:'decubito', freqResp:20, profResp:4, bombaMuscular:20, cardiacStrength:33,
+      insuficiencia: { nome:'Insuficiência cardíaca', volume:6.0, tono:60, complacencia:66, resistencia:1.05, postura:'decubito', freqResp:20, profResp:4, bombaMuscular:20, cardiacStrength:30,
         leitura:'Na insuficiência cardíaca, a curva de função cardíaca se achata; a retenção renal de volume eleva a pressão média de enchimento sistêmico. O novo equilíbrio tem débito cardíaco baixo e PAD (átrio) elevada (congestão venosa).' },
       ortostatismo: { nome:'Ortostatismo', volume:5.0, tono:50, complacencia:70, resistencia:1.0, postura:'ortostatismo', freqResp:14, profResp:3, bombaMuscular:10, cardiacStrength:100,
-        leitura:'Ao ficar em pé, cerca de 500 mL se acumulam nos membros inferiores por ação da gravidade: a pressão média de enchimento sistêmico efetiva cai e, sem reflexos, o débito cardíaco diminui ~25%. A bomba muscular reduz esse acúmulo.' },
+        leitura:'Ao ficar em pé, o sangue se acumula nos membros inferiores por ação da gravidade (no modelo, ~350 mL deixam de contribuir para o volume estressado): a pressão média de enchimento sistêmico efetiva cai e, sem reflexos, o débito cardíaco diminui ~25–30%. A bomba muscular reduz esse acúmulo.' },
       decubito: { nome:'Elevação passiva das pernas', volume:5.0, tono:50, complacencia:70, resistencia:1.0, postura:'elevacao', freqResp:14, profResp:3, bombaMuscular:10, cardiacStrength:100,
         leitura:'A elevação passiva dos membros inferiores em decúbito desloca ~250 mL para o compartimento central (autotransfusão): a pressão média de enchimento sistêmico sobe e o débito cardíaco aumenta se o coração responder à pré-carga.' },
       inspiracao: { nome:'Respiração profunda', volume:5.0, tono:50, complacencia:70, resistencia:1.0, postura:'decubito', freqResp:8, profResp:18, bombaMuscular:20, cardiacStrength:100,
-        leitura:'Na respiração profunda, cada inspiração torna a pressão pleural mais negativa e comprime o abdome: o retorno venoso aumenta na inspiração e diminui na expiração. Em média, a pressão pleural mais negativa desloca a curva cardíaca para a esquerda: a PAD (átrio) cai e o débito cardíaco sobe um pouco.' }
+        leitura:'Na respiração profunda, cada inspiração torna a pressão pleural mais negativa e comprime o abdome: o retorno venoso aumenta na inspiração e diminui na expiração. Em média, a pressão pleural mais negativa desloca a curva cardíaca para a esquerda e a PAD (átrio) cai abaixo de zero, mas o retorno médio quase não muda: as grandes veias intratorácicas colapsam e o retorno fica no platô (limite de Guyton).' }
     };
     const POSTURAS = { decubito:'Decúbito dorsal', ortostatismo:'Ortostatismo (em pé)', elevacao:'Decúbito com pernas elevadas' };
 
-    // Constantes do modelo (calibradas para o basal do site: DC ≈ 5,1 L/min, PAD átrio ≈ PVC ≈ 2 mmHg).
+    // Calibração do Guyton clássico: PSM 7 mmHg, PAD (átrio) 0 mmHg, RRV 1,4 mmHg·min/L → RV = DC = 5,0 L/min.
     const C0 = 0.20;      // complacência vascular sistêmica basal (L/mmHg)
-    const VU0 = 3.48;     // volume não estressado basal (L) → PSM basal 7,6 mmHg
-    const RRV0 = 1.10;    // resistência ao retorno venoso basal (mmHg·min/L)
-    const X50 = 6.69;     // PAD transmural (+4) de meia-resposta da curva cardíaca normal
+    const VU0 = 3.60;     // volume não estressado basal (L) → volume estressado 1,4 L, PSM 7 mmHg
+    const RRV0 = 1.40;    // resistência ao retorno venoso basal (mmHg·min/L)
+    const X50 = 4.499;    // PAD transmural (+4) de meia-resposta: curva cardíaca normal passa por (0; 5,0)
     const PPL_GAIN = 0.07; // deslocamento da pressão pleural média (mmHg) por cmH₂O de profundidade acima do basal
 
     const model = JSON.parse(JSON.stringify(stateProfiles.normal));
@@ -994,7 +994,7 @@ label.control select{grid-column:1/-1;grid-row:2;width:100%;min-height:40px;marg
 
     function unstressedVolume(){
       let vu = VU0 - 0.7 * (model.tono - 50) / 50 - 0.3 * (model.bombaMuscular - 20) / 80;
-      if(model.postura === 'ortostatismo') vu += 0.45 * (1 - 0.7 * model.bombaMuscular / 100);
+      if(model.postura === 'ortostatismo') vu += 0.35 * (1 - 0.7 * model.bombaMuscular / 100);
       if(model.postura === 'elevacao') vu -= 0.25;
       return vu;
     }
@@ -1080,7 +1080,7 @@ label.control select{grid-column:1/-1;grid-row:2;width:100%;min-height:40px;marg
       physio.pad = eq.x;
       physio.rv = eq.y;
       physio.co = eq.y;
-      physio.plateau = eq.x < 0;
+      physio.plateau = eq.x < -0.05;
       physio.eqPoint = eq;
       // Somente para a animação: oscilação fásica em torno do valor médio (média do ciclo = equilíbrio).
       physio.rvInst = Math.max(0, eq.y * (1 + respPhasicAmp() * resp.wave + 0.18 * (muscle.squeeze - meanSqueeze)));
@@ -1195,12 +1195,12 @@ label.control select{grid-column:1/-1;grid-row:2;width:100%;min-height:40px;marg
       const muscleFav = physio.muscleSqueeze > 0.18;
 
       const tags = [];
-      if(pmsf >= 9.5){
+      if(pmsf >= 9){
         tags.push('A pressão de enchimento sistêmico está elevada, deslocando a curva de retorno venoso para cima e para a direita.');
       } else if(pmsf <= 6){
         tags.push('A pressão de enchimento sistêmico está reduzida, deslocando a curva de retorno venoso para baixo e para a esquerda.');
       } else {
-        tags.push('A pressão de enchimento sistêmico está próxima do basal (~7–8 mmHg).');
+        tags.push('A pressão de enchimento sistêmico está próxima do basal (~7 mmHg).');
       }
       if(physio.plateau){
         tags.push('A pressão atrial direita de equilíbrio é negativa: as grandes veias intratorácicas colapsam e o retorno venoso fica no platô, limitado pela PSM e pela resistência ao retorno venoso.');
@@ -1209,9 +1209,9 @@ label.control select{grid-column:1/-1;grid-row:2;width:100%;min-height:40px;marg
       } else {
         tags.push('A pressão atrial direita de equilíbrio está em faixa normal (0–5 mmHg).');
       }
-      if(rvr >= 1.3){
+      if(rvr >= 1.65){
         tags.push('A resistência ao retorno venoso está aumentada, reduzindo a inclinação da curva.');
-      } else if(rvr <= 0.95){
+      } else if(rvr <= 1.2){
         tags.push('A resistência ao retorno venoso está reduzida, tornando a curva mais inclinada.');
       }
       if(respFav){
@@ -1241,7 +1241,7 @@ label.control select{grid-column:1/-1;grid-row:2;width:100%;min-height:40px;marg
 
     function getSemanticTone(){
       let score = 0;
-      if(physio.pmsf >= 9.5) score += 1.0;
+      if(physio.pmsf >= 9) score += 1.0;
       else if(physio.pmsf <= 6) score -= 1.4;
       if(physio.pad >= 6) score -= 1.7;
       if(physio.rv >= 5.5) score += 1.2;
@@ -1278,7 +1278,7 @@ label.control select{grid-column:1/-1;grid-row:2;width:100%;min-height:40px;marg
       const eqHTML = `<strong><span class="v-rv">Retorno venoso</span> = (<span class="v-pmsf">PSM</span> − máx(<span class="v-pra">PAD átrio</span>; 0)) / <span class="v-resistencia">RRV</span></strong><br>
 <span style="font-size:14px">PSM = pressão média de enchimento sistêmico · RRV = resistência ao retorno venoso · com PAD (átrio) &lt; 0 as grandes veias colapsam e a curva forma um platô.</span><br><br>
 <span class="v-pmsf">PSM: ${formatPt(pmsf,1)} mmHg</span><br>
-<span class="v-pra">PAD (átrio) no equilíbrio: ${formatPt(eq.x,1)} mmHg</span>${eq.x < 0 ? ' <span style="font-size:14px">(platô: usa-se 0 no numerador)</span>' : ''}<br>
+<span class="v-pra">PAD (átrio) no equilíbrio: ${formatPt(eq.x,1)} mmHg</span>${eq.x < -0.05 ? ' <span style="font-size:14px">(platô: usa-se 0 no numerador)</span>' : ''}<br>
 <span class="v-resistencia">RRV: ${formatPt(currentResistance(),2)} mmHg·min/L</span><br>
 <span class="v-rv">(${formatPt(pmsf,2)} − ${formatPt(padNum,2)}) / ${formatPt(currentResistance(),2)} = ${formatPt(eq.y,2)} L/min</span> = <span class="v-cardiac">débito cardíaco ${formatPt(eq.y,2)} L/min</span>`;
       const box=document.getElementById('equationBox');

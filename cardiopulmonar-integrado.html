@@ -965,7 +965,7 @@ body{background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121
 <div class="panel-header"><h2>Controles globais</h2><span>Ajuste fisiologia e integração</span></div>
 <div class="slider-grid" id="sliders"></div>
 </div><div class="panel quick-states-panel">
-<div class="panel-header"><h2>Estados rápidos</h2><span>Aplicações automáticas</span></div>
+<div class="panel-header"><h2>Estados rápidos</h2><span id="profileLabel">Perfil: adulto não treinado</span></div>
 <div class="states" id="states"></div>
 </div></div><div class="hero-right"><div class="panel animation-panel">
 <div class="panel-header">
@@ -1993,6 +1993,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         thoracicLoad: 0,
         metabolicAcidosis: 0,
         breathHold: 0,
+        trained: 0,
         ventFixed: 0,
         paCO2Set: 0
       },
@@ -2111,7 +2112,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       },
       {
         key: "aerob",
-        title: "Exercício aeróbio",
+        title: "Exercício aeróbio (perfil padrão: adulto não treinado)",
         items: [
           ["Aeróbio leve", {
             fr:20, breathDepth:71, hr:105, bloodVolume:72, venousTone:62, compliance:70, contractility:72, afterload:40, pulmEfficiency:95,
@@ -2126,8 +2127,12 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
             metabolicVO2:2500, exerciseDrive:0.8, thoracicLoad:0, metabolicAcidosis:0
           }],
           ["Teste de carga máxima", {
-            fr:40, breathDepth:96, hr:190, bloodVolume:72, venousTone:92, compliance:70, contractility:100, afterload:40, pulmEfficiency:95,
-            metabolicVO2:3200, exerciseDrive:1, thoracicLoad:0, metabolicAcidosis:1
+            fr:40, breathDepth:96, hr:190, bloodVolume:72, venousTone:80, compliance:70, contractility:100, afterload:40, pulmEfficiency:95,
+            metabolicVO2:3100, exerciseDrive:1, thoracicLoad:0, metabolicAcidosis:1
+          }],
+          ["Atleta de endurance no máximo", {
+            fr:45, breathDepth:100, hr:190, bloodVolume:84, venousTone:92, compliance:100, contractility:100, afterload:24, pulmEfficiency:96,
+            metabolicVO2:5000, exerciseDrive:1, thoracicLoad:0, metabolicAcidosis:1, trained:1
           }],
           ["Recuperação", {
             fr:16, breathDepth:60, hr:95, bloodVolume:70, venousTone:56, compliance:70, contractility:66, afterload:40, pulmEfficiency:95,
@@ -2273,7 +2278,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const preset=statePresets[name];
       if(!preset) return;
       // Contexto metabólico/mecânico do estado (demanda de O₂, exercício, carga intratorácica, acidose): sempre reiniciado.
-      Object.assign(model.params, {metabolicVO2:250, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0, breathHold:0, ventFixed:0, paCO2Set:0});
+      Object.assign(model.params, {metabolicVO2:250, exerciseDrive:0, thoracicLoad:0, metabolicAcidosis:0, breathHold:0, ventFixed:0, paCO2Set:0, trained:0});
       Object.entries(preset).forEach(([k,v])=>{
         model.params[k]=v;
         const el=document.getElementById(k);
@@ -2348,9 +2353,13 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       - Fick: CaO₂ = 1,34·Hb·SaO₂ + 0,003·PaO₂; VO₂ = DC × (CaO₂ − CvO₂) × 10.
     */
     const HB_REF = 15;
-    const VO2_MAX_REF = 3200; // adulto não treinado, ~72 kg (≈44 mL/kg/min)
+    // Perfis: 0 = adulto não treinado (padrão), 1 = atleta de endurance.
+    const PROFILES = [
+      {vo2max:3100, extractionMax:0.77, heartScale:1.00, fillBoost:0},   // ~43 mL/kg/min (72 kg)
+      {vo2max:5100, extractionMax:0.85, heartScale:1.38, fillBoost:500}  // ~71 mL/kg/min (72 kg)
+    ];
+    const profileOf = p => PROFILES[p.trained ? 1 : 0];
     const PAM_SOFT = 140, PAM_CEIL = 60, PP_SOFT = 80, PP_CEIL = 40;
-    const EXTRACTION_MAX = 0.85;
     const SVO2_FLOOR_PO2 = 13.0; // PO₂ correspondente a SvO₂ ≈ 15% na curva de Severinghaus
     function satFromPO2(P){ P=Math.max(P,0.1); return 100/(23400/(P*P*P+150*P)+1); }
     function o2Content(hb, sat, po2){ return 1.34*hb*sat/100 + 0.003*po2; }
@@ -2372,7 +2381,8 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const tau=0.12*Math.pow(60/Math.max(c,10),1.35)*(1-0.4*exP);
       const fill=Math.pow(1-Math.exp(-td/tau),2);
       // Taxa máxima de enchimento (mL/s), maior no exercício (sucção diastólica), mas finita: VS ≤ taxa × tempo diastólico.
-      const peakFill=600+700*exP;
+      const prof=profileOf(p);
+      const peakFill=600+(700+prof.fillBoost)*exP;
       const fillCap=peakFill*td;
       const ees=c<=60 ? 0.35+1.85*Math.pow(c/60,1.5) : 2.2*(1+2.4*(c-60)/40);
       const svr=18.4*Math.pow(p.afterload/40,0.7)*(1-0.73*Math.pow(ex,0.4));
@@ -2381,7 +2391,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       let pas=120, out=null;
       for(let it=0;it<80;it++){
         const esv=5+0.9*pas/ees;
-        const strokeAt=(rap)=>{ const edvFull=20+comp*169*(1-Math.exp(-Math.max(0,rap-thor+2)/5)); const a=Math.max(0,fill*(edvFull-esv)); return a/Math.pow(1+Math.pow(a/fillCap,8),0.125); };
+        const strokeAt=(rap)=>{ const edvFull=20+prof.heartScale*comp*169*(1-Math.exp(-Math.max(0,rap-thor+2)/5)); const a=Math.max(0,fill*(edvFull-esv)); return a/Math.pow(1+Math.pow(a/fillCap,8),0.125); };
         let lo=thor-3, hi=pmsf+thor+5;
         for(let i=0;i<50;i++){ const m=(lo+hi)/2; if(hr*strokeAt(m)/1000 > venousReturn(m)) hi=m; else lo=m; }
         const rap=(lo+hi)/2;
@@ -2410,7 +2420,7 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const hold=p.breathHold||0; // apneia voluntária/Valsalva: retrato após "hold" segundos, partindo da eupneia
       const va=hold>0?4.33:Math.max(0,p.fr*(vt-(0.16+0.06*vt)));
       const vo2Demand=Math.max(80,p.metabolicVO2||250);
-      const intensity=clamp((vo2Demand-250)/(VO2_MAX_REF-250),0,1.1);
+      const intensity=clamp((vo2Demand-250)/(profileOf(p).vo2max-250),0,1.1);
       const rerMetabolic=0.80+0.32*Math.pow(intensity,1.6);
       const vco2Metabolic=vo2Demand*rerMetabolic;
       const paCO2=clamp(0.863*vco2Metabolic/Math.max(va,0.01),18,90)+0.15*hold;
@@ -2425,8 +2435,8 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
       const paO2=clamp(po2Pulm-aaGradient,25,po2Pulm-1);
       const saO2=satFromPO2(paO2), pulmO2Sat=satFromPO2(po2Pulm);
       const caO2=o2Content(hb,saO2,paO2);
-      // Limite de extração: ~85% ou SvO₂ mínima de ~15% (PvO₂ crítica), o que ocorrer primeiro.
-      const extractionMax=Math.min(EXTRACTION_MAX, 1-o2Content(hb,15,SVO2_FLOOR_PO2)/caO2);
+      // Limite de extração do perfil (~77% não treinado; ~85% atleta) ou SvO₂ mínima de ~15%, o que ocorrer primeiro.
+      const extractionMax=Math.min(profileOf(p).extractionMax, 1-o2Content(hb,15,SVO2_FLOOR_PO2)/caO2);
       let extraction=vo2Demand/(Math.max(C.co,0.05)*caO2*10), supplyLimited=false;
       if(extraction>extractionMax){ extraction=extractionMax; supplyLimited=true; }
       const vo2=C.co*caO2*extraction*10;
@@ -2599,7 +2609,8 @@ Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof.
         if(v.pas>=200 || v.pad>=120) al.push('Hipertensão extrema (≥ 200/120 mmHg): pressões nesse nível só ocorrem de forma breve, como em esforço resistido máximo com Valsalva.');
         if(v.pam<60 || v.co<2) al.push('Colapso circulatório: PAM abaixo de 60 mmHg ou DC abaixo de 2 L/min não mantêm a perfusão dos órgãos.');
         if(v.vo2<200) al.push('VO₂ abaixo do metabolismo basal (~250 mL/min em adulto): combinação não sustentável.');
-        if(v.supplyLimited) al.push('A oferta de O₂ não atende à demanda: a extração chegou ao limite (SvO₂ ~15%).');
+        if(v.supplyLimited) al.push(`A oferta de O₂ não atende à demanda: a extração chegou ao limite do perfil (${model.params.trained?'~85% no atleta de endurance':'~77% no adulto não treinado'}) ou à SvO₂ mínima de ~15%.`);
+        const pl=document.getElementById('profileLabel'); if(pl) pl.textContent = model.params.trained ? 'Perfil: atleta de endurance' : 'Perfil: adulto não treinado';
         if(pr.fr>0 && ((v.va??99) < 1.5 || v.paCO2>=70) && !pr.breathHold) al.push('Hipoventilação extrema com hipercapnia grave: em regime estável seria incompatível com a vida; PaCO₂ e PaO₂ aparecem no limite do modelo.');
         if(pr.fr===0 && !pr.breathHold) al.push('Sem ventilação: apneia mantida é incompatível com a vida; PaCO₂ e PaO₂ aparecem no limite do modelo.');
         ui.alert.textContent = al.join(' ');
