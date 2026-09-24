@@ -23,7 +23,15 @@ No nível gratuito, o Google pode usar o conteúdo enviado para melhorar seus pr
 
 Há limite local de 6 chamadas por minuto por IP, duas simultâneas e 100 por dia UTC para o processo. A cota diária pode ser ajustada com `TUTOR_DAILY_LIMIT`; contadores ficam em memória e reiniciam junto com o servidor. Atrás de um proxy, o limite por IP é compartilhado: cabeçalhos de IP enviados pelo cliente não são aceitos. Esses controles complementam as cotas do Google, não são um limite de faturamento da conta nem autenticação de alunos. Para uma turma grande, preparar autenticação e controle de abuso antes da abertura pública.
 
-## Servidor Google e publicação
+## Cloud Run (projeto próprio)
+
+A API passa a rodar no Cloud Run, num projeto do Google Cloud exclusivo do tutor, sem depender de VM, IP ou Caddy. O `Dockerfile` da raiz monta uma imagem só com `server/tutor.cjs`, `server/catalog.cjs`, `tutor-ef-data.js` e `tutor-fisio-data.js`. O `.gcloudignore` limita o envio a esses arquivos.
+
+Para publicar ou atualizar, abra o Cloud Shell, baixe `server/cloudrun-deploy.sh` e execute `bash cloudrun-deploy.sh`. Nas atualizações, use `PROJECT=<id> bash cloudrun-deploy.sh`. O script cria o projeto e pede a conta de faturamento, que é exigida pelo Cloud Run embora o uso fique na cota gratuita. Ele ativa os serviços e guarda a chave do Gemini no Secret Manager, com entrada oculta. Depois publica o serviço `tutor-fisiologia` com no máximo 1 instância e testa `/api/tutor/status`. O endereço `https://…run.app/api/tutor` é fixo e é o que fica em `tutor-widget.js` e `tutor-moodle.html`.
+
+Os limites de 6/min e 100/dia continuam em memória. Com no máximo 1 instância, valem para todo o serviço, mas reiniciam quando o Cloud Run desliga a instância por inatividade.
+
+## Servidor Google e publicação (instalação anterior, na VM)
 
 Publicado em 05/09/2026. O GitHub Pages serve as páginas e a VM `convite-rasgado-bot`, zona `us-central1-a`, serve a API em `https://tutor-fisiologia.35.208.107.43.sslip.io/api/tutor`. A opção **Respostas personalizadas com IA** precisa ser marcada pelo aluno. O serviço `convite-bot` permanece independente.
 
