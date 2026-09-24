@@ -49,7 +49,7 @@
   let selectedModule = null;
   const quizProgress = new Map();
   let lastQuiz = null;
-  const aiEndpoint = window.TUTOR_AI_CONFIG?.endpoint || (location.hostname === 'drmarionascimento.github.io' ? 'https://tutor-fisiologia.35.208.107.43.sslip.io/api/tutor' : '');
+  const aiEndpoint = window.TUTOR_AI_CONFIG?.endpoint || (location.hostname === 'drmarionascimento.github.io' ? 'https://tutor-fisiologia-wlt26s6wjq-uc.a.run.app/api/tutor' : '');
   let aiHistory = [], aiModule = null, aiRequest = null;
   const currentAxis = () => selectedModule?.group || (typeof active !== 'undefined' ? active : (courseConfig?.defaultAxis || 'muscular'));
 

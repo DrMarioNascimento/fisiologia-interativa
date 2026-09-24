@@ -8,7 +8,7 @@ set -euo pipefail
 REGION=${REGION:-us-central1}
 SERVICE=tutor-fisiologia
 REPO_URL=https://github.com/DrMarioNascimento/fisiologia-interativa.git
-PROJECT=${PROJECT:-tutor-fisiologia-$(tr -dc a-z0-9 </dev/urandom | head -c 6)}
+PROJECT=${PROJECT:-tutor-fisiologia-$(date +%y%m%d%H%M)}
 
 echo "== Projeto: $PROJECT"
 if ! gcloud projects describe "$PROJECT" >/dev/null 2>&1; then
