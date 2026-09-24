@@ -135,9 +135,9 @@
       ? [{src:assetHref('assets/maps/cardiovascular-01-sangue.webp'),title:'Sangue'}]
       : mapsForGroup(m.group);
     const links = moduleMaps.map(item=>`<a class="tutor-link" href="${escapeHtml(item.src)}" target="_blank" rel="noopener">Mapa — ${escapeHtml(item.title)}</a>`);
-    if (m.href === 'da-intencao-ao-movimento.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/da-intencao-ao-movimento-guia-visual.pdf?v=20260821'))}" target="_blank" rel="noopener">Leitura de aprofundamento</a>`);
-    if (m.href === 'sangue.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260823'))}" target="_blank" rel="noopener">Guia visual de Sangue</a>`);
-    if (m.href === 'ventilacao-pulmonar-neonatal.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260902-2'))}" target="_blank" rel="noopener">Guia visual neonatal</a>`);
+    if (m.href === 'da-intencao-ao-movimento.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/da-intencao-ao-movimento-guia-visual.pdf?v=20260924'))}" target="_blank" rel="noopener">Leitura de aprofundamento</a>`);
+    if (m.href === 'sangue.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260924'))}" target="_blank" rel="noopener">Guia visual de Sangue</a>`);
+    if (m.href === 'ventilacao-pulmonar-neonatal.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260924'))}" target="_blank" rel="noopener">Guia visual neonatal</a>`);
     return links.join(' ');
   }
   function renderMapLinks(items, intro) {

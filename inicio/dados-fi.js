@@ -118,7 +118,7 @@ window.FI_DADOS = {
      "obj": "Integrar drive motivacional e atenção, giro do cíngulo, relé talâmico, vias motoras, recrutamento, frequência de disparo e acoplamento excitação–contração.",
      "href": "../da-intencao-ao-movimento.html?percurso=fisioterapia",
      "deep": "módulo de aprofundamento",
-     "leitura": "../assets/leituras/da-intencao-ao-movimento-guia-visual.pdf?v=20260821"
+     "leitura": "../assets/leituras/da-intencao-ao-movimento-guia-visual.pdf?v=20260924"
     }
    ],
    "sala": {
@@ -180,7 +180,7 @@ window.FI_DADOS = {
      "obj": "Integrar hematopoiese, transporte de oxigênio, viscosidade, débito cardíaco e respostas fisiológicas em cenários clínicos e de exercício.",
      "href": "../sangue.html?percurso=fisioterapia",
      "deep": "módulo de aprofundamento",
-     "leitura": "../assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260823"
+     "leitura": "../assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260924"
     }
    ],
    "sala": {
@@ -242,7 +242,7 @@ window.FI_DADOS = {
      "obj": "Relacionar idade gestacional ao nascimento, idade pós-natal, massa corporal e maturidade pulmonar à mecânica ventilatória neonatal.",
      "href": "../ventilacao-pulmonar-neonatal.html?percurso=fisioterapia",
      "deep": "módulo de aprofundamento",
-     "leitura": "../assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260902-2"
+     "leitura": "../assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260924"
     }
    ],
    "sala": {
