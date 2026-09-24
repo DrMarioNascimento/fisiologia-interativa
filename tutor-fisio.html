@@ -91,8 +91,8 @@
       <div class="modal-body"><img id="mapImage" alt="Mapa mental do eixo"></div>
     </div>
   </div>
-  <script src="tutor-fisio-data.js?v=7"></script>
-  <script src="tutor-desafios-extra.js?v=2"></script>
+  <script src="tutor-fisio-data.js?v=8"></script>
+  <script src="tutor-desafios-extra.js?v=3"></script>
   <script>
     let active = 'celular';
     const config = window.fisioterapiaTutor;
@@ -122,8 +122,7 @@
       const list=config.modules.filter(item=>item.group===active);
       const escapeRoom=config.escapeRooms?.[active];
       const plantao=config.escapeRooms?.uti;
-      const extra=active==='integracao' && plantao ? `<article class="card escape-card"><span class="meta">Desafio de fechamento</span><h2>ESCAPE ROOM</h2><p class="escape-call">Plantão de UTI — o monitor mostra o estado; você decide.</p><p>${esc(plantao.goal)}</p><div class="actions"><a class="btn btn-primary" href="${esc(plantao.href)}?percurso=fisioterapia" aria-label="Abrir ${esc(plantao.title)}">Abrir o plantão</a></div></article>` : '';
-      const escapeCard=(escapeRoom ? `<article class="card escape-card"><span class="meta">Desafio de fechamento</span><h2>ESCAPE ROOM</h2><p class="escape-call">Liberte seu conhecimento — ou fique preso na sala.</p><p>Use o que aprendeu nesta unidade para abrir os cadeados antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="${esc(escapeRoom.href)}" aria-label="Entrar em ${esc(escapeRoom.title)}">Entrar no escape room</a></div></article>` : '')+extra;
+      const escapeCard=(escapeRoom ? `<article class="card escape-card"><span class="meta">Desafio de fechamento</span><h2>ESCAPE ROOM</h2><p class="escape-call">Liberte seu conhecimento — ou fique preso na sala.</p><p>Use o que aprendeu nesta unidade para abrir os cadeados antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="${esc(escapeRoom.href)}" aria-label="Entrar em ${esc(escapeRoom.title)}">Entrar no escape room</a></div></article>` : '');
       cardsEl.innerHTML=list.map((item,moduleIndex)=>{
         const maps=groupMaps(item.group);
         const mapButtons=maps.map((map,index)=>`<button class="btn btn-ghost" type="button" data-map="${index}">${maps.length>1 ? 'Mapa '+(index+1) : 'Ver mapa'}</button>`).join('');
@@ -167,6 +166,7 @@
   </script>
   <script src="tutor-ligacao-fuga.js?v=4"></script>
   <script src="tutor-widget.js?v=20"></script>
+  <script src="tutor-escape-chat.js?v=6"></script>
   <script src="inicio/tutor-tema.js?v=1"></script>
 </body>
 </html>

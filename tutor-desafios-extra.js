@@ -7,7 +7,7 @@
   var atleta = {
     group: 'integracao',
     title: 'Box do Atleta',
-    href: 'atleta-box.html',
+    href: 'atleta-box.html?percurso=educacao-fisica',
     goal: 'Conduzir um atleta em Ironman, maratona, ultra ou aventura: ritmo, hidratação, sódio, calor e carboidrato acoplados.',
     steps: [
       'Escolha o caso e leia o que o atleta pede.',
@@ -25,7 +25,7 @@
 
   var uti = {
     group: 'integracao',
-    title: 'ESCAPE ROOM — Plantão de UTI',
+    title: 'UTI fisiológica',
     href: 'fisioterapia/uti-fisiologica.html',
     goal: 'Plantão de 6 h: água, eletrólitos, circulação, ventilação, ácido-base e rim num único paciente.',
     steps: [
@@ -42,53 +42,24 @@
     ]
   };
 
-  if (typeof escapeRooms === 'object' && escapeRooms) {
-    escapeRooms.atleta = { title: 'BOX DO ATLETA', href: 'atleta-box.html', goal: atleta.goal };
-  }
-  if (typeof modules !== 'undefined' && Array.isArray(modules) && !hasHref(modules, atleta.href)) {
-    modules.push(atleta);
-  }
+  // Cada curso tem o seu desafio de fechamento na integração:
+  // Educação Física → Box do Atleta; Fisioterapia → UTI fisiológica.
+  var isFisio = location.pathname.endsWith('/tutor-fisio.html') ||
+    location.pathname.indexOf('/fisioterapia/') >= 0 ||
+    new URLSearchParams(location.search).get('percurso') === 'fisioterapia';
 
-  if (window.fisioterapiaTutor) {
+  if (!isFisio) {
+    if (typeof escapeRooms === 'object' && escapeRooms) {
+      escapeRooms.atleta = { title: 'Box do Atleta', href: 'atleta-box.html?percurso=educacao-fisica', goal: atleta.goal };
+    }
+    if (typeof modules !== 'undefined' && Array.isArray(modules) && !hasHref(modules, atleta.href)) {
+      modules.push(atleta);
+    }
+  } else if (window.fisioterapiaTutor) {
     window.fisioterapiaTutor.escapeRooms = window.fisioterapiaTutor.escapeRooms || {};
     window.fisioterapiaTutor.escapeRooms.uti = { title: uti.title, href: uti.href, goal: uti.goal };
     if (Array.isArray(window.fisioterapiaTutor.modules) && !hasHref(window.fisioterapiaTutor.modules, uti.href)) {
       window.fisioterapiaTutor.modules.push(uti);
     }
   }
-
-  function integracaoAtiva() {
-    var btn = document.querySelector('.axis[aria-pressed="true"]');
-    if (!btn) return false;
-    return btn.getAttribute('data-id') === 'integracao' || btn.getAttribute('data-axis') === 'integracao';
-  }
-
-  function card(title, lead, href, label) {
-    return '<article class="card escape-card" data-desafio-extra="1">' +
-      '<span class="meta">Desafio de fechamento</span>' +
-      '<h2>' + title + '</h2>' +
-      '<p class="escape-call">' + lead + '</p>' +
-      '<div class="actions"><a class="btn btn-primary" href="' + href + '">' + label + '</a></div>' +
-      '</article>';
-  }
-
-  function pintar() {
-    var grid = document.querySelector('#cards');
-    if (!grid || !integracaoAtiva()) return;
-    if (grid.querySelector('[data-desafio-extra="1"]')) return;
-    var html = '';
-    if (typeof escapeRooms === 'object' && escapeRooms && escapeRooms.atleta) {
-      html += card('BOX DO ATLETA', 'Prova longa — o box mostra o estado; você decide o plano.', 'atleta-box.html', 'Abrir o box');
-    }
-    if (window.fisioterapiaTutor && window.fisioterapiaTutor.escapeRooms && window.fisioterapiaTutor.escapeRooms.uti) {
-      html += card('ESCAPE ROOM', 'Plantão de UTI — o monitor mostra o estado; você decide.', 'fisioterapia/uti-fisiologica.html?percurso=fisioterapia', 'Abrir o plantão');
-    }
-    if (html) grid.insertAdjacentHTML('beforeend', html);
-  }
-
-  document.addEventListener('click', function (event) {
-    if (event.target.closest && event.target.closest('.axis')) setTimeout(pintar, 50);
-  });
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(pintar, 80); });
-  else setTimeout(pintar, 80);
 })();

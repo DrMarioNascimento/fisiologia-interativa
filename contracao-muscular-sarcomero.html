@@ -83351,6 +83351,6 @@ $('play').onclick=()=>{if(time>=30)time=0;running=true;last=0;$('play').textCont
 function setZoom(v){zoom=Math.max(1,Math.min(5,v));$('composition').style.width=zoom===1?'100%':($('large').clientWidth*zoom)+'px';$('composition').style.maxWidth='none'}
 $('expand').onclick=()=>{$('dialog').showModal();$('large').appendChild($('composition'));setZoom(1)};$('plus').onclick=()=>setZoom(zoom+.5);$('minus').onclick=()=>setZoom(zoom-.5);$('fit').onclick=()=>setZoom(1);$('close').onclick=()=>$('dialog').close();$('dialog').onclose=()=>{$('home').appendChild($('composition'));$('composition').style.width='100%';zoom=1};select(0);update();requestAnimationFrame(tick);
 </script>
-<script src="tutor-ef-data.js?v=18"></script>
+<script src="tutor-ef-data.js?v=19"></script>
 <script src="tutor-widget.js?v=20"></script>
 </html>
