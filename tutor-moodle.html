@@ -66,7 +66,8 @@
     (function(){
       const box=document.getElementById('messages'),input=document.getElementById('input');
       const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').trim();
-      const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c]));
+      const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+      const aiMarkup=s=>esc(s).replace(/^[ \t]*[*-][ \t]+/gm,'• ').replace(/^[ \t]*#{1,6}[ \t]*(.+)$/gm,'<b>$1</b>').replace(/\*\*([^*\n]+?)\*\*/g,'<b>$1</b>').replace(/(^|[\s(])\*([^*\s][^*\n]*?)\*(?=[\s).,;:!?]|$)/gm,'$1<i>$2</i>');
       const base='https://drmarionascimento.github.io/fisiologia-interativa/';
       const isFisio=new URLSearchParams(location.search).get('percurso')==='fisioterapia';
       const course=isFisio?'fisio':'ef';
@@ -93,7 +94,7 @@
             body:JSON.stringify({course,module:module?.href||null,message:q,history})});
           const data=await response.json();controller.signal.throwIfAborted();
           if(!response.ok||typeof data.text!=='string'||!data.text.trim())throw new Error(response.status===429?'limit':'unavailable');
-          pending.textContent=data.text+(data.truncated?'\n\nA resposta atingiu o limite. Peça uma explicação mais curta.':'');
+          pending.innerHTML=aiMarkup(data.text+(data.truncated?'\n\nA resposta atingiu o limite. Peça uma explicação mais curta.':''));
           history=[...history,{role:'user',text:q},{role:'model',text:data.text.slice(0,6000)}].slice(-6);
         }catch(error){
           if(controller.signal.aborted&&!controller.timedOut)pending.textContent='Resposta cancelada.';

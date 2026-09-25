@@ -39,6 +39,12 @@
 
   const normalize = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9+]+/g, ' ').trim();
   const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  // Converte o Markdown simples do Gemini (**negrito**, *itálico*, listas, títulos) em HTML, sempre a partir de texto já escapado.
+  const aiMarkup = value => escapeHtml(value)
+    .replace(/^[ \t]*[*-][ \t]+/gm, '• ')
+    .replace(/^[ \t]*#{1,6}[ \t]*(.+)$/gm, '<b>$1</b>')
+    .replace(/\*\*([^*\n]+?)\*\*/g, '<b>$1</b>')
+    .replace(/(^|[\s(])\*([^*\s][^*\n]*?)\*(?=[\s).,;:!?]|$)/gm, '$1<i>$2</i>');
   const allModules = () => courseConfig?.modules || ((typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : []);
   const allMaps = () => courseConfig?.maps || ((typeof maps !== 'undefined' && maps) ? maps : {});
   const mapsForGroup = group => {
@@ -291,7 +297,7 @@
       controller.signal.throwIfAborted();
       if (!response.ok || typeof data.text !== 'string' || !data.text.trim()) throw new Error(response.status === 429 ? 'limit' : 'unavailable');
       pending.classList.add('tutor-ai-answer');
-      pending.textContent = data.text + (data.truncated ? '\n\nA resposta atingiu o limite. Peça uma explicação mais curta de um ponto específico.' : '');
+      pending.innerHTML = aiMarkup(data.text + (data.truncated ? '\n\nA resposta atingiu o limite. Peça uma explicação mais curta de um ponto específico.' : ''));
       aiHistory = [...aiHistory, {role:'user',text}, {role:'model',text:data.text.slice(0,6000)}].slice(-6);
     } catch (error) {
       if (controller.signal.aborted && !controller.timedOut) pending.textContent = 'Resposta cancelada.';

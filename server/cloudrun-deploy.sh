@@ -2,6 +2,7 @@
 # Publica a API do tutor no Cloud Run, num projeto próprio (separado de outros serviços).
 # Executar no Cloud Shell: bash cloudrun-deploy.sh
 # Para atualizar depois: PROJECT=<id-do-projeto> bash cloudrun-deploy.sh
+# Para trocar a chave do Gemini: NOVA_CHAVE=1 PROJECT=<id-do-projeto> bash cloudrun-deploy.sh
 # Nunca coloque a chave do Gemini neste arquivo; ela é pedida com entrada oculta.
 set -euo pipefail
 
@@ -27,11 +28,23 @@ echo "== Ativando serviços"
 gcloud services enable run.googleapis.com cloudbuild.googleapis.com \
   artifactregistry.googleapis.com secretmanager.googleapis.com
 
-if ! gcloud secrets describe gemini-api-key >/dev/null 2>&1; then
-  read -rsp "Cole a chave do Gemini (não aparece na tela) e tecle Enter: " KEY; echo
-  test -n "$KEY"
-  printf %s "$KEY" | gcloud secrets create gemini-api-key --data-file=- --replication-policy=automatic
+# A chave é pedida na primeira publicação ou quando NOVA_CHAVE=1 (troca de chave).
+# Ela só é gravada depois que o próprio Gemini a aceita, para evitar salvar texto colado por engano.
+if ! gcloud secrets describe gemini-api-key >/dev/null 2>&1 || [ "${NOVA_CHAVE:-0}" = "1" ]; then
+  while true; do
+    read -rsp "Cole a chave do Gemini (não aparece na tela) e tecle Enter: " KEY; echo
+    CODE=$(curl -s -o /dev/null -w "%{http_code}" -H "x-goog-api-key: $KEY" \
+      https://generativelanguage.googleapis.com/v1beta/models || true)
+    if [ "$CODE" = "200" ]; then break; fi
+    echo "O Gemini recusou esta chave (HTTP $CODE). Nada foi gravado; tente de novo (Ctrl+C cancela)."
+  done
+  if gcloud secrets describe gemini-api-key >/dev/null 2>&1; then
+    printf %s "$KEY" | gcloud secrets versions add gemini-api-key --data-file=-
+  else
+    printf %s "$KEY" | gcloud secrets create gemini-api-key --data-file=- --replication-policy=automatic
+  fi
   unset KEY
+  echo "== Chave validada e gravada."
 fi
 
 NUMBER=$(gcloud projects describe "$PROJECT" --format='value(projectNumber)')
