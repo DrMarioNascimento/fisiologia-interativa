@@ -41,6 +41,8 @@ Sem autorização prévia, expressa e escrita do titular, não é permitido:
 - remover, ocultar ou alterar avisos de autoria e créditos;
 - vender, sublicenciar, ceder ou explorar economicamente o projeto;
 - utilizar o projeto ou suas partes para fins comerciais;
+- utilizar o projeto ou suas partes para treinar, ajustar ou avaliar sistemas
+  de inteligência artificial;
 - apresentar o projeto, integral ou parcialmente, como criação de outra pessoa
   ou instituição.
 
@@ -49,6 +51,18 @@ Sem autorização prévia, expressa e escrita do titular, não é permitido:
 Qualquer uso não previsto na seção de uso permitido depende de autorização
 individual do titular. Uma autorização concedida para determinada finalidade
 não implica autorização para outras formas de utilização.
+
+## Tutor com respostas geradas por IA
+
+O código do tutor, incluindo a API em `server/`, os roteiros, os catálogos e as
+instruções enviadas ao modelo, integra o projeto e está sujeito a estas mesmas
+condições.
+
+As respostas personalizadas são geradas por um serviço de inteligência
+artificial de terceiros (Google Gemini), cujo uso também se submete aos termos
+do provedor. Essas respostas podem conter imprecisões, não foram revisadas
+individualmente pelo autor e não substituem o material didático, as aulas nem
+orientação profissional.
 
 ## Ausência de garantia
 

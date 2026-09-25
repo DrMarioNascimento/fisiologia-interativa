@@ -28,6 +28,12 @@ A Fisioterapia usa o mesmo motor com `inicio/dados-fi.js` (em `fisioterapia/inde
 
 Os tutores (`tutor-ef.html` e `tutor-fisio.html`) seguem o mesmo padrão visual, com `inicio/tutor-tema.css` e `inicio/tutor-tema.js`. Na página inicial, o tutor abre pelo botão "Estudar … com o tutor" da unidade escolhida, já no eixo correspondente. O arquivo `tutor-ligacao-fuga.js` liga o tutor às salas da Fisiologia em Fuga e à Operação Secreta.
 
+### Tutor com IA (opcional)
+
+Os tutores podem oferecer **respostas personalizadas com IA** (Gemini), ativadas voluntariamente pelo estudante no avatar. Sem a IA, o tutor guiado, os mapas e as questões continuam funcionando localmente. Não há conta de aluno nem histórico de conversas: só as últimas mensagens ficam na memória da página.
+
+A API do tutor roda à parte, no Cloud Run (`server/tutor.cjs`, imagem definida no `Dockerfile`); a chave fica no Secret Manager e nunca no repositório. `tutor-moodle.html` é a versão do tutor para incorporação no Moodle. Instalação, limites de uso e publicação estão em [TUTOR-IA.md](TUTOR-IA.md).
+
 ### Fisiologia em Fuga
 
 Cada unidade termina com uma sala de fuga do projeto [Fisiologia em Fuga](https://drmarionascimento.github.io/fisiologia-em-fuga/), acessível pela roleta abaixo do mapa e pelo cadeado da unidade na lista. A **Operação Secreta** reúne todas as unidades e pede confirmação antes de abrir. Os desafios de fechamento são o **Box do Atleta** (Educação Física) e a **UTI fisiológica** (Fisioterapia). As imagens das salas ficam em `assets/salas/` (miniaturas quadradas) e `assets/salas/grande/` (versões verticais usadas na vitrine).
@@ -135,9 +141,10 @@ Este projeto tem finalidade exclusivamente **didática e educacional**. Os simul
 
 - aplicação web estática;
 - tecnologias: HTML, CSS e JavaScript;
-- não utiliza banco de dados;
+- não utiliza banco de dados nem conta de usuário;
 - não requer instalação de dependências para uso (os testes automatizados em `tests/` usam Playwright apenas no desenvolvimento);
 - não requer compilação ou processo de build;
+- única parte com servidor: a API opcional do tutor com IA (Node.js no Cloud Run, ver [TUTOR-IA.md](TUTOR-IA.md)); o site continua estático e funciona sem ela;
 - índices de acesso: `index.html` (Educação Física) e `fisioterapia/index.html` (Fisioterapia);
 - simuladores distribuídos em arquivos HTML independentes;
 - recursos visuais organizados na pasta `assets/`;
@@ -154,7 +161,11 @@ fisiologia-interativa/
 ├── *.html                     # simuladores independentes
 ├── tutor-ef.html              # tutor da Educação Física
 ├── tutor-fisio.html           # tutor da Fisioterapia
+├── tutor-moodle.html          # tutor para incorporação no Moodle
 ├── tutor-*.js / tutor-*.css   # dados e componentes dos tutores
+├── TUTOR-IA.md                # tutor com IA: configuração e publicação
+├── Dockerfile                 # imagem da API do tutor (Cloud Run)
+├── server/                    # API do tutor com IA e scripts de publicação
 ├── inicio/                    # motor das páginas iniciais e tema dos tutores
 │   ├── dados-ef.js / dados-fi.js
 │   ├── celula-mapa.js / lista.js / inicio.css
@@ -163,6 +174,7 @@ fisiologia-interativa/
 │   ├── index.html             # página inicial da Fisioterapia
 │   ├── index-legado.html      # página inicial anterior (Fisio)
 │   └── uti-fisiologica.html   # desafio de fechamento da Fisioterapia
+├── atleta-box.html            # desafio de fechamento da Educação Física
 ├── assets/
 │   ├── maps/                  # mapas mentais
 │   ├── salas/                 # imagens das salas da Fisiologia em Fuga
