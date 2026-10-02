@@ -178,7 +178,8 @@ export function prepararParaRA(raiz) {
       o.geometry.deleteAttribute('color'); // já está na paleta
       o.material = o.material.clone();
       o.material.vertexColors = false;
-      o.material.color = new THREE.Color(0xffffff); // a paleta é que pinta
+      // A textura conserva as cores por vértice; o material clonado conserva
+      // o tom de cada lobo, como o produto cor × material mostrado na tela.
       o.material.map = tex;
       o.material.needsUpdate = true;
       conta.assadas++; conta.cores += paleta.length;
