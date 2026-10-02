@@ -6,7 +6,8 @@
     "test:tutor": "node --test tests/tutor/server.test.cjs",
     "test:tutor:browser": "playwright test --config=tests/tutor/playwright.config.cjs",
     "test:visual": "playwright test",
-    "test:intencao": "playwright test tests/visual/da-intencao-ao-movimento.spec.js"
+    "test:intencao": "playwright test tests/visual/da-intencao-ao-movimento.spec.js",
+    "test:ra": "npm --prefix ra test"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0"

@@ -1,0 +1,99 @@
+{
+  "origem": "DrMarioNascimento/lab-ra/pleura",
+  "revisao": "f290ff9f5fa619b4ac828877171674e7d66c4e1c",
+  "arquivos": [
+    {
+      "path": "README.md",
+      "sha256": "d365f119a7b1100fd8aaf9e80cd6672dfce9ec6e68cc42ea4ff2339bedbdf803"
+    },
+    {
+      "path": "assets/ATRIBUICAO.md",
+      "sha256": "7cd73f887ad21f2c495024db0c320b82b18510240b26c233489e698df07c1037"
+    },
+    {
+      "path": "assets/coracao.glb",
+      "sha256": "fcb3c1036fe59dfdcc1c30917dbdaa8fbd52c858e6ba3cadaf126b44ccca4b5b"
+    },
+    {
+      "path": "brand/mestre-lap.webp",
+      "sha256": "6abb9a0c87f21b1b175612e69b95d3f45d9a49c1ed381e4fa03025d80e3609e7"
+    },
+    {
+      "path": "brand/orientador.webp",
+      "sha256": "82e649ba2bd4148a51da3fdeddc9f28c9ca7d3c71a78fb40569bc7e456ed141a"
+    },
+    {
+      "path": "cores-para-ra.js",
+      "sha256": "423815349e6057b92db0568b77caa885699bb21022f2997c39da977c4b6b34cd"
+    },
+    {
+      "path": "fisica-cardiaca.js",
+      "sha256": "5eb636d5b72c0ff8c1a683ce16ddd83037324a670cd25de3478feee35019914b"
+    },
+    {
+      "path": "index.html",
+      "sha256": "a0c0cddd2fb74458559394bd5883d6b9ceef547480b1892fec8d072be1dcd9fe"
+    },
+    {
+      "path": "laboratorio.css",
+      "sha256": "628c15d0d7b3af805304793f6d8d80384cf90dbc849291b2735b4f82a3a9e5b7"
+    },
+    {
+      "path": "package.json",
+      "sha256": "465977f5f793f8be68d41eeb5dd4bf5765ffaad413b5dc1b47ac717071f12c97"
+    },
+    {
+      "path": "pleura/ANATOMIA.md",
+      "sha256": "5bbb823671df2562c1ccff0dbc85b25d5395a0c9292f946f3a3116fc5cf97ec4"
+    },
+    {
+      "path": "pleura/AUDITORIA-FISIOLOGIA.md",
+      "sha256": "e881185f976f81cfd4477c6babb0c3b3e9141bb247db429ba97c59ce5b8cc5b5"
+    },
+    {
+      "path": "pleura/anatomia.js",
+      "sha256": "90f94113e9232c6b9e7d4d29d68f051e36b75eb9dd98e955e27a8ce1b523ee23"
+    },
+    {
+      "path": "pleura/app.js",
+      "sha256": "0cbfde7aea52559c1025c5302270f316034679951bb6dbeeec28b032666d8be6"
+    },
+    {
+      "path": "pleura/estados.js",
+      "sha256": "31f1e9860895e212076e6fde04c3073729907f27f9f47f2f97c0055b962255c3"
+    },
+    {
+      "path": "pleura/fisica.js",
+      "sha256": "ffd4606c2a16c7a6d36bc2f70798a6a920af0e3a80c8ddf142c89cdb67bd75b0"
+    },
+    {
+      "path": "pleura/grafico.js",
+      "sha256": "0abc251c14432d6a747c817e090d1afc4b1744f4ac166ee144250a71bbd62666"
+    },
+    {
+      "path": "pleura/index.html",
+      "sha256": "213a26cdd90e246fe261dda1e273663983878d8b3c8a10b58a907b6c4c12cc76"
+    },
+    {
+      "path": "pleura/modelos.js",
+      "sha256": "f2b3f9f2147d9d26f13cdec7e13d2396b19dd90eba09705d9ce53ab8bb342565"
+    },
+    {
+      "path": "pleura/movimento-costal.js",
+      "sha256": "c0104cd45f7908ba37bd4059b3c5c183f25a695f78cb90419bd07be774ff6b76"
+    },
+    {
+      "path": "pleura/ra.js",
+      "sha256": "ae68b6191b50012323fb8fba08cc96acf5cf9b6b07663dfbd7f1493106d955fd"
+    },
+    {
+      "path": "pleura/style.css",
+      "sha256": "d8ab83c081b9fd7acfdcd8c3836910674db29db3256ad76702c6ff75939b9b7c"
+    },
+    {
+      "path": "tutor-origem.js",
+      "sha256": "d17dd0acbfb6611edb35a5fb5c2e5c1de311379701e02c06c2d8803e0ca713d2"
+    }
+  ],
+  "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais."
+}

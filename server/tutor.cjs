@@ -124,9 +124,10 @@ function createTutorServer(options = {}) {
       // Local preview only: expose teaching assets, never arbitrary server files or secrets.
       if (env.TUTOR_SERVE_SITE !== '1' || !['GET', 'HEAD'].includes(req.method)) throw failure(404, 'not_found');
       let relative = decodeURIComponent(url.pathname).replace(/^\/+/, '') || 'tutor-ef.html';
+      if (relative.startsWith('ra/') && relative.endsWith('/')) relative += 'index.html';
       const extension = path.extname(relative).toLowerCase();
       const mime = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
-        '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.pdf': 'application/pdf', '.mp3': 'audio/mpeg' };
+        '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.pdf': 'application/pdf', '.mp3': 'audio/mpeg', '.glb': 'model/gltf-binary' };
       if (!mime[extension] || relative.split('/').some(s => s.startsWith('.') || s.includes('\\')) ||
           /^(server|tests|node_modules|docs)\//.test(relative)) throw failure(404, 'not_found');
       const file = path.resolve(ROOT, relative);
