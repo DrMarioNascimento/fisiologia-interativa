@@ -86,7 +86,7 @@ for(const course of ['ef','fisio']) test(`Moodle ${course} iframe: shared API, c
   const catalog=loadCatalog(require('node:path').resolve(__dirname,'../..'));
   const extraHref = course === 'ef' ? 'atleta-box.html' : 'fisioterapia/uti-fisiologica.html';
   const expected = catalog[course].map(m=>'https://drmarionascimento.github.io/fisiologia-interativa/'+m.href+(course==='fisio'?'?percurso=fisioterapia':''));
-  expected.push('https://drmarionascimento.github.io/fisiologia-interativa/'+extraHref+(course==='fisio'?'?percurso=fisioterapia':''));
+  expected.push('https://drmarionascimento.github.io/fisiologia-interativa/'+extraHref+(course==='fisio'?'?percurso=fisioterapia':'?percurso=educacao-fisica'));
   expect(actual).toEqual(expected);
   await frame.locator('#aiEnabled').check();
   await frame.locator('#input').fill('Por que o sódio entra na célula?');await frame.locator('.send').click();
@@ -105,4 +105,30 @@ for(const course of ['ef','fisio']) test(`Moodle ${course} iframe: shared API, c
   await page.locator('iframe').evaluate(el=>el.contentWindow.location.reload());
   await expect(frame.locator('#aiEnabled')).not.toBeChecked();
   await expect(frame.locator('.ai-response')).toHaveCount(0);
+});
+
+for(const course of ['ef','fisio']) test(`${course}: todas as unidades destacam Questões e abrem Pleura independente`,async({page})=>{
+ await page.route('**/api/tutor/status',r=>r.fulfill({json:{enabled:false}}));
+ await page.goto(`${base}/tutor-${course}.html`);
+ const axes=await page.locator('#axes .axis').count();
+ for(let i=0;i<axes;i++) {
+  await page.locator('#axes .axis').nth(i).click();
+  const cards=page.locator('#cards'),questions=cards.locator('[data-open]'),simulators=cards.getByRole('link',{name:'Abrir simulador',exact:true});
+  expect(await questions.count()).toBe(await simulators.count());expect(await questions.count()).toBeGreaterThan(0);
+  for(const q of await questions.all())await expect(q).toHaveClass(/btn-primary/);
+  for(const sim of await simulators.all())await expect(sim).toHaveClass(/btn-ghost/);
+  const styles=await cards.evaluate(el=>({q:getComputedStyle(el.querySelector('[data-open]')).backgroundImage,sim:getComputedStyle([...el.querySelectorAll('a')].find(a=>a.textContent==='Abrir simulador')).backgroundImage}));expect(styles.q).not.toBe(styles.sim);
+  await expect(cards.locator('.ra-card')).toHaveCount(1);
+  await expect(cards.locator('.ra-card h2')).toHaveText('RA - Realidade Aumentada');
+  await expect(cards.locator('.ra-call')).toContainText('viagem de aprendizado incrível');
+  const first=questions.first();await first.click();await expect(first.locator('..').locator('..').locator('.panel')).toBeVisible();await first.click();
+ }
+ const link=page.locator('.ra-card a');await expect(link).toHaveAttribute('target','_blank');
+ await page.context().route('**/ra/pleura/app.js*',r=>r.fulfill({body:'',contentType:'text/javascript'}));
+ await page.context().route('**/model-viewer.min.js',r=>r.fulfill({body:'',contentType:'text/javascript'}));
+ const popupPromise=page.waitForEvent('popup');await link.click();const popup=await popupPromise;await popup.waitForLoadState('domcontentloaded');
+ expect(new URL(popup.url()).pathname).toBe('/ra/pleura/');expect(new URL(popup.url()).searchParams.get('percurso')).toBe(course==='fisio'?'fisioterapia':'educacao-fisica');
+ await expect(popup.locator('a.small-button[data-voltar-tutor]')).toHaveAttribute('href',`${base}/tutor-${course}.html`);
+ expect(await popup.getByRole('link',{name:'Bancadas',exact:true}).count()).toBe(0);
+ await expect(link).toHaveAttribute('rel','noopener noreferrer');await popup.close();
 });

@@ -62,7 +62,7 @@ html.tema-fi [data-id="osteoarticular"],html.tema-fi [data-axis="osteoarticular"
 html.tema-fi [data-id="respiratorio"],html.tema-fi [data-axis="respiratorio"]{--c:#63B8FF} html.tema-fi [data-id="integracao"],html.tema-fi [data-axis="integracao"]{--c:#3FE0C8}
 
 /* cartões com o mesmo acabamento da página inicial */
-html.tema-fi .grid{grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;align-items:start}
+html.tema-fi .grid{grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:14px;align-items:start}
 html.tema-fi .card{position:relative;overflow:hidden;border:1px solid var(--line);border-top-color:rgba(200,235,240,.26);background:var(--card);color:var(--ink);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 0 rgba(0,0,0,.35),0 14px 30px rgba(0,0,0,.42)}
 html.tema-fi .card::before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);box-shadow:0 0 14px color-mix(in srgb,var(--c) 55%,transparent)}
@@ -111,3 +111,10 @@ html.tema-fi .tutor-ai button{color:var(--ink);background:#111a23;border-color:v
 html.tema-fi .brand .fi-av{display:block!important}
 html.tema-fi .brand .bt{display:flex!important}
 @media(max-width:720px){html.tema-fi .brand .bt > span{display:none!important}}
+
+/* Realidade aumentada: o mesmo destaque dos desafios de fechamento. */
+html.tema-fi .ra-card{--c:var(--gold);min-height:210px;align-content:end;border-color:rgba(232,176,92,.5);background:radial-gradient(ellipse at 100% 0%,rgba(99,184,255,.13),transparent 65%),#120f0b}
+html.tema-fi .ra-card h2{font-size:clamp(1.45rem,4vw,2rem);line-height:1.15}
+html.tema-fi .ra-card .ra-call{font-size:1.05rem;font-weight:800}
+html.tema-fi .ra-card .btn-primary{color:#2a1a04;border-color:#f3d27a;background:linear-gradient(180deg,#f7dc98 0%,#E8B05C 50%,#b8813a 100%)}
+html.tema-fi .ra-card .btn{max-width:100%;min-height:44px;height:auto;padding:10px 16px;text-align:center}
