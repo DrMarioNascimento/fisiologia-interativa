@@ -458,12 +458,16 @@ button:focus-visible,input:focus-visible,a:focus-visible {
 .legenda-fresta li b {
   box-shadow:inset 0 0 0 3px var(--tecido)
 }
-.credito-coracao {
-  font:.67rem/1.65 var(--body);
+.referencias-modelo {
+  display:grid;
+  gap:12px;
+  font:.75rem/1.65 var(--body);
   color:var(--mist);
+}
+.referencias-modelo p {
   margin:0
 }
-.credito-coracao a {
+.referencias-modelo a {
   color:#9ce4ed;
   text-underline-offset:3px
 }
@@ -504,7 +508,7 @@ button:focus-visible,input:focus-visible,a:focus-visible {
     grid-template-columns:repeat(2,minmax(0,1fr));
     align-items:start
   }
-  #caixaPostura,.ra-box,.credito-coracao {
+  #caixaPostura,.ra-box,.referencias-modelo {
     grid-column:1/-1
   }
 }

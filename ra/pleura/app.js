@@ -226,7 +226,6 @@ function irAoNivel(n) {
   $('caixaZonas').hidden = atual !== 4;
   $('legendaFresta').hidden = atual !== 0;
   $('frestaPontos').hidden = atual !== 0;
-  $('creditoCoracao').hidden = atual !== 1 && atual !== 2;
   enquadrar(atual);
   atualizar(); prepararRA();
 }
