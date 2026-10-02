@@ -15,6 +15,6 @@
     var a = e.target.closest('a[href]'); if (!a || a.closest('header')) return;
     var h = a.getAttribute('href') || '';
     if (h.charAt(0) === '#') return;
-    a.target = '_blank'; a.rel = 'noopener';
+    a.target = '_blank'; a.rel = 'noopener noreferrer';
   }, true);
 })();

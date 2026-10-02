@@ -61,7 +61,7 @@
     @media (max-width:720px) { .brand span { display:none; } h1 { font-size:1.85rem; } }
   </style>
   <link rel="stylesheet" href="tutor-widget.css?v=5">
-  <link rel="stylesheet" href="inicio/tutor-tema.css?v=2">
+  <link rel="stylesheet" href="inicio/tutor-tema.css?v=ra-20261002">
 </head>
 <body>
   <div class="fi-ambient" aria-hidden="true"><span class="cel" style="--x:3%;--y:22%;--s:54px;--d:17s"></span><span class="mol" style="--x:91%;--y:14%;--s:21px;--o:.3;--d:14s"></span><span class="cel" style="--x:94%;--y:52%;--s:78px;--o:.18;--d:22s"></span><span class="mol" style="--x:6%;--y:74%;--s:17px;--o:.3;--d:13s"></span><span class="cel" style="--x:76%;--y:86%;--s:43px;--d:19s"></span></div>
@@ -91,6 +91,7 @@
       <div class="modal-body"><img id="mapImage" alt="Mapa mental do eixo"></div>
     </div>
   </div>
+  <script src="tutor-ra-card.js?v=ra-20261002"></script>
   <script src="tutor-fisio-data.js?v=9"></script>
   <script src="tutor-desafios-extra.js?v=3"></script>
   <script>
@@ -127,8 +128,8 @@
         const maps=groupMaps(item.group);
         const mapButtons=maps.map((map,index)=>`<button class="btn btn-ghost" type="button" data-map="${index}">${maps.length>1 ? 'Mapa '+(index+1) : 'Ver mapa'}</button>`).join('');
         const questions=(item.qs||[]).map((question,questionIndex)=>`<div class="q"><b>${questionIndex+1}. ${esc(question.q)}</b><div class="opts">${question.opts.map((option,optionIndex)=>`<button type="button" data-option="${optionIndex}" data-answer="${question.a}">${String.fromCharCode(65+optionIndex)}) ${esc(option)}</button>`).join('')}</div><p class="feedback" data-why="${esc(question.why)}"></p></div>`).join('');
-        return `<article class="card" data-module="${moduleIndex}"><span class="meta">${esc(config.axisNames[item.group])}</span><h2>${esc(item.title)}</h2><p>${esc(item.goal)}</p><ol class="steps">${(item.steps||[]).map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="actions">${mapButtons}<a class="btn btn-primary" href="${esc(item.href)}?percurso=fisioterapia">Abrir simulador</a><button class="btn btn-ghost" type="button" data-open>Questões</button></div><div class="panel">${questions}</div></article>`;
-      }).join('')+escapeCard;
+        return `<article class="card" data-module="${moduleIndex}"><span class="meta">${esc(config.axisNames[item.group])}</span><h2>${esc(item.title)}</h2><p>${esc(item.goal)}</p><ol class="steps">${(item.steps||[]).map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="actions">${mapButtons}<a class="btn btn-ghost" href="${esc(item.href)}?percurso=fisioterapia">Abrir simulador</a><button class="btn btn-primary" type="button" data-open>Questões</button></div><div class="panel">${questions}</div></article>`;
+      }).join('')+escapeCard+window.cardRealidadeAumentada('fisioterapia');
     }
     axesEl.addEventListener('click',event=>{
       const button=event.target.closest('[data-axis]');
@@ -167,6 +168,6 @@
   <script src="tutor-ligacao-fuga.js?v=4"></script>
   <script src="tutor-widget.js?v=21"></script>
   <script src="tutor-escape-chat.js?v=6"></script>
-  <script src="inicio/tutor-tema.js?v=1"></script>
+  <script src="inicio/tutor-tema.js?v=ra-20261002"></script>
 </body>
 </html>
