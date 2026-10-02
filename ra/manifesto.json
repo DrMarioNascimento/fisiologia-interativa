@@ -4,11 +4,11 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "9c36987908440f66e6e9cefc8fe67fb72cc7cdd70ce4aa85d9d82464ad6cd352"
+      "sha256": "d365f119a7b1100fd8aaf9e80cd6672dfce9ec6e68cc42ea4ff2339bedbdf803"
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "4010185f82076147e717cd25a528135e0049cb508d24d3eb72c23502b05449e6"
+      "sha256": "7cd73f887ad21f2c495024db0c320b82b18510240b26c233489e698df07c1037"
     },
     {
       "path": "assets/coracao.glb",
@@ -24,75 +24,76 @@
     },
     {
       "path": "cores-para-ra.js",
-      "sha256": "723cdd5ea2c2394e6a0b3b7c3c6a589f5515c7e347e117750684a1f12a4ac15c"
+      "sha256": "b9fe0340d28ba6cdb8d2d60e5eba0f34e096ea66e1b246bed448faadf556affc"
     },
     {
       "path": "fisica-cardiaca.js",
-      "sha256": "56eee6a5e4e49575a3ae04cfa7da8627cbbb8b62801f0c6d500c4ed9c654cde7"
+      "sha256": "5eb636d5b72c0ff8c1a683ce16ddd83037324a670cd25de3478feee35019914b"
     },
     {
       "path": "index.html",
-      "sha256": "e40dcb683f59d584b2ad0cb440718174825f6847564a20ff662b72adba568d55"
+      "sha256": "a0c0cddd2fb74458559394bd5883d6b9ceef547480b1892fec8d072be1dcd9fe"
     },
     {
       "path": "laboratorio.css",
-      "sha256": "9cf86ad9e699e73efe73199c75fef1004709eca0f4d8549cbad70da3dc583f97"
+      "sha256": "628c15d0d7b3af805304793f6d8d80384cf90dbc849291b2735b4f82a3a9e5b7"
     },
     {
       "path": "package.json",
-      "sha256": "aceae3c5f132a4cb3bcc33c46fdb6dcda9537c31e36218ea0e74cd6ea80e5746"
+      "sha256": "465977f5f793f8be68d41eeb5dd4bf5765ffaad413b5dc1b47ac717071f12c97"
     },
     {
       "path": "pleura/ANATOMIA.md",
-      "sha256": "623385083a0901945af50347062362cac86c68781c53e2b20f3fc1eea7be253c"
+      "sha256": "5bbb823671df2562c1ccff0dbc85b25d5395a0c9292f946f3a3116fc5cf97ec4"
     },
     {
       "path": "pleura/AUDITORIA-FISIOLOGIA.md",
-      "sha256": "b1edf59dfc2a364cde4d4eb5d3ab9e8a643a36e11a8a30af050bc26eb07076de"
+      "sha256": "e881185f976f81cfd4477c6babb0c3b3e9141bb247db429ba97c59ce5b8cc5b5"
     },
     {
       "path": "pleura/anatomia.js",
-      "sha256": "f0d55d8ba66136807fe641b6afd24032d0c78dc5cccde91c83b04969a82eba3c"
+      "sha256": "90f94113e9232c6b9e7d4d29d68f051e36b75eb9dd98e955e27a8ce1b523ee23"
     },
     {
       "path": "pleura/app.js",
-      "sha256": "be9af5a690b1706d360f9020cf7c2e32d4dabe528f26838d8c46a3204f6c44bf"
+      "sha256": "50753e9a9626385606ea8bc071e4665168831f02391246fad6eb3c7922188f22"
     },
     {
       "path": "pleura/estados.js",
-      "sha256": "e60578ee6e0f20b47351b31a2a3a62c44f67ab589e2034498cff495d44826006"
+      "sha256": "31f1e9860895e212076e6fde04c3073729907f27f9f47f2f97c0055b962255c3"
     },
     {
       "path": "pleura/fisica.js",
-      "sha256": "f8635756b5825f2c8c101fa85be06cb1c22045c8463d79f2d9ab4395cbd59477"
+      "sha256": "ffd4606c2a16c7a6d36bc2f70798a6a920af0e3a80c8ddf142c89cdb67bd75b0"
     },
     {
       "path": "pleura/grafico.js",
-      "sha256": "3f32604da449388dfd0086900cc002c4e3290ad6298b3e2578f4447b6b3bd883"
+      "sha256": "0abc251c14432d6a747c817e090d1afc4b1744f4ac166ee144250a71bbd62666"
     },
     {
       "path": "pleura/index.html",
-      "sha256": "b89dbf14a02b0c90922ad0766f468945b3962cc722fba846c64c0bee9eb29e77"
+      "sha256": "342f5cd5ff603b0df52a9f108306b22fae4028bfc62e9f9a2e4bf53c285b9d99"
     },
     {
       "path": "pleura/modelos.js",
-      "sha256": "e23fb8397861b51a18ad66860d591973e55262f42dcda6ba0c80c971137269a7"
+      "sha256": "f2b3f9f2147d9d26f13cdec7e13d2396b19dd90eba09705d9ce53ab8bb342565"
     },
     {
       "path": "pleura/movimento-costal.js",
-      "sha256": "f226b8f34ccfbcdd3ed494b634c568597c96e69b7fb8db0f7a2fd9bc4ce4bc5b"
+      "sha256": "c0104cd45f7908ba37bd4059b3c5c183f25a695f78cb90419bd07be774ff6b76"
     },
     {
       "path": "pleura/ra.js",
-      "sha256": "efbf6aa547828e1a06dc4f0de07d70c1601b659f7236ffb910322cc0d7166f52"
+      "sha256": "ae68b6191b50012323fb8fba08cc96acf5cf9b6b07663dfbd7f1493106d955fd"
     },
     {
       "path": "pleura/style.css",
-      "sha256": "5f004e035e05fdcd94391cc4bf9de6dc589ca7f99f1075e1b6ec90c70367a5e7"
+      "sha256": "d8ab83c081b9fd7acfdcd8c3836910674db29db3256ad76702c6ff75939b9b7c"
     },
     {
       "path": "tutor-origem.js",
-      "sha256": "e522b5c0da595f05746d73fd0ce3c80f40e84dbe0476f3d9b203dabcc027912d"
+      "sha256": "d17dd0acbfb6611edb35a5fb5c2e5c1de311379701e02c06c2d8803e0ca713d2"
     }
-  ]
+  ],
+  "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais."
 }

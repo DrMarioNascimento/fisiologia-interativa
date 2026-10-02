@@ -6,7 +6,10 @@ import vm from 'node:vm';
 const base=new URL('../',import.meta.url),ler=p=>readFile(new URL(p,base));
 test('instalação conserva todos os recursos declarados na migração de Pleura',async()=>{
  const manifest=JSON.parse(await ler('manifesto.json'));assert(manifest.arquivos.length>=20);
- for(const f of manifest.arquivos)assert.equal(createHash('sha256').update(await ler(f.path)).digest('hex'),f.sha256,f.path);
+ for(const f of manifest.arquivos) {
+  const b=await ler(f.path),content=/\.(glb|webp)$/.test(f.path)?b:b.toString('utf8').replace(/\r\n/g,'\n');
+  assert.equal(createHash('sha256').update(content).digest('hex'),f.sha256,f.path);
+ }
 });
 test('arquivos de execução não usam repositório antigo, catálogo ou autenticação',async()=>{
  const manifest=JSON.parse(await ler('manifesto.json'));
