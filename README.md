@@ -1,5 +1,62 @@
 # Fisiologia Interativa
 
+**English** · [Português](#português)
+
+Interactive human physiology simulators for Physical Education and Physiotherapy students: change parameters, compare physiological states and watch variables interact in real time. Runs in any browser, mobile-friendly.
+
+**Fisiologia Interativa** is a personal intellectual project created and maintained by **Mário César Nascimento, PhD**. The author's affiliation with CEFID/UDESC is stated for academic information only and does not imply institutional authorship or ownership of this repository.
+
+## Access
+
+- **Physical Education:** [drmarionascimento.github.io/fisiologia-interativa](https://drmarionascimento.github.io/fisiologia-interativa/)
+- **Physiotherapy:** [drmarionascimento.github.io/fisiologia-interativa/fisioterapia](https://drmarionascimento.github.io/fisiologia-interativa/fisioterapia/)
+
+The interface and all content are in Portuguese.
+
+## Who it is for
+
+Undergraduate students and teachers in Physical Education (teaching and bachelor's degrees), Physiotherapy and other health programs that include human physiology. The simulators can be projected in class or used individually on a computer or smartphone.
+
+## What is included
+
+Both courses share the same simulator files; each has its own learning path, defined in `inicio/dados-ef.js` (Physical Education) and `inicio/dados-fi.js` (Physiotherapy).
+
+| Unit | Physical Education | Physiotherapy |
+|---|---|---|
+| Cell physiology, membrane transport and action potentials | yes | yes |
+| Excitability and the muscular system | yes | yes |
+| Musculoskeletal system (calcium homeostasis, bone mechanotransduction / Wolff's law) | yes | — |
+| Cardiovascular system | yes | yes |
+| Respiratory system | yes | yes, plus the **Neonatal Pulmonary Ventilation** module |
+| Cardiorespiratory integration | yes, closing challenge **Athlete's Box** | yes, closing challenge **Physiological ICU** |
+
+Each course home page also offers:
+
+- mind maps for review and visual reading guides for the in-depth modules;
+- a guided study **tutor** per course, with an optional AI mode (Google Gemini) that the student turns on voluntarily; without it, the guided tutor, maps and questions keep working locally;
+- one escape room per unit from the companion project [Fisiologia em Fuga](https://drmarionascimento.github.io/fisiologia-em-fuga/), plus a final "Operação Secreta" covering all units.
+
+The simulators are simplified educational models. They do not replace academic sources, clinical assessment, diagnosis, prescription or professional guidance.
+
+## Technology
+
+- Static website: HTML, CSS and JavaScript, no build step, no database, no user accounts; relative paths throughout.
+- Fonts loaded from Google Fonts (browser defaults are used if unavailable).
+- The only server-side part is the optional AI tutor API (Node.js on Google Cloud Run, see [TUTOR-IA.md](TUTOR-IA.md)); the site works without it.
+- Automated tests use Playwright and Node's test runner during development only.
+
+See the Portuguese section for the full simulator list, folder structure and maintenance notes.
+
+## Authorship and license
+
+**Author:** Mário César Nascimento, PhD · [github.com/DrMarioNascimento](https://github.com/DrMarioNascimento)
+
+License: see [LICENSE.md](LICENSE.md) (all rights reserved; functional educational use permitted).
+
+---
+
+## Português
+
 **Simuladores educacionais para explorar mecanismos, testar cenários e integrar variáveis da Fisiologia Humana.**
 
 A **Fisiologia Interativa** é um projeto intelectual pessoal, desenvolvido, organizado e mantido por **Mário César Nascimento, PhD**. A vinculação profissional do autor ao CEFID/UDESC é indicada apenas como informação acadêmica e não representa atribuição automática de autoria ou titularidade institucional sobre este repositório.
@@ -10,33 +67,16 @@ O projeto complementa aulas, estudos dirigidos e atividades acadêmicas por meio
 
 - **Educação Física:** [drmarionascimento.github.io/fisiologia-interativa](https://drmarionascimento.github.io/fisiologia-interativa/)
 - **Fisioterapia:** [drmarionascimento.github.io/fisiologia-interativa/fisioterapia](https://drmarionascimento.github.io/fisiologia-interativa/fisioterapia/)
-- **Hospedagem institucional:** em processo de implantação na infraestrutura da UDESC
-- **Endereço institucional sugerido:** `fisiologia-interativa-sites.cefid.udesc.br`
+- **Hospedagem institucional:** em processo de implantação na infraestrutura da UDESC (endereço institucional sugerido: `fisiologia-interativa-sites.cefid.udesc.br`)
 
-## Páginas iniciais e tutores (Educação Física e Fisioterapia)
+## Público-alvo
 
-A página inicial usa o tema escuro "fluorescência" e é montada a partir de um único arquivo de dados por curso:
+O material foi desenvolvido principalmente para estudantes e professores de:
 
-- `inicio/dados-ef.js` e `inicio/dados-fi.js` — unidades, simuladores, mapas mentais, salas da Fisiologia em Fuga, Operação Secreta e desafio de fechamento;
-- `inicio/celula-mapa.js` — Célula-Mapa (unidades como células no meio interno), ECG de 75 bpm, ficha da unidade e roleta das salas;
-- `inicio/lista.js` — lista das unidades, filtros, busca (Ctrl K), surgimento ao rolar e janela de entrada;
-- `inicio/inicio.css` — tokens de cor, tipografia e layout (coluna única no celular).
-
-A Fisioterapia usa o mesmo motor com `inicio/dados-fi.js` (em `fisioterapia/index.html`). As versões anteriores permanecem em `index-legado.html` e `fisioterapia/index-legado.html`. Na página inicial e nos tutores, simuladores, salas e leituras abrem em nova aba.
-
-### Tutores
-
-Os tutores (`tutor-ef.html` e `tutor-fisio.html`) seguem o mesmo padrão visual, com `inicio/tutor-tema.css` e `inicio/tutor-tema.js`. Na página inicial, o tutor abre pelo botão "Estudar … com o tutor" da unidade escolhida, já no eixo correspondente. O arquivo `tutor-ligacao-fuga.js` liga o tutor às salas da Fisiologia em Fuga e à Operação Secreta.
-
-### Tutor com IA (opcional)
-
-Os tutores podem oferecer **respostas personalizadas com IA** (Gemini), ativadas voluntariamente pelo estudante no avatar. Sem a IA, o tutor guiado, os mapas e as questões continuam funcionando localmente. Não há conta de aluno nem histórico de conversas: só as últimas mensagens ficam na memória da página.
-
-A API do tutor roda à parte, no Cloud Run (`server/tutor.cjs`, imagem definida no `Dockerfile`); a chave fica no Secret Manager e nunca no repositório. `tutor-moodle.html` é a versão do tutor para incorporação no Moodle. Instalação, limites de uso e publicação estão em [TUTOR-IA.md](TUTOR-IA.md).
-
-### Fisiologia em Fuga
-
-Cada unidade termina com uma sala de fuga do projeto [Fisiologia em Fuga](https://drmarionascimento.github.io/fisiologia-em-fuga/), acessível pela roleta abaixo do mapa e pelo cadeado da unidade na lista. A **Operação Secreta** reúne todas as unidades e pede confirmação antes de abrir. Os desafios de fechamento são o **Box do Atleta** (Educação Física) e a **UTI fisiológica** (Fisioterapia). As imagens das salas ficam em `assets/salas/` (miniaturas quadradas) e `assets/salas/grande/` (versões verticais usadas na vitrine).
+- Educação Física — Licenciatura;
+- Educação Física — Bacharelado;
+- Fisioterapia;
+- demais cursos da área da saúde que incluam Fisiologia Humana em sua formação.
 
 ## Finalidade educacional
 
@@ -49,57 +89,61 @@ A plataforma busca favorecer uma aprendizagem ativa e integrativa da Fisiologia 
 - apoiar aulas expositivas, atividades práticas e estudo autônomo;
 - aproximar conceitos fisiológicos de aplicações em Educação Física e Fisioterapia.
 
-## Público-alvo
+## Como utilizar
 
-O material foi desenvolvido principalmente para estudantes e professores de:
+A proposta de exploração segue quatro momentos:
 
-- Educação Física — Licenciatura;
-- Educação Física — Bacharelado;
-- Fisioterapia;
-- demais cursos da área da saúde que incluam Fisiologia Humana em sua formação.
+1. **Relembre:** revise o conteúdo por meio dos mapas mentais;
+2. **Selecione:** escolha um estado fisiológico ou uma situação disponível;
+3. **Ajuste:** modifique os parâmetros do simulador;
+4. **Interprete:** observe gráficos, indicadores e relações entre as variáveis.
 
-## Organização curricular
+Os simuladores podem ser utilizados em projeção durante as aulas ou individualmente em computador e smartphone, conforme a interface de cada módulo.
 
-A plataforma utiliza os mesmos simuladores compartilhados, mas apresenta percursos pedagógicos próprios para cada formação. A diferença está na organização, nos textos de orientação e na ordem dos cards — não na duplicação de arquivos ou de modelos.
+## Aviso importante
 
-### Educação Física
+Este projeto tem finalidade exclusivamente **didática e educacional**. Os simuladores representam modelos simplificados de fenômenos fisiológicos e não substituem fontes acadêmicas, avaliação clínica, diagnóstico, prescrição ou orientação profissional em saúde.
 
-O índice principal é organizado em seis eixos:
+## O que a plataforma oferece
 
-1. **Fisiologia celular, transporte de substâncias e potenciais de ação**
-2. **Excitabilidade e sistema muscular**
-3. **Sistema osteoarticular**
-4. **Sistema cardiovascular**
-5. **Sistema respiratório**
-6. **Integração cardiorrespiratória**
+### Organização curricular
 
-### Fisioterapia
+Os dois cursos usam os mesmos arquivos de simuladores, mas cada um tem percurso pedagógico próprio: a diferença está na organização das unidades, nos textos de orientação e na ordem dos cards, não na duplicação de arquivos ou de modelos.
 
-O índice específico da Fisioterapia reúne os simuladores em cinco Unidades:
+**Educação Física** — seis unidades:
 
-1. **Fisiologia celular, transporte de substâncias e potenciais de ação**
-2. **Excitabilidade e Sistema Muscular**
-3. **Sistema cardiovascular**
-4. **Sistema respiratório**
-5. **Integração cardiorrespiratória**
+1. Fisiologia celular, transporte de substâncias e potenciais de ação
+2. Excitabilidade e Sistema Muscular
+3. Sistema Osteoarticular
+4. Sistema cardiovascular
+5. Sistema respiratório
+6. Integração cardiorrespiratória — desafio de fechamento: **Box do Atleta**
 
-O simulador de homeostase do cálcio e o tópico osteoarticular permanecem disponíveis no projeto e no percurso da Educação Física, mas não são exibidos no índice específico da Fisioterapia.
+**Fisioterapia** — cinco unidades:
 
-## Simuladores disponíveis
+1. Fisiologia celular, transporte de substâncias e potenciais de ação
+2. Excitabilidade e Sistema Muscular
+3. Sistema cardiovascular
+4. Sistema respiratório — inclui o módulo **Ventilação Pulmonar Neonatal**, exclusivo da Fisioterapia
+5. Integração cardiorrespiratória — desafio de fechamento: **UTI fisiológica**
+
+A unidade de Sistema Osteoarticular (Homeostase do cálcio e Mecanotransdução Óssea e Lei de Wolff) faz parte apenas do percurso da Educação Física; os arquivos permanecem no projeto, mas não são exibidos no índice da Fisioterapia.
+
+### Simuladores disponíveis
 
 A fonte de verdade da lista é `inicio/dados-ef.js` (Educação Física) e `inicio/dados-fi.js` (Fisioterapia); esta tabela resume o conteúdo desses arquivos.
 
-| Eixo | Simulador | Percurso | Objetivo pedagógico |
+| Unidade | Simulador | Percurso | Objetivo pedagógico |
 |---|---|---|---|
+| Fisiologia celular | Osmose e equilíbrio hidroeletrolítico | EF e Fisio | Comparar osmolalidade e tonicidade entre LIC e LEC, a ureia como osmol ineficaz, distúrbios do sódio e da água e os efeitos de NaCl 0,9%, NaCl 3% e SG 5%. |
+| Fisiologia celular | Homeostase integrada tricompartimentada | EF e Fisio | Relacionar plasma, interstício e célula — osmose, forças de Starling, potencial de membrana e regulação por rim, ADH e sede — nas respostas a sal, água, K⁺, perdas e hemorragia. |
 | Fisiologia celular | Potencial de ação na membrana | EF e Fisio | Acompanhar em sete etapas as mudanças de permeabilidade, os fluxos de Na⁺ e K⁺ e a variação do potencial de membrana. |
 | Fisiologia celular | Potencial de ação do neurônio | EF e Fisio | Visualizar o impulso nervoso, a membrana ampliada e a abertura sequencial dos canais dependentes de voltagem. |
 | Fisiologia celular | Transporte ativo secundário — SGLT | EF e Fisio | Relacionar o gradiente de Na⁺, a Na⁺/K⁺ ATPase e o cotransporte de glicose através da membrana. |
 | Fisiologia celular | Potencial de ação cardíaco | EF e Fisio | Reconhecer as fases do potencial de ação do cardiomiócito e relacioná-las aos fluxos iônicos e ao período refratário. |
-| Fisiologia celular | Osmose e equilíbrio hidroeletrolítico | Fisio | Comparar tonicidade, osmolaridade e distribuição de água entre LIC e LEC. |
-| Fisiologia celular | Homeostase integrada tricompartimentada | Fisio | Relacionar plasma, líquido intersticial e LIC em um modelo integrado de transporte e distribuição de água. |
-| Sistema muscular | Contração muscular esquelética | EF e Fisio | Acompanhar do potencial de ação ao relaxamento: ACh, placa motora, Ca²⁺, pontes cruzadas, ATP e sarcômero. |
+| Sistema muscular | Contração muscular esquelética | EF e Fisio | Do potencial de ação no sarcolema ao relaxamento pela SERCA: DHPR–RyR1, Ca²⁺ na troponina C, ciclo das pontes cruzadas (Pi e ATP) e sarcômero em escala com zona H e banda I; compara abalo, tétano, rigor e bloqueios. |
 | Sistema muscular | Acoplamento excitação–contração | EF e Fisio | Conectar a chegada do impulso nervoso à liberação de Ca²⁺ e à exposição dos sítios de ligação da actina. |
-| Sistema muscular | Contração muscular e sarcômero | EF e Fisio | Explorar o ciclo das pontes cruzadas, o consumo de ATP e as alterações da zona H durante a contração. |
+| Sistema muscular | Contração muscular e sarcômero | EF e Fisio | Do músculo aos filamentos em sete etapas: motoneurônio α, ACh na placa motora, túbulos T (DHPR–RyR1), Ca²⁺ na troponina C, pontes cruzadas e relaxamento pela SERCA. |
 | Sistema muscular | Contrações musculares interativas | EF e Fisio | Comparar contrações estática, dinâmica e isocinética, relacionando carga, movimento e produção de força. |
 | Sistema muscular | Hill × Isocinético | EF e Fisio | Integrar força, velocidade, ativação neural, torque e potência em diferentes condições de contração. |
 | Sistema muscular | Recrutamento de unidades motoras | EF e Fisio | Relacionar recrutamento progressivo, frequência de disparo e tipos de fibras ao desenvolvimento da força muscular. |
@@ -122,43 +166,59 @@ A fonte de verdade da lista é `inicio/dados-ef.js` (Educação Física) e `inic
 | Integração cardiorrespiratória | Box do Atleta *(desafio de fechamento)* | EF | Provas longas: ritmo, água, sódio, calor, glicogênio e intestino no mesmo atleta. O box mostra o estado; o aluno decide o plano. |
 | Integração cardiorrespiratória | UTI fisiológica *(desafio de fechamento)* | Fisio | Plantão de 6 horas: regular água, eletrólitos, circulação, ventilação, ácido-base e rim num único paciente. O monitor mostra o estado; o aluno decide. |
 
-## Como utilizar
+Os módulos de aprofundamento **Da intenção ao movimento**, **Sangue** e **Ventilação Pulmonar Neonatal** têm um guia visual em PDF, acessível pelo link "Leitura complementar" no card do simulador.
 
-A proposta de exploração segue quatro momentos:
+### Páginas iniciais
 
-1. **Relembre:** revise o conteúdo por meio dos mapas mentais;
-2. **Selecione:** escolha um estado fisiológico ou uma situação disponível;
-3. **Ajuste:** modifique os parâmetros do simulador;
-4. **Interprete:** observe gráficos, indicadores e relações entre as variáveis.
+A página inicial de cada curso usa o tema escuro "fluorescência" e é montada a partir de um único arquivo de dados por curso:
 
-Os simuladores podem ser utilizados em projeção durante as aulas ou individualmente em computador e smartphone, conforme a interface de cada módulo.
+- `inicio/dados-ef.js` e `inicio/dados-fi.js` — unidades, simuladores, mapas mentais, leituras complementares, salas da Fisiologia em Fuga, Operação Secreta e desafio de fechamento;
+- `inicio/celula-mapa.js` — Célula-Mapa (unidades como células no meio interno), ECG de 75 bpm, ficha da unidade e roleta das salas;
+- `inicio/lista.js` — lista das unidades, filtros, busca (Ctrl K), surgimento ao rolar e janela de entrada;
+- `inicio/inicio.css` — tokens de cor, tipografia e layout (coluna única no celular).
 
-## Aviso importante
+A Fisioterapia usa o mesmo motor com `inicio/dados-fi.js` (em `fisioterapia/index.html`). As versões anteriores permanecem em `index-legado.html` e `fisioterapia/index-legado.html`. Na página inicial e nos tutores, simuladores, salas e leituras abrem em nova aba.
 
-Este projeto tem finalidade exclusivamente **didática e educacional**. Os simuladores representam modelos simplificados de fenômenos fisiológicos e não substituem fontes acadêmicas, avaliação clínica, diagnóstico, prescrição ou orientação profissional em saúde.
+### Tutores
+
+Os tutores (`tutor-ef.html` e `tutor-fisio.html`) seguem o mesmo padrão visual, com `inicio/tutor-tema.css` e `inicio/tutor-tema.js`. Na página inicial, o tutor abre pelo botão "Estudar … com o tutor" da unidade escolhida, já no eixo correspondente. O arquivo `tutor-ligacao-fuga.js` liga o tutor às salas da Fisiologia em Fuga e à Operação Secreta. `tutor-moodle.html` é a versão do tutor para incorporação no Moodle.
+
+### Tutor com IA (opcional)
+
+Os tutores podem oferecer **respostas personalizadas com IA** (Google Gemini), ativadas voluntariamente pelo estudante no avatar. Sem a IA, o tutor guiado, os mapas e as questões continuam funcionando localmente. Não há conta de aluno nem histórico de conversas: só as últimas mensagens ficam na memória da página. As respostas geradas por IA podem conter imprecisões e não substituem o material didático nem as aulas.
+
+A API do tutor roda à parte, no Google Cloud Run (`server/tutor.cjs`, imagem definida no `Dockerfile`); a chave fica no Secret Manager e nunca no repositório. Instalação, limites de uso e publicação estão em [TUTOR-IA.md](TUTOR-IA.md).
+
+### Fisiologia em Fuga
+
+Cada unidade termina com uma sala de fuga do projeto [Fisiologia em Fuga](https://drmarionascimento.github.io/fisiologia-em-fuga/), acessível pela roleta abaixo do mapa e pelo cadeado da unidade na lista. A **Operação Secreta** reúne todas as unidades e pede confirmação antes de abrir. Os desafios de fechamento da integração são o **Box do Atleta** (Educação Física) e a **UTI fisiológica** (Fisioterapia).
 
 ## Características técnicas
 
-- aplicação web estática;
-- tecnologias: HTML, CSS e JavaScript;
+- aplicação web estática, em HTML, CSS e JavaScript;
 - não utiliza banco de dados nem conta de usuário;
-- não requer instalação de dependências para uso (os testes automatizados em `tests/` usam Playwright apenas no desenvolvimento);
-- não requer compilação ou processo de build;
-- única parte com servidor: a API opcional do tutor com IA (Node.js no Cloud Run, ver [TUTOR-IA.md](TUTOR-IA.md)); o site continua estático e funciona sem ela;
+- não requer compilação, processo de build nem instalação de dependências para uso;
 - índices de acesso: `index.html` (Educação Física) e `fisioterapia/index.html` (Fisioterapia);
-- simuladores distribuídos em arquivos HTML independentes;
-- recursos visuais organizados na pasta `assets/`;
+- simuladores distribuídos em arquivos HTML independentes, compartilhados pelos dois índices;
 - links internos e recursos configurados com caminhos relativos;
 - funcionamento por hospedagem HTTP/HTTPS convencional de arquivos estáticos;
-- fontes carregadas do Google Fonts (sem elas, o navegador usa fontes padrão).
+- fontes carregadas do Google Fonts (sem elas, o navegador usa fontes padrão);
+- única parte com servidor: a API opcional do tutor com IA (Node.js no Cloud Run, ver [TUTOR-IA.md](TUTOR-IA.md)); o site continua estático e funciona sem ela.
 
-## Estrutura geral
+## Manutenção
+
+### Estrutura geral
 
 ```text
 fisiologia-interativa/
 ├── index.html                 # página inicial da Educação Física
 ├── index-legado.html          # página inicial anterior (EF)
 ├── *.html                     # simuladores independentes
+├── *-visual.css / *-visual.js # camadas visuais de alguns simuladores
+├── atleta-box.html            # desafio de fechamento da Educação Física
+├── atleta-motor.js            # motor fisiológico do Box do Atleta
+├── atleta-motor.test.cjs      # testes do motor do Box do Atleta
+├── card-*-aprofundamento.js   # cards de aprofundamento das páginas iniciais legadas
 ├── tutor-ef.html              # tutor da Educação Física
 ├── tutor-fisio.html           # tutor da Fisioterapia
 ├── tutor-moodle.html          # tutor para incorporação no Moodle
@@ -173,28 +233,40 @@ fisiologia-interativa/
 ├── fisioterapia/
 │   ├── index.html             # página inicial da Fisioterapia
 │   ├── index-legado.html      # página inicial anterior (Fisio)
-│   └── uti-fisiologica.html   # desafio de fechamento da Fisioterapia
-├── atleta-box.html            # desafio de fechamento da Educação Física
+│   ├── uti-fisiologica.html   # desafio de fechamento da Fisioterapia
+│   └── uti-motor.js / uti-visual.css
 ├── assets/
 │   ├── maps/                  # mapas mentais
 │   ├── salas/                 # imagens das salas da Fisiologia em Fuga
-│   ├── leituras/              # leituras complementares
+│   ├── leituras/              # guias visuais e leituras complementares
 │   ├── data/                  # dados usados por alguns simuladores
 │   └── demais recursos visuais
-└── tests/                     # testes automatizados (Playwright)
+├── tests/
+│   ├── visual/                # testes Playwright (página inicial, Da intenção ao movimento)
+│   └── tutor/                 # testes do servidor e do tutor no navegador
+└── .github/workflows/         # testes automáticos no GitHub Actions
 ```
 
-## Publicação e manutenção
+### Testes
 
-A versão pública atual é publicada pelo GitHub Pages a partir deste repositório. O projeto também está sendo preparado para hospedagem institucional na UDESC por meio do OpenShift.
+Os testes são usados apenas no desenvolvimento (requerem Node.js; `npm install` instala o Playwright):
+
+- `npm run test:visual` — testes Playwright da pasta `tests/visual/`;
+- `npm run test:intencao` — auditoria visual de Da intenção ao movimento;
+- `npm run test:tutor` e `npm run test:tutor:browser` — testes do servidor e do tutor no navegador;
+- `node --test atleta-motor.test.cjs` — testes do motor fisiológico do Box do Atleta.
+
+No GitHub Actions, `playwright-visual.yml` roda a auditoria visual e `tutor-tests.yml` roda os testes dos tutores quando os arquivos correspondentes mudam.
+
+### Publicação
+
+A versão pública atual é publicada pelo GitHub Pages a partir deste repositório. O projeto também está sendo preparado para hospedagem institucional na UDESC por meio do OpenShift; a SETIC/CINF será responsável pela infraestrutura e pelo fluxo institucional de publicação. A revisão científica, a manutenção e a atualização do conteúdo permanecem sob responsabilidade do autor.
 
 Os simuladores permanecem na pasta principal e são compartilhados pelos dois índices. Dessa forma, uma correção ou melhoria em qualquer modelo é refletida automaticamente nos percursos de Educação Física e Fisioterapia; somente a organização curricular de cada página inicial é mantida separadamente, em `inicio/dados-ef.js` e `inicio/dados-fi.js`.
 
-A SETIC/CINF será responsável pela infraestrutura e pelo fluxo institucional de publicação. A revisão científica, a manutenção e a atualização do conteúdo permanecem sob responsabilidade do autor.
-
 Como o projeto utiliza caminhos relativos e não depende de processamento no servidor, pode ser publicado em um subdiretório ou domínio institucional destinado a conteúdo estático.
 
-## Autoria e titularidade declarada
+## Autoria, licença e contato
 
 **Autor e titular declarado:** Mário César Nascimento, PhD  
 **Projeto pessoal:** Fisiologia Interativa  
@@ -202,8 +274,6 @@ Como o projeto utiliza caminhos relativos e não depende de processamento no ser
 
 A vinculação profissional do autor ao CEFID/UDESC não transfere, por si só, a autoria declarada neste repositório nem identifica a Universidade como licenciadora deste projeto.
 
-## Direitos autorais e condições de uso
-
 Copyright © 2026 Mário César Nascimento. Todos os direitos reservados.
 
-O uso educacional funcional dos simuladores é permitido nos termos descritos em [LICENSE.md](LICENSE.md). A disponibilização pública do código não autoriza sua cópia, adaptação, republicação ou exploração comercial.
+Licença: ver [LICENSE.md](LICENSE.md) (todos os direitos reservados; uso educacional funcional permitido). A disponibilização pública do código não autoriza sua cópia, adaptação, republicação ou exploração comercial.
