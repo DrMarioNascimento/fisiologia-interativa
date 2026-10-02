@@ -72,7 +72,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "38c7c8d8da4aa5f5d6637e9a3b3cde08c885efc34da9c1d2ec65fd25d4233cd1"
+      "sha256": "85cafdae6dd24653ba35cef585966e14085402588b0a0e3dc9542147037dd9e6"
     },
     {
       "path": "pleura/modelos.js",
@@ -88,7 +88,7 @@
     },
     {
       "path": "pleura/style.css",
-      "sha256": "48f2485f54790c97d25833cf330ec55eb39fa63928bf6dfc450ff3bf24e31219"
+      "sha256": "9be7c6c421579b4c4afef1d975052f77b5aceaf466b58b0a21184b0066ad6276"
     },
     {
       "path": "tutor-origem.js",
