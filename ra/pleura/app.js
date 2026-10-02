@@ -16,7 +16,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { prepararParaRA } from '../cores-para-ra.js';
+import { prepararParaRA } from '../cores-para-ra.js?v=tutor-ra-cores-20261002';
 import { criar } from './modelos.js?v=encaixes-20261002';
 import { clonarVisual } from './ra.js';
 import { carregarCoracao } from './anatomia.js?v=encaixes-20261002';

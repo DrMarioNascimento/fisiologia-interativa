@@ -24,7 +24,7 @@
     },
     {
       "path": "cores-para-ra.js",
-      "sha256": "b9fe0340d28ba6cdb8d2d60e5eba0f34e096ea66e1b246bed448faadf556affc"
+      "sha256": "423815349e6057b92db0568b77caa885699bb21022f2997c39da977c4b6b34cd"
     },
     {
       "path": "fisica-cardiaca.js",
@@ -56,7 +56,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "50753e9a9626385606ea8bc071e4665168831f02391246fad6eb3c7922188f22"
+      "sha256": "0cbfde7aea52559c1025c5302270f316034679951bb6dbeeec28b032666d8be6"
     },
     {
       "path": "pleura/estados.js",
@@ -72,7 +72,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "342f5cd5ff603b0df52a9f108306b22fae4028bfc62e9f9a2e4bf53c285b9d99"
+      "sha256": "213a26cdd90e246fe261dda1e273663983878d8b3c8a10b58a907b6c4c12cc76"
     },
     {
       "path": "pleura/modelos.js",
