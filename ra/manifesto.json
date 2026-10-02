@@ -56,7 +56,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "0cbfde7aea52559c1025c5302270f316034679951bb6dbeeec28b032666d8be6"
+      "sha256": "f67434eee0d94a9bef3ee47a23e99387953c6acf1c149810ce364555fc9e97bc"
     },
     {
       "path": "pleura/estados.js",
@@ -72,7 +72,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "213a26cdd90e246fe261dda1e273663983878d8b3c8a10b58a907b6c4c12cc76"
+      "sha256": "38c7c8d8da4aa5f5d6637e9a3b3cde08c885efc34da9c1d2ec65fd25d4233cd1"
     },
     {
       "path": "pleura/modelos.js",
@@ -88,7 +88,7 @@
     },
     {
       "path": "pleura/style.css",
-      "sha256": "d8ab83c081b9fd7acfdcd8c3836910674db29db3256ad76702c6ff75939b9b7c"
+      "sha256": "48f2485f54790c97d25833cf330ec55eb39fa63928bf6dfc450ff3bf24e31219"
     },
     {
       "path": "tutor-origem.js",
