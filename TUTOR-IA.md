@@ -6,11 +6,11 @@ Não há conta de aluno, banco de conversas, retomada de estudos ou histórico e
 
 ## Quatro acessos, com IA opcional e estudo local
 
-Os acessos são `tutor-ef.html`, `tutor-fisio.html`, `tutor-moodle.html` (EF) e `tutor-moodle.html?percurso=fisioterapia`. Todos compartilham as experiências Coração em ação, Retorno venoso e Pleura por meio de `tutor-ra-data.js`, mantendo o catálogo e o percurso de cada curso. Procurar ou abrir uma experiência continua local mesmo com a IA ligada. Os links abrem em outra aba e preservam o percurso.
+Os acessos são `tutor-ef.html`, `tutor-fisio.html`, `tutor-moodle.html` (EF) e `tutor-moodle.html?percurso=fisioterapia`. Todos compartilham as experiências Coração em ação, Retorno venoso, Pleura e Do músculo ao sarcômero por meio de `tutor-ra-data.js`, mantendo o catálogo e o percurso de cada curso. Procurar ou abrir uma experiência continua local mesmo com a IA ligada. Os links abrem em outra aba e preservam o percurso.
 
 O catálogo RA contém objetivos, controles e questões locais. Um pedido explícito, como “Explique o gradiente da pleura RA”, seleciona essa experiência para a API e descarta o histórico de outro assunto. O Tutor recebe o roteiro, mas não lê os controles ao vivo. No coração, a referência Realistic Human Heart se aplica somente à Vista Externa; os movimentos por segmento são creditados ao Prof. Mário César Nascimento, PhD. A exportação RA apresenta o instante estático escolhido na página.
 
-**Ordem de publicação:** atualizar primeiro o catálogo na API existente do Cloud Run; verificar que ela aceita `ra/coracao/`, `ra/retorno-venoso/` e `ra/pleura/` nos dois cursos; depois publicar as páginas do Tutor. Uma API antiga recusa esses identificadores. Testes com respostas simuladas não confirmam que a API pública foi atualizada.
+**Ordem de publicação:** atualizar primeiro o catálogo na API existente do Cloud Run; verificar que ela aceita `ra/coracao/`, `ra/retorno-venoso/`, `ra/pleura/` e `ra/musculo-sarcomero/` nos dois cursos; depois publicar as páginas do Tutor. Uma API antiga recusa esses identificadores. Testes com respostas simuladas não confirmam que a API pública foi atualizada.
 
 ## Experimentar no computador
 

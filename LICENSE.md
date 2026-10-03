@@ -89,6 +89,8 @@ em especial:
 
 ### Modelos e bibliotecas das experiências de realidade aumentada
 
+Os modelos e as texturas procedurais de `ra/musculo-sarcomero/` integram os componentes originais do projeto. A transferência não acrescenta um modelo anatômico externo; a referência bibliográfica da curva não transfere direitos sobre o artigo citado.
+
 | Componente | Uso e atribuição | Licença preservada |
 |---|---|---|
 | `ra/assets/coracao.glb` | *Realistic Human Heart*, de neshallads; somente Vista Externa no Coração em ação, também utilizado na Pleura e no Retorno venoso | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.pt-br) |
@@ -224,6 +226,8 @@ their respective owners and are not covered by this license, in particular:
 - works, articles and other bibliographic references cited in the simulators.
 
 ### Augmented reality models and libraries
+
+The procedural models and textures in `ra/musculo-sarcomero/` are original project components. This transfer adds no external anatomical model; the curve's bibliographic reference does not transfer rights to the cited paper.
 
 | Component | Use and attribution | Preserved license |
 |---|---|---|

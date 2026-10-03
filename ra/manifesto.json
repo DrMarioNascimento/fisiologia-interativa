@@ -4,7 +4,7 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "7b8e4e52194e9c894538605868b95e12dd2c8b9dff3b80492f8593a2eaedf1bb"
+      "sha256": "e7ea2643bda641b845edc58153472d58274b2e3f61838831c448a52869ff2f3d"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -205,6 +205,30 @@
     {
       "path": "coracao/README.md",
       "sha256": "3ddea0aff0d324d22d622190d6efe12684b5b29a785d31ea6a8382e4ffb7c6fd"
+    },
+    {
+      "path": "musculo-sarcomero/app.js",
+      "sha256": "b4894c513fc537dbb8603cf444e490e9d48ba89d025328db223d7fcf176e6542"
+    },
+    {
+      "path": "musculo-sarcomero/index.html",
+      "sha256": "f5157e1a3312a79f32f83d8b0e6181cc9648d38d1610bc31e182623d3ea7ed3e"
+    },
+    {
+      "path": "musculo-sarcomero/modelos.js",
+      "sha256": "91323428e5b9fc1b7f6ca064b456daa36d30ee6a37c1421c5e98dafcf0595e0a"
+    },
+    {
+      "path": "musculo-sarcomero/README.md",
+      "sha256": "d821eb2e7da133c92c3ed7341df8fd0ab522ff2cfa7934089a7c94cb01bb97df"
+    },
+    {
+      "path": "musculo-sarcomero/style.css",
+      "sha256": "d11cea06a814796599ad8fd0274c8994681b6a7ba34484e8bda35d12f31c13d3"
+    },
+    {
+      "path": "tests/musculo-migracao.test.mjs",
+      "sha256": "2b17f1f8e3ee8d2ee676175b95c71df19f273d6a27476d110bbc6993c1a8216f"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
@@ -220,6 +244,10 @@
     "coracao": {
       "origem": "DrMarioNascimento/lab-ra/bancadas/11-coracao/prototipo/duas-pecas.html",
       "revisao": "85d13200078f5201d251c857efde5326cd53daa7"
+    },
+    "musculo-sarcomero": {
+      "origem": "DrMarioNascimento/lab-ra/musculo-sarcomero",
+      "revisao": "6792eb577870bb72933b845791743bc872bcbad2"
     }
   }
 }
