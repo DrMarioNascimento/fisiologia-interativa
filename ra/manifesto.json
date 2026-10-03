@@ -4,7 +4,7 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "dc01c56a785b3bc729454fe4e69ca4153d4c99760489bcd5126ec49cf8f55c55"
+      "sha256": "313f81e3129e9a334d6655c7b6139329dc6968029e3b4062c5cab1a128130543"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -285,6 +285,30 @@
     {
       "path": "starling/variaveis.js",
       "sha256": "ea7e64db03d4c2b662f8907df29bbfc8634fec435769d3de0dd320106ef5c777"
+    },
+    {
+      "path": "juncao-neuromuscular/app.js",
+      "sha256": "50e18cec13d8b281823077764220d589f674f54e0dd25323bfb2aec26744e15b"
+    },
+    {
+      "path": "juncao-neuromuscular/fisica.js",
+      "sha256": "04d835d62415095e810859ec7ac78750a7fff32904e7c61bc899d4dd2c73f29a"
+    },
+    {
+      "path": "juncao-neuromuscular/index.html",
+      "sha256": "7ff89a15ee5c4b45890839c2eee818265c7f9467e667bb62493e898a554dc7cf"
+    },
+    {
+      "path": "juncao-neuromuscular/modelos.js",
+      "sha256": "c568218d64ee92ab36771de1f8ea094b0c99545321c7cdf24bf83ba9e6e7055a"
+    },
+    {
+      "path": "juncao-neuromuscular/README.md",
+      "sha256": "69bd5a5dccab9552481138eb12709f7d228558c7fc7bb104cadc007d8a2e055d"
+    },
+    {
+      "path": "juncao-neuromuscular/style.css",
+      "sha256": "a9f7cefd4c00e1234a5cea6d7eb914fd7858f464ae2d800c677384c768da27a9"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
@@ -312,6 +336,11 @@
     "starling": {
       "origem": "DrMarioNascimento/lab-ra/starling",
       "revisao": "5ac3f4cce5b8d62d76d9fc3cced1e0e0bc2f224d"
+    },
+    "juncao-neuromuscular": {
+      "origem": "DrMarioNascimento/fisiologia-interativa/ra/juncao-neuromuscular",
+      "tipo": "Modelo procedural original; reutiliza o sarcômero aprovado sem modificar musculo-sarcomero/modelos.js",
+      "sarcomeroBase": "ec0414d006e6ea2d2102208c79da597b9284660b"
     }
   }
 }

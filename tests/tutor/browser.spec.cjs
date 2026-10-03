@@ -116,13 +116,13 @@ for(const course of ['ef','fisio'])for(const moodle of [false,true])test(`${cour
  await page.goto(`${base}/${moodle?'tutor-moodle':`tutor-${course}`}.html${moodle&&course==='fisio'?'?percurso=fisioterapia':''}`);
  if(!moodle)await page.locator('#tutorLauncher').click();
  const input=page.locator(moodle?'#input':'#tutorInput'),send=page.locator(moodle?'.send':'.tutor-send'),toggle=page.locator(moodle?'#aiEnabled':'#tutorAiEnabled'),messages=page.locator(moodle?'#messages':'#tutorMessages');
- for(const [query,href]of [['onde estudo coração RA','ra/coracao/'],['onde estudo retorno venoso RA','ra/retorno-venoso/'],['onde estudo pleura RA','ra/pleura/'],['onde estudo músculo sarcômero RA','ra/musculo-sarcomero/'],['onde estudo potencial membrana RA','ra/potencial-membrana/'],['onde estudo forças de Starling RA','ra/starling/']]){
+ for(const [query,href]of [['onde estudo coração RA','ra/coracao/'],['onde estudo retorno venoso RA','ra/retorno-venoso/'],['onde estudo pleura RA','ra/pleura/'],['onde estudo músculo sarcômero RA','ra/musculo-sarcomero/'],['onde estudo potencial membrana RA','ra/potencial-membrana/'],['onde estudo forças de Starling RA','ra/starling/'],['onde estudo junção neuromuscular RA','ra/juncao-neuromuscular/']]){
   await input.fill(query);await send.click();const link=messages.locator(`a[href*="${href}"]`).last();
   await expect(link).toHaveAttribute('href',new RegExp(`${href}\\?percurso=${course==='fisio'?'fisioterapia':'educacao-fisica'}$`));
   await expect(link).toHaveAttribute('target','_blank');await expect(link).toHaveAttribute('rel','noopener noreferrer');
  }
  expect(requests).toHaveLength(0);await toggle.check();
- for(const [query,href]of [['Explique o movimento do coração RA','ra/coracao/'],['Explique a bomba do retorno venoso RA','ra/retorno-venoso/'],['Explique o gradiente da pleura RA','ra/pleura/'],['Explique o comprimento do sarcômero muscular RA','ra/musculo-sarcomero/'],['Explique a película de carga em realidade aumentada','ra/potencial-membrana/'],['Explique o retorno linfático nas forças de Starling RA','ra/starling/'],['Explique por que a banda A não muda na experiência muscular RA, em até quatro linhas.','ra/musculo-sarcomero/']]){
+ for(const [query,href]of [['Explique a placa motora na junção neuromuscular RA','ra/juncao-neuromuscular/'],['Explique o movimento do coração RA','ra/coracao/'],['Explique a bomba do retorno venoso RA','ra/retorno-venoso/'],['Explique o gradiente da pleura RA','ra/pleura/'],['Explique o comprimento do sarcômero muscular RA','ra/musculo-sarcomero/'],['Explique a película de carga em realidade aumentada','ra/potencial-membrana/'],['Explique o retorno linfático nas forças de Starling RA','ra/starling/'],['Explique por que a banda A não muda na experiência muscular RA, em até quatro linhas.','ra/musculo-sarcomero/']]){
   await input.fill(query);await send.click();await expect(messages.locator(moodle?'.ai-response':'.tutor-ai-answer').last()).toHaveText('Resposta simulada com contexto RA correto.');
   await expect.poll(()=>requests.length).toBeGreaterThan(0);await expect.poll(()=>requests.at(-1).module).toBe(href);expect(requests.at(-1).course).toBe(course);
  }
@@ -147,7 +147,7 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
   if(hasRA){
   await expect(cards.locator('.ra-card h2')).toHaveText('RA - Realidade Aumentada');
   await expect(cards.locator('.ra-call')).toContainText('viagem de aprendizado incrível');
-  const experiencias=axis==='celular'?['potencial-membrana','starling']:axis==='muscular'?['musculo-sarcomero']:axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
+  const experiencias=axis==='celular'?['potencial-membrana','starling']:axis==='muscular'?['musculo-sarcomero','juncao-neuromuscular']:axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
   await expect(cards.locator('.ra-card a')).toHaveCount(experiencias.length);
   for(let j=0;j<experiencias.length;j++){
    const acesso=cards.locator('.ra-card a').nth(j);
@@ -178,8 +178,13 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
  await expect(heart.locator('#pA')).toHaveText('Vista Externa');await expect(heart.locator('#pB')).toHaveText('Vista Interna');await heart.close();
  await page.locator('#axes [data-id="muscular"],#axes [data-axis="muscular"]').click();
  await page.context().route('**/ra/musculo-sarcomero/app.js*',r=>r.fulfill({body:'',contentType:'text/javascript'}));
- const musclePopupPromise=page.waitForEvent('popup');await page.locator('.ra-card a').click();const muscle=await musclePopupPromise;await muscle.waitForLoadState('domcontentloaded');
+ const musclePopupPromise=page.waitForEvent('popup');await page.locator('.ra-card a').filter({hasText:'Do músculo ao sarcômero'}).click();const muscle=await musclePopupPromise;await muscle.waitForLoadState('domcontentloaded');
  expect(new URL(muscle.url()).pathname).toBe('/ra/musculo-sarcomero/');expect(new URL(muscle.url()).searchParams.get('percurso')).toBe(course==='fisio'?'fisioterapia':'educacao-fisica');
  await expect(muscle.locator('a.small-button[data-voltar-tutor]')).toHaveAttribute('href',`${base}/tutor-${course}.html`);
  await expect(muscle.locator('.step')).toHaveCount(5);await expect(muscle.locator('#launchAR')).toHaveText('Abrir em realidade aumentada');await muscle.close();
+ await page.context().route('**/ra/juncao-neuromuscular/app.js*',r=>r.fulfill({body:'',contentType:'text/javascript'}));
+ const junctionPopupPromise=page.waitForEvent('popup');await page.locator('.ra-card a').filter({hasText:'Do nervo à força'}).click();const junction=await junctionPopupPromise;await junction.waitForLoadState('domcontentloaded');
+ expect(new URL(junction.url()).pathname).toBe('/ra/juncao-neuromuscular/');expect(new URL(junction.url()).searchParams.get('percurso')).toBe(course==='fisio'?'fisioterapia':'educacao-fisica');
+ await expect(junction.locator('a[data-voltar-tutor]').last()).toHaveAttribute('href',`${base}/tutor-${course}.html`);
+ await expect(junction.locator('[data-step]')).toHaveCount(5);await expect(junction.locator('#play')).toHaveText('Iniciar');await junction.close();
 });

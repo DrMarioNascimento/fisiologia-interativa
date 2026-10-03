@@ -89,7 +89,7 @@ em especial:
 
 ### Modelos e bibliotecas das experiências de realidade aumentada
 
-Os modelos e as texturas procedurais de `ra/musculo-sarcomero/`, `ra/potencial-membrana/` e `ra/starling/` integram os componentes originais do projeto. A transferência não acrescenta um modelo anatômico externo; a referência bibliográfica da curva não transfere direitos sobre o artigo citado.
+Os modelos e as texturas procedurais de `ra/musculo-sarcomero/`, `ra/potencial-membrana/`, `ra/starling/` e `ra/juncao-neuromuscular/` integram os componentes originais do projeto. Essas experiências não acrescentam um modelo anatômico externo; as referências bibliográficas não transferem direitos sobre os artigos citados.
 
 | Componente | Uso e atribuição | Licença preservada |
 |---|---|---|
@@ -227,7 +227,7 @@ their respective owners and are not covered by this license, in particular:
 
 ### Augmented reality models and libraries
 
-The procedural models and textures in `ra/musculo-sarcomero/`, `ra/potencial-membrana/` and `ra/starling/` are original project components. This transfer adds no external anatomical model; the curve's bibliographic reference does not transfer rights to the cited paper.
+The procedural models and textures in `ra/musculo-sarcomero/`, `ra/potencial-membrana/`, `ra/starling/` and `ra/juncao-neuromuscular/` are original project components. These experiences add no external anatomical model; bibliographic references do not transfer rights to the cited papers.
 
 | Component | Use and attribution | Preserved license |
 |---|---|---|

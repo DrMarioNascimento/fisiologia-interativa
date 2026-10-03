@@ -38,7 +38,7 @@ Each course home page also offers:
 
 ### Augmented reality
 
-Six independent experiences run in this repository, without Google sign-in or runtime dependencies on the former Lab RA repository:
+Seven independent experiences run in this repository, without Google sign-in or runtime dependencies on the former Lab RA repository:
 
 | System | Experience | Explore |
 |---|---|---|
@@ -47,6 +47,7 @@ Six independent experiences run in this repository, without Google sign-in or ru
 | Respiratory | Pleura: layers, alveolar gradient, West zones and ventilation | [Pleura](https://drmarionascimento.github.io/fisiologia-interativa/ra/pleura/) |
 | Cellular | Charge film: neuron, organelles, bilayer, transport and action potential | [Charge film](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/) |
 | Cellular · Unit 1 | Starling forces: microvascular exchange, glycocalyx, edema and lymph | [Starling forces](https://drmarionascimento.github.io/fisiologia-interativa/ra/starling/) |
+| Muscular | Nerve to force: neuromuscular junction, excitation–contraction coupling and synchronized signals | [Nerve to force](https://drmarionascimento.github.io/fisiologia-interativa/ra/juncao-neuromuscular/) |
 | Muscular | Muscle to sarcomere: five structural levels, filament sliding and length–tension curve | [Muscle to sarcomere](https://drmarionascimento.github.io/fisiologia-interativa/ra/musculo-sarcomero/) |
 
 The Tutors provide course-specific links. The browser shows the animation; augmented reality presents the selected static state on a compatible device. Pressures are displayed in mmHg and cmH₂O. See [RA documentation](ra/README.md).
@@ -216,6 +217,7 @@ As experiências **Coração em ação**, **Retorno venoso**, **Pleura**, **Do m
 - [Coração em ação](https://drmarionascimento.github.io/fisiologia-interativa/ra/coracao/): vistas interna e externa, contração, valvas, frequência, velocidade, instantes do ciclo e gráfico de Wiggers sincronizados.
 - [Retorno venoso](https://drmarionascimento.github.io/fisiologia-interativa/ra/retorno-venoso/): posição em pé/decúbito, PA e PV, válvulas, caminhada e bomba muscular.
 - [Pleura](https://drmarionascimento.github.io/fisiologia-interativa/ra/pleura/): camadas, gradiente alveolar, zonas de West, respiração e estados rápidos.
+- [Do nervo à força](https://drmarionascimento.github.io/fisiologia-interativa/ra/juncao-neuromuscular/): junção, terminal, fenda, tríade e contração; gráficos sincronizados, estímulos repetidos e transmissão insuficiente. Reutiliza o sarcômero aprovado. [Modelo e limites](ra/juncao-neuromuscular/README.md).
 - [Do músculo ao sarcômero](https://drmarionascimento.github.io/fisiologia-interativa/ra/musculo-sarcomero/): músculo, fascículo, fibra, miofibrila e sarcômero, sem bases; giro, rótulos, ampliação, contração e curva comprimento–tensão. A geometria e os cálculos conservam a versão aprovada. [Detalhes e referência](ra/musculo-sarcomero/README.md).
 
 - [A película de carga](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/): neurônio, interior com organelas, película, travessias e onda; Goldman, capacitância e propagação preservados. [Detalhes e limites](ra/potencial-membrana/README.md).
@@ -274,7 +276,7 @@ fisiologia-interativa/
 │   ├── celula-mapa.js / lista.js / inicio.css
 │   └── tutor-tema.css / tutor-tema.js
 ├── ra/                        # experiências independentes de realidade aumentada
-│   ├── coracao/ / retorno-venoso/ / pleura/ / musculo-sarcomero/ / potencial-membrana/ / starling/
+│   ├── coracao/ / retorno-venoso/ / pleura/ / musculo-sarcomero/ / potencial-membrana/ / starling/ / juncao-neuromuscular/
 │   ├── assets/ / brand/       # modelos com créditos próprios e identidade visual
 │   └── tests/ / manifesto.json # testes e integridade dos arquivos
 ├── fisioterapia/
