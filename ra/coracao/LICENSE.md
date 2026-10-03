@@ -1,9 +1,13 @@
 # Licença e atribuição — malhas do coração
 
-Este diretório contém **cópias parciais** do BodyParts3D (catálogo PART-OF
-e malhas Wavefront OBJ do coração / vasos proximais) e documentação que
-aponta ao Z-Anatomy. Qualquer glb daqui é obra derivada e herda
-ShareAlike.
+Esta experiência usa dois modelos com fontes e licenças distintas:
+
+- **Somente Vista Externa:** `../assets/coracao.glb`, *Realistic Human Heart*, de [neshallads](https://sketchfab.com/3d-models/realistic-human-heart-3f8072336ce94d18b3d0d055a1ece089), sob [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.pt-br). Não é derivado do BodyParts3D. Escala, materiais e animação foram adaptados; as texturas do autor permanecem.
+- **Vista Interna:** `../assets/coracao-interno.glb`, derivado do BodyParts3D com 79 malhas, sob **CC BY-SA 2.1 JP**, conforme a licença preservada nos arquivos usados na origem. A procedência histórica está documentada abaixo.
+
+Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo **Prof. Mário César Nascimento, PhD**, e sincronizados ao ciclo cardíaco simulado. Essa atribuição ao trabalho do simulador não substitui os créditos dos modelos de terceiros. Consulte [ATTRIBUTION.md](ATTRIBUTION.md).
+
+Os componentes originais do projeto seguem [a licença principal](../../LICENSE.md); os modelos acima conservam suas licenças próprias. A migração não inclui o catálogo PART-OF, os OBJ originais ou arquivos `.blend` de Z-Anatomy.
 
 ## BodyParts3D
 
@@ -64,11 +68,11 @@ arquivo e na bancada.
 > CC-BY-SA 2.1 JP. Nomenclatura conferida com Z-Anatomy, CC-BY-SA 4.0.
 > Não é um coração de ensino acabado.
 
-## Arquivos deste diretório
+## Arquivos distribuídos nesta migração
 
 | Caminho | Origem |
 |---|---|
-| `fontes/bodyparts3d/catalogos/*.txt` | LSDB Archive, LATEST |
-| `fontes/bodyparts3d/obj/FJ*.obj` | extraídos de `partof_BP3D_4.0_obj_99.zip` |
-| `export/coracao-bancada11-WIP.glb` | derivado (pipeline deste repo) |
-| `SPEC.md`, `INVENTORY.md`, `scripts/` | Laboratório do Pesquisar RA |
+| `../assets/coracao.glb` | Scan *Realistic Human Heart*, somente Vista Externa; CC BY 4.0 |
+| `../assets/coracao-interno.glb` | Cópia do `export/coracao-bancada11-WIP.glb` da origem; BodyParts3D, CC BY-SA 2.1 JP |
+| `MODELO-INTERNO.json` | Metadados e limitações do modelo interno preservados da origem |
+| `ATTRIBUTION.md` | Créditos e adaptações das duas vistas |

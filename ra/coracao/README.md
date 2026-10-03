@@ -9,6 +9,8 @@ Experiência independente do Fisiologia Interativa. Origem confirmada pelo profe
 
 Modelos, cores, materiais, campos de deformação e motor cardíaco conservam a origem. A transferência não corrige as limitações anatômicas do modelo interno em desenvolvimento; consulte `MODELO-INTERNO.json`. Marcação externa é aproximada. Não existe trajeto anatômico do sistema de condução nesses dois modelos; a leitura elétrica e o ECG são esquemáticos.
 
+A referência *Realistic Human Heart*, de neshallads, corresponde **somente à Vista Externa**. A Vista Interna tem fonte própria, BodyParts3D. Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo **Prof. Mário César Nascimento, PhD**, e sincronizados ao ciclo simulado. Os créditos das duas fontes permanecem visíveis abaixo do card de RA, independentemente da vista selecionada.
+
 ## Apresentação e controles
 
 Tema, assinatura, cards e navegação seguem as experiências RA do novo repositório. Os dois Tutores oferecem Coração e Retorno venoso no destaque cardiovascular, em nova aba. Voltar ao Tutor preserva Educação Física/Fisioterapia. Não há credencial Google ou dependência de execução do Lab RA.

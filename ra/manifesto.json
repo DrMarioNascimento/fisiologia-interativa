@@ -4,11 +4,11 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "679d5568699b63aae7360833de5ee72cc3c3c83cb34264cb5b44ce35bee3eec6"
+      "sha256": "7b8e4e52194e9c894538605868b95e12dd2c8b9dff3b80492f8593a2eaedf1bb"
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "7cd73f887ad21f2c495024db0c320b82b18510240b26c233489e698df07c1037"
+      "sha256": "05ecdc09a1b9f557dbaa86ee465477c625ece5cb92d2125556d30625276aa453"
     },
     {
       "path": "assets/coracao.glb",
@@ -180,7 +180,7 @@
     },
     {
       "path": "coracao/LICENSE.md",
-      "sha256": "f8bbcea51ce8c316a9887a39ddbf1fe51013a0760bb7c1d27e7eb0bf8595c450"
+      "sha256": "e850650f5ce4c8c7e8f2a64d078a480b198e43d8578b291eca3b3e2408c3d857"
     },
     {
       "path": "coracao/MODELO-INTERNO.json",
@@ -204,7 +204,7 @@
     },
     {
       "path": "coracao/README.md",
-      "sha256": "6af84a2ab42b1e220f027e487ce2cefbd6b466779775d8568041ef9be02992be"
+      "sha256": "3ddea0aff0d324d22d622190d6efe12684b5b29a785d31ea6a8382e4ffb7c6fd"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
