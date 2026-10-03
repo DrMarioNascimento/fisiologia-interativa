@@ -2,7 +2,7 @@
 
 Experiência original do Sistema Muscular, para EF e Fisioterapia. Cinco ampliações: O encontro, O terminal, A fenda, A tríade e A contração. Sem mesas, pedestais, autenticação Google ou dependências do Lab RA.
 
-Anatomia procedural: axônio mielinizado antes da arborização terminal, células de Schwann, vesículas e mitocôndrias em corte, membranas separadas por uma fenda, pregas com receptores nicotínicos nas cristas e canais de sódio nas regiões profundas. Tríade com túbulo T entre duas cisternas do retículo. Dimensões, cores e partículas são ilustrativas; não há escala comum aos cinco níveis.
+Anatomia procedural: axônio com segmentos de mielina e núcleos de Schwann, arborização alongada junto ao sarcolema e núcleos periféricos da fibra. O terminal em corte mostra vesículas de tamanhos variados, algumas junto às zonas ativas, mitocôndrias com cristas e cobertura glial. A fenda mantém as membranas separadas, a bicamada visível na borda, pregas arredondadas com receptores nicotínicos nas cristas, canais de sódio nas regiões profundas e acetilcolinesterase ancorada. Na tríade, o túbulo T cruza o eixo das miofibrilas entre duas cisternas conectadas ao retículo que acompanha os feixes. Texturas, cortes, cores e partículas são ilustrativos; não há escala comum aos cinco níveis.
 
 O sarcômero do nível 5 importa `../musculo-sarcomero/modelos.js`, conservando o modelo aprovado. Nenhum arquivo dessa experiência foi alterado. O encurtamento é uma visualização em carga livre ilustrativa, não uma previsão de força, trabalho ou relação força–velocidade.
 
@@ -21,7 +21,11 @@ Os estados rápidos comparam abalo, somação, alta frequência e falha de trans
 
 ## Exploração e RA
 
-Iniciar/Pausar, Reiniciar, Recentrar, Legendas, Ampliar, Velocidade e Instante da observação. Os cinco botões de navegação e a seleção de RA ficam disponíveis. A exportação GLB leva a peça e o instante pausados; o modelo é ampliado para aproximadamente 65 cm. A animação fica na página. Abrir a câmera exige aparelho e navegador compatíveis; preparação de GLB não confirma funcionamento em hardware físico.
+Iniciar/Pausar, Reiniciar, Recentrar, Legendas, Ampliar, Velocidade, Repetir em loop e Instante da observação. O loop é opcional e desmarcado inicialmente: reapresenta o mesmo ensaio, conserva o excedente de tempo na virada e não acumula cálcio ou acrescenta estímulos. Pausa interrompe a reprodução e Reiniciar volta ao início; mudanças de parâmetros iniciam uma nova observação pausada.
+
+Cena, controles e leituras ficam juntos. Gráficos, Como interpretar, Realidade aumentada e Modelo e referências aparecem em abas, sem remover explicações. As setas, Home e End navegam pelas abas; mudar de aba não altera o instante nem a reprodução. Os cinco níveis permanecem disponíveis.
+
+A exportação GLB é preparada ao abrir a aba Realidade aumentada, evitando esse trabalho durante a primeira visualização. Leva a peça e o instante pausados; o modelo é ampliado para aproximadamente 65 cm. A animação fica na página. Abrir a câmera exige aparelho e navegador compatíveis; preparação de GLB não confirma funcionamento em hardware físico.
 
 Os quatro Tutores compartilham catálogo, roteiro e três questões; os links preservam o percurso e abrem nova aba. A IA usa o catálogo do serviço existente, sem acesso ao estado da cena em tempo real.
 

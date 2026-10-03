@@ -288,7 +288,7 @@
     },
     {
       "path": "juncao-neuromuscular/app.js",
-      "sha256": "50e18cec13d8b281823077764220d589f674f54e0dd25323bfb2aec26744e15b"
+      "sha256": "dba4f1bae0d3303cf589c282fb68c5ffb593cf2ea0a196aa6496b5ec92e25a0e"
     },
     {
       "path": "juncao-neuromuscular/fisica.js",
@@ -296,19 +296,27 @@
     },
     {
       "path": "juncao-neuromuscular/index.html",
-      "sha256": "7ff89a15ee5c4b45890839c2eee818265c7f9467e667bb62493e898a554dc7cf"
+      "sha256": "751dc116367533749594c1e4b3a6ad1c0ab798e6c432b2a6f074d5c5bbad929a"
     },
     {
       "path": "juncao-neuromuscular/modelos.js",
-      "sha256": "c568218d64ee92ab36771de1f8ea094b0c99545321c7cdf24bf83ba9e6e7055a"
+      "sha256": "e3967726cad2d479182b62cbd1157ec9c0ec84d5f57090d6a1423f14fe382916"
     },
     {
       "path": "juncao-neuromuscular/README.md",
-      "sha256": "69bd5a5dccab9552481138eb12709f7d228558c7fc7bb104cadc007d8a2e055d"
+      "sha256": "0c175b68f3594bcd7d4cbb383912e6677654f7d2ebfacb3527beb5726b17dc40"
     },
     {
       "path": "juncao-neuromuscular/style.css",
-      "sha256": "a9f7cefd4c00e1234a5cea6d7eb914fd7858f464ae2d800c677384c768da27a9"
+      "sha256": "9bd2b986b138a2ead73ccc92dd6f575fcd13b754a00c4aaefef430f1abdb1992"
+    },
+    {
+      "path": "juncao-neuromuscular/interface.js",
+      "sha256": "e68b24821721804476519faa9fdead46a649cb3432b4d66f31d0a11c926f292d"
+    },
+    {
+      "path": "juncao-neuromuscular/reproducao.js",
+      "sha256": "ee7995279efb6f219299b584b6577cb8ff5ba49689e47d64e0de7c743f820ab4"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
