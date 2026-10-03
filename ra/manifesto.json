@@ -4,7 +4,7 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "e7ea2643bda641b845edc58153472d58274b2e3f61838831c448a52869ff2f3d"
+      "sha256": "511074645b0ae44516fe7381bcad3dbf19117fcd033703931dfa51c80a04c6c3"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -229,6 +229,34 @@
     {
       "path": "tests/musculo-migracao.test.mjs",
       "sha256": "2b17f1f8e3ee8d2ee676175b95c71df19f273d6a27476d110bbc6993c1a8216f"
+    },
+    {
+      "path": "potencial-membrana/app.js",
+      "sha256": "f2267fbf7fa7bdc6e5e171935bb8d1bfb09eaf8cf26d51da88c05892456fe3d4"
+    },
+    {
+      "path": "potencial-membrana/index.html",
+      "sha256": "10947a76b1b9725a91d71a9cb84e7b0a66256e31ecb51b068c1ec1aebe7f82ba"
+    },
+    {
+      "path": "potencial-membrana/modelos.js",
+      "sha256": "23ac7c4a4fb4c18e6d63d21b7c2e27c14899506b4ad74c5a61b0667571665c41"
+    },
+    {
+      "path": "potencial-membrana/README.md",
+      "sha256": "878d31f7189cedbf9bf478f84cad21af840a90b064568b10d30acafa47131032"
+    },
+    {
+      "path": "potencial-membrana/style.css",
+      "sha256": "3e689ff201d473836437c4c681a74d8a840cb755454c42258054e24c2b226799"
+    },
+    {
+      "path": "tests/celular-migracao.test.mjs",
+      "sha256": "27083bdf55ac00de53ba70006e25c1673a5fb5ea73bad7c6e607083da3741330"
+    },
+    {
+      "path": "potencial-membrana/cores-para-ra.js",
+      "sha256": "b9fe0340d28ba6cdb8d2d60e5eba0f34e096ea66e1b246bed448faadf556affc"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
@@ -248,6 +276,10 @@
     "musculo-sarcomero": {
       "origem": "DrMarioNascimento/lab-ra/musculo-sarcomero",
       "revisao": "6792eb577870bb72933b845791743bc872bcbad2"
+    },
+    "potencial-membrana": {
+      "origem": "DrMarioNascimento/lab-ra/potencial-membrana",
+      "revisao": "303bad15b77d7c995fdc90f20fa0e2b9eaa0902f"
     }
   }
 }

@@ -43,3 +43,7 @@ Os dois botões cardiovasculares usam o mesmo acabamento dourado com profundidad
 [Músculo RA](https://drmarionascimento.github.io/fisiologia-interativa/ra/musculo-sarcomero/) transfere a versão aprovada `6792eb577870bb72933b845791743bc872bcbad2` do Lab RA. O arquivo de modelos é idêntico à origem: cinco níveis, ventre contínuo, janela no epimísio, tendões, sarcômero e texturas preservados, sem bases em nenhum nível. O card aparece no Sistema Muscular dos dois percursos; a experiência também integra o catálogo compartilhado dos quatro Tutores, com e sem IA.
 
 A apresentação segue as demais experiências: assinatura, retorno ao Tutor de origem, navegação por níveis, botões com profundidade, giro com início/pausa e velocidade, rótulos e ampliação. Esses controles de giro não alteram a contração nem a curva comprimento–tensão. Os controles e os cálculos do sarcômero permanecem iguais à versão aprovada; a RA exporta o nível e o comprimento selecionados. [Detalhes e limites didáticos](musculo-sarcomero/README.md).
+
+## A película de carga · Fisiologia celular
+
+[A película de carga RA](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/) transfere a revisão aprovada `303bad15b77d7c995fdc90f20fa0e2b9eaa0902f`. Modelos procedurais e cálculos preservados, cinco níveis, organelas, bicamada e onda amielínica. Acesso celular nos dois percursos e catálogo dos quatro Tutores; apresentação comum com giro, velocidade, ampliação e retorno ao Tutor. [Detalhes e limites](potencial-membrana/README.md).
