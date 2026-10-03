@@ -1,6 +1,6 @@
 # Fisiologia em realidade aumentada
 
-Experiência independente do Fisiologia Interativa, aberta pelos Tutores de Educação Física e Fisioterapia. Inclui Camadas, Mecânica, Pneumotórax, Gradiente e Zonas de West, controles de respiração e velocidade, Repouso, Exercício, Enfisema, Fibrose e Capacidade vital forçada.
+Experiências independentes do Fisiologia Interativa, abertas pelos Tutores de Educação Física e Fisioterapia. Pleura inclui Camadas, Mecânica, Pneumotórax, Gradiente e Zonas de West, controles de respiração e velocidade, Repouso, Exercício, Enfisema, Fibrose e Capacidade vital forçada.
 
 Acesse [Pleura RA](https://drmarionascimento.github.io/fisiologia-interativa/ra/pleura/). “Voltar ao Tutor” respeita o percurso de origem. Não há catálogo de bancadas, porta de acesso ou credenciais Google.
 
@@ -37,3 +37,9 @@ PA/PV compartilham a escala dos gráficos, e os cards informam o desnível em re
 Coração e Retorno venoso têm acessos próprios no destaque RA cardiovascular dos Tutores EF e Fisioterapia. Iniciar/Pausar, Um ciclo, Reiniciar, velocidade, frequência, amplitude, instantes rápidos, ampliação e legendas usam o padrão das outras experiências. A exportação RA preserva o instante pausado escolhido e invalida exportações antigas ao iniciar ou trocar a vista. Não exige Google nem carrega recursos do repositório anterior. [Detalhes, validação e atribuições](coracao/README.md).
 
 Os dois botões cardiovasculares usam o mesmo acabamento dourado com profundidade 3D. A referência *Realistic Human Heart* corresponde somente à Vista Externa; a Vista Interna deriva de BodyParts3D. Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo Prof. Mário César Nascimento, PhD. Consulte as [atribuições dos modelos](assets/ATRIBUICAO.md), as [licenças do coração](coracao/LICENSE.md) e a [licença principal](../LICENSE.md), que preserva as licenças próprias dos componentes de terceiros.
+
+## Do músculo ao sarcômero · Sistema muscular
+
+[Músculo RA](https://drmarionascimento.github.io/fisiologia-interativa/ra/musculo-sarcomero/) transfere a versão aprovada `6792eb577870bb72933b845791743bc872bcbad2` do Lab RA. O arquivo de modelos é idêntico à origem: cinco níveis, ventre contínuo, janela no epimísio, tendões, sarcômero e texturas preservados, sem bases em nenhum nível. O card aparece no Sistema Muscular dos dois percursos; a experiência também integra o catálogo compartilhado dos quatro Tutores, com e sem IA.
+
+A apresentação segue as demais experiências: assinatura, retorno ao Tutor de origem, navegação por níveis, botões com profundidade, giro com início/pausa e velocidade, rótulos e ampliação. Esses controles de giro não alteram a contração nem a curva comprimento–tensão. Os controles e os cálculos do sarcômero permanecem iguais à versão aprovada; a RA exporta o nível e o comprimento selecionados. [Detalhes e limites didáticos](musculo-sarcomero/README.md).
