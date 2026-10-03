@@ -16,8 +16,8 @@
     });
   }
   function catalogModules() {
-    if (isFisioPage()) return (window.fisioterapiaTutor && window.fisioterapiaTutor.modules) || [];
-    return (typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : [];
+    const base = isFisioPage() ? ((window.fisioterapiaTutor && window.fisioterapiaTutor.modules) || []) : ((typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : []);
+    return base.concat(window.raTutorModules || []);
   }
   function axisId() {
     return (typeof active !== 'undefined' && active) ? active : '';
@@ -63,6 +63,12 @@
   function matchModule(query) {
     const q = norm(query);
     const qTokens = tokens(query);
+    if (/realidade aumentada|\bra\b|\b3d\b/.test(q)) {
+      const matches = catalogModules().filter(item => item.ra).map(item => ({
+        item, score: qTokens.filter(tok => !/^(realidade|aumentada|3d)$/.test(tok) && tokens(item.title + ' ' + item.aliases).includes(tok)).length
+      })).sort((a,b) => b.score - a.score);
+      if (matches[0]?.score > 0 && matches[0].score > (matches[1]?.score || 0)) return matches[0].item;
+    }
     var hinted = null;
     qTokens.concat(q.split(' ').filter(Boolean)).forEach(function (tok) {
       Object.keys(shortHints).forEach(function (key) {
@@ -149,7 +155,7 @@
     return /\b(escape|room|fuga|cadeado|cadeados)\b/.test(norm(text));
   }
   function moduleHref(href) {
-    return href + (isFisioPage() ? '?percurso=fisioterapia' : '');
+    return href + ((isFisioPage() || href.startsWith('ra/')) ? (href.includes('?') ? '&' : '?') + 'percurso=' + (isFisioPage() ? 'fisioterapia' : 'educacao-fisica') : '');
   }
   function resourcesHtml(query, opts) {
     opts = opts || {};
@@ -158,7 +164,7 @@
     if (!mods.length && !rooms.length) return '';
     var html = opts.afterAi ? '<p><b>Para continuar neste tutor:</b></p>' : '<p>Encontrei estes recursos da disciplina:</p>';
     mods.forEach(function (item) {
-      html += '<div class="tutor-result"><b>' + item.title + '</b><span>' + (item.goal || '') + '</span><br><a class="tutor-link" href="' + moduleHref(item.href) + '">Abrir simulador</a></div>';
+      html += '<div class="tutor-result"><b>' + item.title + '</b><span>' + (item.goal || '') + '</span><br><a class="tutor-link" target="_blank" rel="noopener noreferrer" href="' + moduleHref(item.href) + '">Abrir simulador</a></div>';
     });
     rooms.slice(0, opts.allRooms ? rooms.length : 1).forEach(function (room) {
       html += '<div class="tutor-result"><b>' + room.title + '</b><span>Escape room · ' + room.id + '</span><br><a class="tutor-link" href="' + room.href + '">Entrar no escape room</a></div>';

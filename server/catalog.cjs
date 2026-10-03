@@ -11,6 +11,8 @@ function loadCatalog(root) {
   vm.runInContext(fs.readFileSync(path.join(root, 'tutor-ef-data.js'), 'utf8'), context, { timeout: 1000 });
   const ef = vm.runInContext('modules', context);
   vm.runInContext(fs.readFileSync(path.join(root, 'tutor-fisio-data.js'), 'utf8'), context, { timeout: 1000 });
-  return JSON.parse(JSON.stringify({ ef, fisio: context.window.fisioterapiaTutor.modules }));
+  vm.runInContext(fs.readFileSync(path.join(root, 'tutor-ra-data.js'), 'utf8'), context, { timeout: 1000 });
+  const ra=context.window.raTutorModules;
+  return JSON.parse(JSON.stringify({ ef:ef.concat(ra), fisio:context.window.fisioterapiaTutor.modules.concat(ra) }));
 }
 module.exports = { loadCatalog };
