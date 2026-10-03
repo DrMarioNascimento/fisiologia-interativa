@@ -3,20 +3,22 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {prepararParaRA} from '../cores-para-ra.js';
-import {criar,NIVEIS} from './modelos.js?v=jun-20261003';
+import {criar,NIVEIS} from './modelos.js?v=jun-realismo-20261003';
 import {simular,noInstante,fase,CORES,LIMIAR} from './fisica.js?v=jun-20261003';
+import {avancarInstante} from './reproducao.js?v=jun-realismo-20261003';
 const $=id=>document.getElementById(id),fmt=(v,n=1)=>v.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
 const stage=$('stage'),renderer=new THREE.WebGLRenderer({canvas:$('scene'),antialias:true,alpha:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;
 const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(37,1,.01,100);
 const pmrem=new THREE.PMREMGenerator(renderer),environment=pmrem.fromScene(new RoomEnvironment(),.04);scene.environment=environment.texture;scene.environmentIntensity=.65;pmrem.dispose();
-scene.add(new THREE.HemisphereLight(0xe4f6ff,0x263044,1.6));
-for(const [color,intensity,pos]of [[0xffe9d8,2.9,[4,6,5]],[0x8cc6df,1.5,[-4,2,4]],[0xabc6d7,1.7,[0,3,-5]]]){const l=new THREE.DirectionalLight(color,intensity);l.position.set(...pos);scene.add(l);}
+const hemisphere=new THREE.HemisphereLight(0xe4f6ff,0x263044,1.6);scene.add(hemisphere);
+const lights=[];
+for(const [color,intensity,pos]of [[0xffe9d8,2.9,[4,6,5]],[0x8cc6df,1.5,[-4,2,4]],[0xabc6d7,1.7,[0,3,-5]]]){const l=new THREE.DirectionalLight(color,intensity);l.position.set(...pos);scene.add(l);lights.push(l);}
 const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.07;controls.minDistance=.6;controls.maxDistance=22;
 function canvasFactory(w,h,draw,{repeatX=1,repeatY=1}={}){const c=document.createElement('canvas');c.width=w;c.height=h;draw(c.getContext('2d'),w,h);const tex=new THREE.CanvasTexture(c);tex.colorSpace=THREE.SRGBColorSpace;tex.wrapS=tex.wrapT=THREE.RepeatWrapping;tex.repeat.set(repeatX,repeatY);return tex;}
 function textura(tipo){return canvasFactory(512,512,(ctx,w,h)=>{
  const image=ctx.createImageData(w,h);let seed=72917;
- for(let y=0;y<h;y++)for(let x=0;x<w;x++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const n=(seed/4294967296-.5)*17;const bands=tipo==='estrias'?14*Math.sin(y*.27)+9*Math.cos(x*.035):8*Math.sin(x*.027+y*.018)*Math.cos(y*.043);const c=Math.max(0,Math.min(255,221+n+bands)),i=(y*w+x)*4;image.data[i]=c;image.data[i+1]=c;image.data[i+2]=c;image.data[i+3]=255;}ctx.putImageData(image,0,0);
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const n=(seed/4294967296-.5)*24;const bands=tipo==='estrias'?23*Math.sin(y*.27)+9*Math.cos(y*.54)+12*Math.cos(x*.12):24*Math.sin(x*.027+y*.018)*Math.cos(y*.043)+7*Math.sin(x*.19-y*.12);const c=Math.max(0,Math.min(255,199+n+bands)),i=(y*w+x)*4;image.data[i]=c;image.data[i+1]=c;image.data[i+2]=c;image.data[i+3]=255;}ctx.putImageData(image,0,0);
  });}
 const anatomy=criar(textura);anatomy.modelos.forEach((m,i)=>{m.visible=i===0;scene.add(m);});
 let nivel=0,sim=simular(),instante=0,running=false,speed=1,labels=true,frame=0,exportId=0,readyId=-1,arUrl=null,arTimer=null,selectionId=0,disposed=false;
@@ -24,7 +26,12 @@ let labelNodes=[];
 function enquadrar(){
  const box=new THREE.Box3().setFromObject(anatomy.modelos[nivel]),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
  const radius=Math.max(size.length()/2,.8),fov=camera.fov*Math.PI/180,lim=Math.min(fov,2*Math.atan(Math.tan(fov/2)*camera.aspect));
- const dist=radius/Math.sin(lim/2)*1.12;controls.target.copy(center);camera.position.copy(center).add(new THREE.Vector3(.2,nivel===2||nivel===3?.65:.25,1).normalize().multiplyScalar(dist));camera.near=Math.max(.01,dist/1000);camera.far=Math.max(100,dist*5);camera.updateProjectionMatrix();controls.update();
+ const direction=new THREE.Vector3(.2,nivel===2||nivel===3?.65:.25,1).normalize();
+ let dist=radius/Math.sin(lim/2)*1.12;
+ if(nivel<4){const right=new THREE.Vector3().crossVectors(camera.up,direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right),tan=Math.tan(fov/2);dist=0;
+  for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){const p=new THREE.Vector3(x,y,z).sub(center),depth=p.dot(direction);dist=Math.max(dist,Math.abs(p.dot(right))/(tan*camera.aspect)+depth,Math.abs(p.dot(up))/tan+depth);}dist=Math.max(2,dist*1.15);
+ }
+ controls.target.copy(center);camera.position.copy(center).add(direction.multiplyScalar(dist));camera.near=Math.max(.01,dist/1000);camera.far=Math.max(100,dist*5);camera.updateProjectionMatrix();controls.update();
 }
 function criarLegendas(){
  $('labels').replaceChildren();labelNodes=anatomy.modelos[nivel].userData.labels.map(l=>{const el=document.createElement('span');el.textContent=l.text;if(l.text.includes('Ca²⁺'))el.style.borderLeftColor=CORES.ca;$('labels').append(el);return {...l,el};});
@@ -57,6 +64,9 @@ function novaObservacao(){
 }
 async function selecionar(i){
  const ticket=++selectionId;definirRunning(false);++exportId;clearTimeout(arTimer);nivel=Math.max(0,Math.min(4,i));
+ // O sarcômero mantém a iluminação original; os cortes recebem luz menos intensa.
+ hemisphere.intensity=nivel===4?1.6:.85;scene.environmentIntensity=nivel===4?.65:.42;
+ lights.forEach((l,j)=>l.intensity=(nivel===4?[2.9,1.5,1.7]:[1.7,.75,1.25])[j]);
  const d=NIVEIS[nivel];$('stepLabel').textContent=String(nivel+1).padStart(2,'0')+' · '+d.nome;$('infoTitle').textContent=d.titulo;$('infoText').textContent=d.texto;$('infoEyebrow').textContent='Nível '+(nivel+1)+' · escala ampliada';$('raPiece').textContent=$('stepLabel').textContent;
  document.querySelectorAll('[data-step],[data-ra-step]').forEach(b=>{const active=Number(b.dataset.step??b.dataset.raStep)===nivel;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
  anatomy.modelos.forEach((m,j)=>m.visible=j===nivel);
@@ -65,6 +75,7 @@ async function selecionar(i){
 }
 function chart(id){const el=$(id),w=Math.max(230,el.clientWidth),h=240,dpr=Math.min(devicePixelRatio,2);if(el.width!==Math.round(w*dpr)||el.height!==h*dpr){el.width=Math.round(w*dpr);el.height=h*dpr;}const c=el.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);return {c,w,h};}
 function drawGraphs(){
+ if($('panel-graphs').hidden)return;
  for(const electrical of [true,false]){
   const {c,w,h}=chart(electrical?'electrical':'mechanical'),left=electrical?42:38,right=electrical?14:43;
   const x=t=>left+t/sim.duracao*(w-left-right),y=(v,lo,hi)=>24+(hi-v)/(hi-lo)*(h-55);
@@ -82,11 +93,12 @@ function drawGraphs(){
   c.lineWidth=1.2;c.strokeStyle='#f5e3b8';c.beginPath();c.moveTo(x(instante),19);c.lineTo(x(instante),h-30);c.stroke();
  }
 }
+document.addEventListener('studychange',()=>{drawGraphs();if(!$('panel-ra').hidden)prepararRA();});
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;if(w&&h){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();enquadrar();drawGraphs();}}
 new ResizeObserver(resize).observe(stage);
 function prepararRA(){
  const id=++exportId;clearTimeout(arTimer);$('launchAR').disabled=true;
- if(running)return;$('raStatus').textContent='Preparando o estado atual…';
+ if(running||$('panel-ra').hidden)return;$('raStatus').textContent='Preparando o estado atual…';
  arTimer=setTimeout(async()=>{try{
   anatomy.atualizar(nivel,noInstante(sim,instante),instante,sim);const clone=anatomy.modelos[nivel].clone(true);clone.visible=true;
   const box=new THREE.Box3().setFromObject(clone),size=box.getSize(new THREE.Vector3());clone.scale.setScalar(.65/Math.max(size.x,size.y,size.z));clone.updateMatrixWorld(true);
@@ -113,4 +125,4 @@ $('exitFullscreen').onclick=()=>document.exitFullscreen();document.addEventListe
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&running)definirRunning(false);});
 addEventListener('pagehide',()=>{disposed=true;++exportId;clearTimeout(arTimer);renderer.setAnimationLoop(null);if(arUrl)URL.revokeObjectURL(arUrl);controls.dispose();renderer.dispose();environment.dispose();});
 const query=new URLSearchParams(location.search),initial=Number.parseInt(query.get('nivel'),10);novaObservacao();resize();selecionar(Number.isFinite(initial)?initial-1:0);
-renderer.setAnimationLoop(t=>{const dt=Math.min(.06,Math.max(0,(t-frame)/1000));frame=t;if(running&&!document.hidden){instante=Math.min(sim.duracao,instante+dt*40*speed);atualizar();if(instante>=sim.duracao)definirRunning(false);}controls.update();posicionarLegendas();renderer.render(scene,camera);});
+renderer.setAnimationLoop(t=>{const dt=Math.min(.06,Math.max(0,(t-frame)/1000));frame=t;if(running&&!document.hidden){const next=avancarInstante(instante,dt*40*speed,sim.duracao,$('loop').checked);instante=next.instante;atualizar();if(next.terminou)definirRunning(false);}controls.update();posicionarLegendas();renderer.render(scene,camera);});

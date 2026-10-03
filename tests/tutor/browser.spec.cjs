@@ -21,8 +21,27 @@ test('junção neuromuscular: níveis e controles cabem no viewport do projeto',
  await expect(page.locator('[data-step]')).toHaveCount(5);
  await expect(page.locator('[data-voltar-tutor]').last()).toHaveAttribute('href',`${base}/tutor-fisio.html`);
  await expect(page.locator('#play')).toHaveText('Iniciar');
+ await expect(page.getByLabel('Repetir em loop',{exact:true})).not.toBeChecked();
+ await page.getByLabel('Repetir em loop',{exact:true}).check();
+ await expect(page.getByLabel('Repetir em loop',{exact:true})).toBeChecked();
+ await expect(page.locator('[role="tabpanel"]:visible')).toHaveCount(1);
+ for(const id of ['guide','ra','references','graphs']){
+  await page.locator('#tab-'+id).click();
+  await expect(page.locator('#panel-'+id)).toBeVisible();
+  await expect(page.locator('[role="tabpanel"]:visible')).toHaveCount(1);
+ }
+ await page.locator('#tab-graphs').press('ArrowRight');
+ await expect(page.locator('#tab-guide')).toBeFocused();
+ await expect(page.locator('#panel-guide')).toBeVisible();
+ await expect(page.locator('#panel-guide')).toContainText('Repetir em loop reapresenta');
+ await expect(page.locator('#panel-guide')).toContainText('DHPR: receptor');
+ await page.locator('#tab-guide').press('End');
+ await expect(page.locator('#panel-references')).toBeVisible();
+ await page.locator('#tab-references').press('Home');
+ await expect(page.locator('#panel-graphs')).toBeVisible();
  const dimensions=await page.evaluate(()=>({width:innerWidth,content:document.documentElement.scrollWidth,buttons:[...document.querySelectorAll('[data-step],.journey-controls button')].map(e=>({left:e.getBoundingClientRect().left,right:e.getBoundingClientRect().right}))}));
  expect(dimensions.content).toBeLessThanOrEqual(dimensions.width+1);
+ if(dimensions.width>=1000)expect(await page.evaluate(()=>document.documentElement.scrollHeight)).toBeLessThan(1900);
  for(const b of dimensions.buttons){expect(b.left).toBeGreaterThanOrEqual(0);expect(b.right).toBeLessThanOrEqual(dimensions.width);}
 });
 for(const course of ['ef','fisio']) test(`${course}: context, history, text safety and clear`,async({page},info)=>{

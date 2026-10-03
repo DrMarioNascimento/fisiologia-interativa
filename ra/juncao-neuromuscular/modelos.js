@@ -10,97 +10,118 @@ export const NIVEIS=[
 ];
 export function criar(textura){
  const bump=textura('tecido'),bands=textura('estrias');
- const mat=(cor,extra={})=>new THREE.MeshPhysicalMaterial({color:cor,roughness:.54,metalness:0,sheen:.3,sheenRoughness:.7,bumpMap:bump,bumpScale:.035,...extra});
- const M={nerve:mat('#ceb5a0'),muscle:mat('#c98583',{map:bands,bumpScale:.018}),membrane:mat('#dba6a0',{side:THREE.DoubleSide}),inside:mat('#a96c70'),glia:mat('#8dadaa',{transparent:true,opacity:.23,depthWrite:false,side:THREE.DoubleSide}),nucleus:mat('#53658b'),vesicle:mat('#ddc292',{bumpScale:.014}),mito:mat('#b57058'),crista:mat('#e5b194'),ach:mat(CORES.ach),ca:mat(CORES.ca,{emissive:CORES.ca,emissiveIntensity:.12}),sodium:mat(CORES.vm),receptor:mat('#ba9c69'),ryr:mat('#9883bb'),reticulum:mat('#b4aaa7'),t:mat('#8ab3ac'),pulse:mat(CORES.vm,{emissive:CORES.vm,emissiveIntensity:.7})};
- const sphere=new THREE.SphereGeometry(1,20,14),small=new THREE.SphereGeometry(1,10,8);
- function ell(g,pos,size,material,rough=false){
-  const geo=rough?sphere.clone():sphere;
-  if(rough){const a=geo.attributes.position;for(let i=0;i<a.count;i++){const x=a.getX(i),y=a.getY(i),z=a.getZ(i),r=1+.035*Math.sin(x*8+y*5)*Math.cos(z*9-y*3);a.setXYZ(i,x*r,y*r,z*r);}geo.computeVertexNormals();}
-  const mesh=new THREE.Mesh(geo,material);mesh.position.copy(V(...pos));mesh.scale.set(...size);g.add(mesh);return mesh;
- }
- function tube(g,points,r,material,end=r,segments=44){
+ const mat=(cor,extra={})=>new THREE.MeshPhysicalMaterial({color:cor,roughness:.48,metalness:0,sheen:.24,sheenRoughness:.68,bumpMap:bump,bumpScale:.022,clearcoat:.12,clearcoatRoughness:.65,...extra});
+ const M={nerve:mat('#cfb09a'),muscle:mat('#a65359',{map:bands,bumpMap:bands,bumpScale:.012}),membrane:mat('#c98085',{side:THREE.DoubleSide}),inside:mat('#9c545f'),glia:mat('#8baba4',{transparent:true,opacity:.27,depthWrite:false,side:THREE.DoubleSide}),myelin:mat('#c6c9ad',{transparent:true,opacity:.58,depthWrite:false}),nucleus:mat('#594971'),vesicle:mat('#d1ad73',{bumpScale:.01}),mito:mat('#a85f48',{side:THREE.DoubleSide}),crista:mat('#e1a46e',{side:THREE.DoubleSide}),ach:mat(CORES.ach),ca:mat(CORES.ca,{emissive:CORES.ca,emissiveIntensity:.12}),sodium:mat(CORES.vm),receptor:mat('#9f9d5b'),ryr:mat('#9380b1'),reticulum:mat('#9e9c85',{side:THREE.DoubleSide}),t:mat('#5b9698',{side:THREE.DoubleSide}),pulse:mat(CORES.vm,{emissive:CORES.vm,emissiveIntensity:.7}),lipid:mat('#e8bdac'),tails:mat('#aa8174'),matrix:mat('#75565e'),lamina:mat('#beb998',{transparent:true,opacity:.5,depthWrite:false})};
+ for(const tissue of ['nerve','membrane','inside','reticulum','t','myelin'])M[tissue].map=bump;
+ const sphere=new THREE.SphereGeometry(1,24,16),small=new THREE.SphereGeometry(1,10,8);
+ function organificar(geo,amount=.045){const a=geo.attributes.position;for(let i=0;i<a.count;i++){const x=a.getX(i),y=a.getY(i),z=a.getZ(i),r=1+amount*Math.sin(x*5+y*3)*Math.cos(z*6-y*2);a.setXYZ(i,x*r,y*r,z*r);}geo.computeVertexNormals();return geo;}
+ function ell(g,pos,size,material,rough=false){const mesh=new THREE.Mesh(rough?organificar(sphere.clone()):sphere,material);mesh.position.copy(V(...pos));mesh.scale.set(...size);g.add(mesh);return mesh;}
+ function tube(g,points,r,material,end=r,segments=36){
   const c=new THREE.CatmullRomCurve3(points.map(p=>V(...p))),geo=new THREE.TubeGeometry(c,segments,1,12,false),a=geo.attributes.position;
-  for(let i=0;i<=segments;i++){const u=i/segments,p=c.getPointAt(u),radius=(r+(end-r)*u)*(1+.035*Math.sin(u*19));for(let j=0;j<=12;j++){const k=i*13+j;a.setXYZ(k,p.x+(a.getX(k)-p.x)*radius,p.y+(a.getY(k)-p.y)*radius,p.z+(a.getZ(k)-p.z)*radius);}}
+  for(let i=0;i<=segments;i++){const u=i/segments,p=c.getPointAt(u),radius=(r+(end-r)*u)*(1+.04*Math.sin(u*19));for(let j=0;j<=12;j++){const k=i*13+j;a.setXYZ(k,p.x+(a.getX(k)-p.x)*radius,p.y+(a.getY(k)-p.y)*radius,p.z+(a.getZ(k)-p.z)*radius);}}
   geo.computeVertexNormals();const mesh=new THREE.Mesh(geo,material);g.add(mesh);return {mesh,curve:c};
  }
  function label(g,text,pos){g.userData.labels.push({text,pos:V(...pos)});}
  function group(){const g=new THREE.Group();g.userData={labels:[],particles:[],pulses:[],receptors:[]};return g;}
  function mito(g,pos,scale=.45){
-  const organ=new THREE.Group();organ.position.copy(V(...pos));organ.scale.setScalar(scale);organ.rotation.set(.2,.35,-.3);g.add(organ);
-  const cut=new THREE.Mesh(new THREE.SphereGeometry(1,36,22,Math.PI,Math.PI),M.mito);
-  cut.scale.set(1,.45,.42);organ.add(cut);
-  ell(organ,[0,0,-.1],[.95,.4,.13],M.inside,true);
-  for(let k=0;k<9;k++){const x=-.7+k*.17;tube(organ,[[x-.06,-.28,.22],[x+.09,0,.3],[x-.06,.25,.22]],.025,M.crista,.023,12);}
+  const organ=new THREE.Group();organ.position.copy(V(...pos));organ.scale.setScalar(scale);organ.rotation.set(.08,.18,-.24);g.add(organ);
+  const cut=new THREE.Mesh(organificar(new THREE.SphereGeometry(1,40,26,Math.PI,Math.PI)),M.mito);cut.scale.set(1,.47,.45);organ.add(cut);
+  ell(organ,[0,0,-.09],[.92,.405,.16],M.matrix,true);
+  // Cristas em lâminas contínuas, contidas na matriz da mitocôndria em corte.
+  for(let k=0;k<7;k++){const x=-.68+k*.22,extent=.36*Math.sqrt(1-x*x),points=[];for(let j=0;j<=12;j++){const y=-extent+2*extent*j/12;points.push([x+.035*Math.sin(j*.9+k),y,.025+.055*Math.sin(j*Math.PI/12)]);}tube(organ,points,.031,M.crista,.022,18);}
+  const edge=[];for(let i=0;i<=64;i++){const a=i*Math.PI*2/64;edge.push([.97*Math.cos(a),.44*Math.sin(a),0]);}tube(organ,edge,.021,M.crista,.021,64);
  }
  function dots(g,type,n,path){for(let i=0;i<n;i++){const m=new THREE.Mesh(small,type==='ach'?M.ach:type==='na'?M.sodium:M.ca);m.scale.setScalar(type==='ach'?.043:.035);g.add(m);g.userData.particles.push({m,type,index:i,n,path});}}
  function receptor(g,x,y,z,type='ach'){
   const protein=new THREE.Group();protein.position.set(x,y,z);g.add(protein);
-  for(let k=0;k<(type==='ach'?5:4);k++){const a=k*Math.PI*2/(type==='ach'?5:4),r=.095;tube(protein,[[Math.cos(a)*r,-.14,Math.sin(a)*r],[Math.cos(a)*r*.8,.05,Math.sin(a)*r*.8],[Math.cos(a)*r*1.35,.19,Math.sin(a)*r*1.35]],.042,type==='ach'?M.receptor:type==='ca'?M.ca:M.sodium,.05,12);}
+  const count=type==='ach'?5:4;
+  for(let k=0;k<count;k++){const a=k*Math.PI*2/count,r=.081;tube(protein,[[Math.cos(a)*r,-.12,Math.sin(a)*r],[Math.cos(a)*r*.78,.02,Math.sin(a)*r*.78],[Math.cos(a)*r*1.23,.14,Math.sin(a)*r*1.23]],.038,type==='ach'?M.receptor:type==='ca'?M.ca:M.sodium,.045,10);}
   g.userData.receptors.push({protein,type});return protein;
  }
  function sheet(g,offset=0,folded=false,material=M.membrane){
-  const nu=92,nv=18,positions=[],uv=[],index=[];
-  const surface=(x,z)=>offset+(folded?-.62*Math.pow((1+Math.cos(x*5.7))*.5,7):.11*Math.cos(x*1.1))+.075*Math.cos(z*2);
-  for(let i=0;i<=nu;i++)for(let j=0;j<=nv;j++){const u=i/nu,v=j/nv,x=(u-.5)*5,z=(v-.5)*2.4*(.8+.2*Math.sin(u*Math.PI));positions.push(x,surface(x,z),z);uv.push(u,v);}
+  const nu=144,nv=24,positions=[],uv=[],index=[];
+  // Pregas de fundo arredondado, com profundidade e trajeto variáveis.
+  const surface=(x,z)=>offset+(folded?-(.62+.055*Math.sin(x*1.8+z))*Math.pow((1+Math.cos((x+.035*Math.sin(z*2))*5.7))*.5,1.45):.09*Math.cos(x*1.1))+.04*Math.cos(z*2.7+x*.6);
+  const edgeZ=x=>1.22*Math.sqrt(1-(x/2.8)**2)*(1+.025*Math.sin(x*2.4));
+  for(let i=0;i<=nu;i++)for(let j=0;j<=nv;j++){const u=i/nu,v=j/nv,x=(u-.5)*5,z=(v-.5)*2*edgeZ(x);positions.push(x,surface(x,z),z);uv.push(u,v);}
   for(let i=0;i<nu;i++)for(let j=0;j<nv;j++){const a=i*(nv+1)+j,b=a+nv+1;index.push(a,a+1,b,a+1,b+1,b);}
   const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));geo.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));geo.setIndex(index);geo.computeVertexNormals();g.add(new THREE.Mesh(geo,material));
-  // A bicamada acompanha o corte biológico; não é uma base ou pedestal.
-  for(let i=0;i<83;i++){const x=-2.45+i*4.9/82,z=1.2*(.8+.2*Math.sin((x/5+.5)*Math.PI));for(const s of [-1,1]){
-   const y=surface(x,z)+s*.035;const h=new THREE.Mesh(small,M.membrane);h.position.set(x,y,z);h.scale.setScalar(.026);g.add(h);
-   tube(g,[[x,y,z],[x+.012,y-s*.022,z+.008],[x-.006,y-s*.033,z+.015]],.006,M.reticulum,.004,5);
-  }}return surface;
+  const inner=geo.clone(),p=inner.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,p.getY(i)-.06);inner.computeVertexNormals();g.add(new THREE.Mesh(inner,M.inside));
+  // Os dois folhetos fosfolipídicos permanecem visíveis na borda do corte.
+  for(let i=0;i<96;i++){const x=-2.48+i*4.96/95,z=edgeZ(x),slope=(surface(x+.002,z)-surface(x-.002,z))/.004,normal=V(-slope,1,0).normalize(),mid=V(x,surface(x,z)-.03,z);
+   for(const sign of [-1,1]){const head=mid.clone().addScaledVector(normal,sign*.04);const h=new THREE.Mesh(small,M.lipid);h.position.copy(head);h.scale.setScalar(.022);g.add(h);const end=mid.clone().addScaledVector(normal,-sign*.014);tube(g,[head.toArray(),head.clone().lerp(end,.6).add(V(.008,0,.009)).toArray(),end.toArray()],.006,M.tails,.004,4);}
+  }return surface;
  }
  const encounter=group();
  const fiber=new THREE.Mesh(new THREE.CapsuleGeometry(.87,5.9,12,60),M.muscle);fiber.rotation.z=Math.PI/2;fiber.position.y=-.94;encounter.add(fiber);
- for(let i=0;i<4;i++)ell(encounter,[-2.4+i*1.5,-.96,.83],[.22,.085,.095],M.nucleus,true);
- const main=tube(encounter,[[-3,2.45,-.25],[-2.1,1.5,-.1],[-.8,1.03,0]],.16,M.nerve,.13);
- for(let i=0;i<4;i++){
-  const x=-1.3+i*.9,z=(i%2?.43:-.28);
-  const pts=[[-.8,1.03,0],[x*.6,.66,z*.45],[x,.22,z],[x+.24,.04,z+.15]];
-  tube(encounter,pts,.13,M.nerve,.105);ell(encounter,[x+.19,.07,z+.14],[.38,.2,.25],M.nerve,true);
-  ell(encounter,[x+.16,.24,z+.12],[.42,.15,.32],M.glia,true);ell(encounter,[x+.24,.3,z+.16],[.13,.08,.075],M.nucleus);
+ const top=z=>-.94+Math.sqrt(Math.max(.08,.87*.87-z*z));
+ // Feixes longitudinais sob o sarcolema e núcleos periféricos integrados.
+ for(let i=0;i<16;i++){const a=i*Math.PI*2/16,z=Math.sin(a)*.87,y=-.94+Math.cos(a)*.87;tube(encounter,[[-2.92,y,z],[-1.4,y+.008,z],[1.5,y-.01,z],[2.94,y,z]],.01,M.membrane,.008,24);}
+ for(let i=0;i<5;i++)ell(encounter,[-2.6+i*1.23,-.72,.835],[.24,.075,.068],M.nucleus,true);
+ const main=tube(encounter,[[-3,2.3,-.2],[-2.4,1.7,-.15],[-1.65,1.07,-.08],[-.75,.46,-.02]],.14,M.nerve,.09);
+ for(let i=0;i<4;i++){const u=.05+i*.19,points=[];for(let j=0;j<=8;j++)points.push(main.curve.getPointAt(u+j*.13/8).toArray());tube(encounter,points,.225,M.myelin,.195,20);const p=main.curve.getPointAt(u+.055);ell(encounter,[p.x+.13,p.y+.02,p.z+.13],[.055,.13,.06],M.nucleus,true);}
+ for(let i=0;i<6;i++){
+  const x=-1.6+i*.62,z=-.49+(i%3)*.42,y=top(z)+.105;
+  tube(encounter,[[-.75,.46,-.02],[x*.6,.27,z*.6],[x-.28,y+.07,z],[x+.02,y,z]],.09,M.nerve,.058,28);
+  const path=[[x-.24,y,z-.035],[x-.02,y-.025,z+.075],[x+.22,y+.02,z+.06],[x+.41,y-.015,z+.12]];
+  tube(encounter,path,.105,M.nerve,.073,28);
+  tube(encounter,[[x,y,z],[x+.12,top(z-.19)+.1,z-.19],[x+.28,top(z-.25)+.08,z-.25]],.067,M.nerve,.045,18);
+  tube(encounter,path.map(([px,py,pz])=>[px,py+.056,pz]),.145,M.glia,.095,24);
+  if(i%2===0)ell(encounter,[x+.12,y+.12,z+.085],[.16,.055,.085],M.nucleus,true);
  }
- for(let i=0;i<4;i++){const u=.09+i*.19,p=main.curve.getPoint(u);const sheath=ell(encounter,[p.x,p.y,p.z],[.24,.38,.24],M.glia,true);sheath.rotation.z=.6;ell(encounter,[p.x+.2,p.y+.05,p.z+.02],[.075,.13,.06],M.nucleus);}
- const nervePulse=ell(encounter,[-3,2.45,-.25],[.19,.19,.19],M.pulse);encounter.userData.pulses.push({m:nervePulse,curve:main.curve});
- label(encounter,'Axônio motor',[-2.3,1.75,0]);label(encounter,'Schwann terminal',[1.5,.44,.55]);label(encounter,'Fibra muscular',[1.5,-1.35,.8]);label(encounter,'Placa motora',[-.5,.12,.5]);
+ const nervePulse=ell(encounter,[-3,2.3,-.2],[.16,.16,.16],M.pulse);encounter.userData.pulses.push({m:nervePulse,curve:main.curve});
+ label(encounter,'Axônio motor',[-2.2,1.5,0]);label(encounter,'Schwann terminal',[1.2,.25,.45]);label(encounter,'Fibra muscular',[1.65,-1.28,.83]);label(encounter,'Placa motora',[-.6,.08,.52]);
  const terminal=group();
- // A janela ocupa a face anterior: o corte revela o terminal já na vista inicial.
- const shellGeo=new THREE.SphereGeometry(1,64,36,Math.PI,Math.PI);
+ const shellGeo=organificar(new THREE.SphereGeometry(1,64,40,Math.PI,Math.PI),.06);
  const shell=new THREE.Mesh(shellGeo,M.membrane);shell.scale.set(2.25,1.25,1.28);shell.position.y=.6;terminal.add(shell);
- const rim=[];for(let i=0;i<=64;i++){const a=i*Math.PI*2/64;rim.push([Math.cos(a)*2.25,.6+Math.sin(a)*1.25,0]);}tube(terminal,rim,.04,M.nerve,.04,96);
- tube(terminal,[[-3.05,1.4,-.4],[-2.35,1.22,-.1],[-1.8,.95,0]],.3,M.nerve,.35);
- ell(terminal,[.2,1.4,-.6],[1.9,.25,.85],M.glia,true);ell(terminal,[.9,1.55,-.4],[.29,.16,.2],M.nucleus,true);
- sheet(terminal,-1.05,true,M.inside);
- for(let i=0;i<64;i++){const a=i*2.3999,r=.28+1.48*Math.sqrt((i+.5)/64);ell(terminal,[Math.cos(a)*r,-.3+(i%5)*.19,Math.sin(a)*r*.53],[.12,.12,.12],M.vesicle);}
- mito(terminal,[-.85,.77,.25],.54);mito(terminal,[.86,.8,.09],.43);
- for(let i=0;i<6;i++){const x=-1.55+i*.62,y=.6-1.25*Math.sqrt(1-(x/2.25)**2);receptor(terminal,x,y,.01,'ca');}
+ ell(terminal,[0,.57,-.22],[2.1,1.14,.19],M.inside,true);
+ const rim=[];for(let i=0;i<=96;i++){const a=i*Math.PI*2/96,x=Math.cos(a),y=Math.sin(a),r=1+.06*Math.sin(x*5+y*3)*Math.cos(-y*2);rim.push([x*2.25*r,.6+y*1.25*r,.008]);}tube(terminal,rim,.032,M.lipid,.032,96);
+ tube(terminal,[[-3.05,1.4,-.4],[-2.35,1.22,-.12],[-1.8,.95,-.15]],.3,M.nerve,.35);
+ ell(terminal,[.08,1.48,-.63],[1.9,.25,.78],M.glia,true);ell(terminal,[.84,1.59,-.46],[.27,.12,.18],M.nucleus,true);
+ sheet(terminal,-1.05,true,M.membrane);
+ for(let i=0;i<48;i++){const a=i*2.3999,r=.25+1.48*Math.sqrt((i+.5)/48),x=Math.cos(a)*r,y=-.18+(i%5)*.18,z=.05+(Math.sin(a)+1)*.21,size=.085+.032*(.5+.5*Math.sin(i*7));ell(terminal,[x,y,z],[size,size*.96,size],M.vesicle,true);}
+ for(let i=0;i<7;i++){const x=-1.55+i*.51,y=.6-1.25*Math.sqrt(1-(x/2.25)**2);receptor(terminal,x,y,.02,'ca');ell(terminal,[x,y+.15,.12],[.08,.08,.08],M.vesicle);tube(terminal,[[x-.1,y+.045,.11],[x,y+.055,.15],[x+.1,y+.035,.11]],.021,M.receptor,.018,10);}
+ mito(terminal,[-.86,.98,.19],.65);mito(terminal,[.88,.89,.12],.49);
+ for(let i=0;i<7;i++){const x=-1.6+i*.52;tube(terminal,[[x,-.82,-.35],[x+.14,-.85,.15],[x-.07,-.8,.66]],.012,M.lamina,.01,14);}
  dots(terminal,'ach',25,u=>V(-1.5+(u*17%1)*3,-.5-u*.6,.58+.18*Math.sin(u*25)));
  dots(terminal,'preca',16,u=>V(-1.5+3*(u*13%1),-.55+u*.53,.28));
- label(terminal,'Vesículas de ACh',[-.5,.45,.75]);label(terminal,'Mitocôndria',[-.95,1,.38]);label(terminal,'Ca²⁺ do terminal',[1.25,-.43,.4]);label(terminal,'Zona ativa',[0,-.57,.74]);label(terminal,'Membrana muscular',[1,-1.4,1.15]);
+ label(terminal,'Vesículas de ACh',[-.5,.4,.6]);label(terminal,'Mitocôndria',[-.95,1.08,.38]);label(terminal,'Ca²⁺ do terminal',[1.25,-.43,.4]);label(terminal,'Zona ativa',[0,-.58,.45]);label(terminal,'Membrana muscular',[1,-1.46,1.1]);
  const cleft=group();
- const surface=sheet(cleft,-.62,true);sheet(cleft,1.07,false,M.nerve);
+ const surface=sheet(cleft,-.62,true);sheet(cleft,.42,false,M.nerve);
  const cristas=[-3*Math.PI/5.7,-Math.PI/5.7,Math.PI/5.7,3*Math.PI/5.7];
- for(const x of cristas)receptor(cleft,x,surface(x,.58)+.1,.58);
- for(let i=-2;i<=2;i++){const x=i*2*Math.PI/5.7;receptor(cleft,x,surface(x,.05)+.04,.05,'na');}
- for(let i=0;i<8;i++){const x=-2+i*.55;ell(cleft,[x,1.2,.42],[.12,.12,.12],M.vesicle);ell(cleft,[x,.3,-.3],[.09,.08,.07],M.reticulum,true);}
- dots(cleft,'ach',38,u=>V(-2.1+4.2*(u*11.7%1),1.02-u*1.5,.42+.15*Math.sin(u*31)));
- dots(cleft,'na',23,u=>{const x=cristas[Math.floor((u*4)%4)];return V(x,surface(x,.58)+.38-u*.7,.58);});
- label(cleft,'Membrana do terminal',[-1.2,1.18,.9]);label(cleft,'Acetilcolina',[1.6,.52,.6]);label(cleft,'Receptor nicotínico',[.42,-.45,.7]);label(cleft,'Pregas do sarcolema',[-1.3,-1.05,1]);label(cleft,'Acetilcolinesterase',[1.55,.31,-.25]);
- const triad=group();
- const tCurve=tube(triad,[[-3,.65,0],[-1.7,.52,.01],[0,.51,-.02],[1.6,.53,.01],[3,.72,0]],.23,M.t,.25);
- tube(triad,[[-1.6,.57,0],[-1.6,1.7,-.05],[-1.65,2,-.35]],.23,M.t,.22);
- for(const s of [-1,1]){
-  const cisterna=tube(triad,[[-2.7,.35,s*.75],[-1.3,.38,s*.71],[.15,.36,s*.76],[1.5,.39,s*.73],[2.7,.36,s*.79]],.36,M.reticulum,.32);
-  const cp=cisterna.mesh.geometry.attributes.position;
-  for(let k=0;k<cp.count;k++){const x=cp.getX(k),ripple=1+.08*Math.sin(x*4.3)+.025*Math.cos(x*9);cp.setY(k,.36+(cp.getY(k)-.36)*.74*ripple);cp.setZ(k,s*.75+(cp.getZ(k)-s*.75)*1.18*ripple);}cisterna.mesh.geometry.computeVertexNormals();
-  ell(triad,[-2.7,.35,s*.75],[.3,.26,.4],M.reticulum,true);ell(triad,[2.7,.36,s*.79],[.27,.24,.37],M.reticulum,true);
-  for(let i=0;i<11;i++){const x=-2.5+i*.49;tube(triad,[[x,.29,s*.92],[x+.11,-.26,s*1.2],[x-.04,-.75,s*.75]],.05,M.reticulum,.035,18);}
-  for(let i=0;i<6;i++){const x=-2.15+i*.84;tube(triad,[[x,.5,s*.2],[x,.46,s*.35],[x,.43,s*.47]],.063,M.ryr,.077,14);ell(triad,[x,.43,s*.47],[.15,.15,.12],M.ryr,true);}
+ for(const x of cristas)for(const z of [-.34,.53])receptor(cleft,x,surface(x,z)+.01,z);
+ for(let i=-2;i<=2;i++){const x=i*2*Math.PI/5.7;receptor(cleft,x,surface(x,.08)+.035,.08,'na');}
+ for(let i=0;i<8;i++){const x=-2+i*.55;ell(cleft,[x,.63,.16],[.105,.105,.105],M.vesicle,true);
+  tube(cleft,[[x,-.43,-.47],[x+.02,-.33,-.43],[x+.01,-.22,-.4]],.016,M.lamina,.016,9);
+  for(const s of [-1,1])ell(cleft,[x+s*.065,-.19,-.4],[.075,.04,.05],M.reticulum,true);
  }
- for(const z of [-.6,.6]){const m=new THREE.Mesh(new THREE.CylinderGeometry(.33,.33,5.9,36),M.muscle);m.rotation.z=Math.PI/2;m.position.set(0,-1.08,z);triad.add(m);}
- dots(triad,'ca',48,u=>V(-2.4+4.8*(u*9.3%1),.15-u*1.17,Math.sin(u*21)*.62));
- const tPulse=ell(triad,[-3,.65,0],[.26,.26,.26],M.pulse);triad.userData.pulses.push({m:tPulse,curve:tCurve.curve});
- label(triad,'Túbulo T',[-1.65,1.6,.1]);label(triad,'Cisterna terminal',[1.4,.72,.85]);label(triad,'DHPR → RyR1',[-.8,.52,.4]);label(triad,'Ca²⁺ liberado',[1.4,-.29,.4]);label(triad,'Miofibrilas',[.6,-1.32,.8]);
+ for(let i=0;i<11;i++){const x=-2.35+i*.47;tube(cleft,[[x-.09,-.38,-1.05],[x+.04,-.39,-.45],[x-.07,-.36,.4],[x+.08,-.39,1.04]],.01,M.lamina,.009,20);}
+ dots(cleft,'ach',38,u=>V(-2.1+4.2*(u*11.7%1),.42-u*.96,.45+.15*Math.sin(u*31)));
+ dots(cleft,'na',23,u=>{const x=cristas[Math.floor((u*4)%4)];return V(x,surface(x,.53)+.25-u*.6,.53);});
+ label(cleft,'Membrana do terminal',[-1.2,.57,.9]);label(cleft,'Acetilcolina',[1.6,-.08,.6]);label(cleft,'Receptor nicotínico',[.52,-.55,.63]);label(cleft,'Pregas do sarcolema',[-1.3,-1.05,1.1]);label(cleft,'Acetilcolinesterase',[1.6,-.16,-.4]);
+ const triad=group();
+ const tCurve=tube(triad,[[-2.8,.61,0],[-1.4,.51,.01],[0,.5,-.02],[1.5,.54,.01],[2.8,.64,0]],.22,M.t,.23);
+ tube(triad,[[-2.78,.61,0],[-3.01,1.02,-.06],[-2.98,1.58,-.16]],.22,M.t,.24);
+ for(const s of [-1,1]){
+  const cisterna=tube(triad,[[-2.55,.52,s*.68],[-1.3,.52,s*.7],[.1,.52,s*.71],[1.4,.55,s*.7],[2.55,.52,s*.68]],.34,M.reticulum,.3);
+  const cp=cisterna.mesh.geometry.attributes.position;
+  for(let k=0;k<cp.count;k++){const x=cp.getX(k),ripple=1+.14*Math.sin(x*4.3)+.03*Math.cos(x*9);cp.setY(k,.52+(cp.getY(k)-.52)*.77*ripple);cp.setZ(k,s*.7+(cp.getZ(k)-s*.7)*1.03*ripple);}cisterna.mesh.geometry.computeVertexNormals();
+  ell(triad,[-2.55,.52,s*.68],[.29,.25,.32],M.reticulum,true);ell(triad,[2.55,.52,s*.68],[.26,.22,.3],M.reticulum,true);
+  for(let i=0;i<7;i++){const x=-2.17+i*.72;tube(triad,[[x,.52,s*.2],[x,.52,s*.3],[x,.52,s*.39]],.055,M.ryr,.055,10);ell(triad,[x,.52,s*.4],[.13,.1,.075],M.ryr,true);}
+ }
+ // O túbulo T cruza o eixo longitudinal das miofibrilas. A rede do retículo
+ // conecta as cisternas e acompanha os feixes.
+ for(const x of [-1.65,0,1.65]){
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(.51,.51,3.65,40,1),M.muscle);m.rotation.x=Math.PI/2;m.position.set(x,-.48,0);triad.add(m);
+  for(let i=0;i<6;i++){const a=i*Math.PI/3,cx=x+.57*Math.cos(a),cy=-.48+.57*Math.sin(a);
+   for(const s of [-1,1])tube(triad,[[x+.18*Math.cos(a),.33,s*.88],[cx,cy,s*1.12],[cx+.035,cy-.02,s*1.8]],.035,M.reticulum,.028,18);
+  }
+  for(const s of [-1,1]){const points=[];for(let i=0;i<=36;i++){const a=i*Math.PI*2/36;points.push([x+.57*Math.cos(a),-.48+.57*Math.sin(a),s*1.52+.035*Math.sin(a*3)]);}tube(triad,points,.03,M.reticulum,.03,36);}
+  for(let i=0;i<19;i++){const a=i*2.4,r=.44*Math.sqrt((i+.5)/19);ell(triad,[x+Math.cos(a)*r,-.48+Math.sin(a)*r,1.832],[.055,.055,.018],M.inside);}
+ }
+ dots(triad,'ca',48,u=>V(-2.4+4.8*(u*9.3%1),.26-u*.92,Math.sin(u*21)*1.25));
+ const tPulse=ell(triad,[-2.8,.61,0],[.23,.23,.23],M.pulse);triad.userData.pulses.push({m:tPulse,curve:tCurve.curve});
+ label(triad,'Túbulo T',[-2.98,1.48,-.12]);label(triad,'Cisterna terminal',[1.4,.8,.8]);label(triad,'DHPR → RyR1',[-.74,.55,.36]);label(triad,'Retículo sarcoplasmático',[1.92,-.45,1.52]);label(triad,'Miofibrilas',[.5,-.9,1.8]);
  const sarcomere=group();let approved=null,loading=null;
  async function prepararSarcomero(canvasFactory){
   if(approved)return approved;if(loading)return loading;
