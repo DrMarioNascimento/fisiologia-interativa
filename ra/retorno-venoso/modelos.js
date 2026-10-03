@@ -33,7 +33,7 @@ const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
    Uma unidade de mundo = 50 cm; 170 cm correspondem a 3,4 unidades.
    A física usa as alturas anatômicas em centímetros, independentemente
    da ampliação das peças explicativas. */
-import {CM,CORPO,PIH,MMHG_POR_CM,pressaoVenosa,pressaoLocal,aberturaValvula,pulsoCardiaco} from './fisica.js?v=postura-20261003';
+import {CM,CORPO,PIH,MMHG_POR_CM,pressaoVenosa,pressaoLocal,aberturaValvula,pulsoCardiaco,leiturasHemodinamicas,fatorVenoso} from './fisica.js?v=pa-pv-20261003';
 export {CM,CORPO,PIH,MMHG_POR_CM,pressaoVenosa};
 
 /* ── MATERIAIS ─────────────────────────────────────────────────────────── */
@@ -130,18 +130,11 @@ function veia(pontos, raioBase) {
    raio. Ela sai de achatada, vira circular e então a parede endurece — muito
    volume por pouca pressão no começo, quase nada depois.
 
-   O EXPOENTE FOI CALIBRADO CONTRA O LIVRO, não escolhido pelo desenho. Com
-   raiz cúbica a perna engordava 2,9x em área e o modelo previa 1.140 ml
-   empoçados nas duas pernas — o dobro do que se mede. Com raiz quarta e teto
-   em 1,45 a área dobra e a previsão cai para ~600 ml, dentro da faixa de 300
-   a 800 que a literatura relata ao levantar.
-
-   E A LEI É A MESMA PARA O DESENHO E PARA A CONTA. Seria fácil engrossar mais
-   a veia "para aparecer" e calcular o volume por outra régua — e seria
-   exatamente a mentira que esta bancada existe para não contar. Quem faz a
-   distensão aparecer é a COR, que tem rampa própria. */
+   Lei demonstrativa recalibrada para 5 mmHg na periferia em decúbito.
+   A mesma curva controla calibre e volume. A pressão não define o calibre
+   de um paciente: a complacência aqui é uma aproximação limitada. */
 export function fatorDeDistensao(mmHg, teto = 1.45) {
-  return clamp(Math.pow(clamp(mmHg, 1, 120) / 12, .25), .80, teto);
+  return fatorVenoso(mmHg,teto);
 }
 
 function moldarVeia(malha, grau, opc = {}) {
@@ -149,9 +142,9 @@ function moldarVeia(malha, grau, opc = {}) {
   moldarOriginalCardiaca(g,grau,opc,moldarVeia);
   moldarOriginalDistal(g,grau,opc,moldarVeia);
   const pos = g.attributes.position, cor = g.attributes.color;
-  const base = opc.base ?? 10, teto = opc.teto ?? 1.45;
+  const teto = opc.teto ?? 1.45;
   for (let s = 0; s <= u.segsU; s++) {
-    const p = pressaoLocal(u.alturas[s], grau, opc.atividade??0, { base });
+    const p = pressaoLocal(u.alturas[s], grau, opc.atividade??0);
     const f = fatorDeDistensao(p, teto);
     const c = corDaPressao(p);
     const ct = u.centros[s], r = u.raioBase * f * (u.calibreCardiaco?.[s] ?? 1) * (u.calibreDistal?.[s] ?? 1);
@@ -569,12 +562,9 @@ function nivelCorpoSilhueta(scan) {
   }
 
   g.userData.veias = veias;
-  /* A GEOMETRIA FICA EM ALTURA ABSOLUTA — `veia()` guarda `p.y / CM` como
-     altura em cm, e a física depende disso. Quem desce o corpo é o GRUPO, e
-     ele desce até o ponto indiferente hidrostático: é em torno dele que o
-     corpo tem de girar, porque é a única altura cuja pressão não muda entre
-     deitar e levantar. Girar em torno do pé ou do coração faria a peça
-     escorregar no quadro e mentiria sobre a física. */
+  /* Alturas absolutas conservadas; a origem do grupo permanece no diafragma
+     somente para preservar o encaixe e a geometria aprovados. A referência
+     de pressão é o átrio direito e independe desta origem visual. */
   g.position.y = -PIH * CM;
   return g;
 }
@@ -1115,25 +1105,9 @@ export async function criar() {
   ];
   modelos.forEach((m, i) => { m.visible = i === 0; });
 
-  /* ── VOLUME EMPOÇADO ───────────────────────────────────────────────────
-     Somado das próprias veias desenhadas, não chumbado: pi*r^2*L anel a
-     anel, comparado com o mesmo corpo deitado. O livro fala em 300 a 800 ml
-     ao levantar, e o modelo tem de cair nessa faixa sozinho — se não cair, é
-     o modelo que está errado, não o livro. */
-  /* ── O VOLUME EMPOÇADO ─────────────────────────────────────────────────
-     O tubo desenhado é EXAGERADO para se enxergar: medir volume no calibre
-     do desenho deu 7.314 ml, dez vezes o que se mede numa perna. A saída não
-     é corrigir o número no fim — é calibrar onde há medida.
-
-     Repare que o CALIBRE DESENHADO NAO ENTRA nesta conta: so o fator de
-     distensao e o comprimento. E por isso que se pode engrossar a veia para
-     ela aparecer sem mexer um mililitro no resultado.
-
-     Calibra-se o REPOUSO: as duas pernas guardam cerca de 600 ml de sangue
-     venoso deitado, e isso é anatomia medida. O que acontece ao levantar sai
-     então da lei de distensão, e é PREVISÃO do modelo, não entrada dele. Se a
-     previsão não cair na faixa de 300 a 800 ml que a literatura relata, é o
-     modelo que está errado — e é justamente isso que se quer poder descobrir. */
+  /* Volume demonstrativo: a área relativa da mesma lei venosa é integrada
+     no comprimento das veias, com referência de 600 mL nas duas pernas.
+     Não representa conservação sanguínea ou débito de toda a circulação. */
   const VOL_REPOUSO_PERNAS = 600;                 // ml, deitado, as duas pernas
   const DA_PERNA = new Set(['perna', 'profunda', 'safena', 'perfurante']);
 
@@ -1141,9 +1115,8 @@ export async function criar() {
     let soma = 0;
     for (const v of (m.userData.veias || [])) {
       if (!DA_PERNA.has(v.userData.papel)) continue;
-      const u = v.geometry.userData;
+      const u = v.geometry.userData,centros=centrosParaVolume(v.geometry);
       for (let s = 0; s < u.segsU; s++) {
-        const centros=centrosParaVolume(v.geometry);
         const f = fatorDeDistensao(pressaoLocal(centros[s].y/CM, grau, atividade));
         const L = centros[s].distanceTo(centros[s + 1]) / CM;
         soma += f * f * L;                        // area vai com o quadrado do raio
@@ -1162,14 +1135,15 @@ export async function criar() {
           ? { teto: 1.2, atividade } : { atividade });
       }
     }
-    const jug = pressaoVenosa(CORPO.jugular, grau);
+    const regioes=leiturasHemodinamicas(grau,atividade),jug=regioes.jugular.pvLivre;
     return {
-      tornozelo: pressaoVenosa(CORPO.tornozelo, grau),
-      panturrilha: pressaoVenosa(30, grau),
-      coxa: pressaoVenosa(CORPO.coxa, grau),
-      coracao: pressaoVenosa(CORPO.coracao, grau),
+      regioes,
+      tornozelo: regioes.tornozelo.pv,
+      panturrilha: pressaoLocal(30,grau,atividade),
+      coxa: regioes.coxa.pv,
+      coracao: regioes.coracao.pv,
       jugular: jug,
-      jugularColabada: jug < 0,
+      jugularColabada: regioes.jugular.colabada,
       empocado: volumeDe(modelos[0], grau,atividade) - volumeDe(modelos[0], 0),
     };
   }

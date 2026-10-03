@@ -34,11 +34,11 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { prepararParaRA } from '../cores-para-ra.js';
-import { criar, corDaPressao } from './modelos.js?v=postura-20261003';
+import { criar } from './modelos.js?v=pa-pv-20261003';
 import {criarEstadoBomba,avancarBomba} from './bomba.js?v=pes-bomba-20261002';
 
-import {mmHgParaCmH2O} from './fisica.js?v=postura-20261003';
-import {criarGraficoPostura} from './grafico.js?v=perfil-20261003';
+import {mmHgParaCmH2O} from './fisica.js?v=pa-pv-20261003';
+import {criarGraficoPostura,desenharGraficoTemporal} from './grafico.js?v=pa-pv-20261003';
 const $ = id => document.getElementById(id);
 const canvas = $('scene'), stage = $('stage');
 const clamp = THREE.MathUtils.clamp;
@@ -170,9 +170,9 @@ function definirGrau(g, imediato = false) {
 /* ------------------------------------------------------------ os níveis */
 const TEXTOS = [
   { olho: 'A pergunta', titulo: 'Onde a gravidade aperta?',
-    texto: 'Deitado, a coluna de sangue não tem altura: do tornozelo ao pescoço a pressão venosa é quase a mesma. Em pé, cada centímetro abaixo do diafragma acrescenta 0,78 mmHg — e o tornozelo chega a noventa. Incline o aparelho e veja a árvore mudar de calibre e de cor.',
-    tags: ['0,78 mmHg/cm', 'ponto indiferente no diafragma', 'U nos pés: microcirculação simplificada'] },
-  { olho: 'Nível 02', titulo: 'Meio litro sai de circulação',
+    texto: 'Deitado, as veias periféricas estão em 5 mmHg e o átrio direito em 2: existe gradiente de escoamento mesmo sem desnível gravitacional. Em pé, cada centímetro abaixo do átrio acrescenta cerca de 0,78 mmHg às pressões arterial e venosa. Compare PA e PV na mesma região enquanto muda a postura.',
+    tags: ['0,78 mmHg/cm', 'altura de referência: átrio direito', 'U nos pés: microcirculação simplificada'] },
+  { olho: 'Nível 02', titulo: 'A reserva venosa nas pernas',
     texto: 'A veia é um saco complacente, não um cano: recebe muito volume com pouca pressão. Ao levantar, algumas centenas de mililitros descem para as pernas e deixam de voltar ao coração — e esse represamento pode reduzir a pré-carga. O card estima o volume adicional nas pernas neste modelo didático.',
     tags: ['safena e profunda', 'perfurantes'] },
   { olho: 'Nível 03', titulo: 'Abre para subir, fecha para não voltar',
@@ -182,7 +182,7 @@ const TEXTOS = [
     texto: 'A panturrilha é a segunda bomba do corpo. Ao contrair, espreme a veia profunda entre as barrigas: a válvula de baixo fecha, a de cima abre, e o segmento se esvazia para cima. As valvas coordenam o esvaziamento na contração e o reenchimento no relaxamento.',
     tags: ['bomba muscular', 'vista interna das válvulas', 'fluxo: distal → proximal → coração'] },
   { olho: 'Nível 05', titulo: 'Parado em pé é pior que andar',
-    texto: 'De pé e imóvel, a coluna é inteira e o tornozelo fica em noventa. A caminhada com válvulas competentes reduz a pressão ambulatorial para perto de 25 mmHg neste modelo. Ao parar, o reservatório distal se reenche gradualmente. A pressão não mede diretamente o fluxo ou o débito cardíaco.',
+    texto: 'De pé e imóvel, a pressão venosa no tornozelo se aproxima de 95 mmHg neste corpo. A caminhada com válvulas competentes reduz a pressão ambulatorial para perto de 25 mmHg neste modelo. Ao parar, o reservatório distal se reenche gradualmente. A pressão não mede diretamente o fluxo ou o débito cardíaco.',
     tags: ['pressão venosa ambulatorial', 'retorno ao coração', 'U nos pés: microcirculação simplificada'] },
 ];
 const ROTULO = ['O corpo', 'A perna', 'A válvula', 'A bomba', 'O ciclo'];
@@ -224,30 +224,25 @@ function aplicarTudo(atualizarFluxo=true) {
   const p = aplicarPostura(grau,{atividade:estadoBomba.atividade});
   ultimo = p;
 
-  const b = aplicarBomba(faseBomba, grau,estadoBomba.atividade,bombaAndando||passoRestante>0);
-  const tornozelo = b.bombeando;
+  aplicarBomba(faseBomba, grau,estadoBomba.atividade,bombaAndando||passoRestante>0);
 
   $('posturaLabel').textContent =
     grau < 20 ? `Decúbito · ${grau.toFixed(0)}°`
     : grau > 70 ? `Ortostatismo · ${grau.toFixed(0)}°`
     : `Inclinado · ${grau.toFixed(0)}°`;
-  $('pressaoLabel').textContent = `Tornozelo ${tornozelo.toFixed(0)} mmHg · ${mmHgParaCmH2O(tornozelo).toFixed(1).replace('.',',')} cmH₂O`;
-  $('grauValor').textContent = `${grau.toFixed(0)}°`;
-  if (!arrastando) $('grauCursor').value = grau.toFixed(0);
-
-  $('lTornozelo').textContent = tornozelo.toFixed(0);
-  $('lCoxa').textContent = p.coxa.toFixed(0);
-  $('lCoracao').textContent = p.coracao.toFixed(0);
-  /* veia é tubo COLABÁVEL: não sustenta pressão negativa, ela fecha. Escrever
-     o número negativo seria ensinar errado. */
-  $('lJugular').textContent = p.jugularColabada ? 'colabada' : p.jugular.toFixed(0);
-  $('lEmpocado').textContent = Math.max(0, p.empocado).toFixed(0);
-  const equivalente=p=>mmHgParaCmH2O(p).toFixed(1).replace('.',',')+' cmH₂O';
-  $('uTornozelo').textContent=equivalente(tornozelo);
-  $('uCoxa').textContent=equivalente(p.coxa);
-  $('uCoracao').textContent=equivalente(p.coracao);
-  $('uJugular').textContent=p.jugularColabada?'':equivalente(p.jugular);
-  $('jugularUnidade').textContent=p.jugularColabada?'':' mmHg';
+  const numero=v=>v.toFixed(1).replace('.',','),equivalente=v=>numero(mmHgParaCmH2O(v))+' cmH₂O';
+  const distal=p.regioes.tornozelo;
+  $('pressaoLabel').innerHTML='<b>Tornozelo</b><small class="pa-hud">PA '+numero(distal.pa)+' mmHg <em class="hud-agua">· '+equivalente(distal.pa)+'</em></small><small class="pv-hud">PV '+numero(distal.pv)+' mmHg <em class="hud-agua">· '+equivalente(distal.pv)+'</em></small>';
+  $('grauValor').textContent=grau.toFixed(0)+'°';if(!arrastando)$('grauCursor').value=grau.toFixed(0);
+  for(const [id,r] of Object.entries(p.regioes)){
+   const k=id[0].toUpperCase()+id.slice(1);
+   $('pa'+k).textContent=numero(r.pa);$('uPa'+k).textContent=equivalente(r.pa);
+   $('l'+k).textContent=r.colabada?'colabada':numero(r.pv);
+   $('unidade'+k).textContent=r.colabada?'':' mmHg';$('u'+k).textContent=r.colabada?'Coluna venosa interrompida':equivalente(r.pv);
+   $('h'+k).textContent=Math.abs(r.desnivel)<.05?'Mesmo nível vertical do átrio direito':numero(Math.abs(r.desnivel))+' cm '+(r.desnivel>0?'abaixo':'acima')+' do átrio direito';
+   $('d'+k).textContent=r.diferenca===null?'Jugular colabada: diferença PA−PV não estimada.':'Diferença PA−PV: '+numero(r.diferenca)+' mmHg · '+equivalente(r.diferenca);
+  }
+  $('lEmpocado').textContent=Math.max(0,p.empocado).toFixed(0);
   $('deitar').setAttribute('aria-pressed',grau<1);
   $('levantar').setAttribute('aria-pressed',grau>89);
   atualizarExecucao();
@@ -272,32 +267,12 @@ let ultimaCurva='';
 function desenharCurva(){
  if(!Number.isFinite(ultimo.coracao))return;
  const chave=[grau.toFixed(2),estadoBomba.atividade.toFixed(4),ultimo.empocado,gr.clientWidth].join('|');if(chave===ultimaCurva)return;ultimaCurva=chave;
- const tornozelo=aplicarBomba(faseBomba,grau,estadoBomba.atividade,bombaAndando||passoRestante>0).bombeando;
- graficoPostura(gr,grau,ultimo,tornozelo,corDaPressao);
+ graficoPostura(gr,grau,ultimo);
 }
 
-const gt = $('curvaTempo'), ctt = gt && gt.getContext('2d');
-function desenharTempo() {
-  if (!ctt) return;
-  const W = gt.width, H = gt.height;
-  ctt.clearRect(0, 0, W, H);
-  const m = { e: 54, d: 62, t: 38, b: 43 };
-  const py = v => H - m.b - clamp(v, 0, 100) / 100 * (H - m.t - m.b);
-  ctt.fillStyle='#b6cad9';ctt.font='12px Inter, sans-serif';ctt.fillText('mmHg',12,20);ctt.fillText('cmH₂O',W-55,20);ctt.fillText('Tempo simulado (s)',W-150,H-12);
-  ctt.strokeStyle = '#385365'; ctt.lineWidth = 1;
-  ctt.beginPath(); ctt.moveTo(m.e, m.t); ctt.lineTo(m.e, H - m.b); ctt.lineTo(W - m.d, H - m.b); ctt.stroke();
-  ctt.fillStyle = '#b6cad9'; ctt.font = '11px "IBM Plex Mono", monospace';
-  for (const v of [0, 50, 100]) {ctt.fillText(String(v), 6, py(v) + 3);ctt.fillText(mmHgParaCmH2O(v).toFixed(1).replace('.',','),W-m.d+8,py(v)+3);}
-  const fim=Math.max(JANELA_S,tempoSimulado),inicio=fim-JANELA_S;
-  for(let i=0;i<=4;i++){const x=m.e+i/4*(W-m.e-m.d);ctt.fillText((inicio+i*JANELA_S/4).toFixed(0),x-4,H-26);ctt.strokeStyle='#38536566';ctt.beginPath();ctt.moveTo(x,m.t);ctt.lineTo(x,H-m.b);ctt.stroke();}
-  if (!historico.length) return;
-  ctt.beginPath();
-  historico.forEach((v, i) => {
-    const x = m.e + (v.t-inicio)/JANELA_S * (W - m.e - m.d);
-    i ? ctt.lineTo(x, py(v.p)) : ctt.moveTo(x, py(v.p));
-  });
-  ctt.strokeStyle = '#ffcb96'; ctt.lineWidth = 2.2; ctt.stroke();
-}
+const gt=$('curvaTempo');
+let ultimoTempo='';
+function desenharTempo(){if(!ultimo.regioes)return;const r=ultimo.regioes.tornozelo,chave=[tempoSimulado,r.pa,r.pv,gt.clientWidth].join('|');if(chave===ultimoTempo)return;ultimoTempo=chave;desenharGraficoTemporal(gt,historico,tempoSimulado,r,JANELA_S);}
 
 function desenhar() { desenharCurva(); desenharTempo(); renderer.render(scene, camera); rotularValvulas(); }
 
@@ -362,7 +337,7 @@ function executar(dt){
     if(ativo)faseBomba=(faseBomba+h/1.15)%1;
     avancarBomba(estadoBomba,h,ativo);
     aplicarTudo(false);animarCirculacao(h,grau,ativo,estadoBomba.atividade);
-    if(tempoSimulado-ultimaAmostra>=.125){ultimaAmostra=tempoSimulado;historico.push({t:tempoSimulado,p:aplicarBomba(faseBomba,grau,estadoBomba.atividade,bombaAndando||passoRestante>0).bombeando});}
+    if(tempoSimulado-ultimaAmostra>=.125){ultimaAmostra=tempoSimulado;historico.push({t:tempoSimulado,p:ultimo.regioes.tornozelo.pv,pa:ultimo.regioes.tornozelo.pa});}
     while(historico.length&&historico[0].t<tempoSimulado-JANELA_S)historico.shift();
     if(passoRestante>0){passoRestante=Math.max(0,passoRestante-h);if(passoRestante<1e-8){passoRestante=0;faseBomba=0;executando=false;}}
     if(!$('loopContinuo').checked&&tempoCiclo>=1.15-1e-8){executando=false;faseBomba=0;}
@@ -378,7 +353,7 @@ renderer.setAnimationLoop(() => {
   if(Math.abs(grau-antes)>1e-5)aplicarTudo();
   if(posturaParaRA&&grau===grauAlvo){posturaParaRA=false;prepararRA();}
   executar(dt*velocidade);
-  controls.update();desenharCurva();renderer.render(scene,camera);rotularValvulas();
+  controls.update();desenharCurva();desenharTempo();renderer.render(scene,camera);rotularValvulas();
 });
 
 /* ------------------------------------------------------------ o sensor */
@@ -431,7 +406,7 @@ $('andar').onclick=()=>estadoRapido(90,true);
 $('estadoParado').onclick=()=>estadoRapido(90,false);
 $('estadoDeitado').onclick=()=>estadoRapido(0,false);
 $('passo').onclick=()=>{bombaAndando=false;faseBomba=0;passoRestante=1.15;tempoCiclo=0;executando=true;aplicarTudo();desenhar()};
-document.querySelectorAll('[data-grafico]').forEach(b=>b.onclick=()=>{const temporal=b.dataset.grafico==='tempo';$('curvaColuna').hidden=temporal;$('curvaTempo').hidden=!temporal;document.querySelectorAll('[data-grafico]').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});$('notaGrafico').textContent=temporal?'Pressão venosa do tornozelo nos últimos 12 segundos simulados. Caminhada reduz a pressão; ao parar, o reservatório distal se reenche gradualmente.':'Postura do corpo e pressões regionais: a silhueta fica em pé ou deitada como na cena. As barras representam pressão, não inclinação.';desenhar()});
+document.querySelectorAll('[data-grafico]').forEach(b=>b.onclick=()=>{const temporal=b.dataset.grafico==='tempo';$('curvaColuna').hidden=temporal;$('curvaTempo').hidden=!temporal;document.querySelectorAll('[data-grafico]').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});$('notaGrafico').textContent=temporal?'PA e PV do tornozelo nos últimos 12 segundos simulados, na mesma escala. Caminhada reduz PV; a PA mantém a referência didática desta postura.':'Postura do corpo e pressões regionais: a silhueta fica em pé ou deitada como na cena. PA e PV são comparadas na mesma escala e na mesma postura.';desenhar()});
 $('telaCheia').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await stage.requestFullscreen()}catch{$('telaCheia').textContent='Ampliação indisponível'}};
 document.addEventListener('fullscreenchange',()=>{$('telaCheia').textContent=document.fullscreenElement?'Reduzir':'Ampliar';ajustar()});
 

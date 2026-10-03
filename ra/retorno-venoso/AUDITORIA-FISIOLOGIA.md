@@ -1,37 +1,53 @@
-# Revisão de postura, pressões e sincronização
+# Revisão de PA, PV, postura e sincronização
 
-O modelo demonstra hidrostática, válvulas e bomba muscular. Não resolve a circulação completa, o débito cardíaco ou a curva de retorno venoso de Guyton.
+O modelo demonstra hidrostática, gradiente de pressão em repouso, válvulas e bomba muscular. Não resolve resistências vasculares completas, débito cardíaco, autorregulação, barorreflexo ou curva de retorno venoso de Guyton.
 
-## Pressões e unidades
+## Referências e unidades
 
-O cálculo usa densidade sanguínea de 1.060 kg/m³, gravidade de 9,80665 m/s² e 133,322387415 Pa/mmHg: 0,779693 mmHg por cm de coluna vertical. A conversão é 1 mmHg = 1,35951 cmH₂O. A inclinação entra pelo seno, aplicado ao desnível anatômico.
+A altura de referência é o átrio direito, a 128 cm do solo em um corpo de 170 cm. A PAM central é 100 mmHg; a pressão atrial direita é 2 mmHg. Em decúbito, os pontos periféricos apresentados têm PA média de 95 mmHg e PV de 5 mmHg. Esses valores são referências ilustrativas, mantidas fixas para isolar gravidade e bomba; não são previsão da resposta clínica ao levantar. A pressão atrial direita real pode diminuir transitoriamente com redistribuição sanguínea e retornar com compensação.
 
-A referência didática é 10 mmHg no diafragma, a 118 cm do solo. Em pé e em repouso, resulta em aproximadamente 92,65 mmHg no tornozelo, 43,53 na coxa e 2,20 na altura do coração. Todas as regiões usam a mesma referência; no decúbito, ficam em 10 mmHg. A extrapolação na jugular, a 150 cm, é negativa em pé e é apresentada como veia colabada, sem tratá-la como pressão negativa sustentada.
+Densidade sanguínea: 1.060 kg/m³; gravidade: 9,80665 m/s²; 133,322387415 Pa/mmHg. A coluna vertical de sangue acrescenta 0,779693 mmHg/cm. Conversão: 1 mmHg = 1,35951 cmH₂O. PA significa pressão arterial **média**, não sistólica/diastólica.
 
-O card “Coração (ref.)” apresenta essa referência hidrostática regional, não uma previsão clínica da pressão venosa central. Um modelo completo precisaria representar redistribuição sanguínea, complacência central e função cardíaca.
+Para uma altura anatômica h em cm, o desnível vertical abaixo do átrio é (128 − h) × sen(inclinação). PA e PV recebem o mesmo componente hidrostático. Um peso periférico suave, de zero no átrio até um a 20 cm de distância longitudinal, interpola a queda arterial de 5 mmHg e o gradiente venoso de 3 mmHg. É uma aproximação espacial didática do gradiente de escoamento; não calcula resistências ou fluxo. No decúbito há gradiente venoso periférico → central, em vez de pressão uniforme.
 
-Válvulas competentes, sozinhas, não eliminam a pressão hidrostática estática em pé. As três válvulas do nível Válvula abrem na fase de ejeção da caminhada e fecham na fase de relaxamento, demonstrando o bloqueio do refluxo. Em repouso, a representação fica aberta para fluxo basal. Os valores entre os marcos são desníveis hidrostáticos, não perdas de pressão nas válvulas; o segmento de 12 a 56 cm totaliza 34,31 mmHg em pé.
+| Ponto | Altura do solo | PA/PV deitado | PA/PV em pé e parado |
+| --- | ---: | ---: | ---: |
+| Pescoço: carótida/jugular | 150 cm | 95 / 5 mmHg | 77,85 / jugular colabada |
+| Coração: aorta/átrio direito | 128 cm | 100 / 2 mmHg | 100 / 2 mmHg |
+| Coxa: femoral | 75 cm | 95 / 5 mmHg | 136,32 / 46,32 mmHg |
+| Tornozelo | 12 cm | 95 / 5 mmHg | 185,44 / 95,44 mmHg |
+
+O pescoço não representa pressão intracraniana ou perfusão cerebral. A extrapolação jugular negativa de uma coluna aberta é identificada como colapso; não é mostrada como pressão negativa sustentada nem usada para estimar diferença PA−PV nesse ponto. A pressão transmural e o sistema de drenagem cerebral exigiriam outro modelo.
+
+A referência de altura no átrio direito não é sinônimo do ponto de indiferença hidrostática venoso. A constante histórica `PIH`, no diafragma, permanece somente para conservar a origem geométrica das malhas; não entra nas pressões.
+
+## Relação com o slide e fluxo
+
+O slide enviado usa correções hidrostáticas de +88 e −44 mmHg. Aplicadas às referências periféricas de 95/5 mmHg, resultam em PA/PV de 183/93 abaixo e 51/−39 acima, antes do colapso venoso. Aqui os desníveis vêm do corpo representado: por isso os números diferem ligeiramente. Os cards mostram a distância vertical em relação ao átrio, nas duas posturas e nos ângulos intermediários.
+
+PA e PV sobem juntas abaixo do coração. Nos pontos periféricos pérvios em repouso, sua diferença permanece 90 mmHg ao inclinar. Pressão local alta não significa fluxo proporcionalmente maior: fluxo também depende da resistência e da função cardíaca. A diferença PA−PV regional não é o gradiente de retorno venoso sistêmico de Guyton.
 
 ## Bomba, volume e relógio
 
-O ciclo muscular dura 1,15 s. A atividade aproxima a pressão média distal de 25 mmHg, com constante de tempo de 2,4 s na ativação e 7 s no reenchimento. São aproximações didáticas, não picos de pressão intramuscular nem medidas individualizadas. O efeito é pleno até o joelho e diminui suavemente até zero na coxa; não se atribui à caminhada uma queda da pressão média na coxa.
+Válvulas competentes isoladamente não eliminam a pressão hidrostática estática em pé. As três válvulas do nível Válvula abrem na ejeção da caminhada e fecham no relaxamento, ilustrando o bloqueio do refluxo. Em repouso ficam abertas para o fluxo basal. Os valores entre marcos são desníveis hidrostáticos, não perdas nas válvulas; de 12 a 56 cm, a diferença é 34,31 mmHg em pé.
 
-Cores venosas, distensão e volume estimado usam o mesmo campo de pressão. A referência de volume de 600 mL é uma calibração demonstrativa; o modelo não fecha um balanço sanguíneo de toda a circulação. As cores venosas indicam pressão, não oxigenação. As artérias conservam sua identificação visual.
+O ciclo muscular dura 1,15 s. A atividade aproxima a pressão média distal de 25 mmHg, com constante de tempo de 2,4 s na ativação e 7 s no reenchimento. São aproximações didáticas, não picos intramusculares ou um valor universal de normalidade. O efeito é pleno até o joelho e diminui suavemente até zero na coxa; não se atribui à caminhada queda da pressão média femoral. PA mantém a referência ilustrativa para aquela postura.
 
-Coração (66 bpm de referência), partículas, bomba, válvulas e histórico acompanham o tempo simulado. Pausa e velocidade afetam esse relógio; mudar postura durante a pausa atualiza as pressões e cores sem avançar a animação.
+Cores venosas, distensão, leituras e volume usam o mesmo campo de pressão. A lei de complacência visual foi recalibrada para PV basal periférica de 5 mmHg, conservando o calibre basal anterior e limitando a expansão. O volume excedente usa referência de 600 mL e integração dos calibres relativos ao decúbito. É uma estimativa demonstrativa, sem balanço de toda a circulação; não é medida individual nem cálculo de débito cardíaco. Cores venosas indicam pressão, não oxigenação; artérias mantêm sua identificação visual.
+
+Coração (66 bpm de referência), partículas, bomba, válvulas e histórico usam o tempo simulado. Pausa e velocidade afetam esse relógio. Mudar postura durante pausa atualiza pressões e cores, sem avançar o histórico. Caminhada e parada mantêm redução gradual e reenchimento.
 
 ## Apresentação e validação
 
-O corpo e o contorno conservam as malhas, materiais e shaders aprovados. A geometria e os materiais da Bomba permanecem iguais, inclusive em sete fases de comparação. O enquadramento dos níveis Corpo e Ciclo usa os vértices reais do corpo para centralizar e ampliar a vista, respeitando os limites no celular.
+Cada card regional reúne PA/PV, mmHg/cmH₂O, desnível e diferença. Corpo e Ciclo abrem em pé, de perfil, e reclinam para decúbito dorsal; a RA conserva essa postura. A figura do gráfico projeta a silhueta aprovada e adapta-se à janela. Barras regionais e curvas temporais comparam PA vermelha e PV azul na mesma escala de 0–200 mmHg; o eixo equivalente em cmH₂O conserva a conversão. O ponto verde marca o nível do átrio direito.
 
-A experiência abre em pé, vista de perfil. Corpo e Ciclo reclinam no plano sagital, com a cabeça para trás e a face para cima no decúbito dorsal; a exportação RA usa a mesma postura. O gráfico projeta a silhueta aprovada de perfil, dimensionada à largura disponível: vertical em pé, horizontal no decúbito e inclinada nas posições intermediárias. As barras, o indicador do tornozelo e os desníveis valvulares identificam pressões em mmHg e cmH₂O; o gráfico temporal usa as duas escalas equivalentes. As barras não representam um ângulo de tilt. O ponto verde identifica o diafragma como referência hidrostática.
-
-A verificação automatizada cobre fórmulas e unidades, válvulas, efeito regional da bomba, relógio cardíaco, cores, reenchimento, pausa, enquadramento em três posturas e dois tamanhos de tela, comparação das malhas protegidas e exportação GLB. A câmera de realidade aumentada exige dispositivo e navegador compatíveis.
+Corpo e contorno preservam malhas, materiais e shaders. A Bomba preserva geometria, materiais e fases. Os testes verificam gradiente, hidrostática compartilhada, unidades, colapso jugular, equivalência com o exemplo do slide, atividade e reenchimento, válvulas, relógio, enquadramento e consistência dos painéis/gráficos. A câmera RA depende de dispositivo e navegador compatíveis.
 
 ## Referências consultadas
 
-- [NCBI Bookshelf — Venous Insufficiency](https://www.ncbi.nlm.nih.gov/books/NBK534256/): pressão estática em pé, válvulas e bomba muscular.
-- [PubMed — Hydrostatic and venous pressure indifference points](https://pubmed.ncbi.nlm.nih.gov/24481962/): distinção entre referência hidrostática e resposta venosa à postura.
-- [PubMed — Ambulatory venous pressure](https://pubmed.ncbi.nlm.nih.gov/11173991/): redução da pressão durante atividade e recuperação.
-- [Calf muscle pump and venous hemodynamics](https://pmc.ncbi.nlm.nih.gov/articles/PMC3699225/): pressão média na coxa e ação da bomba da panturrilha.
-- [Central venous pressure assessment](https://pmc.ncbi.nlm.nih.gov/articles/PMC11699050/): contexto clínico da pressão venosa central, distinto da referência simplificada do modelo.
+- [CV Physiology — Effects of gravity](https://cvphysiology.com/cardiac-function/cf017): pressão arterial/venosa periférica e resposta central à postura.
+- [CV Physiology — Venous return](https://cvphysiology.com/cardiac-function/cf016): gradiente, resistência e retorno venoso.
+- [NCBI Bookshelf — Venous Insufficiency](https://www.ncbi.nlm.nih.gov/books/NBK534256/): pressão estática, válvulas e bomba muscular.
+- [Calf muscle pump and venous hemodynamics](https://pmc.ncbi.nlm.nih.gov/articles/PMC3699225/): pressão média na coxa e ação da bomba.
+- [PubMed — Hydrostatic and venous pressure indifference points](https://pubmed.ncbi.nlm.nih.gov/24481962/): distinção entre referência e ponto de indiferença.
+- [PubMed — Upright cerebral venous outflow](https://pubmed.ncbi.nlm.nih.gov/15284348/): colapso jugular e drenagem cerebral na posição vertical.
