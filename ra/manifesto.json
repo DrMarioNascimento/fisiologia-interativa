@@ -148,11 +148,11 @@
     },
     {
       "path": "coracao/app.js",
-      "sha256": "359886a898b281cd709c4d900ddbfda60ffd82c1026e68295b2155fb2c340c15"
+      "sha256": "e089d8de98a24ea411dafd5b99eb1fb8c13823a00e73576c9c72166c47d36709"
     },
     {
       "path": "coracao/ATTRIBUTION.md",
-      "sha256": "e2751eaf5b4916e6dac5a71541e3a54a607b0c83336efb239e9e9eae51046365"
+      "sha256": "c30af69eb1908903d61b67acf48d02dfdf48197b93c2055cc39319595f214a12"
     },
     {
       "path": "coracao/erro.js",
@@ -164,7 +164,7 @@
     },
     {
       "path": "coracao/index.html",
-      "sha256": "6111440e48330a52e8b007a21db9755a12488bb57196dcde167dedaea4c38203"
+      "sha256": "6f67b9a4e0c73ce56f161dde1ae9ad7db01cde19f3bb60b2f2fad3de51ea1ede"
     },
     {
       "path": "coracao/legendas-a.js",

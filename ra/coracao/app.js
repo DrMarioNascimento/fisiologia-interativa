@@ -1059,13 +1059,7 @@ function trocar(qual) {
   $('pB').setAttribute('aria-pressed', qual === 'B');
   $('avA').hidden = qual !== 'A';
   $('avB').hidden = qual !== 'B';
-  /* CADA PEÇA CREDITA A SUA FONTE, e só quando está à vista. É mais correto
-     que um rodapé fixo: a CC BY pede atribuição de QUEM está sendo mostrado,
-     e crédito de peça escondida polui sem informar. O bloco continua no HTML
-     nos dois casos — só a exibição muda —, então quem inspeciona a página
-     encontra os dois. */
-  $('creditoA').hidden = qual !== 'A';
-  $('creditoB').hidden = qual !== 'B';
+  // As duas fontes permanecem identificadas abaixo da RA, independentemente da vista.
   pintarBotoesLegenda();
   $('notaValvas').textContent = qual === 'B'
     ? 'Aqui as onze cúspides estão desenhadas: elas obedecem a estes estados, que o motor deriva das PRESSÕES.'

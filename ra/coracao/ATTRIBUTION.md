@@ -4,6 +4,8 @@ Ver [LICENSE.md](LICENSE.md) — BodyParts3D CC-BY-SA 2.1 JP e Z-Anatomy CC-BY-S
 
 ## Peça A · o scan realista
 
+A referência *Realistic Human Heart* corresponde somente à **Vista Externa**. A **Vista Interna** tem a fonte própria indicada na seção Peça B.
+
 **Crédito do modelo 3D:** *Realistic Human Heart*, de
 [neshallads](https://sketchfab.com/neshallads), disponibilizado no
 [Sketchfab](https://sketchfab.com/3d-models/realistic-human-heart-3f8072336ce94d18b3d0d055a1ece089)
@@ -11,6 +13,8 @@ sob a licença Creative Commons Atribuição 4.0 Internacional —
 [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.pt-br).
 
 **Alterações para este simulador:** ajuste de escala, materiais e animação.
+
+Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados e sincronizados ao ciclo cardíaco simulado, com movimentos distintos para átrios, ventrículos, plano valvar e ápice. Essa animação foi desenvolvida para o simulador; não é uma animação fornecida pelo autor do scan.
 
 Em detalhe, porque a CC BY pede que as alterações sejam indicadas e porque
 quem vier depois precisa saber o que é do autor e o que é nosso:
