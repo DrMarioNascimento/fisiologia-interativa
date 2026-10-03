@@ -4,7 +4,7 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "7d37d5cdcec4679011a2c84c09d4e65911b5132073747c50f0545591a491ab9b"
+      "sha256": "cd8e65bc190a1964fad26a9139f345e504a3699058326289f184af7b8fbc41a0"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -96,7 +96,7 @@
     },
     {
       "path": "retorno-venoso/app.js",
-      "sha256": "c5b072ba27e5888cfb2b8fe843487615e9e7870e839f59954f4575b965c9613b"
+      "sha256": "10c6cdc1970249425fea61846508aa1bbe161bd110b3751b46b4441e34323010"
     },
     {
       "path": "retorno-venoso/bomba.js",
@@ -112,11 +112,11 @@
     },
     {
       "path": "retorno-venoso/index.html",
-      "sha256": "bfa67f6d3fa3c1d423ea2e8869dcfc63070a689379eaae1d7c99d0d480dd23b2"
+      "sha256": "d8d17f1472a31c6411e77894ec091a21825275a8841c57e90487a31f0599e4cc"
     },
     {
       "path": "retorno-venoso/modelos.js",
-      "sha256": "52918cb50ec7903a94330203d13541f8666e59369d943cae0a535b3d8caaaa9c"
+      "sha256": "c1a6efc1596dbe7dbdbec0bc4f10d3245cc5f326950670826d163f192b2274e1"
     },
     {
       "path": "retorno-venoso/panturrilha.js",
@@ -132,7 +132,19 @@
     },
     {
       "path": "retorno-venoso/style.css",
-      "sha256": "23f23c5e83f8788486c2f97f7af22bb68138a37e6cbb55c68a9d6be23f3fce50"
+      "sha256": "b2aebd2637ed28fe5b176e3556a848e3b13bf1018eb435f7fc007b6876fa13f8"
+    },
+    {
+      "path": "retorno-venoso/AUDITORIA-FISIOLOGIA.md",
+      "sha256": "747d7ca03f30b3bbdeaa44c21740fb1c6466fbf1d7104ee99e52f5aa5811a9a1"
+    },
+    {
+      "path": "retorno-venoso/fisica.js",
+      "sha256": "9a34dc309dcc1b7c497c06fad6d92021880f66cacdbdd926c44416a9989335f1"
+    },
+    {
+      "path": "retorno-venoso/grafico.js",
+      "sha256": "0eebee4340387d9409283339838bb370375496a9e2018118d988c53154ca38a4"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",

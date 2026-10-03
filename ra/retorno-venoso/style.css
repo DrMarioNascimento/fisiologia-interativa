@@ -688,3 +688,5 @@ button:focus-visible,input:focus-visible,a:focus-visible {
 .valve-label {background:#10202ced;border-color:#9a9587}
 .stage-hud {display:flex;justify-content:space-between}.stage-hud #pressaoLabel {color:#a9d7ff;border-color:#608db6}
 @media(max-width:650px){.stage-hud {display:grid;grid-template-columns:1fr 1fr}.stage-hud #pressaoLabel {grid-column:2;grid-row:1/3}.stage-hud #stepLabel {grid-column:1}}
+
+#curvaColuna {aspect-ratio:600/430}
