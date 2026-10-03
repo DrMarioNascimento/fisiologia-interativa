@@ -38,7 +38,7 @@ Each course home page also offers:
 
 ### Augmented reality
 
-Four independent experiences run in this repository, without Google sign-in or runtime dependencies on the former Lab RA repository:
+Six independent experiences run in this repository, without Google sign-in or runtime dependencies on the former Lab RA repository:
 
 | System | Experience | Explore |
 |---|---|---|
