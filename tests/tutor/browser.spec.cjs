@@ -107,7 +107,7 @@ for(const course of ['ef','fisio']) test(`Moodle ${course} iframe: shared API, c
   await expect(frame.locator('.ai-response')).toHaveCount(0);
 });
 
-for(const course of ['ef','fisio']) test(`${course}: todas as unidades destacam Questões e abrem Pleura independente`,async({page})=>{
+for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões e abrem a RA do sistema ativo`,async({page})=>{
  await page.route('**/api/tutor/status',r=>r.fulfill({json:{enabled:false}}));
  await page.goto(`${base}/tutor-${course}.html`);
  const axes=await page.locator('#axes .axis').count();
@@ -121,6 +121,8 @@ for(const course of ['ef','fisio']) test(`${course}: todas as unidades destacam 
   await expect(cards.locator('.ra-card')).toHaveCount(1);
   await expect(cards.locator('.ra-card h2')).toHaveText('RA - Realidade Aumentada');
   await expect(cards.locator('.ra-call')).toContainText('viagem de aprendizado incrível');
+  const axis=await page.locator('#axes .axis').nth(i).evaluate(b=>b.dataset.id||b.dataset.axis);
+  await expect(cards.locator('.ra-card a')).toHaveAttribute('href',`ra/${axis==='cardiovascular'?'retorno-venoso':'pleura'}/?percurso=${course==='fisio'?'fisioterapia':'educacao-fisica'}`);
   const first=questions.first();await first.click();await expect(first.locator('..').locator('..').locator('.panel')).toBeVisible();await first.click();
  }
  const link=page.locator('.ra-card a');await expect(link).toHaveAttribute('target','_blank');
@@ -131,4 +133,9 @@ for(const course of ['ef','fisio']) test(`${course}: todas as unidades destacam 
  await expect(popup.locator('a.small-button[data-voltar-tutor]')).toHaveAttribute('href',`${base}/tutor-${course}.html`);
  expect(await popup.getByRole('link',{name:'Bancadas',exact:true}).count()).toBe(0);
  await expect(link).toHaveAttribute('rel','noopener noreferrer');await popup.close();
+ await page.locator('#axes [data-id="cardiovascular"],#axes [data-axis="cardiovascular"]').click();
+ await page.context().route('**/ra/retorno-venoso/app.js*',r=>r.fulfill({body:'',contentType:'text/javascript'}));
+ const venousPopupPromise=page.waitForEvent('popup');await page.locator('.ra-card a').click();const venous=await venousPopupPromise;await venous.waitForLoadState('domcontentloaded');
+ expect(new URL(venous.url()).pathname).toBe('/ra/retorno-venoso/');
+ await expect(venous.locator('a.small-button[data-voltar-tutor]')).toHaveAttribute('href',`${base}/tutor-${course}.html`);await venous.close();
 });
