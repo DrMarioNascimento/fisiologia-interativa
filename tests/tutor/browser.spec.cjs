@@ -14,6 +14,17 @@ async function open(page,course='ef') {
   await page.locator('#tutorAiEnabled').check();
 }
 async function send(page,text) { await page.locator('#tutorInput').fill(text);await page.locator('.tutor-send').click(); }
+test('junção neuromuscular: níveis e controles cabem no viewport do projeto',async({page})=>{
+ await page.route('**/ra/juncao-neuromuscular/app.js*',r=>r.fulfill({body:'',contentType:'text/javascript'}));
+ await page.route('**/model-viewer.min.js',r=>r.fulfill({body:'',contentType:'text/javascript'}));
+ await page.goto(`${base}/ra/juncao-neuromuscular/?percurso=fisioterapia`);
+ await expect(page.locator('[data-step]')).toHaveCount(5);
+ await expect(page.locator('[data-voltar-tutor]').last()).toHaveAttribute('href',`${base}/tutor-fisio.html`);
+ await expect(page.locator('#play')).toHaveText('Iniciar');
+ const dimensions=await page.evaluate(()=>({width:innerWidth,content:document.documentElement.scrollWidth,buttons:[...document.querySelectorAll('[data-step],.journey-controls button')].map(e=>({left:e.getBoundingClientRect().left,right:e.getBoundingClientRect().right}))}));
+ expect(dimensions.content).toBeLessThanOrEqual(dimensions.width+1);
+ for(const b of dimensions.buttons){expect(b.left).toBeGreaterThanOrEqual(0);expect(b.right).toBeLessThanOrEqual(dimensions.width);}
+});
 for(const course of ['ef','fisio']) test(`${course}: context, history, text safety and clear`,async({page},info)=>{
   const requests=[];
   await page.route('**/api/tutor',async r=>{requests.push(r.request().postDataJSON());await r.fulfill({json:{text:'Explicação de teste: <img src=x onerror=alert(1)>\nQual mudança você prevê?'}});});
