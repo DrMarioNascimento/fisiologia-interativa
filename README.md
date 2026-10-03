@@ -46,6 +46,7 @@ Four independent experiences run in this repository, without Google sign-in or r
 | Cardiovascular | Venous return: posture, arterial/venous pressures, valves and muscle pump | [Venous return](https://drmarionascimento.github.io/fisiologia-interativa/ra/retorno-venoso/) |
 | Respiratory | Pleura: layers, alveolar gradient, West zones and ventilation | [Pleura](https://drmarionascimento.github.io/fisiologia-interativa/ra/pleura/) |
 | Cellular | Charge film: neuron, organelles, bilayer, transport and action potential | [Charge film](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/) |
+| Cellular · Unit 1 | Starling forces: microvascular exchange, glycocalyx, edema and lymph | [Starling forces](https://drmarionascimento.github.io/fisiologia-interativa/ra/starling/) |
 | Muscular | Muscle to sarcomere: five structural levels, filament sliding and length–tension curve | [Muscle to sarcomere](https://drmarionascimento.github.io/fisiologia-interativa/ra/musculo-sarcomero/) |
 
 The Tutors provide course-specific links. The browser shows the animation; augmented reality presents the selected static state on a compatible device. Pressures are displayed in mmHg and cmH₂O. See [RA documentation](ra/README.md).
@@ -210,7 +211,7 @@ Os quatro acessos preservam o percurso de cada disciplina e o modo guiado local,
 
 ### Realidade aumentada
 
-As experiências **Coração em ação**, **Retorno venoso**, **Pleura**, **Do músculo ao sarcômero** e **A película de carga** são independentes dentro de `ra/`: não exigem credencial Google e não carregam recursos do antigo Lab RA. Coração e Retorno venoso aparecem no destaque cardiovascular; Pleura, no respiratório; Do músculo ao sarcômero, no muscular; A película de carga, no celular. Os botões RA usam acabamento dourado, relevo 3D e efeito de pressionamento.
+As experiências **Coração em ação**, **Retorno venoso**, **Pleura**, **Do músculo ao sarcômero**, **A película de carga** e **Forças de Starling** são independentes dentro de `ra/`: não exigem credencial Google e não carregam recursos do antigo Lab RA. Coração e Retorno venoso aparecem no destaque cardiovascular; Pleura, no respiratório; Do músculo ao sarcômero, no muscular; A película de carga e Forças de Starling, na Unidade 1 — Celular. Os botões RA usam acabamento dourado, relevo 3D e efeito de pressionamento.
 
 - [Coração em ação](https://drmarionascimento.github.io/fisiologia-interativa/ra/coracao/): vistas interna e externa, contração, valvas, frequência, velocidade, instantes do ciclo e gráfico de Wiggers sincronizados.
 - [Retorno venoso](https://drmarionascimento.github.io/fisiologia-interativa/ra/retorno-venoso/): posição em pé/decúbito, PA e PV, válvulas, caminhada e bomba muscular.
@@ -218,6 +219,8 @@ As experiências **Coração em ação**, **Retorno venoso**, **Pleura**, **Do m
 - [Do músculo ao sarcômero](https://drmarionascimento.github.io/fisiologia-interativa/ra/musculo-sarcomero/): músculo, fascículo, fibra, miofibrila e sarcômero, sem bases; giro, rótulos, ampliação, contração e curva comprimento–tensão. A geometria e os cálculos conservam a versão aprovada. [Detalhes e referência](ra/musculo-sarcomero/README.md).
 
 - [A película de carga](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/): neurônio, interior com organelas, película, travessias e onda; Goldman, capacitância e propagação preservados. [Detalhes e limites](ra/potencial-membrana/README.md).
+
+- [Forças de Starling](https://drmarionascimento.github.io/fisiologia-interativa/ra/starling/): rede, capilar, forças, barreira, edema e linfa; princípio clássico e revisado, balanço de líquido, guia de variáveis e cores padronizadas. [Funcionamento e limites](ra/starling/README.md).
 
 As pressões são apresentadas em **mmHg e cmH₂O**. A animação ocorre na página; a RA apresenta o estado estático selecionado e depende de dispositivo/navegador compatíveis. Consulte [documentação RA](ra/README.md), [Coração](ra/coracao/README.md) e [auditoria do Retorno venoso](ra/retorno-venoso/AUDITORIA-FISIOLOGIA.md).
 
@@ -271,7 +274,7 @@ fisiologia-interativa/
 │   ├── celula-mapa.js / lista.js / inicio.css
 │   └── tutor-tema.css / tutor-tema.js
 ├── ra/                        # experiências independentes de realidade aumentada
-│   ├── coracao/ / retorno-venoso/ / pleura/ / musculo-sarcomero/ / potencial-membrana/
+│   ├── coracao/ / retorno-venoso/ / pleura/ / musculo-sarcomero/ / potencial-membrana/ / starling/
 │   ├── assets/ / brand/       # modelos com créditos próprios e identidade visual
 │   └── tests/ / manifesto.json # testes e integridade dos arquivos
 ├── fisioterapia/

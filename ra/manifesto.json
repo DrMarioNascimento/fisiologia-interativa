@@ -4,7 +4,7 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "511074645b0ae44516fe7381bcad3dbf19117fcd033703931dfa51c80a04c6c3"
+      "sha256": "dc01c56a785b3bc729454fe4e69ca4153d4c99760489bcd5126ec49cf8f55c55"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -257,6 +257,34 @@
     {
       "path": "potencial-membrana/cores-para-ra.js",
       "sha256": "b9fe0340d28ba6cdb8d2d60e5eba0f34e096ea66e1b246bed448faadf556affc"
+    },
+    {
+      "path": "starling/app.js",
+      "sha256": "aeb3b17f58710b3e72342ed1b8edecb15a36681ee5532174d878423db9db9629"
+    },
+    {
+      "path": "starling/fisica.js",
+      "sha256": "9f4976e3663ef8f7ca1faeeefa8cc6cec11e5815d7b2b0b84d838bbfb025dec8"
+    },
+    {
+      "path": "starling/index.html",
+      "sha256": "8d105949377c3812652a1e21eab98f999d2ac46d58af53761499d442360c4909"
+    },
+    {
+      "path": "starling/modelos.js",
+      "sha256": "6a18be432bd4d3e4e7d8d1a7720372d22f2203348532d7597f21b55b08aa76b1"
+    },
+    {
+      "path": "starling/README.md",
+      "sha256": "dae132b4ac8008e5d147842fb6d023d8ca92cc8b24b2b29ef0ee2ca83c932fbe"
+    },
+    {
+      "path": "starling/style.css",
+      "sha256": "cdd6680fbadc1cf4398ce49a3cb0d47572a33f91e861cb433745751103fdabd4"
+    },
+    {
+      "path": "starling/variaveis.js",
+      "sha256": "ea7e64db03d4c2b662f8907df29bbfc8634fec435769d3de0dd320106ef5c777"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
@@ -280,6 +308,10 @@
     "potencial-membrana": {
       "origem": "DrMarioNascimento/lab-ra/potencial-membrana",
       "revisao": "303bad15b77d7c995fdc90f20fa0e2b9eaa0902f"
+    },
+    "starling": {
+      "origem": "DrMarioNascimento/lab-ra/starling",
+      "revisao": "5ac3f4cce5b8d62d76d9fc3cced1e0e0bc2f224d"
     }
   }
 }

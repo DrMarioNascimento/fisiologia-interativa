@@ -47,3 +47,7 @@ A apresentação segue as demais experiências: assinatura, retorno ao Tutor de 
 ## A película de carga · Fisiologia celular
 
 [A película de carga RA](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/) transfere a revisão aprovada `303bad15b77d7c995fdc90f20fa0e2b9eaa0902f`. Modelos procedurais e cálculos preservados, cinco níveis, organelas, bicamada e onda amielínica. Acesso celular nos dois percursos e catálogo dos quatro Tutores; apresentação comum com giro, velocidade, ampliação e retorno ao Tutor. [Detalhes e limites](potencial-membrana/README.md).
+
+## Forças de Starling · Unidade 1 — Celular
+
+[Forças de Starling RA](https://drmarionascimento.github.io/fisiologia-interativa/ra/starling/) conserva integralmente app, modelos, física, paleta e estilos da revisão aprovada `5ac3f4cce5b8d62d76d9fc3cced1e0e0bc2f224d`. Cinco níveis, seleção explícita de RA, guia Como interpretar, cores consistentes, pressões nas duas unidades e balanço linfático. O card celular mantém A película de carga e acrescenta um segundo botão com o mesmo acabamento. Os quatro Tutores compartilham roteiro e questões. [Detalhes, referências e limites](starling/README.md).
