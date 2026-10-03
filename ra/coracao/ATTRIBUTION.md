@@ -14,7 +14,7 @@ sob a licença Creative Commons Atribuição 4.0 Internacional —
 
 **Alterações para este simulador:** ajuste de escala, materiais e animação.
 
-Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados e sincronizados ao ciclo cardíaco simulado, com movimentos distintos para átrios, ventrículos, plano valvar e ápice. Essa animação foi desenvolvida para o simulador; não é uma animação fornecida pelo autor do scan.
+Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo Prof. Mário César Nascimento, PhD, e sincronizados ao ciclo cardíaco simulado, com movimentos distintos para átrios, ventrículos, plano valvar e ápice. Essa animação foi desenvolvida para o simulador; não é uma animação fornecida pelo autor do scan.
 
 Em detalhe, porque a CC BY pede que as alterações sejam indicadas e porque
 quem vier depois precisa saber o que é do autor e o que é nosso:
