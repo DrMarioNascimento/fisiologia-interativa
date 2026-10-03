@@ -36,6 +36,20 @@ Each course home page also offers:
 - a guided study **tutor** per course, with an optional AI mode (Google Gemini) that the student turns on voluntarily; without it, the guided tutor, maps and questions keep working locally;
 - one escape room per unit from the companion project [Fisiologia em Fuga](https://drmarionascimento.github.io/fisiologia-em-fuga/), plus a final "Operação Secreta" covering all units.
 
+### Augmented reality
+
+Three independent experiences run in this repository, without Google sign-in or runtime dependencies on the former Lab RA repository:
+
+| System | Experience | Explore |
+|---|---|---|
+| Cardiovascular | Heart in action: external and internal views, beating, valves and Wiggers diagram | [Heart](https://drmarionascimento.github.io/fisiologia-interativa/ra/coracao/) |
+| Cardiovascular | Venous return: posture, arterial/venous pressures, valves and muscle pump | [Venous return](https://drmarionascimento.github.io/fisiologia-interativa/ra/retorno-venoso/) |
+| Respiratory | Pleura: layers, alveolar gradient, West zones and ventilation | [Pleura](https://drmarionascimento.github.io/fisiologia-interativa/ra/pleura/) |
+
+The Tutors provide course-specific links. The browser shows the animation; augmented reality presents the selected static state on a compatible device. Pressures are displayed in mmHg and cmH₂O. See [RA documentation](ra/README.md).
+
+The *Realistic Human Heart* reference applies **only to the External View**; the Internal View derives from BodyParts3D and has separate credits. The beating movements for each cardiac area (segment) were carefully calculated by **Mário César Nascimento, PhD**, and synchronized with the simulated cardiac cycle. Third-party models retain their own licenses, documented in [asset credits](ra/assets/ATRIBUICAO.md) and [heart licenses](ra/coracao/LICENSE.md).
+
 The simulators are simplified educational models. They do not replace academic sources, clinical assessment, diagnosis, prescription or professional guidance.
 
 ## Technology
@@ -183,6 +197,27 @@ A Fisioterapia usa o mesmo motor com `inicio/dados-fi.js` (em `fisioterapia/inde
 
 Os tutores (`tutor-ef.html` e `tutor-fisio.html`) seguem o mesmo padrão visual, com `inicio/tutor-tema.css` e `inicio/tutor-tema.js`. Na página inicial, o tutor abre pelo botão "Estudar … com o tutor" da unidade escolhida, já no eixo correspondente. O arquivo `tutor-ligacao-fuga.js` liga o tutor às salas da Fisiologia em Fuga e à Operação Secreta. `tutor-moodle.html` é a versão do tutor para incorporação no Moodle.
 
+Os quatro acessos preservam o percurso de cada disciplina e o modo guiado local, com IA opcional:
+
+| Acesso | Endereço |
+|---|---|
+| Tutor Educação Física | [tutor-ef.html](https://drmarionascimento.github.io/fisiologia-interativa/tutor-ef.html) |
+| Tutor Fisioterapia | [tutor-fisio.html](https://drmarionascimento.github.io/fisiologia-interativa/tutor-fisio.html) |
+| Tutor Moodle — Educação Física | [tutor-moodle.html](https://drmarionascimento.github.io/fisiologia-interativa/tutor-moodle.html) |
+| Tutor Moodle — Fisioterapia | [tutor-moodle.html?percurso=fisioterapia](https://drmarionascimento.github.io/fisiologia-interativa/tutor-moodle.html?percurso=fisioterapia) |
+
+### Realidade aumentada
+
+As experiências **Coração em ação**, **Retorno venoso** e **Pleura** são independentes dentro de `ra/`: não exigem credencial Google e não carregam recursos do antigo Lab RA. Coração e Retorno venoso aparecem no destaque cardiovascular; Pleura, no respiratório. Os dois botões cardiovasculares têm o mesmo acabamento dourado, relevo 3D e efeito de pressionamento.
+
+- [Coração em ação](https://drmarionascimento.github.io/fisiologia-interativa/ra/coracao/): vistas interna e externa, contração, valvas, frequência, velocidade, instantes do ciclo e gráfico de Wiggers sincronizados.
+- [Retorno venoso](https://drmarionascimento.github.io/fisiologia-interativa/ra/retorno-venoso/): posição em pé/decúbito, PA e PV, válvulas, caminhada e bomba muscular.
+- [Pleura](https://drmarionascimento.github.io/fisiologia-interativa/ra/pleura/): camadas, gradiente alveolar, zonas de West, respiração e estados rápidos.
+
+As pressões são apresentadas em **mmHg e cmH₂O**. A animação ocorre na página; a RA apresenta o estado estático selecionado e depende de dispositivo/navegador compatíveis. Consulte [documentação RA](ra/README.md), [Coração](ra/coracao/README.md) e [auditoria do Retorno venoso](ra/retorno-venoso/AUDITORIA-FISIOLOGIA.md).
+
+A referência *Realistic Human Heart*, de neshallads, corresponde **somente à Vista Externa**. A Vista Interna deriva do BodyParts3D, com fonte própria. Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo **Prof. Mário César Nascimento, PhD**, e sincronizados ao ciclo cardíaco simulado. As limitações do modelo interno e as marcações externas aproximadas permanecem documentadas. Os modelos de terceiros conservam suas licenças: [atribuições dos arquivos](ra/assets/ATRIBUICAO.md) e [licenças do coração](ra/coracao/LICENSE.md).
+
 ### Tutor com IA (opcional)
 
 Os tutores podem oferecer **respostas personalizadas com IA** (Google Gemini), ativadas voluntariamente pelo estudante no avatar. Sem a IA, o tutor guiado, os mapas e as questões continuam funcionando localmente. Não há conta de aluno nem histórico de conversas: só as últimas mensagens ficam na memória da página. As respostas geradas por IA podem conter imprecisões e não substituem o material didático nem as aulas.
@@ -230,6 +265,10 @@ fisiologia-interativa/
 │   ├── dados-ef.js / dados-fi.js
 │   ├── celula-mapa.js / lista.js / inicio.css
 │   └── tutor-tema.css / tutor-tema.js
+├── ra/                        # experiências independentes de realidade aumentada
+│   ├── coracao/ / retorno-venoso/ / pleura/
+│   ├── assets/ / brand/       # modelos com créditos próprios e identidade visual
+│   └── tests/ / manifesto.json # testes e integridade dos arquivos
 ├── fisioterapia/
 │   ├── index.html             # página inicial da Fisioterapia
 │   ├── index-legado.html      # página inicial anterior (Fisio)
@@ -254,6 +293,7 @@ Os testes são usados apenas no desenvolvimento (requerem Node.js; `npm install`
 - `npm run test:visual` — testes Playwright da pasta `tests/visual/`;
 - `npm run test:intencao` — auditoria visual de Da intenção ao movimento;
 - `npm run test:tutor` e `npm run test:tutor:browser` — testes do servidor e do tutor no navegador;
+- `npm run test:ra` — modelos, cálculos, sincronização, recursos e navegação das experiências RA;
 - `node --test atleta-motor.test.cjs` — testes do motor fisiológico do Box do Atleta.
 
 No GitHub Actions, `playwright-visual.yml` roda a auditoria visual e `tutor-tests.yml` roda os testes dos tutores quando os arquivos correspondentes mudam.

@@ -87,6 +87,19 @@ em especial:
   próprias licenças;
 - obras, artigos e demais referências bibliográficas citados nos simuladores.
 
+### Modelos e bibliotecas das experiências de realidade aumentada
+
+| Componente | Uso e atribuição | Licença preservada |
+|---|---|---|
+| `ra/assets/coracao.glb` | *Realistic Human Heart*, de neshallads; somente Vista Externa no Coração em ação, também utilizado na Pleura e no Retorno venoso | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.pt-br) |
+| `ra/assets/coracao-interno.glb` | Vista Interna derivada do BodyParts3D © The Database Center for Life Science; conserva a licença dos arquivos usados na origem | [CC BY-SA 2.1 JP](https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en) |
+| Three.js | Renderização 3D e exportação dos modelos | [MIT](https://github.com/mrdoob/three.js/blob/r180/LICENSE) |
+| `<model-viewer>` | Visualização e abertura dos modelos em RA | [Apache 2.0](https://github.com/google/model-viewer/blob/v4.1.0/LICENSE) |
+
+A licença restrita dos componentes originais deste projeto **não substitui nem restringe** as licenças dos modelos e bibliotecas de terceiros. Os créditos, as adaptações e a procedência estão em [ra/assets/ATRIBUICAO.md](ra/assets/ATRIBUICAO.md), [ra/coracao/ATTRIBUTION.md](ra/coracao/ATTRIBUTION.md) e [ra/coracao/LICENSE.md](ra/coracao/LICENSE.md). O uso da nomenclatura Z-Anatomy é identificado nessa documentação; suas malhas não fazem parte desta migração.
+
+Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo **Prof. Mário César Nascimento, PhD**, e sincronizados ao ciclo cardíaco simulado. Esse crédito se refere ao trabalho de animação e cálculo do simulador; não transfere a autoria dos modelos anatômicos de terceiros ao autor do projeto.
+
 ## 7. Vínculo institucional
 
 A vinculação profissional do autor ao CEFID/UDESC é indicada apenas como
@@ -209,6 +222,19 @@ their respective owners and are not covered by this license, in particular:
   provider's terms;
 - tools used only in development, such as Playwright, under their own licenses;
 - works, articles and other bibliographic references cited in the simulators.
+
+### Augmented reality models and libraries
+
+| Component | Use and attribution | Preserved license |
+|---|---|---|
+| `ra/assets/coracao.glb` | *Realistic Human Heart* by neshallads; External View only in Heart in action, also used in Pleura and Venous return | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| `ra/assets/coracao-interno.glb` | Internal View derived from BodyParts3D © The Database Center for Life Science; retains the license of the source files used | [CC BY-SA 2.1 JP](https://creativecommons.org/licenses/by-sa/2.1/jp/deed.en) |
+| Three.js | 3D rendering and model export | [MIT](https://github.com/mrdoob/three.js/blob/r180/LICENSE) |
+| `<model-viewer>` | Model viewing and augmented reality | [Apache 2.0](https://github.com/google/model-viewer/blob/v4.1.0/LICENSE) |
+
+The restricted license for this project's original components **does not replace or restrict** third-party model and library licenses. Credits, changes and provenance are documented in [ra/assets/ATRIBUICAO.md](ra/assets/ATRIBUICAO.md), [ra/coracao/ATTRIBUTION.md](ra/coracao/ATTRIBUTION.md) and [ra/coracao/LICENSE.md](ra/coracao/LICENSE.md). Z-Anatomy nomenclature is identified there; its meshes are not part of this migration.
+
+The beating movements for each cardiac area (segment) were carefully calculated by **Mário César Nascimento, PhD**, and synchronized with the simulated cardiac cycle. This credits the simulator's animation and calculation work; it does not transfer authorship of third-party anatomical models to the project author.
 
 ## 7. Institutional affiliation
 
