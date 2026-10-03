@@ -4,7 +4,7 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "d2aa2696f210a9e7bfef080e4026b3b4d740e4244535f6251d5bdaa311a44bc2"
+      "sha256": "30674d85c76d2bd81af16ef891b0d0858d1fcc2d309ec4dbafbfc2a7d29f2d36"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -96,7 +96,7 @@
     },
     {
       "path": "retorno-venoso/app.js",
-      "sha256": "fbd39c15ffb41ce0576830614ded045121ab579ab65dbeb49beb67b63095d690"
+      "sha256": "62efd3ea0b2d10d640a5859bcd4bf5e1f054a43181cd465514f5992bc3fa05d6"
     },
     {
       "path": "retorno-venoso/bomba.js",
@@ -112,11 +112,11 @@
     },
     {
       "path": "retorno-venoso/index.html",
-      "sha256": "11e343265d8a16e91a0bfafec23e014208f7fe74002a1bf45f5b441e06332edd"
+      "sha256": "b7cc1dfe0f7441d9320ac41a62d923502850b2c82134dd4e692ac5129c659515"
     },
     {
       "path": "retorno-venoso/modelos.js",
-      "sha256": "c1a6efc1596dbe7dbdbec0bc4f10d3245cc5f326950670826d163f192b2274e1"
+      "sha256": "9a339b6b0b93b87b973e974ae086eee5f7554675ed1698eedcee1478478fbbab"
     },
     {
       "path": "retorno-venoso/panturrilha.js",
@@ -132,19 +132,19 @@
     },
     {
       "path": "retorno-venoso/style.css",
-      "sha256": "acacc8ae87b5d67578ec2d4d9af7346859b6ce9bbb0890e9e6353c40ec06feff"
+      "sha256": "116bb7c67d58167c71b32a89a4f0289f0f8df78d8cfb6eee4684378b57bfc289"
     },
     {
       "path": "retorno-venoso/AUDITORIA-FISIOLOGIA.md",
-      "sha256": "6408c7ee6ceb46950e7db1188b403c28a124ef595c45248934ec4990576f8422"
+      "sha256": "ff777f1de7b01a2d8fe14a666b8b631e0c18a364bd7f6686f9e6ef5f0ed74471"
     },
     {
       "path": "retorno-venoso/fisica.js",
-      "sha256": "9a34dc309dcc1b7c497c06fad6d92021880f66cacdbdd926c44416a9989335f1"
+      "sha256": "1c733b15fcbaeea50e7dc9fbcb8ebb8ed73635c352b8872ed49a03eca0a16745"
     },
     {
       "path": "retorno-venoso/grafico.js",
-      "sha256": "f7dc4b4dc1848ed193df6fd11f47c9484c713fb03e5e5d6a233a8978a788e0ec"
+      "sha256": "2a87328e6fb4c47c0601ac71307338ce1645ac83de52c3ae48643cad4a995bf1"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",

@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../laboratorio.css" />
-  <link rel="stylesheet" href="style.css?v=perfil-20261003" />
+  <link rel="stylesheet" href="style.css?v=pa-pv-20261003" />
   <script src="../tutor-origem.js?v=ra-20261002" defer></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
@@ -41,7 +41,7 @@
     <div id="stage" class="stage" role="group" aria-label="Modelo tridimensional e controles de visualização">
       <canvas id="scene"></canvas>
       <p id="modeloStatus" class="modelo-status" role="status">Carregando o corpo e o coração anatômico…</p>
-      <div class="stage-hud"><span id="posturaLabel">Ortostatismo · 90°</span><span id="pressaoLabel">Tornozelo 93 mmHg · 126,0 cmH₂O</span><span id="stepLabel">01 · O corpo</span></div>
+      <div class="stage-hud"><span id="posturaLabel">Ortostatismo · 90°</span><span id="pressaoLabel">Tornozelo · PA/PV</span><span id="stepLabel">01 · O corpo</span></div>
       <div id="valveLabels" class="valve-labels" hidden>
         <svg aria-hidden="true"><defs><marker id="venousArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#d6c684" /></marker></defs><path id="valveLeader0" class="valve-leader" /><path id="valveLeader1" class="valve-leader" /><path id="valveFlow" class="valve-flow" marker-end="url(#venousArrow)" /></svg>
         <span id="valveLabel0" class="valve-label"><b>Válvula distal</b><span></span></span>
@@ -62,7 +62,7 @@
       </article>
 
       <div class="actions"><button id="prev" class="secondary" type="button" disabled>← Voltar</button><button id="next" class="primary" type="button">Aprofundar →</button></div>
-<section class="caixa grafico-box" aria-label="Gráficos fisiológicos"><div class="caixa-head"><span class="eyebrow">Gráficos</span></div><div class="causas"><button data-grafico="coluna" class="on" aria-pressed="true" type="button">Postura e pressões</button><button data-grafico="tempo" aria-pressed="false" type="button">Pressão × tempo</button></div><p id="notaGrafico" class="nota">Postura do corpo e pressões regionais: a silhueta fica em pé ou deitada como na cena. As barras representam pressão, não inclinação.</p><canvas id="curvaColuna" width="600" height="430" role="img" aria-label="Postura do corpo e pressões venosas regionais"></canvas><canvas id="curvaTempo" width="600" height="330" role="img" aria-label="Pressão venosa do tornozelo nos últimos 12 segundos simulados" hidden></canvas><p class="grafico-resumo">A cor das veias e das barras representa pressão venosa, não oxigenação. Compare a queda durante a caminhada com o reenchimento ao parar.</p></section>
+<section class="caixa grafico-box" aria-label="Gráficos fisiológicos"><div class="caixa-head"><span class="eyebrow">Gráficos</span></div><div class="causas"><button data-grafico="coluna" class="on" aria-pressed="true" type="button">Postura e pressões</button><button data-grafico="tempo" aria-pressed="false" type="button">Pressão × tempo</button></div><p id="notaGrafico" class="nota">Postura do corpo e pressões regionais: a silhueta fica em pé ou deitada como na cena. PA e PV são comparadas na mesma escala e na mesma postura.</p><canvas id="curvaColuna" width="600" height="430" role="img" aria-label="Postura do corpo e pressões arteriais e venosas regionais"></canvas><canvas id="curvaTempo" width="600" height="330" role="img" aria-label="Pressões arterial e venosa do tornozelo nos últimos 12 segundos simulados" hidden></canvas><p class="grafico-resumo">Barras e curvas: vermelho = PA; azul = PV. Nos vasos, a cor venosa varia com a pressão, não com a oxigenação. Compare a caminhada com o reenchimento ao parar.</p></section>
     </div>
     <aside class="panel">
 
@@ -82,13 +82,10 @@
 
       </section>
 
-<section class="caixa" id="caixaLeituras" aria-label="Leituras fisiológicas"><div class="caixa-head"><span class="eyebrow">Leituras fisiológicas</span></div><div class="reading-group"><h3>Pressões venosas · inferior → superior</h3>        <ul class="leituras">
-          <li style="--card-color:#88c5ff">Tornozelo <b><span id="lTornozelo">10</span> mmHg</b><small id="uTornozelo"></small></li>
-          <li style="--card-color:#c4a2f6">Coxa <b><span id="lCoxa">10</span> mmHg</b><small id="uCoxa"></small></li>
-          <li style="--card-color:#ff8d96">Coração (ref.) <b><span id="lCoracao">10</span> mmHg</b><small id="uCoracao"></small></li>
-          <li style="--card-color:#8cdcca">Jugular <b><span id="lJugular">10</span><span id="jugularUnidade"> mmHg</span></b><small id="uJugular"></small></li>
-
-        </ul></div><div class="reading-group"><h3>Volume · membros inferiores</h3><ul class="leituras">          <li class="leitura-comum" style="--card-color:#ffcb96">Represamento venoso <b><span id="lEmpocado">0</span> ml</b></li></ul></div><p class="nota">Tornozelo: pressão com o efeito da bomba. Coxa, coração e jugular: referências hidrostáticas em repouso. A coluna usa uma pressão de referência de 10 mmHg no diafragma; o valor junto ao coração não é uma previsão clínica da PVC. O represamento acompanha postura e atividade da bomba; é uma estimativa didática, sem cálculo de débito cardíaco.</p></section>
+<section class="caixa" id="caixaLeituras" aria-label="Pressões arteriais e venosas"><div class="caixa-head"><span class="eyebrow">PA e PV · mesma postura e instante</span></div><div class="reading-group"><h3>Pressões · inferior → superior</h3><ul class="leituras pressao-regioes"><li class="pressao-regiao"><header><strong>Tornozelo</strong><small>Artéria / veias distais</small></header><p class="altura-regiao" id="hTornozelo"></p><div class="pa-pv-grid"><div class="medida pa"><span>PA · média</span><b><span id="paTornozelo">—</span> mmHg</b><small id="uPaTornozelo"></small></div><div class="medida pv"><span>PV</span><b><span id="lTornozelo">—</span><span id="unidadeTornozelo"> mmHg</span></b><small id="uTornozelo"></small></div></div><p class="diferenca-regiao" id="dTornozelo"></p></li>
+<li class="pressao-regiao"><header><strong>Coxa</strong><small>Artéria / veia femoral</small></header><p class="altura-regiao" id="hCoxa"></p><div class="pa-pv-grid"><div class="medida pa"><span>PA · média</span><b><span id="paCoxa">—</span> mmHg</b><small id="uPaCoxa"></small></div><div class="medida pv"><span>PV</span><b><span id="lCoxa">—</span><span id="unidadeCoxa"> mmHg</span></b><small id="uCoxa"></small></div></div><p class="diferenca-regiao" id="dCoxa"></p></li>
+<li class="pressao-regiao"><header><strong>Coração</strong><small>Aorta / átrio direito</small></header><p class="altura-regiao" id="hCoracao"></p><div class="pa-pv-grid"><div class="medida pa"><span>PA · média</span><b><span id="paCoracao">—</span> mmHg</b><small id="uPaCoracao"></small></div><div class="medida pv"><span>PV · atrial</span><b><span id="lCoracao">—</span><span id="unidadeCoracao"> mmHg</span></b><small id="uCoracao"></small></div></div><p class="diferenca-regiao" id="dCoracao"></p></li>
+<li class="pressao-regiao"><header><strong>Pescoço</strong><small>Carótida / jugular</small></header><p class="altura-regiao" id="hJugular"></p><div class="pa-pv-grid"><div class="medida pa"><span>PA · média</span><b><span id="paJugular">—</span> mmHg</b><small id="uPaJugular"></small></div><div class="medida pv"><span>PV</span><b><span id="lJugular">—</span><span id="unidadeJugular"> mmHg</span></b><small id="uJugular"></small></div></div><p class="diferenca-regiao" id="dJugular"></p></li></ul></div><div class="reading-group"><h3>Volume · membros inferiores</h3><ul class="leituras"><li class="leitura-comum" style="--card-color:#ffcb96">Represamento venoso <b><span id="lEmpocado">0</span> mL</b></li></ul></div><p class="nota">PA = pressão arterial média; PV = pressão venosa. Referências didáticas centrais: aorta 100 mmHg e átrio direito 2 mmHg. Deitado, a periferia tem PA 95 e PV 5 mmHg: há gradiente de escoamento mesmo sem desnível gravitacional. A diferença PA−PV não determina o fluxo sem conhecer a resistência.</p><details class="leitura-slide"><summary>Como comparar com o slide?</summary><p>O acréscimo hidrostático depende da distância vertical ao átrio direito. Com +88 mmHg, PA periférica 95 passa a 183; PV 5 passa a 93 mmHg. Este corpo tem 170 cm; veja o desnível indicado em cada região para entender seus valores. Pescoço representa carótida e jugular no mesmo nível, não pressão intracraniana.</p><p>O modelo mantém as referências centrais para isolar postura e bomba; não calcula barorreflexo, hipotensão transitória ou débito cardíaco. O volume é uma estimativa demonstrativa.</p></details></section>
       <section class="caixa" id="caixaValvula" aria-label="Os degraus das válvulas" hidden>
         <div class="caixa-head"><span class="eyebrow">Desníveis hidrostáticos entre os marcos</span></div>
         <ol id="degraus" class="degraus"></ol><p class="nota">Os valores são diferenças hidrostáticas potenciais, não quedas de pressão através de cada válvula. Em repouso de pé, a pressão no tornozelo continua elevada.</p>
@@ -107,6 +104,6 @@
   </section>
 </main>
 <footer class="rodape shell"><img src="../brand/mestre-lap.webp" alt="" width="84" height="84"><p class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Mário César Nascimento, PhD ©</p></footer>
-<script type="module" src="app.js?v=perfil-20261003"></script>
+<script type="module" src="app.js?v=pa-pv-20261003"></script>
 </body>
 </html>

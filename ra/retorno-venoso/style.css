@@ -691,3 +691,28 @@ button:focus-visible,input:focus-visible,a:focus-visible {
 
 #curvaColuna {aspect-ratio:600/430}
 #curvaColuna {aspect-ratio:auto;display:block;box-sizing:border-box;max-width:100%}
+/* PA e PV comparadas em cada região anatômica. */
+.pressao-regioes {grid-template-columns:1fr!important}
+.leituras li.pressao-regiao {display:block;border-left-color:#87a8bd;padding:13px}
+.pressao-regiao header {display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.pressao-regiao header strong {font-size:.83rem;color:#dce9f3}
+.pressao-regiao header small,.altura-regiao {color:#aec6d5;font-size:.64rem;line-height:1.6}
+.altura-regiao {margin:5px 0 9px}
+.pa-pv-grid {display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.medida {padding:9px 7px;border-radius:9px;background:#081725;border-top:2px solid var(--serie)}
+.medida.pa {--serie:#ff939b}.medida.pv {--serie:#88c5ff}
+.medida>span,.medida>small,.medida>b {display:block}
+.medida>span {color:var(--serie);font-size:.62rem;font-weight:600;margin-bottom:5px}
+.leituras .medida>b {color:var(--serie);font-size:.83rem;white-space:normal}
+.medida>small {color:#b9d2e1;font-size:.66rem;margin-top:5px;min-height:1.3em}
+.diferenca-regiao {font-size:.63rem;color:#b9d2e1;line-height:1.65;margin:9px 0 0}
+.leitura-slide {margin-top:14px;font-size:.71rem;line-height:1.8;color:#aec6d5}
+.leitura-slide summary {cursor:pointer;color:#dce9f3}
+#pressaoLabel b,#pressaoLabel small {display:block}
+#pressaoLabel small {font-size:.9em;line-height:1.8;font-weight:500}
+#pressaoLabel .pa-hud {color:#ff939b}#pressaoLabel .pv-hud {color:#88c5ff}
+#curvaTempo {aspect-ratio:auto;display:block;box-sizing:border-box;max-width:100%}
+#pressaoLabel .hud-agua {white-space:nowrap;font-style:normal}
+@media(max-width:650px){#pressaoLabel .hud-agua {display:block;padding-left:12px;font-size:.9em}#pressaoLabel small {line-height:1.5}}
+.pa-pv-grid {grid-template-columns:repeat(2,minmax(0,1fr))}
+.medida {min-width:0}
