@@ -1,5 +1,6 @@
 /* Destaque comum aos Tutores EF e Fisioterapia; a RA vive neste repositório. */
 window.cardRealidadeAumentada = function(percurso, eixo) {
+  if(eixo!=='cardiovascular'&&eixo!=='respiratorio')return '';
   const curso=percurso==='fisioterapia'?'fisioterapia':'educacao-fisica';
   const cardiovascular=eixo==='cardiovascular';
   const experiencia=cardiovascular?'retorno-venoso':'pleura';
