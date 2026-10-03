@@ -4,7 +4,7 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "d365f119a7b1100fd8aaf9e80cd6672dfce9ec6e68cc42ea4ff2339bedbdf803"
+      "sha256": "7d37d5cdcec4679011a2c84c09d4e65911b5132073747c50f0545591a491ab9b"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -40,7 +40,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "465977f5f793f8be68d41eeb5dd4bf5765ffaad413b5dc1b47ac717071f12c97"
+      "sha256": "6b0e924d0b60cc0e2d09b134767fc37b88bc967dc3b50e8b8a796c831944b104"
     },
     {
       "path": "pleura/ANATOMIA.md",
@@ -93,7 +93,57 @@
     {
       "path": "tutor-origem.js",
       "sha256": "d17dd0acbfb6611edb35a5fb5c2e5c1de311379701e02c06c2d8803e0ca713d2"
+    },
+    {
+      "path": "retorno-venoso/app.js",
+      "sha256": "c5b072ba27e5888cfb2b8fe843487615e9e7870e839f59954f4575b965c9613b"
+    },
+    {
+      "path": "retorno-venoso/bomba.js",
+      "sha256": "7491cfbb532391046a25727fa2bf3a15a5ce2b27ec3e1b9698128122763a820b"
+    },
+    {
+      "path": "retorno-venoso/coracao.js",
+      "sha256": "a055fb8d8d3ccfbb5537e5980130fbfe486f843be896d17966df66d6add760b6"
+    },
+    {
+      "path": "retorno-venoso/corpo.glb",
+      "sha256": "c98564777b57e47b9599ebaf088c3dfeeaf47882c7f3974f5de4e938a95d9455"
+    },
+    {
+      "path": "retorno-venoso/index.html",
+      "sha256": "bfa67f6d3fa3c1d423ea2e8869dcfc63070a689379eaae1d7c99d0d480dd23b2"
+    },
+    {
+      "path": "retorno-venoso/modelos.js",
+      "sha256": "52918cb50ec7903a94330203d13541f8666e59369d943cae0a535b3d8caaaa9c"
+    },
+    {
+      "path": "retorno-venoso/panturrilha.js",
+      "sha256": "43a1056277e9fdfedc92ee087e208ead642e81e8ddfba1b7ccdeda91e91f26a4"
+    },
+    {
+      "path": "retorno-venoso/pes-anatomicos.json",
+      "sha256": "6ae07d5e1505388383090086b9369ae27693afc9edbdc8b985b0b2a9a71233e3"
+    },
+    {
+      "path": "retorno-venoso/pes.js",
+      "sha256": "2805466dd0be60ef8515bf8a563f9cdb5bf6ea70add632866ee9faa254127fa6"
+    },
+    {
+      "path": "retorno-venoso/style.css",
+      "sha256": "23f23c5e83f8788486c2f97f7af22bb68138a37e6cbb55c68a9d6be23f3fce50"
     }
   ],
-  "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais."
+  "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
+  "experiencias": {
+    "pleura": {
+      "origem": "DrMarioNascimento/lab-ra/pleura",
+      "revisao": "f290ff9f5fa619b4ac828877171674e7d66c4e1c"
+    },
+    "retorno-venoso": {
+      "origem": "DrMarioNascimento/lab-ra/retorno-venoso",
+      "revisao": "85d13200078f5201d251c857efde5326cd53daa7"
+    }
+  }
 }

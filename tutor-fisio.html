@@ -91,7 +91,7 @@
       <div class="modal-body"><img id="mapImage" alt="Mapa mental do eixo"></div>
     </div>
   </div>
-  <script src="tutor-ra-card.js?v=ra-20261002"></script>
+  <script src="tutor-ra-card.js?v=retorno-20261002"></script>
   <script src="tutor-fisio-data.js?v=9"></script>
   <script src="tutor-desafios-extra.js?v=3"></script>
   <script>
@@ -129,7 +129,7 @@
         const mapButtons=maps.map((map,index)=>`<button class="btn btn-ghost" type="button" data-map="${index}">${maps.length>1 ? 'Mapa '+(index+1) : 'Ver mapa'}</button>`).join('');
         const questions=(item.qs||[]).map((question,questionIndex)=>`<div class="q"><b>${questionIndex+1}. ${esc(question.q)}</b><div class="opts">${question.opts.map((option,optionIndex)=>`<button type="button" data-option="${optionIndex}" data-answer="${question.a}">${String.fromCharCode(65+optionIndex)}) ${esc(option)}</button>`).join('')}</div><p class="feedback" data-why="${esc(question.why)}"></p></div>`).join('');
         return `<article class="card" data-module="${moduleIndex}"><span class="meta">${esc(config.axisNames[item.group])}</span><h2>${esc(item.title)}</h2><p>${esc(item.goal)}</p><ol class="steps">${(item.steps||[]).map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="actions">${mapButtons}<a class="btn btn-ghost" href="${esc(item.href)}?percurso=fisioterapia">Abrir simulador</a><button class="btn btn-primary" type="button" data-open>Questões</button></div><div class="panel">${questions}</div></article>`;
-      }).join('')+escapeCard+window.cardRealidadeAumentada('fisioterapia');
+      }).join('')+escapeCard+window.cardRealidadeAumentada('fisioterapia',active);
     }
     axesEl.addEventListener('click',event=>{
       const button=event.target.closest('[data-axis]');
