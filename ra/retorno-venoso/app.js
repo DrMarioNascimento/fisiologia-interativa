@@ -38,7 +38,7 @@ import { criar, corDaPressao } from './modelos.js?v=postura-20261003';
 import {criarEstadoBomba,avancarBomba} from './bomba.js?v=pes-bomba-20261002';
 
 import {mmHgParaCmH2O} from './fisica.js?v=postura-20261003';
-import {criarGraficoPostura} from './grafico.js?v=postura-20261003';
+import {criarGraficoPostura} from './grafico.js?v=perfil-20261003';
 const $ = id => document.getElementById(id);
 const canvas = $('scene'), stage = $('stage');
 const clamp = THREE.MathUtils.clamp;
@@ -118,9 +118,9 @@ const centrosCorpo=[0,4].map(n=>{
 let ultimaPosturaVista=null;
 function vistaCorpo(n){
  const info=centrosCorpo.find(x=>x.n===n),a=g2r(90-grau),c=Math.cos(a),s=Math.sin(a),box=new THREE.Box3(),p=new THREE.Vector3();
- for(let i=0;i<info.pontos.length;i+=3){const x=info.pontos[i],y=info.pontos[i+1],z=info.pontos[i+2];p.set(x*c-y*s,x*s+y*c,z);box.expandByPoint(p)}
+ for(let i=0;i<info.pontos.length;i+=3){const x=info.pontos[i],y=info.pontos[i+1],z=info.pontos[i+2];p.set(x,y*c+z*s,z*c-y*s);box.expandByPoint(p)}
  const centro=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3());
- const tan=Math.tan(camera.fov*Math.PI/360),ajuste=Math.max(size.y/2/tan,size.x/2/(tan*camera.aspect))*1.14+size.z/2;
+ const tan=Math.tan(camera.fov*Math.PI/360),ajuste=Math.max(size.y/2/tan,size.z/2/(tan*camera.aspect))*1.14+size.x/2;
  const d=Math.max(ajuste,raio[n]/tan*1.28*.84);
  return {centro,d};
 }
@@ -139,7 +139,7 @@ let vistaAnterior=0;
 function enquadrar(n) {
  let centro=new THREE.Vector3(),d=raio[n]/Math.tan(camera.fov*Math.PI/360)*1.28;
  if(n===0||n===4){const v=vistaCorpo(n);centro=v.centro;d=v.d;vistaAnterior=d;ultimaPosturaVista=grau;}else ultimaPosturaVista=null;
- camera.position.copy(centro).add(new THREE.Vector3(0,0,d));controls.target.copy(centro);
+ camera.position.copy(centro).add(n===0||n===4?new THREE.Vector3(-d,0,0):new THREE.Vector3(0,0,d));controls.target.copy(centro);
  controls.minDistance=d*.35;controls.maxDistance=d*2.6;controls.update();
 }
 
@@ -154,14 +154,16 @@ export function inclinacaoDe(beta, gamma) {
   return t > 90 ? 180 - t : t;
 }
 
-let grauAlvo = 0, grau = 0, sensorVivo = false, eventos = 0;
+let grauAlvo = 90, grau = 90, sensorVivo = false, eventos = 0;
 /* Tremor de mão é o estado normal de quem segura um telefone: sem suavizar, o
    número dança e a peça treme. Média exponencial, que aqui basta — inclinação
    não vira em 360 como rumo, então não precisa de média circular. */
-const SUAVE = .16;
+const SUAVE = .18; // Constante de tempo em segundos, independente da taxa de quadros.
+let posturaParaRA=false;
 
 function definirGrau(g, imediato = false) {
   grauAlvo = clamp(g, 0, 90);
+  posturaParaRA=!imediato;
   if (imediato) { grau = grauAlvo; aplicarTudo(); desenhar(); }
 }
 
@@ -215,8 +217,9 @@ const JANELA_S = 12;
 /* ------------------------------------------------------------ aplicar */
 let ultimo = {};
 function aplicarTudo(atualizarFluxo=true) {
-  /* o corpo pende: 90 graus de inclinação = corpo em pé = giro zero */
-  root.rotation.z = g2r(90 - grau);
+  // Corpo/Ciclo reclinam no plano sagital: cabeça para trás, face para cima.
+  // As ampliações da perna e bomba conservam a orientação aprovada.
+  root.rotation.set(atual===0||atual===4?-g2r(90-grau):0,0,atual===0||atual===4?0:g2r(90-grau));
   acompanharCorpo();
   const p = aplicarPostura(grau,{atividade:estadoBomba.atividade});
   ultimo = p;
@@ -228,7 +231,7 @@ function aplicarTudo(atualizarFluxo=true) {
     grau < 20 ? `Decúbito · ${grau.toFixed(0)}°`
     : grau > 70 ? `Ortostatismo · ${grau.toFixed(0)}°`
     : `Inclinado · ${grau.toFixed(0)}°`;
-  $('pressaoLabel').textContent = `Tornozelo ${tornozelo.toFixed(0)} mmHg`;
+  $('pressaoLabel').textContent = `Tornozelo ${tornozelo.toFixed(0)} mmHg · ${mmHgParaCmH2O(tornozelo).toFixed(1).replace('.',',')} cmH₂O`;
   $('grauValor').textContent = `${grau.toFixed(0)}°`;
   if (!arrastando) $('grauCursor').value = grau.toFixed(0);
 
@@ -256,8 +259,9 @@ function aplicarTudo(atualizarFluxo=true) {
 function escreverDegraus() {
   const d = degrausDaValvula(grau);
   $('degraus').innerHTML = d.passos.map((s, i) =>
-    `<li><b>${i + 1}ª</b> de ${s.de} a ${s.ate} cm <span>${s.mmHg.toFixed(1)} mmHg</span></li>`).join('');
-  $('colunaTotal').textContent = d.coluna.toFixed(0);
+    `<li><b>${i + 1}ª</b> de ${s.de} a ${s.ate} cm <span>${s.mmHg.toFixed(1)} mmHg · ${mmHgParaCmH2O(s.mmHg).toFixed(1).replace('.',',')} cmH₂O</span></li>`).join('');
+  $('colunaTotal').textContent = d.coluna.toFixed(1);
+  $('colunaAgua').textContent = mmHgParaCmH2O(d.coluna).toFixed(1).replace('.',',');
 }
 
 /* ------------------------------------------------------------ o gráfico */
@@ -267,7 +271,7 @@ const graficoPostura=criarGraficoPostura(peleGrafico.geometry);
 let ultimaCurva='';
 function desenharCurva(){
  if(!Number.isFinite(ultimo.coracao))return;
- const chave=[grau.toFixed(2),estadoBomba.atividade.toFixed(4),ultimo.empocado].join('|');if(chave===ultimaCurva)return;ultimaCurva=chave;
+ const chave=[grau.toFixed(2),estadoBomba.atividade.toFixed(4),ultimo.empocado,gr.clientWidth].join('|');if(chave===ultimaCurva)return;ultimaCurva=chave;
  const tornozelo=aplicarBomba(faseBomba,grau,estadoBomba.atividade,bombaAndando||passoRestante>0).bombeando;
  graficoPostura(gr,grau,ultimo,tornozelo,corDaPressao);
 }
@@ -277,13 +281,13 @@ function desenharTempo() {
   if (!ctt) return;
   const W = gt.width, H = gt.height;
   ctt.clearRect(0, 0, W, H);
-  const m = { e: 54, d: 25, t: 38, b: 43 };
+  const m = { e: 54, d: 62, t: 38, b: 43 };
   const py = v => H - m.b - clamp(v, 0, 100) / 100 * (H - m.t - m.b);
-  ctt.fillStyle='#b6cad9';ctt.font='12px Inter, sans-serif';ctt.fillText('Tornozelo (mmHg)',12,20);ctt.fillText('Tempo simulado (s)',W-150,H-12);
+  ctt.fillStyle='#b6cad9';ctt.font='12px Inter, sans-serif';ctt.fillText('mmHg',12,20);ctt.fillText('cmH₂O',W-55,20);ctt.fillText('Tempo simulado (s)',W-150,H-12);
   ctt.strokeStyle = '#385365'; ctt.lineWidth = 1;
   ctt.beginPath(); ctt.moveTo(m.e, m.t); ctt.lineTo(m.e, H - m.b); ctt.lineTo(W - m.d, H - m.b); ctt.stroke();
   ctt.fillStyle = '#b6cad9'; ctt.font = '11px "IBM Plex Mono", monospace';
-  for (const v of [0, 50, 100]) ctt.fillText(String(v), 6, py(v) + 3);
+  for (const v of [0, 50, 100]) {ctt.fillText(String(v), 6, py(v) + 3);ctt.fillText(mmHgParaCmH2O(v).toFixed(1).replace('.',','),W-m.d+8,py(v)+3);}
   const fim=Math.max(JANELA_S,tempoSimulado),inicio=fim-JANELA_S;
   for(let i=0;i<=4;i++){const x=m.e+i/4*(W-m.e-m.d);ctt.fillText((inicio+i*JANELA_S/4).toFixed(0),x-4,H-26);ctt.strokeStyle='#38536566';ctt.beginPath();ctt.moveTo(x,m.t);ctt.lineTo(x,H-m.b);ctt.stroke();}
   if (!historico.length) return;
@@ -369,8 +373,10 @@ function executar(dt){
 let anterior = performance.now();
 renderer.setAnimationLoop(() => {
   const agora=performance.now(),dt=Math.min(.12,(agora-anterior)/1000);anterior=agora;
-  const antes=grau;grau+=(grauAlvo-grau)*SUAVE;
-  if(Math.abs(grau-antes)>.02)aplicarTudo();
+  const antes=grau;grau+=(grauAlvo-grau)*(1-Math.exp(-dt/SUAVE));
+  if(Math.abs(grauAlvo-grau)<.05)grau=grauAlvo;
+  if(Math.abs(grau-antes)>1e-5)aplicarTudo();
+  if(posturaParaRA&&grau===grauAlvo){posturaParaRA=false;prepararRA();}
   executar(dt*velocidade);
   controls.update();desenharCurva();renderer.render(scene,camera);rotularValvulas();
 });
@@ -410,8 +416,8 @@ let arrastando = false;
 $('grauCursor').addEventListener('pointerdown', () => { arrastando = true; });
 addEventListener('pointerup', () => { arrastando = false; });
 $('grauCursor').addEventListener('input', e => {definirGrau(parseFloat(e.currentTarget.value),true);prepararRA()});
-$('deitar').onclick = () => {definirGrau(0,true);prepararRA()};
-$('levantar').onclick = () => {definirGrau(90,true);prepararRA()};
+$('deitar').onclick = () => definirGrau(0);
+$('levantar').onclick = () => definirGrau(90);
 
 function reiniciar(){executando=false;bombaAndando=false;faseBomba=0;passoRestante=0;estadoBomba.atividade=0;tempoCiclo=0;tempoSimulado=0;ultimaAmostra=0;historico.length=0;reiniciarCirculacao(grau);aplicarTudo();desenhar();prepararRA();}
 $('iniciar').onclick=()=>{if(tempoCiclo>=1.15-1e-8)tempoCiclo=0;executando=true;atualizarExecucao()};
@@ -419,7 +425,7 @@ $('pausar').onclick=()=>{executando=false;atualizarExecucao();prepararRA()};
 $('reiniciar').onclick=reiniciar;
 $('velocidade').oninput=e=>{velocidade=+e.currentTarget.value;$('velocidadeValor').textContent=velocidade.toFixed(2).replace('.',',')+'×'};
 $('loopContinuo').onchange=()=>{tempoCiclo=bombaAndando?faseBomba*1.15:0};
-$('restaurarParametros').onclick=()=>{reiniciar();velocidade=1;$('velocidade').value='1';$('velocidadeValor').textContent='1,00×';$('loopContinuo').checked=true;definirGrau(0,true);prepararRA()};
+$('restaurarParametros').onclick=()=>{reiniciar();velocidade=1;$('velocidade').value='1';$('velocidadeValor').textContent='1,00×';$('loopContinuo').checked=true;definirGrau(90,true);enquadrar(atual);prepararRA()};
 function estadoRapido(g,andando){bombaAndando=andando;faseBomba=0;passoRestante=0;tempoCiclo=0;executando=true;definirGrau(g,true);desenhar();prepararRA()}
 $('andar').onclick=()=>estadoRapido(90,true);
 $('estadoParado').onclick=()=>estadoRapido(90,false);
@@ -447,7 +453,7 @@ function prepararRA() {
       clone.visible = true;
       /* a RA leva a POSTURA que está na tela: é uma foto, e a foto tem de ser
          do estado que a pessoa escolheu */
-      clone.rotation.z = g2r(90 - grau);
+      clone.rotation.copy(root.rotation);
       clone.updateMatrixWorld(true);
       const caixa = new THREE.Box3().setFromObject(clone), tam = caixa.getSize(new THREE.Vector3());
       clone.scale.setScalar(TAM_REAL[atual] / Math.max(tam.x, tam.y, tam.z));

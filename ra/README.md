@@ -25,3 +25,5 @@ Validação de migração: comparação de 113 malhas, atributos, transformaçõ
 ## Revisão posterior de postura e sincronização
 
 O corpo inteiro foi centralizado e ampliado, sem alterar sua silhueta ou contorno. As cores venosas respondem à postura mesmo durante a pausa; as três válvulas acompanham a caminhada. O coração usa o relógio simulado. O gráfico mostra a postura corporal e pressões regionais. Pressões, distensão e volume compartilham o efeito regional da bomba; todas as regiões usam a mesma referência hidrostática. A geometria e os materiais da Bomba foram preservados. Veja [a auditoria fisiológica e suas limitações](retorno-venoso/AUDITORIA-FISIOLOGIA.md).
+
+A vista inicial do Corpo/Ciclo é lateral, em pé, e o movimento de Deitar reclina sobre as costas. Restaurar parâmetros retorna a essa postura; links com `grau=0` continuam abrindo em decúbito. A exportação RA conserva a reclinação. A figura do gráfico se adapta à largura da janela e as pressões aparecem nas duas unidades, também no indicador da cena, nos desníveis das válvulas e nos eixos temporais.
