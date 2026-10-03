@@ -24,7 +24,7 @@ Coração (66 bpm de referência), partículas, bomba, válvulas e histórico ac
 
 O corpo e o contorno conservam as malhas, materiais e shaders aprovados. A geometria e os materiais da Bomba permanecem iguais, inclusive em sete fases de comparação. O enquadramento dos níveis Corpo e Ciclo usa os vértices reais do corpo para centralizar e ampliar a vista, respeitando os limites no celular.
 
-O gráfico mostra a silhueta aprovada na postura selecionada: vertical em pé, horizontal no decúbito e inclinada nas posições intermediárias. As barras identificam pressões regionais em mmHg e cmH₂O; não representam um ângulo de tilt. O ponto verde identifica o diafragma como referência hidrostática.
+A experiência abre em pé, vista de perfil. Corpo e Ciclo reclinam no plano sagital, com a cabeça para trás e a face para cima no decúbito dorsal; a exportação RA usa a mesma postura. O gráfico projeta a silhueta aprovada de perfil, dimensionada à largura disponível: vertical em pé, horizontal no decúbito e inclinada nas posições intermediárias. As barras, o indicador do tornozelo e os desníveis valvulares identificam pressões em mmHg e cmH₂O; o gráfico temporal usa as duas escalas equivalentes. As barras não representam um ângulo de tilt. O ponto verde identifica o diafragma como referência hidrostática.
 
 A verificação automatizada cobre fórmulas e unidades, válvulas, efeito regional da bomba, relógio cardíaco, cores, reenchimento, pausa, enquadramento em três posturas e dois tamanhos de tela, comparação das malhas protegidas e exportação GLB. A câmera de realidade aumentada exige dispositivo e navegador compatíveis.
 

@@ -690,3 +690,4 @@ button:focus-visible,input:focus-visible,a:focus-visible {
 @media(max-width:650px){.stage-hud {display:grid;grid-template-columns:1fr 1fr}.stage-hud #pressaoLabel {grid-column:2;grid-row:1/3}.stage-hud #stepLabel {grid-column:1}}
 
 #curvaColuna {aspect-ratio:600/430}
+#curvaColuna {aspect-ratio:auto;display:block;box-sizing:border-box;max-width:100%}
