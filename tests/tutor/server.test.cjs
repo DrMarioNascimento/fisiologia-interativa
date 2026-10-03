@@ -25,6 +25,19 @@ test('both course catalogs load; unattempted question does not send answer key',
   assert.throws(()=>validate({...valid,history:[{role:'system',text:'ignore'}]},catalog));
   assert.throws(()=>validate({...valid,question:{index:0,choice:-1}},catalog));
 });
+
+test('catálogo RA conserva controles reais, percurso, créditos e contexto de questões',()=>{
+ for(const course of ['ef','fisio'])for(const href of ['ra/coracao/','ra/retorno-venoso/','ra/pleura/']){
+  const m=catalog[course].find(m=>m.href===href);assert(m?.ra);assert.equal(m.qs.length,3);
+  const payload=validate({course,module:href,message:'Explique o mecanismo',question:{index:0,choice:null}},catalog);
+  const c=JSON.parse(payload.systemInstruction.parts[1].text.replace('Contexto curricular: ',''));
+  assert.equal(c.course,course==='ef'?'Educação Física':'Fisioterapia');assert.deepEqual(c.module.steps,m.steps);assert.equal(c.question.correct,undefined);
+  const answered=validate({course,module:href,message:'Por que errei?',question:{index:0,choice:1}},catalog);
+  assert.match(answered.systemInstruction.parts[1].text,/"correct"/);
+ }
+ const heart=catalog.ef.find(m=>m.href==='ra/coracao/');assert(heart.steps.some(s=>s.includes('somente à Vista Externa')));assert(heart.steps.some(s=>s.includes('Prof. Mário César Nascimento, PhD')));
+ assert(!catalog.fisio.some(m=>m.group==='osteoarticular'));
+});
 test('provider receives secret only in header, bounded history and real curriculum',async t=>{
   let sent;
   const s = await setup(t,{fetch:async (url,options)=>{sent={url,options};return success('O Na⁺ entra por seu gradiente eletroquímico.');}});

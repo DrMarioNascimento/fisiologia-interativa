@@ -62,6 +62,7 @@
   <script src="tutor-ef-data.js?v=20"></script>
   <script src="tutor-fisio-data.js?v=9"></script>
   <script src="tutor-desafios-extra.js?v=2"></script>
+  <script src="tutor-ra-data.js?v=ra-catalogo-20261003"></script>
   <script>
     (function(){
       const box=document.getElementById('messages'),input=document.getElementById('input');
@@ -74,16 +75,18 @@
       const courseConfig=isFisio?window.fisioterapiaTutor:null;
       document.querySelector('.head span').textContent=(isFisio?'Fisioterapia':'Educação Física')+' • estudo guiado';
       const add=(html,who='bot')=>{const d=document.createElement('div');d.className='msg '+who;d.innerHTML=html;box.appendChild(d);box.scrollTop=box.scrollHeight};
-      const linkList=items=>'<div class="links">'+items.map(x=>`<a class="link" href="${esc(base+x.href+(isFisio&&x.href.endsWith('.html')?'?percurso=fisioterapia':''))}">${esc(x.title)}</a>`).join('')+'</div>';
+      const linkList=items=>'<div class="links">'+items.map(x=>`<a class="link" href="${esc(base+x.href+(isFisio||x.href.startsWith('ra/')?(x.href.includes('?')?'&':'?')+'percurso='+(isFisio?'fisioterapia':'educacao-fisica'):''))}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`).join('')+'</div>';
       const mapItems=()=>Object.values(isFisio?(courseConfig?.maps||{}):(typeof maps==='object'?maps:{})).flatMap(v=>Array.isArray(v)?v:[v]).filter(Boolean).map(x=>({title:x.title,href:x.src}));
-      const moduleItems=()=>isFisio?(courseConfig?.modules||[]):(Array.isArray(modules)?modules:[]);
+      const moduleItems=()=>(isFisio?(courseConfig?.modules||[]):(Array.isArray(modules)?modules:[])).concat(window.raTutorModules||[]);
       const endpoint=window.TUTOR_AI_CONFIG?.endpoint || (location.hostname === 'drmarionascimento.github.io' ? 'https://tutor-fisiologia-wlt26s6wjq-uc.a.run.app/api/tutor' : '');
       const enabled=document.getElementById('aiEnabled'),moduleSelect=document.getElementById('aiModule');
       let history=[],currentModule=null,request=null;
       const plain=(text)=>{const d=document.createElement('div');d.className='msg bot ai-response';d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;};
       const cancel=()=>request?.abort();
       async function askAI(q){
-        const module=moduleItems().find(m=>m.href===moduleSelect.value)||currentModule||find(q)[0]||null;
+        const encontrado=find(q)[0],pedidoRA=/realidade aumentada|\bra\b|\b3d\b/.test(norm(q))&&encontrado?.ra;
+        const module=moduleItems().find(m=>m.href===moduleSelect.value)||(pedidoRA?encontrado:null)||currentModule||encontrado||null;
+        if(currentModule?.href!==module?.href)history=[];
         currentModule=module;
         const controller=new AbortController();request=controller;
         const send=document.querySelector('.send');send.disabled=true;document.getElementById('aiCancel').hidden=false;
@@ -122,7 +125,7 @@
         }catch{document.getElementById('aiNotice').textContent='IA ainda não disponível. Simuladores, mapas e aprofundamentos continuam funcionando.';document.querySelector('.ai details').open=true;}
       }
       const profundos=()=>moduleItems().filter(m=>['da-intencao-ao-movimento.html','sangue.html','ventilacao-pulmonar-neonatal.html','atleta-box.html','fisioterapia/uti-fisiologica.html'].includes(m.href)||/aprofund|integr|sangue|neonatal|intencao|atleta|uti|escape|plantao/i.test(`${m.title||''} ${m.goal||''} ${m.href||''}`));
-      function find(q){const terms=norm(q).split(' ').filter(t=>t.length>2);return moduleItems().map(m=>{const hay=norm(`${m.title} ${m.goal} ${(m.steps||[]).join(' ')}`);let score=0;terms.forEach(t=>{if(hay.includes(t))score+=norm(m.title).includes(t)?5:1});return{m,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6).map(x=>x.m)}
+      function find(q){const raw=norm(q),terms=raw.split(' ').filter(t=>t.length>2);return moduleItems().map(m=>{const hay=norm(`${m.title} ${m.goal} ${(m.steps||[]).join(' ')} ${m.aliases||''}`);let score=0;terms.forEach(t=>{if(hay.includes(t))score+=norm(m.title).includes(t)?5:1});if(m.ra&&/realidade aumentada|\bra\b|\b3d\b/.test(raw)&&terms.some(t=>norm(m.title+' '+m.aliases).includes(t)&&!['realidade','aumentada'].includes(t)))score+=14;return{m,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6).map(x=>x.m)}
       function act(type){
         if(type==='simuladores')return add('<p><b>Qual simulador você quer explorar?</b></p>'+linkList(moduleItems().map(m=>({title:m.title,href:m.href}))));
         if(type==='mapas')return add('<p><b>Escolha um mapa mental:</b></p>'+linkList(mapItems()));
@@ -134,6 +137,7 @@
         if(/mapa/.test(n))return act('mapas');
         if(/aprofund/.test(n))return act('aprofundamentos');
         if(/^(simulador|simuladores|abrir simuladores)$/.test(n))return act('simuladores');
+        if(/abrir.*realidade aumentada|abrir.*\bra\b/.test(n))return localReply(q);
         if(enabled.checked)return askAI(q);
         localReply(q);
       }

@@ -85,8 +85,9 @@ for(const course of ['ef','fisio']) test(`Moodle ${course} iframe: shared API, c
   const {loadCatalog}=require('../../server/catalog.cjs');
   const catalog=loadCatalog(require('node:path').resolve(__dirname,'../..'));
   const extraHref = course === 'ef' ? 'atleta-box.html' : 'fisioterapia/uti-fisiologica.html';
-  const expected = catalog[course].map(m=>'https://drmarionascimento.github.io/fisiologia-interativa/'+m.href+(course==='fisio'?'?percurso=fisioterapia':''));
+  const expected = catalog[course].filter(m=>!m.ra).map(m=>'https://drmarionascimento.github.io/fisiologia-interativa/'+m.href+(course==='fisio'?'?percurso=fisioterapia':''));
   expected.push('https://drmarionascimento.github.io/fisiologia-interativa/'+extraHref+(course==='fisio'?'?percurso=fisioterapia':'?percurso=educacao-fisica'));
+  expected.push(...catalog[course].filter(m=>m.ra).map(m=>'https://drmarionascimento.github.io/fisiologia-interativa/'+m.href+'?percurso='+(course==='fisio'?'fisioterapia':'educacao-fisica')));
   expect(actual).toEqual(expected);
   await frame.locator('#aiEnabled').check();
   await frame.locator('#input').fill('Por que o sódio entra na célula?');await frame.locator('.send').click();
@@ -105,6 +106,28 @@ for(const course of ['ef','fisio']) test(`Moodle ${course} iframe: shared API, c
   await page.locator('iframe').evaluate(el=>el.contentWindow.location.reload());
   await expect(frame.locator('#aiEnabled')).not.toBeChecked();
   await expect(frame.locator('.ai-response')).toHaveCount(0);
+});
+
+for(const course of ['ef','fisio'])for(const moodle of [false,true])test(`${course} ${moodle?'Moodle':'completo'}: RA com e sem IA preserva curso e contexto`,async({page})=>{
+ const {loadCatalog}=require('../../server/catalog.cjs'),{validate}=require('../../server/tutor.cjs');
+ const catalog=loadCatalog(require('node:path').resolve(__dirname,'../..')),requests=[];
+ await page.route('**/api/tutor/status',r=>r.fulfill({json:{enabled:true}}));
+ await page.route('**/api/tutor',r=>{const body=r.request().postDataJSON();validate(body,catalog);requests.push(body);return r.fulfill({json:{text:'Resposta simulada com contexto RA correto.'}})});
+ await page.goto(`${base}/${moodle?'tutor-moodle':`tutor-${course}`}.html${moodle&&course==='fisio'?'?percurso=fisioterapia':''}`);
+ if(!moodle)await page.locator('#tutorLauncher').click();
+ const input=page.locator(moodle?'#input':'#tutorInput'),send=page.locator(moodle?'.send':'.tutor-send'),toggle=page.locator(moodle?'#aiEnabled':'#tutorAiEnabled'),messages=page.locator(moodle?'#messages':'#tutorMessages');
+ for(const [query,href]of [['onde estudo coração RA','ra/coracao/'],['onde estudo retorno venoso RA','ra/retorno-venoso/'],['onde estudo pleura RA','ra/pleura/']]){
+  await input.fill(query);await send.click();const link=messages.locator(`a[href*="${href}"]`).last();
+  await expect(link).toHaveAttribute('href',new RegExp(`${href}\\?percurso=${course==='fisio'?'fisioterapia':'educacao-fisica'}$`));
+  await expect(link).toHaveAttribute('target','_blank');await expect(link).toHaveAttribute('rel','noopener noreferrer');
+ }
+ expect(requests).toHaveLength(0);await toggle.check();
+ for(const [query,href]of [['Explique o movimento do coração RA','ra/coracao/'],['Explique a bomba do retorno venoso RA','ra/retorno-venoso/'],['Explique o gradiente da pleura RA','ra/pleura/']]){
+  await input.fill(query);await send.click();await expect(messages.locator(moodle?'.ai-response':'.tutor-ai-answer').last()).toHaveText('Resposta simulada com contexto RA correto.');
+  await expect.poll(()=>requests.length).toBeGreaterThan(0);await expect.poll(()=>requests.at(-1).module).toBe(href);expect(requests.at(-1).course).toBe(course);
+ }
+ const count=requests.length;await input.fill('Abrir pleura em realidade aumentada');await send.click();await expect(messages.locator('a[href*="ra/pleura/"]').last()).toBeVisible();expect(requests).toHaveLength(count);
+ await toggle.uncheck();await input.fill('onde estudo coração RA');await send.click();await expect(messages.locator('a[href*="ra/coracao/"]').last()).toBeVisible();expect(requests).toHaveLength(count);
 });
 
 for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões e abrem a RA do sistema ativo`,async({page})=>{

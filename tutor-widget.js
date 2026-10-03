@@ -15,7 +15,7 @@
   };
   const moduleHref = href => {
     const base=location.pathname.includes('/fisioterapia/') ? '../' : '';
-    return base + href + (isFisioterapia ? '?percurso=fisioterapia' : '');
+    return base + href + (isFisioterapia || href.startsWith('ra/') ? (href.includes('?')?'&':'?')+'percurso='+(isFisioterapia?'fisioterapia':'educacao-fisica') : '');
   };
   const aliases = {
     'curva-dissociacao-hemoglobina.html': 'curva de o2 oxigenio hemoglobina hb afinidade saturacao efeito bohr ph temperatura 2 3 bpg desvio direita esquerda liberacao tecidos',
@@ -45,7 +45,7 @@
     .replace(/^[ \t]*#{1,6}[ \t]*(.+)$/gm, '<b>$1</b>')
     .replace(/\*\*([^*\n]+?)\*\*/g, '<b>$1</b>')
     .replace(/(^|[\s(])\*([^*\s][^*\n]*?)\*(?=[\s).,;:!?]|$)/gm, '$1<i>$2</i>');
-  const allModules = () => courseConfig?.modules || ((typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : []);
+  const allModules = () => (courseConfig?.modules || ((typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : [])).concat(window.raTutorModules||[]);
   const allMaps = () => courseConfig?.maps || ((typeof maps !== 'undefined' && maps) ? maps : {});
   const mapsForGroup = group => {
     const value=allMaps()[group];
@@ -120,7 +120,7 @@
   function closeTutor() { panel().hidden = true; panel().classList.remove('is-open'); launcher().setAttribute('aria-expanded','false'); }
 
   function moduleText(m) {
-    return normalize([m.title,m.goal,(m.steps||[]).join(' '),(m.qs||[]).map(x=>`${x.q} ${(x.opts||[]).join(' ')} ${x.why}`).join(' '), aliases[m.href]||'', axisNames[m.group]||''].join(' '));
+    return normalize([m.title,m.goal,(m.steps||[]).join(' '),(m.qs||[]).map(x=>`${x.q} ${(x.opts||[]).join(' ')} ${x.why}`).join(' '),m.aliases||'', aliases[m.href]||'', axisNames[m.group]||''].join(' '));
   }
   function findModules(query) {
     const raw = normalize(query);
@@ -132,10 +132,11 @@
       if (/curva|hemoglobin|saturacao/.test(raw) && /curva-dissociacao/.test(m.href)) score += 10;
       if (/forca.*velocidade|velocidade.*forca|potencia/.test(raw) && /hill/.test(m.href)) score += 8;
       if (/neonat|recem nascid|prematur|surfact|gestacional|pos menstrual|sdr|dbp|vdalv/.test(raw) && /ventilacao-pulmonar-neonatal/.test(m.href)) score += 14;
+      if(m.ra && /realidade aumentada|\bra\b|\b3d\b/.test(raw) && terms.some(t=>normalize(m.title+' '+m.aliases).includes(t)&&!['ra','3d','realidade','aumentada'].includes(t)))score+=14;
       return {m,score};
     }).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,3).map(x=>x.m);
   }
-  function linkFor(m) { return `<a class="tutor-link" href="${escapeHtml(moduleHref(m.href))}">Abrir ${escapeHtml(m.title)}</a>`; }
+  function linkFor(m) { return `<a class="tutor-link" href="${escapeHtml(moduleHref(m.href))}" target="_blank" rel="noopener noreferrer">Abrir ${escapeHtml(m.title)}</a>`; }
   function resourceLinks(m) {
     let moduleMaps = m.href === 'sangue.html'
       ? [{src:assetHref('assets/maps/cardiovascular-01-sangue.webp'),title:'Sangue'}]
@@ -269,7 +270,7 @@
   }
   function localAction(text) {
     const q = normalize(text);
-    return /mapa|encontrar|onde estudo|onde fica|abrir simulador/.test(q) ||
+    return /mapa|encontrar|onde estudo|onde fica|abrir simulador|abrir.*realidade aumentada|abrir.*\bra\b/.test(q) ||
       /^(teste meu entendimento|questoes|questao|quiz|quero treinar|proxima|proxima questao|outra|mais uma|ajude me a explorar)$/.test(q);
   }
   function cancelAI() {
@@ -281,7 +282,8 @@
     if (!document.querySelector('#tutorAiEnabled')?.checked || localAction(text)) {
       addMessage(answer(text),'bot',true); return;
     }
-    const module = selectedModule || allModules().find(m=>m.href===aiModule) || findModules(text)[0] || null;
+    const encontrado=findModules(text)[0],pedidoRA=/realidade aumentada|\bra\b|\b3d\b/.test(normalize(text))&&encontrado?.ra;
+    const module = (pedidoRA?encontrado:null) || selectedModule || allModules().find(m=>m.href===aiModule) || encontrado || null;
     if (aiModule !== module?.href) { aiHistory = []; aiModule = module?.href; }
     const question = lastQuiz?.module.href === module?.href ? {index:lastQuiz.index, choice:lastQuiz.choice} : null;
     const pending = addMessage('Preparando a explicação…','bot');

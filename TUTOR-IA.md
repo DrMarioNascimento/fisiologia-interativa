@@ -4,6 +4,14 @@ O tutor de Educação Física e de Fisioterapia pode explicar dúvidas livres, a
 
 Não há conta de aluno, banco de conversas, retomada de estudos ou histórico entre visitas. Somente os três últimos pares de mensagens ficam em memória na página e acompanham uma nova pergunta. Limpar a conversa, recarregar ou sair da página descarta esse contexto. A posição do avatar já era salva pelo site e continua independente.
 
+## Quatro acessos, com IA opcional e estudo local
+
+Os acessos são `tutor-ef.html`, `tutor-fisio.html`, `tutor-moodle.html` (EF) e `tutor-moodle.html?percurso=fisioterapia`. Todos compartilham as experiências Coração em ação, Retorno venoso e Pleura por meio de `tutor-ra-data.js`, mantendo o catálogo e o percurso de cada curso. Procurar ou abrir uma experiência continua local mesmo com a IA ligada. Os links abrem em outra aba e preservam o percurso.
+
+O catálogo RA contém objetivos, controles e questões locais. Um pedido explícito, como “Explique o gradiente da pleura RA”, seleciona essa experiência para a API e descarta o histórico de outro assunto. O Tutor recebe o roteiro, mas não lê os controles ao vivo. No coração, a referência Realistic Human Heart se aplica somente à Vista Externa; os movimentos por segmento são creditados ao Prof. Mário César Nascimento, PhD. A exportação RA apresenta o instante estático escolhido na página.
+
+**Ordem de publicação:** atualizar primeiro o catálogo na API existente do Cloud Run; verificar que ela aceita `ra/coracao/`, `ra/retorno-venoso/` e `ra/pleura/` nos dois cursos; depois publicar as páginas do Tutor. Uma API antiga recusa esses identificadores. Testes com respostas simuladas não confirmam que a API pública foi atualizada.
+
 ## Experimentar no computador
 
 Requer Node.js 22.9+ (testado com 24). O servidor não precisa de pacotes npm em produção.
@@ -25,7 +33,7 @@ Há limite local de 6 chamadas por minuto por IP, duas simultâneas e 100 por di
 
 ## Cloud Run (projeto próprio)
 
-A API passa a rodar no Cloud Run, num projeto do Google Cloud exclusivo do tutor, sem depender de VM, IP ou Caddy. O `Dockerfile` da raiz monta uma imagem só com `server/tutor.cjs`, `server/catalog.cjs`, `tutor-ef-data.js` e `tutor-fisio-data.js`. O `.gcloudignore` limita o envio a esses arquivos.
+A API passa a rodar no Cloud Run, num projeto do Google Cloud exclusivo do tutor, sem depender de VM, IP ou Caddy. O `Dockerfile` da raiz monta uma imagem só com `server/tutor.cjs`, `server/catalog.cjs`, `tutor-ef-data.js`, `tutor-fisio-data.js` e `tutor-ra-data.js`. O `.gcloudignore` limita o envio a esses arquivos.
 
 Para publicar ou atualizar, abra o Cloud Shell, baixe `server/cloudrun-deploy.sh` e execute `bash cloudrun-deploy.sh`. Nas atualizações, use `PROJECT=<id> bash cloudrun-deploy.sh`. O script cria o projeto e pede a conta de faturamento, que é exigida pelo Cloud Run embora o uso fique na cota gratuita. Ele ativa os serviços e guarda a chave do Gemini no Secret Manager, com entrada oculta. Depois publica o serviço `tutor-fisiologia` com no máximo 1 instância e testa `/api/tutor/status`. O endereço atual é `https://tutor-fisiologia-wlt26s6wjq-uc.a.run.app/api/tutor`, no projeto `tutor-fisiologia-mcn`, região `us-central1`. Ele é fixo e é o que está em `tutor-widget.js` e `tutor-moodle.html`. Para atualizar o serviço: `PROJECT=tutor-fisiologia-mcn bash cloudrun-deploy.sh`. Para trocar a chave do Gemini: `NOVA_CHAVE=1 PROJECT=tutor-fisiologia-mcn bash cloudrun-deploy.sh`. A chave colada é testada no próprio Gemini e só é gravada se for aceita; um texto colado por engano não substitui a chave válida.
 
@@ -53,7 +61,7 @@ A IA recebe o catálogo do repositório, não o conteúdo integral dos PDFs ou a
 
 `tutor-moodle.html` também usa a mesma API, mas seleciona o catálogo específico de cada curso pelo endereço. Educação Física: http://127.0.0.1:8787/tutor-moodle.html. Fisioterapia: http://127.0.0.1:8787/tutor-moodle.html?percurso=fisioterapia. Use o endereço correspondente no iframe de cada disciplina, conservando o parâmetro ao publicar. O cabeçalho identifica o curso; módulos, objetivos e mapas seguem seu catálogo, e os links de Fisioterapia mantêm esse percurso. O chat compacto preserva mapas, simuladores, aprofundamentos e links em nova aba; a IA acrescenta explicações livres com contexto temporário. Em “Sobre a IA e o assunto da conversa” é possível escolher um módulo. As questões continuam nos simuladores; o quadro do Moodle não recebe automaticamente uma alternativa escolhida em outra aba.
 
-Para incorporar em produção, use um iframe apontando para o endereço HTTPS publicado de `tutor-moodle.html` com o percurso apropriado (altura de 540px recomendada; o quadro de 300px também é testado). A chave permanece no servidor. A configuração pública `window.TUTOR_AI_CONFIG` deve vir antes do script inline do tutor. Se o HTML for hospedado diretamente pelo Moodle, autorize a origem HTTPS do Moodle em `TUTOR_ALLOWED_ORIGINS` e mantenha `tutor-ef-data.js` e `tutor-fisio-data.js` acessíveis no caminho relativo. Se o iframe apontar para outro site, autorize a origem desse site, e não a página externa do Moodle. Um iframe com sandbox precisa permitir scripts e preservar a origem; requisições de origem `null` são recusadas. Inserir apenas HTML em um editor que remove scripts não executará o tutor.
+Para incorporar em produção, use um iframe apontando para o endereço HTTPS publicado de `tutor-moodle.html` com o percurso apropriado (altura de 540px recomendada; o quadro de 300px também é testado). A chave permanece no servidor. A configuração pública `window.TUTOR_AI_CONFIG` deve vir antes do script inline do tutor. Se o HTML for hospedado diretamente pelo Moodle, autorize a origem HTTPS do Moodle em `TUTOR_ALLOWED_ORIGINS` e mantenha `tutor-ef-data.js`, `tutor-fisio-data.js` e `tutor-ra-data.js` acessíveis no caminho relativo. Se o iframe apontar para outro site, autorize a origem desse site, e não a página externa do Moodle. Um iframe com sandbox precisa permitir scripts e preservar a origem; requisições de origem `null` são recusadas. Inserir apenas HTML em um editor que remove scripts não executará o tutor.
 
 ## Verificação
 
