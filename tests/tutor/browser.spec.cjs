@@ -122,7 +122,13 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
   await expect(cards.locator('.ra-card h2')).toHaveText('RA - Realidade Aumentada');
   await expect(cards.locator('.ra-call')).toContainText('viagem de aprendizado incrível');
   const axis=await page.locator('#axes .axis').nth(i).evaluate(b=>b.dataset.id||b.dataset.axis);
-  await expect(cards.locator('.ra-card a')).toHaveAttribute('href',`ra/${axis==='cardiovascular'?'retorno-venoso':'pleura'}/?percurso=${course==='fisio'?'fisioterapia':'educacao-fisica'}`);
+  const experiencias=axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
+  await expect(cards.locator('.ra-card a')).toHaveCount(experiencias.length);
+  for(let j=0;j<experiencias.length;j++){
+   const acesso=cards.locator('.ra-card a').nth(j);
+   await expect(acesso).toHaveAttribute('href',`ra/${experiencias[j]}/?percurso=${course==='fisio'?'fisioterapia':'educacao-fisica'}`);
+   await expect(acesso).toHaveAttribute('target','_blank');await expect(acesso).toHaveAttribute('rel','noopener noreferrer');
+  }
   const first=questions.first();await first.click();await expect(first.locator('..').locator('..').locator('.panel')).toBeVisible();await first.click();
  }
  const link=page.locator('.ra-card a');await expect(link).toHaveAttribute('target','_blank');
@@ -135,7 +141,12 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
  await expect(link).toHaveAttribute('rel','noopener noreferrer');await popup.close();
  await page.locator('#axes [data-id="cardiovascular"],#axes [data-axis="cardiovascular"]').click();
  await page.context().route('**/ra/retorno-venoso/app.js*',r=>r.fulfill({body:'',contentType:'text/javascript'}));
- const venousPopupPromise=page.waitForEvent('popup');await page.locator('.ra-card a').click();const venous=await venousPopupPromise;await venous.waitForLoadState('domcontentloaded');
+ const venousPopupPromise=page.waitForEvent('popup');await page.locator('.ra-card a').filter({hasText:'Retorno venoso'}).click();const venous=await venousPopupPromise;await venous.waitForLoadState('domcontentloaded');
  expect(new URL(venous.url()).pathname).toBe('/ra/retorno-venoso/');
  await expect(venous.locator('a.small-button[data-voltar-tutor]')).toHaveAttribute('href',`${base}/tutor-${course}.html`);await venous.close();
+ await page.context().route('**/ra/coracao/app.js*',r=>r.fulfill({body:'',contentType:'text/javascript'}));
+ const heartPopupPromise=page.waitForEvent('popup');await page.locator('.ra-card a').filter({hasText:'Coração em ação'}).click();const heart=await heartPopupPromise;await heart.waitForLoadState('domcontentloaded');
+ expect(new URL(heart.url()).pathname).toBe('/ra/coracao/');expect(new URL(heart.url()).searchParams.get('percurso')).toBe(course==='fisio'?'fisioterapia':'educacao-fisica');
+ await expect(heart.locator('a.small-button[data-voltar-tutor]')).toHaveAttribute('href',`${base}/tutor-${course}.html`);
+ await expect(heart.locator('#pA')).toHaveText('Vista Externa');await expect(heart.locator('#pB')).toHaveText('Vista Interna');await heart.close();
 });
