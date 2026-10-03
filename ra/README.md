@@ -29,3 +29,9 @@ O corpo inteiro foi centralizado e ampliado, sem alterar sua silhueta ou contorn
 A vista inicial do Corpo/Ciclo é lateral, em pé, e o movimento de Deitar reclina sobre as costas. Restaurar parâmetros retorna a essa postura; links com `grau=0` continuam abrindo em decúbito. A exportação RA conserva a reclinação. A figura do gráfico se adapta à largura da janela e as pressões aparecem nas duas unidades, também no indicador da cena, nos desníveis das válvulas e nos eixos temporais.
 
 PA/PV compartilham a escala dos gráficos, e os cards informam o desnível em relação ao átrio direito. O detalhe de leitura explica por que valores do slide variam com as alturas representadas. As referências centrais são fixas para isolar gravidade e bomba; barorreflexo e resposta transitória central não são simulados.
+
+## Coração em ação · Sistema cardiovascular
+
+[Coração RA](https://drmarionascimento.github.io/fisiologia-interativa/ra/coracao/) reúne a Vista Interna de 79 malhas e a Vista Externa do coração aprovado, com motor cardíaco, contração, estados valvulares, leituras e Wiggers no mesmo relógio. A migração mantém os modelos da experiência `bancadas/11-coracao/prototipo/duas-pecas.html` do Lab RA, revisão `85d13200078f5201d251c857efde5326cd53daa7`; suas limitações anatômicas estão documentadas.
+
+Coração e Retorno venoso têm acessos próprios no destaque RA cardiovascular dos Tutores EF e Fisioterapia. Iniciar/Pausar, Um ciclo, Reiniciar, velocidade, frequência, amplitude, instantes rápidos, ampliação e legendas usam o padrão das outras experiências. A exportação RA preserva o instante pausado escolhido e invalida exportações antigas ao iniciar ou trocar a vista. Não exige Google nem carrega recursos do repositório anterior. [Detalhes, validação e atribuições](coracao/README.md).

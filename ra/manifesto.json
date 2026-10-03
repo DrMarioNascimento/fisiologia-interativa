@@ -4,7 +4,7 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "30674d85c76d2bd81af16ef891b0d0858d1fcc2d309ec4dbafbfc2a7d29f2d36"
+      "sha256": "679d5568699b63aae7360833de5ee72cc3c3c83cb34264cb5b44ce35bee3eec6"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -145,6 +145,66 @@
     {
       "path": "retorno-venoso/grafico.js",
       "sha256": "2a87328e6fb4c47c0601ac71307338ce1645ac83de52c3ae48643cad4a995bf1"
+    },
+    {
+      "path": "coracao/app.js",
+      "sha256": "359886a898b281cd709c4d900ddbfda60ffd82c1026e68295b2155fb2c340c15"
+    },
+    {
+      "path": "coracao/ATTRIBUTION.md",
+      "sha256": "e2751eaf5b4916e6dac5a71541e3a54a607b0c83336efb239e9e9eae51046365"
+    },
+    {
+      "path": "coracao/erro.js",
+      "sha256": "fc43b329dda876d1679e3d5f15a8f8808540242143458862adce99753cecf461"
+    },
+    {
+      "path": "coracao/fisica.js",
+      "sha256": "5eb636d5b72c0ff8c1a683ce16ddd83037324a670cd25de3478feee35019914b"
+    },
+    {
+      "path": "coracao/index.html",
+      "sha256": "6111440e48330a52e8b007a21db9755a12488bb57196dcde167dedaea4c38203"
+    },
+    {
+      "path": "coracao/legendas-a.js",
+      "sha256": "a7489516fe77e3f684eca652cc2e7b199bd603a5b93df039a27b893f4751410f"
+    },
+    {
+      "path": "coracao/legendas-b.js",
+      "sha256": "44d838d3848a4b5567662eb11fe5780a75adf996c0f38c9e8445a7a6b7f2d939"
+    },
+    {
+      "path": "coracao/leituras.js",
+      "sha256": "0598db54ddd40e8fb4cb06ed6626ae115605975d5002f047b04aa3dbc4a306d1"
+    },
+    {
+      "path": "coracao/LICENSE.md",
+      "sha256": "f8bbcea51ce8c316a9887a39ddbf1fe51013a0760bb7c1d27e7eb0bf8595c450"
+    },
+    {
+      "path": "coracao/MODELO-INTERNO.json",
+      "sha256": "981fc782d27b678d29e43a0e0143719a14a8b1c26e05ae74e56bc3e792e1dcce"
+    },
+    {
+      "path": "coracao/origem.css",
+      "sha256": "d2dc4862400492bedc0375d51a74aebc9f221f89db5dc9a5506088e1203d8924"
+    },
+    {
+      "path": "coracao/style.css",
+      "sha256": "09625b51d2f1ca1993ba55d933ccf309d23f07e2bb784bcbfbe27ede5d168993"
+    },
+    {
+      "path": "coracao/wiggers.js",
+      "sha256": "9877c7a8c9129e2598f5c79e7417fecbc18b5282d2f8fedf643927633d7a6903"
+    },
+    {
+      "path": "assets/coracao-interno.glb",
+      "sha256": "b717a1f2e3880835703d4088a2cc99e06e01efc49695e7e55abf32d5c6af79cd"
+    },
+    {
+      "path": "coracao/README.md",
+      "sha256": "6af84a2ab42b1e220f027e487ce2cefbd6b466779775d8568041ef9be02992be"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
@@ -155,6 +215,10 @@
     },
     "retorno-venoso": {
       "origem": "DrMarioNascimento/lab-ra/retorno-venoso",
+      "revisao": "85d13200078f5201d251c857efde5326cd53daa7"
+    },
+    "coracao": {
+      "origem": "DrMarioNascimento/lab-ra/bancadas/11-coracao/prototipo/duas-pecas.html",
       "revisao": "85d13200078f5201d251c857efde5326cd53daa7"
     }
   }
