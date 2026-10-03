@@ -51,3 +51,7 @@ A apresentação segue as demais experiências: assinatura, retorno ao Tutor de 
 ## Forças de Starling · Unidade 1 — Celular
 
 [Forças de Starling RA](https://drmarionascimento.github.io/fisiologia-interativa/ra/starling/) conserva integralmente app, modelos, física, paleta e estilos da revisão aprovada `5ac3f4cce5b8d62d76d9fc3cced1e0e0bc2f224d`. Cinco níveis, seleção explícita de RA, guia Como interpretar, cores consistentes, pressões nas duas unidades e balanço linfático. O card celular mantém A película de carga e acrescenta um segundo botão com o mesmo acabamento. Os quatro Tutores compartilham roteiro e questões. [Detalhes, referências e limites](starling/README.md).
+
+## Do nervo à força · Sistema muscular
+
+[Nova experiência](https://drmarionascimento.github.io/fisiologia-interativa/ra/juncao-neuromuscular/), construída neste repositório: cinco níveis da junção neuromuscular ao acoplamento excitação–contração. O último importa o modelo de sarcômero aprovado, sem editar seus arquivos. Cena e gráficos compartilham o instante; pausas preparam a peça estática escolhida em RA. Catálogo, roteiro, três questões e os dois botões musculares integram os quatro Tutores, preservando EF/Fisioterapia. [Cálculos, referências e limites](juncao-neuromuscular/README.md).
