@@ -122,7 +122,7 @@ for(const course of ['ef','fisio'])for(const moodle of [false,true])test(`${cour
   await expect(link).toHaveAttribute('target','_blank');await expect(link).toHaveAttribute('rel','noopener noreferrer');
  }
  expect(requests).toHaveLength(0);await toggle.check();
- for(const [query,href]of [['Explique o movimento do coração RA','ra/coracao/'],['Explique a bomba do retorno venoso RA','ra/retorno-venoso/'],['Explique o gradiente da pleura RA','ra/pleura/'],['Explique o comprimento do sarcômero muscular RA','ra/musculo-sarcomero/']]){
+ for(const [query,href]of [['Explique o movimento do coração RA','ra/coracao/'],['Explique a bomba do retorno venoso RA','ra/retorno-venoso/'],['Explique o gradiente da pleura RA','ra/pleura/'],['Explique o comprimento do sarcômero muscular RA','ra/musculo-sarcomero/'],['Explique por que a banda A não muda na experiência muscular RA, em até quatro linhas.','ra/musculo-sarcomero/']]){
   await input.fill(query);await send.click();await expect(messages.locator(moodle?'.ai-response':'.tutor-ai-answer').last()).toHaveText('Resposta simulada com contexto RA correto.');
   await expect.poll(()=>requests.length).toBeGreaterThan(0);await expect.poll(()=>requests.at(-1).module).toBe(href);expect(requests.at(-1).course).toBe(course);
  }
