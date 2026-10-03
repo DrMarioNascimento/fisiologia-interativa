@@ -125,7 +125,18 @@
         }catch{document.getElementById('aiNotice').textContent='IA ainda não disponível. Simuladores, mapas e aprofundamentos continuam funcionando.';document.querySelector('.ai details').open=true;}
       }
       const profundos=()=>moduleItems().filter(m=>['da-intencao-ao-movimento.html','sangue.html','ventilacao-pulmonar-neonatal.html','atleta-box.html','fisioterapia/uti-fisiologica.html'].includes(m.href)||/aprofund|integr|sangue|neonatal|intencao|atleta|uti|escape|plantao/i.test(`${m.title||''} ${m.goal||''} ${m.href||''}`));
-      function find(q){const raw=norm(q),terms=raw.split(' ').filter(t=>t.length>2);return moduleItems().map(m=>{const hay=norm(`${m.title} ${m.goal} ${(m.steps||[]).join(' ')} ${m.aliases||''}`);let score=0;terms.forEach(t=>{if(hay.includes(t))score+=norm(m.title).includes(t)?5:1});if(m.ra&&/realidade aumentada|\bra\b|\b3d\b/.test(raw)&&terms.some(t=>norm(m.title+' '+m.aliases).includes(t)&&!['realidade','aumentada'].includes(t)))score+=14;return{m,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,6).map(x=>x.m)}
+      function find(q){
+        const raw=norm(q),terms=raw.split(' ').filter(t=>t.length>2),items=moduleItems();
+        // Um pedido explícito de RA usa termos exatos do nome/aliases antes do texto do roteiro.
+        const raPedido=/realidade aumentada|\bra\b|\b3d\b/.test(raw);
+        const raMatches=raPedido?items.filter(m=>m.ra).map(m=>{
+          const names=norm(m.title+' '+m.aliases).split(' ');
+          return{m,score:terms.filter(t=>!['realidade','aumentada','3d'].includes(t)&&names.includes(t)).length};
+        }).sort((a,b)=>b.score-a.score):[];
+        const named=raMatches[0]?.score>0&&raMatches[0].score>(raMatches[1]?.score||0)?raMatches[0].m:null;
+        const ranked=items.map(m=>{const hay=norm(`${m.title} ${m.goal} ${(m.steps||[]).join(' ')} ${m.aliases||''}`);let score=0;terms.forEach(t=>{if(hay.includes(t))score+=norm(m.title).includes(t)?5:1});if(m.ra&&raPedido&&terms.some(t=>norm(m.title+' '+m.aliases).includes(t)&&!['realidade','aumentada'].includes(t)))score+=14;return{m,score}}).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).map(x=>x.m);
+        return(named?[named,...ranked.filter(m=>m!==named)]:ranked).slice(0,6);
+      }
       function act(type){
         if(type==='simuladores')return add('<p><b>Qual simulador você quer explorar?</b></p>'+linkList(moduleItems().map(m=>({title:m.title,href:m.href}))));
         if(type==='mapas')return add('<p><b>Escolha um mapa mental:</b></p>'+linkList(mapItems()));
