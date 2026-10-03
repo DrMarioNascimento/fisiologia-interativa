@@ -2,12 +2,10 @@
    TESTE 08 — RETORNO VENOSO E ORTOSTATISMO (Unidade IV)
    Geometria e materiais. Nada de DOM aqui.
 
-   O QUE ESTA BANCADA EXISTE PARA DESFAZER: o aluno decora "a válvula impede o
-   refluxo" e imagina que ela segura a coluna inteira. Não segura — nenhuma
-   segura. Cada válvula sustenta SÓ O SEGMENTO ATÉ A DE CIMA, e é a soma dos
-   segmentos que divide os 90 mmHg do tornozelo em degraus de poucos
-   centímetros. Por isso o nível 03 mostra a coluna partida em degraus, e não
-   uma tampa no pé.
+   As válvulas limitam o refluxo durante a ação da bomba muscular. Em pé e
+   parado, sua competência não elimina a pressão hidrostática do tornozelo.
+   Os desníveis entre marcos do nível 03 são diferenças hidrostáticas
+   potenciais, não quedas de pressão somadas através de válvulas abertas.
 
    A REGRA DA CASA, herdada das bancadas 06 e 07 e válida aqui inteira:
    • face invertida mora na GEOMETRIA, nunca em `side: THREE.BackSide` — o
@@ -32,32 +30,11 @@ const rnd = (a, b) => a + Math.random() * (b - a);
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 
 /* ── A ESCALA DO CORPO ─────────────────────────────────────────────────────
-   Uma unidade de mundo = 10 cm de gente. O corpo tem 17,0 (1,70 m) e as
-   alturas anatômicas abaixo saem daí. Manter isto explícito é o que permite
-   à física usar centímetros de verdade sem número mágico nenhum. */
-export const CM = 0.02;                // 1 cm em unidades de mundo (corpo = 3,4)
-export const CORPO = {
-  altura: 170 * CM,
-  /* alturas a partir do CHÃO, em cm, de quem está em pé */
-  solo: 0, tornozelo: 12, joelho: 48, coxa: 75, quadril: 92,
-  diafragma: 118, coracao: 128, ombro: 142, olhos: 160,
-};
-/* O PONTO INDIFERENTE HIDROSTÁTICO fica na altura do diafragma: é a altura em
-   que a pressão venosa não muda ao levantar ou deitar. Toda a conta de coluna
-   é medida a partir DELE, não do coração — usar o coração erra o sinal acima
-   do diafragma e some com o fato de a jugular colabar em pé. */
-export const PIH = CORPO.diafragma;
-
-/* 1 cm de sangue = 0,78 mmHg. Vem de rho*g*h: 1060 kg/m3 x 9,81 x 0,01 m
-   / 133,3 Pa por mmHg. Chumbar "90 mmHg no tornozelo" seria número mágico;
-   assim o valor CAI da altura, e mudar o corpo muda a pressão sozinho. */
-export const MMHG_POR_CM = 1060 * 9.81 * 0.01 / 133.3;
-
-/* pressão venosa local, em mmHg, para uma altura e uma inclinação */
-export function pressaoVenosa(alturaCm, grau, { base = 10 } = {}) {
-  const sen = Math.sin(grau * Math.PI / 180);
-  return base + (PIH - alturaCm) * MMHG_POR_CM * sen;
-}
+   Uma unidade de mundo = 50 cm; 170 cm correspondem a 3,4 unidades.
+   A física usa as alturas anatômicas em centímetros, independentemente
+   da ampliação das peças explicativas. */
+import {CM,CORPO,PIH,MMHG_POR_CM,pressaoVenosa,pressaoLocal,aberturaValvula,pulsoCardiaco} from './fisica.js?v=postura-20261003';
+export {CM,CORPO,PIH,MMHG_POR_CM,pressaoVenosa};
 
 /* ── MATERIAIS ─────────────────────────────────────────────────────────── */
 const phys = o => new THREE.MeshPhysicalMaterial(o);
@@ -174,7 +151,7 @@ function moldarVeia(malha, grau, opc = {}) {
   const pos = g.attributes.position, cor = g.attributes.color;
   const base = opc.base ?? 10, teto = opc.teto ?? 1.45;
   for (let s = 0; s <= u.segsU; s++) {
-    const p = pressaoVenosa(u.alturas[s], grau, { base });
+    const p = pressaoLocal(u.alturas[s], grau, opc.atividade??0, { base });
     const f = fatorDeDistensao(p, teto);
     const c = corDaPressao(p);
     const ct = u.centros[s], r = u.raioBase * f * (u.calibreCardiaco?.[s] ?? 1) * (u.calibreDistal?.[s] ?? 1);
@@ -1013,11 +990,9 @@ function nivelPerna(geo) {
   return g;
 }
 
-/* ── NÍVEL 03 — A VÁLVULA, E O QUE ELA REALMENTE SEGURA ───────────────────
-   Um segmento com três válvulas. A lição está na SOMA: nenhuma delas segura
-   os 90 mmHg do tornozelo. Cada uma segura a diferença até a de cima —
-   poucos centímetros de sangue, poucos mmHg. É a fila de degraus que parte a
-   coluna, e é por isso que a competência de UMA válvula não salva a perna. */
+/* ── NÍVEL 03 — VÁLVULAS EM FLUXO ANTERÓGRADO E REFLUXO ───────────────────
+   Ampliação de um segmento. Durante a ejeção as cúspides abrem; na soltura
+   fecham para limitar o refluxo. A carga hidrostática em repouso permanece. */
 const VALV_ALTURAS = [16, 30, 44];        // cm, no segmento desenhado
 
 function nivelValvula() {
@@ -1162,14 +1137,14 @@ export async function criar() {
   const VOL_REPOUSO_PERNAS = 600;                 // ml, deitado, as duas pernas
   const DA_PERNA = new Set(['perna', 'profunda', 'safena', 'perfurante']);
 
-  function somaArea(m, grau) {
+  function somaArea(m, grau, atividade=0) {
     let soma = 0;
     for (const v of (m.userData.veias || [])) {
       if (!DA_PERNA.has(v.userData.papel)) continue;
       const u = v.geometry.userData;
       for (let s = 0; s < u.segsU; s++) {
         const centros=centrosParaVolume(v.geometry);
-        const f = fatorDeDistensao(pressaoVenosa(centros[s].y/CM, grau));
+        const f = fatorDeDistensao(pressaoLocal(centros[s].y/CM, grau, atividade));
         const L = centros[s].distanceTo(centros[s + 1]) / CM;
         soma += f * f * L;                        // area vai com o quadrado do raio
       }
@@ -1177,30 +1152,17 @@ export async function criar() {
     return soma;
   }
   const AREA0 = somaArea(modelos[0], 0);
-  const volumeDe = (m, grau) => VOL_REPOUSO_PERNAS * somaArea(m, grau) / AREA0;
+  const volumeDe = (m, grau, atividade=0) => VOL_REPOUSO_PERNAS * somaArea(m, grau, atividade) / AREA0;
 
   /* Aplica a postura. `grau`: 0 = decúbito, 90 = ortostatismo. */
-  function aplicarPostura(grau, { bombaOff = 0 } = {}) {
+  function aplicarPostura(grau, { atividade=0 } = {}) {
     for (const m of modelos) {
       for (const v of (m.userData.veias || [])) {
         moldarVeia(v, grau, v.userData.papel === 'jugular'
-          ? { base: 6, teto: 1.2 } : {});
+          ? { teto: 1.2, atividade } : { atividade });
       }
     }
-    /* AS VALVULAS DO NIVEL 03 FECHAM COM A COLUNA, e essa e a licao inteira.
-       Deitado nao ha coluna que empurre para baixo: as cuspides ficam soltas
-       contra a parede. Em pe, o peso do sangue acima as enche por tras e elas
-       encostam as bordas — cada uma segurando o seu degrau. Mostra-las
-       abertas em ortostatismo, como estavam na primeira foto, dizia o oposto
-       do que o nivel existe para dizer. */
-    const fechamento = clamp(Math.sin(grau * Math.PI / 180) * 1.15, 0, 1);
-    for (const par of (modelos[2].userData.valvulas || [])) {
-      const abre = clamp(1 - fechamento, 0, 1);
-      par.children.forEach(c => moldarCuspide(c, abre));
-      par.userData.abertura = abre;
-    }
-
-    const jug = pressaoVenosa(CORPO.olhos, grau, { base: 6 });
+    const jug = pressaoVenosa(CORPO.jugular, grau);
     return {
       tornozelo: pressaoVenosa(CORPO.tornozelo, grau),
       panturrilha: pressaoVenosa(30, grau),
@@ -1208,7 +1170,7 @@ export async function criar() {
       coracao: pressaoVenosa(CORPO.coracao, grau),
       jugular: jug,
       jugularColabada: jug < 0,
-      empocado: volumeDe(modelos[0], grau) - volumeDe(modelos[0], 0),
+      empocado: volumeDe(modelos[0], grau,atividade) - volumeDe(modelos[0], 0),
     };
   }
 
@@ -1217,7 +1179,7 @@ export async function criar() {
      músculo aperta (senão o sangue voltaria ao pé) e a de CIMA abre. Na
      soltura o par troca de papel. Nunca as duas abertas ao mesmo tempo com o
      músculo apertando: isso seria um cano, e cano não bombeia. */
-  function aplicarBomba(fase, grau, atividade=0) {
+  function aplicarBomba(fase, grau, atividade=0, ativo=false) {
     const aperto = contracaoNaFase(fase);
     const b = modelos[3].userData;
     b.aperto=aperto;
@@ -1231,14 +1193,18 @@ export async function criar() {
       par.userData.abertura = abre;
     });
 
-    /* A PRESSÃO DO TORNOZELO CAI COM O BOMBEAMENTO, e é esse o número que
-       fecha a bancada: parado em pé são ~90 mmHg; andando, a coluna se parte
-       nos segmentos e cai para perto de 25. */
+    /* Pressão média ambulatorial: atividade muscular e válvulas competentes
+       esvaziam o reservatório distal, aproximando a pressão de 25 mmHg.
+       Válvulas sozinhas não reduzem a pressão hidrostática estática. */
+    // O nível 03 é uma ampliação das valvas a jusante da bomba.
+    // Abre no fluxo anterógrado e fecha durante o relaxamento/refluxo incipiente.
+    const abre=aberturaValvula(fase,ativo);
+    for(const par of modelos[2].userData.valvulas){par.children.forEach(c=>moldarCuspide(c,abre));par.userData.abertura=abre}
     const parado = pressaoVenosa(CORPO.tornozelo, grau);
     return { aperto, parado, bombeando: pressaoComBomba(parado,atividade) };
   }
 
-  /* as válvulas do nível 03 seguram cada uma o seu degrau, e só ele */
+  /* Desníveis hidrostáticos entre marcos anatômicos, sem pressão basal. */
   function degrausDaValvula(grau) {
     const m = modelos[2], base = m.userData.alturaBase;
     const alturas = [base, ...VALV_ALTURAS.map(h => base + h)];
@@ -1249,7 +1215,7 @@ export async function criar() {
         mmHg: (alturas[i + 1] - alturas[i]) * MMHG_POR_CM * Math.sin(grau * Math.PI / 180),
       });
     }
-    return { passos, coluna: pressaoVenosa(base, grau) };
+    return { passos, coluna: passos.reduce((s,p)=>s+p.mmHg,0),tornozelo:pressaoVenosa(base,grau) };
   }
 
   /* O sangue anda no desenho, e a velocidade é a fisiologia: em pé e parado
@@ -1257,10 +1223,11 @@ export async function criar() {
      A artéria não espera a postura — ela pulsa. */
   const tmp = new THREE.Vector3(), nrm = new THREE.Vector3(), bin = new THREE.Vector3(), tan = new THREE.Vector3(), up = V(0, 1, 0);
   const coresFluxo={a:new THREE.Color(0xff4040),m:new THREE.Color(0xa64d9a),v:new THREE.Color(0x6a5cff)};
-  function animarCirculacao(dt, grau, andando) {
+  let tempoFluxo=0;
+  function animarCirculacao(dt, grau, andando, atividade=0) {
     const sen = Math.sin(grau * Math.PI / 180);
-    const time = performance.now() / 1000;
-    const beat = Math.pow(Math.max(0, Math.sin(time * 2 * Math.PI * 1.1)), 6);
+    tempoFluxo+=Math.max(0,dt);
+    const time=tempoFluxo,beat=pulsoCardiaco(time);
     const fecha = clamp(sen * 1.15, 0, 1);
     for (const m of modelos) {
       if (!m.visible) continue;
@@ -1301,7 +1268,8 @@ export async function criar() {
           tmp.addScaledVector(nrm, (d.off[0] + w)*calibre).addScaledVector(bin, (d.off[1] - w)*calibre);
           pos[i * 3] = tmp.x; pos[i * 3 + 1] = tmp.y; pos[i * 3 + 2] = tmp.z;
           atributos.calibreParticula?.setX(i,Math.max(.035,Math.min(1,calibre*(d.path.kind==='m'?.12:1))));
-          const cor=d.path.next?coresFluxo[d.path.kind]:corBase;
+          const altura=tmp.y/CM;
+          const cor=d.path.kind==='v'&&m.userData.veias?corDaPressao(pressaoLocal(altura,grau,atividade)):d.path.next?coresFluxo[d.path.kind]:corBase;
           if(cor)atributos.color?.setXYZ(i,cor.r,cor.g,cor.b);
         }
         layer.pts.geometry.attributes.position.needsUpdate = true;
@@ -1311,7 +1279,8 @@ export async function criar() {
     }
   }
 
+  function reiniciarCirculacao(grau=0){tempoFluxo=0;for(const m of modelos)m.userData.coracao?.userData.animar?.(0);animarCirculacao(0,grau,false)}
   aplicarPostura(0);
   aplicarBomba(0, 0);
-  return { modelos, aplicarPostura, aplicarBomba, degrausDaValvula, animarCirculacao };
+  return { modelos, aplicarPostura, aplicarBomba, degrausDaValvula, animarCirculacao,reiniciarCirculacao };
 }

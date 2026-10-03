@@ -34,9 +34,11 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { prepararParaRA } from '../cores-para-ra.js';
-import { criar, CM, CORPO, PIH, MMHG_POR_CM, pressaoVenosa, corDaPressao } from './modelos.js?v=valvulas-90-20261002';
+import { criar, corDaPressao } from './modelos.js?v=postura-20261003';
 import {criarEstadoBomba,avancarBomba} from './bomba.js?v=pes-bomba-20261002';
 
+import {mmHgParaCmH2O} from './fisica.js?v=postura-20261003';
+import {criarGraficoPostura} from './grafico.js?v=postura-20261003';
 const $ = id => document.getElementById(id);
 const canvas = $('scene'), stage = $('stage');
 const clamp = THREE.MathUtils.clamp;
@@ -77,7 +79,7 @@ const rim = new THREE.DirectionalLight(0x8fb8ff, 1.05); rim.position.set(-3.2, 2
    postura é o corpo, não quem olha. */
 const root = new THREE.Group(); scene.add(root);
 
-const { modelos, aplicarPostura, aplicarBomba, degrausDaValvula, animarCirculacao } = await criar();
+const { modelos, aplicarPostura, aplicarBomba, degrausDaValvula, animarCirculacao,reiniciarCirculacao } = await criar();
 $('modeloStatus').hidden=true;
 modelos.forEach((m, i) => {
   m.visible = i === 0; root.add(m);
@@ -107,12 +109,38 @@ const raio = modelos.map(m => {
   });
   return r;
 });
+const centrosCorpo=[0,4].map(n=>{
+ const pele=modelos[n].getObjectByName('corpo_translucido')??modelos[n].children.find(o=>o.isMesh&&!o.geometry.userData.centros);
+ pele.updateWorldMatrix(true,false);const P=pele.geometry.attributes.position,pontos=new Float32Array(P.count*3),p=new THREE.Vector3();
+ for(let i=0;i<P.count;i++){p.fromBufferAttribute(P,i).applyMatrix4(pele.matrixWorld);pontos.set(p.toArray(),i*3)}
+ return {n,pontos};
+});
+let ultimaPosturaVista=null;
+function vistaCorpo(n){
+ const info=centrosCorpo.find(x=>x.n===n),a=g2r(90-grau),c=Math.cos(a),s=Math.sin(a),box=new THREE.Box3(),p=new THREE.Vector3();
+ for(let i=0;i<info.pontos.length;i+=3){const x=info.pontos[i],y=info.pontos[i+1],z=info.pontos[i+2];p.set(x*c-y*s,x*s+y*c,z);box.expandByPoint(p)}
+ const centro=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3());
+ const tan=Math.tan(camera.fov*Math.PI/360),ajuste=Math.max(size.y/2/tan,size.x/2/(tan*camera.aspect))*1.14+size.z/2;
+ const d=Math.max(ajuste,raio[n]/tan*1.28*.84);
+ return {centro,d};
+}
+function acompanharCorpo(){
+ if(atual!==0&&atual!==4)return;
+ if(ultimaPosturaVista!==null&&Math.abs(grau-ultimaPosturaVista)<.02)return;
+ const v=vistaCorpo(atual),offset=camera.position.clone().sub(controls.target),delta=v.centro.clone().sub(controls.target);
+ camera.position.add(delta);controls.target.copy(v.centro);
+ // Respeita a distância escolhida pelo aluno, ajustando apenas a proporção entre posturas.
+ if(ultimaPosturaVista!==null){const anterior=vistaAnterior;offset.multiplyScalar(v.d/anterior);camera.position.copy(v.centro).add(offset)}
+ vistaAnterior=v.d;ultimaPosturaVista=grau;
+ controls.minDistance=v.d*.35;controls.maxDistance=v.d*2.6;
+ controls.update();
+}
+let vistaAnterior=0;
 function enquadrar(n) {
-  const d = raio[n] / Math.tan(camera.fov * Math.PI / 360) * 1.28;
-  camera.position.set(0, 0, d);
-  controls.target.set(0, 0, 0);
-  controls.minDistance = d * .35; controls.maxDistance = d * 2.6;
-  controls.update();
+ let centro=new THREE.Vector3(),d=raio[n]/Math.tan(camera.fov*Math.PI/360)*1.28;
+ if(n===0||n===4){const v=vistaCorpo(n);centro=v.centro;d=v.d;vistaAnterior=d;ultimaPosturaVista=grau;}else ultimaPosturaVista=null;
+ camera.position.copy(centro).add(new THREE.Vector3(0,0,d));controls.target.copy(centro);
+ controls.minDistance=d*.35;controls.maxDistance=d*2.6;controls.update();
 }
 
 /* ------------------------------------------------------------ a inclinação */
@@ -143,16 +171,16 @@ const TEXTOS = [
     texto: 'Deitado, a coluna de sangue não tem altura: do tornozelo ao pescoço a pressão venosa é quase a mesma. Em pé, cada centímetro abaixo do diafragma acrescenta 0,78 mmHg — e o tornozelo chega a noventa. Incline o aparelho e veja a árvore mudar de calibre e de cor.',
     tags: ['0,78 mmHg/cm', 'ponto indiferente no diafragma', 'U nos pés: microcirculação simplificada'] },
   { olho: 'Nível 02', titulo: 'Meio litro sai de circulação',
-    texto: 'A veia é um saco complacente, não um cano: recebe muito volume com pouca pressão. Ao levantar, algumas centenas de mililitros descem para as pernas e deixam de voltar ao coração — e é essa a conta que decide se alguém desmaia na formatura.',
+    texto: 'A veia é um saco complacente, não um cano: recebe muito volume com pouca pressão. Ao levantar, algumas centenas de mililitros descem para as pernas e deixam de voltar ao coração — e esse represamento pode reduzir a pré-carga. O card estima o volume adicional nas pernas neste modelo didático.',
     tags: ['safena e profunda', 'perfurantes'] },
-  { olho: 'Nível 03', titulo: 'Nenhuma segura a coluna inteira',
-    texto: 'A válvula não é tampa. É bicúspide, se enche por trás e encosta as bordas — e cada uma sustenta só o segmento até a de cima. É a fila que parte a coluna em degraus de poucos centímetros; sozinha, nenhuma delas daria conta.',
-    tags: ['bicúspide', 'degrau por segmento'] },
+  { olho: 'Nível 03', titulo: 'Abre para subir, fecha para não voltar',
+    texto: 'As duas cúspides abrem com o fluxo em direção ao coração e fecham quando o gradiente favorece o refluxo. Durante a caminhada, acompanhe a abertura na ejeção e o fechamento no relaxamento. Em pé parado, válvulas competentes não eliminam a pressão hidrostática do tornozelo.',
+    tags: ['bicúspide', 'gradiente de pressão', 'fluxo anterógrado e refluxo'] },
   { olho: 'Nível 04', titulo: 'O músculo que esvazia a veia',
     texto: 'A panturrilha é a segunda bomba do corpo. Ao contrair, espreme a veia profunda entre as barrigas: a válvula de baixo fecha, a de cima abre, e o segmento se esvazia para cima. As valvas coordenam o esvaziamento na contração e o reenchimento no relaxamento.',
     tags: ['bomba muscular', 'vista interna das válvulas', 'fluxo: distal → proximal → coração'] },
   { olho: 'Nível 05', titulo: 'Parado em pé é pior que andar',
-    texto: 'De pé e imóvel, a coluna é inteira e o tornozelo fica em noventa. Bastam alguns passos para a bomba partir essa coluna e derrubar a pressão para perto de vinte e cinco. Quem desmaia em posição de sentido não desmaia por estar em pé: desmaia por estar parado.',
+    texto: 'De pé e imóvel, a coluna é inteira e o tornozelo fica em noventa. A caminhada com válvulas competentes reduz a pressão ambulatorial para perto de 25 mmHg neste modelo. Ao parar, o reservatório distal se reenche gradualmente. A pressão não mede diretamente o fluxo ou o débito cardíaco.',
     tags: ['pressão venosa ambulatorial', 'retorno ao coração', 'U nos pés: microcirculação simplificada'] },
 ];
 const ROTULO = ['O corpo', 'A perna', 'A válvula', 'A bomba', 'O ciclo'];
@@ -186,13 +214,14 @@ const JANELA_S = 12;
 
 /* ------------------------------------------------------------ aplicar */
 let ultimo = {};
-function aplicarTudo() {
+function aplicarTudo(atualizarFluxo=true) {
   /* o corpo pende: 90 graus de inclinação = corpo em pé = giro zero */
   root.rotation.z = g2r(90 - grau);
-  const p = aplicarPostura(grau);
+  acompanharCorpo();
+  const p = aplicarPostura(grau,{atividade:estadoBomba.atividade});
   ultimo = p;
 
-  const b = aplicarBomba(faseBomba, grau,estadoBomba.atividade);
+  const b = aplicarBomba(faseBomba, grau,estadoBomba.atividade,bombaAndando||passoRestante>0);
   const tornozelo = b.bombeando;
 
   $('posturaLabel').textContent =
@@ -210,7 +239,7 @@ function aplicarTudo() {
      o número negativo seria ensinar errado. */
   $('lJugular').textContent = p.jugularColabada ? 'colabada' : p.jugular.toFixed(0);
   $('lEmpocado').textContent = Math.max(0, p.empocado).toFixed(0);
-  const equivalente=p=>(p*1.35951).toFixed(1).replace('.',',')+' cmH₂O';
+  const equivalente=p=>mmHgParaCmH2O(p).toFixed(1).replace('.',',')+' cmH₂O';
   $('uTornozelo').textContent=equivalente(tornozelo);
   $('uCoxa').textContent=equivalente(p.coxa);
   $('uCoracao').textContent=equivalente(p.coracao);
@@ -219,6 +248,7 @@ function aplicarTudo() {
   $('deitar').setAttribute('aria-pressed',grau<1);
   $('levantar').setAttribute('aria-pressed',grau>89);
   atualizarExecucao();
+  if(atualizarFluxo)animarCirculacao(0,grau,bombaAndando||passoRestante>0,estadoBomba.atividade);
 
   if (atual === 2) escreverDegraus();
 }
@@ -231,36 +261,15 @@ function escreverDegraus() {
 }
 
 /* ------------------------------------------------------------ o gráfico */
-const gr = $('curvaColuna'), ctx = gr.getContext('2d');
-function desenharCurva() {
-  const W = gr.width, H = gr.height;
-  ctx.clearRect(0, 0, W, H);
-  const m = { e: 95, d: 25, t: 38, b: 43 };
-  const px = mmHg => m.e + (clamp(mmHg, -20, 110) + 20) / 130 * (W - m.e - m.d);
-  const py = h => H - m.b - (h / 175) * (H - m.t - m.b);
-
-  ctx.fillStyle='#b6cad9';ctx.font='12px Inter, sans-serif';ctx.fillText('Altura (cm)',12,20);ctx.fillText('Pressão venosa (mmHg)',W-185,H-12);
-  ctx.strokeStyle = '#385365'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(px(0), m.t); ctx.lineTo(px(0), H - m.b); ctx.stroke();
-  ctx.fillStyle = '#b6cad9'; ctx.font = '11px "IBM Plex Mono", monospace';
-  for (const v of [0,20,40,60,80,100]) {ctx.fillText(String(v),px(v)-5,H-26);ctx.strokeStyle='#38536566';ctx.beginPath();ctx.moveTo(px(v),m.t);ctx.lineTo(px(v),H-m.b);ctx.stroke();}
-  for (const [h, r] of [[CORPO.tornozelo, 'tornozelo'], [PIH, 'diafragma'], [CORPO.olhos, 'cabeça']]) {
-    ctx.fillText(r, 4, py(h) + 3);ctx.fillText(h.toFixed(0),65,py(h)+3);
-  }
-
-  /* a linha da pressão contra a altura: em pé é uma reta inclinada, deitado é
-     uma vertical. O cruzamento com o eixo é o ponto indiferente, e ele fica
-     PARADO enquanto tudo gira — é a coisa mais bonita de ver aqui. */
-  ctx.beginPath();
-  for (let h = 0; h <= 175; h += 2) {
-    const p = pressaoVenosa(h, grau, { base: h > PIH ? 6 : 10 });
-    const x = px(Math.max(0, p));
-    h === 0 ? ctx.moveTo(x, py(h)) : ctx.lineTo(x, py(h));
-  }
-  ctx.strokeStyle = '#88c5ff'; ctx.lineWidth = 2.2; ctx.stroke();
-
-  ctx.beginPath(); ctx.arc(px(pressaoVenosa(PIH, grau)), py(PIH), 3.4, 0, 7);
-  ctx.fillStyle = '#8cdcca'; ctx.fill();
+const gr=$('curvaColuna');
+const peleGrafico=modelos[0].getObjectByName('corpo_translucido')??modelos[0].children.find(o=>o.isMesh&&!o.geometry.userData.centros);
+const graficoPostura=criarGraficoPostura(peleGrafico.geometry);
+let ultimaCurva='';
+function desenharCurva(){
+ if(!Number.isFinite(ultimo.coracao))return;
+ const chave=[grau.toFixed(2),estadoBomba.atividade.toFixed(4),ultimo.empocado].join('|');if(chave===ultimaCurva)return;ultimaCurva=chave;
+ const tornozelo=aplicarBomba(faseBomba,grau,estadoBomba.atividade,bombaAndando||passoRestante>0).bombeando;
+ graficoPostura(gr,grau,ultimo,tornozelo,corDaPressao);
 }
 
 const gt = $('curvaTempo'), ctt = gt && gt.getContext('2d');
@@ -321,6 +330,7 @@ function ajustar() {
   const w = stage.clientWidth, h = stage.clientHeight;
   renderer.setSize(w, h, false);
   camera.aspect = w / h; camera.updateProjectionMatrix();
+  if(atual===0||atual===4)enquadrar(atual);
   desenhar();
 }
 addEventListener('resize', ajustar);
@@ -328,7 +338,7 @@ addEventListener('resize', ajustar);
 /* ------------------------------------------------------------ execução */
 function atualizarExecucao(){
   $('iniciar').disabled=executando;$('pausar').disabled=!executando;$('passo').disabled=passoRestante>0;
-  const modo=passoRestante>0?'passo isolado':bombaAndando?'caminhada':'repouso';
+  const modo=passoRestante>0?'passo isolado':bombaAndando?(grau>70?'caminhada':'bomba muscular'):'repouso';
   $('cicloEstado').textContent=(executando?'Em execução':'Pausado')+' · '+modo;
   $('andar').classList.toggle('on',bombaAndando);$('andar').setAttribute('aria-pressed',bombaAndando);
   for(const [id,on] of [['estadoDeitado',!bombaAndando&&grau<20],['estadoParado',!bombaAndando&&grau>70]]){$(id).classList.toggle('on',on);$(id).setAttribute('aria-pressed',on)}
@@ -347,13 +357,13 @@ function executar(dt){
     tempoSimulado+=h;tempoCiclo+=h;restante-=h;
     if(ativo)faseBomba=(faseBomba+h/1.15)%1;
     avancarBomba(estadoBomba,h,ativo);
-    aplicarTudo();animarCirculacao(h,grau,ativo);
-    if(tempoSimulado-ultimaAmostra>=.125){ultimaAmostra=tempoSimulado;historico.push({t:tempoSimulado,p:aplicarBomba(faseBomba,grau,estadoBomba.atividade).bombeando});}
+    aplicarTudo(false);animarCirculacao(h,grau,ativo,estadoBomba.atividade);
+    if(tempoSimulado-ultimaAmostra>=.125){ultimaAmostra=tempoSimulado;historico.push({t:tempoSimulado,p:aplicarBomba(faseBomba,grau,estadoBomba.atividade,bombaAndando||passoRestante>0).bombeando});}
     while(historico.length&&historico[0].t<tempoSimulado-JANELA_S)historico.shift();
     if(passoRestante>0){passoRestante=Math.max(0,passoRestante-h);if(passoRestante<1e-8){passoRestante=0;faseBomba=0;executando=false;}}
     if(!$('loopContinuo').checked&&tempoCiclo>=1.15-1e-8){executando=false;faseBomba=0;}
   }
-  aplicarTudo();desenharTempo();
+  aplicarTudo(false);desenharTempo();
   if(!executando)prepararRA();
 }
 let anterior = performance.now();
@@ -369,6 +379,7 @@ renderer.setAnimationLoop(() => {
 function ligarSensor() {
   addEventListener('deviceorientation', e => {
     if (e.beta === null || e.gamma === null) return;
+    if(arrastando)return;
     eventos++; sensorVivo = true;
     $('sensorEstado').textContent = 'sensor ligado';
     $('sensorEstado').classList.add('vivo');
@@ -402,7 +413,7 @@ $('grauCursor').addEventListener('input', e => {definirGrau(parseFloat(e.current
 $('deitar').onclick = () => {definirGrau(0,true);prepararRA()};
 $('levantar').onclick = () => {definirGrau(90,true);prepararRA()};
 
-function reiniciar(){executando=false;bombaAndando=false;faseBomba=0;passoRestante=0;estadoBomba.atividade=0;tempoCiclo=0;tempoSimulado=0;ultimaAmostra=0;historico.length=0;aplicarTudo();desenhar();prepararRA();}
+function reiniciar(){executando=false;bombaAndando=false;faseBomba=0;passoRestante=0;estadoBomba.atividade=0;tempoCiclo=0;tempoSimulado=0;ultimaAmostra=0;historico.length=0;reiniciarCirculacao(grau);aplicarTudo();desenhar();prepararRA();}
 $('iniciar').onclick=()=>{if(tempoCiclo>=1.15-1e-8)tempoCiclo=0;executando=true;atualizarExecucao()};
 $('pausar').onclick=()=>{executando=false;atualizarExecucao();prepararRA()};
 $('reiniciar').onclick=reiniciar;
@@ -414,7 +425,7 @@ $('andar').onclick=()=>estadoRapido(90,true);
 $('estadoParado').onclick=()=>estadoRapido(90,false);
 $('estadoDeitado').onclick=()=>estadoRapido(0,false);
 $('passo').onclick=()=>{bombaAndando=false;faseBomba=0;passoRestante=1.15;tempoCiclo=0;executando=true;aplicarTudo();desenhar()};
-document.querySelectorAll('[data-grafico]').forEach(b=>b.onclick=()=>{const temporal=b.dataset.grafico==='tempo';$('curvaColuna').hidden=temporal;$('curvaTempo').hidden=!temporal;document.querySelectorAll('[data-grafico]').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});$('notaGrafico').textContent=temporal?'Pressão venosa do tornozelo nos últimos 12 segundos simulados. Caminhada reduz a pressão; ao parar, o reservatório distal se reenche gradualmente.':'Perfil hidrostático em repouso: pressão venosa (mmHg) e altura a partir do solo (cm). Valores negativos são limitados pelo colapso venoso.';desenhar()});
+document.querySelectorAll('[data-grafico]').forEach(b=>b.onclick=()=>{const temporal=b.dataset.grafico==='tempo';$('curvaColuna').hidden=temporal;$('curvaTempo').hidden=!temporal;document.querySelectorAll('[data-grafico]').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});$('notaGrafico').textContent=temporal?'Pressão venosa do tornozelo nos últimos 12 segundos simulados. Caminhada reduz a pressão; ao parar, o reservatório distal se reenche gradualmente.':'Postura do corpo e pressões regionais: a silhueta fica em pé ou deitada como na cena. As barras representam pressão, não inclinação.';desenhar()});
 $('telaCheia').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await stage.requestFullscreen()}catch{$('telaCheia').textContent='Ampliação indisponível'}};
 document.addEventListener('fullscreenchange',()=>{$('telaCheia').textContent=document.fullscreenElement?'Reduzir':'Ampliar';ajustar()});
 
