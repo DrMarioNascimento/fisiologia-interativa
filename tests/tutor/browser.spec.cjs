@@ -141,10 +141,12 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
   for(const q of await questions.all())await expect(q).toHaveClass(/btn-primary/);
   for(const sim of await simulators.all())await expect(sim).toHaveClass(/btn-ghost/);
   const styles=await cards.evaluate(el=>({q:getComputedStyle(el.querySelector('[data-open]')).backgroundImage,sim:getComputedStyle([...el.querySelectorAll('a')].find(a=>a.textContent==='Abrir simulador')).backgroundImage}));expect(styles.q).not.toBe(styles.sim);
-  await expect(cards.locator('.ra-card')).toHaveCount(1);
+  const axis=await page.locator('#axes .axis').nth(i).evaluate(b=>b.dataset.id||b.dataset.axis);
+  const hasRA=axis==='cardiovascular'||axis==='respiratorio';
+  await expect(cards.locator('.ra-card')).toHaveCount(hasRA?1:0);
+  if(hasRA){
   await expect(cards.locator('.ra-card h2')).toHaveText('RA - Realidade Aumentada');
   await expect(cards.locator('.ra-call')).toContainText('viagem de aprendizado incrível');
-  const axis=await page.locator('#axes .axis').nth(i).evaluate(b=>b.dataset.id||b.dataset.axis);
   const experiencias=axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
   await expect(cards.locator('.ra-card a')).toHaveCount(experiencias.length);
   for(let j=0;j<experiencias.length;j++){
@@ -152,8 +154,10 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
    await expect(acesso).toHaveAttribute('href',`ra/${experiencias[j]}/?percurso=${course==='fisio'?'fisioterapia':'educacao-fisica'}`);
    await expect(acesso).toHaveAttribute('target','_blank');await expect(acesso).toHaveAttribute('rel','noopener noreferrer');
   }
+  }
   const first=questions.first();await first.click();await expect(first.locator('..').locator('..').locator('.panel')).toBeVisible();await first.click();
  }
+ await page.locator('#axes [data-id="respiratorio"],#axes [data-axis="respiratorio"]').click();
  const link=page.locator('.ra-card a');await expect(link).toHaveAttribute('target','_blank');
  await page.context().route('**/ra/pleura/app.js*',r=>r.fulfill({body:'',contentType:'text/javascript'}));
  await page.context().route('**/model-viewer.min.js',r=>r.fulfill({body:'',contentType:'text/javascript'}));
