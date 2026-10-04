@@ -62,7 +62,7 @@
   <script src="tutor-ef-data.js?v=20"></script>
   <script src="tutor-fisio-data.js?v=9"></script>
   <script src="tutor-desafios-extra.js?v=2"></script>
-  <script src="tutor-ra-data.js?v=ra-juncao-20261003"></script>
+  <script src="tutor-ra-data.js?v=ra-osso-20261004"></script>
   <script>
     (function(){
       const box=document.getElementById('messages'),input=document.getElementById('input');
@@ -77,7 +77,7 @@
       const add=(html,who='bot')=>{const d=document.createElement('div');d.className='msg '+who;d.innerHTML=html;box.appendChild(d);box.scrollTop=box.scrollHeight};
       const linkList=items=>'<div class="links">'+items.map(x=>`<a class="link" href="${esc(base+x.href+(isFisio||x.href.startsWith('ra/')?(x.href.includes('?')?'&':'?')+'percurso='+(isFisio?'fisioterapia':'educacao-fisica'):''))}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`).join('')+'</div>';
       const mapItems=()=>Object.values(isFisio?(courseConfig?.maps||{}):(typeof maps==='object'?maps:{})).flatMap(v=>Array.isArray(v)?v:[v]).filter(Boolean).map(x=>({title:x.title,href:x.src}));
-      const moduleItems=()=>(isFisio?(courseConfig?.modules||[]):(Array.isArray(modules)?modules:[])).concat(window.raTutorModules||[]);
+      const moduleItems=()=>(isFisio?(courseConfig?.modules||[]):(Array.isArray(modules)?modules:[])).concat(window.raTutorModulesForCourse?.(isFisio?'fisio':'ef')||window.raTutorModules||[]);
       const endpoint=window.TUTOR_AI_CONFIG?.endpoint || (location.hostname === 'drmarionascimento.github.io' ? 'https://tutor-fisiologia-wlt26s6wjq-uc.a.run.app/api/tutor' : '');
       const enabled=document.getElementById('aiEnabled'),moduleSelect=document.getElementById('aiModule');
       let history=[],currentModule=null,request=null;
