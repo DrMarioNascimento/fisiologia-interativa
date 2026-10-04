@@ -1,6 +1,5 @@
 /* Destaque comum aos Tutores EF e Fisioterapia; a RA vive neste repositório. */
 window.cardRealidadeAumentada = function(percurso, eixo) {
-  if(eixo==='integracao'){const curso=percurso==='fisioterapia'?'fisioterapia':'educacao-fisica';return '<article class="card ra-card"><span class="meta">Uma nova experiência</span><h2>RA - Realidade Aumentada</h2><p class="meta">Corpo em ação · Integração dos sistemas</p><p class="ra-call">Prepare-se para uma nova experiência em fisiologia humana, venha para essa viagem de aprendizado incrível!</p><div class="actions"><a class="btn btn-primary" href="ra/integracao/?percurso='+curso+'" target="_blank" rel="noopener noreferrer">Corpo em ação</a></div></article>';}
   if(!['celular','cardiovascular','respiratorio','muscular','osteoarticular'].includes(eixo))return '';
   const curso=percurso==='fisioterapia'?'fisioterapia':'educacao-fisica';
   const cardiovascular=eixo==='cardiovascular';
