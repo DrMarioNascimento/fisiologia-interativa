@@ -1,4 +1,4 @@
-import {estado,limitar,suave,CENARIOS} from './fisica.js?v=osso-osteon-axial-20261004';
+import {estado,limitar,suave,CENARIOS} from './fisica.js?v=osso-deforma-20261004';
 
 export const REGIOES=[-.95,0,.95];
 // Os níveis celulares são estudos isolados: três regiões trabalhadas em sequência.
@@ -32,9 +32,10 @@ export function estadoNivel(t,cenario='habitual',nivel=0){
 // Coordenadas visuais ampliadas; não são deformações medidas nem volumes clínicos.
 export function quadro(t,cenario,separacao=0,cargaVisivel=true,nivel=0){
  const a=estadoNivel(t,cenario,nivel),pulso=.5+.5*Math.sin(a.u*20*Math.PI);
- const intensidade=a.carga/1.55;
- return {...a,separacao:limitar(separacao),forca:cargaVisivel?intensidade*(.35+.65*pulso):0,
-  deformacao:cargaVisivel?.06*intensidade*(.35+.65*pulso):0,
+ const intensidade=a.carga/1.55,axial=nivel===1||nivel===2;
+ const forca=cargaVisivel?intensidade*(axial?pulso:.35+.65*pulso):0;
+ return {...a,separacao:limitar(separacao),forca,
+  deformacao:(axial?.12:.06)*forca,
   transporteReabsorcao:nivel===3?a.atividade:nivel===4?0:a.u>=.08&&a.u<.30?a.osteoclasto:0,
   transporteFormacao:nivel===4?a.atividade:nivel===3?0:a.u>=.40&&a.u<.85?a.osteoblasto:0};
 }

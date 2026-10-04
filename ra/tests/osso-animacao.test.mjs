@@ -17,6 +17,23 @@ test('osso: força relativa e deformação ampliada respondem ao cenário e fech
  for(let k=0;k<=1000;k++)assert(quadro(k/1000).deformacao<=.06);
 });
 
+test('trabéculas e ósteon: compressão proporcional à carga, com alívio completo',()=>{
+ for(const nivel of [1,2])for(const scenario of ['habitual','exercicio','imobilizacao']){
+  for(let k=0;k<=1000;k++){
+   const a=quadro(k/1000,scenario,0,true,nivel);
+   assert(Math.abs(a.deformacao-.12*a.forca)<1e-12);
+   assert(a.deformacao>=0&&a.deformacao<=.12);
+   const base=estado(k/1000,scenario);
+   for(const key of Object.keys(base))assert.equal(a[key],base[key]);
+  }
+  const relieved=quadro(.075,scenario,0,true,nivel);
+  assert.equal(relieved.forca,0);assert.equal(relieved.deformacao,0);
+  assert.equal(quadro(.025,scenario,0,false,nivel).deformacao,0);
+  assert(Math.abs(quadro(0,scenario,0,true,nivel).deformacao-quadro(1,scenario,0,true,nivel).deformacao)<1e-12);
+ }
+ assert.equal(quadro(.025,'exercicio',0,true,1).deformacao,.12);
+});
+
 test('osso: níveis celulares mantêm ações separadas e cumulativas, incluindo a mineralização',()=>{
  for(const scenario of ['habitual','exercicio','imobilizacao'])for(const nivel of [3,4]){
   let anterior=estadoNivel(0,scenario,nivel);

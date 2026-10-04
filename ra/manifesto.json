@@ -324,7 +324,7 @@
     },
     {
       "path": "osso-vivo/app.js",
-      "sha256": "175cd453a0be3a212c353eba1dc1d8b689ec7dd40754850d5299e3914fa3443d"
+      "sha256": "418728489fd1267419f76cd7c4ade6c6ea1f04bd5435de9084b42316b027cf01"
     },
     {
       "path": "osso-vivo/fisica.js",
@@ -332,23 +332,23 @@
     },
     {
       "path": "osso-vivo/index.html",
-      "sha256": "ff1a5c2af815ef08f2ad25b5afada682faf2b3b763113be826f61cf2acf9eae6"
+      "sha256": "1b7322acda65a6d80f0bbac2bba57f0e2828b613648c88959b1539451b9be282"
     },
     {
       "path": "osso-vivo/modelos.js",
-      "sha256": "ae6820690266e39ee2d1ae0d8363b6af118f0ff34b10eb0b2716f0e65ea70aed"
+      "sha256": "9229406c6d2a4fc829d3d6638825015343d112592f4d79522b2fdcb4c346caec"
     },
     {
       "path": "osso-vivo/README.md",
-      "sha256": "d78b34e21b0c7259024261ee6bc47ea2fd32d70531983e05093e153a4327695b"
+      "sha256": "acea438ef8c6a20dafd21e4afa98a920f3975dc846fa4289589eb37dfcefc6ed"
     },
     {
       "path": "osso-vivo/style.css",
-      "sha256": "cf0b3733e6c453d56f62f465ce6a52ac4b0945b7bddf11cd137ecc0f3f897be8"
+      "sha256": "e26066a88482cfd8cc1604935103889e0f5cc00cc1f317f4d8e708ec29319389"
     },
     {
       "path": "osso-vivo/animacao.js",
-      "sha256": "7d2b736515959cd1a6972ad0ece3d5406943f637e781aea71ff00554822066f8"
+      "sha256": "afa38ce4ca4eecbaf3b10fa54551d93dc6c0b9aafb1b62197bc8a0d96a106cf7"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
