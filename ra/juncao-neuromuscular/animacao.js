@@ -7,6 +7,22 @@ export function estadoVisual(sim,t){
  return Object.fromEntries(Object.entries(a).map(([key,value])=>[key,key==='t'?time:value+(b[key]-value)*u]));
 }
 export function comprimentoVisual(ativacao){return 2.4-.5*clamp(ativacao);}
+export function encaixeTriade(ativacao){
+ const fibra=comprimentoVisual(ativacao)/2.4;
+ // A raiz permanece na cisterna; a extremidade conserva margem dentro do feixe.
+ const reticulo=(1.74*fibra-.88)/(1.8-.88);
+ return {fibra,reticulo,deslocamento:.88*(1-reticulo)};
+}
+export function faseContracao(sim,t){
+ if(t<sim.estimulos[0])return 'Antes do estímulo';
+ if(!sim.disparos.length&&t>sim.estimulos[0]+8)return 'Transmissão insuficiente · sem contração';
+ const a=estadoVisual(sim,t);
+ if(a.ativacao<=.002)return a.ca>.01?'Início da ativação contrátil':'Sarcômero em repouso';
+ const variacao=estadoVisual(sim,t+.5).ativacao-estadoVisual(sim,t-.5).ativacao;
+ if(variacao>.00001)return 'Contração · sarcômero encurtando';
+ if(variacao<-.00001)return 'Relaxamento · sarcômero alongando';
+ return 'Contração mantida · comprimento estável';
+}
 export function impulsoVisual(eventos,t,inicio,duracao){
  for(let i=eventos.length-1;i>=0;i--){const age=t-eventos[i]-inicio;if(age>=0&&age<duracao)return age/duracao;}
  return null;

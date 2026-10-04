@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {simular} from '../juncao-neuromuscular/fisica.js';
-import {estadoVisual,comprimentoVisual,impulsoVisual,particulaVisual,vesiculaVisual,trajetoFluido} from '../juncao-neuromuscular/animacao.js';
+import {estadoVisual,comprimentoVisual,encaixeTriade,faseContracao,impulsoVisual,particulaVisual,vesiculaVisual,trajetoFluido} from '../juncao-neuromuscular/animacao.js';
 
 test('o estado visual interpola o ensaio sem saltos de amostra ou mutação do cálculo',()=>{
  const s=simular(),a=s.amostras[505],b=s.amostras[506],before=JSON.stringify(s);
@@ -52,4 +52,41 @@ test('níveis 4 e 5 compartilham encurtamento, repouso, limites e relaxamento',(
  const s=simular({modo:'trem',frequencia:50}),inicio=estadoVisual(s,19),ativo=estadoVisual(s,200),final=estadoVisual(s,650);
  assert.equal(comprimentoVisual(inicio.ativacao),2.4);assert(comprimentoVisual(ativo.ativacao)<2);
  assert(comprimentoVisual(final.ativacao)>comprimentoVisual(ativo.ativacao));
+});
+
+test('retículo mantém a ligação à cisterna e cabe no comprimento da miofibrila em toda a contração',()=>{
+ for(let a=0;a<=1;a+=.001){
+  const fit=encaixeTriade(a),limite=3.65/2*fit.fibra;
+  for(const lado of [-1,1]){
+   const raiz=lado*.88*fit.reticulo+lado*fit.deslocamento;
+   assert(Math.abs(raiz-lado*.88)<1e-12);
+   // Inclui a espessura dos tubos na ponta, além da linha central.
+   for(const z of [.84,.88,1.12,1.52,1.84])assert(Math.abs(lado*z*fit.reticulo+lado*fit.deslocamento)<limite);
+  }
+ }
+});
+
+test('fase mecânica distingue repouso, encurtamento e relaxamento conforme o comprimento mostrado',()=>{
+ const s=simular();
+ assert.equal(faseContracao(s,0),'Antes do estímulo');
+ assert.match(faseContracao(s,50),/encurtando/);
+ assert.match(faseContracao(s,150),/alongando/);
+ for(const t of [25,50,80,100,150,250]){
+  const antes=comprimentoVisual(estadoVisual(s,t-.5).ativacao),depois=comprimentoVisual(estadoVisual(s,t+.5).ativacao);
+  assert.match(faseContracao(s,t),depois<antes?/encurtando/:/alongando/);
+ }
+ assert.match(faseContracao(simular({receptores:0}),100),/sem contração/);
+ assert.match(faseContracao(simular({liberacao:0}),100),/sem contração/);
+});
+
+test('fase mecânica acompanha reversões após cada impulso, pausa, cursor e reinício do loop',()=>{
+ const s=simular({modo:'trem',frequencia:15});
+ for(let t=30;t<600;t+=2){
+  const fase=faseContracao(s,t),antes=estadoVisual(s,t-.5).ativacao,depois=estadoVisual(s,t+.5).ativacao;
+  if(fase.includes('encurtando'))assert(depois>antes);
+  if(fase.includes('alongando'))assert(depois<antes);
+  assert.equal(faseContracao(s,t),faseContracao(s,t));
+ }
+ assert.match(faseContracao(s,650),/alongando/);
+ assert.equal(faseContracao(s,0),'Antes do estímulo');
 });

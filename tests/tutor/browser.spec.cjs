@@ -26,6 +26,10 @@ test('junção neuromuscular: níveis e controles cabem no viewport do projeto',
  await expect(page.getByLabel('Repetir em loop',{exact:true})).not.toBeChecked();
  await page.getByLabel('Repetir em loop',{exact:true}).check();
  await expect(page.getByLabel('Repetir em loop',{exact:true})).toBeChecked();
+ await expect(page.getByLabel('Rótulos',{exact:true})).toBeChecked();
+ await page.getByLabel('Rótulos',{exact:true}).uncheck();
+ await expect(page.getByLabel('Rótulos',{exact:true})).not.toBeChecked();
+ await expect(page.locator('#loop').locator('..').locator('xpath=following-sibling::label[1]')).toHaveText('Rótulos');
  await expect(page.locator('[role="tabpanel"]:visible')).toHaveCount(1);
  for(const id of ['guide','ra','references','graphs']){
   await page.locator('#tab-'+id).click();
