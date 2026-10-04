@@ -178,12 +178,12 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
   for(const sim of await simulators.all())await expect(sim).toHaveClass(/btn-ghost/);
   const styles=await cards.evaluate(el=>({q:getComputedStyle(el.querySelector('[data-open]')).backgroundImage,sim:getComputedStyle([...el.querySelectorAll('a')].find(a=>a.textContent==='Abrir simulador')).backgroundImage}));expect(styles.q).not.toBe(styles.sim);
   const axis=await page.locator('#axes .axis').nth(i).evaluate(b=>b.dataset.id||b.dataset.axis);
-  const hasRA=['celular','cardiovascular','respiratorio','muscular','osteoarticular'].includes(axis);
+  const hasRA=['celular','cardiovascular','respiratorio','muscular','osteoarticular','integracao'].includes(axis);
   await expect(cards.locator('.ra-card')).toHaveCount(hasRA?1:0);
   if(hasRA){
   await expect(cards.locator('.ra-card h2')).toHaveText('RA - Realidade Aumentada');
   await expect(cards.locator('.ra-call')).toContainText('viagem de aprendizado incrível');
-  const experiencias=axis==='celular'?['potencial-membrana','starling']:axis==='osteoarticular'?['osso-vivo']:axis==='muscular'?(course==='fisio'?['musculo-sarcomero','juncao-neuromuscular','osso-vivo']:['musculo-sarcomero','juncao-neuromuscular']):axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
+  const experiencias=axis==='integracao'?['integracao']:axis==='celular'?['potencial-membrana','starling']:axis==='osteoarticular'?['osso-vivo']:axis==='muscular'?(course==='fisio'?['musculo-sarcomero','juncao-neuromuscular','osso-vivo']:['musculo-sarcomero','juncao-neuromuscular']):axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
   await expect(cards.locator('.ra-card a')).toHaveCount(experiencias.length);
   for(let j=0;j<experiencias.length;j++){
    const acesso=cards.locator('.ra-card a').nth(j);

@@ -4,11 +4,11 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "9c28106c8dc65f988ff49dd3c475b41926a03493c8f4f93c8035864e07e3818e"
+      "sha256": "a64c68acf2359c760fef565a15676e2af64c70fe42ec5c0ac76bc6f39293d8d9"
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "05ecdc09a1b9f557dbaa86ee465477c625ece5cb92d2125556d30625276aa453"
+      "sha256": "e200b6143361c980a388a23ec510836bbee8e8ab3efc1ffe47025394f487c9d8"
     },
     {
       "path": "assets/coracao.glb",
@@ -40,7 +40,7 @@
     },
     {
       "path": "package.json",
-      "sha256": "6b0e924d0b60cc0e2d09b134767fc37b88bc967dc3b50e8b8a796c831944b104"
+      "sha256": "3a65fdf2540244390a3ab9accff66b21606c08d8c70a6ff09182059ad0337452"
     },
     {
       "path": "pleura/ANATOMIA.md",
@@ -349,6 +349,46 @@
     {
       "path": "osso-vivo/animacao.js",
       "sha256": "afa38ce4ca4eecbaf3b10fa54551d93dc6c0b9aafb1b62197bc8a0d96a106cf7"
+    },
+    {
+      "path": "integracao/index.html",
+      "sha256": "bfe943e9004f3754386762c3756b382fc3f405227c74a59c8ad552153b3f1a28"
+    },
+    {
+      "path": "integracao/app.js",
+      "sha256": "f25bd536c68f2d51f312a21cad08eaa1214e49efb376fade80dc9790b14b0449"
+    },
+    {
+      "path": "integracao/modelos.js",
+      "sha256": "526f42952cb3d4790aa60202cb3426f5716e498411a84ed78a0f140277e05559"
+    },
+    {
+      "path": "integracao/fisica.js",
+      "sha256": "f8780023394ce09a80200ecb544d232179da522caa0202f955fe1948c4f1b139"
+    },
+    {
+      "path": "integracao/style.css",
+      "sha256": "7aef1007fd5d85357382d912a9a705b5d2cf3374107be0a0369548865db3e61b"
+    },
+    {
+      "path": "integracao/README.md",
+      "sha256": "562bbebe2bf957789bdd9e365332b9414c7636c0a7af0c637e9c1ec2e1f106d8"
+    },
+    {
+      "path": "integracao/assets/corpo.glb",
+      "sha256": "a27fd29b0cebf24c612b7d11b130411eb3478badef70191bdf919caae7f07159"
+    },
+    {
+      "path": "integracao/assets/coracao.glb",
+      "sha256": "de71f468bb615dd6ccdb47b7bce4fb4ce0b173a747659bc75c33f2c1379d168c"
+    },
+    {
+      "path": "integracao/assets/compressao.json",
+      "sha256": "d192fa189b9d4f0ea3b5ff1d5d8ac296e15230adbb9b357bf58bfc64e572b030"
+    },
+    {
+      "path": "scripts/preparar-integracao.mjs",
+      "sha256": "05a30bad279192289b894c067bb6f7be70f936b03fa5966fae01b1f3bbbd01d6"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
@@ -381,6 +421,10 @@
       "origem": "DrMarioNascimento/fisiologia-interativa/ra/juncao-neuromuscular",
       "tipo": "Modelo procedural original; reutiliza o sarcômero aprovado sem modificar musculo-sarcomero/modelos.js",
       "sarcomeroBase": "ec0414d006e6ea2d2102208c79da597b9284660b"
+    },
+    "integracao": {
+      "origem": "DrMarioNascimento/fisiologia-interativa/ra/integracao",
+      "tipo": "Motor didático original, Meshopt e RA animada WebXR; reutiliza silhueta, coração externo e anatomia pulmonar aprovados"
     }
   }
 }

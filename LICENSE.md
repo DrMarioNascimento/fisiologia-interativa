@@ -273,3 +273,8 @@ The English translation is provided for convenience only.
 ### Modelos originais — Viagem ao osso vivo
 
 As geometrias procedurais, texturas e animações de `ra/osso-vivo/` integram a obra original abrangida por esta licença. NIAMS, Tu et al., Salo et al., estudos da rede lacunocanalicular e da associação colágeno/mineral são referências conceituais, não fontes de modelos 3D ou texturas incorporados. As imagens apresentadas como inspiração não foram copiadas ou distribuídas. As licenças de Three.js e model-viewer permanecem próprias de seus titulares.
+
+
+### Corpo em ação — componentes
+
+O motor didático, as ampliações procedurais e a interface de `ra/integracao/` integram os componentes originais. A silhueta reutiliza a malha existente no Retorno venoso; os pulmões reutilizam a anatomia procedural da Pleura. O coração externo conserva neshallads e CC BY 4.0, com atribuição em `ra/assets/ATRIBUICAO.md`; compressão, escala, acabamento e pulso foram adaptados. Three.js (MIT), Meshoptimizer (MIT) e glTF Transform (MIT) conservam suas licenças próprias. Esta licença não restringe os direitos conferidos por essas licenças de terceiros.
