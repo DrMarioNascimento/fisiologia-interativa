@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {CORES} from './fisica.js?v=jun-20261003';
-import {estadoVisual,comprimentoVisual,impulsoVisual,particulaVisual,vesiculaVisual,trajetoFluido,suave} from './animacao.js?v=jun-fluido-20261004';
+import {estadoVisual,comprimentoVisual,encaixeTriade,impulsoVisual,particulaVisual,vesiculaVisual,trajetoFluido,suave} from './animacao.js?v=jun-encaixe-20261004';
 const V=(x=0,y=0,z=0)=>new THREE.Vector3(x,y,z);
 export const NIVEIS=[
  {nome:'O encontro',titulo:'Uma conexão, duas células',texto:'O axônio motor termina em ramos sobre uma fibra muscular. A mielina termina antes dos botões; células de Schwann terminais acompanham a arborização. O nervo não se funde à fibra: existe uma fenda entre as membranas.'},
@@ -165,8 +165,8 @@ export function criar(textura){
    protein.visible=type!=='ach'||(++receptorIndex-.5)/totalReceptors<=sim.p.receptores;
    protein.scale.x=1+(type==='ach'?visual.ach*sim.p.receptores:type==='ca'?visual.preca:visual.vm>-65?1:0)*.12;protein.scale.z=protein.scale.x;
   }
-  const length=comprimentoVisual(visual.ativacao),ratio=length/2.4;
-  if(indice===3){for(const fiber of g.userData.myofibrils)fiber.scale.z=ratio;for(const {network,s}of g.userData.reticula){network.scale.z=ratio;network.position.z=s*.88*(1-ratio);}g.userData.labels[3].pos.z=.88+.64*ratio;g.userData.labels[4].pos.z=1.8*ratio;}
+  const length=comprimentoVisual(visual.ativacao);
+  if(indice===3){const fit=encaixeTriade(visual.ativacao);for(const fiber of g.userData.myofibrils)fiber.scale.z=fit.fibra;for(const {network,s}of g.userData.reticula){network.scale.z=fit.reticulo;network.position.z=s*fit.deslocamento;}g.userData.labels[3].pos.z=1.52*fit.reticulo+fit.deslocamento;g.userData.labels[4].pos.z=1.8*fit.fibra;}
   if(indice===4&&approved){approved.aplicar(approved.model,length);const shift=(2.4-length)/2;g.userData.labels[0].pos.x=-length/2;g.userData.labels[1].pos.x=-.57+shift;g.userData.labels[3].pos.x=.58-shift;}
  }
  return {modelos,prepararSarcomero,atualizar};

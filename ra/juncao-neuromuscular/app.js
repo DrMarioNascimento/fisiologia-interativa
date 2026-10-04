@@ -3,10 +3,10 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {prepararParaRA} from '../cores-para-ra.js';
-import {criar,NIVEIS} from './modelos.js?v=jun-fluido-20261004';
+import {criar,NIVEIS} from './modelos.js?v=jun-encaixe-20261004';
 import {simular,noInstante,fase,CORES,LIMIAR} from './fisica.js?v=jun-20261003';
 import {avancarInstante} from './reproducao.js?v=jun-realismo-20261003';
-import {estadoVisual,comprimentoVisual} from './animacao.js?v=jun-fluido-20261004';
+import {estadoVisual,comprimentoVisual,faseContracao} from './animacao.js?v=jun-encaixe-20261004';
 const $=id=>document.getElementById(id),fmt=(v,n=1)=>v.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
 const stage=$('stage'),renderer=new THREE.WebGLRenderer({canvas:$('scene'),antialias:true,alpha:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;
@@ -24,7 +24,7 @@ function textura(tipo){return canvasFactory(512,512,(ctx,w,h)=>{
 const anatomy=criar(textura);anatomy.modelos.forEach((m,i)=>{m.visible=i===0;scene.add(m);});
 const bounds=anatomy.modelos.map((m,i)=>i===4?null:new THREE.Box3().setFromObject(m));
 let uiElapsed=0;
-let nivel=0,sim=simular(),instante=0,running=false,speed=Number($('speed').value),labels=true,frame=0,exportId=0,readyId=-1,arUrl=null,arTimer=null,selectionId=0,disposed=false;
+let nivel=0,sim=simular(),instante=0,running=false,speed=Number($('speed').value),labels=$('toggleLabels').checked,frame=0,exportId=0,readyId=-1,arUrl=null,arTimer=null,selectionId=0,disposed=false;
 let labelNodes=[];
 function enquadrar(){
  const box=bounds[nivel]??(bounds[nivel]=new THREE.Box3().setFromObject(anatomy.modelos[nivel])),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
@@ -52,8 +52,8 @@ function definirRunning(value){
  if(value){++exportId;clearTimeout(arTimer);$('launchAR').disabled=true;$('raStatus').textContent='Pause para preparar o estado atual em RA.';}else prepararRA();
 }
 function atualizar(leituras=true){
- const a=noInstante(sim,instante);anatomy.atualizar(nivel,a,instante,sim);if(!leituras)return;$('instant').value=instante;$('instantValue').textContent=fmt(instante)+' ms';
- $('phaseLabel').textContent=fase(sim,instante);$('eppValue').textContent=fmt(a.epp)+' mV';$('vmValue').textContent=fmt(a.vm)+' mV';$('caValue').textContent=fmt(a.ca,2);$('activationValue').textContent=fmt(a.ativacao*100,0)+'%';
+ const a=noInstante(sim,instante);anatomy.atualizar(nivel,a,instante,sim);$('phaseLabel').textContent=nivel===4?faseContracao(sim,instante):fase(sim,instante);if(!leituras)return;$('instant').value=instante;$('instantValue').textContent=fmt(instante)+' ms';
+ $('eppValue').textContent=fmt(a.epp)+' mV';$('vmValue').textContent=fmt(a.vm)+' mV';$('caValue').textContent=fmt(a.ca,2);$('activationValue').textContent=fmt(a.ativacao*100,0)+'%';
  $('shortening').hidden=nivel<3;const length=comprimentoVisual(estadoVisual(sim,instante).ativacao);$('shortening').textContent=nivel===3?'Encurtamento ilustrativo das miofibrilas: '+fmt((1-length/2.4)*100,0)+'%.':'Comprimento do sarcômero: '+fmt(length,2)+' µm · banda A: 1,60 µm (fixa).';
  const seen=sim.disparos.filter(t=>t<=instante).length,stim=sim.estimulos.filter(t=>t<=instante).length;
  $('transmission').textContent=stim===0?'Antes do estímulo.':seen+' potencial(is) de ação muscular para '+stim+' impulso(s) recebido(s).';
@@ -130,7 +130,7 @@ $('quick').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;cons
 document.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>selecionar(Number(b.dataset.step)));
 $('raChoices').innerHTML=NIVEIS.map((d,i)=>'<button class="button" data-ra-step="'+i+'">'+String(i+1).padStart(2,'0')+' · '+d.nome+'</button>').join('');
 document.querySelectorAll('[data-ra-step]').forEach(b=>b.onclick=()=>selecionar(Number(b.dataset.raStep)));
-$('resetView').onclick=enquadrar;$('toggleLabels').onclick=()=>{labels=!labels;$('toggleLabels').setAttribute('aria-pressed',String(labels));posicionarLegendas();};
+$('resetView').onclick=enquadrar;$('toggleLabels').onchange=()=>{labels=$('toggleLabels').checked;posicionarLegendas();};
 $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await stage.requestFullscreen();}catch{$('fullscreen').textContent='Ampliar indisponível';}};
 $('exitFullscreen').onclick=()=>document.exitFullscreen();document.addEventListener('fullscreenchange',()=>{$('fullscreen').textContent=document.fullscreenElement?'Reduzir':'Ampliar';resize();});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&running)definirRunning(false);});
