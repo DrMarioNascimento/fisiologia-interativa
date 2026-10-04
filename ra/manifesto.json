@@ -324,7 +324,7 @@
     },
     {
       "path": "osso-vivo/app.js",
-      "sha256": "6da2130edc4b0b8033db124809535bfd5a3dc6d6dfc1fe7051712d91cf4927df"
+      "sha256": "117ef0160acf35a64ce644896226ebe908735889a29ee85e775ddf8762a18770"
     },
     {
       "path": "osso-vivo/fisica.js",
@@ -332,15 +332,15 @@
     },
     {
       "path": "osso-vivo/index.html",
-      "sha256": "bb6a05cc6a5cf930beefdc234fcf77459c7814f1791f3bee0b2224765d3b0e35"
+      "sha256": "a8ac3e1ba22c8926839fe57a05c44ef8f3ac2038d51647e60b98ce940b88af29"
     },
     {
       "path": "osso-vivo/modelos.js",
-      "sha256": "2d9fee442831aafd56c3995e53964bb9dd99f03699e2e455aec73ae326f56909"
+      "sha256": "94f692c92643f66e991b820193337d73421849fc593d778e822f1ae877924d2f"
     },
     {
       "path": "osso-vivo/README.md",
-      "sha256": "8ec4b0a8413ecee1caa96c1f5aec5695ac2297615a07b90589757ede0c1c6be9"
+      "sha256": "f92ad10831a3f40d47e5236ef313956139d9a85799035b0be6b0b175cedad488"
     },
     {
       "path": "osso-vivo/style.css",
@@ -348,7 +348,7 @@
     },
     {
       "path": "osso-vivo/animacao.js",
-      "sha256": "21fd76e065be610dba6f3c3fba880e45e1c71ac1a4a8b0c128786be49a054879"
+      "sha256": "dc5139a061d05761d6c818febd7562c6933a28fd3aea51f21c49af4ba2323d36"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
