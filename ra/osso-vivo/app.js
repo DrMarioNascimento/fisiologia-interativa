@@ -3,9 +3,9 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {prepararParaRA} from '../cores-para-ra.js';
-import {criar,NIVEIS} from './modelos.js?v=osso-paleta-20261004';
-import {avancar,CENARIOS,CORES} from './fisica.js?v=osso-paleta-20261004';
-import {estadoNivel} from './animacao.js?v=osso-paleta-20261004';
+import {criar,NIVEIS} from './modelos.js?v=osso-axial-20261004';
+import {avancar,CENARIOS,CORES} from './fisica.js?v=osso-axial-20261004';
+import {estadoNivel} from './animacao.js?v=osso-axial-20261004';
 const $=id=>document.getElementById(id),fmt=(v,n=1)=>v.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
 const stage=$('stage'),renderer=new THREE.WebGLRenderer({canvas:$('scene'),antialias:true,alpha:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;
@@ -29,7 +29,7 @@ let nivel=0,instante=0,cenario='habitual',running=false,speed=1,separacao=Number
 let labelNodes=[];
 function enquadrar(box=nivel===0?new THREE.Box3().setFromObject(anatomy.modelos[0]):bounds[nivel]){
  const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
- const direction=new THREE.Vector3(nivel===2?.46:.20,nivel>=3?.70:nivel===2?.33:.12,1).normalize(),right=new THREE.Vector3().crossVectors(camera.up,direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right),tan=Math.tan(camera.fov*Math.PI/360);let dist=0;
+ const direction=new THREE.Vector3(nivel===2?.46:nivel===1?.50:.20,nivel>=3?.70:nivel===2?.33:nivel===1?.55:.12,1).normalize(),right=new THREE.Vector3().crossVectors(camera.up,direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right),tan=Math.tan(camera.fov*Math.PI/360);let dist=0;
  for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){const p=new THREE.Vector3(x,y,z).sub(center),depth=p.dot(direction);dist=Math.max(dist,Math.abs(p.dot(right))/(tan*camera.aspect)+depth,Math.abs(p.dot(up))/tan+depth);}
  dist=Math.max(2,dist*1.14);controls.target.copy(center);camera.position.copy(center).add(direction.multiplyScalar(dist));camera.near=Math.max(.01,dist/1000);camera.far=Math.max(100,dist*5);camera.updateProjectionMatrix();controls.update();
 }
@@ -93,7 +93,7 @@ function prepararRA(){
  if(running||$('panel-ra').hidden)return;$('raStatus').textContent='Preparando o estado atual…';
  arTimer=setTimeout(async()=>{try{
   anatomy.atualizar(nivel,instante,cenario,separacao,mostrarCarga);const clone=clonarPeca(anatomy.modelos[nivel]);clone.visible=true;
-  const box=new THREE.Box3().setFromObject(clone),size=box.getSize(new THREE.Vector3());clone.scale.setScalar(.65/Math.max(size.x,size.y,size.z));clone.updateMatrixWorld(true);
+  const box=new THREE.Box3().setFromObject(clone),size=box.getSize(new THREE.Vector3());clone.scale.multiplyScalar(.65/Math.max(size.x,size.y,size.z));clone.updateMatrixWorld(true);
   const fitted=new THREE.Box3().setFromObject(clone),center=fitted.getCenter(new THREE.Vector3());clone.position.set(-center.x,-fitted.min.y,-center.z);prepararParaRA(clone);
   const wrap=new THREE.Group();wrap.add(clone);const buffer=await new GLTFExporter().parseAsync(wrap,{binary:true,onlyVisible:true});
   if(id!==exportId||running||disposed)return;if(arUrl)URL.revokeObjectURL(arUrl);arUrl=URL.createObjectURL(new Blob([buffer],{type:'model/gltf-binary'}));readyId=id;$('arViewer').alt='Peça selecionada: '+NIVEIS[nivel].nome;$('arViewer').src=arUrl;
