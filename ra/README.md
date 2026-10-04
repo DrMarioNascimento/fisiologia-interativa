@@ -59,8 +59,3 @@ A apresentação segue as demais experiências: assinatura, retorno ao Tutor de 
 ## Viagem ao osso vivo
 
 [Nova experiência](https://drmarionascimento.github.io/fisiologia-interativa/ra/osso-vivo/) procedural original: desmontagem do osso, compacto e esponjoso, ósteon com vasos e canalículos, osteoclasto com transcitose, osteoblasto com síntese e mineralização extracelular. Colágeno entrelaçado e cristais em placas ganham uma ampliação própria; setas e deformação ampliada tornam a carga visível. Três cenários de carga compartilham um ciclo demonstrativo; valores são volumes relativos escolhidos, sem densitometria ou calendário clínico. Controles de reprodução, rótulos, cinco peças estáticas em RA, roteiro e questões nos quatro Tutores. EF: Osteoarticular; Fisioterapia: Sistema muscular, preservando suas cinco unidades. [Modelo, referências e limites](osso-vivo/README.md).
-
-
-## Corpo em ação — Integração
-
-[Experiência 3D e RA animada](https://drmarionascimento.github.io/fisiologia-interativa/ra/integracao/) conecta respiração, coração, circulação e utilização de O₂ no mesmo estado de repouso/exercício. Cinco aproximações, transição gradual, rótulos, velocidade e sequência automática. Corpo e coração comprimidos com Meshopt sem simplificação; animação calculada em execução. Card na unidade Integração nos dois percursos e catálogo dos quatro Tutores. RA viva exige WebXR com controles sobrepostos; a câmera precisa ser validada em aparelho físico. [Modelo, limites e referências](integracao/README.md).
