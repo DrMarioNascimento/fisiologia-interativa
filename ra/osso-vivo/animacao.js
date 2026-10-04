@@ -1,4 +1,4 @@
-import {estado,limitar,suave,CENARIOS} from './fisica.js?v=osso-encaixe-20261004';
+import {estado,limitar,suave,CENARIOS} from './fisica.js?v=osso-paleta-20261004';
 
 export const REGIOES=[-.95,0,.95];
 // Os níveis celulares são estudos isolados: três regiões trabalhadas em sequência.
