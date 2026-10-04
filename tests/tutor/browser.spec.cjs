@@ -21,6 +21,8 @@ test('junção neuromuscular: níveis e controles cabem no viewport do projeto',
  await expect(page.locator('[data-step]')).toHaveCount(5);
  await expect(page.locator('[data-voltar-tutor]').last()).toHaveAttribute('href',`${base}/tutor-fisio.html`);
  await expect(page.locator('#play')).toHaveText('Iniciar');
+ await expect(page.locator('#mode')).toHaveValue('trem');
+ await expect(page.locator('#speed')).toHaveValue('0.5');
  await expect(page.getByLabel('Repetir em loop',{exact:true})).not.toBeChecked();
  await page.getByLabel('Repetir em loop',{exact:true}).check();
  await expect(page.getByLabel('Repetir em loop',{exact:true})).toBeChecked();
