@@ -19,3 +19,8 @@ O modelo interno continua em desenvolvimento. A composição, a paleta e o movim
 ## Cálculo dos movimentos
 
 Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo **Prof. Mário César Nascimento, PhD**, e sincronizados ao ciclo cardíaco simulado. Essa autoria se refere ao trabalho do simulador; os modelos de terceiros conservam seus autores e licenças. A página anima a peça; a RA apresenta o instante estático escolhido.
+
+
+## Corpo em ação — superfície externa
+
+`integracao/assets/coracao.glb` é uma cópia Meshopt do coração externo acima, de neshallads sob CC BY 4.0. Não houve simplificação de triângulos; escala, acabamento e pulso didático foram adaptados. A pulsação desta experiência é um pulso visual simplificado, distinto do cálculo segmentar de Coração em ação. `integracao/assets/corpo.glb` comprime a silhueta preexistente em `retorno-venoso/corpo.glb`, preservando metadados e a forma.

@@ -329,3 +329,8 @@ A vinculação profissional do autor ao CEFID/UDESC não transfere, por si só, 
 Copyright © 2026 Mário César Nascimento. Todos os direitos reservados.
 
 Licença: ver [LICENSE.md](LICENSE.md) (todos os direitos reservados; uso educacional funcional permitido). A disponibilização pública do código não autoriza sua cópia, adaptação, republicação ou exploração comercial.
+
+
+## Corpo em ação — Integração
+
+[Experiência 3D e RA animada](https://drmarionascimento.github.io/fisiologia-interativa/ra/integracao/) conecta respiração, coração, circulação e utilização de O₂ no mesmo estado de repouso/exercício. Cinco aproximações, transição gradual, rótulos, velocidade e sequência automática. Corpo e coração comprimidos com Meshopt sem simplificação; animação calculada em execução. Card na unidade Integração nos dois percursos e catálogo dos quatro Tutores. RA viva exige WebXR com controles sobrepostos; a câmera precisa ser validada em aparelho físico. [Modelo, limites e referências](ra/integracao/README.md).
