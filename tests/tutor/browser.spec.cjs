@@ -233,6 +233,10 @@ test('osso vivo: navegação, controles e espaço preservam a didática',async({
  await expect(page.locator('[data-voltar-tutor]').last()).toHaveAttribute('href',base+'/tutor-fisio.html');
  await expect(page.locator('#instant')).toHaveAttribute('max','100');
  await expect(page.locator('#speed')).toHaveValue('1');
+ await expect(page.getByRole('slider',{name:'Separar estruturas'})).toHaveAttribute('max','100');
+ await page.getByRole('slider',{name:'Separar estruturas'}).focus();await page.keyboard.press('End');await expect(page.locator('#separation')).toHaveValue('100');
+ await expect(page.getByLabel('Mostrar carga',{exact:true})).toBeChecked();
+ await expect(page.getByRole('button',{name:'Focar detalhe',exact:true})).toBeVisible();
  await expect(page.getByLabel('Rótulos',{exact:true})).toBeChecked();
  await page.getByLabel('Repetir em loop',{exact:true}).check();await expect(page.getByLabel('Repetir em loop',{exact:true})).toBeChecked();
  for(const id of ['guide','ra','references','graphs']){await page.locator('#tab-'+id).click();await expect(page.locator('#panel-'+id)).toBeVisible();await expect(page.locator('[role="tabpanel"]:visible')).toHaveCount(1);}

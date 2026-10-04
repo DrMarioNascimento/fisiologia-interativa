@@ -272,4 +272,4 @@ The English translation is provided for convenience only.
 
 ### Modelos originais — Viagem ao osso vivo
 
-As geometrias procedurais, texturas e animações de `ra/osso-vivo/` integram a obra original abrangida por esta licença. NIAMS e Tu et al. são referências conceituais, não fontes de modelos 3D ou texturas incorporados. As licenças de Three.js e model-viewer permanecem próprias de seus titulares.
+As geometrias procedurais, texturas e animações de `ra/osso-vivo/` integram a obra original abrangida por esta licença. NIAMS, Tu et al., Salo et al., estudos da rede lacunocanalicular e da associação colágeno/mineral são referências conceituais, não fontes de modelos 3D ou texturas incorporados. As imagens apresentadas como inspiração não foram copiadas ou distribuídas. As licenças de Three.js e model-viewer permanecem próprias de seus titulares.
