@@ -3,9 +3,9 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {prepararParaRA} from '../cores-para-ra.js';
-import {criar,NIVEIS} from './modelos.js?v=osso-osteon-axial-20261004';
-import {avancar,CENARIOS,CORES} from './fisica.js?v=osso-osteon-axial-20261004';
-import {estadoNivel} from './animacao.js?v=osso-osteon-axial-20261004';
+import {criar,NIVEIS} from './modelos.js?v=osso-deforma-20261004';
+import {avancar,CENARIOS,CORES} from './fisica.js?v=osso-deforma-20261004';
+import {estadoNivel} from './animacao.js?v=osso-deforma-20261004';
 const $=id=>document.getElementById(id),fmt=(v,n=1)=>v.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
 const stage=$('stage'),renderer=new THREE.WebGLRenderer({canvas:$('scene'),antialias:true,alpha:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;
@@ -38,16 +38,19 @@ function criarLegendas(){
 }
 function posicionarLegendas(){
  const w=stage.clientWidth,h=stage.clientHeight,placed=[];
+ const load=$('loadLabel'),bottomReserve=load.hidden?36:parseFloat(getComputedStyle(load).bottom)+load.offsetHeight+10;
  for(const l of labelNodes){const world=anatomy.modelos[nivel].localToWorld(l.pos.clone()),p=world.project(camera);l.el.hidden=!labels||l.source.visible===false||p.z>1||p.z<-1||Math.abs(p.x)>1.05||Math.abs(p.y)>1.05;if(l.el.hidden)continue;
-  const x=(p.x*.5+.5)*w,y=(-p.y*.5+.5)*h,ew=l.el.offsetWidth,eh=l.el.offsetHeight,left=Math.min(w-ew-8,Math.max(8,x+12));let top=Math.min(h-eh-36,Math.max(52,y-10));
-  for(let n=0;n<placed.length;n++){const collision=placed.find(r=>left<r.x+r.w+4&&left+ew>r.x-4&&top<r.y+r.h+4&&top+eh>r.y-4);if(!collision)break;top=Math.min(h-eh-36,collision.y+collision.h+5);}
+  const x=(p.x*.5+.5)*w,y=(-p.y*.5+.5)*h,ew=l.el.offsetWidth,eh=l.el.offsetHeight,left=Math.min(w-ew-8,Math.max(8,x+12)),maxTop=Math.max(52,h-eh-bottomReserve),preferred=Math.min(maxTop,Math.max(52,y-10));
+  const free=top=>!placed.some(r=>left<r.x+r.w+4&&left+ew>r.x-4&&top<r.y+r.h+4&&top+eh>r.y-4);
+  const candidates=[preferred,52,maxTop,...placed.flatMap(r=>[r.y-eh-5,r.y+r.h+5])].filter(top=>top>=52&&top<=maxTop).sort((a,b)=>Math.abs(a-preferred)-Math.abs(b-preferred));
+  let top=candidates.find(free)??preferred;
   l.el.style.left=left+'px';l.el.style.top=top+'px';placed.push({x:left,y:top,w:ew,h:eh});
  }
 }
 
 function definirRunning(value){running=value;$('play').textContent=value?'Pausar':'Iniciar';$('play').setAttribute('aria-pressed',String(value));if(value){++exportId;clearTimeout(arTimer);$('launchAR').disabled=true;$('raStatus').textContent='Pause para preparar o estado atual em RA.';}else prepararRA();}
 function atualizar(leituras=true){
- const a=anatomy.atualizar(nivel,instante,cenario,separacao,mostrarCarga);$('phaseLabel').textContent=a.fase;$('loadLabel').hidden=nivel<3&&!mostrarCarga;$('loadLabel').textContent='Carga relativa '+fmt(a.carga,2)+'× · '+(nivel<3?'deformação ampliada':'resposta da matriz ampliada');$('focusDetail').disabled=nivel===4&&a.depositada<=.001;$('focusDetail').title=$('focusDetail').disabled?'Avance o ciclo até a formação do osteoide.':'Aproximar a estrutura destacada; Recentrar volta ao conjunto.';if(!leituras)return;
+ const a=anatomy.atualizar(nivel,instante,cenario,separacao,mostrarCarga);$('phaseLabel').textContent=a.fase;$('loadLabel').hidden=nivel<3&&!mostrarCarga;$('loadLabel').textContent=nivel===1||nivel===2?'Carga instantânea '+fmt(a.forca*1.55,2)+'× · encurtamento visual '+fmt(a.deformacao*100,1)+'% (ampliado)':'Carga relativa '+fmt(a.carga,2)+'× · '+(nivel<3?'deformação ampliada':'resposta da matriz ampliada');$('focusDetail').disabled=nivel===4&&a.depositada<=.001;$('focusDetail').title=$('focusDetail').disabled?'Avance o ciclo até a formação do osteoide.':'Aproximar a estrutura destacada; Recentrar volta ao conjunto.';if(!leituras)return;
  $('instant').value=instante*100;$('instantValue').textContent=fmt(instante*100,1)+'%';
  for(const [id,key]of [['removedValue','retirada'],['formedValue','depositada'],['mineralValue','mineralizada'],['totalValue','mineral']])$(id).textContent=fmt(a[key]*100,1)+'%';
  $('balance').textContent='Osteoide ainda não mineralizado: '+fmt(a.osteoide*100,1)+'%. Total mineralizado = 100% − matriz retirada + parte nova mineralizada.';
@@ -69,7 +72,7 @@ function chart(id){const el=$(id),w=Math.max(230,el.clientWidth),h=240,dpr=Math.
 function drawGraphs(){
  if($('panel-graphs').hidden)return;
  for(const first of [true,false]){const {c,w,h}=chart(first?'electrical':'mechanical'),lo=first?0:75,hi=first?24:nivel===4?125:105,left=42,right=15,x=u=>left+u*(w-left-right),y=v=>24+(hi-v)/(hi-lo)*(h-55);
- c.font='10px Inter,Arial';c.fillStyle='#a6bdcf';c.strokeStyle='#345365';c.lineWidth=1;
+ c.font='12px Inter,Arial';c.fillStyle='#a6bdcf';c.strokeStyle='#345365';c.lineWidth=1;
  for(let k=0;k<=4;k++){const value=lo+(hi-lo)*k/4,py=y(value);c.beginPath();c.moveTo(left,py);c.lineTo(w-right,py);c.stroke();c.fillText(fmt(value,0),3,py+3);}c.fillText('% da região inicial',3,13);
  for(const u of [0,.5,1]){c.textAlign=u===0?'left':u===1?'right':'center';c.fillText(fmt(u*100,0)+'% ciclo',x(u),h-10);}c.textAlign='left';
  if(!first){c.setLineDash([4,4]);c.strokeStyle='#a6bdcf';c.beginPath();c.moveTo(left,y(100));c.lineTo(w-right,y(100));c.stroke();c.setLineDash([]);}

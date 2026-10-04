@@ -9,3 +9,21 @@
 .detail-focus{position:absolute;top:52px;right:14px;z-index:3;font-size:11px!important;padding:6px 10px!important}.structure-controls input:disabled{opacity:.4}.structure-controls{padding:9px 13px;margin-top:9px}.time-control{margin-top:9px}.time-control p{margin-bottom:0}
 
 .structure-controls [hidden],.cycle-steps[hidden]{display:none!important}.structure-controls{min-height:62px}
+
+/* Hierarquia única desta experiência, inclusive em telas pequenas. */
+:root{--type-body:14px;--type-control:13px;--type-small:12px;--type-label:11px;--type-title:18px;--type-value:20px}
+body{font-family:Inter,Arial,sans-serif;font-size:var(--type-body);line-height:1.55}
+.page-note,.dashboard p,.guide p,.references p{font-size:var(--type-body);line-height:1.55}
+.dashboard h2,.readings h2,.study .card h2{font-size:var(--type-title);line-height:1.35}
+.trace-grid h3,.guide-grid h3{font-size:var(--type-body);line-height:1.4}
+.step,.button,.journey-controls .button,.quick button,.study-tabs .button,.topbar .button{font-family:Inter,Arial,sans-serif;font-size:var(--type-control);line-height:1.4}
+.journey-controls label,.journey-controls .loop-control,.time-control label,.structure-controls label:first-child,.structure-controls .loop-control{font-size:var(--type-control);line-height:1.4}
+.time-control p,.readings p,.trace-grid p,.structure-controls span,.graphs-head>span,.signal-box span,.cycle-steps span,.metric span,.signature,.study .loop-note{font-size:var(--type-small);line-height:1.5}
+.signal-box strong{font-size:var(--type-body);line-height:1.4}
+.metric strong{font-family:'IBM Plex Mono',monospace;font-size:var(--type-value);line-height:1.35}
+.anatomy-labels span,.stage-hud span,.eyebrow,.badge{font-family:'IBM Plex Mono',monospace;font-size:var(--type-label);line-height:1.4}
+.detail-focus{font-size:var(--type-small)!important}
+.load-label{font-family:Inter,Arial,sans-serif;font-size:var(--type-small);line-height:1.4;max-width:calc(100% - 28px);font-variant-numeric:tabular-nums}
+.gesture{font-size:var(--type-small);line-height:1.4}
+.brand span{font-size:var(--type-control)}.brand small{font-size:var(--type-label);letter-spacing:0;line-height:1.4}
+@media(max-width:650px){.brand small{max-width:180px}.stage-hud span:last-child{max-width:52%}.journey-controls{gap:9px}.load-label{bottom:44px}}

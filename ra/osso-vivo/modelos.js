@@ -1,12 +1,12 @@
 import * as THREE from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {fluxoCanalicular,suave,CORES} from './fisica.js?v=osso-osteon-axial-20261004';
-import {quadro,superficie,percurso,maturacaoLocal,maturacaoRegiao} from './animacao.js?v=osso-osteon-axial-20261004';
+import {fluxoCanalicular,suave,CORES} from './fisica.js?v=osso-deforma-20261004';
+import {quadro,superficie,percurso,maturacaoLocal,maturacaoRegiao} from './animacao.js?v=osso-deforma-20261004';
 const V=(x,y,z)=>new THREE.Vector3(x,y,z),TAU=Math.PI*2;
 export const NIVEIS=[
  {nome:'O osso',titulo:'Desmonte um órgão vivo',texto:'Separe periósteo, cortical, esponjoso e medula. Setas douradas representam carga e reação; a deformação é ampliada. Reúna as partes para reconhecer o fêmur.'},
- {nome:'As trabéculas',titulo:'Compacto por fora, esponjoso por dentro',texto:'A cortical envolve lâminas e hastes interligadas, com medula e vasos nos espaços. Este segmento aberto recebe compressão pelas extremidades, ao longo do eixo longitudinal do osso. O encurtamento ampliado acompanha esse eixo; não representa a distribuição real dos esforços em cada trabécula.'},
- {nome:'O osteócito',titulo:'Do vaso ao ósteon e à célula',texto:'O corte expõe lamelas concêntricas e o canal de Havers, com vasos. Carga, reação e encurtamento ampliado seguem o eixo longitudinal do ósteon. O canal de Volkmann comunica a vascularização transversalmente. Lacunas abrigam osteócitos; canalículos comunicam o espaço pericelular. O detalhe ampliado mostra fluido ao redor dos processos, não sangue dentro deles.'},
+ {nome:'As trabéculas',titulo:'Compacto por fora, esponjoso por dentro',texto:'A cortical envolve trabéculas interligadas, com medula e vasos nos espaços. A compressão atua no eixo longitudinal: a base fica apoiada, a peça encurta proporcionalmente à carga e recupera a forma no alívio. Deformação ampliada para ensino.'},
+ {nome:'O osteócito',titulo:'Do vaso ao ósteon e à célula',texto:'Lamelas envolvem o canal de Havers e seus vasos; Volkmann conecta a vascularização transversalmente. A compressão longitudinal encurta a peça sobre uma base apoiada, com retorno no alívio. Osteócitos ocupam lacunas; canalículos contêm fluido pericelular, não sangue. O detalhe amplia essa relação.'},
  {nome:'O osteoclasto',titulo:'Escavar, degradar e transportar',texto:'A zona de selamento isola a superfície. Prótons dissolvem o mineral e enzimas degradam o colágeno. Produtos de degradação entram em vesículas, atravessam a célula e são liberados no interstício, antes da troca com o vaso. A célula trabalha em três regiões sucessivas, sem aparecer formação neste nível. O corte mostra a borda pregueada e a escavação.'},
  {nome:'O osteoblasto',titulo:'Do precursor à matriz mineralizada',texto:'O vaso fornece precursores. O osteoblasto sintetiza e secreta colágeno tipo I, formando osteoide; cálcio e fosfato contribuem para a mineralização extracelular posterior. O detalhe mostra fibrilas entrelaçadas e cristais de hidroxiapatita alinhados. Este nível mostra somente formação e mineralização, em três regiões sucessivas; não começa com osteoclastos.'}
 ];
@@ -28,7 +28,8 @@ export function criar(textura){
  // Anatomia, forças e deformação usam esse mesmo eixo, apresentado na vertical.
  function axialForces(g,x,end,labelX,y=0){
   g.rotation.x=-Math.PI/2;
-  for(const sign of [1,-1]){arrow(g,[x,y,0]);const load=g.userData.loads.at(-1);load.quaternion.setFromUnitVectors(V(0,1,0),V(0,0,-sign));load.userData.axialSign=sign;load.userData.axialEnd=end;}
+  const tissue=new THREE.Group();for(const child of [...g.children])tissue.add(child);g.add(tissue);g.userData.tissue=tissue;g.updateMatrixWorld(true);g.userData.support=-new THREE.Box3().setFromObject(g.userData.parts[0].g).min.y;
+  for(const sign of [1,-1]){arrow(g,[x,y,0]);const load=g.userData.loads.at(-1);load.quaternion.setFromUnitVectors(V(0,1,0),V(0,0,-sign));load.userData.axialSign=sign;load.userData.axialEnd=end;load.userData.contact=V(x,y,0);}
   label(g,'Carga mecânica · longitudinal',[labelX,-.8,end+.9]);label(g,'Reação · longitudinal',[labelX,-.8,-end-.9]);g.userData.labels.unshift(...g.userData.labels.splice(-2));
  }
  function annulus(g,r0,r1,depth,material,start=0,span=TAU){const shape=new THREE.Shape(),n=72;for(let i=0;i<=n;i++){const a=start+span*i/n,x=r1*Math.cos(a),y=r1*Math.sin(a);i?shape.lineTo(x,y):shape.moveTo(x,y);}for(let i=n;i>=0;i--){const a=start+span*i/n;shape.lineTo(r0*Math.cos(a),r0*Math.sin(a));}shape.closePath();const geo=new THREE.ExtrudeGeometry(shape,{depth,steps:1,bevelEnabled:true,bevelSize:.008,bevelThickness:.008,bevelSegments:2});geo.translate(0,0,-depth/2);const m=new THREE.Mesh(geo,material);g.add(m);return m;}
@@ -79,11 +80,19 @@ export function criar(textura){
  const modelos=[bone,trab,cyte,clast,blast];
  function atualizar(nivel,t,cenario,separacao=0,mostrarCarga=true){
   const a=quadro(t,cenario,nivel===0?separacao:0,mostrarCarga,nivel),g=modelos[nivel];
-  if(nivel===1||nivel===2)g.scale.set(1+a.deformacao*.3,1+a.deformacao*.3,1-a.deformacao);
+  const tissue=g.userData.tissue;
+  if(tissue){g.scale.setScalar(1);tissue.scale.set(1+a.deformacao*.3,1+a.deformacao*.3,1-a.deformacao);tissue.position.z=-g.userData.support*a.deformacao;}
   else g.scale.set(1+(nivel<3?a.deformacao*.3:0),1-(nivel<3?a.deformacao:0),1);
   for(const p of g.userData.parts)p.g.position.copy(p.base).addScaledVector(p.offset,a.separacao);
-  for(const arrow of g.userData.loads){arrow.visible=mostrarCarga;arrow.scale.setScalar(.55+1.35*a.forca);if(arrow.userData.axialSign)arrow.position.z=arrow.userData.axialSign*(arrow.userData.axialEnd+.76*arrow.scale.y);}
-  for(const l of g.userData.labels){l.pos.copy(l.base);const p=g.userData.parts.find(p=>p.g===l.part);if(p)l.pos.addScaledVector(p.offset,a.separacao);if(/Carga mecânica|Reação/.test(l.text))l.visible=mostrarCarga;if(l.text.startsWith('Ampliação'))l.visible=a.depositada>.001;}
+  for(const arrow of g.userData.loads){
+   arrow.visible=mostrarCarga;arrow.scale.setScalar(.55+1.35*a.forca);
+   if(arrow.userData.axialSign){
+    arrow.scale.set(.85,.20+1.35*a.forca,.85);
+    arrow.position.copy(arrow.userData.contact).multiply(tissue.scale);
+    arrow.position.z=arrow.userData.axialSign*(arrow.userData.axialEnd*tissue.scale.z+.76*arrow.scale.y)+tissue.position.z;
+   }
+  }
+  for(const l of g.userData.labels){l.pos.copy(l.base);const p=g.userData.parts.find(p=>p.g===l.part);if(p)l.pos.addScaledVector(p.offset,a.separacao);if(tissue){if(!/Carga mecânica|Reação/.test(l.text))l.pos.multiply(tissue.scale).add(tissue.position);else if(l.text.startsWith('Carga'))l.pos.z-=2*g.userData.support*a.deformacao;}if(/Carga mecânica|Reação/.test(l.text))l.visible=mostrarCarga;if(l.text.startsWith('Ampliação'))l.visible=a.depositada>.001;}
   if(nivel>=3){
    for(const {mesh,base,wall}of g.userData.surfaces){
     const p=mesh.geometry.attributes.position;
