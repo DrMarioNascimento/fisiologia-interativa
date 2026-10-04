@@ -13,6 +13,6 @@ function loadCatalog(root) {
   vm.runInContext(fs.readFileSync(path.join(root, 'tutor-fisio-data.js'), 'utf8'), context, { timeout: 1000 });
   vm.runInContext(fs.readFileSync(path.join(root, 'tutor-ra-data.js'), 'utf8'), context, { timeout: 1000 });
   const ra=context.window.raTutorModules;
-  return JSON.parse(JSON.stringify({ ef:ef.concat(ra), fisio:context.window.fisioterapiaTutor.modules.concat(ra) }));
+  return JSON.parse(JSON.stringify({ ef:ef.concat(ra), fisio:context.window.fisioterapiaTutor.modules.concat(context.window.raTutorModulesForCourse('fisio')) }));
 }
 module.exports = { loadCatalog };

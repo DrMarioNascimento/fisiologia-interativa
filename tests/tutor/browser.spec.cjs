@@ -158,7 +158,7 @@ for(const course of ['ef','fisio'])for(const moodle of [false,true])test(`${cour
   await expect(link).toHaveAttribute('target','_blank');await expect(link).toHaveAttribute('rel','noopener noreferrer');
  }
  expect(requests).toHaveLength(0);await toggle.check();
- for(const [query,href]of [['Explique a placa motora na junção neuromuscular RA','ra/juncao-neuromuscular/'],['Explique o movimento do coração RA','ra/coracao/'],['Explique a bomba do retorno venoso RA','ra/retorno-venoso/'],['Explique o gradiente da pleura RA','ra/pleura/'],['Explique o comprimento do sarcômero muscular RA','ra/musculo-sarcomero/'],['Explique a película de carga em realidade aumentada','ra/potencial-membrana/'],['Explique o retorno linfático nas forças de Starling RA','ra/starling/'],['Explique por que a banda A não muda na experiência muscular RA, em até quatro linhas.','ra/musculo-sarcomero/']]){
+ for(const [query,href]of [['Explique o osteócito na viagem ao osso vivo RA','ra/osso-vivo/'],['Explique a placa motora na junção neuromuscular RA','ra/juncao-neuromuscular/'],['Explique o movimento do coração RA','ra/coracao/'],['Explique a bomba do retorno venoso RA','ra/retorno-venoso/'],['Explique o gradiente da pleura RA','ra/pleura/'],['Explique o comprimento do sarcômero muscular RA','ra/musculo-sarcomero/'],['Explique a película de carga em realidade aumentada','ra/potencial-membrana/'],['Explique o retorno linfático nas forças de Starling RA','ra/starling/'],['Explique por que a banda A não muda na experiência muscular RA, em até quatro linhas.','ra/musculo-sarcomero/']]){
   await input.fill(query);await send.click();await expect(messages.locator(moodle?'.ai-response':'.tutor-ai-answer').last()).toHaveText('Resposta simulada com contexto RA correto.');
   await expect.poll(()=>requests.length).toBeGreaterThan(0);await expect.poll(()=>requests.at(-1).module).toBe(href);expect(requests.at(-1).course).toBe(course);
  }
@@ -178,12 +178,12 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
   for(const sim of await simulators.all())await expect(sim).toHaveClass(/btn-ghost/);
   const styles=await cards.evaluate(el=>({q:getComputedStyle(el.querySelector('[data-open]')).backgroundImage,sim:getComputedStyle([...el.querySelectorAll('a')].find(a=>a.textContent==='Abrir simulador')).backgroundImage}));expect(styles.q).not.toBe(styles.sim);
   const axis=await page.locator('#axes .axis').nth(i).evaluate(b=>b.dataset.id||b.dataset.axis);
-  const hasRA=['celular','cardiovascular','respiratorio','muscular'].includes(axis);
+  const hasRA=['celular','cardiovascular','respiratorio','muscular','osteoarticular'].includes(axis);
   await expect(cards.locator('.ra-card')).toHaveCount(hasRA?1:0);
   if(hasRA){
   await expect(cards.locator('.ra-card h2')).toHaveText('RA - Realidade Aumentada');
   await expect(cards.locator('.ra-call')).toContainText('viagem de aprendizado incrível');
-  const experiencias=axis==='celular'?['potencial-membrana','starling']:axis==='muscular'?['musculo-sarcomero','juncao-neuromuscular']:axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
+  const experiencias=axis==='celular'?['potencial-membrana','starling']:axis==='osteoarticular'?['osso-vivo']:axis==='muscular'?(course==='fisio'?['musculo-sarcomero','juncao-neuromuscular','osso-vivo']:['musculo-sarcomero','juncao-neuromuscular']):axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
   await expect(cards.locator('.ra-card a')).toHaveCount(experiencias.length);
   for(let j=0;j<experiencias.length;j++){
    const acesso=cards.locator('.ra-card a').nth(j);
@@ -223,4 +223,20 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
  expect(new URL(junction.url()).pathname).toBe('/ra/juncao-neuromuscular/');expect(new URL(junction.url()).searchParams.get('percurso')).toBe(course==='fisio'?'fisioterapia':'educacao-fisica');
  await expect(junction.locator('a[data-voltar-tutor]').last()).toHaveAttribute('href',`${base}/tutor-${course}.html`);
  await expect(junction.locator('[data-step]')).toHaveCount(5);await expect(junction.locator('#play')).toHaveText('Iniciar');await junction.close();
+});
+
+test('osso vivo: navegação, controles e espaço preservam a didática',async({page})=>{
+ await page.route('**/ra/osso-vivo/app.js*',r=>r.fulfill({body:'',contentType:'text/javascript'}));
+ await page.route('**/model-viewer.min.js',r=>r.fulfill({body:'',contentType:'text/javascript'}));
+ await page.goto(base+'/ra/osso-vivo/?percurso=fisioterapia');
+ await expect(page.locator('[data-step]')).toHaveCount(5);
+ await expect(page.locator('[data-voltar-tutor]').last()).toHaveAttribute('href',base+'/tutor-fisio.html');
+ await expect(page.locator('#instant')).toHaveAttribute('max','100');
+ await expect(page.locator('#speed')).toHaveValue('1');
+ await expect(page.getByLabel('Rótulos',{exact:true})).toBeChecked();
+ await page.getByLabel('Repetir em loop',{exact:true}).check();await expect(page.getByLabel('Repetir em loop',{exact:true})).toBeChecked();
+ for(const id of ['guide','ra','references','graphs']){await page.locator('#tab-'+id).click();await expect(page.locator('#panel-'+id)).toBeVisible();await expect(page.locator('[role="tabpanel"]:visible')).toHaveCount(1);}
+ const d=await page.evaluate(()=>({width:innerWidth,content:document.documentElement.scrollWidth,buttons:[...document.querySelectorAll('[data-step],.journey-controls button')].map(e=>({l:e.getBoundingClientRect().left,r:e.getBoundingClientRect().right}))}));
+ expect(d.content).toBeLessThanOrEqual(d.width+1);for(const b of d.buttons){expect(b.l).toBeGreaterThanOrEqual(0);expect(b.r).toBeLessThanOrEqual(d.width);}
+ if(d.width>=1000)expect(await page.evaluate(()=>document.documentElement.scrollHeight)).toBeLessThan(1900);
 });

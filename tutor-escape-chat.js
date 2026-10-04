@@ -17,7 +17,7 @@
   }
   function catalogModules() {
     const base = isFisioPage() ? ((window.fisioterapiaTutor && window.fisioterapiaTutor.modules) || []) : ((typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : []);
-    return base.concat(window.raTutorModules || []);
+    return base.concat(window.raTutorModulesForCourse?.(isFisioPage()?'fisio':'ef') || window.raTutorModules || []);
   }
   function axisId() {
     return (typeof active !== 'undefined' && active) ? active : '';

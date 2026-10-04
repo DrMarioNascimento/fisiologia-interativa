@@ -55,3 +55,7 @@ A apresentação segue as demais experiências: assinatura, retorno ao Tutor de 
 ## Do nervo à força · Sistema muscular
 
 [Nova experiência](https://drmarionascimento.github.io/fisiologia-interativa/ra/juncao-neuromuscular/), construída neste repositório: cinco níveis da junção neuromuscular ao acoplamento excitação–contração. O último importa o modelo de sarcômero aprovado, sem editar seus arquivos. Cena e gráficos compartilham o instante; pausas preparam a peça estática escolhida em RA. Catálogo, roteiro, três questões e os dois botões musculares integram os quatro Tutores, preservando EF/Fisioterapia. [Cálculos, referências e limites](juncao-neuromuscular/README.md).
+
+## Viagem ao osso vivo
+
+[Nova experiência](https://drmarionascimento.github.io/fisiologia-interativa/ra/osso-vivo/) procedural original: osso inteiro, trabéculas, osteócito e canalículos, osteoclasto, osteoblasto e mineralização. Três cenários de carga compartilham um ciclo demonstrativo; valores são volumes relativos escolhidos, sem densitometria ou calendário clínico. Controles de reprodução, rótulos, cinco peças estáticas em RA, roteiro e questões nos quatro Tutores. EF: Osteoarticular; Fisioterapia: Sistema muscular, preservando suas cinco unidades. [Modelo, referências e limites](osso-vivo/README.md).

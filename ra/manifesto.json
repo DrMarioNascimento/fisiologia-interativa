@@ -4,7 +4,7 @@
   "arquivos": [
     {
       "path": "README.md",
-      "sha256": "313f81e3129e9a334d6655c7b6139329dc6968029e3b4062c5cab1a128130543"
+      "sha256": "1e332e7e4e7f41e16272c33b7e51d5cd52f0d9eb0c58b2c2583056fb07449313"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -321,6 +321,30 @@
     {
       "path": "juncao-neuromuscular/animacao.js",
       "sha256": "0b3c48c031a66deb251323f28ff17b7ee57269119389399ab82d9eec5baaec67"
+    },
+    {
+      "path": "osso-vivo/app.js",
+      "sha256": "130b8501bd7c0f4a899bcb08562db4c1a9aeb5f2e5a61ab99670607929dfa86f"
+    },
+    {
+      "path": "osso-vivo/fisica.js",
+      "sha256": "864b29c67b4b85e2e02fa8d2ee70535befe0a4d22855e957c1d540c902537f8a"
+    },
+    {
+      "path": "osso-vivo/index.html",
+      "sha256": "e03c093f0f3e1b6a8dfcddc0805a7a2927b7b3f0d7744f3aa270ff3019346167"
+    },
+    {
+      "path": "osso-vivo/modelos.js",
+      "sha256": "fd07a3a807600b6a06881ce578422546ec3d06d0988fa557cf3ab46a608c630d"
+    },
+    {
+      "path": "osso-vivo/README.md",
+      "sha256": "5860dbd934bc745b78f8207de129fedb36f5a5e03519aaf335ee70d390b3023b"
+    },
+    {
+      "path": "osso-vivo/style.css",
+      "sha256": "23a5656b2aaf1817e1a134d649e503ad42de9a5fe1f878b2fa49ae819f5c690c"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",

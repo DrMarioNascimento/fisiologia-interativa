@@ -45,7 +45,7 @@
     .replace(/^[ \t]*#{1,6}[ \t]*(.+)$/gm, '<b>$1</b>')
     .replace(/\*\*([^*\n]+?)\*\*/g, '<b>$1</b>')
     .replace(/(^|[\s(])\*([^*\s][^*\n]*?)\*(?=[\s).,;:!?]|$)/gm, '$1<i>$2</i>');
-  const allModules = () => (courseConfig?.modules || ((typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : [])).concat(window.raTutorModules||[]);
+  const allModules = () => (courseConfig?.modules || ((typeof modules !== 'undefined' && Array.isArray(modules)) ? modules : [])).concat(window.raTutorModulesForCourse?.(isFisioterapia?'fisio':'ef')||window.raTutorModules||[]);
   const allMaps = () => courseConfig?.maps || ((typeof maps !== 'undefined' && maps) ? maps : {});
   const mapsForGroup = group => {
     const value=allMaps()[group];
