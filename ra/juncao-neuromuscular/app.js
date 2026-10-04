@@ -3,9 +3,10 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {prepararParaRA} from '../cores-para-ra.js';
-import {criar,NIVEIS} from './modelos.js?v=jun-realismo-20261003';
+import {criar,NIVEIS} from './modelos.js?v=jun-fluido-20261004';
 import {simular,noInstante,fase,CORES,LIMIAR} from './fisica.js?v=jun-20261003';
 import {avancarInstante} from './reproducao.js?v=jun-realismo-20261003';
+import {estadoVisual,comprimentoVisual} from './animacao.js?v=jun-fluido-20261004';
 const $=id=>document.getElementById(id),fmt=(v,n=1)=>v.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
 const stage=$('stage'),renderer=new THREE.WebGLRenderer({canvas:$('scene'),antialias:true,alpha:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;
@@ -21,10 +22,12 @@ function textura(tipo){return canvasFactory(512,512,(ctx,w,h)=>{
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const n=(seed/4294967296-.5)*24;const bands=tipo==='estrias'?23*Math.sin(y*.27)+9*Math.cos(y*.54)+12*Math.cos(x*.12):24*Math.sin(x*.027+y*.018)*Math.cos(y*.043)+7*Math.sin(x*.19-y*.12);const c=Math.max(0,Math.min(255,199+n+bands)),i=(y*w+x)*4;image.data[i]=c;image.data[i+1]=c;image.data[i+2]=c;image.data[i+3]=255;}ctx.putImageData(image,0,0);
  });}
 const anatomy=criar(textura);anatomy.modelos.forEach((m,i)=>{m.visible=i===0;scene.add(m);});
-let nivel=0,sim=simular(),instante=0,running=false,speed=1,labels=true,frame=0,exportId=0,readyId=-1,arUrl=null,arTimer=null,selectionId=0,disposed=false;
+const bounds=anatomy.modelos.map((m,i)=>i===4?null:new THREE.Box3().setFromObject(m));
+let uiElapsed=0;
+let nivel=0,sim=simular(),instante=0,running=false,speed=Number($('speed').value),labels=true,frame=0,exportId=0,readyId=-1,arUrl=null,arTimer=null,selectionId=0,disposed=false;
 let labelNodes=[];
 function enquadrar(){
- const box=new THREE.Box3().setFromObject(anatomy.modelos[nivel]),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
+ const box=bounds[nivel]??(bounds[nivel]=new THREE.Box3().setFromObject(anatomy.modelos[nivel])),size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
  const radius=Math.max(size.length()/2,.8),fov=camera.fov*Math.PI/180,lim=Math.min(fov,2*Math.atan(Math.tan(fov/2)*camera.aspect));
  const direction=new THREE.Vector3(.2,nivel===2||nivel===3?.65:.25,1).normalize();
  let dist=radius/Math.sin(lim/2)*1.12;
@@ -48,9 +51,10 @@ function definirRunning(value){
  running=value;$('play').textContent=value?'Pausar':'Iniciar';$('play').setAttribute('aria-pressed',String(value));
  if(value){++exportId;clearTimeout(arTimer);$('launchAR').disabled=true;$('raStatus').textContent='Pause para preparar o estado atual em RA.';}else prepararRA();
 }
-function atualizar(){
- const a=noInstante(sim,instante);anatomy.atualizar(nivel,a,instante,sim);$('instant').value=instante;$('instantValue').textContent=fmt(instante)+' ms';
+function atualizar(leituras=true){
+ const a=noInstante(sim,instante);anatomy.atualizar(nivel,a,instante,sim);if(!leituras)return;$('instant').value=instante;$('instantValue').textContent=fmt(instante)+' ms';
  $('phaseLabel').textContent=fase(sim,instante);$('eppValue').textContent=fmt(a.epp)+' mV';$('vmValue').textContent=fmt(a.vm)+' mV';$('caValue').textContent=fmt(a.ca,2);$('activationValue').textContent=fmt(a.ativacao*100,0)+'%';
+ $('shortening').hidden=nivel<3;const length=comprimentoVisual(estadoVisual(sim,instante).ativacao);$('shortening').textContent=nivel===3?'Encurtamento ilustrativo das miofibrilas: '+fmt((1-length/2.4)*100,0)+'%.':'Comprimento do sarcômero: '+fmt(length,2)+' µm · banda A: 1,60 µm (fixa).';
  const seen=sim.disparos.filter(t=>t<=instante).length,stim=sim.estimulos.filter(t=>t<=instante).length;
  $('transmission').textContent=stim===0?'Antes do estímulo.':seen+' potencial(is) de ação muscular para '+stim+' impulso(s) recebido(s).';
  $('safety').textContent='Pico de placa: '+fmt(sim.picoEpp)+' mV · fator de segurança ilustrativo: '+fmt(sim.fatorSeguranca,2)+' (pico da despolarização ÷ 25 mV).';
@@ -71,7 +75,7 @@ async function selecionar(i){
  document.querySelectorAll('[data-step],[data-ra-step]').forEach(b=>{const active=Number(b.dataset.step??b.dataset.raStep)===nivel;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
  anatomy.modelos.forEach((m,j)=>m.visible=j===nivel);
  if(nivel===4){$('raStatus').textContent='Preparando o sarcômero aprovado…';try{await anatomy.prepararSarcomero(canvasFactory);}catch(e){console.error(e);$('raStatus').textContent='Não foi possível carregar o sarcômero. Os outros níveis continuam disponíveis.';return;}}
- if(ticket!==selectionId||disposed)return;atualizar();enquadrar();criarLegendas();prepararRA();
+ if(ticket!==selectionId||disposed)return;if(nivel===4&&!bounds[4])bounds[4]=new THREE.Box3().setFromObject(anatomy.modelos[4]);atualizar();enquadrar();criarLegendas();prepararRA();
 }
 function chart(id){const el=$(id),w=Math.max(230,el.clientWidth),h=240,dpr=Math.min(devicePixelRatio,2);if(el.width!==Math.round(w*dpr)||el.height!==h*dpr){el.width=Math.round(w*dpr);el.height=h*dpr;}const c=el.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);return {c,w,h};}
 function drawGraphs(){
@@ -96,11 +100,18 @@ function drawGraphs(){
 document.addEventListener('studychange',()=>{drawGraphs();if(!$('panel-ra').hidden)prepararRA();});
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;if(w&&h){renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();enquadrar();drawGraphs();}}
 new ResizeObserver(resize).observe(stage);
+function clonarPeca(source){
+ // Só a anatomia e suas transformações vão ao GLB. As listas de animação têm
+ // referências às malhas e não devem duplicar geometrias/texturas nos extras.
+ const clone=source.isMesh?new THREE.Mesh(source.geometry,source.material):new THREE.Group();
+ clone.position.copy(source.position);clone.quaternion.copy(source.quaternion);clone.scale.copy(source.scale);clone.visible=source.visible;clone.name=source.name;clone.renderOrder=source.renderOrder;
+ for(const child of source.children)clone.add(clonarPeca(child));return clone;
+}
 function prepararRA(){
  const id=++exportId;clearTimeout(arTimer);$('launchAR').disabled=true;
  if(running||$('panel-ra').hidden)return;$('raStatus').textContent='Preparando o estado atual…';
  arTimer=setTimeout(async()=>{try{
-  anatomy.atualizar(nivel,noInstante(sim,instante),instante,sim);const clone=anatomy.modelos[nivel].clone(true);clone.visible=true;
+  anatomy.atualizar(nivel,noInstante(sim,instante),instante,sim);const clone=clonarPeca(anatomy.modelos[nivel]);clone.visible=true;
   const box=new THREE.Box3().setFromObject(clone),size=box.getSize(new THREE.Vector3());clone.scale.setScalar(.65/Math.max(size.x,size.y,size.z));clone.updateMatrixWorld(true);
   const fitted=new THREE.Box3().setFromObject(clone),center=fitted.getCenter(new THREE.Vector3());clone.position.set(-center.x,-fitted.min.y,-center.z);prepararParaRA(clone);
   const wrap=new THREE.Group();wrap.add(clone);const buffer=await new GLTFExporter().parseAsync(wrap,{binary:true,onlyVisible:true});
@@ -125,4 +136,4 @@ $('exitFullscreen').onclick=()=>document.exitFullscreen();document.addEventListe
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&running)definirRunning(false);});
 addEventListener('pagehide',()=>{disposed=true;++exportId;clearTimeout(arTimer);renderer.setAnimationLoop(null);if(arUrl)URL.revokeObjectURL(arUrl);controls.dispose();renderer.dispose();environment.dispose();});
 const query=new URLSearchParams(location.search),initial=Number.parseInt(query.get('nivel'),10);novaObservacao();resize();selecionar(Number.isFinite(initial)?initial-1:0);
-renderer.setAnimationLoop(t=>{const dt=Math.min(.06,Math.max(0,(t-frame)/1000));frame=t;if(running&&!document.hidden){const next=avancarInstante(instante,dt*40*speed,sim.duracao,$('loop').checked);instante=next.instante;atualizar();if(next.terminou)definirRunning(false);}controls.update();posicionarLegendas();renderer.render(scene,camera);});
+renderer.setAnimationLoop(t=>{const dt=Math.min(.06,Math.max(0,(t-frame)/1000));frame=t;if(running&&!document.hidden){const next=avancarInstante(instante,dt*40*speed,sim.duracao,$('loop').checked);instante=next.instante;uiElapsed+=dt;const ui=uiElapsed>=.05||next.terminou;atualizar(ui);if(ui)uiElapsed=0;if(next.terminou)definirRunning(false);}controls.update();posicionarLegendas();renderer.render(scene,camera);});
