@@ -3,8 +3,9 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {prepararParaRA} from '../cores-para-ra.js';
-import {criar,NIVEIS} from './modelos.js?v=osso-anatomia-20261004';
-import {estado,avancar,CENARIOS,CORES} from './fisica.js?v=osso-anatomia-20261004';
+import {criar,NIVEIS} from './modelos.js?v=osso-encaixe-20261004';
+import {avancar,CENARIOS,CORES} from './fisica.js?v=osso-encaixe-20261004';
+import {estadoNivel} from './animacao.js?v=osso-encaixe-20261004';
 const $=id=>document.getElementById(id),fmt=(v,n=1)=>v.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
 const stage=$('stage'),renderer=new THREE.WebGLRenderer({canvas:$('scene'),antialias:true,alpha:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.04;
@@ -22,11 +23,11 @@ function textura(tipo){return canvasFactory(512,512,(ctx,w,h)=>{
 
 const anatomy=criar(textura);anatomy.modelos.forEach((m,i)=>{m.visible=i===0;scene.add(m);});
 // A câmera cobre partes reunidas e desmontadas sem saltar durante a animação.
-const bounds=anatomy.modelos.map((m,i)=>{const box=new THREE.Box3();for(const separation of [0,1])for(const time of [0,.025,.30,1]){anatomy.atualizar(i,time,'exercicio',separation,true);box.union(new THREE.Box3().setFromObject(m));}anatomy.atualizar(i,0,'habitual');return box;});
-const traces=Object.fromEntries(Object.keys(CENARIOS).map(key=>[key,Array.from({length:201},(_,i)=>estado(i/200,key))]));
+const bounds=anatomy.modelos.map((m,i)=>{const box=new THREE.Box3();for(const separation of i===0?[0,1]:[0])for(const time of [0,.025,.30,.5,.66,.8,1]){anatomy.atualizar(i,time,'exercicio',separation,true);box.union(new THREE.Box3().setFromObject(m));}anatomy.atualizar(i,0,'habitual');return box;});
+const traces=Array.from({length:5},(_,nivel)=>Object.fromEntries(Object.keys(CENARIOS).map(key=>[key,Array.from({length:201},(_,i)=>estadoNivel(i/200,key,nivel))])));
 let nivel=0,instante=0,cenario='habitual',running=false,speed=1,separacao=Number($('separation').value)/100,mostrarCarga=$('showLoad').checked,labels=$('toggleLabels').checked,frame=0,uiElapsed=0,exportId=0,readyId=-1,arUrl=null,arTimer=null,disposed=false;
 let labelNodes=[];
-function enquadrar(box=bounds[nivel]){
+function enquadrar(box=nivel===0?new THREE.Box3().setFromObject(anatomy.modelos[0]):bounds[nivel]){
  const size=box.getSize(new THREE.Vector3()),center=box.getCenter(new THREE.Vector3());
  const direction=new THREE.Vector3(nivel===2?.46:.20,nivel>=3?.70:nivel===2?.33:.12,1).normalize(),right=new THREE.Vector3().crossVectors(camera.up,direction).normalize(),up=new THREE.Vector3().crossVectors(direction,right),tan=Math.tan(camera.fov*Math.PI/360);let dist=0;
  for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){const p=new THREE.Vector3(x,y,z).sub(center),depth=p.dot(direction);dist=Math.max(dist,Math.abs(p.dot(right))/(tan*camera.aspect)+depth,Math.abs(p.dot(up))/tan+depth);}
@@ -46,29 +47,34 @@ function posicionarLegendas(){
 
 function definirRunning(value){running=value;$('play').textContent=value?'Pausar':'Iniciar';$('play').setAttribute('aria-pressed',String(value));if(value){++exportId;clearTimeout(arTimer);$('launchAR').disabled=true;$('raStatus').textContent='Pause para preparar o estado atual em RA.';}else prepararRA();}
 function atualizar(leituras=true){
- const a=anatomy.atualizar(nivel,instante,cenario,separacao,mostrarCarga);$('phaseLabel').textContent=a.fase;$('loadLabel').hidden=nivel>2||!mostrarCarga;$('loadLabel').textContent='Carga relativa '+fmt(a.carga,2)+'× · deformação ampliada';$('focusDetail').disabled=nivel===4&&a.depositada<=.001;$('focusDetail').title=$('focusDetail').disabled?'Avance o ciclo até a formação do osteoide.':'Aproximar a estrutura destacada; Recentrar volta ao conjunto.';if(!leituras)return;
+ const a=anatomy.atualizar(nivel,instante,cenario,separacao,mostrarCarga);$('phaseLabel').textContent=a.fase;$('loadLabel').hidden=nivel<3&&!mostrarCarga;$('loadLabel').textContent='Carga relativa '+fmt(a.carga,2)+'× · '+(nivel<3?'deformação ampliada':'resposta da matriz ampliada');$('focusDetail').disabled=nivel===4&&a.depositada<=.001;$('focusDetail').title=$('focusDetail').disabled?'Avance o ciclo até a formação do osteoide.':'Aproximar a estrutura destacada; Recentrar volta ao conjunto.';if(!leituras)return;
  $('instant').value=instante*100;$('instantValue').textContent=fmt(instante*100,1)+'%';
  for(const [id,key]of [['removedValue','retirada'],['formedValue','depositada'],['mineralValue','mineralizada'],['totalValue','mineral']])$(id).textContent=fmt(a[key]*100,1)+'%';
  $('balance').textContent='Osteoide ainda não mineralizado: '+fmt(a.osteoide*100,1)+'%. Total mineralizado = 100% − matriz retirada + parte nova mineralizada.';
  $('sclerostin').textContent=CENARIOS[cenario].esclerostina;
+ document.querySelector('.cycle-steps').hidden=nivel>=3;
+ $('regionHeading').textContent=(nivel===3?'Reabsorção isolada':nivel===4?'Formação isolada':'Uma região da matriz')+' · referência inicial = 100%';
+ $('cycleHint').textContent=nivel>=3?'Três regiões trabalhadas sucessivamente. 1× = 40 s por ação ilustrativa. O loop reinicia a referência; não acumula matriz.':'1× = 40 s por ciclo ilustrativo, sem calendário biológico fixo. O loop reapresenta o estado inicial, sem acumular matriz.';
  document.querySelectorAll('.cycle-steps span').forEach((el,i)=>el.classList.toggle('active',i===(instante<.08?0:instante<.3?1:instante<.4?2:instante<.85?3:4)));
  drawGraphs();
 }
 function selecionar(i){
  nivel=Math.max(0,Math.min(4,i));const d=NIVEIS[nivel];$('stepLabel').textContent=String(nivel+1).padStart(2,'0')+' · '+d.nome;$('infoTitle').textContent=d.titulo;$('infoText').textContent=d.texto;$('infoEyebrow').textContent='Nível '+(nivel+1)+' · escala ampliada';$('raPiece').textContent=$('stepLabel').textContent;
  document.querySelectorAll('[data-step],[data-ra-step]').forEach(b=>{const active=Number(b.dataset.step??b.dataset.raStep)===nivel;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});
- $('showLoad').disabled=nivel>2;anatomy.modelos.forEach((m,j)=>m.visible=j===nivel);atualizar();enquadrar();criarLegendas();prepararRA();
+ $('separation').parentElement.hidden=nivel!==0;$('showLoad').parentElement.hidden=nivel>2;
+ $('separationHint').textContent=nivel===0?'0% reúne · 100% desmonta. Separação para estudo, não deslocamento real.':nivel<3?'Estruturas reunidas. Compare a carga: setas, deformação e fluido respondem na cena.':'Ação isolada em três regiões sucessivas; apenas a célula deste nível atua.';
+ anatomy.modelos.forEach((m,j)=>m.visible=j===nivel);atualizar();enquadrar();criarLegendas();prepararRA();
 }
 function chart(id){const el=$(id),w=Math.max(230,el.clientWidth),h=240,dpr=Math.min(devicePixelRatio,2);if(el.width!==Math.round(w*dpr)||el.height!==h*dpr){el.width=Math.round(w*dpr);el.height=h*dpr;}const c=el.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);return {c,w,h};}
 function drawGraphs(){
  if($('panel-graphs').hidden)return;
- for(const first of [true,false]){const {c,w,h}=chart(first?'electrical':'mechanical'),lo=first?0:75,hi=first?24:105,left=42,right=15,x=u=>left+u*(w-left-right),y=v=>24+(hi-v)/(hi-lo)*(h-55);
+ for(const first of [true,false]){const {c,w,h}=chart(first?'electrical':'mechanical'),lo=first?0:75,hi=first?24:nivel===4?125:105,left=42,right=15,x=u=>left+u*(w-left-right),y=v=>24+(hi-v)/(hi-lo)*(h-55);
  c.font='10px Inter,Arial';c.fillStyle='#a6bdcf';c.strokeStyle='#345365';c.lineWidth=1;
  for(let k=0;k<=4;k++){const value=lo+(hi-lo)*k/4,py=y(value);c.beginPath();c.moveTo(left,py);c.lineTo(w-right,py);c.stroke();c.fillText(fmt(value,0),3,py+3);}c.fillText('% da região inicial',3,13);
  for(const u of [0,.5,1]){c.textAlign=u===0?'left':u===1?'right':'center';c.fillText(fmt(u*100,0)+'% ciclo',x(u),h-10);}c.textAlign='left';
  if(!first){c.setLineDash([4,4]);c.strokeStyle='#a6bdcf';c.beginPath();c.moveTo(left,y(100));c.lineTo(w-right,y(100));c.stroke();c.setLineDash([]);}
  const curves=first?[['retirada',CORES.reabsorcao,cenario],['depositada',CORES.formacao,cenario],['mineralizada',CORES.mineral,cenario]]:[['mineral',CORES.carga,'habitual'],['mineral',CORES.formacao,'exercicio'],['mineral',CORES.reabsorcao,'imobilizacao']];
- for(const [key,color,caseKey]of curves){c.strokeStyle=color;c.lineWidth=first||caseKey===cenario?2.2:1.3;c.beginPath();traces[caseKey].forEach((a,i)=>{const px=x(a.u),py=y(a[key]*100);i?c.lineTo(px,py):c.moveTo(px,py);});c.stroke();}
+ for(const [key,color,caseKey]of curves){c.strokeStyle=color;c.lineWidth=first||caseKey===cenario?2.2:1.3;c.beginPath();traces[nivel][caseKey].forEach((a,i)=>{const px=x(a.u),py=y(a[key]*100);i?c.lineTo(px,py):c.moveTo(px,py);});c.stroke();}
  c.lineWidth=1.2;c.strokeStyle='#f5e3b8';c.beginPath();c.moveTo(x(instante),19);c.lineTo(x(instante),h-30);c.stroke();
  }
 }
@@ -101,9 +107,9 @@ $('play').onclick=()=>{if(!running&&instante>=1)instante=0;definirRunning(!runni
 $('reset').onclick=()=>{definirRunning(false);instante=0;atualizar();prepararRA();};
 $('instant').oninput=()=>{definirRunning(false);instante=Number($('instant').value)/100;atualizar();prepararRA();};
 $('speed').oninput=()=>{speed=Number($('speed').value);$('speedValue').textContent=fmt(speed,speed%1?2:0)+'×';};
-$('separation').oninput=()=>{separacao=Number($('separation').value)/100;$('separationValue').textContent=fmt(separacao*100,0)+'%';atualizar();prepararRA();};
+$('separation').oninput=()=>{separacao=Number($('separation').value)/100;$('separationValue').textContent=fmt(separacao*100,0)+'%';atualizar();enquadrar();prepararRA();};
 $('showLoad').onchange=()=>{mostrarCarga=$('showLoad').checked;atualizar();prepararRA();};
-$('quick').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;definirRunning(false);cenario=b.dataset.case;instante=0;document.querySelectorAll('[data-case]').forEach(el=>{el.classList.toggle('on',el===b);el.setAttribute('aria-pressed',String(el===b));});atualizar();prepararRA();};
+$('quick').onclick=e=>{const b=e.target.closest('[data-case]');if(!b)return;cenario=b.dataset.case;document.querySelectorAll('[data-case]').forEach(el=>{el.classList.toggle('on',el===b);el.setAttribute('aria-pressed',String(el===b));});atualizar();prepararRA();};
 document.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>selecionar(Number(b.dataset.step)));
 $('raChoices').innerHTML=NIVEIS.map((d,i)=>'<button class="button" data-ra-step="'+i+'">'+String(i+1).padStart(2,'0')+' · '+d.nome+'</button>').join('');
 document.querySelectorAll('[data-ra-step]').forEach(b=>b.onclick=()=>selecionar(Number(b.dataset.raStep)));
