@@ -34,3 +34,27 @@ test('músculo: miofibrila e sarcômero vão à RA na escala do repouso', () => 
   assert.match(app, /const LADO_REPOUSO = \{ 3: maiorLado\(modelos\[3\]\), 4: maiorLado\(modelos\[4\]\) \};/);
   assert.match(app, /TAM_REAL\[atual\] \/ \(LADO_REPOUSO\[atual\] \|\| lado\)/);
 });
+
+test('músculo: RA com botões no iPhone (teste) — só no nível 05, poses da função aprovada', () => {
+  const html = fs.readFileSync(new URL('../musculo-sarcomero/index.html', import.meta.url), 'utf8');
+  const mod = fs.readFileSync(new URL('../ra-botoes-ios.js', import.meta.url), 'utf8');
+  assert.match(html, /<button id="raBotoes"[^>]*hidden/);
+  assert.match(html, /<button id="launchAR"/);                                      // o botão atual continua
+  assert.match(app, /\$\('raBotoes'\)\.hidden = !\(pode && atual === 4\);/);
+  assert.match(app, /const ESTADOS_BOTOES = \[\{ rotulo: 'Relaxar', L: 2\.4 \}, \{ rotulo: 'Contrair', L: 1\.9 \}\];/);
+  assert.match(app, /aplicarComprimento\(sarc, e\.L\)/);
+  assert.match(mod, /token info:id = "TapGesture"/);
+  assert.match(mod, /token info:id = "Transform"/);
+  assert.match(mod, /token type = "absolute"/);
+});
+
+test('ra-botoes-ios: o zip é refeito com os dados de cada arquivo alinhados a 64 bytes', async () => {
+  const src = fs.readFileSync(new URL('../ra-botoes-ios.js', import.meta.url), 'utf8');
+  const fn = src.match(/export function alinhamento\(zip\) \{[\s\S]*?\n\}/)[0].replace('export ', '');
+  const ctx = { DataView, TextDecoder, Uint8Array }; vm.runInNewContext(fn + '\nthis.alinhamento = alinhamento;', ctx);
+  // zip mínimo feito à mão: um arquivo "a" com 3 bytes, dados em 30 + 1 + 33 = 64
+  const z = new Uint8Array(64 + 3); const v = new DataView(z.buffer);
+  v.setUint32(0, 0x04034b50, true); v.setUint32(18, 3, true); v.setUint16(26, 1, true); v.setUint16(28, 33, true); z[30] = 97;
+  const r = ctx.alinhamento(z);
+  assert.equal(r.length, 1); assert.equal(r[0].nome, 'a'); assert.equal(r[0].dados, 64); assert.equal(r[0].ok, true);
+});

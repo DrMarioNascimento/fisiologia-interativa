@@ -30,6 +30,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { prepararParaRA } from '../cores-para-ra.js';
+import { usdzComBotoes } from '../ra-botoes-ios.js';
 import { criar } from './modelos.js?v=musculo-anatomico-20261003';
 
 const $ = id => document.getElementById(id);
@@ -421,6 +422,16 @@ const ehQuickLook = /iPad|iPhone|iPod/.test(navigator.userAgent)
 const COMO_ABRIR = ehQuickLook
   ? 'Toque, e depois em "AR" no alto da tela para ir à câmera.'
   : 'Toque para abrir a câmera.';
+/* CLONAR SEM COPIAR OS DADOS INTERNOS. `clone(true)` copia o userData por
+   JSON, e o do sarcômero guarda os próprios discos Z e titinas — objetos 3D
+   com textura, que o JSON transforma em imagem: 3,6 s a cada exportação, e o
+   GLB não usa nada disso. O clone sai com a mesma geometria, material e pose;
+   o userData de cada objeto volta intacto logo depois. */
+function clonarSemDados(obj) {
+  const guardados = [];
+  obj.traverse(o => { if (o.userData && Object.keys(o.userData).length) { guardados.push([o, o.userData]); o.userData = {}; } });
+  try { return obj.clone(true); } finally { for (const [o, u] of guardados) o.userData = u; }
+}
 let arUrl = null, prepId = 0, timer = null, tamNoAmbiente = 0;
 /* MIOFIBRILA E SARCÔMERO VÃO À MESA NA ESCALA DO REPOUSO. A escala era tirada
    da caixa do instante: o sarcômero contraído (1,9 µm) e o relaxado (2,4 µm)
@@ -428,13 +439,14 @@ let arUrl = null, prepId = 0, timer = null, tamNoAmbiente = 0;
    o fator vem da peça a 2,4 µm, medida aqui (a página abre relaxada): a
    contraída chega mais curta, na proporção certa, e a banda A tem o mesmo
    tamanho nas duas. */
-const maiorLado = obj => { const c = obj.clone(true); c.visible = true; c.position.set(0, 0, 0); c.scale.setScalar(1); c.updateMatrixWorld(true); const t = new THREE.Box3().setFromObject(c).getSize(V()); return Math.max(t.x, t.y, t.z); };
+const maiorLado = obj => { const c = clonarSemDados(obj); c.visible = true; c.position.set(0, 0, 0); c.scale.setScalar(1); c.updateMatrixWorld(true); const t = new THREE.Box3().setFromObject(c).getSize(V()); return Math.max(t.x, t.y, t.z); };
 const LADO_REPOUSO = { 3: maiorLado(modelos[3]), 4: maiorLado(modelos[4]) };
 function prepararRA() {
+  if (typeof prepararBotoes === 'function') prepararBotoes();
   clearTimeout(timer); timer = setTimeout(async () => {
     const id = ++prepId; E.ar.disabled = true; E.status.textContent = 'Preparando o modelo para a câmera…';
     try {
-      const clone = modelos[atual].clone(true); clone.visible = true; clone.position.set(0, 0, 0); clone.scale.setScalar(1);
+      const clone = clonarSemDados(modelos[atual]); clone.visible = true; clone.position.set(0, 0, 0); clone.scale.setScalar(1);
       // titina/discos do sarcômero são referenciados pelo userData, mas o clone leva a pose atual
       const box = new THREE.Box3().setFromObject(clone); const tam = box.getSize(V()); const lado = Math.max(tam.x, tam.y, tam.z); const esc = TAM_REAL[atual] / (LADO_REPOUSO[atual] || lado); tamNoAmbiente = lado * esc;
       clone.scale.setScalar(esc); clone.updateMatrixWorld(true);
@@ -457,6 +469,60 @@ E.viewer.addEventListener('load', () => {
 E.viewer.addEventListener('error', () => { E.status.textContent = 'O modelo não carregou no visualizador de RA.'; });
 /* o clique tem de chamar activateAR() sem nenhum await antes — regra do Safari */
 E.ar.addEventListener('click', () => { try { E.viewer.activateAR(); } catch (err) { console.error(err); E.status.textContent = 'A câmera não abriu. Verifique a permissão de câmera do navegador.'; } });
+
+/* ------------------------------------------------------------ RA com botões no iPhone (teste, nível 05)
+   O Quick Look não aceita controles da página, mas lê comportamentos de dentro
+   do USDZ: na mesa aparecem duas placas, "Relaxar" (2,4 µm) e "Contrair"
+   (1,9 µm). Tocar numa placa desliza os discos Z (com as actinas) e estica ou
+   encurta a titina até aquele comprimento — as poses saem de
+   `aplicarComprimento`, a mesma função da tela. A peça abre no comprimento
+   escolhido no controle. O botão atual de RA continua igual. */
+const ESTADOS_BOTOES = [{ rotulo: 'Relaxar', L: 2.4 }, { rotulo: 'Contrair', L: 1.9 }];
+let botoesUrl = null, botoesId = 0, botoesTimer = null, pacoteBotoes = null;
+const ancoraAR = document.createElement('a');
+ancoraAR.rel = 'ar'; ancoraAR.hidden = true; ancoraAR.appendChild(document.createElement('img'));
+document.body.appendChild(ancoraAR);
+function prepararBotoes() {
+  clearTimeout(botoesTimer);
+  const pode = ehQuickLook || new URLSearchParams(location.search).has('botoesios');
+  $('raBotoes').hidden = !(pode && atual === 4);
+  if ($('raBotoes').hidden) return;
+  $('raBotoes').disabled = true;
+  botoesTimer = setTimeout(async () => {
+    const id = ++botoesId, t0 = performance.now();
+    try {
+      /* poses das partes que se movem, em cada estado, tiradas do próprio motor */
+      const moveisTela = [sarc.userData.zL, sarc.userData.zR, ...sarc.userData.titinas.map(t => t.mola)];
+      const atualL = sarc.userData.comprimento;
+      const poses = ESTADOS_BOTOES.map(e => { aplicarComprimento(sarc, e.L); return moveisTela.map(m => { m.updateMatrix(); return m.matrix.clone(); }); });
+      aplicarComprimento(sarc, atualL);
+      const clone = clonarSemDados(sarc); clone.visible = true; clone.position.set(0, 0, 0); clone.scale.setScalar(1);
+      /* o clone tem a mesma árvore: acha as partes correspondentes pela ordem */
+      const orig = [], copia = []; sarc.traverse(o => orig.push(o)); clone.traverse(o => copia.push(o));
+      const moveis = moveisTela.map(m => copia[orig.indexOf(m)]);
+      const esc = TAM_REAL[4] / LADO_REPOUSO[4]; clone.scale.setScalar(esc); clone.updateMatrixWorld(true);
+      const b2 = new THREE.Box3().setFromObject(clone); clone.position.set(-(b2.min.x + b2.max.x) / 2, -b2.min.y, -(b2.min.z + b2.max.z) / 2);
+      moveis.forEach((m, i) => { m.name = 'rqbMovel_' + i; });                       // nome único antes das gêmeas
+      prepararParaRA(clone);
+      /* gêmeas pelo avesso (dupla face) acompanham a parte de origem */
+      const todos = [...moveis], posesTodos = poses.map(p => [...p]);
+      moveis.forEach((m, i) => m.parent.children.filter(x => x.name === m.name + '-avesso').forEach(g => { todos.push(g); posesTodos.forEach((p, k) => p.push(poses[k][i])); }));
+      const { usdz, usda, alinhado } = await usdzComBotoes({ peca: clone, moveis: todos,
+        estados: ESTADOS_BOTOES.map((e, k) => ({ rotulo: e.rotulo, poses: posesTodos[k] })) });
+      if (id !== botoesId) return;
+      if (botoesUrl) URL.revokeObjectURL(botoesUrl);
+      botoesUrl = URL.createObjectURL(new Blob([usdz], { type: 'model/vnd.usdz+zip' }));
+      ancoraAR.href = botoesUrl;
+      pacoteBotoes = { bytes: usdz.byteLength, ms: +(performance.now() - t0).toFixed(0), partesMoveis: todos.length,
+        estados: ESTADOS_BOTOES, comprimentoInicial: atualL, alinhado: alinhado.every(a => a.ok), arquivos: alinhado.length, usda };
+      $('raBotoes').disabled = false;
+    } catch (err) { console.error(err); }
+  }, 450);
+}
+$('raBotoes').addEventListener('click', () => { if (ancoraAR.href) ancoraAR.click(); });   // sem await: regra do Safari
+window.pacoteBotoesIOS = () => pacoteBotoes && (({ usda, ...r }) => r)(pacoteBotoes);
+window.usdaBotoesIOS = () => pacoteBotoes && pacoteBotoes.usda;
+window.urlBotoesIOS = () => botoesUrl;
 
 onContracao();
 const pedido = parseInt(new URLSearchParams(location.search).get('nivel'), 10);

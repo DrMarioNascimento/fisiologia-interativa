@@ -25,3 +25,12 @@ Origem: `DrMarioNascimento/lab-ra/musculo-sarcomero`, revisão aprovada `6792eb5
 A banda A mantém 1,6 µm; banda I e zona H variam com o comprimento, conforme a implementação aprovada. A curva de tensão ativa relativa é uma aproximação por trechos da relação isométrica em fibras musculares de rã de [Gordon, Huxley e Julian (1966)](https://pubmed.ncbi.nlm.nih.gov/5921536/). Não é força absoluta, tensão passiva, curva força–velocidade nem uma medida clínica individual. As contas e o sarcômero não foram modificados na transferência.
 
 Modelos e texturas são procedurais, criados no código do projeto. Não foi acrescentado um modelo anatômico de terceiros. A autoria e a licença principal permanecem em [LICENSE.md](../../LICENSE.md); Three.js e model-viewer conservam suas licenças próprias.
+
+## RA com botões no iPhone (teste, revisão de 05/10/2026)
+
+- No nível 05, no iPhone, aparece um segundo botão: "Abrir com botões Contrair e Relaxar (teste)". O botão de RA de antes continua igual.
+- A peça abre no comprimento escolhido no controle. À frente dela, no chão, há duas placas: Relaxar (2,4 µm) e Contrair (1,9 µm). Tocar numa placa desliza os discos Z, com as actinas, e estica ou encurta a titina até aquele comprimento, em 1,2 s.
+- As poses de cada estado saem de `aplicarComprimento`, a mesma função da tela. O módulo `../ra-botoes-ios.js` só as empacota: escreve o USDZ com o exportador do three e acrescenta os comportamentos da Apple (`Preliminary_Behavior`: toque na placa → ações `Transform` até alvos com a pose de cada estado), refazendo o arquivo com os dados alinhados a 64 bytes.
+- Conferido na biblioteca USD da Pixar: 2 comportamentos, 102 relações, nenhuma quebrada; cena de 0,90 m apoiada no chão. A abertura no Quick Look precisa ser confirmada num iPhone.
+- Para conferir no computador: `?botoesios` mostra o botão fora do iPhone; `pacoteBotoesIOS()` no console devolve tamanho, tempo e alinhamento.
+- Exportações mais leves e rápidas: o clone para a RA deixou de copiar os dados internos das peças (`userData`), que eram convertidos em imagem a cada exportação (cerca de 3,6 s) e iam para o arquivo sem uso. Nível 05: 5,9 → 4,1 MB; nível 04: 1,6 → 1,1 MB.
