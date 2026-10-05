@@ -512,7 +512,11 @@ function prepararBotoes() {
       if (id !== botoesId) return;
       if (botoesUrl) URL.revokeObjectURL(botoesUrl);
       botoesUrl = URL.createObjectURL(new Blob([usdz], { type: 'model/vnd.usdz+zip' }));
-      ancoraAR.href = botoesUrl;
+      /* SEM PINÇA NESTE MODO. Testado no iPhone: ampliando a cena, a peça
+         passava a cobrir as placas e o toque deixava de chegar a elas. Com a
+         escala travada, a peça fica no tamanho real e as placas sempre no
+         chão, à frente. O botão de RA comum continua com a pinça. */
+      ancoraAR.href = botoesUrl + '#allowsContentScaling=0';
       pacoteBotoes = { bytes: usdz.byteLength, ms: +(performance.now() - t0).toFixed(0), partesMoveis: todos.length,
         estados: ESTADOS_BOTOES, comprimentoInicial: atualL, alinhado: alinhado.every(a => a.ok), arquivos: alinhado.length, usda };
       $('raBotoes').disabled = false;

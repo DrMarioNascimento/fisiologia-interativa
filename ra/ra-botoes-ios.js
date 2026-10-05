@@ -81,10 +81,11 @@ export async function usdzComBotoes({ peca, moveis, estados, duracao = 1.2 }) {
   /* placas à frente da peça, no chão, lado a lado */
   raiz.updateMatrixWorld(true);
   const caixa = new THREE.Box3().setFromObject(peca);
-  const larg = .11, alt = .045, vao = .03, n = estados.length;
+  /* placas grandes e afastadas da peça: alvo fácil e nunca encobertas */
+  const larg = .16, alt = .065, vao = .05, n = estados.length;
   estados.forEach((e, k) => {
     const p = placa(e.rotulo, larg, alt); p.name = 'rqbBotao_' + k;
-    p.position.set((caixa.min.x + caixa.max.x) / 2 + (k - (n - 1) / 2) * (larg + vao), .003, caixa.max.z + alt / 2 + .04);
+    p.position.set((caixa.min.x + caixa.max.x) / 2 + (k - (n - 1) / 2) * (larg + vao), .003, caixa.max.z + alt / 2 + .10);
     raiz.add(p);
   });
   raiz.updateMatrixWorld(true);

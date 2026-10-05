@@ -44,7 +44,7 @@
     },
     {
       "path": "ra-botoes-ios.js",
-      "sha256": "a894465e54037ed93bf3c4cd1c2ec90109a1af2a42d549742760574e5fd8906d"
+      "sha256": "3b7f4a7212dc42cf6308c216926725511b6093611ba882f3ccfaa3fc8105c702"
     },
     {
       "path": "package.json",
@@ -216,7 +216,7 @@
     },
     {
       "path": "musculo-sarcomero/app.js",
-      "sha256": "6637aa1fb8d1f0eca0d569d985e1c8e7df1641188c5853edfffc2d9061928e15"
+      "sha256": "df99cec4d54d1c35eb358e3f5ae13010fc4e0ac23f798fdead4b0e6f1d053fc2"
     },
     {
       "path": "musculo-sarcomero/index.html",
@@ -228,7 +228,7 @@
     },
     {
       "path": "musculo-sarcomero/README.md",
-      "sha256": "cf362c65d2f05d676e9603167d166581af063dcd825a3249ad64172584b1c57c"
+      "sha256": "7bb09db2b9001159b1e5793de4fd3331b223f9be260062f5df3e9a70d055b14d"
     },
     {
       "path": "musculo-sarcomero/style.css",
