@@ -23,10 +23,6 @@
       "sha256": "82e649ba2bd4148a51da3fdeddc9f28c9ca7d3c71a78fb40569bc7e456ed141a"
     },
     {
-      "path": "ciclo-na-mesa.js",
-      "sha256": "a039f4def93cb813895914ed7a68db708af82436c3092792871226e36674255d"
-    },
-    {
       "path": "cores-para-ra.js",
       "sha256": "423815349e6057b92db0568b77caa885699bb21022f2997c39da977c4b6b34cd"
     },
@@ -152,7 +148,7 @@
     },
     {
       "path": "coracao/app.js",
-      "sha256": "80eeeec943ae5c0cb7d8a870699c80a458129f7c3633b60258de3dcb1d759e83"
+      "sha256": "e089d8de98a24ea411dafd5b99eb1fb8c13823a00e73576c9c72166c47d36709"
     },
     {
       "path": "coracao/ATTRIBUTION.md",
@@ -168,7 +164,7 @@
     },
     {
       "path": "coracao/index.html",
-      "sha256": "132532560d8d0a9df444766fe4cc443c2e551f090f4cc47eb49465cefabf9f23"
+      "sha256": "dad64a531a0a4852ea86a10108c3b167f4cb61f1cc81215b8274e344446dc88a"
     },
     {
       "path": "coracao/legendas-a.js",
@@ -212,11 +208,11 @@
     },
     {
       "path": "musculo-sarcomero/app.js",
-      "sha256": "2662df110e3b127ad4e8e38eb4eb2f516bfcc7d8be620ee95cffe7a82fb0f10e"
+      "sha256": "b4894c513fc537dbb8603cf444e490e9d48ba89d025328db223d7fcf176e6542"
     },
     {
       "path": "musculo-sarcomero/index.html",
-      "sha256": "9f063d2e9a58fe2a309ee7e08085dac6117b456778854c1a0e3f7b4bcfad5ea1"
+      "sha256": "f5157e1a3312a79f32f83d8b0e6181cc9648d38d1610bc31e182623d3ea7ed3e"
     },
     {
       "path": "musculo-sarcomero/modelos.js",
@@ -224,7 +220,7 @@
     },
     {
       "path": "musculo-sarcomero/README.md",
-      "sha256": "33d4c1c8e070d66a3ebf7d4395e1365bfa4df2be141614564b3ba64a4a2261da"
+      "sha256": "d821eb2e7da133c92c3ed7341df8fd0ab522ff2cfa7934089a7c94cb01bb97df"
     },
     {
       "path": "musculo-sarcomero/style.css",

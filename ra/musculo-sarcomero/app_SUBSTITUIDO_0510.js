@@ -107,7 +107,7 @@ const dados = [
   ['Escala macroscópica', '01 · Músculo', 'Órgão contrátil', 'Músculo esquelético', 'Ventre fusiforme envolvido pelo epimísio, com tendões nas extremidades. Sob a fáscia já se veem os feixes: o músculo é organizado em fascículos.', 'ventre muscular,epimísio,tendão,fascículos'],
   ['Escala mesoscópica', '02 · Fascículo', 'Feixe de fibras', 'Fascículo muscular', 'Dezenas de fibras envolvidas pelo perimísio. Capilares serpenteiam entre elas. Na extremidade cortada, as fibras aparecem individualmente.', 'perimísio,fibras,capilares,endomísio'],
   ['Escala celular', '03 · Fibra', 'Célula multinucleada', 'Fibra muscular', 'Uma célula longa: sarcolema estriado, núcleos achatados na periferia, mitocôndrias entre miofibrilas paralelas. A estriação vista de fora vem de dentro.', 'sarcolema,núcleos periféricos,mitocôndrias,miofibrilas'],
-  ['Escala subcelular', '04 · Miofibrila', 'Cadeia de sarcômeros', 'Miofibrila', 'Sarcômeros em série, de disco Z a disco Z. O corte longitudinal mostra que as bandas claras e escuras são os próprios filamentos vistos de lado. Deslize o controle: os sarcômeros em série encurtam juntos, e a banda A não muda.', 'disco Z,banda I,banda A,sarcômeros em série'],
+  ['Escala subcelular', '04 · Miofibrila', 'Cadeia de sarcômeros', 'Miofibrila', 'Sarcômeros em série, de disco Z a disco Z. O corte longitudinal mostra que as bandas claras e escuras são os próprios filamentos vistos de lado.', 'disco Z,banda I,banda A,sarcômeros em série'],
   ['Escala molecular', '05 · Sarcômero', 'Unidade contrátil', 'Sarcômero', 'Rede hexagonal: cada miosina rodeada por seis actinas. As cabeças de miosina apontam para os discos Z. A titina ancora a miosina ao Z. Deslize o controle e veja a banda I e a zona H encolherem — a banda A não muda.', 'disco Z,actina,miosina,zona H,linha M,titina'],
 ];
 const E = {
@@ -141,7 +141,7 @@ function aplicarTextos(n) {
   E.tags.innerHTML = d[5].split(',').map(x => `<span>${x}</span>`).join('');
   E.prev.disabled = n === 0; E.next.disabled = n === 4; E.next.textContent = n === 4 ? 'Unidade contrátil ✓' : 'Aprofundar →';
   document.querySelectorAll('.step').forEach((b, i) => b.classList.toggle('active', i === n));
-  E.contrBox.hidden = n < 3; E.labels.innerHTML = '';
+  E.contrBox.hidden = n !== 4; E.labels.innerHTML = '';
 }
 
 function setStep(n, viaMergulho = false) {
@@ -212,10 +212,7 @@ const ancoras = {
   4: () => { const L = sarc.userData.comprimento; return [
     ['disco Z', V(-L / 2, .66, 0)], ['disco Z', V(L / 2, .66, 0)], ['banda I', V(-(L / 2 + SCM.A / 2) / 2, -.5, .3)], ['banda A', V(.55, -.5, .3)],
     ['zona H', V(0, .42, .35)], ['linha M', V(0, -.2, .45)], ['actina', V(-L / 2 + .45, .12, .38)], ['miosina', V(.35, .04, .32)], ['cabeças de miosina', V(-.6, -.15, .32)], ['titina', V(-(L / 2 + SCM.A / 2) / 2, .18, .12)]]; },
-  /* nível 04: as âncoras acompanham o comprimento escolhido — disco Z entre o
-     1º e o 2º sarcômero, banda I no meio da metade esquerda da banda I do
-     sarcômero central, banda A dentro dela */
-  3: () => { const L = sarc.userData.comprimento; return [['disco Z', V(-L / 2, -.62, .2)], ['banda A (escura)', V(.45, -.55, .2)], ['banda I (clara)', V(-(SCM.A / 2 + L / 2) / 2, .6, .2)], ['filamentos', V(0, .2, .4)]]; },
+  3: () => [['disco Z', V(-SARC.len, .5, 0)], ['banda A (escura)', V(.45, -.55, .2)], ['banda I (clara)', V(-.75, .6, .2)], ['filamentos', V(0, .2, .4)]],
   2: () => [['sarcolema', V(-1.6, .85, 0)], ['núcleo periférico', V(.4, .8, .3)], ['miofibrilas', V(2.7, .2, 0)], ['mitocôndrias', V(-.6, -.55, .5)]],
   1: () => [['perimísio', V(-1.4, 1.05, 0)], ['fibras musculares', V(2.1, .44, .3)], ['capilar', V(0, -.9, .4)]],
   0: () => [['ventre muscular', V(0, 1.06, .4)], ['tendão', V(2.95, .40, 0)], ['osso', V(4.3, .55, 0)], ['epimísio', V(-1.35, -.90, .5)], ['fascículos', V(.5, .84, .58)]],
@@ -235,125 +232,6 @@ function atualizarRotulos() {
     el.style.transform = `translate(${x}px, ${y}px)`;
   });
 }
-
-/* ------------------------------------------------------------ miofibrila contrátil (nível 04)
-   O mesmo controle de comprimento do nível 05 passa a valer na miofibrila: os
-   três sarcômeros em série encurtam juntos, com a MESMA função aprovada
-   (`aplicarComprimento`, de modelos.js, que não foi alterado). A banda A
-   continua com 1,6 µm; encolhem a banda I e a zona H.
-
-   DOIS ACERTOS DE MONTAGEM, feitos aqui e não em modelos.js:
-   1. Os sarcômeros internos eram ampliados ×1,34 em TODAS as direções para
-      encher o cilindro. No comprimento isso os deixava com 3,2 de disco a
-      disco num vão de 2,4: os discos Z de dentro caíam a ±1,61 em vez de ±1,2
-      (onde estão os anéis), vizinhos se sobrepunham e os discos das pontas
-      vazavam além das tampas. Agora a ampliação é só na espessura (y, z); no
-      comprimento a escala é 1, e 1 unidade = 1 µm, como no nível 05.
-   2. As duas pontas da capa (a parte da frente, fora da janela) repetiam o
-      padrão de três sarcômeros nos seus próprios 2,3 de comprimento — bandas
-      três vezes mais estreitas que as do fundo. Agora as faixas pintadas
-      seguem a mesma posição do fundo: cada sarcômero pintado coincide com o
-      vão entre dois anéis.
-
-   A CAPA ENCOLHE COMO TECIDO. A pintura das bandas acompanha o tecido: o
-   trecho da banda A fica com o mesmo comprimento; o trecho da banda I e o da
-   zona H encurtam pela mesma regra do sarcômero. Por isso a capa ganhou
-   anéis de vértices nas bordas das bandas (antes tinha só as duas pontas): em
-   repouso a aparência é a mesma, e na contração o desenho encurta onde deve. */
-const mio = modelos[3];
-const N_SARC_MIO = 3;
-const mioPartes = { capa: [], tampas: [], aneis: [], sarcs: [] };
-for (const o of mio.children) {
-  const p = o.isMesh && o.geometry.parameters;
-  if (o.isGroup) o.children.forEach(s => mioPartes.sarcs.push(s));
-  else if (o.geometry.type === 'TorusGeometry') mioPartes.aneis.push(o);
-  else if (p && p.openEnded) mioPartes.capa.push(o);
-  else if (p && p.height < .05) mioPartes.tampas.push(o);
-}
-mioPartes.sarcs.forEach(s => s.scale.set(1, s.scale.y, s.scale.z));               // acerto 1
-{
-  mio.updateMatrix();
-  /* o fundo (a maior peça) dá a relação entre posição no eixo e coordenada da
-     pintura; as pontas passam a usar a mesma relação */
-  const fundo = mioPartes.capa.reduce((a, b) => (a.geometry.parameters.height > b.geometry.parameters.height ? a : b));
-  const v = new THREE.Vector3();
-  let rel = null;
-  for (const m of mioPartes.capa) {
-    m.updateMatrix();
-    const q = m.geometry.parameters;
-    /* anéis de vértices só onde a regra muda de trecho (bordas das bandas de
-       cada sarcômero): entre eles o encurtamento é linear, então a pintura sai
-       exata sem encher o arquivo de RA de vértices */
-    const xDe = y => v.set(0, y, 0).applyMatrix4(m.matrix).x;
-    const xTopo = xDe(q.height / 2), xBase = xDe(-q.height / 2);
-    const xs = [xTopo, xBase];
-    for (let k = 0; k < N_SARC_MIO; k++) for (const d of [-1.2, -1.175, -.8, -.2, .2, .8, 1.175, 1.2]) {
-      const x = (k - (N_SARC_MIO - 1) / 2) * SARC.len + d;
-      if (x > Math.min(xTopo, xBase) + 1e-6 && x < Math.max(xTopo, xBase) - 1e-6) xs.push(x);
-    }
-    const linhas = [...new Set(xs.map(x => +x.toFixed(6)))].sort((p1, p2) => (xBase > xTopo ? p1 - p2 : p2 - p1));
-    const g = new THREE.CylinderGeometry(q.radiusTop, q.radiusBottom, q.height, q.radialSegments,
-      linhas.length - 1, q.openEnded, q.thetaStart, q.thetaLength);
-    const pos = g.attributes.position, uv = g.attributes.uv, porLinha = q.radialSegments + 1;
-    for (let i = 0; i < pos.count; i++)
-      pos.setY(i, q.height / 2 - (linhas[Math.floor(i / porLinha)] - xTopo) / (xBase - xTopo) * q.height);
-    const xRep = new Float32Array(pos.count);
-    for (let i = 0; i < pos.count; i++) xRep[i] = v.fromBufferAttribute(pos, i).applyMatrix4(m.matrix).x;
-    if (m === fundo) {
-      const i0 = 0, i1 = pos.count - 1;                                          // bordas opostas
-      rel = { a: (uv.getY(i1) - uv.getY(i0)) / (xRep[i1] - xRep[i0]) };
-      rel.b = uv.getY(i0) - rel.a * xRep[i0];
-    }
-    m.userData.capaRepouso = { geo: g, xRep, posRep: new Float32Array(pos.array), inv: m.matrix.clone().invert() };
-    m.geometry = g;
-  }
-  for (const m of mioPartes.capa) {                                              // acerto 2
-    const { geo, xRep } = m.userData.capaRepouso, uv = geo.attributes.uv;
-    for (let i = 0; i < uv.count; i++) uv.setY(i, rel.a * xRep[i] + rel.b);
-    uv.needsUpdate = true;
-  }
-}
-/* posição de repouso (2,4 µm) → posição no comprimento L, por trechos:
-   zona H |d| ≤ 0,2 → [0, H/2]; resto da banda A ≤ 0,8 → até 0,8 (fixa);
-   banda I ≤ 1,175 → até L/2 − 0,025; disco Z (0,025 de cada lado) mantém a largura */
-function posicaoNoComprimento(xr, L) {
-  const L0 = SARC.len, i = Math.max(0, Math.min(N_SARC_MIO - 1, Math.round(xr / L0) + 1));
-  const d = xr - (i - 1) * L0, s = Math.sign(d), a = Math.abs(d), meio = L / 2;
-  const h = Math.max(0, meio - SCM.actina), fimA = Math.min(SCM.A / 2, meio - .025);
-  let g;
-  if (a <= .2) g = a / .2 * h;
-  else if (a <= SCM.A / 2) g = h + (a - .2) / (SCM.A / 2 - .2) * (fimA - h);
-  else if (a <= 1.175) g = fimA + (a - SCM.A / 2) / (1.175 - SCM.A / 2) * (meio - .025 - fimA);
-  else g = meio - .025 + (a - 1.175);
-  return (i - 1) * L + s * g;
-}
-function aplicarMiofibrila() {
-  const L = parseFloat(E.contr.value);
-  mioPartes.sarcs.forEach((s, i) => { aplicarComprimento(s, L); s.position.x = (i - (N_SARC_MIO - 1) / 2) * L; });
-  mioPartes.aneis.forEach((z, j) => { z.position.x = (j - N_SARC_MIO / 2) * L; });
-  mioPartes.tampas.forEach(t => { t.position.x = Math.sign(t.position.x) * (N_SARC_MIO * L / 2 + .03); });
-  const v = new THREE.Vector3();
-  for (const m of mioPartes.capa) {
-    const { geo, xRep, posRep, inv } = m.userData.capaRepouso, pos = geo.attributes.position;
-    for (let i = 0; i < pos.count; i++) {
-      v.set(posRep[i * 3], posRep[i * 3 + 1], posRep[i * 3 + 2]).applyMatrix4(m.matrix);
-      v.x = posicaoNoComprimento(xRep[i], L);
-      v.applyMatrix4(inv);
-      pos.setXYZ(i, v.x, v.y, v.z);
-    }
-    pos.needsUpdate = true; geo.computeBoundingBox(); geo.computeBoundingSphere();
-  }
-}
-E.contr.addEventListener('input', aplicarMiofibrila);
-/* depois da ação do próprio botão (o de Restaurar é ligado mais abaixo) */
-for (const id of ['relaxar', 'contrair', 'restaurarParametros']) $(id).addEventListener('click', () => setTimeout(aplicarMiofibrila));
-aplicarMiofibrila();
-window.miofibrilaMedidas = () => {                                                // diagnóstico (console)
-  const L = parseFloat(E.contr.value), r = x => +x.toFixed(4);
-  return { L, aneis: mioPartes.aneis.map(z => r(z.position.x)),
-    discosZ: mioPartes.sarcs.flatMap(s => [r(s.position.x + s.userData.zL.position.x), r(s.position.x + s.userData.zR.position.x)]),
-    bandaA: SCM.A, tampas: mioPartes.tampas.map(t => r(t.position.x)) };
-};
 
 /* ------------------------------------------------------------ laço */
 /* O devicePixelRatio muda quando a janela vai para outro monitor ou o navegador
@@ -421,22 +299,14 @@ const ehQuickLook = /iPad|iPhone|iPod/.test(navigator.userAgent)
 const COMO_ABRIR = ehQuickLook
   ? 'Toque, e depois em "AR" no alto da tela para ir à câmera.'
   : 'Toque para abrir a câmera.';
-let arUrl = null, prepId = 0, timer = null, tamNoAmbiente = 0;
-/* MIOFIBRILA E SARCÔMERO VÃO À MESA NA ESCALA DO REPOUSO. A escala era tirada
-   da caixa do instante: o sarcômero contraído (1,9 µm) e o relaxado (2,4 µm)
-   saíam com os mesmos 0,90 m, e duas peças lado a lado pareciam iguais. Agora
-   o fator vem da peça a 2,4 µm, medida aqui (a página abre relaxada): a
-   contraída chega mais curta, na proporção certa, e a banda A tem o mesmo
-   tamanho nas duas. */
-const maiorLado = obj => { const c = obj.clone(true); c.visible = true; c.position.set(0, 0, 0); c.scale.setScalar(1); c.updateMatrixWorld(true); const t = new THREE.Box3().setFromObject(c).getSize(V()); return Math.max(t.x, t.y, t.z); };
-const LADO_REPOUSO = { 3: maiorLado(modelos[3]), 4: maiorLado(modelos[4]) };
+let arUrl = null, prepId = 0, timer = null;
 function prepararRA() {
   clearTimeout(timer); timer = setTimeout(async () => {
     const id = ++prepId; E.ar.disabled = true; E.status.textContent = 'Preparando o modelo para a câmera…';
     try {
       const clone = modelos[atual].clone(true); clone.visible = true; clone.position.set(0, 0, 0); clone.scale.setScalar(1);
       // titina/discos do sarcômero são referenciados pelo userData, mas o clone leva a pose atual
-      const box = new THREE.Box3().setFromObject(clone); const tam = box.getSize(V()); const lado = Math.max(tam.x, tam.y, tam.z); const esc = TAM_REAL[atual] / (LADO_REPOUSO[atual] || lado); tamNoAmbiente = lado * esc;
+      const box = new THREE.Box3().setFromObject(clone); const tam = box.getSize(V()); const esc = TAM_REAL[atual] / Math.max(tam.x, tam.y, tam.z);
       clone.scale.setScalar(esc); clone.updateMatrixWorld(true);
       const b2 = new THREE.Box3().setFromObject(clone); clone.position.set(-(b2.min.x + b2.max.x) / 2, -b2.min.y, -(b2.min.z + b2.max.z) / 2);
       /* nem a cor por vértice nem a dupla face atravessam o USDZ: sem isto o
@@ -451,7 +321,7 @@ function prepararRA() {
   }, 350);
 }
 E.viewer.addEventListener('load', () => {
-  if (E.viewer.canActivateAR) { E.ar.disabled = false; E.status.textContent = `Pronto. Tamanho no ambiente: ${tamNoAmbiente.toFixed(2)} m. ${COMO_ABRIR}`; }
+  if (E.viewer.canActivateAR) { E.ar.disabled = false; E.status.textContent = `Pronto. Tamanho no ambiente: ${TAM_REAL[atual].toFixed(2)} m. ${COMO_ABRIR}`; }
   else { E.ar.disabled = true; E.status.textContent = 'Este navegador não abre RA. Use o Safari no iPhone/iPad ou o Chrome no Android.'; }
 });
 E.viewer.addEventListener('error', () => { E.status.textContent = 'O modelo não carregou no visualizador de RA.'; });

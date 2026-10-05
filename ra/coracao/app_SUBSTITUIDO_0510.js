@@ -17,7 +17,6 @@ import {
 } from './fisica.js?v=coracao-20261003';
 import { criarWiggers } from './wiggers.js?v=coracao-20261003';
 import { prepararParaRA } from '../cores-para-ra.js';
-import { assarCiclo } from '../ciclo-na-mesa.js';
 import { LEGENDAS } from './legendas-b.js?v=coracao-20261003';
 import { MARCAS_EXTERNAS, RESSALVA_EXTERNA } from './legendas-a.js?v=coracao-20261003';
 
@@ -585,13 +584,7 @@ function montarB(raiz, malhas) {
 
   const abertura = { mitral: 1, tricuspide: 1, aortica: 0, pulmonar: 0 };
 
-  /* O CICLO NA MESA precisa GUARDAR e DEVOLVER a inércia dos folhetos: ele
-     roda o motor por dois ciclos para amostrar e, no fim, a tela tem de voltar
-     exatamente como estava. Só exposição do estado; nenhuma conta muda. */
-  aplicarB.abertura = abertura;
-  return aplicarB;
-
-  function aplicarB(q, dt) {
+  return function aplicarB(q, dt) {
     const amp = +$('amp').value;
     const curso = amp * (+$('bB1').value);
     for (const v of Object.keys(VALVAS)) {
@@ -632,7 +625,7 @@ function montarB(raiz, malhas) {
       }
       pos.needsUpdate = true;
     }
-  }
+  };
 }
 
 /* ══ AS LEGENDAS TRIDIMENSIONAIS ═══════════════════════════════════════
@@ -1382,141 +1375,6 @@ $('launchAR').addEventListener('click', () => {
   try { $('arViewer').activateAR(); }
   catch (err) { $('raStatus').textContent = 'A câmera não abriu. Verifique a permissão do navegador.'; }
 });
-
-/* ══ CICLO NA MESA (protótipo, Android) ═════════════════════════════════
-   O instante continua igual, em todos os aparelhos: é o modo de cima. Este é
-   um SEGUNDO modo, separado: o batimento de verdade, AMOSTRADO DO MOTOR e
-   gravado no GLB como blend shapes (morph targets) com uma animação em loop.
-
-   POR QUE SÓ NO ANDROID. Lá, a WebXR do model-viewer desenha com o three.js,
-   que toca a animação de morph do glTF. O iPhone (AR Quick Look) só lê USDZ, e
-   a conversão automática do model-viewer não leva animação — no iPhone vale o
-   instante escolhido, como sempre. Atenção registrada: o Scene Viewer do
-   Google também NÃO aceita morph targets (MORPH_TARGET_USED na especificação
-   dele); o ciclo depende da WebXR do Chrome.
-
-   COMO SE AMOSTRA. Exatamente o desenho da tela: fase k/(2N) no relógio
-   global, `peca.aplicar(em(sim, fase), dt)` — a mesma função, os mesmos
-   controles. A Vista Interna tem um estado que depende do tempo, a INÉRCIA
-   dos folhetos (abertura persegue o motor a 26/s). Para reproduzir a tela a
-   1×, o motor anda em quadros de dt = RR/M, com M múltiplo de 2N e dt ≤ 1/60 s
-   (a 75 bpm, exatamente 60 quadros/s): um ciclo inteiro de aquecimento, e as
-   amostras saem do segundo. Pares são alvos; ímpares conferem a interpolação;
-   uma amostra a mais (fase 1) confere o fechamento do laço. No fim, fase,
-   execução, inércia e geometria da tela voltam exatamente como estavam.
-
-   REPOUSO. É a peça com a amplitude visual em zero: todo deslocamento das
-   duas vistas é multiplicado por ela, então amplitude 0 devolve a geometria
-   do arquivo. O controle volta ao valor da tela antes de qualquer amostra. */
-const N_CICLO = 24;
-const ehAndroid = /Android/i.test(navigator.userAgent);
-let ultimoCiclo = null, cicloUrl = null;
-
-function amostrarCiclo(qual, N) {
-  const peca = qual === 'A' ? pecaA : pecaB;
-  if (!peca.aplicar) throw new Error('peça ainda não carregada');
-  const malhas = [];
-  peca.raiz.traverse(o => { if (o.isMesh) malhas.push(o); });
-  const guarda = {
-    fase, batendo, amp: $('amp').value,
-    abertura: peca.aplicar.abertura ? { ...peca.aplicar.abertura } : null,
-    pos: malhas.map(m => new Float32Array(m.geometry.attributes.position.array)),
-    nor: malhas.map(m => m.geometry.attributes.normal ? new Float32Array(m.geometry.attributes.normal.array) : null),
-  };
-  const copia = () => malhas.map(m => new Float32Array(m.geometry.attributes.position.array));
-  batendo = false;
-  try {
-    $('amp').value = '0';
-    peca.aplicar(em(sim, fase), .016);
-    const repouso = copia();
-    $('amp').value = guarda.amp;
-
-    const rr = duracoes(fc).rr, J = 2 * N;
-    const porAmostra = Math.max(1, Math.ceil(rr * 60 / J)), M = J * porAmostra, dt = rr / M;
-    const quadros = malhas.map(() => new Array(J + 1));
-    for (let volta = 0; volta < 2; volta++) {
-      for (let m = 0; m < M; m++) {
-        fase = m / M;
-        peca.aplicar(em(sim, fase), dt);
-        if (volta === 1 && m % porAmostra === 0) {
-          const j = m / porAmostra, c = copia();
-          c.forEach((a, i) => { quadros[i][j] = a; });
-        }
-      }
-    }
-    fase = 0; peca.aplicar(em(sim, 0), dt);                 // fase 1 = fechamento do laço
-    copia().forEach((a, i) => { quadros[i][J] = a; });
-    return { malhas, repouso, quadros, rr, quadrosPorCiclo: M, dtS: dt };
-  } finally {
-    $('amp').value = guarda.amp;
-    fase = guarda.fase; batendo = guarda.batendo;
-    if (guarda.abertura) Object.assign(peca.aplicar.abertura, guarda.abertura);
-    malhas.forEach((m, i) => {
-      m.geometry.attributes.position.array.set(guarda.pos[i]);
-      m.geometry.attributes.position.needsUpdate = true;
-      if (guarda.nor[i] && m.geometry.attributes.normal) {
-        m.geometry.attributes.normal.array.set(guarda.nor[i]);
-        m.geometry.attributes.normal.needsUpdate = true;
-      }
-    });
-  }
-}
-
-/* Diagnóstico: gera o ciclo de uma vista e devolve as medições. Não toca a
-   interface; serve ao console e aos testes. */
-async function gerarCiclo({ vista = atual, N = N_CICLO, normais = true, limiarMm = .05 } = {}) {
-  const t0 = performance.now();
-  const a = amostrarCiclo(vista, N);
-  const t1 = performance.now();
-  const { glb, medidas } = await assarCiclo({
-    raiz: (vista === 'A' ? pecaA : pecaB).raiz, malhas: a.malhas, repouso: a.repouso,
-    quadros: a.quadros, N, duracao: a.rr, alturaRealM, preparar: prepararParaRA, normais, limiarMm,
-  });
-  const t2 = performance.now();
-  const pacote = {
-    vista: vista === 'A' ? 'Vista Externa' : 'Vista Interna', fc, ...medidas,
-    quadrosPorCiclo: a.quadrosPorCiclo, dtMotorS: +a.dtS.toFixed(5),
-    msAmostrar: +(t1 - t0).toFixed(1), msTotal: +(t2 - t0).toFixed(1),
-    aparelho: navigator.userAgent,
-  };
-  return { glb, pacote };
-}
-window.pacoteCiclo = () => ultimoCiclo;
-window.medirCiclo = async (op = {}) => { const { pacote } = await gerarCiclo(op); console.info('[ciclo na mesa]', pacote); return pacote; };
-
-if (ehAndroid) {
-  $('cicloTesteBox').hidden = false;
-  $('cicloTeste').addEventListener('click', async () => {
-    $('cicloTeste').disabled = true; $('cicloAbrir').disabled = true;
-    $('cicloStatus').textContent = 'Preparando o ciclo para a câmera…';
-    await new Promise(res => setTimeout(res, 30));          // deixa a frase aparecer
-    try {
-      const { glb, pacote } = await gerarCiclo();
-      ultimoCiclo = pacote;
-      console.info('[ciclo na mesa]', pacote);
-      if (cicloUrl) URL.revokeObjectURL(cicloUrl);
-      cicloUrl = URL.createObjectURL(new Blob([glb], { type: 'model/gltf-binary' }));
-      $('cicloVisor').hidden = false;
-      $('arCiclo').src = cicloUrl;
-    } catch (err) {
-      console.error(err);
-      $('cicloStatus').textContent = 'Não foi possível preparar o ciclo.';
-    } finally { $('cicloTeste').disabled = false; }
-  });
-  $('arCiclo').addEventListener('load', () => {
-    if ($('arCiclo').canActivateAR) {
-      $('cicloAbrir').disabled = false;
-      $('cicloStatus').textContent = 'Ciclo pronto. Toque para abrir a câmera.';
-    } else {
-      $('cicloStatus').textContent = 'Ciclo pronto, mas este navegador não abre a RA com animação.';
-    }
-  });
-  $('arCiclo').addEventListener('error', () => { $('cicloStatus').textContent = 'O ciclo não carregou no visualizador de RA.'; });
-  $('cicloAbrir').addEventListener('click', () => {
-    try { $('arCiclo').activateAR(); }
-    catch (err) { $('cicloStatus').textContent = 'A câmera não abriu. Verifique a permissão do navegador.'; }
-  });
-}
 
 let antes = performance.now();
 r.setAnimationLoop(agora => {

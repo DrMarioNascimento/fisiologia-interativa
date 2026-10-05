@@ -9,16 +9,8 @@ Origem: `DrMarioNascimento/lab-ra/musculo-sarcomero`, revisão aprovada `6792eb5
 - Músculo → Fascículo → Fibra → Miofibrila → Sarcômero: níveis e escalas distintas.
 - Iniciar giro/Pausar giro e Velocidade do giro: rotação da peça, sem efeito nos cálculos. A página abre com o giro pausado.
 - Rótulos, Restaurar vista e Ampliar: exploração da cena.
-- Na Miofibrila e no Sarcômero, Comprimento do sarcômero, Contrair e Relaxar conservam o mecanismo original. O mesmo valor vale para os dois níveis. Restaurar parâmetros retorna a 2,4 µm e ao giro pausado, com velocidade 1×.
+- No Sarcômero, Comprimento do sarcômero, Contrair e Relaxar conservam o mecanismo original. Restaurar parâmetros retorna a 2,4 µm e ao giro pausado, com velocidade 1×.
 - Abrir em realidade aumentada exporta o nível e o comprimento selecionados como uma peça estática. A ativação da câmera depende de dispositivo compatível.
-
-## Miofibrila contrátil (revisão de 05/10/2026)
-
-- O controle de comprimento passou a valer também no nível 04. Os três sarcômeros internos usam a mesma função aprovada (`aplicarComprimento`); `modelos.js` não foi alterado. Os sarcômeros, os discos Z, os anéis e as tampas se reposicionam com o comprimento escolhido.
-- A capa pintada encurta como tecido, por trechos: a banda A conserva 1,6 µm; a banda I e a zona H encolhem pela mesma regra do sarcômero; o disco Z mantém a largura. A capa tem anéis de vértices somente nas bordas das bandas.
-- Dois acertos de montagem, feitos em `app.js`: os sarcômeros internos eram ampliados também no comprimento (discos Z internos a ±1,61 em vez dos anéis a ±1,2, sobreposição entre vizinhos e discos vazando nas pontas); agora a ampliação é só na espessura. As pontas da capa repetiam três sarcômeros nos próprios 2,3 de comprimento; agora a pintura segue a posição do fundo, e cada sarcômero pintado coincide com o vão entre dois anéis.
-- Na RA, miofibrila e sarcômero usam a escala do repouso (2,4 µm): a peça contraída chega mais curta, na proporção correta (a 1,9 µm, 0,48 m na miofibrila e 0,72 m no sarcômero, contra 0,60 m e 0,90 m em repouso). Antes, cada instante era ajustado ao mesmo tamanho final, e o contraído parecia igual ao relaxado.
-- Testes: `../tests/musculo-miofibrila.test.mjs` confere a ligação do controle, a regra de encurtamento (banda A fixa, zona H, discos Z, sem dobras) e a escala de RA.
 
 ## Limites didáticos e referência
 
