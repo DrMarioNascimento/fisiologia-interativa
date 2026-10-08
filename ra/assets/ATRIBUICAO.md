@@ -20,9 +20,9 @@ O modelo interno continua em desenvolvimento. A composição, a paleta e o movim
 
 `torax-completo-lobos-corrigidos.glb` deriva de **BodyParts3D © The Database Center for Life Science**, sob [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Fonte e termos do atlas: [BodyParts3D](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) e [licença](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html).
 
-A versão reúne caixa torácica, pulmões, coração, vias aéreas e diafragma, com orientação e unidades ajustadas para a cena. Os cinco lobos foram reconstruídos como envelopes contínuos mantendo suas dimensões; fissuras são sulcos superficiais aproximados. O entalhe cardíaco esquerdo foi preservado. O diafragma manteve suas extensões e foi conformado localmente à base pulmonar para evitar interseção. As demais malhas anatômicas não foram redimensionadas nesta revisão.
+A versão reúne caixa torácica, pulmões, coração, vias aéreas e diafragma, com orientação e unidades ajustadas para a cena. Os cinco lobos foram reconstruídos como envelopes contínuos mantendo suas dimensões; fissuras são sulcos superficiais aproximados. O entalhe cardíaco esquerdo foi preservado. O diafragma manteve suas extensões e foi conformado localmente à base pulmonar para evitar interseção. Esta revisão acrescenta tubos esquemáticos, criados para esta cena, para artérias pulmonares, quatro veias pulmonares, veias cavas e vasos coronários. Vermelho representa as artérias sistêmicas/coronárias e as veias pulmonares; azul representa as artérias pulmonares, veias cavas e veias coronárias. As malhas preexistentes e suas dimensões foram preservadas.
 
-SHA-256: `7dc1d497656960d1ac01842a4971f1c3cfcff3a05920053892ec6365ea85c460`.
+SHA-256: `f990cb7e6044cb874f99ec476f22d305077bbdfc7381026168bc8b7b768f78fa`.
 
 ## Cálculo dos movimentos
 

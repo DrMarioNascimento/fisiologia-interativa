@@ -8,7 +8,7 @@
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "a7a3b5a54774d90e9c826e5af38a3dc30040deff235d9bf6adbae9abb7e4ef04"
+      "sha256": "fe77800349aa3746be2daa1b661b41e0baedd2c26156a00a4ff9f263236b272b"
     },
     {
       "path": "assets/coracao.glb",
@@ -16,7 +16,7 @@
     },
     {
       "path": "assets/torax-completo-lobos-corrigidos.glb",
-      "sha256": "7dc1d497656960d1ac01842a4971f1c3cfcff3a05920053892ec6365ea85c460"
+      "sha256": "f990cb7e6044cb874f99ec476f22d305077bbdfc7381026168bc8b7b768f78fa"
     },
     {
       "path": "brand/mestre-lap.webp",
@@ -56,7 +56,7 @@
     },
     {
       "path": "pleura/ANATOMIA.md",
-      "sha256": "5bbb823671df2562c1ccff0dbc85b25d5395a0c9292f946f3a3116fc5cf97ec4"
+      "sha256": "77256e36c0ba735a407e10cb911cb019a2d9cd85f888dc5c9a113023a5c92931"
     },
     {
       "path": "pleura/AUDITORIA-FISIOLOGIA.md",
@@ -68,7 +68,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "ca89dcf93d747c922da2884a7c87b678204f4411c861fe356f287bac160d2159"
+      "sha256": "48db216c1b20e2fadd69832f5c1bfedfd2e3420d511fea182faa5b6e0616733b"
     },
     {
       "path": "pleura/estados.js",
@@ -84,7 +84,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "c7464b1d5cfe28518941798e0b05fab936ba3ae839f32550b3da10bbcad65436"
+      "sha256": "95cf9e66eecd33d1a5fcaac52221a630c93d40d8b6b9926066d3a07a4a796ad6"
     },
     {
       "path": "pleura/modelos.js",

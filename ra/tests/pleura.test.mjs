@@ -169,7 +169,8 @@ test("a RA preserva o estado fisiológico e oferece o tórax completo estático"
   assert.match(html, /<select id="raModelo">[\s\S]*value="simulacao"[\s\S]*value="completo"/);
   assert.match(app, /ciclo respiratório, pneumotórax ou os demais estados/);
   assert.match(app, /modoRA === 'completo'/);
-  assert.match(app, /torax-completo-lobos-corrigidos\.glb\?v=20261008/);
+  assert.match(app, /torax-completo-lobos-corrigidos\.glb\?v=20261008-vasos/);
+  assert.match(app, /vasos pulmonares e coronários esquemáticos/);
   assert.match(creditos, /BodyParts3D[\s\S]*CC BY 4\.0/);
   assert.ok(modelo.size > 20_000_000, "o GLB completo precisa estar incluído na pasta de assets");
 });
