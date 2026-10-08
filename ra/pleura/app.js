@@ -461,7 +461,7 @@ function prepararRA() {
     if (modoRA === 'completo') {
       $('raStatus').textContent = 'Carregando o tórax anatômico completo…';
       const viewer = $('arViewer');
-      if (viewer.getAttribute('src') !== URL_TORAX_COMPLETO) viewer.src = URL_TORAX_COMPLETO;
+      if (viewer.getAttribute('src') !== URL_TORAX_COMPLETO) viewer.setAttribute('src', URL_TORAX_COMPLETO);
       return;
     }
     $('raStatus').textContent = 'Preparando o modelo para a câmera…';
@@ -482,7 +482,7 @@ function prepararRA() {
       if (id !== prepId) return;
       if (arUrl) URL.revokeObjectURL(arUrl);
       arUrl = URL.createObjectURL(new Blob([buf], { type: 'model/gltf-binary' }));
-      $('arViewer').src = arUrl;
+      $('arViewer').setAttribute('src', arUrl);
     } catch (err) {
       console.error(err);
       $('raStatus').textContent = 'Não foi possível preparar o modelo para RA.';
