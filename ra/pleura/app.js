@@ -452,7 +452,7 @@ $('resetView').onclick = () => enquadrar(atual);
 /* ------------------------------------------------------------ RA */
 let arUrl = null, prepId = 0, temporizador = null;
 let modoRA = 'simulacao';
-const URL_TORAX_COMPLETO = new URL('../assets/torax-completo-lobos-corrigidos.glb?v=20261008', import.meta.url).href;
+const URL_TORAX_COMPLETO = new URL('../assets/torax-completo-lobos-corrigidos.glb?v=20261008-vasos', import.meta.url).href;
 function prepararRA() {
   const id = ++prepId;
   clearTimeout(temporizador);
@@ -509,7 +509,7 @@ $('arViewer').addEventListener('error', () => { $('launchAR').disabled = true; $
 $('raModelo').addEventListener('change', () => {
   modoRA = $('raModelo').value;
   $('raNotaModelo').textContent = modoRA === 'completo'
-    ? 'Este tórax completo mostra pulmões, caixa torácica, diafragma e coração em posição anatômica. É estático: não reproduz ciclo respiratório, pneumotórax ou os demais estados da bancada.'
+    ? 'Este tórax completo mostra pulmões, caixa torácica, diafragma e coração em posição anatômica, com vasos pulmonares e coronários esquemáticos. É estático: não reproduz ciclo respiratório, pneumotórax ou os demais estados da bancada.'
     : 'A RA acompanha o nível, o estado e a postura selecionados na simulação.';
   prepararRA();
 });
