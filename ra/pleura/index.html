@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../laboratorio.css" />
-  <link rel="stylesheet" href="style.css?v=inclinacao-20261002" />
+  <link rel="stylesheet" href="style.css?v=torax-ra-20261008" />
   <script src="../tutor-origem.js?v=ra-20261002" defer></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
@@ -137,17 +137,20 @@
 
       <section class="ra-box" aria-label="Realidade aumentada">
         <model-viewer id="arViewer" alt="Modelo do tórax em realidade aumentada" ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="auto" camera-controls loading="eager" reveal="auto" shadow-intensity="1" exposure="1.1"></model-viewer>
+        <label class="ra-modelo" for="raModelo"><span>Modelo para RA</span><select id="raModelo"><option value="simulacao">Estado fisiológico atual</option><option value="completo">Tórax anatômico completo corrigido</option></select></label>
         <button id="launchAR" class="ra-launch" type="button" disabled>Abrir em realidade aumentada</button>
         <p id="raStatus" class="ra-status">Preparando o modelo para a câmera…</p>
+        <p id="raNotaModelo" class="ra-status">A RA acompanha o nível, o estado e a postura selecionados na simulação.</p>
       </section>
       <section class="referencias-modelo" aria-label="Observações anatômicas e referências">
         <p>Lobos pulmonares: as cores diferentes são uma convenção didática para distinguir os lobos. A pequena separação no modelo destaca as fissuras anatômicas; não representa ar entre os lobos. Referência: <a href="https://pubmed.ncbi.nlm.nih.gov/9276555/" target="_blank" rel="noopener noreferrer">Classificação anatômica das fissuras pulmonares — Craig e Walker (1997)</a>.</p>
         <p id="creditoCoracao">Coração: modelo anatômico 3D · <a href="https://sketchfab.com/3d-models/realistic-human-heart-3f8072336ce94d18b3d0d055a1ece089" target="_blank" rel="noopener noreferrer">Realistic Human Heart</a>, de neshallads · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. Escala, posição e acabamento ajustados ao tórax.</p>
+        <p>Tórax anatômico completo: modelo derivado de <a href="https://dbarchive.biosciencedbc.jp/en/bodyparts3d/" target="_blank" rel="noopener noreferrer">BodyParts3D</a>, © The Database Center for Life Science · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. Composição e correções do modelo documentadas em <a href="../assets/ATRIBUICAO.md">ra/assets/ATRIBUICAO.md</a>. Este modelo é estático e não reproduz os estados fisiológicos da simulação.
       </section>
     </aside>
   </section>
 </main>
 <footer class="rodape shell"><img src="../brand/mestre-lap.webp" alt="" width="84" height="84"><p class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Mário César Nascimento, PhD ©</p></footer>
-<script type="module" src="app.js?v=referencias-20261002"></script>
+<script type="module" src="app.js?v=torax-ra-20261008"></script>
 </body>
 </html>

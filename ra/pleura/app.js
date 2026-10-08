@@ -451,11 +451,19 @@ $('resetView').onclick = () => enquadrar(atual);
 
 /* ------------------------------------------------------------ RA */
 let arUrl = null, prepId = 0, temporizador = null;
+let modoRA = 'simulacao';
+const URL_TORAX_COMPLETO = new URL('../assets/torax-completo-lobos-corrigidos.glb?v=20261008', import.meta.url).href;
 function prepararRA() {
   const id = ++prepId;
   clearTimeout(temporizador);
   temporizador = setTimeout(async () => {
     $('launchAR').disabled = true;
+    if (modoRA === 'completo') {
+      $('raStatus').textContent = 'Carregando o tórax anatômico completo…';
+      const viewer = $('arViewer');
+      if (viewer.getAttribute('src') !== URL_TORAX_COMPLETO) viewer.src = URL_TORAX_COMPLETO;
+      return;
+    }
     $('raStatus').textContent = 'Preparando o modelo para a câmera…';
     try {
       const clone = clonarVisual(modelos[atual]);
@@ -489,13 +497,22 @@ const COMO_ABRIR = ehQuickLook
 $('arViewer').addEventListener('load', () => {
   if ($('arViewer').canActivateAR) {
     $('launchAR').disabled = false;
-    $('raStatus').textContent = `Pronto. Tamanho no ambiente: ${TAM_REAL[atual].toFixed(2)} m. ${COMO_ABRIR}`;
+    $('raStatus').textContent = modoRA === 'completo'
+      ? `Tórax anatômico completo carregado; modelo estático. ${COMO_ABRIR}`
+      : `Pronto. Tamanho no ambiente: ${TAM_REAL[atual].toFixed(2)} m. ${COMO_ABRIR}`;
   } else {
     $('launchAR').disabled = true;
     $('raStatus').textContent = 'Este navegador não abre RA. Use o Safari no iPhone/iPad ou o Chrome no Android.';
   }
 });
-$('arViewer').addEventListener('error', () => { $('raStatus').textContent = 'O modelo não carregou no visualizador de RA.'; });
+$('arViewer').addEventListener('error', () => { $('launchAR').disabled = true; $('raStatus').textContent = 'O modelo não carregou no visualizador de RA.'; });
+$('raModelo').addEventListener('change', () => {
+  modoRA = $('raModelo').value;
+  $('raNotaModelo').textContent = modoRA === 'completo'
+    ? 'Este tórax completo mostra pulmões, caixa torácica, diafragma e coração em posição anatômica. É estático: não reproduz ciclo respiratório, pneumotórax ou os demais estados da bancada.'
+    : 'A RA acompanha o nível, o estado e a postura selecionados na simulação.';
+  prepararRA();
+});
 $('launchAR').addEventListener('click', () => {
   try { $('arViewer').activateAR(); }
   catch (err) { $('raStatus').textContent = 'A câmera não abriu. Verifique a permissão de câmera do navegador.'; }

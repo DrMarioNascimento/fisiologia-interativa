@@ -493,6 +493,26 @@ button:focus-visible,input:focus-visible,a:focus-visible {
   border-radius:12px;
   background:radial-gradient(ellipse at 50% 42%,#203c50,#0b1826 75%)
 }
+.ra-modelo {
+  display:grid;
+  gap:7px;
+  color:#c5d8e3;
+  font-size:.74rem
+}
+.ra-modelo select {
+  width:100%;
+  min-height:42px;
+  padding:9px 11px;
+  border:1px solid #547487;
+  border-radius:9px;
+  background:#112433;
+  color:#eef5fa;
+  font:inherit
+}
+.ra-modelo select:focus-visible {
+  outline:2px solid #9ce4ed;
+  outline-offset:2px
+}
 .ra-status {
   margin:0;
   color:var(--mist);

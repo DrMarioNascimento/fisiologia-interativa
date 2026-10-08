@@ -8,11 +8,15 @@
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "05ecdc09a1b9f557dbaa86ee465477c625ece5cb92d2125556d30625276aa453"
+      "sha256": "a7a3b5a54774d90e9c826e5af38a3dc30040deff235d9bf6adbae9abb7e4ef04"
     },
     {
       "path": "assets/coracao.glb",
       "sha256": "fcb3c1036fe59dfdcc1c30917dbdaa8fbd52c858e6ba3cadaf126b44ccca4b5b"
+    },
+    {
+      "path": "assets/torax-completo-lobos-corrigidos.glb",
+      "sha256": "7dc1d497656960d1ac01842a4971f1c3cfcff3a05920053892ec6365ea85c460"
     },
     {
       "path": "brand/mestre-lap.webp",
@@ -64,7 +68,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "f67434eee0d94a9bef3ee47a23e99387953c6acf1c149810ce364555fc9e97bc"
+      "sha256": "ca89dcf93d747c922da2884a7c87b678204f4411c861fe356f287bac160d2159"
     },
     {
       "path": "pleura/estados.js",
@@ -80,7 +84,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "85cafdae6dd24653ba35cef585966e14085402588b0a0e3dc9542147037dd9e6"
+      "sha256": "c7464b1d5cfe28518941798e0b05fab936ba3ae839f32550b3da10bbcad65436"
     },
     {
       "path": "pleura/modelos.js",
@@ -96,7 +100,7 @@
     },
     {
       "path": "pleura/style.css",
-      "sha256": "9be7c6c421579b4c4afef1d975052f77b5aceaf466b58b0a21184b0066ad6276"
+      "sha256": "263f654e42e3293360aca1f2d6b26b96977d2cb878bbe52c9dd343b88f847627"
     },
     {
       "path": "tutor-origem.js",
