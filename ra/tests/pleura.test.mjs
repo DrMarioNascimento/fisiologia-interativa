@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import {
   PULMAO, PPL_MEDIA_FRC, GRADIENTE_PLEURAL, CMH2O_EM_MMHG, VOLUMES, VASOS,
   alturaEfetiva, pressaoPleural, transpulmonar, volumeRelativo, ventilacaoRelativa,
@@ -159,6 +159,19 @@ test("a experiência abre parada e oferece retorno ao Tutor", async () => {
   const html = await texto("pleura/index.html");
   assert.ok(html.includes("data-voltar-tutor"));
   assert.ok(!html.includes("bancadas.html"));
+});
+
+test("a RA preserva o estado fisiológico e oferece o tórax completo estático", async () => {
+  const html = await texto("pleura/index.html");
+  const app = await texto("pleura/app.js");
+  const creditos = await texto("assets/ATRIBUICAO.md");
+  const modelo = await stat(new URL("../assets/torax-completo-lobos-corrigidos.glb", import.meta.url));
+  assert.match(html, /<select id="raModelo">[\s\S]*value="simulacao"[\s\S]*value="completo"/);
+  assert.match(app, /ciclo respiratório, pneumotórax ou os demais estados/);
+  assert.match(app, /modoRA === 'completo'/);
+  assert.match(app, /torax-completo-lobos-corrigidos\.glb\?v=20261008/);
+  assert.match(creditos, /BodyParts3D[\s\S]*CC BY 4\.0/);
+  assert.ok(modelo.size > 20_000_000, "o GLB completo precisa estar incluído na pasta de assets");
 });
 
 /* ==========================================================================

@@ -16,6 +16,14 @@ SHA-256: `b717a1f2e3880835703d4088a2cc99e06e01efc49695e7e55abf32d5c6af79cd`.
 
 O modelo interno continua em desenvolvimento. A composição, a paleta e o movimento foram adaptados na origem; consulte [metadados](../coracao/MODELO-INTERNO.json), [atribuições](../coracao/ATTRIBUTION.md) e [licenças](../coracao/LICENSE.md).
 
+## Tórax completo da experiência de Pleura
+
+`torax-completo-lobos-corrigidos.glb` deriva de **BodyParts3D © The Database Center for Life Science**, sob [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Fonte e termos do atlas: [BodyParts3D](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/) e [licença](https://dbarchive.biosciencedbc.jp/en/bodyparts3d/lic.html).
+
+A versão reúne caixa torácica, pulmões, coração, vias aéreas e diafragma, com orientação e unidades ajustadas para a cena. Os cinco lobos foram reconstruídos como envelopes contínuos mantendo suas dimensões; fissuras são sulcos superficiais aproximados. O entalhe cardíaco esquerdo foi preservado. O diafragma manteve suas extensões e foi conformado localmente à base pulmonar para evitar interseção. As demais malhas anatômicas não foram redimensionadas nesta revisão.
+
+SHA-256: `7dc1d497656960d1ac01842a4971f1c3cfcff3a05920053892ec6365ea85c460`.
+
 ## Cálculo dos movimentos
 
 Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo **Prof. Mário César Nascimento, PhD**, e sincronizados ao ciclo cardíaco simulado. Essa autoria se refere ao trabalho do simulador; os modelos de terceiros conservam seus autores e licenças. A página anima a peça; a RA apresenta o instante estático escolhido.
