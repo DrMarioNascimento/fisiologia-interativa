@@ -40,6 +40,17 @@ pleura-simulacao-aprovada.glb é um instante estático de repouso da simulação
 
 SHA-256: c126a8dec4ae0d80d9360593f5f8d4347cf28ceeb17fab678d2260358d62c267.
 
+## Pleura visceral e parietal
+
+pleura-duas-camadas.glb deriva do modelo estático aprovado. Conserva todos os dados geométricos originais; acrescenta cinco películas viscerais azuis e atualiza a apresentação dos dois envelopes parietais para lilás. Cores convencionais, espessura e separação ampliadas para leitura. Os envelopes são simplificados: reflexões hilares e recessos não foram detalhados. Controles de atenuação são recursos do visualizador 3D. Fontes e licenças do modelo aprovado continuam aplicáveis.
+
+SHA-256: 8e73bc726b180d8ee9eaf961f69d199c973919848ac7dc3a3974d67de232da66.
+Gerador: node ra/scripts/criar-pleuras.mjs.
+
+
+## Textura cortical do osso (2026-10-09)
+Albedo sintético criado com a ferramenta integrada de geração de imagens. Mapas de normal e rugosidade gerados numericamente. Não é fotografia de espécime. Os novos GLBs preservam os dados geométricos dos originais; apenas material osso e coordenadas de textura foram atualizados.
+
 ## Mitocôndria compartilhada
 
 mitocondria-aberta.glb e mitocondria-fechada.glb são modelos procedurais originais do projeto, gerados por `../scripts/gerar-mitocondria.py` (campo de distância + marching cubes). Não usam modelo nem textura de terceiros. Cobertos pela licença do projeto.

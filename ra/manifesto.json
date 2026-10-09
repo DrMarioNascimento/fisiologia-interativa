@@ -24,7 +24,7 @@
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "fbc106279db82da018e5f85e6decdb71533c74486f58886d5f4d9b212bd7949b"
+      "sha256": "0c32fa82939ab29ba656b117804d85be81252e8e9036f3247af5cf6a6993888d"
     },
     {
       "path": "assets/coracao.glb",
@@ -84,7 +84,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "a53007ce249d5590817a01ee9ca7c7410cc2a01e7279a64eaea4d63e06b28f79"
+      "sha256": "90cf09aff5d97b2e4b5c6c33efc5c36af9dca02231beb74b70d7a4508d9f8f6d"
     },
     {
       "path": "pleura/estados.js",
@@ -100,7 +100,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "68003d80b0582763a1c5ebc4e24ebc604903e8ae8ecf4d5426d62242daccac97"
+      "sha256": "09e054ec8616fb301abe928e671fe34c4ebe1ffe83b9a3f7795eff3dad82b37e"
     },
     {
       "path": "pleura/modelos.js",
@@ -400,7 +400,35 @@
     },
     {
       "path": "pleura/modelo-aprovado.html",
-      "sha256": "d3fd0eb88d6a1369363245de808a6a1138929dae320575ecb0ac3a84d4b29b0a"
+      "sha256": "6e6c44a45fb9d310b28499dfed71fb2e194de5032ea481a6096ac9f63010185a"
+    },
+    {
+      "path": "assets/pleura-duas-camadas.glb",
+      "sha256": "8e73bc726b180d8ee9eaf961f69d199c973919848ac7dc3a3974d67de232da66"
+    },
+    {
+      "path": "pleura/pleuras.html",
+      "sha256": "969059467358b3efe201c2c85300a3f8f99b6961338da2b311781f2871df127f"
+    },
+    {
+      "path": "assets/pleura-osso-texturizado.glb",
+      "sha256": "b263021817ada37083bbc40b0b2743a699c96c1e0f0aec9a4c3434bcd3087d07"
+    },
+    {
+      "path": "assets/torax-osso-texturizado.glb",
+      "sha256": "6e699808fbfd5200cb9629c179f3812e6584d2da8cb9d6806a5d460f0faa6cca"
+    },
+    {
+      "path": "scripts/texturizar-osso.mjs",
+      "sha256": "9a5532b8bfddf1271e3faa92b16349590f1c517032b3319c5a60233bab728ef6"
+    },
+    {
+      "path": "assets/pleura-apices-nivelados.glb",
+      "sha256": "f3f39992ec4308c1f70cfed9db42475fccec633ba857769ca798835578de3cbf"
+    },
+    {
+      "path": "assets/torax-apices-nivelados.glb",
+      "sha256": "d5e64f27a191ee25ac97338cf261a7a5fa2f04280734b6297632990fc99b94d4"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
