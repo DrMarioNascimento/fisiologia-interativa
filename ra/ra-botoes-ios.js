@@ -9,8 +9,8 @@
    módulo só as empacota.
 
    Como se faz, sem Mac:
-     1. cada parte que se move ganha, ao lado (mesmo pai), um "alvo" vazio por
-        estado, com a transformação daquele estado;
+     1. cada parte que se move ganha, no topo da cena, um "alvo" vazio por
+        estado, com a transformação daquele estado já medida na cena;
      2. o USDZExporter do three escreve a cena (com as placas e os alvos);
      3. abre-se o USDZ, acrescenta-se o bloco "Behaviors" dentro da cena
         (gatilho TapGesture na placa → grupo paralelo de ações Transform,
@@ -71,11 +71,21 @@ export async function usdzComBotoes({ peca, moveis, estados, duracao = 1.2 }) {
   const raiz = new THREE.Group(); raiz.name = 'rqbRaiz';
   raiz.add(peca);
   moveis.forEach((m, i) => { m.name = 'rqbMovel_' + i; });
+  /* ALVOS NO TOPO DA CENA, COM A POSE JÁ EM COORDENADAS DA CENA.
+     Antes, cada alvo ficava ao lado da parte (mesmo pai) com a pose LOCAL. No
+     iPhone, o toque fazia outro movimento: as peças se separavam. A pose local
+     dos discos Z (±1,2, sem a escala de 0,37 que a peça recebe no pai) foi
+     lida como se fosse da cena: os discos iam para longe, maiores, e as
+     titinas para o centro. Com o alvo pendurado direto na raiz e a pose
+     multiplicada pelas transformações dos pais, pose local e pose na cena
+     passam a ser a mesma coisa, e o movimento sai certo nas duas leituras. */
+  raiz.updateMatrixWorld(true);
   estados.forEach((e, k) => {
     moveis.forEach((m, i) => {
       const alvo = new THREE.Object3D(); alvo.name = `rqbAlvo_${k}_${i}`;
-      e.poses[i].decompose(alvo.position, alvo.quaternion, alvo.scale);
-      m.parent.add(alvo);
+      new THREE.Matrix4().multiplyMatrices(m.parent.matrixWorld, e.poses[i])
+        .decompose(alvo.position, alvo.quaternion, alvo.scale);
+      raiz.add(alvo);
     });
   });
   /* placas à frente da peça, no chão, lado a lado */
