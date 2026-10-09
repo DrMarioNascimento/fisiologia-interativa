@@ -3,9 +3,21 @@ const assert = require('node:assert/strict');
 const { createTutorServer, validate } = require('../../server/tutor.cjs');
 const { loadCatalog } = require('../../server/catalog.cjs');
 const path = require('node:path');
+const fs = require('node:fs');
+const vm = require('node:vm');
 const catalog = loadCatalog(path.resolve(__dirname, '../..'));
 const valid = { course:'ef', module:catalog.ef.find(m => m.href === 'potencial-acao-membrana.html').href, message:'Por que o sódio entra?', history:[] };
 const success = text => new Response(JSON.stringify({ candidates:[{finishReason:'STOP',content:{parts:[{text}]}}] }));
+test('película de carga encontra a nova célula nos dois catálogos',()=>{
+ const source=fs.readFileSync(path.resolve(__dirname,'../../tutor-escape-chat.js'),'utf8');
+ const norm=source.slice(source.indexOf('  function norm('),source.indexOf('  function isFisioPage('));
+ const matcher=source.slice(source.indexOf('  function tokens('),source.indexOf('  var axisHints'));
+ for(const course of ['ef','fisio']){
+  const c={catalogModules:()=>catalog[course]};vm.runInNewContext(norm+matcher+';this.match=matchModule;',c);
+  assert.equal(c.match('Explique a película de carga em realidade aumentada').href,'ra/celula/');
+  assert.equal(c.match('Explique as travessias em realidade aumentada').href,'ra/celula/');
+ }
+});
 async function setup(t, options={}) {
   const server = createTutorServer({env:{GEMINI_API_KEY:'test-secret',TUTOR_ALLOWED_ORIGINS:'https://aula.example'}, ...options});
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
