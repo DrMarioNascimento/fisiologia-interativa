@@ -33,3 +33,9 @@ SHA-256: `2907f30e3805c81e055dc9bca69bf6b268ff1128ec6611cc1150a9c31ed75ad9`.
 ## Cálculo dos movimentos
 
 Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo **Prof. Mário César Nascimento, PhD**, e sincronizados ao ciclo cardíaco simulado. Essa autoria se refere ao trabalho do simulador; os modelos de terceiros conservam seus autores e licenças. A página anima a peça; a RA apresenta o instante estático escolhido.
+
+## Modelo aprovado da simulação de Pleura
+
+pleura-simulacao-aprovada.glb é um instante estático de repouso da simulação de Pleura, com clavículas e escápulas derivadas de BodyParts3D (CC BY 4.0), coração Realistic Human Heart de neshallads (CC BY 4.0), bordas pulmonares revisadas e normais das fissuras corrigidas. A borda esquerda foi simplificada visualmente conforme aprovação do autor. As atribuições anteriores continuam aplicáveis.
+
+SHA-256: c126a8dec4ae0d80d9360593f5f8d4347cf28ceeb17fab678d2260358d62c267.

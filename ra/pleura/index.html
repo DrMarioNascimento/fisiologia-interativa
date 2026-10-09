@@ -136,10 +136,11 @@
       </section>
 
       <section class="ra-box" id="visualizacaoRA" aria-label="Visualização 3D e realidade aumentada">
+        <a href="modelo-aprovado.html" class="vasos-ampliar">Ver o modelo aprovado em 3D →</a>
         <button id="verVasos" class="secondary" type="button">Ver coração e vasos em foco</button>
         <a href="vasos.html" class="vasos-ampliar">Abrir coração e vasos em tela ampla →</a>
         <model-viewer id="arViewer" alt="Modelo anatômico 3D e realidade aumentada" ar ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="auto" camera-controls loading="eager" reveal="auto" shadow-intensity="1" exposure="1.1"></model-viewer>
-        <label class="ra-modelo" for="raModelo"><span>Visualização 3D / modelo para RA</span><select id="raModelo"><option value="simulacao">Estado fisiológico atual</option><option value="completo">Tórax anatômico completo corrigido</option><option value="vasos">Coração e vasos em foco</option></select></label>
+        <label class="ra-modelo" for="raModelo"><span>Visualização 3D / modelo para RA</span><select id="raModelo"><option value="simulacao">Estado fisiológico atual</option><option value="aprovado">Modelo revisado aprovado</option><option value="completo">Tórax anatômico completo corrigido</option><option value="vasos">Coração e vasos em foco</option></select></label>
         <button id="launchAR" class="ra-launch" type="button" disabled>Abrir em realidade aumentada</button>
         <p id="raStatus" class="ra-status">Preparando o modelo para a câmera…</p>
         <p id="raNotaModelo" class="ra-status">A RA acompanha o nível, o estado e a postura selecionados na simulação.</p>
@@ -153,6 +154,6 @@
   </section>
 </main>
 <footer class="rodape shell"><img src="../brand/mestre-lap.webp" alt="" width="84" height="84"><p class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Mário César Nascimento, PhD ©</p></footer>
-<script type="module" src="app.js?v=torax-ra-20261008-vasos-foco"></script>
+<script type="module" src="app.js?v=aprovado-20261009"></script>
 </body>
 </html>
