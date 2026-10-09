@@ -14,7 +14,7 @@
   <script src="../tutor-origem.js?v=ra-20261002" defer></script>
   <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
   <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
-</head>
+<style>.pleura-camadas{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.pleura-camadas label{display:flex;align-items:center;gap:8px;padding:12px;border:1px solid #426275;border-radius:12px}.pleura-camadas input{width:22px;height:22px;accent-color:#71d6ef}.pleura-camadas label:first-child{color:#75d5ff}.pleura-camadas label:nth-child(2){color:#caa0ff}</style></head>
 <body>
 <header class="topbar"><nav class="nav shell" aria-label="Fisiologia Interativa"><a class="brand" data-voltar-tutor href="../../tutor-ef.html"><img src="../brand/orientador.webp" alt="" width="42" height="42"><span class="brand-copy"><b>FISIOLOGIA INTERATIVA</b><span>RA - Realidade Aumentada</span></span></a><div class="nav-actions"><a class="small-button" data-voltar-tutor href="../../tutor-ef.html">Voltar ao Tutor</a></div></nav></header>
 <main class="page shell">
@@ -56,6 +56,7 @@
       </div>
     </div>
 
+      <div class="pleura-camadas" aria-label="Camadas e atenuação"><label><input type="checkbox" id="camadaVisceral" checked> Visceral · azul</label><label><input type="checkbox" id="camadaParietal" checked> Parietal · lilás</label><label><input type="checkbox" id="atenuarPulmoes" checked> Atenuar pulmões</label><label><input type="checkbox" id="atenuarOssos" checked> Atenuar ossos</label></div>
       <article class="info-card" id="infoCard">
         <span class="eyebrow" id="infoEyebrow">A pergunta</span>
         <h2 id="infoTitle">Onde a gravidade aperta?</h2>
@@ -155,6 +156,6 @@
   </section>
 </main>
 <footer class="rodape shell"><img src="../brand/mestre-lap.webp" alt="" width="84" height="84"><p class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Mário César Nascimento, PhD ©</p></footer>
-<script type="module" src="app.js?v=apices-20261009"></script>
+<script type="module" src="app.js?v=simulador-20261009"></script>
 </body>
 </html>

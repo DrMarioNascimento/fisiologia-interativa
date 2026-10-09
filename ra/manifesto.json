@@ -84,7 +84,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "90cf09aff5d97b2e4b5c6c33efc5c36af9dca02231beb74b70d7a4508d9f8f6d"
+      "sha256": "0f594c1209387cb119fe2980260854b1a09b5c994c6e618f73991f5a0ac05e14"
     },
     {
       "path": "pleura/estados.js",
@@ -100,11 +100,11 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "09e054ec8616fb301abe928e671fe34c4ebe1ffe83b9a3f7795eff3dad82b37e"
+      "sha256": "96903eadc75ec8fc2c4351d2f2c05113a6a5049df10c9e2fa1e6f525ba68caf9"
     },
     {
       "path": "pleura/modelos.js",
-      "sha256": "f2b3f9f2147d9d26f13cdec7e13d2396b19dd90eba09705d9ce53ab8bb342565"
+      "sha256": "caea342ec031a2ff8ab81dea6904433ff2f893e79cb47415e1fc9b49257ed853"
     },
     {
       "path": "pleura/movimento-costal.js",
@@ -429,6 +429,10 @@
     {
       "path": "assets/torax-apices-nivelados.glb",
       "sha256": "d5e64f27a191ee25ac97338cf261a7a5fa2f04280734b6297632990fc99b94d4"
+    },
+    {
+      "path": "pleura/torax-aprovado.js",
+      "sha256": "a16e9ed47bf40d2cac9443128b064d6e67ae75be547bf4375f5e1f2a8126521d"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
