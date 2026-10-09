@@ -31,6 +31,7 @@ import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { prepararParaRA } from '../cores-para-ra.js';
 import { usdzComBotoes } from '../ra-botoes-ios.js';
+import { novaMitocondria } from '../mitocondria.js';
 import { criar } from './modelos.js?v=musculo-anatomico-20261003';
 
 const $ = id => document.getElementById(id);
@@ -87,6 +88,33 @@ function canvasTex(w, h, draw, { repeatX = 1, repeatY = 1 } = {}) {
 }
 const { modelos, aplicarComprimento, SARC, SCM } = criar(canvasTex);
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
+
+/* MITOCÔNDRIAS NOVAS NA FIBRA. Em `modelos.js` (aprovado, intocado) as 84
+   mitocôndrias entre as miofibrilas são cápsulas de raio 0,028 fundidas numa
+   malha só. A malha é desfeita aqui: cada cápsula tem o mesmo número de
+   vértices, e a caixa de cada trecho dá o lugar e o comprimento da
+   mitocôndria, que é substituída pela compartilhada fechada (`../mitocondria.js`)
+   com as mesmas medidas, deitada no eixo da fibra. */
+(async () => {
+  const fibra = modelos[2]; let antiga = null;
+  fibra.traverse(o => { if (o.isMesh && o.material && o.material.color && o.material.color.getHex() === 0xc9822f) antiga = o; });
+  if (!antiga) return;
+  const porCapsula = new THREE.CapsuleGeometry(.028, .1, 4, 10).attributes.position.count;
+  const pos = antiga.geometry.attributes.position, n = Math.round(pos.count / porCapsula);
+  if (n * porCapsula !== pos.count) return;          // estrutura diferente da esperada: fica a antiga
+  try {
+    const medidas = [];
+    for (let k = 0; k < n; k++) {
+      const b = new THREE.Box3();
+      for (let i = k * porCapsula; i < (k + 1) * porCapsula; i++) b.expandByPoint(V(pos.getX(i), pos.getY(i), pos.getZ(i)));
+      medidas.push(b);
+    }
+    const novas = await Promise.all(medidas.map(b => { const t = b.getSize(V()); return novaMitocondria('fechada', V(t.x, t.y, t.z)); }));
+    novas.forEach((m, k) => { medidas[k].getCenter(m.position); m.position.applyMatrix4(antiga.matrix); antiga.parent.add(m); });
+    antiga.parent.remove(antiga);
+    if (atual === 2) prepararRA();
+  } catch (err) { console.error('mitocôndria nova não carregou; ficam as antigas', err); }
+})();
 
 /* ------------------------------------------------------------ montagem dos níveis */
 modelos.forEach((m, i) => {

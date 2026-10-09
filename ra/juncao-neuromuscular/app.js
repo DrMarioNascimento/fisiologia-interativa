@@ -3,7 +3,8 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {prepararParaRA} from '../cores-para-ra.js';
-import {criar,NIVEIS} from './modelos.js?v=jun-encaixe-20261004';
+import {novaMitocondria} from '../mitocondria.js';
+import {criar,NIVEIS} from './modelos.js?v=jun-mito-20261009';
 import {simular,noInstante,fase,CORES,LIMIAR} from './fisica.js?v=jun-20261003';
 import {avancarInstante} from './reproducao.js?v=jun-realismo-20261003';
 import {estadoVisual,comprimentoVisual,faseContracao} from './animacao.js?v=jun-encaixe-20261004';
@@ -22,6 +23,14 @@ function textura(tipo){return canvasFactory(512,512,(ctx,w,h)=>{
  for(let y=0;y<h;y++)for(let x=0;x<w;x++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const n=(seed/4294967296-.5)*24;const bands=tipo==='estrias'?23*Math.sin(y*.27)+9*Math.cos(y*.54)+12*Math.cos(x*.12):24*Math.sin(x*.027+y*.018)*Math.cos(y*.043)+7*Math.sin(x*.19-y*.12);const c=Math.max(0,Math.min(255,199+n+bands)),i=(y*w+x)*4;image.data[i]=c;image.data[i+1]=c;image.data[i+2]=c;image.data[i+3]=255;}ctx.putImageData(image,0,0);
  });}
 const anatomy=criar(textura);anatomy.modelos.forEach((m,i)=>{m.visible=i===0;scene.add(m);});
+/* MITOCÔNDRIAS NOVAS NO TERMINAL: cada lugar marcado em modelos.js (meia
+   elipsoide 2 × 0,94 × 0,90, aberta para +z) recebe a mitocôndria compartilhada
+   aberta, nas mesmas medidas; a antiga fica até o GLB chegar. */
+(async()=>{const lugares=[];anatomy.modelos.forEach(m=>m.traverse(o=>{if(o.userData.mitocondria)lugares.push(o);}));
+ try{const novas=await Promise.all(lugares.map(()=>novaMitocondria('aberta',new THREE.Vector3(2,.94,.90))));
+  lugares.forEach((o,k)=>{for(const c of [...o.children])o.remove(c);o.add(novas[k]);});
+  if(lugares.length&&typeof prepararRA==='function')prepararRA();
+ }catch(e){console.error('mitocôndria nova não carregou; ficam as antigas',e);}})();
 const bounds=anatomy.modelos.map((m,i)=>i===4?null:new THREE.Box3().setFromObject(m));
 let uiElapsed=0;
 let nivel=0,sim=simular(),instante=0,running=false,speed=Number($('speed').value),labels=$('toggleLabels').checked,frame=0,exportId=0,readyId=-1,arUrl=null,arTimer=null,selectionId=0,disposed=false;

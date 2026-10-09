@@ -39,3 +39,9 @@ Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados
 pleura-simulacao-aprovada.glb é um instante estático de repouso da simulação de Pleura, com clavículas e escápulas derivadas de BodyParts3D (CC BY 4.0), coração Realistic Human Heart de neshallads (CC BY 4.0), bordas pulmonares revisadas e normais das fissuras corrigidas. A borda esquerda foi simplificada visualmente conforme aprovação do autor. As atribuições anteriores continuam aplicáveis.
 
 SHA-256: c126a8dec4ae0d80d9360593f5f8d4347cf28ceeb17fab678d2260358d62c267.
+
+## Mitocôndria compartilhada
+
+mitocondria-aberta.glb e mitocondria-fechada.glb são modelos procedurais originais do projeto, gerados por `../scripts/gerar-mitocondria.py` (campo de distância + marching cubes). Não usam modelo nem textura de terceiros. Cobertos pela licença do projeto.
+
+SHA-256: aberta 16e2beb9b607e71dac8f441c2cd5e8e79d2314cc3d3cdea9f0cb88b95a343840; fechada 3695f1e364dc8e867f1beaa28cf8b24a7efb019b10b6a1766a7be76162862569.

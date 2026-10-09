@@ -35,6 +35,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { prepararParaRA } from './cores-para-ra.js';
 import { usdzComBotoes } from '../ra-botoes-ios.js';
+import { novaMitocondria } from '../mitocondria.js';
 import { criar } from './modelos.js?v=celular-20261003';
 
 const $ = id => document.getElementById(id);
@@ -250,6 +251,25 @@ btnCargas.onclick=()=>{
   E.labels.replaceChildren();prepararRA();
 };
 const btnOrganelas=$('organelas'), grupoOrganelas=modelos[INT].getObjectByName('organelas');
+/* MITOCÔNDRIAS NOVAS NO INTERIOR. As três de `modelos.js` (aprovado, intocado)
+   saem e entram as do modelo compartilhado (`../mitocondria.js`), no mesmo
+   lugar, tamanho e giro — os números abaixo são os de `modelos.js`
+   (posição, semi-eixos a/b/c e giro em Z). A primeira era a aberta, com
+   cristas; continua aberta, agora com a organela inteira por dentro. */
+(async () => {
+  const LUGARES = [[[.94, .70, .54], [.44, .185, .21], -.36, 'aberta'], [[-.88, -.92, .45], [.395, .19, .19], .38, 'fechada'],
+    [[.76, -1.02, .20], [.46, .17, .205], -.24, 'fechada']];
+  try {
+    const novas = await Promise.all(LUGARES.map(([p, [a, b, c], rot, tipo]) => novaMitocondria(tipo, V(2 * a, 2 * b, 2 * c)).then(m => {
+      m.position.set(...p); m.rotation.z = rot; return m;
+    })));
+    for (const nome of ['mitocôndrias', 'cristas mitocondriais', 'matriz mitocondrial']) {
+      const velha = grupoOrganelas.getObjectByName(nome); if (velha) velha.parent.remove(velha);
+    }
+    novas.forEach(m => grupoOrganelas.add(m));
+    if (atual === INT) prepararRA();
+  } catch (err) { console.error('mitocôndria nova não carregou; ficam as antigas', err); }
+})();
 btnOrganelas.onclick=()=>{
   mostrarOrganelas=!mostrarOrganelas;grupoOrganelas.visible=mostrarOrganelas;
   btnOrganelas.classList.toggle('on',mostrarOrganelas);

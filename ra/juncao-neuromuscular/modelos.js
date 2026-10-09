@@ -26,6 +26,8 @@ export function criar(textura){
  function group(){const g=new THREE.Group();g.userData={labels:[],particles:[],pulses:[],receptors:[],vesicles:[],floating:[],reticula:[],myofibrils:[]};return g;}
  function mito(g,pos,scale=.45){
   const organ=new THREE.Group();organ.position.copy(V(...pos));organ.scale.setScalar(scale);organ.rotation.set(.08,.18,-.24);g.add(organ);
+  // marca o lugar: a página troca o conteúdo pela mitocôndria compartilhada (../mitocondria.js) quando o GLB chega
+  organ.name='mitocondria';organ.userData.mitocondria=true;
   const cut=new THREE.Mesh(organificar(new THREE.SphereGeometry(1,40,26,Math.PI,Math.PI)),M.mito);cut.scale.set(1,.47,.45);organ.add(cut);
   ell(organ,[0,0,-.09],[.92,.405,.16],M.matrix,true);
   // Cristas em lâminas contínuas, contidas na matriz da mitocôndria em corte.
