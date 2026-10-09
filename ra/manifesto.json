@@ -8,7 +8,7 @@
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "bcd9d07e272c20ede757249f2a79a29472cbff9935027781ea0bca427c22512e"
+      "sha256": "d64e3348f898b74fe2a4ef3d213a4a231bbeeac935850850097e443b0f43d307"
     },
     {
       "path": "assets/coracao.glb",
@@ -84,7 +84,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "68003d80b0582763a1c5ebc4e24ebc604903e8ae8ecf4d5426d62242daccac97"
+      "sha256": "e0d9aac9a1fbf7f6d5925eb9d37d168590e5725a1e4c5d8a7017e3acfb050655"
     },
     {
       "path": "pleura/modelos.js",
@@ -384,7 +384,15 @@
     },
     {
       "path": "pleura/modelo-aprovado.html",
-      "sha256": "d3fd0eb88d6a1369363245de808a6a1138929dae320575ecb0ac3a84d4b29b0a"
+      "sha256": "23d080d0d82e5f55ba1f85be12984259feddff64bb7d22a8a5b6c90ca79790a2"
+    },
+    {
+      "path": "assets/pleura-duas-camadas.glb",
+      "sha256": "8e73bc726b180d8ee9eaf961f69d199c973919848ac7dc3a3974d67de232da66"
+    },
+    {
+      "path": "pleura/pleuras.html",
+      "sha256": "5ade83d498552d5d793dc88bfc60a10e5a318cd1cbf9b9c10a5c2c659c0be2fb"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",

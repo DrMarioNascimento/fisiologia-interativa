@@ -39,3 +39,10 @@ Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados
 pleura-simulacao-aprovada.glb é um instante estático de repouso da simulação de Pleura, com clavículas e escápulas derivadas de BodyParts3D (CC BY 4.0), coração Realistic Human Heart de neshallads (CC BY 4.0), bordas pulmonares revisadas e normais das fissuras corrigidas. A borda esquerda foi simplificada visualmente conforme aprovação do autor. As atribuições anteriores continuam aplicáveis.
 
 SHA-256: c126a8dec4ae0d80d9360593f5f8d4347cf28ceeb17fab678d2260358d62c267.
+
+## Pleura visceral e parietal
+
+pleura-duas-camadas.glb deriva do modelo estático aprovado. Conserva todos os dados geométricos originais; acrescenta cinco películas viscerais azuis e atualiza a apresentação dos dois envelopes parietais para lilás. Cores convencionais, espessura e separação ampliadas para leitura. Os envelopes são simplificados: reflexões hilares e recessos não foram detalhados. Controles de atenuação são recursos do visualizador 3D. Fontes e licenças do modelo aprovado continuam aplicáveis.
+
+SHA-256: 8e73bc726b180d8ee9eaf961f69d199c973919848ac7dc3a3974d67de232da66.
+Gerador: node ra/scripts/criar-pleuras.mjs.
