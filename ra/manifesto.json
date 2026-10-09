@@ -8,7 +8,7 @@
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "80c8adf07fb9de71bc4301f1a8cc77e0584b43a223f4e9b95ffc6ac5ea71bed6"
+      "sha256": "bcd9d07e272c20ede757249f2a79a29472cbff9935027781ea0bca427c22512e"
     },
     {
       "path": "assets/coracao.glb",
@@ -68,7 +68,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "973ff5e625ddb7978e6152c96bffdde952a5e00ccbc25713b7ed58abd8168738"
+      "sha256": "a53007ce249d5590817a01ee9ca7c7410cc2a01e7279a64eaea4d63e06b28f79"
     },
     {
       "path": "pleura/estados.js",
@@ -84,7 +84,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "31324524171b13017e78f07fff9466e411002df01996d8e977eeba8a51ddac84"
+      "sha256": "68003d80b0582763a1c5ebc4e24ebc604903e8ae8ecf4d5426d62242daccac97"
     },
     {
       "path": "pleura/modelos.js",
@@ -377,6 +377,14 @@
     {
       "path": "pleura/vasos-foco.js",
       "sha256": "1a46b4da67b723619082bd1be2f3cbd8a6e5972e0d38f3611a88124bdc990925"
+    },
+    {
+      "path": "assets/pleura-simulacao-aprovada.glb",
+      "sha256": "c126a8dec4ae0d80d9360593f5f8d4347cf28ceeb17fab678d2260358d62c267"
+    },
+    {
+      "path": "pleura/modelo-aprovado.html",
+      "sha256": "211851759d7af95bdd8e4a90cd1f0d5a7cddb1638482310395247b953daeca5f"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",

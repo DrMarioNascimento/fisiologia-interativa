@@ -454,14 +454,15 @@ let arUrl = null, prepId = 0, temporizador = null;
 let modoRA = 'simulacao';
 const URL_TORAX_COMPLETO = new URL('../assets/torax-completo-lobos-corrigidos.glb?v=20261008-vasos', import.meta.url).href;
 const URL_CORACAO_VASOS = new URL('../assets/coracao-e-vasos-foco.glb?v=20261008-foco', import.meta.url).href;
+const URL_APROVADO = new URL('../assets/pleura-simulacao-aprovada.glb?v=20261009', import.meta.url).href;
 function prepararRA() {
   const id = ++prepId;
   clearTimeout(temporizador);
   const viewer = $('arViewer');
   viewer.classList.toggle('ra-foco-vasos', modoRA === 'vasos');
   temporizador = setTimeout(async () => {
-    if (modoRA === 'completo' || modoRA === 'vasos') {
-      const modelo = modoRA === 'vasos' ? URL_CORACAO_VASOS : URL_TORAX_COMPLETO;
+    if (modoRA === 'completo' || modoRA === 'vasos' || modoRA === 'aprovado') {
+      const modelo = modoRA === 'aprovado' ? URL_APROVADO : modoRA === 'vasos' ? URL_CORACAO_VASOS : URL_TORAX_COMPLETO;
       if (viewer.getAttribute('src') === modelo) return;
       $('launchAR').disabled = true;
       $('raStatus').textContent = modoRA === 'vasos'
@@ -523,7 +524,7 @@ $('arViewer').addEventListener('load', () => {
 $('arViewer').addEventListener('error', () => { $('launchAR').disabled = true; $('raStatus').textContent = 'O modelo não carregou no visualizador de RA.'; });
 $('raModelo').addEventListener('change', () => {
   modoRA = $('raModelo').value;
-  $('raNotaModelo').textContent = modoRA === 'vasos'
+  $('raNotaModelo').textContent = modoRA === 'aprovado' ? 'Modelo aprovado: ombros anatômicos, bordas pulmonares revisadas e acabamento das fissuras. É um instante estático de repouso e não reproduz o ciclo respiratório.' : modoRA === 'vasos'
     ? 'Visualização ampliada do coração, aorta, veias cavas, tronco e ramos pulmonares, veias pulmonares e vasos coronários. Gire para examinar as faces. As terminações pulmonares indicam os hilos de forma esquemática; as dimensões anatômicas originais foram preservadas.'
     : modoRA === 'completo'
       ? 'Tórax completo com pulmões, caixa torácica, diafragma e coração em posição anatômica, com vasos pulmonares e coronários esquemáticos. Modelo estático: não reproduz ciclo respiratório, pneumotórax ou os demais estados da bancada.'
@@ -543,7 +544,7 @@ $('launchAR').addEventListener('click', () => {
 ajustar();
 const busca = new URLSearchParams(location.search);
 const modeloPedido = busca.get('modelo');
-if (['completo', 'vasos'].includes(modeloPedido)) {
+if (['completo', 'vasos', 'aprovado'].includes(modeloPedido)) {
   $('raModelo').value = modeloPedido;
   $('raModelo').dispatchEvent(new Event('change'));
 }
