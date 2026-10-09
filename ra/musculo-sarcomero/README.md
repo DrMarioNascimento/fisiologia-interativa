@@ -26,13 +26,13 @@ A banda A mantém 1,6 µm; banda I e zona H variam com o comprimento, conforme a
 
 Modelos e texturas são procedurais, criados no código do projeto. Não foi acrescentado um modelo anatômico de terceiros. A autoria e a licença principal permanecem em [LICENSE.md](../../LICENSE.md); Three.js e model-viewer conservam suas licenças próprias.
 
-## RA com botões no iPhone (teste, revisão de 05/10/2026)
+## RA com botões no iPhone (revisão de 05/10/2026; botão único em 09/10/2026)
 
-- No nível 05, no iPhone, aparece um segundo botão: "Abrir com botões Contrair e Relaxar (teste)". O botão de RA de antes continua igual.
+- No nível 05, no iPhone, o próprio botão "Abrir em realidade aumentada" abre a peça com as placas Contrair e Relaxar. O segundo botão de teste saiu em 09/10/2026. Nos outros níveis e no Android, o botão abre a peça de sempre.
 - A peça abre no comprimento escolhido no controle. À frente dela, no chão, há duas placas: Relaxar (2,4 µm) e Contrair (1,9 µm). Tocar numa placa desliza os discos Z, com as actinas, e estica ou encurta a titina até aquele comprimento, em 1,2 s.
 - As poses de cada estado saem de `aplicarComprimento`, a mesma função da tela. O módulo `../ra-botoes-ios.js` só as empacota: escreve o USDZ com o exportador do three e acrescenta os comportamentos da Apple (`Preliminary_Behavior`: toque na placa → ações `Transform` até alvos com a pose de cada estado), refazendo o arquivo com os dados alinhados a 64 bytes.
-- Testado no iPhone do professor: os toques nas placas movem a peça. Depois de ampliar com a pinça, a peça passava a cobrir as placas e os toques paravam de funcionar; por isso, neste modo, a escala fica travada (tamanho real, sem pinça) e as placas são maiores (16 × 6,5 cm) e ficam 10 cm à frente da peça. O botão de RA comum continua com a pinça.
+- Testado no iPhone do professor: os toques nas placas movem a peça. Depois de ampliar com a pinça, a peça passava a cobrir as placas e os toques paravam de funcionar; por isso, neste modo, a escala fica travada (tamanho real, sem pinça) e as placas são maiores (16 × 6,5 cm) e ficam 10 cm à frente da peça. Nos outros níveis a RA continua com a pinça.
 - Conferido na biblioteca USD da Pixar: 2 comportamentos, 102 relações, nenhuma quebrada; cena de 0,90 m apoiada no chão. A abertura no Quick Look precisa ser confirmada num iPhone.
-- Para conferir no computador: `?botoesios` mostra o botão fora do iPhone; `pacoteBotoesIOS()` no console devolve tamanho, tempo e alinhamento.
+- Para conferir no computador: `?botoesios` faz o botão abrir a versão com placas também fora do iPhone; `pacoteBotoesIOS()` no console devolve tamanho, tempo e alinhamento.
 - Correção de 09/10/2026: no iPhone, tocar em Contrair ou Relaxar separava as peças em vez de deslizar os filamentos. Os alvos de cada estado ficavam ao lado de cada parte, com a pose local (discos Z a ±1,2, sem a escala de 0,37 da peça), e o Quick Look os lia na escala da cena: os discos iam para longe, maiores, e as titinas para o centro. Agora os alvos ficam no topo da cena, com a pose já multiplicada pelos pais. Conferido no USDA gerado: em repouso cada alvo coincide com a parte; na contração os discos Z vão de ±0,442 m a ±0,350 m (proporção 1,9/2,4) e as titinas encurtam presas à banda A. Falta confirmar no iPhone.
 - Exportações mais leves e rápidas: o clone para a RA deixou de copiar os dados internos das peças (`userData`), que eram convertidos em imagem a cada exportação (cerca de 3,6 s) e iam para o arquivo sem uso. Nível 05: 5,9 → 4,1 MB; nível 04: 1,6 → 1,1 MB.

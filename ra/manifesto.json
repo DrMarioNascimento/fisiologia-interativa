@@ -220,11 +220,11 @@
     },
     {
       "path": "musculo-sarcomero/app.js",
-      "sha256": "df99cec4d54d1c35eb358e3f5ae13010fc4e0ac23f798fdead4b0e6f1d053fc2"
+      "sha256": "693e047f4692df910235e2320e56f2ba2a30bae77f5198ba0735826b14c71fab"
     },
     {
       "path": "musculo-sarcomero/index.html",
-      "sha256": "08d213d4a18198f638f321814d30e6b6730b6a9a7c94a25553c33726e4a2d2eb"
+      "sha256": "9f063d2e9a58fe2a309ee7e08085dac6117b456778854c1a0e3f7b4bcfad5ea1"
     },
     {
       "path": "musculo-sarcomero/modelos.js",
@@ -232,7 +232,7 @@
     },
     {
       "path": "musculo-sarcomero/README.md",
-      "sha256": "a7447de0751725f3248a9c132b38b9140a10a85d8c04165dc02dba23be8d647a"
+      "sha256": "342b1c916ddb4b24bfd620926a08e4faa3f489f451221860399c354e3d106c16"
     },
     {
       "path": "musculo-sarcomero/style.css",

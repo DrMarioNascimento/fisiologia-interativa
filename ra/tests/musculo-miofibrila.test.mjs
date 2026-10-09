@@ -35,12 +35,13 @@ test('músculo: miofibrila e sarcômero vão à RA na escala do repouso', () => 
   assert.match(app, /TAM_REAL\[atual\] \/ \(LADO_REPOUSO\[atual\] \|\| lado\)/);
 });
 
-test('músculo: RA com botões no iPhone (teste) — só no nível 05, poses da função aprovada', () => {
+test('músculo: RA com botões no iPhone — botão único, só no nível 05, poses da função aprovada', () => {
   const html = fs.readFileSync(new URL('../musculo-sarcomero/index.html', import.meta.url), 'utf8');
   const mod = fs.readFileSync(new URL('../ra-botoes-ios.js', import.meta.url), 'utf8');
-  assert.match(html, /<button id="raBotoes"[^>]*hidden/);
+  assert.doesNotMatch(html, /id="raBotoes"/);                                       // o botão de teste saiu
   assert.match(html, /<button id="launchAR"/);                                      // o botão atual continua
-  assert.match(app, /\$\('raBotoes'\)\.hidden = !\(pode && atual === 4\);/);
+  assert.match(app, /const usaBotoes = \(\) => atual === 4 && \(ehQuickLook/);
+  assert.match(app, /if \(usaBotoes\(\) && botoesProntos && ancoraAR\.href\) \{ ancoraAR\.click\(\); return; \}/);
   assert.match(app, /const ESTADOS_BOTOES = \[\{ rotulo: 'Relaxar', L: 2\.4 \}, \{ rotulo: 'Contrair', L: 1\.9 \}\];/);
   assert.match(app, /aplicarComprimento\(sarc, e\.L\)/);
   assert.match(mod, /token info:id = "TapGesture"/);

@@ -463,14 +463,22 @@ function prepararRA() {
   }, 350);
 }
 E.viewer.addEventListener('load', () => {
+  /* no sarcômero do iPhone o botão espera o arquivo com as placas, que é o que ele abre */
+  if (usaBotoes()) { if (!botoesProntos) { E.ar.disabled = true; E.status.textContent = 'Preparando as placas Contrair e Relaxar…'; } return; }
   if (E.viewer.canActivateAR) { E.ar.disabled = false; E.status.textContent = `Pronto. Tamanho no ambiente: ${tamNoAmbiente.toFixed(2)} m. ${COMO_ABRIR}`; }
   else { E.ar.disabled = true; E.status.textContent = 'Este navegador não abre RA. Use o Safari no iPhone/iPad ou o Chrome no Android.'; }
 });
 E.viewer.addEventListener('error', () => { E.status.textContent = 'O modelo não carregou no visualizador de RA.'; });
 /* o clique tem de chamar activateAR() sem nenhum await antes — regra do Safari */
-E.ar.addEventListener('click', () => { try { E.viewer.activateAR(); } catch (err) { console.error(err); E.status.textContent = 'A câmera não abriu. Verifique a permissão de câmera do navegador.'; } });
+E.ar.addEventListener('click', () => {
+  /* nível 05 no iPhone: o botão único abre a peça com as placas; sem await — regra do Safari */
+  if (usaBotoes() && botoesProntos && ancoraAR.href) { ancoraAR.click(); return; }
+  try { E.viewer.activateAR(); } catch (err) { console.error(err); E.status.textContent = 'A câmera não abriu. Verifique a permissão de câmera do navegador.'; } });
 
-/* ------------------------------------------------------------ RA com botões no iPhone (teste, nível 05)
+/* ------------------------------------------------------------ RA com botões no iPhone (nível 05)
+   O botão "Abrir em realidade aumentada" é o único: no nível 05, no iPhone,
+   ele abre a peça com as placas; nos outros níveis e no Android, a peça de
+   sempre. (Antes havia um segundo botão de teste ao lado.)
    O Quick Look não aceita controles da página, mas lê comportamentos de dentro
    do USDZ: na mesa aparecem duas placas, "Relaxar" (2,4 µm) e "Contrair"
    (1,9 µm). Tocar numa placa desliza os discos Z (com as actinas) e estica ou
@@ -478,16 +486,16 @@ E.ar.addEventListener('click', () => { try { E.viewer.activateAR(); } catch (err
    `aplicarComprimento`, a mesma função da tela. A peça abre no comprimento
    escolhido no controle. O botão atual de RA continua igual. */
 const ESTADOS_BOTOES = [{ rotulo: 'Relaxar', L: 2.4 }, { rotulo: 'Contrair', L: 1.9 }];
-let botoesUrl = null, botoesId = 0, botoesTimer = null, pacoteBotoes = null;
+let botoesUrl = null, botoesId = 0, botoesTimer = null, pacoteBotoes = null, botoesProntos = false;
+const usaBotoes = () => atual === 4 && (ehQuickLook || new URLSearchParams(location.search).has('botoesios'));
 const ancoraAR = document.createElement('a');
 ancoraAR.rel = 'ar'; ancoraAR.hidden = true; ancoraAR.appendChild(document.createElement('img'));
 document.body.appendChild(ancoraAR);
 function prepararBotoes() {
   clearTimeout(botoesTimer);
-  const pode = ehQuickLook || new URLSearchParams(location.search).has('botoesios');
-  $('raBotoes').hidden = !(pode && atual === 4);
-  if ($('raBotoes').hidden) return;
-  $('raBotoes').disabled = true;
+  botoesProntos = false; ancoraAR.removeAttribute('href');
+  if (!usaBotoes()) return;
+  E.ar.disabled = true; E.status.textContent = 'Preparando as placas Contrair e Relaxar…';
   botoesTimer = setTimeout(async () => {
     const id = ++botoesId, t0 = performance.now();
     try {
@@ -519,11 +527,11 @@ function prepararBotoes() {
       ancoraAR.href = botoesUrl + '#allowsContentScaling=0';
       pacoteBotoes = { bytes: usdz.byteLength, ms: +(performance.now() - t0).toFixed(0), partesMoveis: todos.length,
         estados: ESTADOS_BOTOES, comprimentoInicial: atualL, alinhado: alinhado.every(a => a.ok), arquivos: alinhado.length, usda };
-      $('raBotoes').disabled = false;
+      botoesProntos = true;
+      if (usaBotoes()) { E.ar.disabled = false; E.status.textContent = `Pronto. Tamanho no ambiente: ${TAM_REAL[4].toFixed(2)} m em repouso. ${COMO_ABRIR} Na mesa, toque nas placas Contrair e Relaxar.`; }
     } catch (err) { console.error(err); }
   }, 450);
 }
-$('raBotoes').addEventListener('click', () => { if (ancoraAR.href) ancoraAR.click(); });   // sem await: regra do Safari
 window.pacoteBotoesIOS = () => pacoteBotoes && (({ usda, ...r }) => r)(pacoteBotoes);
 window.usdaBotoesIOS = () => pacoteBotoes && pacoteBotoes.usda;
 window.urlBotoesIOS = () => botoesUrl;
