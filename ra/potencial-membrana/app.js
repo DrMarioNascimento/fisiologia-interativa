@@ -15,8 +15,13 @@
       equação de Goldman move os íons no 3D. Se os dois pudessem discordar, a
       página ensinaria duas coisas; como são o mesmo estado, ensina uma.
 
-   O nível 05 é o brinde honesto: quando a permeabilidade ao sódio dispara, a
+   O nível 06 é o brinde honesto: quando a permeabilidade ao sódio dispara, a
    película VIRA — e a inversão viaja, ponto a ponto, acendendo a vizinha.
+
+   O nível 02 (Comunicação) vem antes do mergulho: três neurônios em cadeia,
+   num modelo GLB próprio (`impulso-nervoso.glb`) com a animação do sinal. É
+   o único nível que não sai de `modelos.js` — que fica intocado — e por isso
+   entra na lista por fora, carregado de forma assíncrona.
 
    Sobre RA: o GLB do nível é exportado ANTES do clique, e o clique chama
    activateAR() de forma síncrona. O Safari do iPhone exige que o gesto do
@@ -27,6 +32,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { prepararParaRA } from './cores-para-ra.js';
 import { criar } from './modelos.js?v=celular-20261003';
 
@@ -83,10 +89,17 @@ function canvasTex(w, h, draw, { repeatX = 1, repeatY = 1 } = {}) {
   t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repeatX, repeatY);
   t.anisotropy = 8; return t;
 }
-const { modelos, aplicarPotencial, aplicarOnda, uReg } = criar(canvasTex);
+const base = criar(canvasTex);
+const { aplicarPotencial, aplicarOnda, uReg } = base;
+/* OS SEIS NÍVEIS. A Comunicação entra como 02 e empurra os outros um degrau;
+   os nomes abaixo evitam que um número solto no código aponte para o nível
+   errado depois da troca. */
+const NEU = 0, COM = 1, INT = 2, PEL = 3, TRA = 4, ONDA = 5, ULTIMO = ONDA;
+const comunicacao = new THREE.Group(); comunicacao.name = 'comunicacao';
+const modelos = [base.modelos[0], comunicacao, ...base.modelos.slice(1)];
 
-modelos.forEach((m, i) => {
-  m.visible = i === 0; root.add(m);
+function prepararNivel(m, i, visivel = i === NEU) {
+  m.visible = visivel; if (!m.parent) root.add(m);
   // Cada nível guarda sua própria opacidade durante o mergulho.
   const materiais = new Map();
   m.traverse(o => {
@@ -124,7 +137,8 @@ modelos.forEach((m, i) => {
     }
   });
   m.userData.quadro = { rh, hv };
-});
+}
+modelos.forEach((m, i) => { if (m !== comunicacao) prepararNivel(m, i); else { m.visible = false; root.add(m); } });
 
 /* ------------------------------------------------------------ a física
    Concentrações de mamífero, 37 °C. O fator 61,5 mV já traz RT/F em log10.
@@ -188,19 +202,22 @@ const LENTIDAO = 260;                    // câmera lenta: 1 s de tela ≈ 3,8 m
 /* ------------------------------------------------------------ estado e textos */
 const dados = [
   ['Escala celular', '01 · Neurônio', 'A pergunta', 'Onde está a carga?',
-   'Explore um neurônio multipolar mielinizado em três dimensões: do soma aos dendritos e ao axônio. O trecho mielinizado representa um axônio periférico, com uma célula de Schwann por internódio e seu núcleo na camada citoplasmática externa. A translucidez é um recurso didático de visualização. O potencial é uma diferença entre o interior e o exterior da membrana. Aprofunde para entrar na célula, reconhecer suas organelas e chegar à bicamada.',
+   'Explore um neurônio multipolar mielinizado em três dimensões: do soma aos dendritos e ao axônio. O trecho mielinizado representa um axônio periférico, com uma célula de Schwann por internódio e seu núcleo na camada citoplasmática externa. A translucidez é um recurso didático de visualização. O potencial é uma diferença entre o interior e o exterior da membrana. Avance para ver como os neurônios se comunicam; depois, aprofunde para entrar na célula, reconhecer suas organelas e chegar à bicamada.',
    'soma,dendritos,espinhas dendríticas,cone de implantação,axônio,mielina,células de Schwann'],
-  ['Escala celular · em corte', '02 · Interior', 'O volume', 'O citoplasma é neutro',
+  ['Escala de circuito', '02 · Comunicação', 'A mensagem', 'Como um neurônio fala com o outro',
+   'Três neurônios em cadeia. Nos dendritos e no corpo celular, as entradas chegam como potenciais graduados e se somam; quando o cone de implantação atinge o limiar, nasce o potencial de ação, que percorre o axônio e, sob a mielina, salta de um nódulo de Ranvier ao seguinte. No terminal, a sinapse química converte o sinal elétrico em químico: o neurotransmissor cruza a fenda e gera um potencial no dendrito do neurônio seguinte. A esfera luminosa marca onde está o sinal, em câmera lenta. Aprofunde para entrar no corpo do neurônio central.',
+   'dendritos,corpo celular,cone de implantação,axônio,mielina,nódulo de Ranvier,sinapse,neurotransmissor'],
+  ['Escala celular · em corte', '03 · Interior', 'O volume', 'O citoplasma é neutro',
    'Explore núcleo, mitocôndrias, retículos e Golgi dentro da célula em corte. Organelas, lipídios na borda e cargas são representações ampliadas para exploração; suas quantidades e tamanhos são esquemáticos. A separação de cargas ocorre junto à membrana, enquanto o volume permanece praticamente neutro. No próximo nível, as réguas mostram bicamada e película em proporção.',
    'citoplasma,K⁺,Na⁺,Cl⁻,ânions orgânicos,eletroneutralidade'],
-  ['Escala nanométrica', '03 · Película', 'A separação', 'Uma pele colada na membrana',
+  ['Escala nanométrica', '04 · Película', 'A separação', 'Uma pele colada na membrana',
    'Aqui o desenho está em proporção, e por isso leva régua: a bicamada mede 5 nm de superfície a superfície, e a película cabe dentro de cerca de 1 nm de cada face. Numa célula de 50 µm isso é uma casca cinquenta mil vezes mais fina que o corpo — e envolve menos de um milésimo de por cento dos íons. Mexa na permeabilidade e veja a película encher, esvaziar e inverter.',
    'bicamada · 5 nm,película · 1 nm,cabeças polares,caudas,duas faces em oposição'],
-  ['Escala molecular', '04 · Travessias', 'Quatro maneiras de atravessar', 'Bicamada, canal, transportador e bomba',
+  ['Escala molecular', '05 · Travessias', 'Quatro maneiras de atravessar', 'Bicamada, canal, transportador e bomba',
    '1 · Difusão simples: neste exemplo, O₂ entra e CO₂ sai pelo próprio lipídio, sem proteína de transporte. 2 · Canal: poro aquoso seletivo; o de vazamento permanece aberto, e a abertura do canal de Na⁺ é representada pelo controle de permeabilidade. 3 · Difusão facilitada: o transportador liga a glicose e alterna o acesso entre as faces, uma comporta de cada vez. 4 · Transporte ativo: a bomba Na⁺/K⁺ usa ATP para levar três Na⁺ para fora e dois K⁺ para dentro, contra seus gradientes. Os três mecanismos passivos não consomem ATP diretamente; nos canais, o sentido depende do gradiente eletroquímico. As proteínas e partículas são representações didáticas ampliadas.',
    'difusão simples,canal iônico,difusão facilitada,transporte ativo,ATP'],
-  ['Escala do axônio', '05 · A onda', 'A película que vira', 'Potencial de ação',
-   'Aqui usamos outro exemplo: um axônio amielínico, diferente do neurônio mielinizado do nível 01. Ele está aberto ao meio para que as duas faces apareçam ao mesmo tempo. Onde o sódio entra a película inverte: por um instante o lado de dentro fica positivo, e as duas fileiras de sinais trocam de lugar. A inversão não anda sozinha — ela acende a vizinha, e é essa sequência que viaja. Atrás dela a membrana repolariza e passa um momento ainda mais negativa que o repouso.',
+  ['Escala do axônio', '06 · A onda', 'A película que vira', 'Potencial de ação',
+   'Aqui usamos outro exemplo: um axônio amielínico, diferente dos neurônios mielinizados dos níveis 01 e 02. Ele está aberto ao meio para que as duas faces apareçam ao mesmo tempo. Onde o sódio entra a película inverte: por um instante o lado de dentro fica positivo, e as duas fileiras de sinais trocam de lugar. A inversão não anda sozinha — ela acende a vizinha, e é essa sequência que viaja. Atrás dela a membrana repolariza e passa um momento ainda mais negativa que o repouso.',
    'axoplasma,película interna,película externa,inversão,repolarização'],
 ];
 const E = {
@@ -211,6 +228,7 @@ const E = {
   gBox: $('goldmanBox'), alfa: $('alfa'), ko: $('ko'), diam: $('diam'),
   gVal: $('goldmanValor'), gConta: $('goldmanConta'), gCanvas: $('curvaGoldman'),
   dBox: $('disparoBox'), dCanvas: $('curvaDisparo'), dVal: $('disparoValor'), inst: $('instante'),
+  cBox: $('comunicacaoBox'), cVal: $('comunicacaoValor'), cInst: $('comInstante'),
 };
 
 let atual = 0, transicao = null, girar = false, tempo = 0;
@@ -219,12 +237,12 @@ let mostrarCargas = true;
 const btnCargas=$('cargas');
 btnCargas.onclick=()=>{
   mostrarCargas=!mostrarCargas;
-  modelos.slice(1,4).forEach(m=>m.traverse(o=>{if(o.userData.nuvem)o.visible=mostrarCargas;}));
+  modelos.slice(INT,TRA+1).forEach(m=>m.traverse(o=>{if(o.userData.nuvem)o.visible=mostrarCargas;}));
   btnCargas.classList.toggle('on',mostrarCargas);
   btnCargas.setAttribute('aria-pressed',String(mostrarCargas));
   E.labels.replaceChildren();prepararRA();
 };
-const btnOrganelas=$('organelas'), grupoOrganelas=modelos[1].getObjectByName('organelas');
+const btnOrganelas=$('organelas'), grupoOrganelas=modelos[INT].getObjectByName('organelas');
 btnOrganelas.onclick=()=>{
   mostrarOrganelas=!mostrarOrganelas;grupoOrganelas.visible=mostrarOrganelas;
   btnOrganelas.classList.toggle('on',mostrarOrganelas);
@@ -235,7 +253,7 @@ let alfa = .03, Ko = 4, diam = 50, Em = goldman(alfa, Ko);
 let disparo = { t: -1, tocando: false };
 
 function resetCam() {
-  root.rotation.set(0,0,atual===0&&camera.aspect<1?-.58:0);
+  root.rotation.set(0,0,(atual===NEU||atual===COM)&&camera.aspect<1?-.58:0);
   const q = modelos[atual].userData.quadro || { rh: 3, hv: 1 };
   const fovV = camera.fov * Math.PI / 180;
   const fovH = 2 * Math.atan(Math.tan(fovV / 2) * camera.aspect);
@@ -254,7 +272,7 @@ function resetCam() {
      escondida sob a de cima e metade da lição some, então ali a câmera desce
      quase à linha do horizonte. No neurônio, na célula em corte e no axônio
      ela sobe, porque lá o que conta é a forma inteira. */
-  const ELEV = [.19, .21, .048, .052, .44];
+  const ELEV = [.19, .30, .21, .048, .052, .44];
   if(!girar) {
     // Enquadra a peça real e seu centro; no telefone o neurônio fica na diagonal.
     root.updateWorldMatrix(true,true);
@@ -288,21 +306,22 @@ function aplicarTextos(n) {
   E.scale.textContent = d[0]; E.step.textContent = d[1];
   E.eye.textContent = d[2]; E.title.textContent = d[3]; E.text.textContent = d[4];
   E.tags.innerHTML = d[5].split(',').map(x => `<span>${x}</span>`).join('');
-  E.prev.disabled = n === 0; E.next.disabled = n === 4;
-  /* o rótulo do botão diz a verdade do que vai acontecer: de 04 para 05 não
-     há mergulho — a câmera SOBE de escala, e prometer "aprofundar" ali seria
-     mentira de interface */
-  E.next.textContent = n === 4 ? 'A onda ✓' : n === 3 ? 'Ver o axônio →' : 'Aprofundar →';
+  E.prev.disabled = n === NEU; E.next.disabled = n === ULTIMO;
+  /* o rótulo do botão diz a verdade do que vai acontecer: de 05 para 06 e de
+     01 para 02 não há mergulho — a câmera SOBE de escala, e prometer
+     "aprofundar" ali seria mentira de interface */
+  E.next.textContent = n === ONDA ? 'A onda ✓' : n === TRA ? 'Ver o axônio →' : n === NEU ? 'Ver a comunicação →' : 'Aprofundar →';
   document.querySelectorAll('.step').forEach((b, i) => b.classList.toggle('active', i === n));
-  E.gBox.hidden = n === 4; E.dBox.hidden = n !== 4;
+  E.gBox.hidden = n === ONDA || n === COM; E.dBox.hidden = n !== ONDA; E.cBox.hidden = n !== COM;
   E.labels.innerHTML = '';
-  btnOrganelas.disabled=n!==1;
-  btnCargas.disabled=n<1||n>3;
-  if (n !== 4) E.em.textContent = `Em ${Em >= 0 ? '+' : ''}${Em.toFixed(0)} mV`;
-  if (n === 4) { disparo = { t: 0, tocando: true }; textosDisparo(); }
+  btnOrganelas.disabled=n!==INT;
+  btnCargas.disabled=n<INT||n>TRA;
+  if (n !== ONDA && n !== COM) E.em.textContent = `Em ${Em >= 0 ? '+' : ''}${Em.toFixed(0)} mV`;
+  if (n === ONDA) { disparo = { t: 0, tocando: true }; textosDisparo(); }
+  if (n === COM) { sinal.t = 0; sinal.tocando = true; $('comPausar').textContent = 'Pausar'; textosComunicacao(); }
 }
 function setStep(n, viaMergulho = false) {
-  n = Math.max(0, Math.min(4, n)); if (n === atual) return;
+  n = Math.max(NEU, Math.min(ULTIMO, n)); if (n === atual) return;
   if(transicao) {
     restaurar(transicao.velho); transicao.velho.visible=false;
     transicao.velho.scale.setScalar(1);transicao.velho.position.set(0,0,0);
@@ -311,8 +330,9 @@ function setStep(n, viaMergulho = false) {
   }
   root.rotation.set(0,0,0);
   const velho = modelos[atual], novo = modelos[n];
-  /* mergulho só na descida de escala, e só de um degrau */
-  const mergulho = viaMergulho && n === atual + 1 && n <= 3;
+  /* mergulho só na descida de escala, e só de um degrau: da Comunicação para
+     o Interior (entra no corpo do neurônio central) até as Travessias */
+  const mergulho = viaMergulho && n === atual + 1 && n >= INT && n <= TRA;
   novo.visible = true; novo.scale.setScalar(mergulho ? .18 : .7);
   if (mergulho) novo.position.copy(velho.userData.foco || V()); else novo.position.set(0, 0, 0);
   const cameraDe=camera.position.clone(),alvoDe=controls.target.clone();
@@ -328,10 +348,10 @@ function setStep(n, viaMergulho = false) {
   aplicarTextos(n); prepararRA();
 }
 /* Abrir direto num nível, sem transição: serve à aula que já sabe onde quer
-   parar (…/potencial-membrana/?nivel=3) e serve à conferência do desenho,
+   parar (…/potencial-membrana/?nivel=4) e serve à conferência do desenho,
    que precisa do quadro parado. */
 function irDireto(n) {
-  n = Math.max(0, Math.min(4, n));
+  n = Math.max(NEU, Math.min(ULTIMO, n));
   modelos.forEach((m, i) => { m.visible = i === n; m.scale.setScalar(1); m.position.set(0, 0, 0); });
   atual = n; transicao = null; aplicarTextos(n); resetCam(); prepararRA();
 }
@@ -501,7 +521,7 @@ function textosDisparo() {
       confere aqui — e foi exatamente assim que esta bancada pareceu, por
       meia hora, ter uma onda quebrada que nunca existiu. Vale a regra do
       repositório: todo estado que só se chega andando precisa de um jeito de
-      se chegar parado. `?nivel=5&ms=1.9` abre no instante pedido.
+      se chegar parado. `?nivel=6&ms=1.9` abre no instante pedido.
 
    Por isso o cursor força a repintura E o desenho na hora, sem esperar
    quadro nenhum. */
@@ -539,14 +559,75 @@ E.inst.addEventListener('input', e => {
 });
 $('lento').addEventListener('input', textosDisparo);
 
+/* ------------------------------------------------------------ comunicação (nível 02)
+   O modelo vem pronto, com a própria animação: uma esfera luminosa percorre
+   três neurônios em 7,9 s. O tempo da tela é câmera lenta — o trajeto real
+   leva poucos milissegundos — e o cartão diz isso. As fases abaixo seguem os
+   quadros-chave do arquivo; o texto de cada uma é a fisiologia do trecho. */
+const URL_COMUNICACAO = new URL('impulso-nervoso.glb', import.meta.url).href;
+const ESCALA_COM = 8;                 // o arquivo está em metros (0,8 m); a cena trabalha em ~6 unidades
+const sinal = { t: 0, tocando: false, dur: 7.9, mixer: null, acao: null };
+const FASES = [
+  [0, .7, '1º neurônio · dendritos e corpo', 'as entradas chegam como potenciais graduados e se somam no corpo celular'],
+  [.7, 2.1, '1º neurônio · axônio', 'no cone de implantação nasce o potencial de ação; sob a mielina ele salta de nódulo em nódulo'],
+  [2.1, 2.9, 'sinapse 1', 'o terminal libera neurotransmissor; a fenda é cruzada por difusão química, com atraso sináptico de cerca de 0,5 ms'],
+  [2.9, 3.6, '2º neurônio · dendritos e corpo', 'o neurotransmissor gera um potencial pós-sináptico, que se soma a outras entradas'],
+  [3.6, 5.0, '2º neurônio · axônio', 'atingido o limiar, um novo potencial de ação percorre o axônio'],
+  [5.0, 5.8, 'sinapse 2', 'de novo a passagem química: o sinal elétrico não atravessa a fenda'],
+  [5.8, 6.5, '3º neurônio · dendritos e corpo', 'as entradas se somam no corpo do terceiro neurônio'],
+  [6.5, 7.91, '3º neurônio · axônio', 'o potencial de ação segue pelo axônio rumo ao próximo alvo'],
+];
+function textosComunicacao() {
+  const f = FASES.find(([a, b]) => sinal.t >= a && sinal.t < b) || FASES[FASES.length - 1];
+  E.cVal.innerHTML = `<b>${f[2]}:</b> ${f[3]}.`;
+  if (atual === COM) E.em.textContent = 'Sinal em câmera lenta';
+}
+function irAoInstanteSinal(s, tocar = sinal.tocando) {
+  sinal.t = clamp(s, 0, sinal.dur); sinal.tocando = tocar;
+  E.cInst.value = sinal.t;
+  if (sinal.mixer) sinal.mixer.setTime(sinal.t);
+  textosComunicacao();
+  $('comPausar').textContent = tocar ? 'Pausar' : 'Seguir';
+  renderer.render(scene, camera);
+}
+$('comDisparar').onclick = () => irAoInstanteSinal(0, true);
+$('comPausar').onclick = () => irAoInstanteSinal(sinal.t, !sinal.tocando);
+E.cInst.addEventListener('input', e => irAoInstanteSinal(parseFloat(e.currentTarget.value), false));
+new GLTFLoader().load(URL_COMUNICACAO, gltf => {
+  const peca = gltf.scene;
+  /* centrada na origem e na escala da cena: é em torno da origem que a peça gira */
+  peca.scale.setScalar(ESCALA_COM); peca.updateMatrixWorld(true);
+  const caixa = new THREE.Box3().setFromObject(peca), centro = caixa.getCenter(V());
+  peca.position.sub(centro);
+  comunicacao.add(peca); comunicacao.updateMatrixWorld(true);
+  const local = nome => { const o = peca.getObjectByName(nome); if (!o) return V();
+    const p = o.isMesh ? new THREE.Box3().setFromObject(o).getCenter(V()) : o.getWorldPosition(V());
+    return comunicacao.worldToLocal(p); };
+  comunicacao.userData.ancoras = [['corpo celular', local('etiqueta_corpo')], ['dendritos', local('etiqueta_dendrito')],
+    ['bainha de mielina', local('etiqueta_mielina')], ['axônio', local('etiqueta_axon')], ['sinapse', local('sinapse_1')]];
+  /* mergulho para o Interior: entra no corpo do neurônio central */
+  comunicacao.userData.foco = local('mid_corpo_celular');
+  const noSinal = peca.getObjectByName('sinal');
+  noSinal.userData.foraDoQuadro = true;   // a esfera anda: não entra na medida do enquadramento
+  comunicacao.userData.posSinal = () => comunicacao.worldToLocal(noSinal.getWorldPosition(V()));
+  sinal.mixer = new THREE.AnimationMixer(peca);
+  const clip = gltf.animations.find(a => a.name === 'impulso') || gltf.animations[0];
+  if (clip) { sinal.dur = clip.duration; sinal.acao = sinal.mixer.clipAction(clip); sinal.acao.play(); }
+  E.cInst.max = sinal.dur.toFixed(2);
+  prepararNivel(comunicacao, COM, atual === COM);
+  sinal.mixer.setTime(sinal.t);
+  if (atual === COM) { comunicacao.visible = true; resetCam(); prepararRA(); }
+}, undefined, err => { console.error(err); if (atual === COM) E.status.textContent = 'O modelo da comunicação não carregou.'; });
+
 /* ------------------------------------------------------------ rótulos ancorados */
 const ancoras = {
-  0: () => modelos[0].userData.ancoras,
-  1: () => [['citoplasma', V(.32, .68, .38)], ['núcleo', V(-.42, .18, .25)],
+  [NEU]: () => modelos[NEU].userData.ancoras,
+  [COM]: () => comunicacao.userData.ancoras ? [...comunicacao.userData.ancoras, ['sinal', comunicacao.userData.posSinal()]] : [],
+  [INT]: () => [['citoplasma', V(.32, .68, .38)], ['núcleo', V(-.42, .18, .25)],
     ['membrana em corte', V(1.30, -.95, 1.30)], ['película interna', V(1.31, .18, 1.14)],
     ['película externa', V(1.55, -.72, 1.29)],
-    ...(mostrarOrganelas?modelos[1].userData.ancorasOrganelas:[])],
-  2: () => [['bicamada · 5 nm', V(-3.12, 0, .35)], ['película · 1 nm', V(-3.12, .56, -.35)],
+    ...(mostrarOrganelas?modelos[INT].userData.ancorasOrganelas:[])],
+  [PEL]: () => [['bicamada · 5 nm', V(-3.12, 0, .35)], ['película · 1 nm', V(-3.12, .56, -.35)],
     ['cabeças polares', V(-2.10, .48, .55)], ['caudas hidrofóbicas', V(-2.10, .02, .55)],
     ['película interna', V(1.20, .55, .55)], ['película externa', V(1.20, -.55, .55)],
     ['volume neutro', V(-.30, 1.55, .45)]],
@@ -554,14 +635,14 @@ const ancoras = {
      de texto por cima justamente das peças que se quer comparar. O número
      amarra cada um à ordem do cartão ao lado, que é onde o nome inteiro cabe
      sem tapar nada. */
-  3: () => [['1 · sem proteína', V(-2.52, 1.55, -.42)], ['O₂ entra · CO₂ sai', V(-2.52, -1.35, -.42)],
+  [TRA]: () => [['1 · sem proteína', V(-2.52, 1.55, -.42)], ['O₂ entra · CO₂ sai', V(-2.52, -1.35, -.42)],
     ['2 · canal de K⁺', V(-1.24, 1.45, .34)], ['filtro', V(-1.24, .24, .58)],
     ['2 · canal de Na⁺ (voltagem)', V(.04, -1.50, -.40)],
     ['3 · transportador', V(1.34, 1.62, .36)], ['glicose', V(1.34, -1.38, .36)],
     ['4 · bomba', V(2.62, 1.85, -.30)], ['ATP', V(3.02, 1.38, -.10)]],
-  4: () => [['axoplasma', V(-.30, -.08, .28)],
+  [ONDA]: () => [['axoplasma', V(-.30, -.08, .28)],
     ['película interna · sinais', V(-1.55, -.62, -.30)], ['película externa · sinais', V(1.45, .74, .52)],
-    ['ponto de registro', modelos[4].userData.pontoRegistro.clone().add(V(.10, -.22, .16))]],
+    ['ponto de registro', modelos[ONDA].userData.pontoRegistro.clone().add(V(.10, -.22, .16))]],
 };
 let mostrarRotulos = true;
 E.rot.onclick = () => { mostrarRotulos = !mostrarRotulos; E.rot.classList.toggle('on', mostrarRotulos); E.labels.innerHTML = ''; };
@@ -570,10 +651,11 @@ function atualizarRotulos() {
   const lista=ancoras[atual](), w=stage.clientWidth,h=stage.clientHeight;
   // No telefone, priorizar as estruturas principais.
   const visiveis=lista.map(([t,p],i)=>({t,p,i})).filter(q=>
-    (mostrarCargas||atual===0||atual===4||!['película interna','película externa','volume neutro','película · 1 nm'].includes(q.t))
-    &&(mostrarOrganelas||atual!==1||q.t!=='núcleo')
-    &&(w>=520||atual!==0||![2,4].includes(q.i)));
-  if(E.labels.querySelectorAll('.lbl').length!==visiveis.length) {
+    (mostrarCargas||atual===NEU||atual===COM||atual===ONDA||!['película interna','película externa','volume neutro','película · 1 nm'].includes(q.t))
+    &&(mostrarOrganelas||atual!==INT||q.t!=='núcleo')
+    &&(w>=520||atual!==NEU||![2,4].includes(q.i))
+    &&(w>=520||atual!==COM||!['bainha de mielina','dendritos'].includes(q.t)));
+  if(!E.labels.querySelector('svg')||E.labels.querySelectorAll('.lbl').length!==visiveis.length) {
     E.labels.innerHTML='<svg class="label-lines" aria-hidden="true"></svg>'+visiveis.map(q=>'<span class="lbl">'+q.t+'</span>').join('');
   }
   const svg=E.labels.querySelector('svg'),els=E.labels.querySelectorAll('.lbl');
@@ -582,7 +664,7 @@ function atualizarRotulos() {
     const v=q.p.clone().applyMatrix4(modelos[atual].matrixWorld).project(camera);
     q.x=(v.x*.5+.5)*w;q.y=(-v.y*.5+.5)*h;q.el=els[i];q.v=v;
     // Balance the cell labels so the right edge cannot become a text wall.
-    const lado=atual===1&&['núcleo','retículo rugoso · Nissl','complexo de Golgi','membrana em corte'].includes(q.t)?0:q.x<w*.5?0:1;
+    const lado=atual===INT&&['núcleo','retículo rugoso · Nissl','complexo de Golgi','membrana em corte'].includes(q.t)?0:q.x<w*.5?0:1;
     lados[lado].push(q);
   });
   let linhas='';
@@ -660,8 +742,16 @@ const clock = new THREE.Clock();
     }
   }
   /* a coreografia das portas anda com a MESMA permeabilidade da equação */
-  if (atual === 3) modelos[3].userData.animar(tempo, { abertura: clamp((Math.log10(alfa) + 1.2) / 1.9, 0, 1) });
-  if (atual === 4) {
+  if (atual === TRA) modelos[TRA].userData.animar(tempo, { abertura: clamp((Math.log10(alfa) + 1.2) / 1.9, 0, 1) });
+  if (atual === COM && sinal.acao) {
+    if (sinal.tocando) {
+      sinal.t += dt * parseFloat($('comVelocidade').value);
+      if (sinal.t > sinal.dur) sinal.t = 0;
+      E.cInst.value = sinal.t;
+    }
+    sinal.mixer.setTime(sinal.t); textosComunicacao();
+  }
+  if (atual === ONDA) {
     if (disparo.tocando) {
       disparo.t += dt * 1000 / (LENTO * multLento());
       if (disparo.t > janelaMs()) disparo.t = 0;
@@ -676,7 +766,7 @@ const clock = new THREE.Clock();
 })();
 
 /* ------------------------------------------------------------ RA */
-const TAM_REAL = [.62, .56, .52, .60, 1.05]; // metros, maior dimensão no ambiente
+const TAM_REAL = [.62, .80, .56, .52, .60, 1.05]; // metros, maior dimensão no ambiente
 /* O QUE O IPHONE FAZ HOJE, e por que a página precisa dizer.
    O Quick Look abre no modo Objeto: o modelo aparece parado sobre fundo claro,
    e a câmera só entra depois de um toque em "AR", no alto da folha. O iOS
@@ -696,6 +786,14 @@ function prepararRA() {
   timer = setTimeout(async () => {
     E.ar.disabled = true; E.status.textContent = 'Preparando o modelo para a câmera…';
     try {
+      /* COMUNICAÇÃO VAI AO AMBIENTE PELO ARQUIVO ORIGINAL: ele traz a animação
+         do sinal, que o Android (Scene Viewer) toca sozinho; o iPhone recebe a
+         peça parada. Os outros níveis seguem pela exportação do estado. */
+      if (atual === COM) {
+        if (id !== prepId) return;
+        if (arUrl) { URL.revokeObjectURL(arUrl); arUrl = null; }
+        E.viewer.src = URL_COMUNICACAO; return;
+      }
       const clone = modelos[atual].clone(true);
       clone.visible = true; clone.position.set(0, 0, 0); clone.scale.setScalar(1); clone.rotation.set(0, 0, 0);
       const box = new THREE.Box3().setFromObject(clone), tam = box.getSize(V());
@@ -739,6 +837,8 @@ onGoldman();
 ajustarJanela(); textosDisparo(); desenharDisparo(); aplicarOnda(vmDe);
 const busca = new URLSearchParams(location.search);
 const pedido = parseInt(busca.get('nivel'), 10);
-if (Number.isFinite(pedido) && pedido >= 1 && pedido <= 5) irDireto(pedido - 1); else { resetCam(); prepararRA(); }
+if (Number.isFinite(pedido) && pedido >= 1 && pedido <= ULTIMO + 1) irDireto(pedido - 1); else { resetCam(); prepararRA(); }
+const seg = parseFloat(busca.get('t'));
+if (Number.isFinite(seg) && atual === COM) irAoInstanteSinal(seg, false);
 const ms = parseFloat(busca.get('ms'));
 if (Number.isFinite(ms)) { $('pausar').textContent = 'Seguir'; irAoInstante(ms, false); }
