@@ -384,7 +384,7 @@
     },
     {
       "path": "pleura/modelo-aprovado.html",
-      "sha256": "211851759d7af95bdd8e4a90cd1f0d5a7cddb1638482310395247b953daeca5f"
+      "sha256": "d3fd0eb88d6a1369363245de808a6a1138929dae320575ecb0ac3a84d4b29b0a"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
