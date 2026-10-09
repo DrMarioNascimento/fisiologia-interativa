@@ -48,6 +48,13 @@ test('músculo: RA com botões no iPhone (teste) — só no nível 05, poses da 
   assert.match(mod, /token type = "absolute"/);
 });
 
+test('ra-botoes-ios: alvos no topo da cena, com a pose já multiplicada pelos pais (peças não se separam)', () => {
+  const mod = fs.readFileSync(new URL('../ra-botoes-ios.js', import.meta.url), 'utf8');
+  assert.match(mod, /multiplyMatrices\(m\.parent\.matrixWorld, e\.poses\[i\]\)/);
+  assert.match(mod, /raiz\.add\(alvo\)/);
+  assert.doesNotMatch(mod, /m\.parent\.add\(alvo\)/);                              // o alvo ao lado da parte separava as peças
+});
+
 test('ra-botoes-ios: o zip é refeito com os dados de cada arquivo alinhados a 64 bytes', async () => {
   const src = fs.readFileSync(new URL('../ra-botoes-ios.js', import.meta.url), 'utf8');
   const fn = src.match(/export function alinhamento\(zip\) \{[\s\S]*?\n\}/)[0].replace('export ', '');
