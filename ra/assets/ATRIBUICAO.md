@@ -46,3 +46,7 @@ pleura-duas-camadas.glb deriva do modelo estático aprovado. Conserva todos os d
 
 SHA-256: 8e73bc726b180d8ee9eaf961f69d199c973919848ac7dc3a3974d67de232da66.
 Gerador: node ra/scripts/criar-pleuras.mjs.
+
+
+## Textura cortical do osso (2026-10-09)
+Albedo sintético criado com a ferramenta integrada de geração de imagens. Mapas de normal e rugosidade gerados numericamente. Não é fotografia de espécime. Os novos GLBs preservam os dados geométricos dos originais; apenas material osso e coordenadas de textura foram atualizados.

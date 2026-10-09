@@ -8,7 +8,7 @@
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "d64e3348f898b74fe2a4ef3d213a4a231bbeeac935850850097e443b0f43d307"
+      "sha256": "6da46be54ea480488001bea15cef84a3c1a3943b33104a3781a0d29338189eba"
     },
     {
       "path": "assets/coracao.glb",
@@ -68,7 +68,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "a53007ce249d5590817a01ee9ca7c7410cc2a01e7279a64eaea4d63e06b28f79"
+      "sha256": "78489170a36207ba5eedcecb2eb7aadbaec6bc30ab66ae142824207530874745"
     },
     {
       "path": "pleura/estados.js",
@@ -84,7 +84,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "e0d9aac9a1fbf7f6d5925eb9d37d168590e5725a1e4c5d8a7017e3acfb050655"
+      "sha256": "926217ed61e3a485d6585461ace7e51b0a585b32c4a7175db4bca9426d94a73f"
     },
     {
       "path": "pleura/modelos.js",
@@ -384,7 +384,7 @@
     },
     {
       "path": "pleura/modelo-aprovado.html",
-      "sha256": "23d080d0d82e5f55ba1f85be12984259feddff64bb7d22a8a5b6c90ca79790a2"
+      "sha256": "040a1a4620a12dea3b3fda367b7e86e979f830d13a7f98e60f78cecbf5064feb"
     },
     {
       "path": "assets/pleura-duas-camadas.glb",
@@ -392,7 +392,19 @@
     },
     {
       "path": "pleura/pleuras.html",
-      "sha256": "5ade83d498552d5d793dc88bfc60a10e5a318cd1cbf9b9c10a5c2c659c0be2fb"
+      "sha256": "be311bbf77d4dfbeb5593a88975c3b57c5de37d08baaad0c2ba9b3d4b120f563"
+    },
+    {
+      "path": "assets/pleura-osso-texturizado.glb",
+      "sha256": "b263021817ada37083bbc40b0b2743a699c96c1e0f0aec9a4c3434bcd3087d07"
+    },
+    {
+      "path": "assets/torax-osso-texturizado.glb",
+      "sha256": "6e699808fbfd5200cb9629c179f3812e6584d2da8cb9d6806a5d460f0faa6cca"
+    },
+    {
+      "path": "scripts/texturizar-osso.mjs",
+      "sha256": "9a5532b8bfddf1271e3faa92b16349590f1c517032b3319c5a60233bab728ef6"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
