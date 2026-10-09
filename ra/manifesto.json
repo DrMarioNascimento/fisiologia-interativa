@@ -3,12 +3,28 @@
   "revisao": "f290ff9f5fa619b4ac828877171674e7d66c4e1c",
   "arquivos": [
     {
+      "path": "mitocondria.js",
+      "sha256": "b2645f0830f3b4a08ffd8ec8c1fd017f586dc0ab3dbe05022f4044e2d1a8667a"
+    },
+    {
+      "path": "assets/mitocondria-aberta.glb",
+      "sha256": "16e2beb9b607e71dac8f441c2cd5e8e79d2314cc3d3cdea9f0cb88b95a343840"
+    },
+    {
+      "path": "assets/mitocondria-fechada.glb",
+      "sha256": "3695f1e364dc8e867f1beaa28cf8b24a7efb019b10b6a1766a7be76162862569"
+    },
+    {
+      "path": "scripts/gerar-mitocondria.py",
+      "sha256": "4c750a0cbc90b424f86350c23f79ceb0eff76da4d61ca4c7058fab8e29645b11"
+    },
+    {
       "path": "README.md",
       "sha256": "9c28106c8dc65f988ff49dd3c475b41926a03493c8f4f93c8035864e07e3818e"
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "6da46be54ea480488001bea15cef84a3c1a3943b33104a3781a0d29338189eba"
+      "sha256": "0c32fa82939ab29ba656b117804d85be81252e8e9036f3247af5cf6a6993888d"
     },
     {
       "path": "assets/coracao.glb",
@@ -220,11 +236,11 @@
     },
     {
       "path": "musculo-sarcomero/app.js",
-      "sha256": "f4474acf44ae67d82fb558a04417a956c473a493cbd22bd4ffbac2b328df02cf"
+      "sha256": "728735ae40f4f9b1862b426cc88060269147647b9178f24370595f0ebcdf511e"
     },
     {
       "path": "musculo-sarcomero/index.html",
-      "sha256": "2454eb224a284be648f14f4051d9a0ad2dd07d19c2ee02b6c5cbd497cf8601a3"
+      "sha256": "5dd0bd8ef0ae7ed683ad8a6d8328830e3d9f149dec28ed8a0512064086b25092"
     },
     {
       "path": "musculo-sarcomero/modelos.js",
@@ -232,7 +248,7 @@
     },
     {
       "path": "musculo-sarcomero/README.md",
-      "sha256": "342b1c916ddb4b24bfd620926a08e4faa3f489f451221860399c354e3d106c16"
+      "sha256": "6c8cd4206798703849466b6b6e6424ab3cf10714e79cb423ff77ebaa5b80fc46"
     },
     {
       "path": "musculo-sarcomero/style.css",
@@ -244,11 +260,11 @@
     },
     {
       "path": "potencial-membrana/app.js",
-      "sha256": "e7d0287c3c38699a36052616cfae4569c022e93ae12c41fd30c2c45ddc486224"
+      "sha256": "3b30369db0cde275155e1446d2df3f8c4acf0379214d837da923869b973e6a18"
     },
     {
       "path": "potencial-membrana/index.html",
-      "sha256": "e8b5646df0042849ce27852e9a1acef55abe132cd18affd052fe10ad68e57319"
+      "sha256": "d3f01e5543fbc92b161bd709599e4ab0b883365a0dddac914e833c3b7a36a1a9"
     },
     {
       "path": "potencial-membrana/modelos.js",
@@ -256,7 +272,7 @@
     },
     {
       "path": "potencial-membrana/README.md",
-      "sha256": "c80e91d15b5157cb703a3385e518a88b2ed87d80bba7ab011d516cf345ffa2fb"
+      "sha256": "c3a85abcfa32e52cb7de2466e1976f24dba3a86f6ed4e0b134daa5134dd3ce5d"
     },
     {
       "path": "potencial-membrana/style.css",
@@ -304,7 +320,7 @@
     },
     {
       "path": "juncao-neuromuscular/app.js",
-      "sha256": "488245163c34044ea36d6eaaca218714c8522ab9be551aac0331b8c319e1fefd"
+      "sha256": "99e4e338e81226478f5153aa7f9527a97e9b5261d55c19e475318c2b53bcd071"
     },
     {
       "path": "juncao-neuromuscular/fisica.js",
@@ -312,15 +328,15 @@
     },
     {
       "path": "juncao-neuromuscular/index.html",
-      "sha256": "15d53435e1b85b0f6cc8ad3614060745e3bc6fafe59f807958cca1014680c763"
+      "sha256": "15eaa64473534b50505608dc86ccf254e6bc2f307fde812d04166f79d1b5691c"
     },
     {
       "path": "juncao-neuromuscular/modelos.js",
-      "sha256": "1dfb04eb2a581d5928db3cf24abd20e29b3b9969a20fc0538d6b7473e2da2969"
+      "sha256": "437cb10e15bdf5336bb34088a958ec5a1555ae3ca44d7d40e2bd29468f432604"
     },
     {
       "path": "juncao-neuromuscular/README.md",
-      "sha256": "d7fdbea26a84c083b53aac7139ccb2c3af453d974043bcfe8f8cb23efe800012"
+      "sha256": "dea08b0fc660a8de6df3bb4c1acea84494a754a82a6e83e4b35ffd74f879cf47"
     },
     {
       "path": "juncao-neuromuscular/style.css",

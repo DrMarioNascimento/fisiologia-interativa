@@ -45,3 +45,7 @@ Os quatro Tutores compartilham catálogo, roteiro e três questões; os links pr
 - [A stochastic simulation of skeletal muscle calcium transients in a structurally realistic sarcomere model using MCell](https://pmc.ncbi.nlm.nih.gov/articles/PMC6424466/).
 
 Referências sustentam os mecanismos e a organização; seus parâmetros experimentais não foram transplantados para este exercício. Cálculos e testes estão em `fisica.js` e `../tests/juncao-neuromuscular.test.mjs`.
+
+## Mitocôndrias novas no Terminal (09/10/2026)
+
+- `mito()` em `modelos.js` passou a marcar o lugar de cada mitocôndria (`userData.mitocondria`). Em `app.js` o conteúdo antigo dá lugar à mitocôndria compartilhada aberta (`../mitocondria.js`), nas mesmas medidas (2 × 0,94 × 0,90) e aberta para o mesmo lado. Até o GLB chegar, aparece a antiga.

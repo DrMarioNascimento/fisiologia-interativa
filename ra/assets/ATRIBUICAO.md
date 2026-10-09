@@ -50,3 +50,9 @@ Gerador: node ra/scripts/criar-pleuras.mjs.
 
 ## Textura cortical do osso (2026-10-09)
 Albedo sintético criado com a ferramenta integrada de geração de imagens. Mapas de normal e rugosidade gerados numericamente. Não é fotografia de espécime. Os novos GLBs preservam os dados geométricos dos originais; apenas material osso e coordenadas de textura foram atualizados.
+
+## Mitocôndria compartilhada
+
+mitocondria-aberta.glb e mitocondria-fechada.glb são modelos procedurais originais do projeto, gerados por `../scripts/gerar-mitocondria.py` (campo de distância + marching cubes). Não usam modelo nem textura de terceiros. Cobertos pela licença do projeto.
+
+SHA-256: aberta 16e2beb9b607e71dac8f441c2cd5e8e79d2314cc3d3cdea9f0cb88b95a343840; fechada 3695f1e364dc8e867f1beaa28cf8b24a7efb019b10b6a1766a7be76162862569.
