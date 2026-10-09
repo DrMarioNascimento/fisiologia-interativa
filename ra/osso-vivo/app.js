@@ -3,6 +3,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {prepararParaRA} from '../cores-para-ra.js';
+import {usdzComBotoes} from '../ra-botoes-ios.js';
 import {criar,NIVEIS} from './modelos.js?v=osso-deforma-20261004';
 import {avancar,CENARIOS,CORES} from './fisica.js?v=osso-deforma-20261004';
 import {estadoNivel} from './animacao.js?v=osso-deforma-20261004';
@@ -92,7 +93,7 @@ function clonarPeca(source){
  for(const child of source.children)clone.add(clonarPeca(child));return clone;
 }
 function prepararRA(){
- const id=++exportId;clearTimeout(arTimer);$('launchAR').disabled=true;
+ const id=++exportId;clearTimeout(arTimer);$('launchAR').disabled=true;placasProntas=false;placasFalharam=false;ancoraAR.removeAttribute('href');
  if(running||$('panel-ra').hidden)return;$('raStatus').textContent='Preparando o estado atual…';
  arTimer=setTimeout(async()=>{try{
   anatomy.atualizar(nivel,instante,cenario,separacao,mostrarCarga);const clone=clonarPeca(anatomy.modelos[nivel]);clone.visible=true;
@@ -100,12 +101,54 @@ function prepararRA(){
   const fitted=new THREE.Box3().setFromObject(clone),center=fitted.getCenter(new THREE.Vector3());clone.position.set(-center.x,-fitted.min.y,-center.z);prepararParaRA(clone);
   const wrap=new THREE.Group();wrap.add(clone);const buffer=await new GLTFExporter().parseAsync(wrap,{binary:true,onlyVisible:true});
   if(id!==exportId||running||disposed)return;if(arUrl)URL.revokeObjectURL(arUrl);arUrl=URL.createObjectURL(new Blob([buffer],{type:'model/gltf-binary'}));readyId=id;$('arViewer').alt='Peça selecionada: '+NIVEIS[nivel].nome;$('arViewer').src=arUrl;
+  if(usaPlacas())await prepararPlacas(id);
  }catch(e){if(id!==exportId)return;console.error(e);$('raStatus').textContent='Não foi possível preparar a RA. A experiência 3D continua disponível.';}},250);
 }
-$('arViewer').addEventListener('load',()=>{if(readyId!==exportId||running)return;$('launchAR').disabled=!$('arViewer').canActivateAR;$('launchAR').textContent='Abrir '+NIVEIS[nivel].nome+' em RA';$('raStatus').textContent=$('arViewer').canActivateAR?'Estado pronto para RA · ampliação de aproximadamente 65 cm.':'Modelo 3D pronto. Para RA, use Safari no iPhone/iPad ou Chrome no Android compatível.';});
+$('arViewer').addEventListener('load',()=>{if(readyId!==exportId||running)return;if(usaPlacas()&&!placasProntas){$('launchAR').disabled=true;$('raStatus').textContent='Preparando as placas Montar e Desmontar…';return;}if(usaPlacas())return;$('launchAR').disabled=!$('arViewer').canActivateAR;$('launchAR').textContent='Abrir '+NIVEIS[nivel].nome+' em RA';$('raStatus').textContent=$('arViewer').canActivateAR?'Estado pronto para RA · ampliação de aproximadamente 65 cm.':'Modelo 3D pronto. Para RA, use Safari no iPhone/iPad ou Chrome no Android compatível.';});
 $('arViewer').addEventListener('error',()=>{$('launchAR').disabled=true;$('raStatus').textContent='A prévia de RA não carregou. O modelo 3D continua disponível.';});
-$('launchAR').onclick=()=>{$('arViewer').activateAR().catch(()=>{$('raStatus').textContent='A câmera não abriu. Confira a compatibilidade e a permissão no aparelho.';});};
+$('launchAR').onclick=()=>{if(usaPlacas()&&placasProntas&&ancoraAR.href){ancoraAR.click();return;}$('arViewer').activateAR().catch(()=>{$('raStatus').textContent='A câmera não abriu. Confira a compatibilidade e a permissão no aparelho.';});};
 
+/* ── PLACAS NO IPHONE · O osso montado e desmontado ─────────────────────────
+   No nível 01, no iPhone, o botão de RA abre a peça com duas placas no chão:
+   Montar e Desmontar. Cada camada (periósteo, cortical, esponjoso, medula,
+   cartilagem) só DESLIZA entre a posição montada e a separada — movimento de
+   peça inteira, o que o Quick Look anima sem deformar nada. As duas poses
+   saem da mesma função da tela (`anatomy.atualizar` com separação 0 e 1); a
+   carga e o instante ficam como estão na tela. Mesma técnica do sarcômero
+   (`../ra-botoes-ios.js`). Se as placas falharem, o botão abre a peça comum. */
+const ehQuickLook=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+const ancoraAR=document.createElement('a');ancoraAR.rel='ar';ancoraAR.hidden=true;ancoraAR.appendChild(document.createElement('img'));document.body.appendChild(ancoraAR);
+let placasUrl=null,placasProntas=false,placasFalharam=false,pacotePlacas=null,usdaPlacas='';
+const usaPlacas=()=>nivel===0&&!placasFalharam&&(ehQuickLook||new URLSearchParams(location.search).has('botoesios'));
+async function prepararPlacas(id){
+ try{
+  const t0=performance.now(),peca=anatomy.modelos[0],partes=peca.userData.parts.map(p=>p.g);
+  const poses=[0,1].map(s=>{anatomy.atualizar(0,instante,cenario,s,mostrarCarga);return partes.map(g=>{g.updateMatrix();return g.matrix.clone();});});
+  /* tamanho medido com a peça montada E desmontada: as duas cabem nos 80 cm */
+  const uniao=new THREE.Box3();for(const s of [0,1]){anatomy.atualizar(0,instante,cenario,s,mostrarCarga);peca.updateMatrixWorld(true);uniao.union(new THREE.Box3().setFromObject(peca));}
+  anatomy.atualizar(0,instante,cenario,separacao,mostrarCarga);peca.updateMatrixWorld(true);
+  const clone=clonarPeca(peca);clone.visible=true;
+  const orig=[],copia=[];peca.traverse(o=>orig.push(o));clone.traverse(o=>copia.push(o));
+  const moveis=partes.map(g=>copia[orig.indexOf(g)]);
+  const tam=uniao.getSize(new THREE.Vector3()),esc=.80/Math.max(tam.x,tam.y,tam.z);
+  clone.scale.multiplyScalar(esc);clone.position.set(0,0,0);clone.updateMatrixWorld(true);
+  const b=new THREE.Box3().setFromObject(clone),c=b.getCenter(new THREE.Vector3());clone.position.set(-c.x,-b.min.y,-c.z);
+  prepararParaRA(clone);
+  const {usdz,usda,alinhado}=await usdzComBotoes({peca:clone,moveis,estados:[{rotulo:'Montar',poses:poses[0]},{rotulo:'Desmontar',poses:poses[1]}]});
+  if(id!==exportId||running||disposed)return;
+  if(placasUrl)URL.revokeObjectURL(placasUrl);placasUrl=URL.createObjectURL(new Blob([usdz],{type:'model/vnd.usdz+zip'}));
+  /* sem pinça: ampliada, a peça cobriria as placas (aprendido no sarcômero) */
+  ancoraAR.href=placasUrl+'#allowsContentScaling=0';placasProntas=true;
+  pacotePlacas={bytes:usdz.byteLength,ms:Math.round(performance.now()-t0),partes:moveis.length,alinhado:alinhado.every(a=>a.ok)};usdaPlacas=usda;
+  $('launchAR').disabled=false;$('launchAR').textContent='Abrir '+NIVEIS[0].nome+' em RA';
+  $('raStatus').textContent='Pronto · até cerca de 80 cm com a peça desmontada. Na mesa, toque em Montar ou Desmontar.';
+ }catch(e){
+  console.error(e);if(id!==exportId)return;
+  placasFalharam=true;anatomy.atualizar(0,instante,cenario,separacao,mostrarCarga);
+  $('launchAR').disabled=!$('arViewer').canActivateAR;$('raStatus').textContent='Estado pronto para RA, sem as placas Montar e Desmontar (não puderam ser preparadas).';
+ }
+}
+window.pacotePlacasIOS=()=>pacotePlacas;window.usdaPlacasIOS=()=>usdaPlacas;
 $('play').onclick=()=>{if(!running&&instante>=1)instante=0;definirRunning(!running);atualizar();};
 $('reset').onclick=()=>{definirRunning(false);instante=0;atualizar();prepararRA();};
 $('instant').oninput=()=>{definirRunning(false);instante=Number($('instant').value)/100;atualizar();prepararRA();};

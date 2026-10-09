@@ -63,7 +63,9 @@ function caminhosDoUsda(texto) {
  * @param {object} o
  * @param {THREE.Object3D} o.peca   peça já preparada para a mesa (escala real, no chão, cores de RA)
  * @param {THREE.Object3D[]} o.moveis  partes da peça que se movem entre os estados
- * @param {{rotulo:string, poses:THREE.Matrix4[]}[]} o.estados  pose LOCAL de cada parte em cada estado
+ * @param {{rotulo:string, poses?:THREE.Matrix4[], passos?:{poses:THREE.Matrix4[], duracao:number, ease?:string}[]}[]} o.estados
+ *   pose LOCAL de cada parte em cada estado; ou, para um percurso, uma SEQUÊNCIA de passos
+ *   (cada passo leva todas as partes juntas até as suas poses, um passo depois do outro)
  * @param {number} [o.duracao=1.2]  segundos da transição
  * @returns {Promise<{usdz:Uint8Array, usda:string}>}
  */
@@ -80,13 +82,15 @@ export async function usdzComBotoes({ peca, moveis, estados, duracao = 1.2 }) {
      multiplicada pelas transformações dos pais, pose local e pose na cena
      passam a ser a mesma coisa, e o movimento sai certo nas duas leituras. */
   raiz.updateMatrixWorld(true);
+  const novoAlvo = (nome, m, pose) => {
+    const alvo = new THREE.Object3D(); alvo.name = nome;
+    new THREE.Matrix4().multiplyMatrices(m.parent.matrixWorld, pose)
+      .decompose(alvo.position, alvo.quaternion, alvo.scale);
+    raiz.add(alvo);
+  };
   estados.forEach((e, k) => {
-    moveis.forEach((m, i) => {
-      const alvo = new THREE.Object3D(); alvo.name = `rqbAlvo_${k}_${i}`;
-      new THREE.Matrix4().multiplyMatrices(m.parent.matrixWorld, e.poses[i])
-        .decompose(alvo.position, alvo.quaternion, alvo.scale);
-      raiz.add(alvo);
-    });
+    if (e.passos) e.passos.forEach((ps, j) => moveis.forEach((m, i) => novoAlvo(`rqbAlvo_${k}_${j}_${i}`, m, ps.poses[i])));
+    else moveis.forEach((m, i) => novoAlvo(`rqbAlvo_${k}_${i}`, m, e.poses[i]));
   });
   /* placas à frente da peça, no chão, lado a lado */
   raiz.updateMatrixWorld(true);
@@ -110,14 +114,35 @@ export async function usdzComBotoes({ peca, moveis, estados, duracao = 1.2 }) {
   if (fimDaCena < 0) throw new Error('cena não encontrada no USDA');
   const caminho = nome => { const c = mapa.get(nome); if (!c) throw new Error('prim ausente: ' + nome); return c; };
 
+  /* PERCURSO: grupo em SÉRIE de passos; cada passo é um grupo PARALELO que
+     leva todas as partes ao mesmo tempo. Duração zero trava o Quick Look em
+     alguns casos, então o menor passo dura 0,01 s. */
+  const sequencia = (passos, k) => {
+    const l = ['      rel actions = [' + passos.map((_, j) => `<Passo_${k}_${j}>`).join(', ') + ']',
+      '      token info:id = "Group"', '      bool loops = 0', '      int performCount = 1', '      token type = "serial"', ''];
+    passos.forEach((ps, j) => {
+      l.push(`      def Preliminary_Action "Passo_${k}_${j}"`, '      {',
+        '        rel actions = [' + moveis.map((_, i) => `<Mover_${k}_${j}_${i}>`).join(', ') + ']',
+        '        token info:id = "Group"', '        bool loops = 0', '        int performCount = 1', '        token type = "parallel"', '');
+      moveis.forEach((_, i) => l.push(
+        `        def Preliminary_Action "Mover_${k}_${j}_${i}"`, '        {',
+        `          rel affectedObjects = <${caminho('rqbMovel_' + i)}>`,
+        `          double duration = ${Math.max(.01, ps.duracao)}`, `          token easeType = "${ps.ease || 'none'}"`,
+        '          token info:id = "Transform"', '          token type = "absolute"',
+        `          rel xformTarget = <${caminho(`rqbAlvo_${k}_${j}_${i}`)}>`, '        }'));
+      l.push('      }');
+    });
+    return l;
+  };
   const b = ['', 'def Scope "Behaviors"', '{'];
   estados.forEach((e, k) => {
     b.push(`  def Preliminary_Behavior "Comportamento_${k}"`, '  {',
       `    rel triggers = <Toque_${k}>`, `    rel actions = <Grupo_${k}>`, '    uniform bool exclusive = 0', '',
       `    def Preliminary_Trigger "Toque_${k}"`, '    {',
       `      rel affectedObjects = <${caminho('rqbBotao_' + k)}>`, '      token info:id = "TapGesture"', '    }', '',
-      `    def Preliminary_Action "Grupo_${k}"`, '    {',
-      '      rel actions = [' + moveis.map((_, i) => `<Mover_${k}_${i}>`).join(', ') + ']',
+      `    def Preliminary_Action "Grupo_${k}"`, '    {');
+    if (e.passos) { b.push(...sequencia(e.passos, k), '    }', '  }', ''); return; }
+    b.push('      rel actions = [' + moveis.map((_, i) => `<Mover_${k}_${i}>`).join(', ') + ']',
       '      token info:id = "Group"', '      bool loops = 0', '      int performCount = 1', '      token type = "parallel"', '');
     moveis.forEach((_, i) => b.push(
       `      def Preliminary_Action "Mover_${k}_${i}"`, '      {',
@@ -131,6 +156,29 @@ export async function usdzComBotoes({ peca, moveis, estados, duracao = 1.2 }) {
   linhas.splice(fimDaCena, 0, ...b.map(l => '      ' + l));
   const novo = linhas.join('\n');
   arquivos['model.usda'] = strToU8(novo);
+  /* GEOMETRIA COM 4 CASAS. O exportador escreve cada vértice, normal e UV em
+     TEXTO com até 16 algarismos, e o USDZ não pode ser comprimido. No osso,
+     isso dava 52 MB. Quatro casas na unidade do modelo ficam muito abaixo do
+     milímetro na mesa, invisível para o olho e um terço menor no arquivo. */
+  for (const nome of Object.keys(arquivos)) {
+    if (!nome.startsWith('geometries/')) continue;
+    arquivos[nome] = strToU8(strFromU8(arquivos[nome]).replace(/(\d\.\d{4})\d+/g, '$1'));
+  }
+  /* GEOMETRIAS REPETIDAS VIRAM UMA SÓ. Peças clonadas ganham geometria com
+     outro número e o exportador grava uma cópia inteira para cada uma; quando
+     o conteúdo é idêntico, todas passam a apontar para o mesmo arquivo. */
+  const porConteudo = new Map(), troca = new Map();
+  for (const nome of Object.keys(arquivos)) {
+    if (!nome.startsWith('geometries/')) continue;
+    const chave = strFromU8(arquivos[nome]);
+    if (porConteudo.has(chave)) { troca.set(nome, porConteudo.get(chave)); delete arquivos[nome]; }
+    else porConteudo.set(chave, nome);
+  }
+  if (troca.size) {
+    let texto = strFromU8(arquivos['model.usda']);
+    for (const [de, para] of troca) texto = texto.split('@./' + de + '@').join('@./' + para + '@');
+    arquivos['model.usda'] = strToU8(texto);
+  }
 
   /* refaz o zip: model.usda primeiro e cada arquivo alinhado a 64 bytes */
   const ordem = ['model.usda', ...Object.keys(arquivos).filter(f => f !== 'model.usda')];
@@ -145,7 +193,7 @@ export async function usdzComBotoes({ peca, moveis, estados, duracao = 1.2 }) {
     pos = base + extra + dado.length;
   }
   const usdz = zipSync(saida, { level: 0 });
-  return { usdz, usda: novo, alinhado: alinhamento(usdz) };
+  return { usdz, usda: strFromU8(arquivos['model.usda']), alinhado: alinhamento(usdz) };
 }
 
 /* confere: onde começam os dados de cada arquivo dentro do zip */

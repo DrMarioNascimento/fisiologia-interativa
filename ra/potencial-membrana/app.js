@@ -34,6 +34,7 @@ import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { prepararParaRA } from './cores-para-ra.js';
+import { usdzComBotoes } from '../ra-botoes-ios.js';
 import { criar } from './modelos.js?v=celular-20261003';
 
 const $ = id => document.getElementById(id);
@@ -618,6 +619,7 @@ new GLTFLoader().load(URL_COMUNICACAO, gltf => {
   comunicacao.userData.posSinal = () => comunicacao.worldToLocal(noSinal.getWorldPosition(V()));
   sinal.mixer = new THREE.AnimationMixer(peca);
   const clip = gltf.animations.find(a => a.name === 'impulso') || gltf.animations[0];
+  comunicacao.userData.peca = peca; comunicacao.userData.clip = clip;
   if (clip) { sinal.dur = clip.duration; sinal.acao = sinal.mixer.clipAction(clip); sinal.acao.play(); }
   E.cInst.max = sinal.dur.toFixed(2);
   prepararNivel(comunicacao, COM, atual === COM);
@@ -782,6 +784,56 @@ const TAM_REAL = [.62, .80, .56, .52, .60, 1.05]; // metros, maior dimensão no 
    Foi exatamente o que aconteceu. */
 const ehQuickLook = /iPad|iPhone|iPod/.test(navigator.userAgent)
   || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+/* ── PLACA DISPARAR NO IPHONE · nível 02 ─────────────────────────────────────
+   O Quick Look não toca a animação do GLB, mas executa comportamentos de
+   dentro do USDZ (técnica de `../ra-botoes-ios.js`, a mesma do sarcômero).
+   A placa Disparar leva a esfera do sinal pelos MESMOS quadros-chave do
+   arquivo, com os mesmos tempos: um passo atrás do outro, com as pausas nas
+   sinapses. Só a esfera se move, por deslocamento — nada se deforma. */
+const ancoraCom = document.createElement('a');
+ancoraCom.rel = 'ar'; ancoraCom.hidden = true; ancoraCom.appendChild(document.createElement('img'));
+document.body.appendChild(ancoraCom);
+let placaComUrl = null, placaComPronta = false, placaComFalhou = false, pacotePlacaCom = null;
+const usaPlacaCom = () => atual === COM && !placaComFalhou && (ehQuickLook || new URLSearchParams(location.search).has('botoesios'));
+async function prepararPlacaCom(id) {
+  placaComPronta = false; ancoraCom.removeAttribute('href');
+  const { peca, clip } = comunicacao.userData;
+  if (!peca || !clip) return;                      // o GLB ainda vem pela rede; o carregamento chama de novo
+  E.ar.disabled = true; E.status.textContent = 'Preparando a placa Disparar…';
+  try {
+    const t0 = performance.now();
+    const clone = peca.clone(true);
+    clone.position.set(0, 0, 0); clone.scale.setScalar(1); clone.updateMatrixWorld(true);
+    const tam = new THREE.Box3().setFromObject(clone).getSize(V());
+    clone.scale.setScalar(TAM_REAL[COM] / Math.max(tam.x, tam.y, tam.z)); clone.updateMatrixWorld(true);
+    const b = new THREE.Box3().setFromObject(clone), c = b.getCenter(V());
+    clone.position.set(-c.x, -b.min.y, -c.z);
+    const movel = clone.getObjectByName('sinal');
+    const trilha = clip.tracks.find(t => /sinal\.position$/.test(t.name));
+    const pose = i => new THREE.Matrix4().compose(V(trilha.values[i * 3], trilha.values[i * 3 + 1], trilha.values[i * 3 + 2]), movel.quaternion, movel.scale);
+    const passos = [{ poses: [pose(0)], duracao: .01 }];
+    for (let i = 1; i < trilha.times.length; i++) passos.push({ poses: [pose(i)], duracao: trilha.times[i] - trilha.times[i - 1] });
+    movel.position.set(trilha.values[0], trilha.values[1], trilha.values[2]);    // a peça abre com o sinal no início
+    prepararParaRA(clone);
+    const { usdz, usda, alinhado } = await usdzComBotoes({ peca: clone, moveis: [movel], estados: [{ rotulo: 'Disparar', passos }] });
+    if (id !== prepId || atual !== COM) return;
+    if (placaComUrl) URL.revokeObjectURL(placaComUrl);
+    placaComUrl = URL.createObjectURL(new Blob([usdz], { type: 'model/vnd.usdz+zip' }));
+    ancoraCom.href = placaComUrl + '#allowsContentScaling=0';   // sem pinça: a peça não cobre a placa
+    placaComPronta = true;
+    pacotePlacaCom = { bytes: usdz.byteLength, ms: Math.round(performance.now() - t0), passos: passos.length, alinhado: alinhado.every(a => a.ok), usda };
+    E.ar.disabled = false;
+    E.status.textContent = `Pronto. Tamanho no ambiente: ${TAM_REAL[COM].toFixed(2)} m. ${COMO_ABRIR} Na mesa, toque em Disparar para o sinal percorrer os três neurônios.`;
+  } catch (err) {
+    console.error(err);
+    if (id !== prepId) return;
+    placaComFalhou = true;      // sem a placa, o botão abre a peça comum
+    if (E.viewer.canActivateAR) { E.ar.disabled = false; E.status.textContent = `Pronto, sem a placa Disparar (não pôde ser preparada). ${COMO_ABRIR}`; }
+  }
+}
+window.pacotePlacaComIOS = () => pacotePlacaCom && (({ usda, ...r }) => r)(pacotePlacaCom);
+window.usdaPlacaComIOS = () => pacotePlacaCom && pacotePlacaCom.usda;
 const COMO_ABRIR = ehQuickLook
   ? 'Toque, e depois em "AR" no alto da tela para ir à câmera.'
   : 'Toque para abrir a câmera.';
@@ -789,16 +841,20 @@ let arUrl = null, prepId = 0, timer = null;
 function prepararRA() {
   const id = ++prepId;
   clearTimeout(timer);
+  placaComFalhou = false; placaComPronta = false;
   timer = setTimeout(async () => {
     E.ar.disabled = true; E.status.textContent = 'Preparando o modelo para a câmera…';
     try {
       /* COMUNICAÇÃO VAI AO AMBIENTE PELO ARQUIVO ORIGINAL: ele traz a animação
-         do sinal, que o Android (Scene Viewer) toca sozinho; o iPhone recebe a
-         peça parada. Os outros níveis seguem pela exportação do estado. */
+         do sinal, que o Android (Scene Viewer) toca sozinho. No iPhone, o botão
+         abre a versão com a placa Disparar (abaixo). Os outros níveis seguem
+         pela exportação do estado. */
       if (atual === COM) {
         if (id !== prepId) return;
         if (arUrl) { URL.revokeObjectURL(arUrl); arUrl = null; }
-        E.viewer.src = URL_COMUNICACAO; return;
+        E.viewer.src = URL_COMUNICACAO;
+        if (usaPlacaCom()) await prepararPlacaCom(id);
+        return;
       }
       const clone = modelos[atual].clone(true);
       clone.visible = true; clone.position.set(0, 0, 0); clone.scale.setScalar(1); clone.rotation.set(0, 0, 0);
@@ -820,6 +876,7 @@ function prepararRA() {
   }, 350);
 }
 E.viewer.addEventListener('load', () => {
+  if (usaPlacaCom()) { if (!placaComPronta) { E.ar.disabled = true; E.status.textContent = 'Preparando a placa Disparar…'; } return; }
   if (E.viewer.canActivateAR) {
     E.ar.disabled = false;
     E.status.textContent = `Pronto. Tamanho no ambiente: ${TAM_REAL[atual].toFixed(2)} m. ${COMO_ABRIR}`;
@@ -832,6 +889,7 @@ E.viewer.addEventListener('error', () => { E.status.textContent = 'O modelo não
 /* sem nenhum await antes do activateAR — regra do Safari, e foi ela que
    impedia a câmera de abrir no músculo */
 E.ar.addEventListener('click', () => {
+  if (usaPlacaCom() && placaComPronta && ancoraCom.href) { ancoraCom.click(); return; }
   try { E.viewer.activateAR(); }
   catch (err) { console.error(err); E.status.textContent = 'A câmera não abriu. Verifique a permissão de câmera do navegador.'; }
 });

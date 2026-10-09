@@ -48,7 +48,7 @@
     },
     {
       "path": "ra-botoes-ios.js",
-      "sha256": "a2c2f087183e5ae86de9d264b0a15312e7fa3b957e0b209027dae41d952283db"
+      "sha256": "cd6c7b880b1bc9cd5c856da501bf36a8ec50f70f6f6d30d20e0b3617f1fb46da"
     },
     {
       "path": "package.json",
@@ -244,11 +244,11 @@
     },
     {
       "path": "potencial-membrana/app.js",
-      "sha256": "610aaf407ddb6453adf7b55f645ac93fa3ff18ebfc61b61a4e63869bde8a02c8"
+      "sha256": "e7d0287c3c38699a36052616cfae4569c022e93ae12c41fd30c2c45ddc486224"
     },
     {
       "path": "potencial-membrana/index.html",
-      "sha256": "39b0137c7b3f08081fe637bf1f1c3cb74e07f83c725557c1b3d8433422d4e8b3"
+      "sha256": "e8b5646df0042849ce27852e9a1acef55abe132cd18affd052fe10ad68e57319"
     },
     {
       "path": "potencial-membrana/modelos.js",
@@ -256,7 +256,7 @@
     },
     {
       "path": "potencial-membrana/README.md",
-      "sha256": "79d8f52df9059099e77e51a6594a1238cd86f66c3ef10b4d88b53c7daedf24cb"
+      "sha256": "c80e91d15b5157cb703a3385e518a88b2ed87d80bba7ab011d516cf345ffa2fb"
     },
     {
       "path": "potencial-membrana/style.css",
@@ -340,7 +340,7 @@
     },
     {
       "path": "osso-vivo/app.js",
-      "sha256": "418728489fd1267419f76cd7c4ade6c6ea1f04bd5435de9084b42316b027cf01"
+      "sha256": "1a6b794b8a17ecccebeb9e3e56296e41e976c8ebd5f0fdd98506d02e462dd424"
     },
     {
       "path": "osso-vivo/fisica.js",
@@ -348,7 +348,7 @@
     },
     {
       "path": "osso-vivo/index.html",
-      "sha256": "1b7322acda65a6d80f0bbac2bba57f0e2828b613648c88959b1539451b9be282"
+      "sha256": "cf3c1420087b6b209a24120011b45b7163f29d717f603c3faa0d96f5d838c0bc"
     },
     {
       "path": "osso-vivo/modelos.js",
@@ -356,7 +356,7 @@
     },
     {
       "path": "osso-vivo/README.md",
-      "sha256": "acea438ef8c6a20dafd21e4afa98a920f3975dc846fa4289589eb37dfcefc6ed"
+      "sha256": "e3fa52945f1ec58c78aeef11c6cf8203ec6f2255c99ef645218e4501b0991990"
     },
     {
       "path": "osso-vivo/style.css",

@@ -44,3 +44,11 @@ Pause e selecione uma das cinco peças. O arquivo GLB preserva a geometria do es
 - [Intermolecular channels direct crystal orientation in mineralized collagen](https://pmc.ncbi.nlm.nih.gov/articles/PMC7545172/).
 
 As fontes fundamentam mecanismos e tendências, não validam os coeficientes demonstrativos. Nenhum modelo ou textura foi copiado dessas fontes. Os modelos originais são abrangidos pela licença do repositório; bibliotecas conservam suas próprias licenças.
+
+## Placas Montar e Desmontar no iPhone (09/10/2026)
+
+- No nível 01 (O osso), no iPhone, o botão de RA abre a peça com duas placas no chão: **Montar** e **Desmontar**. Tocar numa placa desliza as camadas (periósteo, cortical, osso esponjoso, medula e cartilagem) entre a posição montada e a separada, em 1,2 s.
+- As duas poses saem de `anatomy.atualizar` com separação 0 e 1, a mesma função da tela; carga, cenário e instante ficam como estão na tela. O empacotamento é o de `../ra-botoes-ios.js`, a mesma técnica do sarcômero.
+- Tamanho: a peça montada e a desmontada cabem em cerca de 80 cm. Neste modo a pinça fica desligada, para a peça não cobrir as placas.
+- Arquivo: cerca de 34 MB, porque a geometria do fêmur é detalhada. Ainda assim fica menor que o USDZ que o iPhone recebia pela RA comum (cerca de 52 MB), graças às 4 casas decimais e à união de geometrias repetidas no módulo. A preparação leva alguns segundos; o botão espera.
+- Se as placas falharem, o botão abre a peça comum. Fora do iPhone, `?botoesios` liga as placas para conferência; `pacotePlacasIOS()` no console mostra tamanho e tempo.
