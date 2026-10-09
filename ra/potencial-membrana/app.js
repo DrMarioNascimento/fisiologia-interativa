@@ -127,11 +127,17 @@ function prepararNivel(m, i, visivel = i === NEU) {
      mergulho enquadraria o quadro errado. */
   let rh = 0, hv = 0;
   const pt = new THREE.Vector3();
+  /* MEDIDO NO REFERENCIAL DA PRÓPRIA PEÇA. Na partida tudo está na
+     identidade, mas a Comunicação chega depois, pela rede: pode terminar de
+     carregar no meio de um mergulho (escala e posição provisórias) ou com a
+     raiz inclinada na diagonal do telefone. Desfazer a matriz da peça dá o
+     mesmo quadro em qualquer desses casos. */
+  const doNivel = m.matrixWorld.clone().invert();
   m.traverse(o => {
     if (!o.isMesh || o.userData.foraDoQuadro) return;
     const pos = o.geometry.attributes.position;
     for (let i = 0; i < pos.count; i++) {
-      pt.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld);
+      pt.fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld).applyMatrix4(doNivel);
       rh = Math.max(rh, Math.hypot(pt.x, pt.z));
       hv = Math.max(hv, Math.abs(pt.y));
     }
