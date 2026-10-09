@@ -1,3 +1,4 @@
+import {carregarToraxAprovado,controlarCamadas} from './torax-aprovado.js?v=simulador-20261009';
 /* ============================================================================
    TESTE 10 — ESPAÇO PLEURAL E ZONAS DE WEST · painel, sensor, laço e RA.
 
@@ -17,7 +18,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { prepararParaRA } from '../cores-para-ra.js?v=tutor-ra-cores-20261002';
-import { criar } from './modelos.js?v=encaixes-20261002';
+import { criar } from './modelos.js?v=simulador-20261009';
 import { clonarVisual } from './ra.js';
 import { carregarCoracao } from './anatomia.js?v=encaixes-20261002';
 import {
@@ -63,15 +64,18 @@ const rim = new THREE.DirectionalLight(0x8fb8ff, 1.05); rim.position.set(-20, 16
    daria a mesma imagem e a conta errada: quem tem postura é o corpo. */
 const root = new THREE.Group(); scene.add(root);
 try {
-  await carregarCoracao();
+  await Promise.all([carregarCoracao(),carregarToraxAprovado()]);
   $('modeloStatus').hidden=true;
 } catch(err) {
-  $('modeloStatus').textContent='O coração anatômico não carregou. Recarregue a página para tentar novamente.';
+  $('modeloStatus').textContent='O modelo anatômico não carregou. Recarregue a página para tentar novamente.';
   console.error(err);
 }
 const { modelos, aplicarFresta, aplicarTorax, aplicarAlveolos, aplicarZonas, aplicarCoracao } = criar();
 modelos.forEach((m, i) => { m.visible = i === 0; root.add(m); });
 
+const camadaIds=['camadaVisceral','camadaParietal','atenuarPulmoes','atenuarOssos'];
+function camadas(){controlarCamadas(modelos,{visceral:$('camadaVisceral').checked,parietal:$('camadaParietal').checked,pulmoes:$('atenuarPulmoes').checked,ossos:$('atenuarOssos').checked});}
+camadaIds.forEach(id=>$(id).addEventListener('change',()=>{camadas();desenhar();prepararRA();}));camadas();
 const raio = modelos.map(m => {
   m.updateWorldMatrix(true, true);
   let r = 0; const p = new THREE.Vector3();
@@ -89,7 +93,7 @@ const raio = modelos.map(m => {
    o modelo sairia pela beira justamente nos dois estados que a bancada mostra */
 const FOLGA = 1.35;
 function enquadrar(n) {
-  const folga=n===3?1.08:FOLGA;
+  const folga=modelos[n].userData.aprovado?.95:n===3?1.08:FOLGA;
   const d = raio[n] * folga / Math.tan(camera.fov * Math.PI / 360) * 1.1;
   camera.position.set(d * .22, d * .12, d * .95);
   controls.target.set(0, 0, 0);

@@ -1,3 +1,4 @@
+import {criarToraxAprovado,moverToraxAprovado,contrairCoracaoAprovado} from './torax-aprovado.js?v=simulador-20261009';
 /* ============================================================================
    TESTE 10 — ESPAÇO PLEURAL E ZONAS DE WEST · geometria. Nada de DOM.
    A física mora em `fisica.js` e não é importada aqui: geometria não decide
@@ -171,6 +172,7 @@ function nivelFresta() {
    sem furo. A caixa (costelas, esterno, coluna e a pleura PARIETAL, que é da
    parede) escala em x e z; cada pulmão escala em torno do seu hilo. */
 function nivelTorax() {
+  const aprovado=criarToraxAprovado();if(aprovado)return aprovado;
   const g = new THREE.Group();
   const cm = emCm(); g.add(cm);
 
@@ -310,6 +312,7 @@ export function criar() {
   const escalaDe = fracao => Math.cbrt(clamp(fracao, .02, 1.2) / .40);
 
   function aplicarTorax(nivel, { pulmao, caixa, desvio = 0, ciclo = 1, inspiracao = 0 }) {
+    if(modelos[nivel].userData.aprovado){if(modelos[nivel].visible)moverToraxAprovado(modelos[nivel],{pulmao,caixa,desvio,ciclo,inspiracao});return;}
     const d = modelos[nivel].userData;
     if (!d || !d.pulmoes) return;
     // Entrar no nível chama atualizar() antes de desenhar e exportar.
@@ -430,6 +433,7 @@ export function criar() {
   }
 
   function aplicarCoracao(nivel, contracao) {
+    if(modelos[nivel]?.userData.aprovado){contrairCoracaoAprovado(modelos[nivel],contracao);return;}
     const med=modelos[nivel]?.userData.med;
     if(!med)return;
     med.traverse(m=>{
