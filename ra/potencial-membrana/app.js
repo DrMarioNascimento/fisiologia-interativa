@@ -97,6 +97,8 @@ const { aplicarPotencial, aplicarOnda, uReg } = base;
    os nomes abaixo evitam que um número solto no código aponte para o nível
    errado depois da troca. */
 const NEU = 0, COM = 1, INT = 2, PEL = 3, TRA = 4, ONDA = 5, ULTIMO = ONDA;
+const EMBED_MEMBRANA = document.body.dataset.membranaEmbed === 'true';
+const NIVEIS = EMBED_MEMBRANA ? [PEL, TRA] : [NEU, COM, INT, ONDA];
 const comunicacao = new THREE.Group(); comunicacao.name = 'comunicacao';
 const modelos = [base.modelos[0], comunicacao, ...base.modelos.slice(1)];
 
@@ -210,13 +212,13 @@ const LENTIDAO = 260;                    // câmera lenta: 1 s de tela ≈ 3,8 m
 /* ------------------------------------------------------------ estado e textos */
 const dados = [
   ['Escala celular', '01 · Neurônio', 'A pergunta', 'Onde está a carga?',
-   'Explore um neurônio multipolar mielinizado em três dimensões: do soma aos dendritos e ao axônio. O trecho mielinizado representa um axônio periférico, com uma célula de Schwann por internódio e seu núcleo na camada citoplasmática externa. A translucidez é um recurso didático de visualização. O potencial é uma diferença entre o interior e o exterior da membrana. Avance para ver como os neurônios se comunicam; depois, aprofunde para entrar na célula, reconhecer suas organelas e chegar à bicamada.',
+   'Explore um neurônio multipolar mielinizado em três dimensões: do soma aos dendritos e ao axônio. O trecho mielinizado representa um axônio periférico, com uma célula de Schwann por internódio e seu núcleo na camada citoplasmática externa. A translucidez é um recurso didático de visualização. O potencial é uma diferença entre o interior e o exterior da membrana. Avance para ver como os neurônios se comunicam; depois, aprofunde para entrar na célula, reconhecer suas organelas e observar a propagação do impulso.',
    'soma,dendritos,espinhas dendríticas,cone de implantação,axônio,mielina,células de Schwann'],
   ['Escala de circuito', '02 · Comunicação', 'A mensagem', 'Como um neurônio fala com o outro',
    'Três neurônios em cadeia. Nos dendritos e no corpo celular, as entradas chegam como potenciais graduados e se somam; quando o cone de implantação atinge o limiar, nasce o potencial de ação, que percorre o axônio e, sob a mielina, salta de um nódulo de Ranvier ao seguinte. No terminal, a sinapse química converte o sinal elétrico em químico: o neurotransmissor cruza a fenda e gera um potencial no dendrito do neurônio seguinte. A esfera luminosa marca onde está o sinal, em câmera lenta. Aprofunde para entrar no corpo do neurônio central.',
    'dendritos,corpo celular,cone de implantação,axônio,mielina,nódulo de Ranvier,sinapse,neurotransmissor'],
   ['Escala celular · em corte', '03 · Interior', 'O volume', 'O citoplasma é neutro',
-   'Explore núcleo, mitocôndrias, retículos e Golgi dentro da célula em corte. Organelas, lipídios na borda e cargas são representações ampliadas para exploração; suas quantidades e tamanhos são esquemáticos. A separação de cargas ocorre junto à membrana, enquanto o volume permanece praticamente neutro. No próximo nível, as réguas mostram bicamada e película em proporção.',
+   'Explore núcleo, mitocôndrias, retículos e Golgi dentro da célula em corte. Organelas, lipídios na borda e cargas são representações ampliadas para exploração; suas quantidades e tamanhos são esquemáticos. A separação de cargas ocorre junto à membrana, enquanto o volume permanece praticamente neutro. Película e Travessias estão na RA Célula viva. Avance para explorar A onda em um exemplo separado de axônio amielínico.',
    'citoplasma,K⁺,Na⁺,Cl⁻,ânions orgânicos,eletroneutralidade'],
   ['Escala nanométrica', '04 · Película', 'A separação', 'Uma pele colada na membrana',
    'Aqui o desenho está em proporção, e por isso leva régua: a bicamada mede 5 nm de superfície a superfície, e a película cabe dentro de cerca de 1 nm de cada face. Numa célula de 50 µm isso é uma casca cinquenta mil vezes mais fina que o corpo — e envolve menos de um milésimo de por cento dos íons. Mexa na permeabilidade e veja a película encher, esvaziar e inverter.',
@@ -330,15 +332,15 @@ function resetCam() {
 /* ------------------------------------------------------------ navegação */
 function aplicarTextos(n) {
   const d = dados[n];
-  E.scale.textContent = d[0]; E.step.textContent = d[1];
+  E.scale.textContent = d[0]; E.step.textContent = EMBED_MEMBRANA ? (n === PEL ? '02 · Película' : '03 · Travessias') : (n === ONDA ? '04 · A onda' : d[1]);
   E.eye.textContent = d[2]; E.title.textContent = d[3]; E.text.textContent = d[4];
   E.tags.innerHTML = d[5].split(',').map(x => `<span>${x}</span>`).join('');
-  E.prev.disabled = n === NEU; E.next.disabled = n === ULTIMO;
+  E.prev.disabled = n === NIVEIS[0]; E.next.disabled = n === NIVEIS.at(-1);
   /* o rótulo do botão diz a verdade do que vai acontecer: de 05 para 06 e de
      01 para 02 não há mergulho — a câmera SOBE de escala, e prometer
      "aprofundar" ali seria mentira de interface */
-  E.next.textContent = n === ONDA ? 'A onda ✓' : n === TRA ? 'Ver o axônio →' : n === NEU ? 'Ver a comunicação →' : 'Aprofundar →';
-  document.querySelectorAll('.step').forEach((b, i) => b.classList.toggle('active', i === n));
+  E.next.textContent = n === ONDA ? 'A onda ✓' : n === INT ? 'Ver A onda →' : n === TRA ? 'Travessias ✓' : n === NEU ? 'Ver a comunicação →' : 'Aprofundar →';
+  document.querySelectorAll('.step').forEach(b => b.classList.toggle('active', Number(b.dataset.step) === n));
   E.gBox.hidden = n === ONDA || n === COM; E.dBox.hidden = n !== ONDA; E.cBox.hidden = n !== COM;
   E.labels.innerHTML = '';
   btnOrganelas.disabled=n!==INT;
@@ -348,7 +350,7 @@ function aplicarTextos(n) {
   if (n === COM) { sinal.t = 0; sinal.tocando = true; $('comPausar').textContent = 'Pausar'; textosComunicacao(); }
 }
 function setStep(n, viaMergulho = false) {
-  n = Math.max(NEU, Math.min(ULTIMO, n)); if (n === atual) return;
+  if (!NIVEIS.includes(n) || n === atual) return;
   if(transicao) {
     restaurar(transicao.velho); transicao.velho.visible=false;
     transicao.velho.scale.setScalar(1);transicao.velho.position.set(0,0,0);
@@ -378,12 +380,12 @@ function setStep(n, viaMergulho = false) {
    parar (…/potencial-membrana/?nivel=4) e serve à conferência do desenho,
    que precisa do quadro parado. */
 function irDireto(n) {
-  n = Math.max(NEU, Math.min(ULTIMO, n));
+  if (!NIVEIS.includes(n)) return;
   modelos.forEach((m, i) => { m.visible = i === n; m.scale.setScalar(1); m.position.set(0, 0, 0); });
   atual = n; transicao = null; aplicarTextos(n); resetCam(); prepararRA();
 }
-document.querySelectorAll('.step').forEach((b, i) => b.onclick = () => setStep(i));
-E.prev.onclick = () => setStep(atual - 1); E.next.onclick = () => setStep(atual + 1, true);
+document.querySelectorAll('.step').forEach(b => b.onclick = () => setStep(Number(b.dataset.step)));
+E.prev.onclick = () => setStep(NIVEIS[NIVEIS.indexOf(atual)-1]); E.next.onclick = () => setStep(NIVEIS[NIVEIS.indexOf(atual)+1], true);
 $('resetView').onclick = resetCam;
 
 /* Guardar também o depthWrite: as películas e o miolo nascem com transparência
@@ -620,7 +622,7 @@ function irAoInstanteSinal(s, tocar = sinal.tocando) {
 $('comDisparar').onclick = () => irAoInstanteSinal(0, true);
 $('comPausar').onclick = () => irAoInstanteSinal(sinal.t, !sinal.tocando);
 E.cInst.addEventListener('input', e => irAoInstanteSinal(parseFloat(e.currentTarget.value), false));
-new GLTFLoader().load(URL_COMUNICACAO, gltf => {
+if (!EMBED_MEMBRANA) new GLTFLoader().load(URL_COMUNICACAO, gltf => {
   const peca = gltf.scene;
   /* centrada na origem e na escala da cena: é em torno da origem que a peça gira */
   peca.scale.setScalar(ESCALA_COM); peca.updateMatrixWorld(true);
@@ -921,7 +923,10 @@ onGoldman();
 ajustarJanela(); textosDisparo(); desenharDisparo(); aplicarOnda(vmDe);
 const busca = new URLSearchParams(location.search);
 const pedido = parseInt(busca.get('nivel'), 10);
-if (Number.isFinite(pedido) && pedido >= 1 && pedido <= ULTIMO + 1) irDireto(pedido - 1); else { resetCam(); prepararRA(); }
+if (!EMBED_MEMBRANA && (pedido === 4 || pedido === 5)) { const dest = new URL('../celula/', location.href); dest.searchParams.set('aba', pedido === 4 ? 'pelicula' : 'travessias'); if(busca.has('percurso')) dest.searchParams.set('percurso',busca.get('percurso')); location.replace(dest.href); }
+if (Number.isFinite(pedido) && NIVEIS.includes(pedido - 1)) irDireto(pedido - 1); else irDireto(NIVEIS[0]);
+if(EMBED_MEMBRANA) addEventListener('message',event=>{if(event.origin!==location.origin || event.source!==parent)return;if(event.data?.type==='celula-nivel' && [PEL,TRA].includes(event.data.nivel))irDireto(event.data.nivel);});
+document.querySelectorAll('[data-celula-link]').forEach(a=>{const u=new URL(a.href);if(busca.has('percurso'))u.searchParams.set('percurso',busca.get('percurso'));a.href=u.href;});
 const seg = parseFloat(busca.get('t'));
 if (Number.isFinite(seg) && atual === COM) irAoInstanteSinal(seg, false);
 const ms = parseFloat(busca.get('ms'));

@@ -22,3 +22,7 @@
 #comunicacaoBox{border-left:4px solid #f0c45a}
 @media(max-width:1000px){.progress{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:650px){.progress{grid-template-columns:repeat(2,minmax(0,1fr))}.progress .step:last-child{grid-column:auto}}
+
+/* Quatro abas na experiência do neurônio. */
+.progress{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:650px){.progress{grid-template-columns:repeat(2,minmax(0,1fr))}}

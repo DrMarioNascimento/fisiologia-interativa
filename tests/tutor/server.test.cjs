@@ -27,7 +27,7 @@ test('both course catalogs load; unattempted question does not send answer key',
 });
 
 test('catálogo RA conserva controles reais, percurso, créditos e contexto de questões',()=>{
- for(const course of ['ef','fisio'])for(const href of ['ra/coracao/','ra/retorno-venoso/','ra/pleura/','ra/musculo-sarcomero/','ra/potencial-membrana/','ra/starling/','ra/juncao-neuromuscular/','ra/osso-vivo/']){
+ for(const course of ['ef','fisio'])for(const href of ['ra/coracao/','ra/retorno-venoso/','ra/pleura/','ra/musculo-sarcomero/','ra/potencial-membrana/','ra/celula/','ra/starling/','ra/juncao-neuromuscular/','ra/osso-vivo/']){
   const m=catalog[course].find(m=>m.href===href);assert(m?.ra);assert.equal(m.qs.length,3);
   const payload=validate({course,module:href,message:'Explique o mecanismo',question:{index:0,choice:null}},catalog);
   const c=JSON.parse(payload.systemInstruction.parts[1].text.replace('Contexto curricular: ',''));
