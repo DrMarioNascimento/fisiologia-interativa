@@ -222,7 +222,7 @@ As experiências **Coração em ação**, **Retorno venoso**, **Pleura**, **Do m
 - [Do nervo à força](https://drmarionascimento.github.io/fisiologia-interativa/ra/juncao-neuromuscular/): junção, terminal, fenda, tríade e contração; gráficos sincronizados, estímulos repetidos e transmissão insuficiente. Reutiliza o sarcômero aprovado. [Modelo e limites](ra/juncao-neuromuscular/README.md).
 - [Do músculo ao sarcômero](https://drmarionascimento.github.io/fisiologia-interativa/ra/musculo-sarcomero/): músculo, fascículo, fibra, miofibrila e sarcômero, sem bases; giro, rótulos, ampliação, contração e curva comprimento–tensão. A geometria e os cálculos conservam a versão aprovada. [Detalhes e referência](ra/musculo-sarcomero/README.md).
 
-- [A película de carga](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/): neurônio, interior com organelas, película, travessias e onda; Goldman, capacitância e propagação preservados. [Detalhes e limites](ra/potencial-membrana/README.md).
+- [A película de carga](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/): neurônio, comunicação entre neurônios, interior com organelas, película, travessias e onda; Goldman, capacitância e propagação preservados. [Detalhes e limites](ra/potencial-membrana/README.md).
 
 - [Forças de Starling](https://drmarionascimento.github.io/fisiologia-interativa/ra/starling/): rede, capilar, forças, barreira, edema e linfa; princípio clássico e revisado, balanço de líquido, guia de variáveis e cores padronizadas. [Funcionamento e limites](ra/starling/README.md).
 

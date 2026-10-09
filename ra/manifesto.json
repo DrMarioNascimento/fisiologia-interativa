@@ -244,11 +244,11 @@
     },
     {
       "path": "potencial-membrana/app.js",
-      "sha256": "f2267fbf7fa7bdc6e5e171935bb8d1bfb09eaf8cf26d51da88c05892456fe3d4"
+      "sha256": "610aaf407ddb6453adf7b55f645ac93fa3ff18ebfc61b61a4e63869bde8a02c8"
     },
     {
       "path": "potencial-membrana/index.html",
-      "sha256": "10947a76b1b9725a91d71a9cb84e7b0a66256e31ecb51b068c1ec1aebe7f82ba"
+      "sha256": "39b0137c7b3f08081fe637bf1f1c3cb74e07f83c725557c1b3d8433422d4e8b3"
     },
     {
       "path": "potencial-membrana/modelos.js",
@@ -256,11 +256,11 @@
     },
     {
       "path": "potencial-membrana/README.md",
-      "sha256": "878d31f7189cedbf9bf478f84cad21af840a90b064568b10d30acafa47131032"
+      "sha256": "79d8f52df9059099e77e51a6594a1238cd86f66c3ef10b4d88b53c7daedf24cb"
     },
     {
       "path": "potencial-membrana/style.css",
-      "sha256": "3e689ff201d473836437c4c681a74d8a840cb755454c42258054e24c2b226799"
+      "sha256": "a639d5534ba80a057ffeb163ee4ebbc5a6392e87b4e753f36e100bf572b29d29"
     },
     {
       "path": "tests/celular-migracao.test.mjs",
@@ -269,6 +269,10 @@
     {
       "path": "potencial-membrana/cores-para-ra.js",
       "sha256": "b9fe0340d28ba6cdb8d2d60e5eba0f34e096ea66e1b246bed448faadf556affc"
+    },
+    {
+      "path": "potencial-membrana/impulso-nervoso.glb",
+      "sha256": "9a554e2f307a9a460d1b4f7adb0a0d5f7e390d5b4fc1c664421ddae730e0bf19"
     },
     {
       "path": "starling/app.js",
