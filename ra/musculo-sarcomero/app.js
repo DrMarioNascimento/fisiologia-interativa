@@ -486,14 +486,15 @@ E.ar.addEventListener('click', () => {
    `aplicarComprimento`, a mesma função da tela. A peça abre no comprimento
    escolhido no controle. O botão atual de RA continua igual. */
 const ESTADOS_BOTOES = [{ rotulo: 'Relaxar', L: 2.4 }, { rotulo: 'Contrair', L: 1.9 }];
-let botoesUrl = null, botoesId = 0, botoesTimer = null, pacoteBotoes = null, botoesProntos = false;
-const usaBotoes = () => atual === 4 && (ehQuickLook || new URLSearchParams(location.search).has('botoesios'));
+let botoesUrl = null, botoesId = 0, botoesTimer = null, pacoteBotoes = null, botoesProntos = false, botoesFalhou = false;
+/* se as placas não puderem ser montadas, o botão volta a abrir a peça comum */
+const usaBotoes = () => atual === 4 && !botoesFalhou && (ehQuickLook || new URLSearchParams(location.search).has('botoesios'));
 const ancoraAR = document.createElement('a');
 ancoraAR.rel = 'ar'; ancoraAR.hidden = true; ancoraAR.appendChild(document.createElement('img'));
 document.body.appendChild(ancoraAR);
 function prepararBotoes() {
   clearTimeout(botoesTimer);
-  botoesProntos = false; ancoraAR.removeAttribute('href');
+  botoesProntos = false; botoesFalhou = false; ancoraAR.removeAttribute('href');
   if (!usaBotoes()) return;
   E.ar.disabled = true; E.status.textContent = 'Preparando as placas Contrair e Relaxar…';
   botoesTimer = setTimeout(async () => {
@@ -529,7 +530,14 @@ function prepararBotoes() {
         estados: ESTADOS_BOTOES, comprimentoInicial: atualL, alinhado: alinhado.every(a => a.ok), arquivos: alinhado.length, usda };
       botoesProntos = true;
       if (usaBotoes()) { E.ar.disabled = false; E.status.textContent = `Pronto. Tamanho no ambiente: ${TAM_REAL[4].toFixed(2)} m em repouso. ${COMO_ABRIR} Na mesa, toque nas placas Contrair e Relaxar.`; }
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      console.error(err);
+      if (id !== botoesId) return;
+      /* NÃO DEIXAR O ÚNICO BOTÃO PRESO. Sem as placas, ele abre a peça comum, se
+         ela já estiver pronta; senão o carregamento do visualizador o libera. */
+      botoesFalhou = true;
+      if (E.viewer.canActivateAR && E.viewer.src) { E.ar.disabled = false; E.status.textContent = `Pronto, sem as placas Contrair e Relaxar (não puderam ser preparadas). Tamanho no ambiente: ${tamNoAmbiente.toFixed(2)} m. ${COMO_ABRIR}`; }
+    }
   }, 450);
 }
 window.pacoteBotoesIOS = () => pacoteBotoes && (({ usda, ...r }) => r)(pacoteBotoes);

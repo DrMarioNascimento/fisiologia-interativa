@@ -220,11 +220,11 @@
     },
     {
       "path": "musculo-sarcomero/app.js",
-      "sha256": "693e047f4692df910235e2320e56f2ba2a30bae77f5198ba0735826b14c71fab"
+      "sha256": "f4474acf44ae67d82fb558a04417a956c473a493cbd22bd4ffbac2b328df02cf"
     },
     {
       "path": "musculo-sarcomero/index.html",
-      "sha256": "9f063d2e9a58fe2a309ee7e08085dac6117b456778854c1a0e3f7b4bcfad5ea1"
+      "sha256": "2454eb224a284be648f14f4051d9a0ad2dd07d19c2ee02b6c5cbd497cf8601a3"
     },
     {
       "path": "musculo-sarcomero/modelos.js",
