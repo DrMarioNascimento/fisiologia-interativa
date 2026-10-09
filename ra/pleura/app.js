@@ -453,17 +453,28 @@ $('resetView').onclick = () => enquadrar(atual);
 let arUrl = null, prepId = 0, temporizador = null;
 let modoRA = 'simulacao';
 const URL_TORAX_COMPLETO = new URL('../assets/torax-completo-lobos-corrigidos.glb?v=20261008-vasos', import.meta.url).href;
+const URL_CORACAO_VASOS = new URL('../assets/coracao-e-vasos-foco.glb?v=20261008-foco', import.meta.url).href;
 function prepararRA() {
   const id = ++prepId;
   clearTimeout(temporizador);
+  const viewer = $('arViewer');
+  viewer.classList.toggle('ra-foco-vasos', modoRA === 'vasos');
   temporizador = setTimeout(async () => {
-    $('launchAR').disabled = true;
-    if (modoRA === 'completo') {
-      $('raStatus').textContent = 'Carregando o tórax anatômico completo…';
-      const viewer = $('arViewer');
-      if (viewer.getAttribute('src') !== URL_TORAX_COMPLETO) viewer.setAttribute('src', URL_TORAX_COMPLETO);
+    if (modoRA === 'completo' || modoRA === 'vasos') {
+      const modelo = modoRA === 'vasos' ? URL_CORACAO_VASOS : URL_TORAX_COMPLETO;
+      if (viewer.getAttribute('src') === modelo) return;
+      $('launchAR').disabled = true;
+      $('raStatus').textContent = modoRA === 'vasos'
+        ? 'Carregando o coração e os vasos em foco…'
+        : 'Carregando o tórax anatômico completo…';
+      viewer.setAttribute('alt', modoRA === 'vasos'
+        ? 'Coração com vasos pulmonares, aorta, veias cavas e vasos coronários em visualização ampliada'
+        : 'Modelo anatômico do tórax completo em 3D');
+      viewer.setAttribute('src', modelo);
       return;
     }
+    $('launchAR').disabled = true;
+    viewer.setAttribute('alt', 'Modelo da simulação respiratória em realidade aumentada');
     $('raStatus').textContent = 'Preparando o modelo para a câmera…';
     try {
       const clone = clonarVisual(modelos[atual]);
@@ -497,21 +508,31 @@ const COMO_ABRIR = ehQuickLook
 $('arViewer').addEventListener('load', () => {
   if ($('arViewer').canActivateAR) {
     $('launchAR').disabled = false;
-    $('raStatus').textContent = modoRA === 'completo'
-      ? `Tórax anatômico completo carregado; modelo estático. ${COMO_ABRIR}`
-      : `Pronto. Tamanho no ambiente: ${TAM_REAL[atual].toFixed(2)} m. ${COMO_ABRIR}`;
+    $('raStatus').textContent = modoRA === 'vasos'
+      ? `Coração e vasos carregados. Gire o modelo para conferir as conexões. ${COMO_ABRIR}`
+      : modoRA === 'completo'
+        ? `Tórax anatômico completo carregado; modelo estático. ${COMO_ABRIR}`
+        : `Pronto. Tamanho no ambiente: ${TAM_REAL[atual].toFixed(2)} m. ${COMO_ABRIR}`;
   } else {
     $('launchAR').disabled = true;
-    $('raStatus').textContent = 'Este navegador não abre RA. Use o Safari no iPhone/iPad ou o Chrome no Android.';
+    $('raStatus').textContent = modoRA === 'vasos'
+      ? 'Modelo 3D carregado. Este navegador não abre a câmera de RA; gire e amplie o modelo aqui.'
+      : 'Este navegador não abre RA. Use o Safari no iPhone/iPad ou o Chrome no Android.';
   }
 });
 $('arViewer').addEventListener('error', () => { $('launchAR').disabled = true; $('raStatus').textContent = 'O modelo não carregou no visualizador de RA.'; });
 $('raModelo').addEventListener('change', () => {
   modoRA = $('raModelo').value;
-  $('raNotaModelo').textContent = modoRA === 'completo'
-    ? 'Este tórax completo mostra pulmões, caixa torácica, diafragma e coração em posição anatômica, com vasos pulmonares e coronários esquemáticos. É estático: não reproduz ciclo respiratório, pneumotórax ou os demais estados da bancada.'
-    : 'A RA acompanha o nível, o estado e a postura selecionados na simulação.';
+  $('raNotaModelo').textContent = modoRA === 'vasos'
+    ? 'Visualização ampliada do coração, aorta, veias cavas, tronco e ramos pulmonares, veias pulmonares e vasos coronários. Gire para examinar as faces. As terminações pulmonares indicam os hilos de forma esquemática; as dimensões anatômicas originais foram preservadas.'
+    : modoRA === 'completo'
+      ? 'Tórax completo com pulmões, caixa torácica, diafragma e coração em posição anatômica, com vasos pulmonares e coronários esquemáticos. Modelo estático: não reproduz ciclo respiratório, pneumotórax ou os demais estados da bancada.'
+      : 'A RA acompanha o nível, o estado e a postura selecionados na simulação.';
   prepararRA();
+});
+$('verVasos').addEventListener('click', () => {
+  $('raModelo').value = 'vasos';
+  $('raModelo').dispatchEvent(new Event('change'));
 });
 $('launchAR').addEventListener('click', () => {
   try { $('arViewer').activateAR(); }
@@ -521,6 +542,11 @@ $('launchAR').addEventListener('click', () => {
 /* ------------------------------------------------------------ entradas paradas */
 ajustar();
 const busca = new URLSearchParams(location.search);
+const modeloPedido = busca.get('modelo');
+if (['completo', 'vasos'].includes(modeloPedido)) {
+  $('raModelo').value = modeloPedido;
+  $('raModelo').dispatchEvent(new Event('change'));
+}
 const nivel = parseInt(busca.get('nivel'), 10);
 const grauPedido = parseFloat(busca.get('grau'));
 const pn = busca.get('pneumo');
@@ -544,3 +570,4 @@ sincronizarCiclo();
 irAoNivel(Number.isFinite(nivel) ? nivel - 1 : 0);
 /* desenha uma vez à mão: o laço pode estar congelado no painel do navegador */
 desenhar();
+if (modeloPedido === 'vasos') $('visualizacaoRA').scrollIntoView({ block: 'center' });

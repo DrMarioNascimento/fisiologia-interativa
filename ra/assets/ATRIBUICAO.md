@@ -24,6 +24,12 @@ A versão reúne caixa torácica, pulmões, coração, vias aéreas e diafragma,
 
 SHA-256: `f990cb7e6044cb874f99ec476f22d305077bbdfc7381026168bc8b7b768f78fa`.
 
+## Coração e vasos em foco
+
+`coracao-e-vasos-foco.glb` é uma seleção de 24 peças do tórax completo acima: miocárdio, grandes vasos, conexões pulmonares e vasos coronários. Conserva os mesmos dados geométricos, materiais, dimensões e posições; apenas remove as estruturas que ocultavam os vasos e os dados não utilizados. As fontes, atribuições e licenças são as mesmas do tórax completo. A seleção pode ser reproduzida com `node ra/scripts/gerar-coracao-vasos-foco.mjs`.
+
+SHA-256: `2907f30e3805c81e055dc9bca69bf6b268ff1128ec6611cc1150a9c31ed75ad9`.
+
 ## Cálculo dos movimentos
 
 Os batimentos de cada área cardíaca (segmento) foram cuidadosamente calculados pelo **Prof. Mário César Nascimento, PhD**, e sincronizados ao ciclo cardíaco simulado. Essa autoria se refere ao trabalho do simulador; os modelos de terceiros conservam seus autores e licenças. A página anima a peça; a RA apresenta o instante estático escolhido.

@@ -8,7 +8,7 @@
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "fe77800349aa3746be2daa1b661b41e0baedd2c26156a00a4ff9f263236b272b"
+      "sha256": "80c8adf07fb9de71bc4301f1a8cc77e0584b43a223f4e9b95ffc6ac5ea71bed6"
     },
     {
       "path": "assets/coracao.glb",
@@ -68,7 +68,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "1055f63799dfff9f305c97bbab8af741d4fed2bb27d6dc3df559abff6f558aff"
+      "sha256": "973ff5e625ddb7978e6152c96bffdde952a5e00ccbc25713b7ed58abd8168738"
     },
     {
       "path": "pleura/estados.js",
@@ -84,7 +84,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "729eaf2d74f3223094174d4dbbe11857b91ccf9961cb346bdeab7bf0c35c2a2d"
+      "sha256": "31324524171b13017e78f07fff9466e411002df01996d8e977eeba8a51ddac84"
     },
     {
       "path": "pleura/modelos.js",
@@ -100,7 +100,7 @@
     },
     {
       "path": "pleura/style.css",
-      "sha256": "263f654e42e3293360aca1f2d6b26b96977d2cb878bbe52c9dd343b88f847627"
+      "sha256": "954924253a0a54a3328d46cf0ee460d693e4c50d23e727bd8ce0bff3d15f89b6"
     },
     {
       "path": "tutor-origem.js",
@@ -361,6 +361,18 @@
     {
       "path": "osso-vivo/animacao.js",
       "sha256": "afa38ce4ca4eecbaf3b10fa54551d93dc6c0b9aafb1b62197bc8a0d96a106cf7"
+    },
+    {
+      "path": "assets/coracao-e-vasos-foco.glb",
+      "sha256": "2907f30e3805c81e055dc9bca69bf6b268ff1128ec6611cc1150a9c31ed75ad9"
+    },
+    {
+      "path": "pleura/vasos.html",
+      "sha256": "b78b333105f7338370670b02116883c2e17de8da37f2e858e69a84d1aff38086"
+    },
+    {
+      "path": "pleura/vasos-foco.js",
+      "sha256": "1a46b4da67b723619082bd1be2f3cbd8a6e5972e0d38f3611a88124bdc990925"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",

@@ -493,6 +493,17 @@ button:focus-visible,input:focus-visible,a:focus-visible {
   border-radius:12px;
   background:radial-gradient(ellipse at 50% 42%,#203c50,#0b1826 75%)
 }
+.ra-box model-viewer.ra-foco-vasos {
+  height:320px
+}
+.vasos-ampliar {
+  color:#9ce4ed;
+  font-size:.85rem;
+  text-underline-offset:3px
+}
+@media(max-width:560px) {
+  .ra-box model-viewer.ra-foco-vasos { height:280px }
+}
 .ra-modelo {
   display:grid;
   gap:7px;

@@ -166,11 +166,15 @@ test("a RA preserva o estado fisiológico e oferece o tórax completo estático"
   const app = await texto("pleura/app.js");
   const creditos = await texto("assets/ATRIBUICAO.md");
   const modelo = await stat(new URL("../assets/torax-completo-lobos-corrigidos.glb", import.meta.url));
-  assert.match(html, /<select id="raModelo">[\s\S]*value="simulacao"[\s\S]*value="completo"/);
+  assert.match(html, /<select id="raModelo">[\s\S]*value="simulacao"[\s\S]*value="completo"[\s\S]*value="vasos"/);
   assert.match(app, /ciclo respiratório, pneumotórax ou os demais estados/);
   assert.match(app, /modoRA === 'completo'/);
   assert.match(app, /torax-completo-lobos-corrigidos\.glb\?v=20261008-vasos/);
-  assert.match(app, /viewer\.setAttribute\('src', URL_TORAX_COMPLETO\)/);
+  assert.match(app, /viewer\.setAttribute\('src', modelo\)/);
+  assert.match(app, /coracao-e-vasos-foco\.glb\?v=20261008-foco/);
+  assert.match(app, /modoRA === 'vasos'/);
+  assert.match(html, /id="verVasos"/);
+  assert.match(app, /busca\.get\('modelo'\)/);
   assert.match(app, /\$\('arViewer'\)\.setAttribute\('src', arUrl\)/);
   assert.match(app, /vasos pulmonares e coronários esquemáticos/);
   assert.match(creditos, /BodyParts3D[\s\S]*CC BY 4\.0/);
