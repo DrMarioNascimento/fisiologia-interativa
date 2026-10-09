@@ -2,14 +2,13 @@ import test from 'node:test'; import assert from 'node:assert/strict'; import fs
 const ler = f => fs.readFileSync(new URL('../potencial-membrana/' + f, import.meta.url));
 const html = ler('index.html').toString(), app = ler('app.js').toString();
 
-test('película de carga: seis abas, com Comunicação em 02 e os demais um número adiante', () => {
+test('neurônio: quatro abas, preservando Comunicação e Interior', () => {
   const abas = [...html.matchAll(/data-step="(\d)" type="button"><b>(\d\d)<\/b><span>([^<]+)<\/span>/g)].map(m => [+m[1], m[2], m[3]]);
-  assert.deepEqual(abas, [[0, '01', 'Neurônio'], [1, '02', 'Comunicação'], [2, '03', 'Interior'],
-    [3, '04', 'Película'], [4, '05', 'Travessias'], [5, '06', 'A onda']]);
+  assert.deepEqual(abas, [[0, '01', 'Neurônio'], [1, '02', 'Comunicação'], [2, '03', 'Interior'], [5, '04', 'A onda']]);
   assert.match(app, /const NEU = 0, COM = 1, INT = 2, PEL = 3, TRA = 4, ONDA = 5, ULTIMO = ONDA;/);
   assert.match(app, /const modelos = \[base\.modelos\[0\], comunicacao, \.\.\.base\.modelos\.slice\(1\)\];/);
   assert.match(app, /const TAM_REAL = \[\.62, \.80, \.56, \.52, \.60, 1\.05\];/);
-  assert.match(app, /pedido <= ULTIMO \+ 1/);
+  assert.match(app, /NIVEIS.includes\(pedido - 1\)/);
 });
 
 test('película de carga: Comunicação usa o GLB local com a animação do sinal', () => {

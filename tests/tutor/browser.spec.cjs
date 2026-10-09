@@ -158,7 +158,7 @@ for(const course of ['ef','fisio'])for(const moodle of [false,true])test(`${cour
   await expect(link).toHaveAttribute('target','_blank');await expect(link).toHaveAttribute('rel','noopener noreferrer');
  }
  expect(requests).toHaveLength(0);await toggle.check();
- for(const [query,href]of [['Explique o osteócito na viagem ao osso vivo RA','ra/osso-vivo/'],['Explique a placa motora na junção neuromuscular RA','ra/juncao-neuromuscular/'],['Explique o movimento do coração RA','ra/coracao/'],['Explique a bomba do retorno venoso RA','ra/retorno-venoso/'],['Explique o gradiente da pleura RA','ra/pleura/'],['Explique o comprimento do sarcômero muscular RA','ra/musculo-sarcomero/'],['Explique a película de carga em realidade aumentada','ra/potencial-membrana/'],['Explique o retorno linfático nas forças de Starling RA','ra/starling/'],['Explique por que a banda A não muda na experiência muscular RA, em até quatro linhas.','ra/musculo-sarcomero/']]){
+ for(const [query,href]of [['Explique o osteócito na viagem ao osso vivo RA','ra/osso-vivo/'],['Explique a placa motora na junção neuromuscular RA','ra/juncao-neuromuscular/'],['Explique o movimento do coração RA','ra/coracao/'],['Explique a bomba do retorno venoso RA','ra/retorno-venoso/'],['Explique o gradiente da pleura RA','ra/pleura/'],['Explique o comprimento do sarcômero muscular RA','ra/musculo-sarcomero/'],['Explique a película de carga em realidade aumentada','ra/celula/'],['Explique o retorno linfático nas forças de Starling RA','ra/starling/'],['Explique por que a banda A não muda na experiência muscular RA, em até quatro linhas.','ra/musculo-sarcomero/']]){
   await input.fill(query);await send.click();await expect(messages.locator(moodle?'.ai-response':'.tutor-ai-answer').last()).toHaveText('Resposta simulada com contexto RA correto.');
   await expect.poll(()=>requests.length).toBeGreaterThan(0);await expect.poll(()=>requests.at(-1).module).toBe(href);expect(requests.at(-1).course).toBe(course);
  }
@@ -183,7 +183,7 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
   if(hasRA){
   await expect(cards.locator('.ra-card h2')).toHaveText('RA - Realidade Aumentada');
   await expect(cards.locator('.ra-call')).toContainText('viagem de aprendizado incrível');
-  const experiencias=axis==='celular'?['potencial-membrana','starling']:axis==='osteoarticular'?['osso-vivo']:axis==='muscular'?(course==='fisio'?['musculo-sarcomero','juncao-neuromuscular','osso-vivo']:['musculo-sarcomero','juncao-neuromuscular']):axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
+  const experiencias=axis==='celular'?['potencial-membrana','celula','starling']:axis==='osteoarticular'?['osso-vivo']:axis==='muscular'?(course==='fisio'?['musculo-sarcomero','juncao-neuromuscular','osso-vivo']:['musculo-sarcomero','juncao-neuromuscular']):axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
   await expect(cards.locator('.ra-card a')).toHaveCount(experiencias.length);
   for(let j=0;j<experiencias.length;j++){
    const acesso=cards.locator('.ra-card a').nth(j);

@@ -260,11 +260,11 @@
     },
     {
       "path": "potencial-membrana/app.js",
-      "sha256": "3b30369db0cde275155e1446d2df3f8c4acf0379214d837da923869b973e6a18"
+      "sha256": "ad24920f1a12ef6e1412afc2be1df84a7f9fee4988534da3a7258b3838b0a14b"
     },
     {
       "path": "potencial-membrana/index.html",
-      "sha256": "d3f01e5543fbc92b161bd709599e4ab0b883365a0dddac914e833c3b7a36a1a9"
+      "sha256": "d75105c71294db36a6b8f08a8690a4f650174c1361ae816a367990f774a13546"
     },
     {
       "path": "potencial-membrana/modelos.js",
@@ -276,7 +276,7 @@
     },
     {
       "path": "potencial-membrana/style.css",
-      "sha256": "a639d5534ba80a057ffeb163ee4ebbc5a6392e87b4e753f36e100bf572b29d29"
+      "sha256": "d503698f41f52c0233b99b1e63a4f9ee574c5e254cca0152a55cfef079dab13d"
     },
     {
       "path": "tests/celular-migracao.test.mjs",
