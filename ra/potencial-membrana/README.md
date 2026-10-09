@@ -18,3 +18,4 @@ O catálogo compartilhado dos quatro acessos ao Tutor, com e sem IA, inclui o ro
 - `?nivel=2&t=3.2` abre a Comunicação parada naquele ponto da animação.
 - Na RA, a Comunicação usa o arquivo original: o Android toca a animação; o iPhone recebe a peça parada.
 - "Aprofundar" a partir da Comunicação mergulha no corpo do neurônio central.
+- Placa **Disparar** no iPhone (09/10/2026): na Comunicação, o botão de RA abre a peça com uma placa no chão. Tocar nela leva a esfera do sinal pelos 23 quadros-chave do arquivo, com os mesmos tempos e as pausas nas sinapses, em série (`../ra-botoes-ios.js`). Só a esfera se move. Arquivo de cerca de 3,5 MB. No Android, a RA continua tocando a animação do próprio GLB. `?botoesios` liga a placa fora do iPhone.

@@ -53,7 +53,7 @@ test('músculo: RA com botões no iPhone — botão único, só no nível 05, po
 
 test('ra-botoes-ios: alvos no topo da cena, com a pose já multiplicada pelos pais (peças não se separam)', () => {
   const mod = fs.readFileSync(new URL('../ra-botoes-ios.js', import.meta.url), 'utf8');
-  assert.match(mod, /multiplyMatrices\(m\.parent\.matrixWorld, e\.poses\[i\]\)/);
+  assert.match(mod, /multiplyMatrices\(m\.parent\.matrixWorld, pose\)/);
   assert.match(mod, /raiz\.add\(alvo\)/);
   assert.doesNotMatch(mod, /m\.parent\.add\(alvo\)/);                              // o alvo ao lado da parte separava as peças
 });
@@ -67,4 +67,23 @@ test('ra-botoes-ios: o zip é refeito com os dados de cada arquivo alinhados a 6
   v.setUint32(0, 0x04034b50, true); v.setUint32(18, 3, true); v.setUint16(26, 1, true); v.setUint16(28, 33, true); z[30] = 97;
   const r = ctx.alinhamento(z);
   assert.equal(r.length, 1); assert.equal(r[0].nome, 'a'); assert.equal(r[0].dados, 64); assert.equal(r[0].ok, true);
+});
+
+test('ra-botoes-ios: percursos em série, geometria com 4 casas e geometrias repetidas unidas', () => {
+  const mod = fs.readFileSync(new URL('../ra-botoes-ios.js', import.meta.url), 'utf8');
+  assert.match(mod, /token type = "serial"/);
+  assert.match(mod, /Math\.max\(\.01, ps\.duracao\)/);                                // duração zero trava o Quick Look
+  assert.match(mod, /replace\(\/\(\\d\\\.\\d\{4\}\)\\d\+\/g, '\$1'\)/);
+  assert.match(mod, /if \(porConteudo\.has\(chave\)\)/);
+});
+
+test('placas no iPhone: Osso vivo (Montar/Desmontar) e Comunicação (Disparar) usam o botão único', () => {
+  const osso = fs.readFileSync(new URL('../osso-vivo/app.js', import.meta.url), 'utf8');
+  const mem = fs.readFileSync(new URL('../potencial-membrana/app.js', import.meta.url), 'utf8');
+  assert.match(osso, /estados:\[\{rotulo:'Montar',poses:poses\[0\]\},\{rotulo:'Desmontar',poses:poses\[1\]\}\]/);
+  assert.match(osso, /const usaPlacas=\(\)=>nivel===0&&!placasFalharam&&/);
+  assert.match(osso, /if\(usaPlacas\(\)&&placasProntas&&ancoraAR\.href\)\{ancoraAR\.click\(\);return;\}/);
+  assert.match(mem, /estados: \[\{ rotulo: 'Disparar', passos \}\]/);
+  assert.match(mem, /const usaPlacaCom = \(\) => atual === COM && !placaComFalhou/);
+  assert.match(mem, /if \(usaPlacaCom\(\) && placaComPronta && ancoraCom\.href\) \{ ancoraCom\.click\(\); return; \}/);
 });
