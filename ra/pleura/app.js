@@ -454,7 +454,7 @@ let arUrl = null, prepId = 0, temporizador = null;
 let modoRA = 'simulacao';
 const URL_TORAX_COMPLETO = new URL('../assets/torax-completo-lobos-corrigidos.glb?v=20261008-vasos', import.meta.url).href;
 const URL_CORACAO_VASOS = new URL('../assets/coracao-e-vasos-foco.glb?v=20261008-foco', import.meta.url).href;
-const URL_APROVADO = new URL('../assets/pleura-simulacao-aprovada.glb?v=20261009', import.meta.url).href;
+const URL_APROVADO = new URL('../assets/torax-osso-texturizado.glb?v=osso-20261009', import.meta.url).href;
 function prepararRA() {
   const id = ++prepId;
   clearTimeout(temporizador);
