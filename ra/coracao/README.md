@@ -28,3 +28,10 @@ A RA recebe a vista e o instante pausado escolhidos, com escala anatômica herda
 Testes fisiológicos herdados verificam referências a 75 bpm, fases isovolumétricas, gradientes valvulares, redução de diástole com frequência, condução e atividade elétrica. Testes de migração conferem identidade dos dois GLBs, 79 malhas internas, recursos locais, atribuições, percursos e instantes rápidos. Comparação no navegador verifica posições, transformações, atributos e materiais das duas vistas ao longo do ciclo; verifica também início/pausa, ciclo único, velocidade, responsividade, legendas e exportação GLB de ambas as vistas.
 
 Veja [atribuições](ATTRIBUTION.md) e [licenças](LICENSE.md). A origem permanece disponível e não foi alterada.
+
+
+## Vista no tórax — 10/10/2026
+
+Terceira vista compartilhada pelos percursos de Educação Física e Fisioterapia. Arquivo `../assets/torax-vasos-encaixe.glb`, fornecido por Mário César Nascimento; SHA-256 `7317d2261a01a662cf445e0fb32075cbf445b3e247e028d4162f0f1e63b96dc5`. Metadados declaram BodyParts3D como fonte e ajuste local do diafragma. O arquivo original é preservado, sem redução das malhas. Normalização de enquadramento e atenuação de materiais ocorrem somente na cena. O modelo não contém animações; não se atribui a ele o batimento das vistas interna e externa.
+
+Carregamento sob demanda, com nova tentativa em caso de falha. A atenuação de pulmões e arcabouço facilita a observação do coração e dos vasos; os rótulos cardíacos A/B não são aplicados ao tórax. A exportação RA conserva a escala anatômica medida do arquivo, separada da escala do coração isolado.

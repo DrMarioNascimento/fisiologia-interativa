@@ -1,6 +1,6 @@
 # Licença e atribuição — malhas do coração
 
-Esta experiência usa dois modelos com fontes e licenças distintas:
+Esta experiência usa três modelos com fontes e licenças distintas:
 
 - **Somente Vista Externa:** `../assets/coracao.glb`, *Realistic Human Heart*, de [neshallads](https://sketchfab.com/3d-models/realistic-human-heart-3f8072336ce94d18b3d0d055a1ece089), sob [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.pt-br). Não é derivado do BodyParts3D. Escala, materiais e animação foram adaptados; as texturas do autor permanecem.
 - **Vista Interna:** `../assets/coracao-interno.glb`, derivado do BodyParts3D com 79 malhas, sob **CC BY-SA 2.1 JP**, conforme a licença preservada nos arquivos usados na origem. A procedência histórica está documentada abaixo.
@@ -76,3 +76,8 @@ arquivo e na bancada.
 | `../assets/coracao-interno.glb` | Cópia do `export/coracao-bancada11-WIP.glb` da origem; BodyParts3D, CC BY-SA 2.1 JP |
 | `MODELO-INTERNO.json` | Metadados e limitações do modelo interno preservados da origem |
 | `ATTRIBUTION.md` | Créditos e adaptações das duas vistas |
+
+
+## Vista no tórax
+
+`../assets/torax-vasos-encaixe.glb` conserva as 99 malhas e os atributos POSITION do tórax BodyParts3D já atribuído em [../assets/ATRIBUICAO.md](../assets/ATRIBUICAO.md), sob CC BY 4.0. O arquivo fornecido pelo autor é preservado integralmente. As transformações de encaixe permanecem as do arquivo enviado; normalização de enquadramento e atenuação são aplicadas na cena. Não é o modelo de neshallads nem a Vista Interna de 79 malhas.

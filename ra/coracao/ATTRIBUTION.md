@@ -38,3 +38,10 @@ aqui: é o que a licença pede, e é onde o aluno o vê.
 Derivada do **BodyParts3D** (© The Database Center for Life Science,
 CC-BY-SA 2.1 JP). Ver [LICENSE.md](LICENSE.md) e
 [especificação original](https://github.com/DrMarioNascimento/lab-ra/blob/85d13200078f5201d251c857efde5326cd53daa7/bancadas/11-coracao/SPEC.md) para a esteira que a monta.
+
+
+## Vista no tórax — 10/10/2026
+
+Terceira vista compartilhada pelos percursos de Educação Física e Fisioterapia. Arquivo `../assets/torax-vasos-encaixe.glb`, fornecido por Mário César Nascimento; SHA-256 `7317d2261a01a662cf445e0fb32075cbf445b3e247e028d4162f0f1e63b96dc5`. Metadados declaram BodyParts3D como fonte e ajuste local do diafragma. O arquivo original é preservado, sem redução das malhas. Normalização de enquadramento e atenuação de materiais ocorrem somente na cena. O modelo não contém animações; não se atribui a ele o batimento das vistas interna e externa.
+
+Carregamento sob demanda, com nova tentativa em caso de falha. A atenuação de pulmões e arcabouço facilita a observação do coração e dos vasos; os rótulos cardíacos A/B não são aplicados ao tórax. A exportação RA conserva a escala anatômica medida do arquivo, separada da escala do coração isolado.

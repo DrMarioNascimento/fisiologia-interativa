@@ -33,12 +33,14 @@ import { MARCAS_EXTERNAS, RESSALVA_EXTERNA } from './legendas-a.js?v=coracao-202
    arquivo faltar, a página diz o que falta em vez de mostrar tela preta. */
 const MODELO_B = '../assets/coracao-interno.glb';
 const MODELO_A = '../assets/coracao.glb';
+const MODELO_T = '../assets/torax-vasos-encaixe.glb';
 
 const $ = id => document.getElementById(id);
 
 /* Sem o A a página não pode ficar em silêncio: uma tela pela metade sem
    explicação é o tipo de coisa que faz alguém procurar defeito no código. */
 THREE.DefaultLoadingManager.onError = url => {
+  if (url.includes('torax-vasos-encaixe.glb')) return;
   if (document.getElementById('faltou')) return;
   const d = document.createElement('div');
   d.id = 'faltou';
@@ -865,6 +867,11 @@ function desenharLegendas() {
 }
 
 function pintarBotoesLegenda() {
+  if (atual === 'T') {
+    $('legValvas').disabled = $('legVasos').disabled = true;
+    $('notaLegendas').textContent = 'Vista anatômica do tórax: use a atenuação para observar coração e vasos. Os rótulos das vistas cardíacas não são aplicados a este modelo.';
+    return;
+  }
   $('legValvas').setAttribute('aria-pressed', grupoAtivo.valvas);
   $('legVasos').setAttribute('aria-pressed', grupoAtivo.vasos);
   const ehInterna = atual === 'B';
@@ -1022,6 +1029,66 @@ window.legendas = () => ({ ...grupoAtivo, rotulos: ancoras.length,
 
 /* ══ CARGA DAS DUAS PEÇAS ══════════════════════════════════════════════ */
 const pecaA = { raiz: null, aplicar: null }, pecaB = { raiz: null, aplicar: null };
+const pecaT = { raiz: null, aplicar: null, alturaM: .4 };
+const pecaDe = qual => qual === 'T' ? pecaT : qual === 'A' ? pecaA : pecaB;
+const nomeDaVista = qual => qual === 'T' ? 'Vista no tórax' : qual === 'A' ? 'Vista Externa' : 'Vista Interna';
+let cargaTorax = null;
+let vistaPedida = 'B';
+
+function atenuarTorax() {
+  pecaT.raiz?.traverse(o => {
+    if (!o.isMesh || !o.userData.contextoToracico) return;
+    for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
+      const atenuar = $('atenuarTorax').checked;
+      m.opacity = atenuar ? .16 : o.userData.opacidadeOriginal;
+      m.transparent = atenuar || o.userData.transparenciaOriginal;
+      m.depthWrite = !atenuar;
+      m.needsUpdate = true;
+    }
+  });
+  desenhaAgora();
+}
+
+async function abrirTorax() {
+  vistaPedida = 'T';
+  if (!pecaT.raiz) {
+    $('pT').disabled = true;
+    $('toraxStatus').textContent = 'Carregando a vista no tórax…';
+    cargaTorax ??= carregador.loadAsync(MODELO_T).then(g => {
+      const raiz = g.scene;
+      raiz.updateMatrixWorld(true);
+      const caixa = new THREE.Box3().setFromObject(raiz);
+      const altura = caixa.getSize(new THREE.Vector3()).y;
+      pecaT.alturaM = altura > 1 ? altura / 1000 : altura;
+      raiz.scale.multiplyScalar(ALTURA / altura);
+      raiz.updateMatrixWorld(true);
+      raiz.position.sub(new THREE.Box3().setFromObject(raiz).getCenter(new THREE.Vector3()));
+      raiz.traverse(o => {
+        if (!o.isMesh) return;
+        o.material = Array.isArray(o.material) ? o.material.map(m => m.clone()) : o.material.clone();
+        if (/^(lobo_|costela_|cartilages_|sternum_|vertebra_|clavicula_|escapula_|diafragma_)/.test(o.name)) {
+          o.userData.contextoToracico = true;
+          const m = Array.isArray(o.material) ? o.material[0] : o.material;
+          o.userData.opacidadeOriginal = m.opacity;
+          o.userData.transparenciaOriginal = m.transparent;
+        }
+      });
+      pecaT.raiz = raiz;
+      pecaT.aplicar = () => {};
+      raiz.visible = false;
+      cena.add(raiz);
+      atenuarTorax();
+    }).catch(err => { cargaTorax = null; throw err; });
+    try {
+      await cargaTorax;
+      $('toraxStatus').textContent = '';
+    } catch (err) {
+      $('toraxStatus').textContent = 'Não foi possível carregar o tórax. As vistas interna e externa continuam disponíveis; toque em Vista no tórax para tentar novamente.';
+      return;
+    } finally { $('pT').disabled = false; }
+  }
+  if (vistaPedida === 'T') { trocar('T'); prepararRA(); }
+}
 let atual = 'B';
 /* O TAMANHO NA MESA sai do arquivo: o BodyParts3D é milimétrico, então a
    caixa do B mede a própria altura anatômica. Fica aqui um valor de partida
@@ -1039,7 +1106,7 @@ carregador.load(MODELO_B, g => {
   pecaB.aplicar = montarB(g.scene, malhas);
   montarLegendas(new Map(malhas.map(m => [m.name, m])), $('legendas'));
   cena.add(g.scene);
-  trocar('B');
+  if (vistaPedida === 'B') trocar('B');
 });
 carregador.load(MODELO_A, g => {
   let malha = null;
@@ -1056,12 +1123,18 @@ carregador.load(MODELO_A, g => {
 });
 
 function trocar(qual) {
+  vistaPedida = qual;
+  if (qual === 'T' && !pecaT.aplicar) return;
   if (qual === 'A' && !pecaA.aplicar) return;
   if (qual === 'B' && !pecaB.aplicar) return;
   atual = qual;
   $('modeloStatus').hidden=true;
   if (pecaA.raiz) pecaA.raiz.visible = qual === 'A';
   if (pecaB.raiz) pecaB.raiz.visible = qual === 'B';
+  if (pecaT.raiz) pecaT.raiz.visible = qual === 'T';
+  $('pT').setAttribute('aria-pressed', qual === 'T');
+  $('toraxControls').hidden = qual !== 'T';
+  $('cicloTesteBox').hidden = qual === 'T' || !/Android/i.test(navigator.userAgent);
   $('pA').setAttribute('aria-pressed', qual === 'A');
   $('pB').setAttribute('aria-pressed', qual === 'B');
   $('avA').hidden = qual !== 'A';
@@ -1071,14 +1144,15 @@ function trocar(qual) {
   $('notaValvas').textContent = qual === 'B'
     ? 'Aqui as onze cúspides estão desenhadas: elas obedecem a estes estados, que o motor deriva das PRESSÕES.'
     : 'A Vista Externa é casca fechada e não tem cúspides para desenhar. Os estados abaixo continuam sendo os do motor.';
-  $('vistaLabel').textContent=qual==='A'?'Vista Externa':'Vista Interna';atualizarExecucao();
+  if (qual === 'T') $('notaValvas').textContent = 'O tórax é um modelo anatômico estático; as valvas e pressões abaixo são leituras do motor, não movimentos deste arquivo.';
+  $('vistaLabel').textContent=nomeDaVista(qual);atualizarExecucao();
   desenhaAgora();
 }
 
 /* ══ O QUADRO ══════════════════════════════════════════════════════════ */
 function aplicar(dt) {
   const q = em(sim, fase);
-  const peca = atual === 'A' ? pecaA : pecaB;
+  const peca = pecaDe(atual);
   if (peca.aplicar) peca.aplicar(q, dt);
 
   for (const v of Object.keys(VALVAS)) {
@@ -1216,9 +1290,11 @@ $('arEjeta').onclick=()=>instante(faseDoInstante(sim,'ejecao'));
 
 $('pA').onclick = () => trocar('A');
 $('pB').onclick = () => trocar('B');
+$('pT').onclick = abrirTorax;
+$('atenuarTorax').onchange = () => { atenuarTorax(); prepararRA(); };
 function atualizarExecucao(){
  $('iniciar').disabled=batendo;$('pausar').disabled=!batendo;
- $('cicloEstado').textContent=(batendo?(cicloRestante>0?'Executando um ciclo':'Em execução'):'Pausado')+' · '+(atual==='A'?'Vista Externa':'Vista Interna');
+ $('cicloEstado').textContent=(batendo?(cicloRestante>0?'Executando um ciclo':'Em execução'):'Pausado')+' · '+nomeDaVista(atual)+(atual==='T'?' · anatomia estática':'');
 }
 function executarCiclo(dt){
  if(!batendo)return;
@@ -1300,7 +1376,8 @@ function prepararRA() {
   $('raStatus').textContent = 'Preparando o instante para a câmera…';
   temporizador = setTimeout(async () => {
     try {
-      const peca = atual === 'A' ? pecaA : pecaB;
+      const peca = pecaDe(atual);
+      const alturaExportada = atual === 'T' ? pecaT.alturaM : alturaRealM;
       if (!peca.raiz) return;
       /* clone(true) COMPARTILHA geometria e material com a cena da tela — e é
          o que se quer aqui, porque a geometria já está deformada no instante
@@ -1312,7 +1389,7 @@ function prepararRA() {
       clone.updateMatrixWorld(true);
       const caixa = new THREE.Box3().setFromObject(clone);
       const tam = caixa.getSize(new THREE.Vector3());
-      clone.scale.multiplyScalar(alturaRealM / (tam.y || 1));
+      clone.scale.multiplyScalar(alturaExportada / (tam.y || 1));
       clone.updateMatrixWorld(true);
       /* de pé no chão: centrado em x e z, e a BASE em y = 0 — senão o Quick
          Look afunda metade da peça no piso */
@@ -1351,7 +1428,7 @@ function prepararRA() {
       if (arUrl) URL.revokeObjectURL(arUrl);
       arUrl = URL.createObjectURL(new Blob([buf], { type: 'model/gltf-binary' }));
       ultimoPacote = { id, bytes: buf.byteLength, conta, peca: atual, fase: +fase.toFixed(3),
-                       alturaM: alturaRealM };
+                       alturaM: alturaExportada };
       $('arViewer').src = arUrl;
     } catch (err) {
       console.error(err);
@@ -1367,7 +1444,7 @@ $('arViewer').addEventListener('load', () => {
   const mb = ultimoPacote ? (ultimoPacote.bytes / 1048576).toFixed(1) : '?';
   if ($('arViewer').canActivateAR) {
     $('launchAR').disabled = false;
-    $('raStatus').textContent = `Pronto · fase ${fase.toFixed(3)} · ${alturaRealM.toFixed(3)} m ` +
+    $('raStatus').textContent = `Pronto · fase ${fase.toFixed(3)} · ${ultimoPacote.alturaM.toFixed(3)} m ` +
       `· ${mb} MB. ${COMO_ABRIR}`;
   } else {
     $('launchAR').disabled = true;
@@ -1465,6 +1542,7 @@ function amostrarCiclo(qual, N) {
 /* Diagnóstico: gera o ciclo de uma vista e devolve as medições. Não toca a
    interface; serve ao console e aos testes. */
 async function gerarCiclo({ vista = atual, N = N_CICLO, normais = true, limiarMm = .05 } = {}) {
+  if (vista === 'T') throw new Error('A Vista no tórax é anatômica e estática; use a exportação RA da vista selecionada.');
   const t0 = performance.now();
   const a = amostrarCiclo(vista, N);
   const t1 = performance.now();
