@@ -273,3 +273,11 @@ The English translation is provided for convenience only.
 ### Modelos originais — Viagem ao osso vivo
 
 As geometrias procedurais, texturas e animações de `ra/osso-vivo/` integram a obra original abrangida por esta licença. NIAMS, Tu et al., Salo et al., estudos da rede lacunocanalicular e da associação colágeno/mineral são referências conceituais, não fontes de modelos 3D ou texturas incorporados. As imagens apresentadas como inspiração não foram copiadas ou distribuídas. As licenças de Three.js e model-viewer permanecem próprias de seus titulares.
+
+---
+
+## Nota editorial — 10 de outubro de 2026
+
+A documentação atual inclui Célula viva, Do neurônio ao impulso e os catálogos dos quatro acessos aos tutores. Os créditos dos modelos, atlas e bibliotecas permanecem nos arquivos de atribuição e licenças próprios.
+
+Esta nota registra a revisão da documentação. Não altera as cláusulas anteriores, os titulares, as permissões, as restrições nem as licenças próprias de terceiros.
