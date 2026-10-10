@@ -108,11 +108,12 @@ test('quatro acessos do Tutor usam o catálogo atual com célula, abas transferi
  const context={window:{}};vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../../tutor-ra-data.js'),'utf8'),context);
  for(const [file,course] of [['tutor-ef.html','ef'],['tutor-fisio.html','fisio'],['tutor-moodle.html','ef'],['tutor-moodle.html','fisio']]){
   const html=fs.readFileSync(path.resolve(__dirname,'../../'+file),'utf8');
-  assert.match(html,/tutor-ra-data\.js\?v=osso-somente-ef-20261009/);
+  assert.match(html,/tutor-ra-data\.js\?v=coracao-torax-20261010/);
   const modules=context.window.raTutorModulesForCourse(course);
   assert.equal(modules.some(m=>m.href==='ra/osso-vivo/'),course==='ef');
   const cell=modules.find(m=>m.href==='ra/celula/'),neuron=modules.find(m=>m.href==='ra/potencial-membrana/');
   assert(cell&&neuron);assert(cell.steps.some(s=>s.includes('Travessias')));assert(cell.steps.some(s=>s.includes('núcleo')));
   assert(neuron.steps.some(s=>s.includes('quatro')));assert(neuron.steps.some(s=>s.includes('Célula viva')));
+  const heart=modules.find(m=>m.href==='ra/coracao/');assert(heart.steps.some(s=>s.includes('Vista no tórax')&&s.includes('estático')));
  }
 });
