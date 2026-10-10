@@ -176,11 +176,11 @@
     },
     {
       "path": "coracao/app.js",
-      "sha256": "80eeeec943ae5c0cb7d8a870699c80a458129f7c3633b60258de3dcb1d759e83"
+      "sha256": "5c7f17286143a84973df1fe9ee26e2353994a7ced1a206d82f5e31e60757f850"
     },
     {
       "path": "coracao/ATTRIBUTION.md",
-      "sha256": "3f18c0ed3c49f047738d7e68493a140fe0fb32f97e26922bc5da03a70f2c50eb"
+      "sha256": "6dadfe05cc9b918419ba109d13252acfd5ae27dbb0e67365969b04a2b2fe87d8"
     },
     {
       "path": "coracao/erro.js",
@@ -192,7 +192,7 @@
     },
     {
       "path": "coracao/index.html",
-      "sha256": "132532560d8d0a9df444766fe4cc443c2e551f090f4cc47eb49465cefabf9f23"
+      "sha256": "172b4064727ce0cd8e2b98fb15d3d7c0c90b26973e31539208b7e162f43c5368"
     },
     {
       "path": "coracao/legendas-a.js",
@@ -208,7 +208,7 @@
     },
     {
       "path": "coracao/LICENSE.md",
-      "sha256": "e850650f5ce4c8c7e8f2a64d078a480b198e43d8578b291eca3b3e2408c3d857"
+      "sha256": "ffbacf67b14bc3db1127a97c02d7101c25794852b9ca78b1045ed28d1638b0b3"
     },
     {
       "path": "coracao/MODELO-INTERNO.json",
@@ -232,7 +232,7 @@
     },
     {
       "path": "coracao/README.md",
-      "sha256": "3ddea0aff0d324d22d622190d6efe12684b5b29a785d31ea6a8382e4ffb7c6fd"
+      "sha256": "bc2a77d72f07d27fdab3a1c4f4513fbcff9be3554a1f1eff439b2e6d57a64f50"
     },
     {
       "path": "musculo-sarcomero/app.js",
@@ -433,6 +433,10 @@
     {
       "path": "pleura/torax-aprovado.js",
       "sha256": "a16e9ed47bf40d2cac9443128b064d6e67ae75be547bf4375f5e1f2a8126521d"
+    },
+    {
+      "path": "assets/torax-vasos-encaixe.glb",
+      "sha256": "7317d2261a01a662cf445e0fb32075cbf445b3e247e028d4162f0f1e63b96dc5"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
