@@ -40,6 +40,7 @@ test('both course catalogs load; unattempted question does not send answer key',
 
 test('catálogo RA conserva controles reais, percurso, créditos e contexto de questões',()=>{
  for(const course of ['ef','fisio'])for(const href of ['ra/coracao/','ra/retorno-venoso/','ra/pleura/','ra/musculo-sarcomero/','ra/potencial-membrana/','ra/celula/','ra/starling/','ra/juncao-neuromuscular/','ra/osso-vivo/']){
+  if(course==='fisio'&&href==='ra/osso-vivo/')continue;
   const m=catalog[course].find(m=>m.href===href);assert(m?.ra);assert.equal(m.qs.length,3);
   const payload=validate({course,module:href,message:'Explique o mecanismo',question:{index:0,choice:null}},catalog);
   const c=JSON.parse(payload.systemInstruction.parts[1].text.replace('Contexto curricular: ',''));
@@ -92,4 +93,26 @@ test('preview serves tutor with configuration; private files are inaccessible',a
   for(const route of ['/server/tutor.cjs','/server/.env','/.git/config','/package.json','/%2eenv','/tests/tutor/server.test.cjs']) {
     assert.equal((await fetch(s.url+route)).status,404,route);
   }
+});
+
+test('osso vivo permanece exclusivo de Educação Física nos cards e no catálogo do Tutor',()=>{
+ assert(catalog.ef.some(m=>m.href==='ra/osso-vivo/'));
+ assert(!catalog.fisio.some(m=>m.href==='ra/osso-vivo/'));
+ assert.throws(()=>validate({course:'fisio',module:'ra/osso-vivo/',message:'Explique o osso'},catalog));
+ const context={window:{}};vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../../tutor-ra-card.js'),'utf8'),context);
+ for(const axis of ['celular','muscular','osteoarticular','cardiovascular','respiratorio'])assert(!context.window.cardRealidadeAumentada('fisioterapia',axis).includes('osso-vivo'));
+ assert(context.window.cardRealidadeAumentada('educacao-fisica','osteoarticular').includes('osso-vivo'));
+});
+
+test('quatro acessos do Tutor usam o catálogo atual com célula, abas transferidas e osso exclusivo EF',()=>{
+ const context={window:{}};vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../../tutor-ra-data.js'),'utf8'),context);
+ for(const [file,course] of [['tutor-ef.html','ef'],['tutor-fisio.html','fisio'],['tutor-moodle.html','ef'],['tutor-moodle.html','fisio']]){
+  const html=fs.readFileSync(path.resolve(__dirname,'../../'+file),'utf8');
+  assert.match(html,/tutor-ra-data\.js\?v=osso-somente-ef-20261009/);
+  const modules=context.window.raTutorModulesForCourse(course);
+  assert.equal(modules.some(m=>m.href==='ra/osso-vivo/'),course==='ef');
+  const cell=modules.find(m=>m.href==='ra/celula/'),neuron=modules.find(m=>m.href==='ra/potencial-membrana/');
+  assert(cell&&neuron);assert(cell.steps.some(s=>s.includes('Travessias')));assert(cell.steps.some(s=>s.includes('núcleo')));
+  assert(neuron.steps.some(s=>s.includes('quatro')));assert(neuron.steps.some(s=>s.includes('Célula viva')));
+ }
 });
