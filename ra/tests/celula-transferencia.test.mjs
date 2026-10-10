@@ -25,3 +25,22 @@ test('troca de abas preserva o iframe e envia o nível correto com origem limita
 test('GLB da célula permanece íntegro e contém texturas normais e organelas',()=>{
  const b=fs.readFileSync(new URL('../celula/visualizador/celula-aprimorada.glb',import.meta.url));assert.equal(b.toString('ascii',0,4),'glTF');assert.equal(b.readUInt32LE(8),b.length);const j=JSON.parse(b.toString('utf8',20,20+b.readUInt32LE(12)));for(const name of ['nucleolo','cromatina','reticulo_endoplasmatico_liso','reticulo_endoplasmatico_rugoso'])assert(j.nodes.some(o=>o.name===name));assert(j.materials.every(m=>m.normalTexture));
 });
+
+test('célula usa viewport separado e recebe enquadramento e toque na área do canvas',()=>{
+ const html=read('celula/visualizador/index.html'),css=read('celula/visualizador/layout.css'),app=read('celula/visualizador/app.js');
+ assert.ok(html.indexOf('id="cell-stage"')<html.indexOf('</section>') && html.indexOf('</section>')<html.indexOf('<aside'));
+ assert.match(css,/grid-template-columns:minmax\(0,1fr\) 280px/);
+ assert.match(css,/@media\(max-width:760px\)/);
+ assert.doesNotMatch(css,/\.panel\{[^}]*position:absolute/);
+ assert.match(app,/new ResizeObserver/);assert.match(app,/getBoundingClientRect/);
+ for(const [width,height] of [[280,420],[390,420],[620,500],[1000,500]]){
+  const vertical=38*Math.PI/180,horizontal=2*Math.atan(Math.tan(vertical/2)*width/height);
+  const distance=1.12/Math.sin(Math.min(vertical,horizontal)/2)*1.08;
+  assert.ok(Math.asin(1.12/distance)<Math.min(vertical,horizontal)/2);
+ }
+});
+test('RA da célula segue a preparação antecipada e mantém o gesto direto para abrir a câmera',()=>{
+ const html=read('celula/visualizador/index.html'),app=read('celula/visualizador/ra.js');
+ assert.match(html,/class="ra-launch"/);assert.match(html,/camera-controls exposure="1.1"/);
+ assert.match(app,/launch.onclick=\(\)=>viewer.activateAR\(\);prepare.click\(\)/);
+});
