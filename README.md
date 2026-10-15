@@ -1,5 +1,14 @@
 # Fisiologia Interativa
 
+## Acesso público e finalidade educacional
+
+As páginas e os simuladores de Fisiologia estão disponíveis gratuitamente ao público. Os recursos são voltados especialmente a estudantes, professores, profissionais da saúde e demais pessoas interessadas em compreender o funcionamento do corpo humano.
+
+Os recursos têm finalidade exclusivamente educacional. Por meio de visualizações, simulações e atividades interativas, ajudam a compreender mecanismos fisiológicos e são aprimorados continuamente. Não substituem diagnóstico, prescrição nem orientação clínica individual.
+
+Portal do autor: https://www.drmarionascimento.com.br/
+
+
 ## Estado e manutenção — 10 de outubro de 2026
 
 O catálogo de RA tem nove experiências em Educação Física e oito em Fisioterapia. **Célula viva** contém Célula, Película e Travessias; **Do neurônio ao impulso** contém Neurônio, Comunicação, Interior e A onda. **Viagem ao osso vivo** é exclusiva do percurso de Educação Física.
