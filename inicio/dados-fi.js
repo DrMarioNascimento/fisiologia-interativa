@@ -59,7 +59,7 @@ window.FI_DADOS = {
     "nome": "A Célula Sitiada",
     "img": "../assets/salas/celular.webp",
     "grande": "../assets/salas/grande/celular.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/celular?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/celular?origem=site"
    }
   },
   {
@@ -125,7 +125,7 @@ window.FI_DADOS = {
     "nome": "O Músculo em Silêncio",
     "img": "../assets/salas/muscular.webp",
     "grande": "../assets/salas/grande/muscular.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/muscular?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/muscular?origem=site"
    }
   },
   {
@@ -187,7 +187,7 @@ window.FI_DADOS = {
     "nome": "O Desafio da Mudança Postural",
     "img": "../assets/salas/cardiovascular.webp",
     "grande": "../assets/salas/grande/cardiovascular.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/cardiovascular?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/cardiovascular?origem=site"
    }
   },
   {
@@ -249,7 +249,7 @@ window.FI_DADOS = {
     "nome": "O Fôlego Perdido",
     "img": "../assets/salas/respiratorio.webp",
     "grande": "../assets/salas/grande/respiratorio.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/respiratorio?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/respiratorio?origem=site"
    }
   },
   {
@@ -296,7 +296,7 @@ window.FI_DADOS = {
     "nome": "A Marcha do Oxigênio",
     "img": "../assets/salas/sala-base.webp",
     "grande": "../assets/salas/grande/sala-base.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/integracao?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/integracao?origem=site"
    }
   }
  ],
@@ -305,7 +305,7 @@ window.FI_DADOS = {
   "sub": "Protocolo Eferente · todas as unidades",
   "img": "../assets/salas/sala-base.webp",
   "grande": "../assets/salas/grande/sala-base.webp",
-  "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/protocolo-eferente?origem=site"
+  "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/protocolo-eferente?origem=site"
  },
  "desafio": {
   "unidade": "integracao",

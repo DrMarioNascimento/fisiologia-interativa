@@ -57,7 +57,7 @@ Each course home page also offers:
 
 - mind maps for review and visual reading guides for the in-depth modules;
 - a guided study **tutor** per course, with an optional AI mode (Google Gemini) that the student turns on voluntarily; without it, the guided tutor, maps and questions keep working locally;
-- one escape room per unit from the companion project [Fisiologia em Fuga](https://drmarionascimento.github.io/fisiologia-em-fuga/), plus a final "Operação Secreta" covering all units.
+- one escape room per unit from the companion project [Fisiologia em Fuga](https://fisiologia-em-fuga.drmarionascimento.com.br/), plus a final "Operação Secreta" covering all units.
 
 ### Augmented reality
 
@@ -264,7 +264,7 @@ A API do tutor roda à parte, no Google Cloud Run (`server/tutor.cjs`, imagem de
 
 ### Fisiologia em Fuga
 
-Cada unidade termina com uma sala de fuga do projeto [Fisiologia em Fuga](https://drmarionascimento.github.io/fisiologia-em-fuga/), acessível pela roleta abaixo do mapa e pelo cadeado da unidade na lista. A **Operação Secreta** reúne todas as unidades e pede confirmação antes de abrir. Os desafios de fechamento da integração são o **Box do Atleta** (Educação Física) e a **UTI fisiológica** (Fisioterapia).
+Cada unidade termina com uma sala de fuga do projeto [Fisiologia em Fuga](https://fisiologia-em-fuga.drmarionascimento.com.br/), acessível pela roleta abaixo do mapa e pelo cadeado da unidade na lista. A **Operação Secreta** reúne todas as unidades e pede confirmação antes de abrir. Os desafios de fechamento da integração são o **Box do Atleta** (Educação Física) e a **UTI fisiológica** (Fisioterapia).
 
 ## Características técnicas
 

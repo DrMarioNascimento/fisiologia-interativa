@@ -10,32 +10,32 @@ const maps = {
 const escapeRooms = {
   celular: {
     title:'A Célula Sitiada',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/celular',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/celular',
     goal:'Resolva os cadeados sobre membrana, transporte e potenciais de ação antes do tempo.'
   },
   muscular: {
     title:'O Músculo em Silêncio',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/muscular',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/muscular',
     goal:'Resolva os cadeados sobre excitabilidade e contração muscular antes do tempo.'
   },
   osteoarticular: {
     title:'O Osso que Se Reconstrói',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/osteoarticular',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/osteoarticular',
     goal:'Resolva os cadeados sobre homeostase do cálcio e adaptação óssea antes do tempo.'
   },
   cardiovascular: {
     title:'A Prova do Débito',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/cardiovascular',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/cardiovascular',
     goal:'Resolva os cadeados sobre débito cardíaco, retorno venoso e resistência vascular antes do tempo.'
   },
   respiratorio: {
     title:'O Fôlego Perdido',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/respiratorio',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/respiratorio',
     goal:'Resolva os cadeados sobre mecânica ventilatória, gases e hemoglobina antes do tempo.'
   },
   integracao: {
     title:'A Marcha do Oxigênio',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/integracao',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/integracao',
     goal:'Resolva os cadeados sobre débito, extração e consumo de oxigênio antes do tempo.'
   }
 };

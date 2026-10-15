@@ -10,7 +10,7 @@
     return "ef";
   }
   function urlOperacao() {
-    return "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/" + cursoAtual() + "/protocolo-eferente?origem=site";
+    return "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/" + cursoAtual() + "/protocolo-eferente?origem=site";
   }
   function idsDisponiveis() {
     if (typeof axes !== "undefined" && Array.isArray(axes)) return axes.map(function (item) { return item.id; });

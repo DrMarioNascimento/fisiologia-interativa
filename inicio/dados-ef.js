@@ -59,7 +59,7 @@ window.FI_DADOS = {
     "nome": "A Célula Sitiada",
     "img": "assets/salas/celular.webp",
     "grande": "assets/salas/grande/celular.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/celular?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/celular?origem=site"
    }
   },
   {
@@ -125,7 +125,7 @@ window.FI_DADOS = {
     "nome": "O Músculo em Silêncio",
     "img": "assets/salas/muscular.webp",
     "grande": "assets/salas/grande/muscular.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/muscular?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/muscular?origem=site"
    }
   },
   {
@@ -159,7 +159,7 @@ window.FI_DADOS = {
     "nome": "O Osso que Se Reconstrói",
     "img": "assets/salas/osteoarticular.webp",
     "grande": "assets/salas/grande/osteoarticular.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/osteoarticular?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/osteoarticular?origem=site"
    }
   },
   {
@@ -221,7 +221,7 @@ window.FI_DADOS = {
     "nome": "A Prova do Débito",
     "img": "assets/salas/cardiovascular.webp",
     "grande": "assets/salas/grande/cardiovascular.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/cardiovascular?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/cardiovascular?origem=site"
    }
   },
   {
@@ -275,7 +275,7 @@ window.FI_DADOS = {
     "nome": "O Fôlego Perdido",
     "img": "assets/salas/respiratorio.webp",
     "grande": "assets/salas/grande/respiratorio.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/respiratorio?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/respiratorio?origem=site"
    }
   },
   {
@@ -322,7 +322,7 @@ window.FI_DADOS = {
     "nome": "A Marcha do Oxigênio",
     "img": "assets/salas/sala-base.webp",
     "grande": "assets/salas/grande/sala-base.webp",
-    "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/integracao?origem=site"
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/integracao?origem=site"
    }
   }
  ],
@@ -331,7 +331,7 @@ window.FI_DADOS = {
   "sub": "Protocolo Eferente · todas as unidades",
   "img": "assets/salas/sala-base.webp",
   "grande": "assets/salas/grande/sala-base.webp",
-  "href": "https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/ef/protocolo-eferente?origem=site"
+  "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/protocolo-eferente?origem=site"
  },
  "desafio": {
   "unidade": "integracao",

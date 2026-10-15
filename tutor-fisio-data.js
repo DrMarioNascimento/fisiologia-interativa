@@ -42,27 +42,27 @@ window.fisioterapiaTutor = {
   escapeRooms: {
   celular: {
     title:'A Célula Sitiada',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/celular',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/celular',
     goal:'Resolva os cadeados sobre membrana, transporte e potenciais de ação antes do tempo.'
   },
   muscular: {
     title:'O Músculo em Silêncio',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/muscular',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/muscular',
     goal:'Resolva os cadeados sobre excitabilidade e contração muscular antes do tempo.'
   },
   cardiovascular: {
     title:'O Desafio da Mudança Postural',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/cardiovascular',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/cardiovascular',
     goal:'Resolva os cadeados sobre ortostatismo, retorno venoso e resposta cardiovascular antes do tempo.'
   },
   respiratorio: {
     title:'O Fôlego Perdido',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/respiratorio',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/respiratorio',
     goal:'Resolva os cadeados sobre mecânica ventilatória, gases e hemoglobina antes do tempo.'
   },
   integracao: {
     title:'A Marcha do Oxigênio',
-    href:'https://drmarionascimento.github.io/fisiologia-em-fuga/#/escape/fisio/integracao',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/integracao',
     goal:'Resolva os cadeados sobre débito, extração e consumo de oxigênio antes do tempo.'
   }
   },
