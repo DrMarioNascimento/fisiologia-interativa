@@ -287,3 +287,10 @@ Esta nota registra a revisão da documentação. Não altera as cláusulas anter
 O portal de apresentação do autor usa o endereço abaixo. Este endereço não altera a hospedagem própria do recurso, a titularidade ou as permissões desta licença.
 
 https://www.drmarionascimento.com.br/
+
+## Endereços oficiais do projeto — 14 de outubro de 2026
+
+- Educação Física: https://fisiologia.drmarionascimento.com.br/
+- Fisioterapia: https://fisiologia.drmarionascimento.com.br/fisioterapia/
+
+A atualização dos endereços mantém as condições de uso educacional e os créditos existentes.
