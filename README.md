@@ -1,5 +1,10 @@
 # Fisiologia Interativa
 
+## Acessos oficiais de Fisiologia
+
+- **Educação Física (EF):** https://fisiologia.drmarionascimento.com.br/
+- **Fisioterapia:** https://fisiologia.drmarionascimento.com.br/fisioterapia/
+
 ## Acesso público e finalidade educacional
 
 As páginas e os simuladores de Fisiologia estão disponíveis gratuitamente ao público. Os recursos são voltados especialmente a estudantes, professores, profissionais da saúde e demais pessoas interessadas em compreender o funcionamento do corpo humano.
@@ -26,8 +31,8 @@ Interactive human physiology simulators for Physical Education and Physiotherapy
 
 ## Access
 
-- **Physical Education:** [drmarionascimento.github.io/fisiologia-interativa](https://drmarionascimento.github.io/fisiologia-interativa/)
-- **Physiotherapy:** [drmarionascimento.github.io/fisiologia-interativa/fisioterapia](https://drmarionascimento.github.io/fisiologia-interativa/fisioterapia/)
+- **Physical Education:** [fisiologia.drmarionascimento.com.br](https://fisiologia.drmarionascimento.com.br/)
+- **Physiotherapy:** [fisiologia.drmarionascimento.com.br/fisioterapia](https://fisiologia.drmarionascimento.com.br/fisioterapia/)
 
 The interface and all content are in Portuguese.
 
@@ -60,15 +65,15 @@ Nine independent experiences run in this repository, without Google sign-in or r
 
 | System | Experience | Explore |
 |---|---|---|
-| Cardiovascular | Heart in action: external and internal views, beating, valves and Wiggers diagram | [Heart](https://drmarionascimento.github.io/fisiologia-interativa/ra/coracao/) |
-| Cardiovascular | Venous return: posture, arterial/venous pressures, valves and muscle pump | [Venous return](https://drmarionascimento.github.io/fisiologia-interativa/ra/retorno-venoso/) |
-| Respiratory | Pleura: layers, alveolar gradient, West zones and ventilation | [Pleura](https://drmarionascimento.github.io/fisiologia-interativa/ra/pleura/) |
-| Cellular | Neuron to impulse: Neuron, Communication, Interior and The wave | [Neuron to impulse](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/) |
-| Cellular | Living cell: Cell, Charge film and Crossings | [Living cell](https://drmarionascimento.github.io/fisiologia-interativa/ra/celula/) |
-| Cellular · Unit 1 | Starling forces: microvascular exchange, glycocalyx, edema and lymph | [Starling forces](https://drmarionascimento.github.io/fisiologia-interativa/ra/starling/) |
-| Osteoarticular (Physical Education only) | Exploded bone anatomy, compact/spongy tissue, vascularized osteon, cellular transport and collagen–mineral formation under mechanical load | [Journey into living bone](https://drmarionascimento.github.io/fisiologia-interativa/ra/osso-vivo/) |
-| Muscular | Nerve to force: neuromuscular junction, excitation–contraction coupling and synchronized signals | [Nerve to force](https://drmarionascimento.github.io/fisiologia-interativa/ra/juncao-neuromuscular/) |
-| Muscular | Muscle to sarcomere: five structural levels, filament sliding and length–tension curve | [Muscle to sarcomere](https://drmarionascimento.github.io/fisiologia-interativa/ra/musculo-sarcomero/) |
+| Cardiovascular | Heart in action: external and internal views, beating, valves and Wiggers diagram | [Heart](https://fisiologia.drmarionascimento.com.br/ra/coracao/) |
+| Cardiovascular | Venous return: posture, arterial/venous pressures, valves and muscle pump | [Venous return](https://fisiologia.drmarionascimento.com.br/ra/retorno-venoso/) |
+| Respiratory | Pleura: layers, alveolar gradient, West zones and ventilation | [Pleura](https://fisiologia.drmarionascimento.com.br/ra/pleura/) |
+| Cellular | Neuron to impulse: Neuron, Communication, Interior and The wave | [Neuron to impulse](https://fisiologia.drmarionascimento.com.br/ra/potencial-membrana/) |
+| Cellular | Living cell: Cell, Charge film and Crossings | [Living cell](https://fisiologia.drmarionascimento.com.br/ra/celula/) |
+| Cellular · Unit 1 | Starling forces: microvascular exchange, glycocalyx, edema and lymph | [Starling forces](https://fisiologia.drmarionascimento.com.br/ra/starling/) |
+| Osteoarticular (Physical Education only) | Exploded bone anatomy, compact/spongy tissue, vascularized osteon, cellular transport and collagen–mineral formation under mechanical load | [Journey into living bone](https://fisiologia.drmarionascimento.com.br/ra/osso-vivo/) |
+| Muscular | Nerve to force: neuromuscular junction, excitation–contraction coupling and synchronized signals | [Nerve to force](https://fisiologia.drmarionascimento.com.br/ra/juncao-neuromuscular/) |
+| Muscular | Muscle to sarcomere: five structural levels, filament sliding and length–tension curve | [Muscle to sarcomere](https://fisiologia.drmarionascimento.com.br/ra/musculo-sarcomero/) |
 
 The Tutors provide course-specific links. The browser shows the animation; augmented reality presents the selected static state on a compatible device. Pressures are displayed in mmHg and cmH₂O. See [RA documentation](ra/README.md).
 
@@ -103,8 +108,8 @@ O projeto complementa aulas, estudos dirigidos e atividades acadêmicas por meio
 
 ## Acesso
 
-- **Educação Física:** [drmarionascimento.github.io/fisiologia-interativa](https://drmarionascimento.github.io/fisiologia-interativa/)
-- **Fisioterapia:** [drmarionascimento.github.io/fisiologia-interativa/fisioterapia](https://drmarionascimento.github.io/fisiologia-interativa/fisioterapia/)
+- **Educação Física:** [fisiologia.drmarionascimento.com.br](https://fisiologia.drmarionascimento.com.br/)
+- **Fisioterapia:** [fisiologia.drmarionascimento.com.br/fisioterapia](https://fisiologia.drmarionascimento.com.br/fisioterapia/)
 - **Hospedagem institucional:** em processo de implantação na infraestrutura da UDESC (endereço institucional sugerido: `fisiologia-interativa-sites.cefid.udesc.br`)
 
 ## Público-alvo
@@ -225,27 +230,27 @@ Os quatro acessos preservam o percurso de cada disciplina e o modo guiado local,
 
 | Acesso | Endereço |
 |---|---|
-| Tutor Educação Física | [tutor-ef.html](https://drmarionascimento.github.io/fisiologia-interativa/tutor-ef.html) |
-| Tutor Fisioterapia | [tutor-fisio.html](https://drmarionascimento.github.io/fisiologia-interativa/tutor-fisio.html) |
-| Tutor Moodle — Educação Física | [tutor-moodle.html](https://drmarionascimento.github.io/fisiologia-interativa/tutor-moodle.html) |
-| Tutor Moodle — Fisioterapia | [tutor-moodle.html?percurso=fisioterapia](https://drmarionascimento.github.io/fisiologia-interativa/tutor-moodle.html?percurso=fisioterapia) |
+| Tutor Educação Física | [tutor-ef.html](https://fisiologia.drmarionascimento.com.br/tutor-ef.html) |
+| Tutor Fisioterapia | [tutor-fisio.html](https://fisiologia.drmarionascimento.com.br/tutor-fisio.html) |
+| Tutor Moodle — Educação Física | [tutor-moodle.html](https://fisiologia.drmarionascimento.com.br/tutor-moodle.html) |
+| Tutor Moodle — Fisioterapia | [tutor-moodle.html?percurso=fisioterapia](https://fisiologia.drmarionascimento.com.br/tutor-moodle.html?percurso=fisioterapia) |
 
 ### Realidade aumentada
 
 As nove experiências **Coração em ação**, **Retorno venoso**, **Pleura**, **Do músculo ao sarcômero**, **Do nervo à força**, **Do neurônio ao impulso**, **Célula viva**, **Forças de Starling** e **Viagem ao osso vivo** são independentes dentro de `ra/`: não exigem credencial Google e não carregam recursos do antigo Lab RA. Coração e Retorno venoso aparecem no destaque cardiovascular; Pleura, no respiratório; Do músculo ao sarcômero, no muscular; Do neurônio ao impulso, Célula viva e Forças de Starling, na Unidade 1 — Celular. Viagem ao osso vivo aparece somente em Educação Física, no sistema osteoarticular. Os botões RA usam acabamento dourado, relevo 3D e efeito de pressionamento.
 
-- [Coração em ação](https://drmarionascimento.github.io/fisiologia-interativa/ra/coracao/): vistas interna e externa, contração, valvas, frequência, velocidade, instantes do ciclo e gráfico de Wiggers sincronizados.
-- [Retorno venoso](https://drmarionascimento.github.io/fisiologia-interativa/ra/retorno-venoso/): posição em pé/decúbito, PA e PV, válvulas, caminhada e bomba muscular.
-- [Pleura](https://drmarionascimento.github.io/fisiologia-interativa/ra/pleura/): camadas, gradiente alveolar, zonas de West, respiração e estados rápidos.
-- [Viagem ao osso vivo](https://drmarionascimento.github.io/fisiologia-interativa/ra/osso-vivo/): desmontagem do fêmur, compacto/esponjoso, ósteon vascularizado, osteócito, reabsorção com transporte e formação de colágeno/hidroxiapatita; carga mecânica visível, habitual, exercício e imobilização. Comparação de volumes ilustrativos, sem previsão de densidade mineral. Somente Educação Física: Sistema osteoarticular; ausente do catálogo de Fisioterapia. [Modelo e limites](ra/osso-vivo/README.md).
-- [Do nervo à força](https://drmarionascimento.github.io/fisiologia-interativa/ra/juncao-neuromuscular/): junção, terminal, fenda, tríade e contração; gráficos sincronizados, estímulos repetidos e transmissão insuficiente. Reutiliza o sarcômero aprovado. [Modelo e limites](ra/juncao-neuromuscular/README.md).
-- [Do músculo ao sarcômero](https://drmarionascimento.github.io/fisiologia-interativa/ra/musculo-sarcomero/): músculo, fascículo, fibra, miofibrila e sarcômero, sem bases; giro, rótulos, ampliação, contração e curva comprimento–tensão. A geometria e os cálculos conservam a versão aprovada. [Detalhes e referência](ra/musculo-sarcomero/README.md).
+- [Coração em ação](https://fisiologia.drmarionascimento.com.br/ra/coracao/): vistas interna e externa, contração, valvas, frequência, velocidade, instantes do ciclo e gráfico de Wiggers sincronizados.
+- [Retorno venoso](https://fisiologia.drmarionascimento.com.br/ra/retorno-venoso/): posição em pé/decúbito, PA e PV, válvulas, caminhada e bomba muscular.
+- [Pleura](https://fisiologia.drmarionascimento.com.br/ra/pleura/): camadas, gradiente alveolar, zonas de West, respiração e estados rápidos.
+- [Viagem ao osso vivo](https://fisiologia.drmarionascimento.com.br/ra/osso-vivo/): desmontagem do fêmur, compacto/esponjoso, ósteon vascularizado, osteócito, reabsorção com transporte e formação de colágeno/hidroxiapatita; carga mecânica visível, habitual, exercício e imobilização. Comparação de volumes ilustrativos, sem previsão de densidade mineral. Somente Educação Física: Sistema osteoarticular; ausente do catálogo de Fisioterapia. [Modelo e limites](ra/osso-vivo/README.md).
+- [Do nervo à força](https://fisiologia.drmarionascimento.com.br/ra/juncao-neuromuscular/): junção, terminal, fenda, tríade e contração; gráficos sincronizados, estímulos repetidos e transmissão insuficiente. Reutiliza o sarcômero aprovado. [Modelo e limites](ra/juncao-neuromuscular/README.md).
+- [Do músculo ao sarcômero](https://fisiologia.drmarionascimento.com.br/ra/musculo-sarcomero/): músculo, fascículo, fibra, miofibrila e sarcômero, sem bases; giro, rótulos, ampliação, contração e curva comprimento–tensão. A geometria e os cálculos conservam a versão aprovada. [Detalhes e referência](ra/musculo-sarcomero/README.md).
 
-- [Do neurônio ao impulso](https://drmarionascimento.github.io/fisiologia-interativa/ra/potencial-membrana/): Neurônio, Comunicação, Interior e A onda; Goldman, capacitância e propagação. Película e Travessias ficam em Célula viva. [Detalhes e limites](ra/potencial-membrana/README.md).
+- [Do neurônio ao impulso](https://fisiologia.drmarionascimento.com.br/ra/potencial-membrana/): Neurônio, Comunicação, Interior e A onda; Goldman, capacitância e propagação. Película e Travessias ficam em Célula viva. [Detalhes e limites](ra/potencial-membrana/README.md).
 
-- [Célula viva](https://drmarionascimento.github.io/fisiologia-interativa/ra/celula/): Célula, Película e Travessias; núcleo, organelas, membrana, bicamada, cargas e transporte. Movimento e visualização em RA têm controles e limitações próprios.
+- [Célula viva](https://fisiologia.drmarionascimento.com.br/ra/celula/): Célula, Película e Travessias; núcleo, organelas, membrana, bicamada, cargas e transporte. Movimento e visualização em RA têm controles e limitações próprios.
 
-- [Forças de Starling](https://drmarionascimento.github.io/fisiologia-interativa/ra/starling/): rede, capilar, forças, barreira, edema e linfa; princípio clássico e revisado, balanço de líquido, guia de variáveis e cores padronizadas. [Funcionamento e limites](ra/starling/README.md).
+- [Forças de Starling](https://fisiologia.drmarionascimento.com.br/ra/starling/): rede, capilar, forças, barreira, edema e linfa; princípio clássico e revisado, balanço de líquido, guia de variáveis e cores padronizadas. [Funcionamento e limites](ra/starling/README.md).
 
 As pressões são apresentadas em **mmHg e cmH₂O**. A animação ocorre na página; a RA apresenta o estado estático selecionado e depende de dispositivo/navegador compatíveis. Consulte [documentação RA](ra/README.md), [Coração](ra/coracao/README.md) e [auditoria do Retorno venoso](ra/retorno-venoso/AUDITORIA-FISIOLOGIA.md).
 
