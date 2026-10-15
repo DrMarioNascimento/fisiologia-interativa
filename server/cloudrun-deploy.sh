@@ -62,7 +62,7 @@ echo "== Publicando no Cloud Run (leva alguns minutos)"
 gcloud run deploy "$SERVICE" --source "$WORK/repo" --region "$REGION" \
   --allow-unauthenticated --max-instances 1 --memory 256Mi --cpu 1 --timeout 60 \
   --set-secrets GEMINI_API_KEY=gemini-api-key:latest \
-  --set-env-vars "^|^TUTOR_ALLOWED_ORIGINS=https://drmarionascimento.github.io|TUTOR_DAILY_LIMIT=100|TUTOR_SERVE_SITE=0|HOST=0.0.0.0" \
+  --set-env-vars "^|^TUTOR_ALLOWED_ORIGINS=https://drmarionascimento.github.io,https://fisiologia.drmarionascimento.com.br|TUTOR_DAILY_LIMIT=100|TUTOR_SERVE_SITE=0|HOST=0.0.0.0" \
   --quiet
 rm -rf "$WORK"
 

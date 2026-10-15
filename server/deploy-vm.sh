@@ -37,7 +37,7 @@ EnvironmentFile=-/etc/tutor-fisiologia/gemini.env
 Environment=HOST=127.0.0.1
 Environment=PORT=8787
 Environment=TUTOR_SERVE_SITE=0
-Environment=TUTOR_ALLOWED_ORIGINS=https://drmarionascimento.github.io
+Environment=TUTOR_ALLOWED_ORIGINS=https://drmarionascimento.github.io,https://fisiologia.drmarionascimento.com.br
 Environment=TUTOR_DAILY_LIMIT=100
 ExecStart=/opt/tutor-node/bin/node /opt/tutor-fisiologia/server/tutor.cjs
 Restart=on-failure
