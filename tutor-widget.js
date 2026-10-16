@@ -285,7 +285,7 @@
     const encontrado=findModules(text)[0],pedidoRA=/realidade aumentada|\bra\b|\b3d\b/.test(normalize(text))&&encontrado?.ra;
     const module = (pedidoRA?encontrado:null) || selectedModule || allModules().find(m=>m.href===aiModule) || encontrado || null;
     if (aiModule !== module?.href) { aiHistory = []; aiModule = module?.href; }
-    const question = lastQuiz?.module.href === module?.href ? {index:lastQuiz.index, choice:lastQuiz.choice} : null;
+    const question = lastQuiz && module && lastQuiz.module?.href === module.href ? {index:lastQuiz.index, choice:lastQuiz.choice} : null;
     const pending = addMessage('Preparando a explicação…','bot');
     const controller = new AbortController(); aiRequest = controller;
     const send = document.querySelector('.tutor-send'); send.disabled = true;
