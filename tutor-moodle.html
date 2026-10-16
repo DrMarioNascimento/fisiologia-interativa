@@ -69,7 +69,7 @@
       const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').trim();
       const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       const aiMarkup=s=>esc(s).replace(/^[ \t]*[*-][ \t]+/gm,'• ').replace(/^[ \t]*#{1,6}[ \t]*(.+)$/gm,'<b>$1</b>').replace(/\*\*([^*\n]+?)\*\*/g,'<b>$1</b>').replace(/(^|[\s(])\*([^*\s][^*\n]*?)\*(?=[\s).,;:!?]|$)/gm,'$1<i>$2</i>');
-      const base='https://drmarionascimento.github.io/fisiologia-interativa/';
+      const base='https://fisiologia.drmarionascimento.com.br/';
       const isFisio=new URLSearchParams(location.search).get('percurso')==='fisioterapia';
       const course=isFisio?'fisio':'ef';
       const courseConfig=isFisio?window.fisioterapiaTutor:null;
@@ -78,7 +78,7 @@
       const linkList=items=>'<div class="links">'+items.map(x=>`<a class="link" href="${esc(base+x.href+(isFisio||x.href.startsWith('ra/')?(x.href.includes('?')?'&':'?')+'percurso='+(isFisio?'fisioterapia':'educacao-fisica'):''))}" target="_blank" rel="noopener noreferrer">${esc(x.title)}</a>`).join('')+'</div>';
       const mapItems=()=>Object.values(isFisio?(courseConfig?.maps||{}):(typeof maps==='object'?maps:{})).flatMap(v=>Array.isArray(v)?v:[v]).filter(Boolean).map(x=>({title:x.title,href:x.src}));
       const moduleItems=()=>(isFisio?(courseConfig?.modules||[]):(Array.isArray(modules)?modules:[])).concat(window.raTutorModulesForCourse?.(isFisio?'fisio':'ef')||window.raTutorModules||[]);
-      const endpoint=window.TUTOR_AI_CONFIG?.endpoint || (location.hostname === 'drmarionascimento.github.io' ? 'https://tutor-fisiologia-wlt26s6wjq-uc.a.run.app/api/tutor' : '');
+      const endpoint=window.TUTOR_AI_CONFIG?.endpoint || (['drmarionascimento.github.io','fisiologia.drmarionascimento.com.br'].includes(location.hostname) ? 'https://tutor-fisiologia-wlt26s6wjq-uc.a.run.app/api/tutor' : '');
       const enabled=document.getElementById('aiEnabled'),moduleSelect=document.getElementById('aiModule');
       let history=[],currentModule=null,request=null;
       const plain=(text)=>{const d=document.createElement('div');d.className='msg bot ai-response';d.textContent=text;box.appendChild(d);box.scrollTop=box.scrollHeight;return d;};
