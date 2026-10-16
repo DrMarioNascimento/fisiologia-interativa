@@ -10,7 +10,7 @@ Use o contexto curricular fornecido: objetivo, roteiro e questão atual. Não in
 Mantenha o percurso do curso informado no contexto. Explique conceitos compartilhados com exemplos adequados a esse curso, sem encaminhar automaticamente para o outro. Se o catálogo atual não contém um recurso solicitado, diga isso sem inventar um link ou sugerir uma troca de curso.
 Você NÃO vê os controles, gráficos ou valores ao vivo. Peça que o aluno descreva a alteração quando necessário.
 Adapte a explicação ao que ele escreveu; identifique primeiro o ponto correto e depois a confusão específica. Use exemplos curtos e termine, quando útil, com uma pergunta para verificar compreensão. Evite elogios vazios e repetir o roteiro genérico.
-Responda normalmente em até 180 palavras, em texto simples. Se pedirem uma analogia ou simplificação, faça isso. Se faltarem dados, diga o que falta.
+Responda normalmente em até 180 palavras, em texto simples. Não use LaTeX, cifrões ($) nem comandos como \\text: escreva siglas e fórmulas em texto comum, com subscritos Unicode (SvO₂, DO₂, PaCO₂, Na⁺). Se pedirem uma analogia ou simplificação, faça isso. Se faltarem dados, diga o que falta.
 Não invente equivalências ou comparações quantitativas sem dados. Por exemplo, o fato de contração e relaxamento dependerem de ATP não demonstra que tenham o mesmo gasto energético.
 Não forneça apenas gabaritos. Questão sem alternativa escolhida: dê pista e peça raciocínio, sem revelar a resposta correta. Questão respondida: explique o mecanismo e a alternativa escolhida.
 O material é didático, não diagnóstico, prescrição ou orientação para um paciente real. Dúvidas conceituais sobre doenças podem ser explicadas no plano educacional.
@@ -108,17 +108,36 @@ function createTutorServer(options = {}) {
         const disconnected = () => { if (!res.writableEnded) controller.abort(); };
         res.on('close', disconnected);
         try {
-          const upstream = await callFetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
-            method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
-            body: JSON.stringify(payload), signal: controller.signal
-          });
-          if (!upstream.ok) throw failure(upstream.status === 429 ? 429 : 502, upstream.status === 429 ? 'limit' : 'provider');
-          const data = await upstream.json();
-          const candidate = data.candidates?.[0];
-          if (data.promptFeedback?.blockReason || !['STOP', 'MAX_TOKENS'].includes(candidate?.finishReason)) throw failure(502, 'no_answer');
-          const text = candidate.content?.parts?.filter(p => typeof p.text === 'string' && !p.thought).map(p => p.text).join('\n').trim();
-          if (!text) throw failure(502, 'no_answer');
-          return reply(200, { text: text.slice(0, 6000), truncated: candidate.finishReason === 'MAX_TOKENS' || text.length > 6000 });
+          // Falhas passageiras do provedor (5xx ou resposta vazia) ganham uma nova tentativa.
+          const ask = async () => {
+            const upstream = await callFetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+              method: 'POST', headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+              body: JSON.stringify(payload), signal: controller.signal
+            });
+            if (!upstream.ok) {
+              console.error(`tutor: Gemini respondeu HTTP ${upstream.status}`);
+              throw Object.assign(failure(upstream.status === 429 ? 429 : 502, upstream.status === 429 ? 'limit' : 'provider'), { retry: upstream.status >= 500 });
+            }
+            const data = await upstream.json();
+            const candidate = data.candidates?.[0];
+            if (data.promptFeedback?.blockReason) throw failure(502, 'no_answer');
+            if (!['STOP', 'MAX_TOKENS'].includes(candidate?.finishReason)) {
+              console.error(`tutor: Gemini sem resposta (finishReason ${candidate?.finishReason})`);
+              throw Object.assign(failure(502, 'no_answer'), { retry: true });
+            }
+            const text = candidate.content?.parts?.filter(p => typeof p.text === 'string' && !p.thought).map(p => p.text).join('\n').trim();
+            if (!text) throw Object.assign(failure(502, 'no_answer'), { retry: true });
+            return { text, finishReason: candidate.finishReason };
+          };
+          let result;
+          try { result = await ask(); } catch (error) {
+            if (!error.retry || controller.signal.aborted) throw error;
+            await new Promise(resolve => setTimeout(resolve, options.retryDelayMs ?? 800));
+            if (controller.signal.aborted) throw error;
+            result = await ask();
+          }
+          const { text, finishReason } = result;
+          return reply(200, { text: text.slice(0, 6000), truncated: finishReason === 'MAX_TOKENS' || text.length > 6000 });
         } finally { clearTimeout(timeout); res.off('close', disconnected); active--; }
       }
       // Local preview only: expose teaching assets, never arbitrary server files or secrets.
