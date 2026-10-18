@@ -1,3 +1,4 @@
+import {renderTissues} from './tissues.js?v=2';
 import {HORMONES,CYCLE_HORMONES,PREGNANCY_HORMONES,snapshotAt,buildSeries,totalDays,formatHormone,formatTime,TERM_DAY} from './model.js';
 import {describePhase,segments} from './phases.js';
 import {applyExercise,EXERCISE} from './exercise.js';
@@ -9,6 +10,7 @@ function rebuild(){series=buildSeries(settings);$('day').max=totalDays(settings)
 function render(){const rest=snapshotAt(day,settings),snap=exercise?applyExercise(rest,exercise):rest,phase=describePhase(settings.mode,day,settings.cycleLength,settings.breastfeeding);$('clock').textContent=formatTime(settings.mode,day,settings.cycleLength);$('day').value=day;$('play').disabled=playing;$('pause').disabled=!playing;$('phase-title').textContent=phase.title;$('period').textContent=phase.period;
  const origin=settings.mode==='gestacao'&&day>=63&&day<TERM_DAY?'Placenta / unidade feto-placentária':'Ovário';
  $('flow').innerHTML=[['hipotalamo','Hipotálamo','GnRH — pulsos que regulam a adeno-hipófise'],['adeno','Adeno-hipófise','FSH e LH → ovários · prolactina → mama'],['ovario',origin,phase.ovary+' · '+phase.gonadSubtitle],['neuro','Hipotálamo → neuro-hipófise','Ocitocina: sintetizada no hipotálamo, transportada e liberada pela neuro-hipófise; atua no útero e na ejeção do leite.']].map(([g,t,s],i)=>`<div class="stage" data-gland="${g}"><h3><span class="stage-number">${i+1}</span>${esc(t)}</h3><p>${esc(s)}</p></div>`).join('');
+ renderTissues($('tissues'),settings.mode,day,settings.cycleLength,snap);
  $('feedback').innerHTML=phase.feedback.map(f=>`<p class="${f.type==='positiva'?'positive':''}"><strong>${esc(f.type)}:</strong> ${esc(f.text)}</p>`).join('');
  $('labs').innerHTML=ids().map(id=>`<div class="lab"><small>${esc(HORMONES[id].name)}</small><b style="color:${colors[PREGNANCY_HORMONES.indexOf(id)]}">${formatHormone(id,snap[id])}</b><small>${esc(HORMONES[id].unit)}${exercise?' · repouso: '+formatHormone(id,rest[id]):''}</small></div>`).join('');
  $('tissue').textContent=snap.endometrium===null?'Gestação contada desde a última menstruação. Puerpério ilustrado até 12 semanas.':`Endométrio: ${snap.endometrium.toFixed(1)} mm · temperatura basal: ${snap.temperature.toFixed(2)} °C (valores ilustrativos).`;
