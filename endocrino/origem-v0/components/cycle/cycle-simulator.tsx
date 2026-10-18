@@ -105,6 +105,7 @@ export function CycleSimulator({ initialMode }: { initialMode: Mode }) {
         <footer className="pb-6 text-xs text-muted-foreground text-pretty lg:col-start-1">
           Modelo didático baseado em perfis hormonais médios de referência. Os valores variam entre pessoas e laboratórios e
           não substituem avaliação clínica.
+          <p className="mt-3 font-semibold">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</p>
         </footer>
       </main>
     </div>

@@ -1,3 +1,4 @@
+import {signalStyle, signalSVG} from './signals.js?v=1';
 import { AXES, PARAM_DEFS, formatParam } from './axes.js?v=20261018-audit2';
 import { BASELINE_STATE, DEFAULT_PARAMS, advance, waterLimitReached } from './model.js?v=20261018-audit2';
 import { computeLabs, BASELINE_LABS, LAB_DEFS, formatLab, labStatus } from './labs.js?v=20261018-audit2';
@@ -21,7 +22,7 @@ function sample(){history.push({t:state.t,labs:{...labs}});if(history.length>400
 function reset(){running=false;params={...DEFAULT_PARAMS};state={...BASELINE_STATE};labs=computeLabs(state,params);scenarioId='normal';history=[];sample();renderStructure();renderValues();}
 function scenarioList(){return SCENARIOS.filter(s=>s.id==='normal'||(axis.id==='ocitocina'?['parto','lactacao'].includes(s.id):axis.id==='neuro'?s.axis==='neuro'&&s.id!=='parto':s.axis===axis.id));}
 function renderStructure(){
- $('tabs').innerHTML=axes.map(a=>`<button type="button" data-axis="${a.id}" aria-pressed="${a.id===axis.id}">${esc(a.tabLabel)}</button>`).join('');
+ $('tabs').innerHTML=axes.map((a,i)=>`<button type="button" data-axis="${a.id}" style="--card-accent:${['#f0a7aa','#ffb764','#88c9a1','#9bcce9','#bca8eb','#64d8d0','#e9bd82'][i]}" aria-pressed="${a.id===axis.id}"><small>Eixo hormonal</small>${esc(a.tabLabel)}</button>`).join('');
  $('axis-title').textContent=axis.name;$('axis-summary').textContent=axis.summary;
  const choices=scenarioList();const local=choices.some(s=>s.id===scenarioId);$('scenario').innerHTML=(!local?'<option value="" disabled>Experimento ativo em outro eixo / personalizado</option>':'')+choices.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');$('scenario').value=local?scenarioId:'';
  $('scenario-description').textContent=SCENARIOS.find(s=>s.id===scenarioId)?.description||'Experimento personalizado';
@@ -30,11 +31,30 @@ function renderStructure(){
  $('legend').innerHTML=axis.chart.series.map(s=>`<span style="--c:${s.color}">${esc(LAB_DEFS[s.lab].short)}${['contraction','milk'].includes(s.lab)?' (% do máximo)':''}</span>`).join('');
 }
 function chip(id){const d=LAB_DEFS[id], status=d.low===undefined&&d.high===undefined?'':labStatus(id,labs[id]);return `<div class="lab"><small>${esc(d.label)}</small><b class="${status}">${formatLab(id,labs[id])}</b><small>${esc(d.unit)}</small><span class="status ${status}">${status||'efeito simulado'}${d.low!==undefined?' · '+d.low+'–'+d.high:''}</span></div>`;}
+function signalArrow(label,id,inhibitory=false){
+ const v=labs[id],base=BASELINE_LABS[id],s=signalStyle(v,base);
+ return '<div class="signal-link">'+signalSVG(v,base,{inhibitory})+'<div><strong>'+esc(label)+'</strong><small>'+s.ratio.toLocaleString('pt-BR',{maximumFractionDigits:2})+'× basal · '+(inhibitory?'inibição':'sinal hormonal')+'</small></div></div>';
+}
+function stageHTML(s,i){
+ let arrow='';
+ if(s.arrow){
+  if(axis.id==='gh'&&i===0)arrow=signalArrow('GHRH estimula os somatotrofos','ghrh')+signalArrow('Somatostatina inibe os somatotrofos','sst',true);
+  else if(axis.id==='prolactina'&&i===0)arrow=signalArrow('Dopamina inibe os lactotrofos (D2)','dopamine',true)+signalArrow('TRH estimula os lactotrofos','trh');
+  else if(axis.id==='ocitocina'&&i===0){const stimulus=Math.min(1,params.labor+params.suckling);arrow='<div class="signal-link">'+signalSVG(stimulus,1)+'<div><strong>Aferências sensoriais ao hipotálamo</strong><small>'+Math.round(stimulus*100)+'% de estímulo selecionado · não é concentração de ocitocina</small></div></div>';}
+  else arrow=signalArrow(s.arrow.label,s.arrow.signal);
+ }
+ return '<div class="axis-step"><div class="stage" style="--card-accent:'+['#88c9a1','#bca8eb','#ffb764','#9bcce9'][i]+'"><h3><span class="stage-number">'+(i+1)+'</span>'+esc(s.title)+'</h3><small>'+esc(s.subtitle)+'</small><div class="labs">'+s.labs.map(chip).join('')+'</div></div>'+(arrow?'<div class="signal-bundle">'+arrow+'</div>':'')+'</div>';
+}
+function renderDiagram(){
+ const stages=axis.stages,count=axis.id==='ocitocina'?3:stages.length;
+ const chain=axis.id==='ocitocina'?stages.slice(0,2).map(stageHTML).join('')+'<div class="parallel-targets"><p>Alvos em paralelo — a ocitocina circulante pode atuar no útero e na mama.</p><div class="target-grid">'+stages.slice(2).map((s,i)=>stageHTML(s,i+2)).join('')+'</div></div>':stages.map(stageHTML).join('');
+ $('diagram').innerHTML='<div class="axis-chain" style="--stage-count:'+count+';--connections:'+(count-1)+'">'+chain+'</div>';
+}
 function renderValues(){
  const atLimit=waterLimitReached(state,params);if(atLimit)running=false;
  $('model-limit').hidden=!atLimit;$('model-limit').textContent=atLimit?'Limite do modelo atingido: balanço hídrico ainda diferente de zero. O avanço foi interrompido para não mostrar um falso equilíbrio. Modifique as entradas/perdas ou use Resetar.':'';
  $('clock').textContent='Dia '+state.t.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});$('play').disabled=running||atLimit;$('pause').disabled=!running;$('step').disabled=atLimit;
- $('diagram').innerHTML=axis.stages.map((s,i)=>`<div class="stage"><h3><span class="stage-number">${i+1}</span>${esc(s.title)}</h3><small>${esc(s.subtitle)}</small><div class="labs">${s.labs.map(chip).join('')}</div>${s.arrow?`<p class="signal">↓ ${esc(s.arrow.label)}</p>`:''}</div>`).join('');
+ renderDiagram();
  const result=interpret(axis.interpretAxis,labs,params);
  if(result.title.includes('em equilíbrio')) {
    const projected=computeLabs(advance(state,params,.25),params);
