@@ -1,1 +1,1 @@
-{"type":"module","scripts":{"build":"node build.cjs","test":"node --test tests.mjs"}}
+{"type":"module","scripts":{"build":"node build.cjs","test":"node --test tests.mjs thyroid-tests.mjs"}}
