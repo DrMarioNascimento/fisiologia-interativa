@@ -46,6 +46,11 @@ export function SiteNav({ current, onModeChange }: Props) {
             </li>
           )
         })}
+        <li className="shrink-0">
+          <a href="/endocrino/cortisol.html" className="flex h-9 items-center rounded-md px-3 text-xs font-medium text-muted-foreground hover:text-foreground">
+            Cortisol: estresse, sono e exercício
+          </a>
+        </li>
       </ul>
     </nav>
   )
