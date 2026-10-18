@@ -91,8 +91,8 @@ test('Integração fracionada preserva resultados e saídas qualitativas não pr
  for(const k of ['e2','p4','endo','priming','secretorySignal'])assert.ok(Math.abs(a[k]-b[k])<1e-7);
  const h=harness();assert.doesNotMatch(h.el('response').innerHTML,/× a referência|NaN|undefined/);
  assert.match(h.el('response').innerHTML,/Sem estimativa numérica/);
- const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');assert.match(html,/class="avatar-portrait"/);assert.match(html,/não dados de uma mulher nem validação externa/);
- assert.ok(html.includes('href="style.css?v=3"'));assert.ok(html.includes('../style.css?v=20261018-indicators'));
+ const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');assert.match(html,/class="avatar-portrait"/);assert.ok(html.includes('viewBox="0 0 420 405"'));assert.match(html,/não dados de uma mulher nem validação externa/);
+ assert.ok(html.includes('href="style.css?v=4"'));assert.ok(html.includes('../style.css?v=20261018-indicators'));
 });
 
 test('P4 sem preparo estrogênico não reproduz supressão central de E2 mais P4',()=>{
