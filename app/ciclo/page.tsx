@@ -7,6 +7,7 @@ export const metadata: Metadata = {
     'Simulador interativo dos hormônios femininos ao longo do ciclo menstrual e da gestação: GnRH, FSH, LH, prolactina, ocitocina, estradiol, progesterona e hCG.',
 }
 
-export default function Page() {
-  return <CycleSimulator />
+export default async function Page({ searchParams }: { searchParams: Promise<{ modo?: string | string[] }> }) {
+  const { modo } = await searchParams
+  return <CycleSimulator initialMode={modo === 'gestacao' ? 'gestacao' : 'ciclo'} />
 }

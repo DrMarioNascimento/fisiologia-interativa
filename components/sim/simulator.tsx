@@ -28,7 +28,7 @@ export function Simulator() {
 
   return (
     <div className="min-h-dvh">
-      <SiteNav current="/" />
+      <SiteNav current="eixos" />
       <SimHeader
         day={sim.sim.t}
         running={sim.running}

@@ -21,8 +21,8 @@ const TICK_MS = 100
 
 type Clock = { day: number; cycle: number }
 
-export function useCycleSim() {
-  const [mode, setModeState] = useState<Mode>('ciclo')
+export function useCycleSim(initialMode: Mode = 'ciclo') {
+  const [mode, setModeState] = useState<Mode>(initialMode)
   const [clock, setClock] = useState<Clock>({ day: 0, cycle: 1 })
   const [running, setRunning] = useState(true)
   const [speedIndex, setSpeedIndex] = useState(0)
@@ -54,6 +54,7 @@ export function useCycleSim() {
 
   const setMode = useCallback((m: Mode) => {
     setModeState(m)
+    window.history.replaceState(null, '', `?modo=${m}`)
     setClock({ day: 0, cycle: 1 })
     setExerciseState(null)
     setRunning(true)

@@ -9,6 +9,7 @@ import {
   GLAND_LABEL,
   HORMONES,
   type HormoneId,
+  type Mode,
   PREGNANCY_HORMONES,
   snapshotAt,
   TERM_DAY,
@@ -24,8 +25,8 @@ import { HormoneFlow } from './hormone-flow'
 import { PhaseCard } from './phase-card'
 import { PhaseTimeline } from './phase-timeline'
 
-export function CycleSimulator() {
-  const sim = useCycleSim()
+export function CycleSimulator({ initialMode }: { initialMode: Mode }) {
+  const sim = useCycleSim(initialMode)
   const settings = { mode: sim.mode, cycleLength: sim.cycleLength, breastfeeding: sim.breastfeeding }
   const rest = snapshotAt(sim.day, settings)
   const snap = sim.exercise ? applyExercise(rest, sim.exercise) : rest
@@ -42,7 +43,7 @@ export function CycleSimulator() {
 
   return (
     <div className="min-h-dvh">
-      <SiteNav current="/ciclo" />
+      <SiteNav current={sim.mode} onModeChange={sim.setMode} />
       <CycleHeader sim={sim} snap={snap} trends={trends} monitor={monitor} />
       <main className="mx-auto flex max-w-6xl flex-col gap-4 px-4 py-4 lg:grid lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start lg:gap-6">
         <div className="lg:col-start-1">
