@@ -31,6 +31,7 @@ type Action =
   | { type: 'reset' }
   | { type: 'speed'; index: number }
   | { type: 'param'; key: ParamKey; value: number }
+  | { type: 'resetParams' }
   | { type: 'scenario'; scenario: Scenario }
 
 const point = (sim: SimState, params: Params): HistoryPoint => ({ t: sim.t, ...computeLabs(sim, params) })
@@ -61,12 +62,16 @@ function reducer(store: SimStore, action: Action): SimStore {
       return { ...store, speedIndex: action.index }
     case 'param':
       return { ...store, params: { ...store.params, [action.key]: action.value }, scenarioId: 'custom' }
+    case 'resetParams':
+      return { ...store, params: DEFAULT_PARAMS, scenarioId: 'normal' }
     case 'scenario': {
-      const sim = { ...store.sim, ...action.scenario.statePatch }
+      const sim = { ...BASELINE_STATE, ...action.scenario.statePatch }
+      const params = { ...DEFAULT_PARAMS, ...action.scenario.params }
       return {
         ...store,
         sim,
-        params: { ...DEFAULT_PARAMS, ...action.scenario.params },
+        history: [point(sim, params)],
+        params,
         scenarioId: action.scenario.id,
         running: true,
       }
@@ -92,6 +97,7 @@ export function useSimulation() {
     reset: () => dispatch({ type: 'reset' }),
     setSpeed: (index: number) => dispatch({ type: 'speed', index }),
     setParam: (key: ParamKey, value: number) => dispatch({ type: 'param', key, value }),
+    resetParams: () => dispatch({ type: 'resetParams' }),
     applyScenario: (scenario: Scenario) => dispatch({ type: 'scenario', scenario }),
   }
 }

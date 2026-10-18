@@ -37,8 +37,9 @@ function thyroid(l: Labs, p: Params): Interpretation {
   }
   if (tsh === 'baixo' && t4 === NORMAL)
     return { title: 'Hipertireoidismo subclínico', tone: 'alerta', points: ['T4 livre ainda normal, mas já suficiente para suprimir o TSH.', ...extra] }
-  if (t4 === 'baixo' && tsh !== 'alto')
-    return { title: 'Hipotireoidismo central', tone: 'alerta', points: ['T4 baixo com TSH normal ou baixo: a hipófise (secundário) ou o hipotálamo (terciário) não respondem.', 'Neste caso o TSH não serve para monitorar o tratamento — use o T4 livre.', ...extra] }
+  const centralLesion = p.adenoFn < 0.7 || p.stalk < 0.7 || p.thyrotropeFn < 0.7 || p.trhDrive < 0.5
+  if (tsh !== 'alto' && (t4 === 'baixo' || (centralLesion && l.ft4 < 1.1)))
+    return { title: 'Hipotireoidismo central', tone: 'alerta', points: ['T4 livre baixo ou normal-baixo com TSH inapropriadamente normal ou baixo: a hipófise (secundário) ou o hipotálamo (terciário) não respondem.', 'Neste caso o TSH não serve para monitorar o tratamento — use o T4 livre.', ...extra] }
   if (t3 === 'baixo' && p.deiodinase < 0.8)
     return { title: 'Síndrome do eutireoidiano doente', tone: 'alerta', points: ['A doença sistêmica reduz a desiodação de T4 em T3 nos tecidos.', 'T3 cai primeiro; T4 e TSH costumam permanecer normais.', ...extra] }
   return {
@@ -51,17 +52,18 @@ function thyroid(l: Labs, p: Params): Interpretation {
 function adrenal(l: Labs, p: Params): Interpretation {
   const acth = labStatus('acth', l.acth)
   const cort = labStatus('cortisol', l.cortisol)
-  if (cort === 'baixo' && acth === 'alto')
+  const centralLesion = p.adenoFn < 0.7 || p.stalk < 0.7 || p.corticotropeFn < 0.7
+  if (acth === 'alto' && (cort === 'baixo' || p.adrenalFn < 0.5))
     return { title: 'Insuficiência adrenal primária', tone: 'alerta', points: ['O córtex adrenal não responde → ↓cortisol → ↑CRH e ↑ACTH.', 'ACTH alto (derivado da POMC, assim como o α-MSH) causa hiperpigmentação.'] }
   if (cort === 'baixo' && p.exoGlucocorticoid > 0)
     return { title: l.gcActivity > 180 ? 'Cushing iatrogênico com eixo suprimido' : 'Eixo suprimido por corticoide exógeno', tone: 'alerta', points: ['O corticoide exógeno exerce retroalimentação negativa: ↓CRH e ↓ACTH.', 'O cortisol sérico (endógeno) cai, mas o efeito glicocorticoide total pode estar alto.', 'Sem ACTH, as adrenais atrofiam — a retirada abrupta causa crise adrenal.'] }
-  if ((cort === 'baixo' || l.adrenalMass < 70) && l.adrenalMass < 80)
+  if (!centralLesion && (cort === 'baixo' || l.adrenalMass < 70) && l.adrenalMass < 80)
     return { title: 'Recuperação de adrenal atrofiada', tone: 'alerta', points: ['O ACTH sobe, mas as adrenais atrofiadas respondem pouco.', 'A massa adrenal se recupera lentamente sob o efeito trófico do ACTH (semanas).'] }
-  if (cort === 'baixo')
-    return { title: 'Insuficiência adrenal central', tone: 'alerta', points: ['Cortisol baixo sem ACTH elevado: falha hipofisária ou hipotalâmica.', 'Sem hiperpigmentação, pois o ACTH está baixo.'] }
+  if (acth !== 'alto' && (cort === 'baixo' || (centralLesion && l.cortisol < 8)))
+    return { title: 'Insuficiência adrenal central', tone: 'alerta', points: ['Cortisol baixo ou normal-baixo sem ACTH elevado: falha hipofisária ou hipotalâmica.', 'Sem hiperpigmentação, pois o ACTH não sobe.'] }
   if (cort === 'alto' && p.ectopicActh > 0)
     return { title: 'Cushing por ACTH ectópico', tone: 'alerta', points: ['O tumor produz ACTH sem retroalimentação — o cortisol alto não suprime a fonte.', 'CRH e ACTH hipofisário são suprimidos, mas o ACTH total segue alto.'] }
-  if (cort === 'alto' || l.crh > 1.5)
+  if (p.stress > 1.2 && (cort === 'alto' || l.crh > 1.5))
     return { title: 'Resposta ao estresse', tone: 'alerta', points: ['O estresse ativa o CRH e redefine o set point do eixo para cima.', 'A retroalimentação negativa continua presente, mas em um nível mais alto.'] }
   if (l.gcActivity > 180)
     return { title: 'Excesso de glicocorticoide', tone: 'alerta', points: ['Efeito glicocorticoide total elevado.'] }
@@ -109,7 +111,7 @@ function prolactin(l: Labs, p: Params): Interpretation {
     return { title: 'Hiperprolactinemia', tone: 'alerta', points: [l.trh > 1.5 ? 'TRH elevado (hipotireoidismo primário) estimula os lactotrofos.' : 'Causa secundária de hiperprolactinemia.', hypogonad] }
   }
   if (prl === 'baixo')
-    return { title: 'Hipoprolactinemia', tone: 'alerta', points: ['Falência adeno-hipofisária: a prolactina é o único hormônio que cai pela perda das células, não do estímulo.', 'Na síndrome de Sheehan, a agalactia pós-parto costuma ser o primeiro sinal.'] }
+    return { title: 'Hipoprolactinemia', tone: 'alerta', points: ['Falência adeno-hipofisária: a perda dos lactotrofos reduz a prolactina, mesmo com menos dopamina inibindo.', 'Na síndrome de Sheehan, a agalactia pós-parto costuma ser o primeiro sinal.'] }
   return { title: 'Prolactina sob controle dopaminérgico', tone: 'normal', points: ['É o único hormônio adeno-hipofisário sob controle predominantemente inibitório.', 'A dopamina (neurônios TIDA) inibe a prolactina via receptor D2; TRH e sucção estimulam.'] }
 }
 
@@ -121,14 +123,14 @@ function neuro(l: Labs, p: Params): Interpretation {
 
   if (p.renalAdhSensitivity < 0.5 && l.urine > 3)
     return { title: 'Diabetes insípido nefrogênico', tone: 'alerta', points: ['ADH elevado, mas o rim não responde (receptor V2/aquaporina-2).', 'Urina diluída e poliúria; desmopressina não corrige.', ...extra] }
+  if (p.waterAccess > 1.5 && p.magnocellularFn >= 0.5)
+    return { title: 'Polidipsia primária', tone: 'alerta', points: ['A ingestão excessiva dilui o plasma e suprime o ADH.', 'Urina máxima diluída: diferente do DI, a osmolalidade plasmática fica baixa ou normal-baixa.', ...extra] }
   if (l.adh < 0.8 && l.urine > 3 && na !== 'baixo')
     return { title: 'Diabetes insípido central', tone: 'alerta', points: ['Pouco ADH → aquaporina-2 não é inserida → urina diluída e poliúria.', na === 'alto' ? 'Sem ingestão suficiente, a perda de água livre causa hipernatremia.' : 'A sede compensa a perda de água e mantém o sódio próximo do normal.', 'Responde à desmopressina (análogo do ADH).', ...extra] }
   if (na === 'baixo' && p.ectopicAdh > 0)
     return { title: 'SIADH', tone: 'alerta', points: ['ADH não suprimido apesar da hipo-osmolalidade.', 'Retenção de água livre → hiponatremia euvolêmica com urina concentrada.', ...extra] }
   if (na === 'baixo' && p.bloodVolume < 0.9)
     return { title: 'Hiponatremia hipovolêmica', tone: 'alerta', points: ['Barorreceptores estimulam ADH mesmo com osmolalidade baixa.', 'Na hipovolemia, a defesa do volume tem prioridade sobre a osmolalidade.', ...extra] }
-  if (p.waterAccess > 1.5)
-    return { title: 'Polidipsia primária', tone: 'alerta', points: ['A ingestão excessiva dilui o plasma e suprime o ADH.', 'Urina máxima diluída: diferente do DI, a osmolalidade plasmática fica baixa.', ...extra] }
   if (p.bloodVolume < 0.9)
     return { title: 'Resposta à hipovolemia', tone: 'alerta', points: ['Barorreceptores (átrio, carótida) reduzem a inibição do ADH.', 'ADH retém água e, em altas doses, causa vasoconstrição (V1).', ...extra] }
   if (na === 'alto')

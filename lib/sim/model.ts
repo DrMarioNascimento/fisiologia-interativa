@@ -180,10 +180,13 @@ export function step(s: SimState, p: Params, dt = DT): SimState {
   const trhT = p.trhDrive * F ** -1.5
   const trhPortal = s.trh * H
   const cortOnTsh = C > 1.2 ? (C / 1.2) ** -0.4 : 1
-  const tshT = Math.min(
-    80,
-    A * p.thyrotropeFn * (0.15 + 0.85 * trhPortal ** 0.7) * F ** -5 * cortOnTsh,
-  )
+  // A damaged pituitary cannot mount the full compensatory TSH rise, so its
+  // feedback gain is capped by the remaining thyrotrope reserve.
+  const thyrotropeReserve = A * p.thyrotropeFn
+  const feedbackGain = Math.min(F ** -5, 1 + 79 * Math.min(1, thyrotropeReserve) ** 2)
+  const tshRaw =
+    thyrotropeReserve * (0.15 + 0.85 * trhPortal ** 0.7) * feedbackGain * cortOnTsh
+  const tshT = (80 * tshRaw) / (80 + tshRaw)
   const iodineFactor = (1.3 * p.iodine) / (0.3 + p.iodine)
   const stim = (s.tsh + p.trab) ** 0.8
   const secretion =
@@ -201,8 +204,10 @@ export function step(s: SimState, p: Params, dt = DT): SimState {
     A * p.corticotropeFn * (0.1 + 0.9 * crhPortal ** 0.8) * adhSynergy * C ** -1.2 +
       p.ectopicActh,
   )
-  const cortEndoT = p.adrenalFn * s.adrenalMass * s.acth ** 0.8
-  const massT = clamp(s.acth ** 0.5, 0.15, 3)
+  const acthDrive = floor(s.acth) ** 0.8
+  const cortEndoT = (p.adrenalFn * s.adrenalMass * 2 * acthDrive) / (1 + acthDrive)
+  // A destroyed cortex cannot hypertrophy in response to ACTH.
+  const massT = clamp(s.acth ** 0.5, 0.15, 0.5 + 2.5 * Math.min(1, p.adrenalFn))
 
   // Gônadas (modelo masculino)
   const prlOnGnrh = s.prl > 1.5 ? (s.prl / 1.5) ** -0.6 : 1

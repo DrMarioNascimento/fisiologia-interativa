@@ -49,7 +49,7 @@ export function Simulator() {
           <InterpretationCard result={result} />
         </div>
         <aside className="lg:sticky lg:top-36 lg:col-start-2 lg:row-span-5 lg:row-start-1 lg:max-h-[calc(100dvh-10rem)] lg:overflow-y-auto">
-          <ControlPanel axis={axis} params={sim.params} onChange={sim.setParam} />
+          <ControlPanel axis={axis} params={sim.params} onChange={sim.setParam} onResetAll={sim.resetParams} />
         </aside>
         <div className="lg:col-start-1">
           <TrendChart axis={axis} history={sim.history} />
