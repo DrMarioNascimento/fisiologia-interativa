@@ -15,7 +15,7 @@ test('Sheehan e haste preservam padrões centrais aos 30 e 90 dias',()=>{for(con
 test('Hashimoto não encosta no teto antigo de TSH e mantém padrão primário',()=>{const c=SCENARIOS.find(s=>s.id==='hashimoto'),p={...DEFAULT_PARAMS,...c.params};let s={...BASELINE_STATE},peak=0;for(let i=0;i<180;i++){s=advance(s,p,.5);const l=computeLabs(s,p);peak=Math.max(peak,l.tsh);assert.ok(Object.values(s).every(Number.isFinite));if(i>=59)assert.equal(interpret('tireoide',l,p).title,'Hipotireoidismo primário');}assert.ok(peak<159);});
 test('Todos os cenários permanecem finitos e não negativos por 90 dias',()=>{for(const c of SCENARIOS){const {state,l}=run(c.id,90);assert.ok(Object.values(state).every(x=>Number.isFinite(x)&&x>=0),c.id);assert.ok(Object.values(l).every(Number.isFinite),c.id);}});
 test('Troca de cenário limpa tempo/histórico e restaurar alcança todos os eixos',()=>{
- const elements=new Map();const document={getElementById(id){if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',hidden:false});return elements.get(id);}};
+ const elements=new Map();const document={getElementById(id){if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',hidden:false,querySelector(selector){assert.ok(this.innerHTML.includes(selector.replaceAll('[','').replaceAll(']','')));return {focus(){}};}});return elements.get(id);}};
  const source=fs.readFileSync(new URL('./app.js',import.meta.url),'utf8').replace(/^import .*$/gm,'');
  const env={signalStyle,signalSVG,AXES,PARAM_DEFS,formatParam,BASELINE_STATE,DEFAULT_PARAMS,advance,waterLimitReached,computeLabs,BASELINE_LABS,LAB_DEFS,formatLab,labStatus,SCENARIOS,interpret,document,setInterval:()=>0};
  const evaluate=new Function(...Object.keys(env),source+'\nreturn {snapshot:()=>({state,params,history,running,scenarioId,axis})};');
@@ -52,9 +52,20 @@ test('Controles nos extremos e 64 combinações reproduzíveis permanecem finito
  for(let i=0;i<64;i++){const p={...DEFAULT_PARAMS};for(const [key,d] of Object.entries(PARAM_DEFS))if(random()<.2)p[key]=d.min+(d.max-d.min)*random();check(p);}
 });
 
+test('Navegação separa anatomia de temas e preserva experimento entre vias',()=>{
+ const h=interfaceHarness(),html=h.el('tabs').innerHTML;
+ const anterior=html.split('id="adeno-heading"')[1].split('id="neuro-heading"')[0];
+ const posterior=html.split('id="neuro-heading"')[1];
+ for(const id of ['tireoide','adrenal','gonadas','gh','prolactina'])assert.ok(anterior.includes(`data-axis="${id}"`));
+ for(const id of ['neuro','ocitocina']){assert.ok(posterior.includes(`data-axis="${id}"`));assert.ok(!anterior.includes(`data-axis="${id}"`));}
+ assert.match(html,/Córtex adrenal/);assert.match(html,/produção do leite/);assert.match(html,/ejeção/);
+ h.input('thyroidFn',.3);h.el('step').onclick();const before=h.ui.snapshot();h.axis('neuro');const after=h.ui.snapshot();
+ assert.equal(after.state.t,before.state.t);assert.equal(after.params.thyroidFn,.3);assert.equal(after.history.length,before.history.length);
+});
+
 function interfaceHarness(){
  const elements=new Map();let interval,blob,downloaded=false;
- const document={getElementById(id){if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',hidden:false});return elements.get(id);},createElement(){return {click(){downloaded=true;}};}};
+ const document={getElementById(id){if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',hidden:false,querySelector(selector){assert.ok(this.innerHTML.includes(selector.replaceAll('[','').replaceAll(']','')));return {focus(){}};}});return elements.get(id);},createElement(){return {click(){downloaded=true;}};}};
  const source=fs.readFileSync(new URL('./app.js',import.meta.url),'utf8').replace(/^import .*$/gm,'');
  const env={signalStyle,signalSVG,AXES,PARAM_DEFS,formatParam,BASELINE_STATE,DEFAULT_PARAMS,advance,waterLimitReached,computeLabs,BASELINE_LABS,LAB_DEFS,formatLab,labStatus,SCENARIOS,interpret,document,setInterval:fn=>{interval=fn;},setTimeout:()=>0,URL:{createObjectURL(b){blob=b;return 'blob:teste';},revokeObjectURL(){}}};
  const ui=new Function(...Object.keys(env),source+'\nreturn {snapshot:()=>({state,params,history,running,scenarioId,axis})};')(...Object.values(env));
