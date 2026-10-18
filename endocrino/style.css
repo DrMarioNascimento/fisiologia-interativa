@@ -3,4 +3,5 @@
 @media(max-width:1050px){.layout{grid-template-columns:minmax(0,1fr) 300px}.panel{padding:16px}.labs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.shell{width:calc(100% - 24px);margin:16px auto}.layout{display:flex;flex-direction:column}.content{display:contents}.controls{position:static;width:100%;order:2}.content>section{width:100%}.content>section:nth-child(n+3){order:3}.tabs{gap:10px}.tabs button{flex:1 1 40%;font-size:13px}.toolbar button{flex:1 1 40%}.toolbar label{flex:1 1 100%;justify-content:space-between}.diagram{grid-template-columns:minmax(0,1fr)}.labs{grid-template-columns:repeat(2,minmax(0,1fr))}.titlebar .button{font-size:12px}.lab{padding:10px}.lab b{font-size:20px}}
 .stage .labs{grid-template-columns:repeat(auto-fit,minmax(105px,1fr));margin-top:14px}.stage .lab b{font-size:20px}.lab{overflow-wrap:anywhere}#cross-axis{border-left:3px solid #ffab73;padding-left:12px;font-size:13px}[hidden]{display:none!important}
+.limit{border-color:#ffab73;border-left:4px solid #ffab73;color:#ffe0c4;font-size:14px}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
