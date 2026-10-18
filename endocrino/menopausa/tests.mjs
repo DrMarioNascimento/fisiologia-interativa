@@ -8,7 +8,7 @@ const run=(id,forcing={},days=90)=>advance(createState(id),id,days,forcing);
 test('Etapas têm trajetórias distintas e marco retrospectivo de 12 meses',()=>{assert.equal(STAGES.find(s=>s.id==='menopausa').months,12);const a=referenceAt('peri-inicial',0),b=referenceAt('peri-inicial',25);assert.notEqual(a.period,b.period);assert.ok(referenceAt('peri-tardia',1).period>=60);for(const id of ['menopausa','pos']){assert.equal(referenceAt(id,0).cycle,null);assert.equal(referenceAt(id,200).ovulatory,false);}});
 test('Fisiologia esperada ovula na fase reprodutiva e inclui anovulação na transição',()=>{const a=run('reprodutiva',{},120),b=run('peri-inicial',{},120),c=run('peri-tardia',{},120);assert.ok(a.ovulations>=3);assert.ok(b.ovulations<a.ovulations);assert.ok(c.ovulations<b.ovulations);for(const id of ['menopausa','pos'])assert.equal(run(id).ovulations,0);});
 test('Pós-menopausa conserva padrão de baixa produção ovariana e gonadotrofinas altas',()=>{const s=run('pos');assert.ok(s.e2<20&&s.p4<1&&s.fsh>40&&s.lh>20&&s.inhibin<3);assert.ok(s.endo<4);});
-test('E2 maior suprime FSH/LH livres e modifica sinal endometrial e ósseo',()=>{const base=run('pos'),higher=run('pos',{e2:100});assert.equal(higher.e2,100);assert.ok(higher.fsh<base.fsh);assert.ok(higher.lh<base.lh);assert.ok(higher.endo>base.endo);assert.ok(effects(higher,'pos').boneSignal<effects(base,'pos').boneSignal);assert.equal(effects(higher,'pos').unopposed,true);});
+test('E2 maior suprime FSH/LH livres e modifica sinal endometrial e ósseo',()=>{const base=run('pos'),higher=run('pos',{e2:100});assert.equal(higher.e2,100);assert.ok(higher.fsh<base.fsh);assert.ok(higher.lh<base.lh);assert.ok(higher.endo>base.endo);assert.match(effects(higher,'pos').boneTrend,/preservada/);assert.match(effects(base,'pos').boneTrend,/baixa/);assert.equal(effects(base,'pos').boneSignal,undefined);assert.equal(effects(higher,'pos').unopposed,true);});
 test('FSH imposto não recria folículos, ovulação ou progesterona após menopausa',()=>{const s=run('pos',{fsh:150});assert.equal(s.fsh,150);assert.equal(s.ovulations,0);assert.equal(s.e2,12);assert.equal(s.p4,.2);});
 test('LH suprimido impede ovulação e elevação lútea de progesterona',()=>{let s=createState('reprodutiva'),max=0;for(let d=0;d<56;d++){s=advance(s,'reprodutiva',1,{lh:0});max=Math.max(max,s.p4);}assert.equal(s.ovulations,0);assert.ok(max<1);});
 test('P4 atua em combinação com E2; não prolifera sozinha',()=>{const alone=run('pos',{p4:10}),both=run('pos',{e2:100,p4:10}),unopposed=run('pos',{e2:100});assert.ok(alone.endo<4);assert.equal(effects(alone,'pos').secretory,false);assert.equal(effects(both,'pos').secretory,true);assert.equal(effects(both,'pos').unopposed,false);assert.ok(both.lh<unopposed.lh);});
@@ -39,4 +39,63 @@ test('CSV baixa histórico com unidades, referência pareada e imposições de c
  const first=lines[1].split(';'),last=lines.at(-1).split(';');
  assert.equal(first[4],'"não"');assert.equal(last[1],'"7,0000"');assert.equal(last[2],'"12,0000"');assert.equal(last[3],'"120,0000"');assert.equal(last[4],'"sim"');
  h.el('reset').onclick();h.el('export').onclick();assert.equal((await h.download().blob.text()).split('\r\n').length,2);
+});
+
+test('LH ausente interrompe esteroidogênese folicular apesar de FSH disponível',()=>{
+ let s=createState('reprodutiva'),peak=0;
+ for(let d=0;d<56;d++){s=advance(s,'reprodutiva',1,{lh:0});if(d>=7)peak=Math.max(peak,s.e2);}
+ assert.ok(peak<25);assert.equal(s.ovulations,0);assert.ok(s.p4<1);assert.ok(s.fsh>1);
+});
+
+test('P4 opõe crescimento endometrial e diferenciação exige exposição, não só concentração',()=>{
+ const natural=run('pos',{e2:100},60),combined=run('pos',{e2:100,p4:10},60);
+ assert.ok(combined.endo<natural.endo-1);assert.equal(effects(combined,'pos').secretory,true);
+ const instant=advance(createState('pos'),'pos',0,{e2:100,p4:10});
+ assert.equal(effects(instant,'pos').secretory,false);
+ assert.equal(effects(advance(instant,'pos',1,{e2:100,p4:10}),'pos').secretory,false);
+ assert.equal(effects(advance(instant,'pos',14,{e2:100,p4:10}),'pos').secretory,true);
+});
+
+test('Preparo estrogênico tem memória e mantém resposta à P4 após retirada de E2',()=>{
+ let s=run('pos',{e2:100},14);s=advance(s,'pos',6,{e2:0,p4:10});
+ assert.equal(s.e2,0);assert.equal(effects(s,'pos').secretory,true);
+ const unprimed=run('pos',{e2:0,p4:10},20);assert.equal(effects(unprimed,'pos').secretory,false);
+});
+
+test('Descamação requer preparo e diferenciação; retirada de P4 isolada não basta',()=>{
+ let s=run('pos',{e2:0,p4:10},14);s=advance(s,'pos',.1,{e2:0,p4:0});
+ assert.equal(effects(s,'pos').withdrawal,false);
+ let prepared=run('pos',{e2:100,p4:10},20);const thick=prepared.endo;
+ prepared=advance(prepared,'pos',.1,{e2:100,p4:0});assert.equal(effects(prepared,'pos').withdrawal,true);
+ prepared=advance(prepared,'pos',2,{e2:100,p4:0});assert.ok(prepared.endo<thick-1);
+});
+
+test('FSH altera maturação e ritmo ovariano; LH alto não ovula um folículo inexistente',()=>{
+ const s=run('reprodutiva',{fsh:0,lh:80},56);assert.equal(s.ovulations,0);assert.equal(s.ovarianTime,0);assert.equal(s.follicle,0);
+ const early=run('reprodutiva',{lh:80},1);assert.equal(early.ovulations,0);
+ const normal=run('reprodutiva',{},56),suppressed=run('reprodutiva',{fsh:1},56);
+ assert.ok(suppressed.ovarianTime<normal.ovarianTime);assert.ok(suppressed.ovulations<normal.ovulations);
+});
+
+test('Ciclo reprodutivo conserva ovulações sucessivas e o corpo lúteo depende de sua idade',()=>{
+ let s=createState('reprodutiva'),times=[];
+ for(let i=0;i<2400;i++){const n=s.ovulations;s=advance(s,'reprodutiva',.1);if(s.ovulations>n)times.push(s.lastOvulation);}
+ assert.ok(times.length>=8);for(let i=1;i<times.length;i++)assert.ok(times[i]-times[i-1]>24&&times[i]-times[i-1]<32);
+ let luteal=createState('reprodutiva');while(luteal.ovulations===0)luteal=advance(luteal,'reprodutiva',.1);
+ assert.ok(advance(luteal,'reprodutiva',6).p4>5);
+ assert.ok(advance(luteal,'reprodutiva',16).p4<1);
+});
+
+test('Integração fracionada preserva resultados e saídas qualitativas não prometem medidas ósseas',()=>{
+ const a=run('pos',{e2:100,p4:10},60);let b=createState('pos');for(let i=0;i<600;i++)b=advance(b,'pos',.1,{e2:100,p4:10});
+ for(const k of ['e2','p4','endo','priming','secretorySignal'])assert.ok(Math.abs(a[k]-b[k])<1e-7);
+ const h=harness();assert.doesNotMatch(h.el('response').innerHTML,/× a referência|NaN|undefined/);
+ assert.match(h.el('response').innerHTML,/Sem estimativa numérica/);
+ const html=fs.readFileSync(new URL('./index.html',import.meta.url),'utf8');assert.match(html,/class="avatar-portrait"/);assert.match(html,/não dados de uma mulher nem validação externa/);
+});
+
+test('P4 sem preparo estrogênico não reproduz supressão central de E2 mais P4',()=>{
+ const base=run('pos',{},60),alone=run('pos',{p4:10},60),combined=run('pos',{e2:100,p4:10},60);
+ assert.ok(Math.abs(alone.fsh-base.fsh)<.01);assert.ok(Math.abs(alone.lh-base.lh)<.01);
+ assert.ok(combined.fsh<alone.fsh);assert.ok(combined.lh<alone.lh);
 });
