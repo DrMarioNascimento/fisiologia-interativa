@@ -1,1 +1,0 @@
-Switch fisioterapia/index.html to loader; preserve original as index-base.html.

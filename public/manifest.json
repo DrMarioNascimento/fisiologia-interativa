@@ -1,0 +1,11 @@
+{
+  "name": "Simulador Endócrino | Hipotálamo e Hipófise",
+  "short_name": "Simulador Endócrino",
+  "description": "Simulador interativo de fisiologia do hipotálamo, adeno-hipófise e neuro-hipófise, incluindo T3 e T4.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8f7f2",
+  "theme_color": "#f8f7f2",
+  "lang": "pt-BR",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
