@@ -16,3 +16,5 @@ jobs:
         run: node --test endocrino/tests.mjs
       - name: Verificar ciclo menstrual e gestação
         run: node endocrino/ciclo/tests.mjs
+      - name: Verificar transição menopausal e manipulação hormonal
+        run: node --test endocrino/menopausa/tests.mjs
