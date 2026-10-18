@@ -10,10 +10,22 @@ test('Todas as unidades e todos os acessos EF recebem a identidade, incluindo os
  for(const u of catalog.unidades)for(const s of u.sims){count++;const path=s.href.split(/[?#]/)[0];assert.ok(manifest[path],path);assert.equal(manifest[path].unit,u.id);assert.equal(manifest[path].number,u.num);assert.match(read(path),/ef-simuladores\.js/);}
  assert.equal(count,33);assert.equal(manifest['endocrino/index.html'].number,'06');assert.equal(manifest['cardiopulmonar-integrado.html'].number,'');
 });
-test('Guardas de curso impedem carregar a identidade da EF na Fisioterapia',()=>{
- for(const href of ['https://site.test/fisioterapia/index.html','https://site.test/potencial-acao-membrana.html?percurso=fisioterapia','https://site.test/neuronio-interativo.html?curso=fi','https://site.test/tutor-fisio.html']){
-  let requests=0;vm.runInNewContext(script,{URL,location:new URL(href),document:{currentScript:{src:'https://site.test/ef-simuladores.js'}},fetch:()=>{requests++;return new Promise(()=>{});}});assert.equal(requests,0,href);
+test('O acesso seleciona o manifesto do próprio curso sem levar a identidade da EF para Fisioterapia',()=>{
+ for(const href of ['https://site.test/fisioterapia/index.html','https://site.test/potencial-acao-membrana.html?percurso=fisioterapia','https://site.test/neuronio-interativo.html?curso=fi']){
+  const requests=[];vm.runInNewContext(script,{URL,location:new URL(href),document:{currentScript:{src:'https://site.test/ef-simuladores.js'}},fetch:u=>{requests.push(u.href);return new Promise(()=>{});}});assert.equal(requests.length,1,href);assert.match(requests[0],/\/fi-simuladores-manifest\.json\?/);
  }
+ let requests=0;vm.runInNewContext(script,{URL,location:new URL('https://site.test/tutor-fisio.html'),document:{currentScript:{src:'https://site.test/ef-simuladores.js'}},fetch:()=>{requests++;}});assert.equal(requests,0);
+});
+test('Todos os 27 simuladores de Fisioterapia seguem as cinco unidades do curso',()=>{
+ const data=JSON.parse(read('inicio/dados-fi.js').replace(/^[\s\S]*?window\.FI_DADOS\s*=\s*/,'').replace(/;\s*$/,'')),fi=JSON.parse(read('fi-simuladores-manifest.json'));let count=0;
+ assert.equal(data.unidades.length,5);
+ for(const u of data.unidades)for(const s of u.sims){count++;const url=new URL(s.href,'https://site.test/fisioterapia/'),p=url.pathname.slice(1);assert.equal(url.searchParams.get('percurso'),'fisioterapia');assert.ok(fi[p],p);assert.equal(fi[p].unit,u.id);assert.equal(fi[p].number,u.num);assert.match(read(p),/ef-simuladores\.js/);}
+ assert.equal(count,27);assert.equal(fi['hemodinamica-pa-dc-rpt.html'].number,'03');assert.equal(fi['ventilacao-pulmonar-neonatal.html'].number,'04');assert.equal(fi['fisioterapia/uti-fisiologica.html'].number,'05');
+ assert.equal(manifest['hemodinamica-pa-dc-rpt.html'].number,'04');assert.equal(manifest['ventilacao-pulmonar.html'].number,'05');
+});
+test('A página de Fisioterapia também funciona por endereço de pasta',async()=>{
+ let mounted=0;vm.runInNewContext(script,{URL,location:new URL('https://site.test/fisioterapia/'),document:{currentScript:{src:'https://site.test/ef-simuladores.js'},readyState:'complete',get body(){mounted++;return null;}},fetch:async()=>({ok:true,json:async()=>JSON.parse(read('fi-simuladores-manifest.json'))}),console});
+ await new Promise(setImmediate);assert.equal(mounted,1);
 });
 test('Rotas EF usam o manifesto sem alterar o estado fisiológico ou persistir escolhas de curso',()=>{
  let requests=0;vm.runInNewContext(script,{URL,location:new URL('https://site.test/endocrino/index.html'),document:{currentScript:{src:'https://site.test/ef-simuladores.js'}},fetch:()=>{requests++;return new Promise(()=>{});}});assert.equal(requests,1);
@@ -55,7 +67,8 @@ test('Carregadores preservam modelos e incluem o tema no documento final',()=>{
  assert.match(script,/frame\.addEventListener\('load',apply\)/);
 });
 test('Scripts inline dos documentos alterados continuam sintaticamente válidos',()=>{
- for(const p of Object.keys(manifest)){
+ const paths=new Set([...Object.keys(manifest),...Object.keys(JSON.parse(read('fi-simuladores-manifest.json')))]);
+ for(const p of paths){
   if(p==='mecanotransducao-lei-de-wolff-loader.html')continue;
   const html=read(p);
   for(const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)){

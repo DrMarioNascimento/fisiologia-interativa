@@ -1,9 +1,9 @@
-name: Identidade visual da Educação Física
+name: Identidade visual de Educação Física e Fisioterapia
 on:
   push:
-    paths: ['*.html', 'ef-simuladores*', 'endocrino/**', 'tests/ef-identidade.test.mjs', '.github/workflows/ef-identidade.yml']
+    paths: ['*.html', 'ef-simuladores*', 'fi-simuladores*', 'inicio/dados-*.js', 'fisioterapia/**', 'endocrino/**', 'tests/ef-identidade.test.mjs', '.github/workflows/ef-identidade.yml']
   pull_request:
-    paths: ['*.html', 'ef-simuladores*', 'endocrino/**', 'tests/ef-identidade.test.mjs', '.github/workflows/ef-identidade.yml']
+    paths: ['*.html', 'ef-simuladores*', 'fi-simuladores*', 'inicio/dados-*.js', 'fisioterapia/**', 'endocrino/**', 'tests/ef-identidade.test.mjs', '.github/workflows/ef-identidade.yml']
 jobs:
   cobertura:
     runs-on: ubuntu-latest
