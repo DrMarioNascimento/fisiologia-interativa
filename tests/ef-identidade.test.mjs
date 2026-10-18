@@ -29,14 +29,14 @@ test('Endereços de pasta recebem a mesma identidade que index.html, no domínio
   assert.equal(mounted,1,prefix+path);
  }
 });
-test('Carregadores montam a identidade após escrever o documento, mesmo sem fechamento de head no original',async()=>{
+test('Carregadores preservam o original em quadro acompanhado mesmo quando o documento interno é reescrito',async()=>{
  for(const file of ['homeostase-do-calcio.html','contracao-muscular-sarcomero.html']){
-  const events=[],nodes=[];
-  const document={open:()=>events.push('open'),write:()=>events.push('write'),close:()=>events.push('close'),createElement:tag=>({tag}),head:{append:n=>{events.push('theme');nodes.push(n);}}};
-  const code=[...read(file).matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)][0][1];
-  await vm.runInNewContext(code,{document,fetch:async()=>({ok:true,text:async()=>'<!doctype html><title>Original</title><main>Simulador</main>'}),console});
-  assert.deepEqual(events,['open','write','close','theme'],file);
-  assert.equal(nodes[0].tag,'script');assert.match(nodes[0].src,/ef-simuladores\.js\?v=/);
+  const original='<!doctype html><title>Original</title><main>Simulador</main>',frame={};let removed=false;
+  const document={getElementById:id=>id==='simulator'?frame:{remove:()=>{removed=true;}}};
+  const code=[...read(file).matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)].find(m=>!m[1].includes('src='))[2];
+  await vm.runInNewContext(code,{document,fetch:async()=>({ok:true,text:async()=>original}),console});
+  assert.equal(frame.srcdoc,original,file);assert.ok(removed,file);
+  assert.match(read(file),/<iframe[^>]*title=/);
  }
 });
 test('Cards dos eixos hipofisários e etapas dinâmicas usam a lateral curva',()=>{
@@ -49,7 +49,7 @@ test('Carregadores preservam modelos e incluem o tema no documento final',()=>{
  for(const p of ['homeostase-do-calcio.html','contracao-muscular-sarcomero.html']){
   const html=read(p);const archived=html.match(/assets\/simulator-sources\/[^"]+\.html/)?.[0];assert.ok(archived,p);
   // O blob original é copiado sem transformação; a página só adiciona apresentação.
-  assert.match(html,/document\.write\(html\)/);assert.match(html,/ef-simuladores\.js/);
+  assert.match(html,/\.srcdoc=html/);assert.match(html,/ef-simuladores\.js/);
  }
  assert.match(read('da-intencao-ao-movimento.html'),/h=h\.replace/);assert.match(read('sangue.html'),/html=html\.replace/);
  assert.match(script,/frame\.addEventListener\('load',apply\)/);
