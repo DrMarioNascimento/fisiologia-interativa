@@ -1,0 +1,9 @@
+# Envia ao Cloud Build apenas o necessário para a API do tutor.
+*
+!Dockerfile
+!server/
+!server/tutor.cjs
+!server/catalog.cjs
+!tutor-ef-data.js
+!tutor-fisio-data.js
+!tutor-ra-data.js

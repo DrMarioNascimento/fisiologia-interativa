@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VO2, débito cardíaco e diferença arteriovenosa – fisiologia interativa</title>
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
+<style>
+:root{
+  --bg:#ffffff;
+  --panel:#fbfbfd;
+  --line:#d9dce3;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --blue:#2563eb;
+  --red:#dc2626;
+  --green:#10b981;
+  --violet:#8b5cf6;
+  --amber:#f59e0b;
+  --teal:#14b8a6;
+  --rose:#e11d48;
+  --slate:#64748b;
+}
+*{box-sizing:border-box}
+body{margin:0;padding:22px;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+h1{margin:0 0 8px;font-size:30px;text-align:center}
+.subtitle{margin:0 0 12px;text-align:center;color:var(--muted);font-size:16px}
+.controls,.selector,.quick{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start;align-items:center;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 auto 10px;max-width:1460px
+}
+.selector-block{width:min(1460px,100%);display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:16px}
+.selector-head{display:flex;flex-direction:column;gap:2px;min-width:240px;max-width:62%}
+.selector-title{font-size:12px;font-weight:700;color:#0f172a}
+.selector-sub{font-size:11px;color:var(--muted)}
+.checks{display:flex;flex-wrap:nowrap;gap:10px;justify-content:flex-end;align-items:center;margin-left:auto}
+label.pick,label.control{
+  display:flex;gap:6px;align-items:center;font-size:13px;background:#fff;border:1px solid #e1e5ec;border-radius:10px;padding:8px 10px;min-height:40px
+}
+.control-name{display:inline-block;min-width:60px;font-weight:600}
+.control-value{display:inline-block;min-width:96px;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.control-value.speed{min-width:38px}
+input[type=range]{width:130px;flex:0 0 130px}
+button{border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer}
+button.primary{border-color:#96b7ff}
+.quick button.active{background:#fff1f2;border-color:#ef4444;color:#b91c1c;font-weight:700;box-shadow:0 0 0 3px rgba(239,68,68,0.20), 0 0 18px rgba(239,68,68,0.45), inset 0 0 10px rgba(255,255,255,0.35)}
+.quick button.active, .quick button:focus{background:#fff1f2;border-color:#ef4444;color:#b91c1c;box-shadow:0 0 0 4px rgba(239,68,68,0.35), 0 0 26px rgba(239,68,68,0.75), inset 0 0 14px rgba(255,255,255,0.45);}
+.notice{
+  max-width:1460px;margin:0 auto 10px;text-align:center;font-size:13px;color:#b45309;min-height:18px
+}
+.mode-line{max-width:1460px;margin:0 auto 14px;text-align:right;min-height:22px}
+.mode-badge{display:inline-block;font-size:12px;color:var(--muted);background:#fff;border:1px solid #e1e5ec;border-radius:999px;padding:4px 10px}
+.status-grid{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:12px;max-width:1460px;margin:0 auto 14px
+}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:124px;position:relative;overflow:hidden
+}
+.card::before{content:"";position:absolute;inset:0 auto 0 0;width:8px;background:var(--blue)}
+.card.vo2::before{background:var(--blue)}
+.card.q::before{background:var(--amber)}
+.card.dav::before{background:var(--green)}
+.card.mass::before{background:var(--violet)}
+.card.stage::before{background:var(--rose)}
+.card-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.phase{font-size:26px;font-weight:700;line-height:1.12;padding-left:4px;min-height:82px;display:flex;flex-direction:column;justify-content:flex-start}
+.phase small{display:block;margin-top:6px;font-size:13px;color:var(--muted);font-weight:400}
+.main-layout{display:grid;grid-template-columns:minmax(620px,1.35fr) minmax(360px,.9fr);gap:16px;max-width:1460px;margin:0 auto}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+.panel-title{font-size:18px;font-weight:700;color:#0f172a;margin:0 0 10px}
+.panel-sub{font-size:13px;color:var(--muted);margin:0 0 10px}
+.canvas-wrap{display:flex;justify-content:center}
+canvas{width:100%;height:auto;display:block;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+.eq-box,.readout-box{
+  background:#fff;border:1px solid #e1e5ec;border-radius:14px;padding:12px 14px;margin-bottom:10px
+}
+.eq-box{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.eq-box .panel-title,.eq-box .eq-main,.eq-box .eq-sub{text-align:center;width:100%}
+.eq-main{font-size:26px;font-weight:700;color:#0f172a;text-align:center;line-height:1.25}
+.eq-sub{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.result-pill{
+  background:#fff;border:1px solid #e1e5ec;border-radius:14px;padding:12px
+}
+.result-pill .lab{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.result-pill .val{font-size:26px;font-weight:700;color:#0f172a}
+.result-pill .sub{font-size:12px;color:var(--muted);margin-top:4px}.result-pill{text-align:center}
+.stage-list{display:grid;gap:10px}
+.stage-item{
+  display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:flex-start;background:#fff;border:1px solid #e1e5ec;border-radius:12px;padding:10px 12px
+}
+.stage-dot{width:14px;height:14px;border-radius:50%;margin-top:3px;background:#cbd5e1}
+.stage-item.active .stage-dot{background:var(--rose);box-shadow:0 0 0 4px rgba(225,29,72,.12)}
+.stage-item .ttl{font-size:12px;font-weight:700;color:#0f172a}
+.stage-item .txt{font-size:13px;color:#475569;line-height:1.45}
+.interpret-block{
+  max-width:1460px;
+  margin:18px auto 0 auto;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:18px 22px 26px;
+  box-sizing:border-box;
+}
+.interpret-title{
+  font-size:16px;
+  font-weight:700;
+  color:#0f172a;
+  margin-bottom:10px;
+}
+.interpret-text{
+  text-align:justify;
+  color:#475569;
+  line-height:1.6;
+  font-size:15px;
+}
+.interpret-text b{
+  color:#0f172a;
+  font-weight:600;
+}
+.interpret-footer{
+  margin-top:18px;
+  border-top:1px solid #e5e7eb;
+  padding-top:10px;
+  text-align:right;
+  color:#4b5563;
+  font-size:12px;
+}
+.value-chip{
+  display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid #dbe2ea;background:#fff;color:#334155;font-size:12px;margin-left:6px
+}
+@media (max-width:1220px){
+  .main-layout{grid-template-columns:1fr}
+  .status-grid{grid-template-columns:1fr 1fr}
+}
+.como-interpretar{font-size:12px;line-height:1.5;text-align:justify}
+
+.controls-sliders{
+  margin-top:4px ;
+  margin-bottom:10px ;
+  padding:10px 12px ;
+  gap:12px ;
+}
+.controls-sliders label.control{
+  display:grid ;
+  grid-template-columns:auto 1fr auto ;
+  align-items:center ;
+  gap:8px ;
+  min-height:58px ;
+  padding:8px 12px ;
+  flex:1 1 0 ;
+}
+.controls-sliders .control-name{
+  min-width:56px ;
+  align-self:center ;
+}
+.controls-sliders .control-value{
+  min-width:110px ;
+  align-self:center ;
+}
+.controls-sliders input[type=range]{
+  width:100% ;
+  flex:none ;
+  align-self:center ;
+  margin:0 ;
+  height:6px ;
+  vertical-align:middle ;
+}
+.controls-sliders input[type=range]::-webkit-slider-runnable-track{
+  height:6px ;
+}
+.controls-sliders input[type=range]::-webkit-slider-thumb{
+  margin-top:-5px ;
+}
+.quick{
+  margin-top:0 ;
+}
+
+.controls-actions{max-width:900px ;margin-left:auto ;margin-right:auto }
+
+.controls-actions{
+  max-width:1460px ;
+  width:100% ;
+  margin-left:0 ;
+  margin-right:0 ;
+  justify-content:flex-start ;
+}
+
+.controls,.selector,.quick{
+  width:min(1460px,100%);
+  margin-left:auto;
+  margin-right:auto;
+}
+
+
+.controls-actions{
+  max-width:1460px ;
+  width:min(1460px,100%) ;
+  margin-left:auto ;
+  margin-right:auto ;
+  justify-content:flex-start ;
+}
+
+
+.panel .result-grid{
+  gap:14px ;
+}
+.panel .result-pill{
+  padding:14px 12px ;
+}
+
+
+.panel .result-grid{
+  display:grid ;
+  grid-template-columns:repeat(3, minmax(0, 1fr)) ;
+  gap:18px ;
+  width:100% ;
+  align-items:stretch ;
+}
+.panel .result-pill{
+  width:100% ;
+  min-width:0 ;
+  min-height:108px ;
+  padding:16px 14px ;
+  display:flex ;
+  flex-direction:column ;
+  justify-content:center ;
+}
+.eq-box{
+  padding:14px 16px ;
+}
+
+
+.result-pill .val{
+  color:#dc2626 ;
+}
+
+
+/* iOS-style advanced mode switch */
+.ios-toggle-wrap{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:6px 2px;
+}
+.ios-toggle{
+  position:relative;
+  width:54px;
+  height:30px;
+  display:inline-block;
+  flex:0 0 auto;
+}
+.ios-toggle input{
+  opacity:0;
+  width:0;
+  height:0;
+  position:absolute;
+}
+.ios-slider{
+  position:absolute;
+  inset:0;
+  border-radius:999px;
+  background:#d1d5db;
+  transition:.22s ease;
+  box-shadow:inset 0 0 0 1px rgba(15,23,42,0.08);
+}
+.ios-slider:before{
+  content:"";
+  position:absolute;
+  width:24px;
+  height:24px;
+  left:3px;
+  top:3px;
+  border-radius:50%;
+  background:#fff;
+  transition:.22s ease;
+  box-shadow:0 1px 3px rgba(0,0,0,.18), 0 1px 2px rgba(0,0,0,.10);
+}
+.ios-toggle input:checked + .ios-slider{
+  background:#34c759;
+}
+.ios-toggle input:checked + .ios-slider:before{
+  transform:translateX(24px);
+}
+.ios-toggle-text{
+  font-size:14px;
+  font-weight:600;
+  color:#0f172a;
+}
+.ios-toggle-sub{
+  font-size:12px;
+  color:#6b7280;
+  margin-left:4px;
+}
+
+
+
+/* === Padronização final — ecossistema de simuladores === */
+:root{
+  --std-shadow:0 10px 24px rgba(18,42,66,.10);
+  --std-radius:18px;
+  --c-vo2:#1F78B4;
+  --c-q:#FF7F00;
+  --c-dav:#33A02C;
+  --c-mass:#6A3D9A;
+  --c-ca:#E3127C;
+  --c-cv:#1F78B4;
+  --c-hb:#B15928;
+  --c-sat:#00A6D6;
+  --c-pao2:#E31A1C;
+}
+body{
+  background:linear-gradient(180deg,#f8fbff 0%, #eef4fb 100%);
+  font-family:Inter,Segoe UI,Arial,sans-serif;
+}
+h1{font-size:30px;letter-spacing:.2px;color:#17324d;font-weight:900;}
+.subtitle{color:#5c7086;}
+.controls,.selector,.quick,.panel,.eq-box,.readout-box,.interpret-block{
+  background:#ffffff;
+  border:1px solid #d7e1ec;
+  box-shadow:var(--std-shadow);
+}
+.controls,.selector,.quick{border-radius:20px;position:relative;}
+.controls-actions{justify-content:center;gap:12px;}
+button{
+  border:none;
+  border-radius:14px;
+  padding:10px 15px;
+  font-size:14px;
+  font-weight:850;
+  color:#17324d;
+  background:linear-gradient(180deg,#ffffff 0%, #eef4ff 100%);
+  box-shadow:0 2px 7px rgba(18,42,66,.08);
+  cursor:pointer;
+  transition:.18s transform,.18s filter,.18s box-shadow;
+}
+button:hover{transform:translateY(-1px);filter:brightness(1.03);box-shadow:0 8px 18px rgba(18,42,66,.14);}
+button:active{transform:translateY(0);}
+button.primary,.btn-start{color:#fff;background:linear-gradient(135deg,#10b981,#16a34a);box-shadow:0 0 0 3px rgba(16,185,129,.14),0 10px 20px rgba(16,185,129,.22);}
+.btn-pause{color:#fff;background:linear-gradient(135deg,#FF7F00,#f59e0b);box-shadow:0 0 0 3px rgba(255,127,0,.13),0 10px 20px rgba(255,127,0,.20);}
+.btn-reset{color:#fff;background:linear-gradient(135deg,#E31A1C,#b91c1c);box-shadow:0 0 0 3px rgba(227,26,28,.13),0 10px 20px rgba(227,26,28,.20);}
+.quick{align-items:center;gap:8px;padding-top:14px;}
+.quick strong{color:#17324d;font-size:14px;}
+.quick button{border:1px solid #d7e1ec;background:#fff;color:#17324d;}
+.quick button.active{color:#fff;background:linear-gradient(135deg,#2f80ed,#57a7ff);box-shadow:0 0 0 3px rgba(47,128,237,.18),0 0 24px rgba(47,128,237,.30);}
+.mode-badge{border-color:#d7e1ec;color:#5c7086;box-shadow:0 1px 4px rgba(18,42,66,.05);}
+.section-card{padding-top:26px;}
+.section-label{
+  position:absolute;top:9px;left:16px;
+  font-size:11px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#1F78B4;
+}
+.selector-block{padding-top:8px;}
+label.pick,label.control{
+  border:1px solid #d7e1ec;border-radius:14px;background:#fff;box-shadow:0 1px 4px rgba(18,42,66,.05);font-weight:750;color:#17324d;
+}
+.controls-sliders{background:linear-gradient(180deg,#ffffff 0%,#f4f9ff 100%);}
+.controls-sliders label.control{
+  position:relative;overflow:hidden;isolation:isolate;border-radius:16px;
+}
+.controls-sliders label.control::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--vc,#1F78B4);border-radius:16px 0 0 16px;
+}
+.controls-sliders label.control::after{
+  content:"";position:absolute;right:-46px;bottom:-56px;width:132px;height:132px;border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--vc,#1F78B4) 20%,white 80%) 0%,rgba(255,255,255,0) 70%);opacity:.62;z-index:-1;
+}
+.var-vo2{--vc:var(--c-vo2)}.var-q{--vc:var(--c-q)}.var-dav{--vc:var(--c-dav)}.var-mass{--vc:var(--c-mass)}.var-hb{--vc:var(--c-hb)}.var-sat{--vc:var(--c-sat)}.var-cv{--vc:var(--c-cv)}.var-pao2{--vc:var(--c-pao2)}
+.control-name{font-weight:900;color:#5c7086;text-transform:uppercase;letter-spacing:.03em;}
+.control-value{font-weight:850;color:#17324d;}
+input[type=range]{accent-color:#2f80ed;}
+.panel{border-radius:20px;background:#fff;}
+.panel-title{color:#17324d;font-weight:900;}
+.panel-sub{color:#5c7086;}
+canvas{border-radius:16px;border-color:#d7e1ec;box-shadow:inset 0 1px 0 rgba(255,255,255,.75);}
+.eq-box,.readout-box{border-radius:18px;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);}
+.eq-main{color:#17324d;font-weight:900;}
+.result-grid{gap:12px;}
+.result-pill{
+  --c:#1F78B4;
+  position:relative;overflow:hidden;isolation:isolate;
+  border-radius:16px;
+  padding:13px 14px;
+  min-height:92px;
+  background:linear-gradient(180deg,#ffffff 0%, #f4f7fb 100%);
+  border:1px solid #d7e1ec;
+  box-shadow:0 2px 7px rgba(18,42,66,.06), inset 0 1px 0 rgba(255,255,255,.80);
+}
+.result-pill::before{content:"";position:absolute;left:0;top:0;bottom:0;width:7px;background:var(--c);border-radius:16px 0 0 16px;}
+.result-pill::after{content:"";position:absolute;right:-66px;bottom:-66px;width:168px;height:168px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--c) 18%,white 82%) 0%,rgba(255,255,255,0) 70%);opacity:.72;z-index:-1;}
+.result-pill .lab{font-size:11px;color:#64748b;font-weight:900;letter-spacing:.05em;}
+.result-pill .val{font-size:28px;font-weight:950;color:var(--c);line-height:1;}
+.result-pill .sub{font-size:12px;color:#64748b;font-weight:750;}
+.result-pill[data-key="vo2"]{--c:var(--c-vo2)}
+.result-pill[data-key="rel"]{--c:var(--c-ca)}
+.result-pill[data-key="mass"]{--c:var(--c-mass)}
+.result-pill[data-key="q"]{--c:var(--c-q)}
+.result-pill[data-key="ven"]{--c:var(--c-cv)}
+.result-pill[data-key="dav"]{--c:var(--c-dav)}
+.result-pill[data-key="cao2"]{--c:var(--c-ca)}
+.result-pill[data-key="cvo2"]{--c:var(--c-cv)}
+.result-pill[data-key="hb"]{--c:var(--c-hb)}
+.result-pill[data-key="sat"]{--c:var(--c-sat)}
+.result-pill[data-key="pao2"]{--c:var(--c-pao2)}
+.interpret-block{border-radius:20px;background:#fff;}
+.interpret-title{color:#17324d;font-weight:900;font-size:18px;}
+.interpret-footer{font-size:14px;color:#5c7086;font-weight:650;}
+.ios-toggle input:checked + .ios-slider{background:#2f80ed;}
+@media(max-width:900px){.selector-block{flex-wrap:wrap}.selector-head{max-width:100%}.checks{flex-wrap:wrap;justify-content:flex-start}.result-grid{grid-template-columns:1fr}}
+
+
+/* === Destaque premium: Variável calculada === */
+.selector.section-card{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  background:linear-gradient(135deg, rgba(227,26,28,0.12) 0%, rgba(255,244,244,0.72) 36%, rgba(255,255,255,1) 72%);
+  border:1px solid rgba(227,26,28,0.26);
+  box-shadow:
+    0 0 0 1px rgba(227,26,28,0.08),
+    0 12px 30px rgba(227,26,28,0.13),
+    inset 0 1px 0 rgba(255,255,255,.92);
+}
+.selector.section-card::before{
+  content:"";
+  position:absolute;
+  left:0;top:0;bottom:0;
+  width:7px;
+  background:linear-gradient(180deg,#E31A1C 0%,#FF7F00 100%);
+  border-radius:20px 0 0 20px;
+  z-index:0;
+}
+.selector.section-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:20px;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 30% 18%, rgba(239,68,68,0.18), transparent 44%),
+    radial-gradient(circle at 92% 86%, rgba(255,127,0,0.13), transparent 36%);
+  z-index:0;
+}
+.selector.section-card > *{position:relative;z-index:1;}
+.selector.section-card:hover{
+  box-shadow:
+    0 0 0 1px rgba(227,26,28,0.16),
+    0 0 22px rgba(227,26,28,0.24),
+    0 14px 34px rgba(227,26,28,0.14),
+    inset 0 1px 0 rgba(255,255,255,.94);
+}
+.selector .section-label{
+  color:#b91c1c;
+  letter-spacing:.09em;
+}
+.selector-title{
+  font-size:13px;
+  font-weight:950;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#b91c1c;
+}
+.selector-sub{
+  font-size:12px;
+  color:#6b1f1f;
+  font-weight:650;
+}
+.checks label.pick{
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease, color .18s ease, filter .18s ease;
+  border:1px solid #d7e1ec;
+  background:linear-gradient(180deg,#ffffff 0%,#fff7f7 100%);
+  border-radius:16px;
+  padding:11px 15px;
+  min-height:46px;
+  font-weight:850;
+  color:#17324d;
+  box-shadow:0 2px 7px rgba(18,42,66,.06), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.checks label.pick:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 22px rgba(227,26,28,.18), inset 0 1px 0 rgba(255,255,255,.95);
+  border-color:#ef4444;
+  filter:brightness(1.015);
+}
+.checks label.pick:has(input:checked){
+  background:linear-gradient(135deg,#ffe4e6 0%,#fff7f7 45%,#ffffff 100%);
+  border-color:#ef4444;
+  color:#b91c1c;
+  font-weight:950;
+  box-shadow:
+    0 0 0 3px rgba(239,68,68,0.22),
+    0 0 22px rgba(239,68,68,0.38),
+    0 10px 24px rgba(227,26,28,.15),
+    inset 0 1px 0 rgba(255,255,255,.95);
+}
+.checks label.pick input[type=radio]{
+  accent-color:#E31A1C;
+  transform:scale(1.08);
+}
+
+
+/* === Destaque sutil do grid Modo avançado === */
+#advancedToggleBar{
+  position:relative;
+  overflow:hidden;
+  isolation:isolate;
+  background:linear-gradient(135deg, rgba(31,120,180,0.12) 0%, rgba(255,255,255,0.96) 48%, rgba(47,128,237,0.06) 100%) ;
+  border:1px solid rgba(31,120,180,0.24) ;
+  box-shadow:
+    0 0 0 1px rgba(31,120,180,0.08),
+    0 10px 26px rgba(31,120,180,0.12),
+    inset 0 1px 0 rgba(255,255,255,.92) ;
+}
+#advancedToggleBar::before{
+  content:"";
+  position:absolute;
+  left:-70px;
+  top:-90px;
+  width:230px;
+  height:230px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(47,128,237,0.18) 0%, rgba(255,255,255,0) 68%);
+  pointer-events:none;
+  z-index:-1;
+}
+#advancedToggleBar::after{
+  content:"";
+  position:absolute;
+  right:-85px;
+  bottom:-95px;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(31,120,180,0.16) 0%, rgba(255,255,255,0) 70%);
+  pointer-events:none;
+  z-index:-1;
+}
+#advancedToggleBar:hover{
+  box-shadow:
+    0 0 0 1px rgba(31,120,180,0.16),
+    0 0 20px rgba(47,128,237,0.22),
+    0 12px 30px rgba(31,120,180,0.14),
+    inset 0 1px 0 rgba(255,255,255,.96) ;
+}
+#advancedToggleBar .ios-toggle-text{
+  color:#1F78B4;
+  font-weight:900;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+}
+#advancedToggleBar .ios-toggle-sub{
+  color:#49677f;
+  font-weight:650;
+}
+#advancedToggleBar .ios-slider{
+  box-shadow:
+    inset 0 0 0 1px rgba(15,23,42,0.08),
+    0 0 12px rgba(31,120,180,0.18);
+}
+#advancedToggleBar .ios-toggle input:checked + .ios-slider{
+  background:#2f80ed;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.16),
+    0 0 14px rgba(47,128,237,0.42),
+    0 0 28px rgba(47,128,237,0.22);
+}
+
+</style>
+</head>
+<body>
+<h1>Consumo de oxigênio, débito cardíaco e diferença arteriovenosa de O₂</h1>
+<p class="subtitle">Simulador interativo da equação de Fick para integrar VO2, débito cardíaco, extração tecidual e valor relativo por quilograma.</p>
+
+
+
+<div class="controls controls-actions"><div id="modeBadge" class="mode-badge">Modo: calcular VO₂</div>
+  <button id="btnStart" class="primary btn-start">▶ Iniciar</button>
+  <button id="btnPause" class="btn-pause">⏸ Pausar</button>
+  <button id="btnReset" class="btn-reset">↻ Resetar</button>
+  <label class="control"><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+  <label class="control"><span class="control-name">Velocidade</span>
+    <input id="speedRange" type="range" min="0.5" max="2.4" step="0.1" value="1.0">
+    <span id="speedLabel" class="control-value speed">1,0x</span>
+  </label>
+</div>
+
+<div class="quick" id="quickStates">
+  <strong style="margin-right:4px" id="profileLabel">Estados rápidos (perfil: adulto não treinado):</strong>
+  <button data-preset="rest">Repouso</button>
+  <button data-preset="light">Exercício leve</button>
+  <button data-preset="moderate">Exercício moderado</button>
+  <button data-preset="intense">Esforço máximo (não treinado)</button>
+  <button data-preset="athlete">Atleta de endurance no máximo</button>
+  <button data-preset="hf">Insuficiência cardíaca</button>
+  <button data-preset="anemia">Anemia</button>
+  <button data-preset="normal">Normalizar</button>
+</div>
+
+
+<div class="selector section-card">
+  <div class="section-label">Variável calculada</div>
+  <div class="selector-block">
+    <div class="selector-head">
+      <div class="selector-title">Selecione a variável a calcular</div>
+      <div class="selector-sub">A variável escolhida ficará automática; as demais permanecem livres para manipulação por botão deslizável.</div>
+    </div>
+    <div class="checks">
+      <label class="pick"><input type="radio" name="solveFor" value="vo2" checked> Calcular VO2</label>
+      <label class="pick"><input type="radio" name="solveFor" value="q"> Calcular Q</label>
+      <label class="pick"><input type="radio" name="solveFor" value="dav"> Calcular Δ a-v O₂</label>
+    </div>
+  </div>
+</div>
+
+<div id="notice" class="notice"></div>
+
+<div class="controls controls-sliders section-card variables-controls">
+  <div class="section-label">Variáveis principais</div>
+  <label class="control var-vo2"><span class="control-name">VO2</span>
+    <input id="vo2Range" type="range" min="100" max="6000" step="10" value="250">
+    <span id="vo2Label" class="control-value">0,25 L/min</span>
+  </label>
+
+  <label class="control var-q"><span class="control-name">Q</span>
+    <input id="qRange" type="range" min="2.0" max="35.0" step="0.1" value="5.0">
+    <span id="qLabel" class="control-value">5,0 L/min</span>
+  </label>
+
+  <label class="control var-dav"><span class="control-name">Δ a-v O₂</span>
+    <input id="davRange" type="range" min="2.0" max="16.9" step="0.1" value="5.0">
+    <span id="davLabel" class="control-value">5,0 mL/dL</span>
+  </label>
+
+  <label class="control var-mass"><span class="control-name">Massa</span>
+    <input id="massRange" type="range" min="40" max="150" step="1" value="70">
+    <span id="massLabel" class="control-value">70 kg</span>
+  </label>
+</div>
+
+<div class="controls" id="advancedToggleBar">
+  <div class="ios-toggle-wrap">
+    <label class="ios-toggle" aria-label="Modo avançado">
+      <input id="advancedModeToggle" type="checkbox">
+      <span class="ios-slider"></span>
+    </label>
+    <div>
+      <div class="ios-toggle-text">Modo avançado</div>
+      <div class="ios-toggle-sub">Hb, PaO₂ (e a SaO₂ que dela decorre) e SvO₂ passam a determinar CaO₂, CvO₂ e VO₂.</div>
+    </div>
+  </div>
+</div>
+
+<div class="controls controls-sliders section-card advanced-sliders" id="advancedControls"  style="display:none">
+  <div class="section-label">Modo avançado</div>
+  <label class="control var-hb"><span class="control-name">Hb</span>
+    <input id="hbRange" type="range" min="5" max="20" step="0.1" value="15">
+    <span id="hbLabel" class="control-value">15,0 g/dL</span>
+  </label>
+
+  <label class="control var-sat"><span class="control-name">SaO₂ (%SO₂)</span>
+    <input id="sao2Range" type="range" min="58" max="98" step="1" value="98">
+    <span id="sao2Label" class="control-value">97,7%</span>
+  </label>
+
+  <label class="control var-cv"><span class="control-name">SvO₂</span>
+    <input id="svo2Range" type="range" min="15" max="90" step="1" value="75">
+    <span id="svo2Label" class="control-value">75%</span>
+  </label>
+
+  <label class="control var-pao2"><span class="control-name">PaO₂</span>
+    <input id="pao2Range" type="range" min="30" max="110" step="1" value="100">
+    <span id="pao2Label" class="control-value">100 mmHg</span>
+  </label>
+</div>
+
+
+
+<div class="main-layout">
+
+  <div class="panel">
+    <div class="scene-heading"><h2>Animação integrada</h2><button data-expand="sceneCanvas">Tela cheia</button></div>
+    <div class="canvas-wrap"><canvas id="sceneCanvas" width="980" height="680"></canvas></div>
+<div class="readout-box" style="margin-top:10px">
+      <div class="panel-title" style="font-size:16px;margin-bottom:8px">Leitura fisiológica imediata</div>
+      <div id="instantRead" style="font-size:12px;color:#475569;line-height:1.55;text-align:justify">
+        O consumo de oxigênio resulta da interação entre débito cardíaco e extração tecidual. Na forma detalhada da equação de Fick, a diferença arteriovenosa pode ser lida como a diferença entre o conteúdo arterial de O₂ (CaO2) e o conteúdo venoso de O₂ (CvO2). No modo avançado, Hb, SaO₂, SvO₂ e PaO₂ passam a determinar automaticamente esses conteúdos. A normalização pela massa corporal permite comparar indivíduos de tamanhos corporais diferentes.
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="eq-box">
+      <div class="panel-title" style="font-size:16px;margin-bottom:8px">Equação ativa</div>
+      <div id="equationMain" class="eq-main">VO2 = Q × Δ a-v O₂ × 10</div>
+      <div id="equationSub" class="eq-sub">Com Q em L/min e Δ a-v O₂ em mL/dL, o fator 10 converte litros em decilitros.</div>
+    </div>
+
+    <div class="result-grid" style="margin-top:14px">
+      <div class="result-pill">
+        <div class="lab">VO2 absoluto</div>
+        <div class="val" id="calcMain">0,25</div>
+        <div class="sub" id="calcSub">L/min</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">VO2 relativo</div>
+        <div class="val" id="relMain">3,57</div>
+        <div class="sub">mL/kg/min</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">Massa corporal</div>
+        <div class="val" id="massCard">70</div>
+        <div class="sub">kg</div>
+      </div>
+
+      <div class="result-pill">
+        <div class="lab">Débito cardíaco (Q)</div>
+        <div class="val" id="qCard">5,0</div>
+        <div class="sub">L/min</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">Sangue venoso</div>
+        <div class="val" id="venMain">15,0</div>
+        <div class="sub">mL O₂/dL</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">Δ a-v O₂</div>
+        <div class="val" id="davCard">5,0</div>
+        <div class="sub">mL/dL</div>
+      </div>
+    </div>
+
+    
+
+    <div class="eq-box" style="margin-top:10px">
+      <div class="panel-title" style="font-size:16px;margin-bottom:8px">Equação alternativa (conteúdo de O₂)</div>
+      <div id="altEquationMain" class="eq-main">VO2 = Q × (CaO2 − CvO2) × 10</div>
+      <div class="eq-sub">Forma fisiológica detalhada da equação de Fick</div>
+    </div>
+
+    <div class="result-grid" style="margin-top:14px">
+      <div class="result-pill">
+        <div class="lab">Q</div>
+        <div class="val" id="altQ">5,0</div>
+        <div class="sub">L/min</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">CaO2</div>
+        <div class="val" id="altCaO2">20,0</div>
+        <div class="sub">mL/dL</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">CvO2</div>
+        <div class="val" id="altCvO2">15,0</div>
+        <div class="sub">mL/dL</div>
+      </div>
+    </div>
+
+    <div class="result-grid" style="margin-top:6px">
+      <div class="result-pill">
+        <div class="lab">Hb</div>
+        <div class="val" id="hbCard">15,0</div>
+        <div class="sub">g/dL</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">SaO₂ / SvO₂</div>
+        <div class="val" id="satCard">98 / 75</div>
+        <div class="sub">%</div>
+      </div>
+      <div class="result-pill">
+        <div class="lab">PaO₂</div>
+        <div class="val" id="pao2Card">100</div>
+        <div class="sub">mmHg</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="interpret-block">
+  <div class="interpret-title">Como interpretar</div>
+  <div class="interpret-text">
+    <b>Equação de Fick:</b> este simulador usa a relação <b>VO2 = Q × Δ a-v O₂ × 10</b>, em que <b>Q</b> representa o débito cardíaco em L/min e <b>Δ a-v O₂</b> representa a diferença arteriovenosa de oxigênio em mL/dL.
+    <b>Débito cardíaco:</b> quanto maior o fluxo sanguíneo enviado aos tecidos, maior tende a ser o potencial de oferta de oxigênio.
+    <b>Conteúdo arterial de O₂ (CaO2):</b> representa a quantidade de oxigênio disponível no sangue arterial para ser entregue aos tecidos. <b>Conteúdo venoso de O₂ (CvO2):</b> representa o oxigênio remanescente após a extração tecidual. <b>Diferença arteriovenosa:</b> corresponde à diferença entre CaO2 e CvO2; quanto maior essa diferença, maior foi a utilização de O₂ pelos tecidos.
+    <b>VO2 relativo:</b> é obtido dividindo o VO2 absoluto pela massa corporal, permitindo comparar indivíduos de massas diferentes.
+    <b>Modo de cálculo:</b> a variável selecionada no topo é resolvida automaticamente; as demais permanecem manipuláveis por botão deslizável, preservando a coerência do modelo.
+    <b>Leitura didática:</b> aumentos de <b>Q</b> e/ou de <b>Δ a-v O₂</b> elevam o VO2 absoluto; já a massa corporal altera apenas o valor relativo por quilograma.
+    <b>Equação alternativa:</b> na forma completa da equação de Fick, o consumo de oxigênio pode ser expresso como <b>VO2 = Q × (CaO2 − CvO2) × 10</b>, em que <b>CaO2</b> representa o conteúdo arterial de oxigênio e <b>CvO2</b> o conteúdo venoso. Essa abordagem evidencia que a diferença arteriovenosa decorre diretamente da quantidade de oxigênio entregue aos tecidos menos a quantidade que retorna, reforçando a integração entre oferta e extração de O₂.
+
+  </div>
+  <div class="interpret-footer">
+    Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
+</div>
+
+<script>
+(()=>{
+const sceneCanvas=document.getElementById('sceneCanvas');
+const sctx=sceneCanvas.getContext('2d');
+
+const btnStart=document.getElementById('btnStart');
+const btnPause=document.getElementById('btnPause');
+const btnReset=document.getElementById('btnReset');
+const labelsToggle=document.getElementById('labelsToggle');
+const speedRange=document.getElementById('speedRange');
+const speedLabel=document.getElementById('speedLabel');
+const notice=document.getElementById('notice');
+
+const vo2Range=document.getElementById('vo2Range');
+const qRange=document.getElementById('qRange');
+const davRange=document.getElementById('davRange');
+const massRange=document.getElementById('massRange');
+
+const vo2Label=document.getElementById('vo2Label');
+const qLabel=document.getElementById('qLabel');
+const davLabel=document.getElementById('davLabel');
+const massLabel=document.getElementById('massLabel');
+
+const vo2Text=document.getElementById('vo2Text');
+const qText=document.getElementById('qText');
+const davText=document.getElementById('davText');
+const relText=document.getElementById('relText');
+const equationMain=document.getElementById('equationMain');
+const equationSub=document.getElementById('equationSub');
+const calcMain=document.getElementById('calcMain');
+const calcSub=document.getElementById('calcSub');
+const relMain=document.getElementById('relMain');
+const venMain=document.getElementById('venMain');
+const qCard=document.getElementById('qCard');
+const davCard=document.getElementById('davCard');
+const massCard=document.getElementById('massCard');
+const instantRead=document.getElementById('instantRead');
+const altQ=document.getElementById('altQ');
+const altCaO2=document.getElementById('altCaO2');
+const altCvO2=document.getElementById('altCvO2');
+const modeBadge=document.getElementById('modeBadge');
+const radioSolve=[...document.querySelectorAll('input[name="solveFor"]')];
+const quickButtons=[...document.querySelectorAll('[data-preset]')];
+const advancedModeToggle=document.getElementById('advancedModeToggle');
+const advancedControls=document.getElementById('advancedControls');
+const hbRange=document.getElementById('hbRange');
+const sao2Range=document.getElementById('sao2Range');
+const svo2Range=document.getElementById('svo2Range');
+const pao2Range=document.getElementById('pao2Range');
+const hbLabel=document.getElementById('hbLabel');
+const sao2Label=document.getElementById('sao2Label');
+const svo2Label=document.getElementById('svo2Label');
+const pao2Label=document.getElementById('pao2Label');
+const hbCard=document.getElementById('hbCard');
+const satCard=document.getElementById('satCard');
+const pao2Card=document.getElementById('pao2Card');
+const altEquationMain=document.getElementById('altEquationMain');
+
+let VO2=250, Q=5.0, DAV=5.0, MASS=70, HB=15.0, SaO2=97.7, SvO2=75, PaO2=100, PvO2=40, advancedMode=false;
+// Limites fisiológicos compartilhados com os demais simuladores de Fick do site.
+const Q_MIN=2.0, DAV_MIN=2.0, SVO2_FLOOR=15, VO2_BASAL_MIN=150, VO2_REL_RECORD=90;
+// Perfis: o não treinado (padrão) extrai até ~77% do O₂ e tem DC máximo ~21 L/min (FC 190 × VS ~110 mL);
+// o atleta de endurance extrai até ~85% e alcança DC ~35 L/min (VS ~180 mL).
+const PROFILES={untrained:{emax:0.77,qmax:21.0,label:'adulto não treinado'},athlete:{emax:0.85,qmax:35.0,label:'atleta de endurance'}};
+let PROFILE='untrained';
+const prof=()=>PROFILES[PROFILE];
+let Q_MAX=PROFILES.untrained.qmax;
+let notices=[];
+// Valores pedidos pelo aluno (sliders/estados): a variável livre é sempre recalculada a partir deles, sem efeito catraca.
+let reqVO2=250, reqQ=5.0, reqDAV=5.0;
+function syncReq(){ reqVO2=VO2; reqQ=Q; reqDAV=DAV; }
+let solveFor='vo2';
+let running=false, raf=null, lastTs=0, t=0;
+
+
+
+function applyDashboardKeys(){
+  const map = {
+    'VO2 absoluto':'vo2', 'VO2 relativo':'rel', 'Massa corporal':'mass',
+    'Débito cardíaco (Q)':'q', 'Sangue venoso':'ven', 'Δ a-v O₂':'dav',
+    'Q':'q', 'CaO2':'cao2', 'CvO2':'cvo2', 'Hb':'hb', 'SaO₂ / SvO₂':'sat', 'PaO₂':'pao2'
+  };
+  document.querySelectorAll('.result-pill').forEach(p=>{
+    const lab = p.querySelector('.lab')?.textContent?.trim();
+    if(map[lab]) p.dataset.key = map[lab];
+  });
+}
+
+function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+function r1(v){ return Math.round(v*10)/10; }
+function r2(v){ return Math.round(v*100)/100; }
+function fmtPt(v){ return v.toFixed(2).replace('.',','); }
+function fmt1(v){ return v.toFixed(1).replace('.',','); }
+function clampSat(v){ return Math.max(0, Math.min(100, v)); }
+// Curva de dissociação da Hb (Severinghaus, P50 ≈ 26,8 mmHg): a saturação é sempre derivada da PO₂.
+function satFromPO2(P){ P=Math.max(P,0.1); return 100/(23400/(P*P*P+150*P)+1); }
+function po2FromSat(S){ let lo=0.5, hi=700; S=clamp(S,0.5,99.9); for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(satFromPO2(m)<S) lo=m; else hi=m; } return (lo+hi)/2; }
+function o2Content(hb,sat,po2){ return 1.34*hb*sat/100 + 0.003*po2; }
+function venousFromContent(cv){
+  let lo=0.5, hi=Math.max(1,PaO2);
+  for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(o2Content(HB,satFromPO2(m),m)<cv) lo=m; else hi=m; }
+  const p=(lo+hi)/2; return { pvo2:p, svo2:satFromPO2(p) };
+}
+function arterialContent(){ SaO2=satFromPO2(PaO2); return o2Content(HB,SaO2,PaO2); }
+function davMax(){ const pv=po2FromSat(SVO2_FLOOR), ca=arterialContent(); return Math.min(ca*prof().emax, ca - o2Content(HB,SVO2_FLOOR,pv)); }
+function calcContents(){
+  const CaO2 = arterialContent();
+  const CvO2 = o2Content(HB,SvO2,PvO2);
+  return { CaO2, CvO2 };
+}
+function colorFromSat(sat){
+  const s = clampSat(sat)/100;
+  const r = Math.round(140 + 115*s);
+  const g = Math.round(35 + 55*(1-s));
+  const b = Math.round(35 + 95*(1-s));
+  return `rgba(${r},${g},${b},0.96)`;
+}
+function edgeFromSat(sat){
+  const s = clampSat(sat)/100;
+  const r = Math.round(110 + 65*s);
+  const g = Math.round(18 + 40*(1-s));
+  const b = Math.round(18 + 70*(1-s));
+  return `rgba(${r},${g},${b},0.98)`;
+}
+
+function getStageIndex(){
+  const cycle = 4.8;
+  const mod = (t*0.001*parseFloat(speedRange.value)) % cycle;
+  return Math.floor(mod/1.2);
+}
+
+function setNotice(msg=''){ notice.textContent = msg; }
+
+function updateActiveButtons(){
+  radioSolve.forEach(r=>{
+    const lab = r.closest('label');
+    if(lab){
+      lab.style.fontWeight = r.checked ? '950' : '850';
+      lab.style.borderColor = r.checked ? '#ef4444' : '#d7e1ec';
+      lab.style.background = r.checked ? 'linear-gradient(135deg,#ffe4e6 0%,#fff7f7 45%,#ffffff 100%)' : 'linear-gradient(180deg,#ffffff 0%,#fff7f7 100%)';
+      lab.style.color = r.checked ? '#b91c1c' : '#17324d';
+      lab.style.boxShadow = r.checked
+        ? '0 0 0 3px rgba(239,68,68,0.22), 0 0 22px rgba(239,68,68,0.38), 0 10px 24px rgba(227,26,28,.15), inset 0 1px 0 rgba(255,255,255,.95)'
+        : '0 2px 7px rgba(18,42,66,.06), inset 0 1px 0 rgba(255,255,255,.9)';
+    }
+  });
+  quickButtons.forEach(btn=>btn.classList.toggle('active', false));
+}
+
+function syncDisabled(){
+  vo2Range.disabled = advancedMode || (solveFor==='vo2');
+  qRange.disabled   = !advancedMode && (solveFor==='q'); radioSolve.forEach(r=>r.disabled=advancedMode);
+  davRange.disabled = advancedMode || (solveFor==='dav');
+}
+
+function derive(){
+  notices=[];
+  const CaO2=arterialContent();
+  const maxDav=davMax();
+  if(advancedMode){
+    Q_MAX=prof().qmax;
+    Q=reqQ; if(Q>Q_MAX){ Q=Q_MAX; notices.push(`Débito cardíaco limitado a ${fmt1(Q_MAX)} L/min, o máximo do perfil (${prof().label}).`); }
+    // SvO₂ é a variável livre do lado venoso; PvO₂ vem da curva e o O₂ dissolvido entra no CvO₂.
+    const svMax=venousFromContent(CaO2-DAV_MIN).svo2;
+    if(SvO2>svMax){ SvO2=svMax; notices.push('SvO₂ limitada: o sangue venoso precisa conter menos O₂ que o arterial (Δ a-v O₂ mínima de 2 mL/dL).'); }
+    if(SvO2<SVO2_FLOOR) SvO2=SVO2_FLOOR;
+    const svMinProfile=venousFromContent(CaO2-maxDav).svo2;
+    if(SvO2<svMinProfile){ SvO2=svMinProfile; notices.push(`SvO₂ limitada a ${Math.round(svMinProfile)}%: a extração máxima do perfil (${prof().label}) é de ~${Math.round(prof().emax*100)}%.`); }
+    PvO2=po2FromSat(SvO2);
+    DAV=CaO2-o2Content(HB,SvO2,PvO2);
+    VO2=Q*DAV*10;
+  }else{
+    Q_MAX=prof().qmax;
+    VO2=reqVO2; Q=reqQ; DAV=reqDAV;
+    if(solveFor!=='q' && Q>Q_MAX){ Q=Q_MAX; notices.push(`Débito cardíaco limitado a ${fmt1(Q_MAX)} L/min, o máximo do perfil (${prof().label}).`); }
+    if(solveFor==='vo2'){
+      if(DAV>maxDav){ DAV=maxDav; notices.push(`Δ a-v O₂ limitada a ${fmt1(maxDav)} mL/dL: extração máxima do perfil (${prof().label}, ~${Math.round(prof().emax*100)}%) ou SvO₂ mínima de ${SVO2_FLOOR}%.`); }
+      DAV=Math.max(DAV_MIN,DAV);
+      VO2=Q*DAV*10;
+    }else if(solveFor==='q'){
+      DAV=clamp(DAV,DAV_MIN,maxDav);
+      const qReq=VO2/(DAV*10);
+      if(qReq>Q_MAX||qReq<Q_MIN){
+        Q=clamp(qReq,Q_MIN,Q_MAX);
+        const asked=VO2; VO2=Q*DAV*10;
+        notices.push(`O VO₂ pedido (${fmtPt(asked/1000)} L/min) exigiria Q de ${fmt1(qReq)} L/min, fora da faixa fisiológica (${fmt1(Q_MIN)}–${fmt1(Q_MAX)} L/min). O VO₂ foi recalculado para ${fmtPt(VO2/1000)} L/min com Q = ${fmt1(Q)} L/min.`);
+      }else Q=qReq;
+    }else if(solveFor==='dav'){
+      const davReq=VO2/(Q*10);
+      if(davReq>maxDav||davReq<DAV_MIN){
+        DAV=clamp(davReq,DAV_MIN,maxDav);
+        const asked=VO2; VO2=Q*DAV*10;
+        notices.push(`O VO₂ pedido (${fmtPt(asked/1000)} L/min) exigiria Δ a-v O₂ de ${fmt1(davReq)} mL/dL, fora do possível para este sangue (${fmt1(DAV_MIN)}–${fmt1(maxDav)} mL/dL). O VO₂ foi recalculado para ${fmtPt(VO2/1000)} L/min.`);
+      }else DAV=davReq;
+    }
+    const ven=venousFromContent(CaO2-DAV);
+    PvO2=ven.pvo2; SvO2=ven.svo2;
+  }
+  if(VO2<VO2_BASAL_MIN) notices.push('VO₂ abaixo do metabolismo basal de um adulto (~150–250 mL/min): esta combinação de Q e Δ a-v O₂ não sustenta o organismo.');
+  if(VO2/MASS>VO2_REL_RECORD) notices.push('VO₂ relativo acima dos maiores valores já medidos em humanos (~90 mL/kg/min).');
+}
+
+function renderLabels(){
+  davRange.max = (Math.floor(davMax()*10)/10).toFixed(1);
+  vo2Range.value = VO2;
+  qRange.value = Q;
+  davRange.value = DAV;
+  massRange.value = MASS;
+  hbRange.value = HB;
+  sao2Range.value = Math.round(SaO2);
+  svo2Range.value = Math.round(SvO2);
+  pao2Range.value = Math.round(PaO2);
+  vo2Label.textContent = `${fmtPt(VO2/1000)} L/min`;
+  qLabel.textContent = `${fmt1(Q)} L/min`;
+  davLabel.textContent = `${fmt1(DAV)} mL/dL`;
+  massLabel.textContent = `${Math.round(MASS)} kg`;
+  speedLabel.textContent = `${fmt1(parseFloat(speedRange.value))}x`;
+  hbLabel.textContent = `${fmt1(HB)} g/dL`;
+  sao2Label.textContent = `${fmt1(SaO2)}%`;
+  svo2Label.textContent = `${Math.round(SvO2)}%`;
+  pao2Label.textContent = `${Math.round(PaO2)} mmHg`;
+  setNotice(notices.join(' '));
+  advancedControls.style.display = advancedMode ? 'flex' : 'none';
+}
+
+function updateEquation(){
+  if(advancedMode){
+    equationMain.textContent = 'VO2 = Q × (CaO2 − CvO2) × 10';
+    equationSub.textContent = 'Modo avançado: CaO2 e CvO2 são calculados automaticamente a partir de Hb, SaO₂, SvO₂ e PaO₂.';
+    altEquationMain.textContent = 'CaO2 = (1,34 × Hb × SaO₂) + (0,003 × PaO₂) | CvO2 = (1,34 × Hb × SvO₂) + (0,003 × PvO₂)';
+    calcMain.textContent = `${fmtPt(VO2/1000)}`;
+    calcSub.textContent = 'L/min';
+    modeBadge.textContent = 'Modo: avançado';
+  }else if(solveFor==='vo2'){
+    equationMain.textContent = 'VO2 = Q × Δ a-v O₂ × 10';
+    equationSub.textContent = 'Com Q em L/min e Δ a-v O₂ em mL/dL, o fator 10 converte litros em decilitros.';
+    altEquationMain.textContent = 'VO2 = Q × (CaO2 − CvO2) × 10';
+    calcMain.textContent = `${fmtPt(VO2/1000)}`;
+    calcSub.textContent = 'L/min';
+    modeBadge.textContent = 'Modo: calcular VO2';
+  }else if(solveFor==='q'){
+    equationMain.textContent = 'Q = VO2 ÷ (Δ a-v O₂ × 10)';
+    equationSub.textContent = 'O débito cardíaco passa a ser a incógnita resolvida automaticamente.';
+    altEquationMain.textContent = 'VO2 = Q × (CaO2 − CvO2) × 10';
+    calcMain.textContent = `${fmt1(Q)}`;
+    calcSub.textContent = 'L/min';
+    modeBadge.textContent = 'Modo: calcular Q';
+  }else{
+    equationMain.textContent = 'Δ a-v O₂ = VO2 ÷ (Q × 10)';
+    equationSub.textContent = 'A extração tecidual passa a ser a incógnita resolvida automaticamente.';
+    altEquationMain.textContent = 'VO2 = Q × (CaO2 − CvO2) × 10';
+    calcMain.textContent = `${fmt1(DAV)}`;
+    calcSub.textContent = 'mL/dL';
+    modeBadge.textContent = 'Modo: calcular Δ a-v O₂';
+  }
+}
+
+function updateReadouts(){
+  const rel = VO2 / MASS;
+  const { CaO2, CvO2 } = calcContents();
+  const currentCa = CaO2;
+  const currentCv = CvO2;
+
+  vo2Label.textContent = `${fmtPt(VO2/1000)} L/min`;
+  relMain.textContent = `${fmtPt(rel)}`;
+  venMain.textContent = `${currentCv.toFixed(1).replace('.',',')}`;
+  qCard.textContent = `${Q.toFixed(1).replace('.',',')}`;
+  davCard.textContent = `${(currentCa-currentCv).toFixed(1).replace('.',',')}`;
+  massCard.textContent = `${Math.round(MASS)}`;
+
+  if(altQ) altQ.textContent = Q.toFixed(1).replace('.',',');
+  if(altCaO2) altCaO2.textContent = currentCa.toFixed(1).replace('.',',');
+  if(altCvO2) altCvO2.textContent = currentCv.toFixed(1).replace('.',',');
+  if(hbCard) hbCard.textContent = fmt1(HB);
+  if(satCard) satCard.innerHTML = `<span class="o2-sat">${Math.round(SaO2)}</span> / <span class="o2-sv">${Math.round(SvO2)}</span>`;
+  // Conferência interna: o VO₂ exibido sempre fecha Q × (CaO₂ − CvO₂) × 10.
+  sceneCanvas.dataset.fick = JSON.stringify({vo2:VO2,q:Q,ca:currentCa,cv:currentCv,sa:SaO2,sv:SvO2,pao2:PaO2,pvo2:PvO2,hb:HB,mass:MASS});
+  if(pao2Card) pao2Card.textContent = `${Math.round(PaO2)}`;
+
+  if(advancedMode){
+    instantRead.textContent = `No modo avançado, o VO₂ passa a depender do débito cardíaco e da diferença entre conteúdo arterial e venoso de oxigênio. Quedas de Hb ou da PaO₂ (e, pela curva de dissociação, da SaO₂) reduzem CaO2; quedas de SvO₂ refletem maior extração. A PaO₂ age sobretudo pela saturação da hemoglobina; sua fração dissolvida (0,003 × PaO₂) é pequena.`;
+  }else{
+    instantRead.textContent = `O consumo de oxigênio resulta da interação entre débito cardíaco e extração tecidual. Na forma detalhada da equação de Fick, a diferença arteriovenosa pode ser lida como a diferença entre o conteúdo arterial de O₂ (CaO2) e o conteúdo venoso de O₂ (CvO2). A normalização pela massa corporal permite comparar indivíduos de tamanhos corporais diferentes.`;
+  }
+}
+
+function roundedBox(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+
+function drawHeart(x,y,w,h,beatAmp){
+ const c=sctx,pulse=1+.035*Math.sin(t*.01*beatAmp);
+ c.save();c.translate(x+w*.5,y+h*.5);c.scale(pulse,pulse);c.translate(-w*.5,-h*.5);
+ const tube=(path,color,width)=>{c.lineCap='round';c.lineJoin='round';c.beginPath();path();c.strokeStyle='#301924';c.lineWidth=width+3;c.stroke();c.strokeStyle=color;c.lineWidth=width;c.stroke();c.strokeStyle='#ffffff70';c.lineWidth=width*.22;c.stroke();};
+ tube(()=>{c.moveTo(w*.54,h*.29);c.bezierCurveTo(w*.42,-h*.04,w*.84,-h*.07,w*.83,h*.25)},'#ba5562',w*.15);
+ tube(()=>{c.moveTo(w*.24,h*.40);c.lineTo(w*.19,h*.03)},'#688db2',w*.12);
+ tube(()=>{c.moveTo(w*.44,h*.39);c.quadraticCurveTo(w*.65,h*.08,w*.98,h*.16)},'#89a5c3',w*.11);
+ c.beginPath();c.moveTo(w*.39,h*.18);c.bezierCurveTo(w*.12,h*.10,-w*.03,h*.38,w*.14,h*.65);c.bezierCurveTo(w*.25,h*.84,w*.55,h*.94,w*.68,h*.99);c.bezierCurveTo(w*.93,h*.79,w*1.02,h*.49,w*.84,h*.29);c.bezierCurveTo(w*.75,h*.15,w*.56,h*.14,w*.39,h*.18);c.closePath();
+ const muscle=c.createRadialGradient(w*.38,h*.32,3,w*.63,h*.63,w*.68);muscle.addColorStop(0,'#f3a0ad');muscle.addColorStop(.36,'#c4546e');muscle.addColorStop(.72,'#882e49');muscle.addColorStop(1,'#3f192c');
+ c.shadowColor='#0008';c.shadowBlur=12;c.shadowOffsetY=6;c.fillStyle=muscle;c.fill();c.shadowBlur=0;c.shadowOffsetY=0;c.strokeStyle='#e598a7';c.lineWidth=1.6;c.stroke();
+ c.save();c.clip();
+ tube(()=>{c.moveTo(w*.63,h*.21);c.bezierCurveTo(w*.44,h*.41,w*.68,h*.66,w*.68,h*.94)},'#913b52',w*.045);
+ for(let i=0;i<4;i++){const yy=h*(.38+i*.11);tube(()=>{c.moveTo(w*.57,yy);c.quadraticCurveTo(w*.39,yy+h*.06,w*(.17+i*.08),yy+h*.08)},'#bd697b',w*.014);}
+ c.restore();
+ c.beginPath();c.ellipse(w*.26,h*.31,w*.16,h*.11,-.55,0,Math.PI*2);const atrium=c.createRadialGradient(w*.21,h*.27,1,w*.28,h*.33,w*.20);atrium.addColorStop(0,'#f3b2bc');atrium.addColorStop(1,'#91364e');c.fillStyle=atrium;c.fill();
+ c.restore();
+}
+
+function drawArrow(x1,y1,x2,y2,color,width=5,label=''){
+  const a=Math.atan2(y2-y1,x2-x1);
+  sctx.save();
+  sctx.lineCap='round'; sctx.lineJoin='round';
+  sctx.strokeStyle=color; sctx.lineWidth=width;
+  sctx.beginPath(); sctx.moveTo(x1,y1); sctx.lineTo(x2,y2); sctx.stroke();
+  const head=16, wing=Math.PI/7;
+  sctx.fillStyle=color;
+  sctx.beginPath();
+  sctx.moveTo(x2,y2);
+  sctx.lineTo(x2-head*Math.cos(a-wing),y2-head*Math.sin(a-wing));
+  sctx.lineTo(x2-head*0.72*Math.cos(a),y2-head*0.72*Math.sin(a));
+  sctx.lineTo(x2-head*Math.cos(a+wing),y2-head*Math.sin(a+wing));
+  sctx.closePath();
+  sctx.fill();
+  if(label && labelsToggle.checked){
+    const mx=(x1+x2)/2;
+    let my=(y1+y2)/2 + 24;
+    if(label==='Q') my=(y1+y2)/2 + 28;
+    if(label==='Retorno venoso') my=(y1+y2)/2 + 24;
+    if(label==='Extração') my=(y1+y2)/2 + 26;
+    sctx.fillStyle=color;
+    sctx.font='bold 14px Arial';
+    sctx.textAlign='center';
+    sctx.fillText(label,mx,my);
+  }
+  sctx.restore();
+}
+
+function drawParticle(x,y,r,fill,border){
+  const grd=sctx.createRadialGradient(x-r*0.35,y-r*0.35,1,x,y,r);
+  grd.addColorStop(0,'rgba(255,255,255,.9)');
+  grd.addColorStop(0.55,fill);
+  grd.addColorStop(1,border);
+  sctx.beginPath();
+  sctx.arc(x,y,r,0,Math.PI*2);
+  sctx.fillStyle=grd;
+  sctx.fill();
+  sctx.lineWidth=0.8;
+  sctx.strokeStyle='rgba(15,23,42,0.20)';
+  sctx.stroke();
+}
+
+function bezierPoint(p0,p1,p2,p3,u){
+  const v=1-u;
+  return {
+    x:v*v*v*p0.x + 3*v*v*u*p1.x + 3*v*u*u*p2.x + u*u*u*p3.x,
+    y:v*v*v*p0.y + 3*v*v*u*p1.y + 3*v*u*u*p2.y + u*u*u*p3.y
+  };
+}
+
+function drawScene(){
+  sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);
+
+  const flowNorm = clamp((Q-2)/(30-2),0,1);
+  const extractionNorm = clamp((DAV-2)/(18-2),0,1);
+  const rel = VO2/MASS;
+  const stageIndex=getStageIndex();
+  const heartBeatAmp = 1.2 + flowNorm*2.4;
+  const bloodSpeedFactor = 0.85 + flowNorm*1.05;
+
+  sctx.fillStyle='#cadce8';
+  sctx.font='bold 22px Arial';
+  sctx.textAlign='left';
+  sctx.fillText('Fluxo central, extração periférica e resultado metabólico', 18, 18);
+
+  roundedBox(sctx,24,40,932,94,14);
+  sctx.fillStyle='#102633';
+  sctx.fill();
+  sctx.strokeStyle='#d1d5db';
+  sctx.stroke();
+
+  sctx.fillStyle='#cadce8';
+  sctx.font='bold 18px Arial';
+  sctx.fillText('Equação aplicada', 48, 70);
+  sctx.fillStyle='#cadce8';
+  sctx.font='bold 24px Arial';
+  if(advancedMode) sctx.fillText('VO2 = Q × (CaO2 − CvO2) × 10',220,74);
+  if(!advancedMode && solveFor==='vo2') sctx.fillText('VO2 = Q × Δ a-v O₂ × 10', 255, 74);
+  if(!advancedMode && solveFor==='q') sctx.fillText('Q = VO2 ÷ (Δ a-v O₂ × 10)', 230, 74);
+  if(!advancedMode && solveFor==='dav') sctx.fillText('Δ a-v O₂ = VO2 ÷ (Q × 10)', 220, 74);
+  sctx.fillStyle='#cadce8';
+  sctx.font='14px Arial';
+  sctx.fillText(advancedMode?'Modo avançado: Hb, PaO₂ (SaO₂) e SvO₂ determinam os conteúdos arterial e venoso.':'Modo básico: CaO2 calculado de Hb e PaO₂ do estado; CvO2 = CaO2 − Δ a-v O₂.',48,106);
+
+  // labels
+  if(labelsToggle.checked){
+    sctx.fillStyle='#cadce8';
+    sctx.font='bold 16px Arial';
+    sctx.fillText('Coração',122,180);
+    sctx.fillText('Sangue venoso',405,180);
+    sctx.fillText('Tecidos',790,180);
+    sctx.fillText('Sangue arterial', 405, 602);
+  }
+  // heart and vessels
+  // vasos retos, mantendo leitura didática e com a ponta esquerda coberta pelo coração
+  const tissueX = 770, tissueY = 243, tissueW = 170, tissueH = 248;
+  const tissueTop = tissueY;
+  const tissueBottom = tissueY + tissueH;
+
+  const arterialOuter = 40;
+  const arterialInner = 34;
+  const venousOuter = 40;
+  const venousInner = 34;
+
+  // alinhamentos pedidos:
+  // arterial: linha externa inferior coincide com o canto inferior esquerdo do tecido
+  // venoso: linha externa superior coincide com o canto superior esquerdo do tecido
+  const arterialY = tissueBottom - arterialOuter/2 - 6;
+  const arterialInnerY = arterialY - (arterialOuter - arterialInner)/2; // 491 - 19 = 472
+  const venousY = tissueTop + venousOuter/2;
+  const venousInnerY = venousY + (venousOuter - venousInner)/2;        // 243 + 13 = 256
+
+  const vesselLeftX = 235;
+  const vesselRightX = tissueX;
+
+  // labels
+  if(labelsToggle.checked){
+    sctx.fillStyle='#cadce8';
+    sctx.font='bold 16px Arial';
+    sctx.fillText('Coração',122,180);
+    sctx.fillText('Sangue venoso',405,180);
+    sctx.fillText('Tecidos',790,180);
+    sctx.fillText('Sangue arterial', 405, 602);
+  }
+
+  // vaso arterial
+  const vesselBorderWidth = 4;
+  const bloodDiameter = 23;
+  const minLumenW = bloodDiameter + 4; // margem de segurança
+
+  const arterialBodyW = 38 + flowNorm*8;
+  const venousBodyW = 38 - flowNorm*6;
+
+  const arterialLumenW = Math.max(minLumenW, 34 + flowNorm*8);
+  const venousLumenW = Math.max(minLumenW, 34 - flowNorm*5);
+
+  const artOuterTop = arterialY - arterialBodyW/2;
+  const artOuterBottom = arterialY + arterialBodyW/2;
+  const artInnerTop = arterialInnerY - arterialLumenW/2;
+  const artInnerBottom = arterialInnerY + arterialLumenW/2;
+
+  // lúmen arterial
+  sctx.strokeStyle='#fca5a5';
+  sctx.lineWidth=arterialLumenW;
+  sctx.lineCap='butt';
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, arterialInnerY);
+  sctx.lineTo(vesselLeftX, arterialInnerY);
+  sctx.stroke();
+
+  // bordas do lúmen arterial
+  sctx.strokeStyle='#7f1d1d';
+  sctx.lineWidth=vesselBorderWidth;
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, artInnerTop);
+  sctx.lineTo(vesselLeftX, artInnerTop);
+  sctx.stroke();
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, artInnerBottom);
+  sctx.lineTo(vesselLeftX, artInnerBottom);
+  sctx.stroke();
+
+  // vaso venoso
+  const venOuterTop = venousY - venousBodyW/2;
+  const venOuterBottom = venousY + venousBodyW/2;
+  const venInnerTop = venousInnerY - venousLumenW/2;
+  const venInnerBottom = venousInnerY + venousLumenW/2;
+
+  // lúmen venoso
+  sctx.strokeStyle='#93c5fd';
+  sctx.lineWidth=venousLumenW;
+  sctx.lineCap='butt';
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, venousInnerY);
+  sctx.lineTo(vesselLeftX, venousInnerY);
+  sctx.stroke();
+
+  // bordas do lúmen venoso
+  sctx.strokeStyle='#1e3a8a';
+  sctx.lineWidth=vesselBorderWidth;
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, venInnerTop);
+  sctx.lineTo(vesselLeftX, venInnerTop);
+  sctx.stroke();
+  sctx.beginPath();
+  sctx.moveTo(vesselRightX, venInnerBottom);
+  sctx.lineTo(vesselLeftX, venInnerBottom);
+  sctx.stroke();
+
+  // sangue arterial e venoso centralizados no lúmen dos vasos retos
+  function drawBloodGasMolecule(x,y,label,fill,edge){ fill=label==='O₂'?'#b6e1ed':'#ecb48e';edge=label==='O₂'?'#4b788a':'#98633e';
+    const r = 11.5; // 30 px de diâmetro
+    const bg = sctx.createRadialGradient(x-r*0.35,y-r*0.35,1,x,y,r);
+    bg.addColorStop(0,'rgba(255,255,255,0.94)');
+    bg.addColorStop(0.55,fill);
+    bg.addColorStop(1,edge);
+    sctx.beginPath();
+    sctx.arc(x,y,r,0,Math.PI*2);
+    sctx.fillStyle = bg;
+    sctx.fill();
+    sctx.lineWidth = 1.0;
+    sctx.strokeStyle = 'rgba(15,23,42,0.22)';
+    sctx.stroke();
+    sctx.fillStyle = '#000000';
+    sctx.font = 'bold 8.5px Arial';
+    sctx.textAlign = 'center';
+    sctx.textBaseline = 'middle';
+    sctx.fillText(label, x, y+0.5);
+    sctx.textAlign = 'left';
+    sctx.textBaseline = 'alphabetic';
+  }
+
+  const arterialCount = 15;
+  for(let i=0;i<arterialCount;i++){
+    const u = ((t*(0.00016 + flowNorm*0.00018)*parseFloat(speedRange.value)*bloodSpeedFactor) + i*(1/arterialCount)) % 1;
+    const x = vesselLeftX + (vesselRightX - vesselLeftX) * u;
+    const isCO2 = (i % 5 === 4); // a cada 4 de O₂, 1 de CO₂
+    drawBloodGasMolecule(
+      x,
+      arterialInnerY,
+      isCO2 ? 'CO₂' : 'O₂',
+      isCO2 ? 'rgba(16,185,129,0.96)' : colorFromSat(SaO2),
+      isCO2 ? 'rgba(5,150,105,0.98)' : edgeFromSat(SaO2)
+    );
+  }
+
+  const venousCount = 14;
+  for(let i=0;i<venousCount;i++){
+    const u = ((t*(0.00015 + flowNorm*0.00016)*parseFloat(speedRange.value)*bloodSpeedFactor) + i*(1/venousCount)) % 1;
+    const x = vesselRightX - (vesselRightX - vesselLeftX) * u;
+    const isO2 = (i % 7 === 6); // a cada 6 de CO₂, 1 de O₂
+    drawBloodGasMolecule(
+      x,
+      venousInnerY,
+      isO2 ? 'O₂' : 'CO₂',
+      isO2 ? colorFromSat(SvO2) : 'rgba(16,185,129,0.96)',
+      isO2 ? edgeFromSat(SvO2) : 'rgba(5,150,105,0.98)'
+    );
+  }
+
+  // coração desenhado por último para cobrir a ponta esquerda dos vasos
+  drawHeart(60,200,330,330,heartBeatAmp);
+
+  drawArrow(600,venousY + 28,430,venousY + 28,'#cadce8',5,'Retorno venoso');
+  drawArrow(430,arterialY + 42,600,arterialY + 42,'#ff8990',5,'Q');
+  drawArrow(780,500,930,500,'#d6a9ff',5,'Extração');
+
+  // tecidos – aumentados novamente, mantendo o centro
+  roundedBox(sctx,tissueX,tissueY,tissueW,tissueH,18);
+  const tg=sctx.createLinearGradient(tissueX,tissueY,tissueX+tissueW,tissueY+tissueH);
+  tg.addColorStop(0,'#f6fffd');
+  tg.addColorStop(0.55,'#e6fff7');
+  tg.addColorStop(1,'#d7faef');
+  sctx.fillStyle=tg;
+  sctx.shadowColor='rgba(45,212,191,0.42)';
+  sctx.shadowBlur=26;
+  sctx.fill();
+  sctx.shadowBlur=0;
+  sctx.strokeStyle='#86e2ce';
+  sctx.lineWidth=1.4;
+  sctx.stroke();
+
+  // halo interno
+  const tissueGlow = sctx.createRadialGradient(855,367,8,855,367,150);
+  tissueGlow.addColorStop(0,'rgba(255,255,255,0.95)');
+  tissueGlow.addColorStop(0.28,'rgba(180,255,235,0.42)');
+  tissueGlow.addColorStop(0.62,'rgba(45,212,191,0.22)');
+  tissueGlow.addColorStop(1,'rgba(45,212,191,0)');
+  sctx.fillStyle=tissueGlow;
+  sctx.fill();
+
+  // microrede capilar/estroma sutil ajustada para a nova altura
+  sctx.strokeStyle='rgba(16,185,129,0.24)';
+  sctx.lineWidth=4;
+  const tissueLines = [
+    [[776,278],[808,246],[850,256],[894,242]],
+    [[770,312],[814,300],[856,310],[900,298]],
+    [[772,346],[820,336],[862,346],[900,336]],
+    [[774,380],[820,372],[864,382],[902,372]],
+    [[776,414],[822,406],[864,416],[902,406]],
+    [[778,448],[824,440],[866,450],[904,440]],
+    [[786,266],[794,304],[790,352],[798,468]],
+    [[824,264],[832,304],[828,354],[836,470]],
+    [[862,264],[868,306],[864,356],[870,470]],
+    [[900,264],[894,306],[900,356],[892,468]],
+  ];
+  tissueLines.forEach(line=>{
+    sctx.beginPath();
+    sctx.moveTo(line[0][0],line[0][1]);
+    sctx.bezierCurveTo(line[1][0],line[1][1],line[2][0],line[2][1],line[3][0],line[3][1]);
+    sctx.stroke();
+  });
+
+  function drawTissueLobule(cx,cy,rx,ry,fillA,fillB,stroke,nucleus='#14b8a6'){
+    sctx.save();
+    sctx.translate(cx,cy);
+    const g = sctx.createRadialGradient(-rx*0.35,-ry*0.35,2,0,0,Math.max(rx,ry)*1.15);
+    g.addColorStop(0,'rgba(255,255,255,0.92)');
+    g.addColorStop(0.48,fillA);
+    g.addColorStop(1,fillB);
+    sctx.beginPath();
+    sctx.ellipse(0,0,rx,ry,0,0,Math.PI*2);
+    sctx.fillStyle=g;
+    sctx.shadowColor='rgba(15,23,42,0.10)';
+    sctx.shadowBlur=8;
+    sctx.fill();
+    sctx.shadowBlur=0;
+    sctx.lineWidth=1.1;
+    sctx.strokeStyle=stroke;
+    sctx.stroke();
+
+    sctx.beginPath();
+    sctx.ellipse(-rx*0.18,-ry*0.22,rx*0.42,ry*0.24,0,0,Math.PI*2);
+    sctx.fillStyle='rgba(255,255,255,0.34)';
+    sctx.fill();
+
+    const ng = sctx.createRadialGradient(-2,-2,1,0,0,Math.min(rx,ry)*0.42);
+    ng.addColorStop(0,'rgba(255,255,255,0.95)');
+    ng.addColorStop(0.55,nucleus);
+    ng.addColorStop(1,'rgba(13,148,136,0.95)');
+    sctx.beginPath();
+    sctx.ellipse(1,1,rx*0.24,ry*0.24,0,0,Math.PI*2);
+    sctx.fillStyle=ng;
+    sctx.fill();
+    sctx.restore();
+  }
+
+  const lobules = [
+    [792,282,22,17],[830,278,23,18],[868,280,22,17],[906,284,22,17],
+    [786,326,23,18],[826,322,24,18],[866,324,24,18],[906,328,23,18],
+    [790,370,22,17],[832,366,24,18],[872,368,23,18],[912,372,22,17],
+    [794,414,22,17],[836,410,24,18],[876,412,23,18],[914,416,22,17],
+    [800,456,22,17],[844,452,23,18],[886,454,22,17]
+  ];
+  lobules.forEach((d,i)=>{
+    const [x,y,rx,ry]=d;
+    drawTissueLobule(
+      x,y,rx,ry,
+      i%2===0?'rgba(110,231,183,0.82)':'rgba(74,222,128,0.82)',
+      i%2===0?'rgba(16,185,129,0.95)':'rgba(5,150,105,0.95)',
+      'rgba(5,150,105,0.30)',
+      i%2===0?'rgba(45,212,191,0.92)':'rgba(20,184,166,0.92)'
+    );
+  });
+
+  // moléculas (agora à frente das células)
+
+  for(let i=0;i<16;i++){
+    const col = i % 4;
+    const row = Math.floor(i / 4);
+    const mx = 792 + col*34 + Math.sin((t*0.002)+(i*0.7))*5;
+    const my = 292 + row*42 + Math.cos((t*0.0022)+(i*0.5))*5;
+    const mg = sctx.createRadialGradient(mx-2,my-2,0.5,mx,my,7);
+    const isCO2 = (i % 3 === 2);
+    mg.addColorStop(0,'rgba(255,255,255,0.95)');
+    mg.addColorStop(0.55, isCO2 ? '#ecb48e' : '#b6e1ed');
+    mg.addColorStop(1, isCO2 ? '#98633e' : '#4b788a');
+    sctx.beginPath();
+    sctx.arc(mx,my,6.2,0,Math.PI*2);
+    sctx.fillStyle = mg;
+    sctx.fill();
+    sctx.lineWidth = 0.9;
+    sctx.strokeStyle = 'rgba(15,23,42,0.24)';
+    sctx.stroke();
+  }
+
+
+  }
+
+
+const O2P={"vo2":"#e7a3d0","q":"#ff8990","dav":"#d6a9ff","mass":"#d9c99a","ca":"#f0a7aa","cv":"#b4bada","hb":"#70bcff","sat":"#e2b6fa","sv":"#a69cf1","pao2":"#84abff","rel":"#f2d77c"};
+const termMap={'VO2':'vo2','VO₂':'vo2','Q':'q','Δ a-v O₂':'dav','CaO2':'ca','CaO₂':'ca','CvO2':'cv','CvO₂':'cv','Hb':'hb','SaO₂':'sat','SvO₂':'sv','PaO₂':'pao2'};
+const termRE=/Δ a-v O₂|CaO[2₂]|CvO[2₂]|VO[2₂]|SaO₂|SvO₂|PaO₂|\bHb\b|\bQ\b/g;
+function colorO2Text(el){if(!el)return;const walk=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);const nodes=[];let n;while(n=walk.nextNode())if(!n.parentElement.closest('[class^="o2-"]'))nodes.push(n);for(const n of nodes){const parts=n.textContent.split(/(Δ a-v O₂|CaO[2₂]|CvO[2₂]|VO[2₂]|SaO₂|SvO₂|PaO₂|\bHb\b|\bQ\b)/);if(parts.length<2)continue;const frag=document.createDocumentFragment();for(const part of parts){if(termMap[part]){const span=document.createElement('span');span.className='o2-'+termMap[part];span.textContent=part;frag.append(span);}else frag.append(document.createTextNode(part));}n.replaceWith(frag);}}
+const nativeO2Text=sctx.fillText.bind(sctx);
+sctx.fillText=function(text,x,y,...rest){const str=String(text),parts=str.split(/(Δ a-v O₂|CaO[2₂]|CvO[2₂]|VO[2₂]|SaO₂|SvO₂|PaO₂|\bHb\b|\bQ\b)/);sctx.save();if(parts.length>1){const w=sctx.measureText(str).width;let pos=x-(sctx.textAlign==='center'?w/2:sctx.textAlign==='right'?w:0);sctx.textAlign='left';const base=sctx.fillStyle;for(const p of parts){sctx.fillStyle=O2P[termMap[p]]||base;nativeO2Text(p,pos,y);pos+=sctx.measureText(p).width;}}else nativeO2Text(text,x,y,...rest);sctx.restore();};
+
+function render(){
+  derive();
+  const pl=document.getElementById('profileLabel'); if(pl) pl.textContent=`Estados rápidos (perfil: ${prof().label}):`;
+  syncDisabled();
+  renderLabels();
+  updateEquation();
+  updateReadouts();
+  const key=advancedMode?'vo2':solveFor,card=calcMain.closest('.result-pill');card.querySelector('.lab').textContent=key==='q'?'Débito cardíaco (Q)':key==='dav'?'Δ a-v O₂':'VO₂ absoluto';card.style.setProperty('--rc',O2P[key]);card.style.setProperty('--reference-accent',O2P[key],'important');
+  for(const id of ['equationMain','equationSub','altEquationMain','instantRead','satCard'])colorO2Text(document.getElementById(id));
+  drawScene();
+}
+
+function play(){
+  if(running) return;
+  running=true; lastTs=0; raf=requestAnimationFrame(loop);
+}
+function pause(){
+  running=false;
+  if(raf) cancelAnimationFrame(raf);
+}
+function resetAll(){
+  pause();
+  VO2=250; Q=5.0; DAV=5.0; MASS=70; HB=15.0; PaO2=100; PROFILE='untrained'; advancedMode=false; advancedModeToggle.checked=false; solveFor='vo2'; syncReq();
+  document.querySelector('input[name="solveFor"][value="vo2"]').checked=true;
+  setNotice('');
+  updateActiveButtons();
+  render();
+}
+function loop(ts){
+  if(!running) return;
+  if(!lastTs) lastTs=ts;
+  const dt=ts-lastTs; lastTs=ts;
+  t += dt;
+  render();
+  raf=requestAnimationFrame(loop);
+}
+
+function applyPreset(name){
+  quickButtons.forEach(btn=>btn.classList.toggle('active', btn.dataset.preset===name));
+  // Estados definidos por Hb, PaO₂, Q e Δ a-v O₂; VO₂, SaO₂, SvO₂ e CvO₂ são sempre calculados (Fick fechado).
+  const P={
+    rest:    {Q:5.0,  DAV:5.0,  MASS:70, HB:15.0, PaO2:100},
+    light:   {Q:9.0,  DAV:8.0,  MASS:70, HB:15.0, PaO2:98},
+    moderate:{Q:13.0, DAV:11.5, MASS:70, HB:15.0, PaO2:96},
+    intense: {Q:20.5, DAV:15.0, MASS:70, HB:15.0, PaO2:95},
+    athlete: {Q:32.0, DAV:16.5, MASS:72, HB:15.0, PaO2:95},
+    hf:      {Q:3.5,  DAV:7.7,  MASS:78, HB:13.0, PaO2:70},
+    anemia:  {Q:7.0,  DAV:3.6,  MASS:70, HB:9.0,  PaO2:95},
+    normal:  {Q:5.0,  DAV:5.0,  MASS:70, HB:15.0, PaO2:100}
+  }[name];
+  if(P){ ({Q,DAV,MASS,HB,PaO2}=P); PROFILE=name==='athlete'?'athlete':'untrained'; solveFor='vo2'; VO2=Q*DAV*10; SvO2=venousFromContent(arterialContent()-DAV).svo2; syncReq(); }
+  document.querySelector(`input[name="solveFor"][value="${solveFor}"]`).checked=true;
+  updateActiveButtons();
+  setNotice('');
+  render();
+}
+
+radioSolve.forEach(r=>r.addEventListener('change', e=>{
+  solveFor = e.target.value; syncReq();
+  updateActiveButtons();
+  render();
+}));
+
+vo2Range.addEventListener('input', e=>{ reqVO2=Number(e.target.value); render(); });
+qRange.addEventListener('input', e=>{ reqQ=Number(e.target.value); render(); });
+davRange.addEventListener('input', e=>{ reqDAV=Number(e.target.value); render(); });
+massRange.addEventListener('input', e=>{ MASS=Number(e.target.value); render(); });
+speedRange.addEventListener('input', render);
+labelsToggle.addEventListener('change', render);
+btnStart.addEventListener('click', play);
+btnPause.addEventListener('click', pause);
+btnReset.addEventListener('click', resetAll);
+quickButtons.forEach(btn=>btn.addEventListener('click', ()=>applyPreset(btn.dataset.preset)));
+
+advancedModeToggle.addEventListener('change', e=>{
+  advancedMode = e.target.checked; syncReq();
+  render();
+});
+hbRange.addEventListener('input', e=>{ HB=Number(e.target.value); render(); });
+sao2Range.addEventListener('input', e=>{ PaO2=clamp(po2FromSat(Number(e.target.value)),30,110); render(); });
+svo2Range.addEventListener('input', e=>{ SvO2=Number(e.target.value); render(); });
+pao2Range.addEventListener('input', e=>{ PaO2=Number(e.target.value); render(); });
+
+document.querySelectorAll('.interpret-block,.subtitle,.ios-toggle-sub').forEach(colorO2Text);
+applyDashboardKeys();
+updateActiveButtons();
+render();
+})();
+</script>
+</body>
+</html>
+
+<style>:root{--c-vo2:#e7a3d0;--c-q:#ff8990;--c-dav:#d6a9ff;--c-mass:#d9c99a;--c-ca:#f0a7aa;--c-cv:#b4bada;--c-hb:#70bcff;--c-sat:#e2b6fa;--c-sv:#a69cf1;--c-pao2:#84abff;--c-rel:#f2d77c}
+:root{color-scheme:dark;--bg:#0b1e2a;--panel:#142c3a;--line:#3a5668;--text:#dce9f3;--muted:#adc5d7}
+body{background:radial-gradient(ellipse at top left,#234352,#0b1e2a 75%);padding:18px;color:var(--text)}
+h1{color:var(--text);font-size:clamp(23px,2.5vw,32px);text-align:left;max-width:1460px;margin:0 auto 8px}.subtitle{max-width:1460px;margin:0 auto 14px;text-align:left;color:var(--muted);line-height:1.5}
+.controls,.selector,.quick,.panel,.eq-box,.readout-box,.interpret-block{background:linear-gradient(145deg,#213b4c,#102633)!important;border:1px solid var(--line)!important;box-shadow:inset 0 1px #ffffff24,0 8px 18px #0004!important;border-radius:18px}
+.controls,.selector,.quick{padding:10px 12px;gap:10px;margin-bottom:10px}.controls-actions{justify-content:flex-start!important;gap:10px!important}
+button,.quick button{color:#f0f8ff!important;border:1px solid #7892a3!important;background:linear-gradient(#587b90,#315569 55%,#163448)!important;border-radius:13px;padding:11px 14px;min-height:44px;box-shadow:inset 0 2px 1px #ffffff65,inset 0 -3px 4px #0006,0 4px 0 #05141e,0 7px 8px #0008!important;text-shadow:0 1px 2px #0009;font-size:14px}
+button.primary,.quick button.active{background:linear-gradient(#69a995,#397c69 45%,#103f34)!important;border-color:#82b8aa!important}
+#btnReset{background:linear-gradient(#be6c79,#8c4250 50%,#542536)!important}button:active{transform:translateY(3px)}button:focus-visible,input:focus-visible{outline:2px solid #dce9f3;outline-offset:3px}
+.quick strong,.section-label,.selector-title,.ios-toggle-text,.panel-title,.interpret-title{color:#dce9f3!important}.panel-sub,.selector-sub,.ios-toggle-sub,.eq-sub,.interpret-footer{color:var(--muted)!important}
+label.control,label.pick,.mode-badge{background:#102633!important;border:1px solid var(--line)!important;color:var(--text)!important;box-shadow:inset 0 1px #ffffff13!important;min-width:0}
+label.pick:has(input:checked){background:#214944!important;border-color:#6ca793!important}.mode-badge{margin-left:auto;padding:8px 10px;line-height:1.4;border-radius:12px}
+.selector-head{min-width:0;max-width:none;flex:1}.checks{flex-wrap:wrap}.section-card{padding-top:30px!important}.section-label{top:9px}
+.controls-sliders{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}.controls-sliders[style*="display: none"],.controls-sliders[style*="display:none"]{display:none!important}
+.controls-sliders label.control{display:grid!important;grid-template-columns:100px minmax(30px,1fr) auto!important;min-height:54px!important;padding:8px 10px!important;gap:10px!important}.control-name{color:var(--vc,var(--text));font-size:12px;min-width:0!important}.control-value{color:var(--vc,var(--text));font-size:14px;min-width:0!important}.controls-sliders label:after{display:none}.controls-sliders label:before{opacity:.8}
+input[type=range]{appearance:none;background:transparent!important;height:28px!important;min-width:0;flex:1;width:100%;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:9px!important;border:1px solid #678591;border-radius:12px;background:#061721;box-shadow:inset 0 2px 4px #000b}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:26px;height:26px;margin-top:-9px!important;border-radius:50%;border:1px solid #abc6d0;background:radial-gradient(circle at 28% 22%,#fff,#c2dfe8 28%,#7299aa 70%,#345768);box-shadow:0 3px 4px #000a,inset 0 1px #fff}
+input:disabled{opacity:.5}.controls-actions label.control{gap:9px;min-height:46px}.controls-actions #speedRange{width:110px;flex:0 1 110px}
+#labelsToggle{appearance:none;width:38px;height:23px;flex:0 0 38px;border:1px solid #60808e;border-radius:20px;background:#061721;position:relative}#labelsToggle:before{content:'';position:absolute;width:17px;height:17px;left:2px;top:2px;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#cee5eb 65%,#7597a7);box-shadow:0 2px 3px #0008}#labelsToggle:checked{background:#267568}#labelsToggle:checked:before{transform:translateX(15px)}.ios-slider{background:#0a1e2b;border:1px solid #527782;box-shadow:inset 0 2px 5px #0009}.ios-toggle input:checked+.ios-slider{background:#267568}.ios-slider:before{background:radial-gradient(circle at 30% 20%,#fff,#c2dce5 65%,#7899a8)}
+.notice:empty{display:none}.notice{color:#f8c16b;min-height:0;margin:8px auto}.main-layout{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:stretch;gap:14px}.panel{min-width:0;padding:12px;display:flex;flex-direction:column}.canvas-wrap{min-width:0}.canvas-wrap canvas{border-color:#385365;background:#102633}.scene-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.scene-heading h2{font-size:18px;margin:0}.scene-heading button{font-size:12px;padding:8px 12px}
+.eq-box{padding:10px!important;margin-bottom:8px}.eq-main{font-size:clamp(17px,1.7vw,23px);color:var(--text);line-height:1.45;overflow-wrap:anywhere}.eq-sub{font-size:12px;line-height:1.5}.panel .result-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important;margin-top:6px!important;margin-bottom:6px}
+.panel .result-pill{min-height:86px!important;padding:10px 12px!important;display:grid!important;grid-template-columns:auto 1fr!important;align-content:center;gap:4px;text-align:left;border-radius:18px!important}.result-pill .lab{grid-column:1/-1;font-size:11px;margin:0;line-height:1.4;letter-spacing:.025em;color:var(--rc,var(--text))!important}.result-pill .val{font-size:22px;color:var(--rc,var(--text))!important;line-height:1.2;white-space:nowrap}.result-pill .sub{font-size:11px;color:var(--muted)!important;align-self:end;margin:0 0 2px 2px}
+#instantRead{font-size:14px!important;color:var(--text)!important;line-height:1.7!important;text-align:left!important}.readout-box{margin-top:12px!important}.interpret-block{margin-top:14px;padding:16px;line-height:1.7;color:var(--text)}.interpret-block b,.interpret-block strong{color:inherit}.interpret-text{color:var(--text)!important}.interpret-footer{font-size:12px}.stage-item{background:#102633;border-color:var(--line)}.stage-item .ttl,.stage-item .txt{color:var(--text)}
+.hill-dialog{padding:14px;border:1px solid #527080;border-radius:18px;background:#102633;color:var(--text);width:min(98vw,1500px);max-height:96dvh}.hill-dialog::backdrop{background:#041019d9}.hill-dialog-close{display:block;margin:0 0 12px auto}.figure-scroll{max-width:100%;margin:auto}.figure-scroll canvas{width:100%;height:auto}
+@media(max-width:1050px){.main-layout{grid-template-columns:1fr}.selector-block{flex-wrap:wrap}.checks{margin-left:0}.main-layout>.panel:first-child .canvas-wrap{max-width:980px;align-self:center;width:100%}}
+@media(max-width:650px){body{padding:10px}.controls-sliders{grid-template-columns:1fr!important}.controls-sliders label.control{grid-template-columns:80px minmax(30px,1fr) auto!important}.checks{display:grid;grid-template-columns:1fr;width:100%;gap:7px}.checks label{min-height:44px}.quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.quick strong{grid-column:1/-1}.quick button{font-size:12px;padding:9px 7px}.controls-actions .mode-badge{margin-left:0}.panel .result-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}.panel .result-pill{min-height:82px!important}.ios-toggle-wrap{gap:8px}.ios-toggle-sub{font-size:12px;margin-left:0}.interpret-block{padding:13px}.eq-main{font-size:17px}}
+.o2-vo2{color:#e7a3d0!important}.var-vo2{--vc:#e7a3d0}.o2-q{color:#ff8990!important}.var-q{--vc:#ff8990}.o2-dav{color:#d6a9ff!important}.var-dav{--vc:#d6a9ff}.o2-mass{color:#d9c99a!important}.var-mass{--vc:#d9c99a}.o2-ca{color:#f0a7aa!important}.var-ca{--vc:#f0a7aa}.o2-cv{color:#b4bada!important}.var-cv{--vc:#b4bada}.o2-hb{color:#70bcff!important}.var-hb{--vc:#70bcff}.o2-sat{color:#e2b6fa!important}.var-sat{--vc:#e2b6fa}.o2-sv{color:#a69cf1!important}.var-sv{--vc:#a69cf1}.o2-pao2{color:#84abff!important}.var-pao2{--vc:#84abff}.o2-rel{color:#f2d77c!important}.var-rel{--vc:#f2d77c}.var-cv:has(#svo2Range){--vc:var(--c-sv)}.result-pill:has(#calcMain){--rc:var(--c-vo2);--reference-accent:var(--c-vo2)!important}.result-pill:has(#relMain){--rc:var(--c-rel);--reference-accent:var(--c-rel)!important}.result-pill:has(#massCard){--rc:var(--c-mass);--reference-accent:var(--c-mass)!important}.result-pill:has(#qCard){--rc:var(--c-q);--reference-accent:var(--c-q)!important}.result-pill:has(#venMain){--rc:var(--c-cv);--reference-accent:var(--c-cv)!important}.result-pill:has(#davCard){--rc:var(--c-dav);--reference-accent:var(--c-dav)!important}.result-pill:has(#altQ){--rc:var(--c-q);--reference-accent:var(--c-q)!important}.result-pill:has(#altCaO2){--rc:var(--c-ca);--reference-accent:var(--c-ca)!important}.result-pill:has(#altCvO2){--rc:var(--c-cv);--reference-accent:var(--c-cv)!important}.result-pill:has(#hbCard){--rc:var(--c-hb);--reference-accent:var(--c-hb)!important}.result-pill:has(#satCard){--rc:var(--c-sat);--reference-accent:var(--c-sat)!important}.result-pill:has(#pao2Card){--rc:var(--c-pao2);--reference-accent:var(--c-pao2)!important}.controls-actions #modeBadge{order:10}.selector::before,.selector::after{display:none!important}.selector.section-card{padding-top:10px!important}.selector>.section-label{display:none}.selector-block{padding-top:0!important}.result-pill:has(#calcMain){--rc:var(--c-vo2)}</style><script>(()=>{document.querySelectorAll('[data-expand]').forEach(button=>{const canvas=document.getElementById(button.dataset.expand),home=canvas.parentNode;const dialog=document.createElement('dialog');dialog.className='hill-dialog';dialog.setAttribute('aria-label',button.previousElementSibling.textContent);const close=document.createElement('button');close.textContent='Fechar';close.type='button';close.className='hill-dialog-close';const wrap=document.createElement('div');wrap.className='figure-scroll';wrap.style.width='min(100%,calc((100dvh - 100px)*'+(canvas.width/canvas.height)+'))';dialog.append(close,wrap);document.body.appendChild(dialog);let overflow='';button.addEventListener('click',()=>{overflow=document.body.style.overflow;wrap.appendChild(canvas);dialog.showModal();document.body.style.overflow='hidden';close.focus();});close.addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{home.appendChild(canvas);document.body.style.overflow=overflow;button.focus();});});})();
+</script>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.result-pill):not(#cards-reference-reserved){--reference-accent:var(--rc,#b6cad9);position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.result-pill):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.result-pill):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.result-pill):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+
+</style>
+
+<script src="tutor-ef-data.js?v=20"></script>
+<script src="tutor-widget.js?v=21"></script>
