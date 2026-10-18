@@ -20,6 +20,28 @@ test('Rotas EF usam o manifesto sem alterar o estado fisiológico ou persistir e
  assert.doesNotMatch(script,/localStorage|sessionStorage|setInterval|\.onclick\s*=|\.value\s*=/);
  assert.match(script,/childList:true,subtree:true/);
 });
+test('Endereços de pasta recebem a mesma identidade que index.html, no domínio e no GitHub Pages',async()=>{
+ for(const prefix of ['/','/fisiologia-interativa/'])for(const path of ['', 'endocrino/', 'endocrino/ciclo/', 'endocrino/menopausa/']){
+  let mounted=0;
+  const document={currentScript:{src:'https://site.test'+prefix+'ef-simuladores.js'},readyState:'complete',get body(){mounted++;return null;}};
+  vm.runInNewContext(script,{URL,location:new URL('https://site.test'+prefix+path),document,fetch:async()=>({ok:true,json:async()=>manifest}),console});
+  await new Promise(setImmediate);
+  assert.equal(mounted,1,prefix+path);
+ }
+});
+test('Carregadores montam a identidade após escrever o documento, mesmo sem fechamento de head no original',async()=>{
+ for(const file of ['homeostase-do-calcio.html','contracao-muscular-sarcomero.html']){
+  const events=[],nodes=[];
+  const document={open:()=>events.push('open'),write:()=>events.push('write'),close:()=>events.push('close'),createElement:tag=>({tag}),head:{append:n=>{events.push('theme');nodes.push(n);}}};
+  const code=[...read(file).matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)][0][1];
+  await vm.runInNewContext(code,{document,fetch:async()=>({ok:true,text:async()=>'<!doctype html><title>Original</title><main>Simulador</main>'}),console});
+  assert.deepEqual(events,['open','write','close','theme'],file);
+  assert.equal(nodes[0].tag,'script');assert.match(nodes[0].src,/ef-simuladores\.js\?v=/);
+ }
+});
+test('Cards dos eixos hipofisários e etapas dinâmicas usam a lateral curva',()=>{
+ for(const name of ['.hypothalamus-origin','.pituitary-group','.lactation-bridge','.stage'])assert.ok(script.includes(name),name);
+});
 test('Logo preserva o recorte completo, a moldura e a cabeça acima; cards usam borda curva',()=>{
  const css=read('ef-simuladores.css');assert.match(script,/viewBox="0 0 420 405"/);assert.match(css,/width:100px!important;height:62px!important/);assert.match(css,/bottom:7px!important/);assert.match(css,/border-radius:18px!important;border-left:5px/);assert.match(css,/fi-ef-flat-strip::before/);
 });

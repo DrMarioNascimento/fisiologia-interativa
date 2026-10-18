@@ -3,12 +3,12 @@
  'use strict';
  const script=document.currentScript;
  const root=new URL('.',script.src);
- const VERSION='20261018-ef1';
- const COLORS={celular:'#b49bff',muscular:'#ff9f57',osteoarticular:'#5ed9a6',cardiovascular:'#ff7478',respiratorio:'#63b8ff',integracao:'#3fe0c8',endocrino:'#80c5af'};
- const CARDS='.card,.panel,.lab,.metric,.metric-card,.metric-box,.stat,.stat-card,.kpi,.section-card,.stage-node,.top-col,.control-group,.slider-card,.toggle-card,.chart-card,.tissue-card,.concepts>p,.response-indicators>div,.tabs>button,.tabs>a,.states>button,.quick>button,.state-row>button,.stage-track>button,.stage-track>.stage,.module-card,.canal';
+ const VERSION='20261018-ef2';
+ const CARDS='.card,.panel,.lab,.metric,.metric-card,.metric-box,.stat,.stat-card,.kpi,.section-card,.stage,.hypothalamus-origin,.pituitary-group,.lactation-bridge,.stage-node,.top-col,.control-group,.slider-card,.toggle-card,.chart-card,.tissue-card,.concepts>p,.response-indicators>div,.tabs>button,.tabs>a,.states>button,.quick>button,.state-row>button,.stage-track>button,.stage-track>.stage,.module-card,.canal';
  function isFisio(url){const u=new URL(url,root);return /\/fisioterapia\//i.test(u.pathname)||/tutor-fisio\.html$/i.test(u.pathname)||['fisioterapia','fi','fisio'].includes((u.searchParams.get('percurso')||u.searchParams.get('curso')||'').toLowerCase());}
  if(isFisio(location.href))return;
- const route=decodeURIComponent(location.pathname).slice(root.pathname.length).replace(/^\//,'')||'index.html';
+ const relative=decodeURIComponent(location.pathname).slice(root.pathname.length).replace(/^\//,'');
+ const route=!relative||relative.endsWith('/')?relative+'index.html':relative;
  fetch(new URL('ef-simuladores-manifest.json?v='+VERSION,root)).then(r=>{if(!r.ok)throw Error('Manifesto visual indisponível');return r.json();}).then(manifest=>{
   const entry=manifest[route];if(!entry)return;
   function mount(doc,info){
