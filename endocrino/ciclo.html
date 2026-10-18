@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Ciclo Menstrual e Gestação — Fisiologia Interativa</title>
+<meta name="description" content="Simulação do eixo hipotálamo–hipófise–ovário ao longo do ciclo menstrual e da gestação, com respostas agudas ao exercício físico.">
+<link rel="icon" href="../brand/orientador.webp">
+<link rel="stylesheet" href="style.css?v=20261018-audit2">
+<link rel="stylesheet" href="ciclo.css?v=20261018-ciclo1">
+</head>
+<body>
+<a class="skip" href="#simulacao">Ir para a simulação</a>
+<header class="shell">
+ <div class="titlebar"><a class="brand" href="../index.html#u-endocrino"><img src="../assets/avatar-prof-mario.webp" alt=""><span>Fisiologia Interativa<small>Educação Física · Unidade 06</small></span></a><a class="button" href="index.html">Eixos hipofisários</a></div>
+ <h1>Ciclo Menstrual e Gestação</h1>
+ <p class="subtitle">Hipotálamo, neuro e adeno-hipófise, ovário e placenta: acompanhe GnRH, FSH, LH, prolactina, ocitocina, estradiol, progesterona e hCG ao longo do tempo.</p>
+ <div class="mode-switch" role="group" aria-label="Modo da simulação">
+  <button type="button" data-mode="ciclo" aria-pressed="true">Ciclo menstrual</button>
+  <button type="button" data-mode="gestacao" aria-pressed="false">Gestação</button>
+ </div>
+</header>
+<main class="shell" id="simulacao">
+ <section class="panel toolbar" aria-label="Controles da simulação">
+  <button id="toggle" class="primary">Pausar</button>
+  <button id="reset" class="danger">Reiniciar</button>
+  <label>Velocidade <select id="speed"></select></label>
+  <label id="len-wrap">Duração do ciclo <input id="cycle-length" type="range" min="21" max="35" step="1" value="28"><output id="cycle-length-v">28 dias</output></label>
+  <label id="bf-wrap" hidden><input id="breastfeeding" type="checkbox" checked> Amamentação no puerpério</label>
+  <output id="clock" aria-live="off">Dia 1 de 28</output>
+ </section>
+
+ <section class="panel timeline" aria-label="Linha do tempo">
+  <div class="timeline-head"><h2 id="phase-chip">Fase</h2><span id="cycle-count" class="muted"></span></div>
+  <div id="segments" class="segments" aria-hidden="true"></div>
+  <input id="seek" type="range" min="0" max="27.99" step="0.05" value="0" aria-label="Posição na linha do tempo">
+  <div id="landmarks" class="landmarks" aria-label="Marcos fisiológicos"></div>
+ </section>
+
+ <div class="layout"><div class="content">
+  <section class="panel"><h2 id="flow-title">Eixo hipotálamo–hipófise–ovário</h2><div id="diagram" class="diagram flow"></div></section>
+  <section class="panel interpretation" aria-live="polite" aria-atomic="true">
+   <p id="phase-period" class="muted"></p><h2 id="phase-title"></h2><div id="phase-text"></div><div id="phase-feedback" class="feedback"></div>
+  </section>
+  <section class="panel"><h2>Perfis hormonais</h2><p class="muted">Cada hormônio em sua própria escala. A linha vertical indica o momento atual; toque no gráfico para ir até um dia.</p><div id="charts" class="charts"></div></section>
+ </div>
+ <aside class="panel controls" aria-labelledby="ex-title">
+  <h2 id="ex-title">Exercício físico</h2>
+  <p class="muted">Resposta aguda ao final de uma sessão de 45–60 min, comparada ao repouso no momento atual. Escolher uma intensidade pausa o tempo.</p>
+  <div id="ex-levels" class="ex-levels" role="radiogroup" aria-label="Intensidade do exercício"></div>
+  <div id="ex-detail"></div>
+ </aside></div>
+</main>
+<footer class="shell"><p>Modelo educacional simplificado, com curvas médias de referência. Uso exclusivamente educacional — não recomendado para diagnóstico ou prescrição.</p><strong>Prof. Mário César Nascimento. PhD ©</strong></footer>
+<script type="module" src="ciclo.js?v=20261018-ciclo1"></script>
+</body></html>

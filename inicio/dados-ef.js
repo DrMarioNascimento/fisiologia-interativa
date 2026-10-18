@@ -339,6 +339,12 @@ window.FI_DADOS = {
      "cat": "Sistema Endócrino",
      "obj": "Manipular estímulos e respostas hormonais, acompanhar ACTH e cortisol, ADH e balanço hídrico, ocitocina e reflexos do parto e da ejeção do leite; comparar retroalimentação negativa e positiva.",
      "href": "endocrino/index.html"
+    },
+    {
+     "t": "Ciclo menstrual e gestação",
+     "cat": "Sistema Endócrino",
+     "obj": "Acompanhar GnRH, FSH, LH, prolactina, ocitocina, estradiol, progesterona e hCG ao longo do ciclo menstrual e da gestação; comparar respostas agudas ao exercício de baixa, moderada e alta intensidade.",
+     "href": "endocrino/ciclo.html"
     }
    ],
    "sala": null
