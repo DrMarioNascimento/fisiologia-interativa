@@ -4,13 +4,13 @@ const $=id=>document.getElementById(id),fmt=n=>n.toLocaleString('pt-BR',{maximum
 let params={...defaults},rows=[],cursor=0,timer=null;
 const groups=[
  ['Sono e relógio biológico',[
- ['bed','Dormir às',0,23,1,'h'],['wake','Acordar às',0,23,1,'h'],['fragmentation','Fragmentação do sono',0,100,5,'%'],['phase','Deslocamento de fase desejado',-12,12,1,'h'],['light','Exposição à luz noturna',0,100,5,'%']]],
+ ['bed','Dormir às',0,23,1,'h'],['wake','Acordar às',0,23,1,'h'],['fragmentation','Fragmentação do sono',0,100,5,'%'],['phase','Deslocamento de fase desejado',-12,12,1,'h'],['car','Componente adicional ao despertar',0,100,5,'%']]],
  ['Exercício e recuperação',[
- ['exerciseHour','Início do exercício',0,23,1,'h'],['intensity','Intensidade relativa',0,100,5,'%'],['duration','Duração por dia',0,240,15,'min'],['fitness','Condicionamento',0,100,5,'%'],['resistance','Estímulo resistido',0,100,5,'%']]],
+ ['exerciseHour','Início do exercício',0,23,1,'h'],['intensity','Intensidade relativa',0,100,5,'%'],['duration','Duração por dia',0,240,15,'min'],['resistance','Componente resistido (contexto, sem efeito nas curvas)',0,100,5,'%']]],
  ['Estímulos e substratos',[
- ['stress','Estresse diário (1 hora)',0,100,5,'%'],['stressHour','Início do estresse',0,23,1,'h'],['inflammation','Estímulo inflamatório',0,100,5,'%'],['energy','Disponibilidade energética',40,140,5,'%'],['protein','Oferta proteica relativa',40,140,5,'%']]],
+ ['stress','Estresse diário (1 hora)',0,100,5,'%'],['stressHour','Início do estresse',0,23,1,'h'],['inflammation','Estímulo inflamatório',0,100,5,'%'],['energy','Oferta energética (contexto, sem efeito nas curvas)',40,140,5,'%'],['protein','Oferta proteica (contexto, sem efeito nas curvas)',40,140,5,'%']]],
  ['Mecanismos do eixo · avançado',[
- ['central','Capacidade central',0,150,5,'%'],['adrenal','Capacidade adrenal inicial',0,150,5,'%'],['acthAutonomy','ACTH autônomo',0,200,10,'u.r.'],['autonomy','Cortisol adrenal autônomo',0,200,10,'u.r.'],['exogenous','Sinal glicocorticoide exógeno',0,250,10,'u.r.']]]
+ ['hypothalamus','Ganho hipotalâmico (não clínico)',0,150,5,'%'],['central','Ganho hipofisário (não clínico)',0,150,5,'%'],['adrenal','Ganho de produção adrenal (não clínico)',0,150,5,'%'],['acthAutonomy','ACTH autônomo',0,200,10,'u.r.'],['autonomy','Cortisol adrenal autônomo',0,200,10,'u.r.'],['exogenous','Sinal exógeno constante (não é dose)',0,250,10,'u.r.'],['withdrawalDay','Dia da retirada programada (0 = não retirar)',0,28,1,'dia']]]
 ];
 $('scenario').innerHTML=Object.entries(scenarios).map(([id,s])=>`<option value="${id}">${s.label}</option>`).join('')+'<option value="custom" disabled>Experimento personalizado</option>';
 $('controls').innerHTML=groups.map(([name,controls])=>{
@@ -47,10 +47,10 @@ function render(){
  $('map-cortisol').textContent=fmt(r.cortisol);$('map-cat').textContent=fmt(r.cat);$('map-sym').textContent=fmt(r.sym);
  $('metrics').innerHTML=[['Cortisol endógeno',r.cortisol],['ACTH',r.acth],['Índice simpático',r.sym],['Sinal efetivo + exógeno',r.effective]].map(([label,n])=>`<div class="metric"><span>${label}</span><strong>${fmt(n)}</strong><small>u.r.</small></div>`).join('');
  const delta=r.cortisol-r.baseline;
- $('interpretation').textContent=`Cortisol ${Math.abs(delta)<.1?'igual ao':delta>0?'acima do':'abaixo do'} basal de referência${Math.abs(delta)<.1?'':` em ${fmt(Math.abs(delta))} u.r.`}. ${r.exercise?'Exercício em curso. ':''}${r.stress?'Estresse programado ativo. ':''}${params.exogenous?'O sinal exógeno pode suprimir ACTH mesmo com cortisol endógeno baixo.':'Feedback depende do sinal glicocorticoide e da capacidade do eixo.'}`;
+ $('interpretation').textContent=`Cortisol ${Math.abs(delta)<.1?'igual ao':delta>0?'acima do':'abaixo do'} basal de referência${Math.abs(delta)<.1?'':` em ${fmt(Math.abs(delta))} u.r.`}. ${r.exercise?'Exercício em curso. ':''}${r.stress?'Estresse programado ativo. ':''}${r.exogenous?'O sinal exógeno pode suprimir ACTH mesmo com cortisol endógeno baixo.':'Feedback depende do sinal glicocorticoide e da capacidade do eixo.'}`;
  $('muscle').textContent=muscleAssessment(r,params);
- $('recovery').textContent=`Sono programado: ${sleepHours(params)} h. Restrição acumulada: ${fmt(r.debt)} (índice). Pressão de sono: ${fmt(r.pressure)} u.r. Fase deslocada: ${fmt(r.phase)} h. Capacidade adrenal adaptativa: ${fmt(r.capacity*100)}%.`;
- $('status').textContent=`${cursor===rows.length-1?'Janela concluída. ':''}${sleepHours(params)===0?'Atenção: horários iguais representam ausência de sono neste modelo. ':''}Parâmetros aplicados desde o início. Dados relativos; coeficientes pedagógicos não calibrados clinicamente.`;
+ $('recovery').textContent=`Sono programado: ${sleepHours(params)} h. Restrição acumulada: ${fmt(r.debt)} (índice). Pressão de sono (indicador independente, sem ação no eixo): ${fmt(r.pressure)} u.r. Fase deslocada: ${fmt(r.phase)} h. Fator trófico adrenal ilustrativo: ${fmt(r.capacity*100)}% (não é reserva funcional medida).`;
+ $('status').textContent=`${cursor===rows.length-1?'Janela concluída. ':''}${sleepHours(params)===0?'Atenção: horários iguais representam ausência de sono neste modelo. ':''}Alterar controles reinicia o experimento. Retirada programada preserva o histórico dentro da mesma execução; se o dia escolhido ficar fora da janela, não ocorrerá retirada. Sem farmacocinética nem orientação de desmame. Dados relativos; coeficientes pedagógicos não calibrados clinicamente.`;
  $('rows').innerHTML=rows.slice(Math.max(0,cursor-11),cursor+1).map(x=>`<tr><td>${time(x.t)}</td>${['crh','acth','cortisol','baseline','sym','cat'].map(k=>`<td>${fmt(x[k])}</td>`).join('')}</tr>`).join('');
  draw();
 }
@@ -75,7 +75,7 @@ function draw(){
  canvas.setAttribute('aria-label',`Gráfico até ${time(end)}. Cortisol ${fmt(rows[cursor].cortisol)}, ACTH ${fmt(rows[cursor].acth)}, simpático ${fmt(rows[cursor].sym)} unidades relativas. Valores na tabela.`);
 }
 $('export').onclick=()=>{
- const headers=['t','crh','acth','cortisol','baseline','sym','cat','effective','burden','debt','pressure','phase','capacity'];
+ const headers=['t','crh','acth','cortisol','baseline','sym','cat','effective','exogenous','awakening','debt','pressure','phase','capacity'];
  const metadata=Object.entries(params).map(([k,v])=>`# ${k};${v}`);
  const csv=['# Modelo didático;unidades relativas;sem validade clínica',...metadata,headers.join(';'),...rows.slice(0,cursor+1).map(r=>headers.map(k=>r[k].toFixed(3)).join(';'))].join('\n');
  const url=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='cortisol-experimento.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
