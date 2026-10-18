@@ -1,4 +1,4 @@
-import {renderTissues} from './tissues.js?v=2';
+import {renderTissues} from './tissues.js?v=3';
 import {HORMONES,CYCLE_HORMONES,PREGNANCY_HORMONES,snapshotAt,buildSeries,totalDays,formatHormone,formatTime,TERM_DAY} from './model.js';
 import {describePhase,segments} from './phases.js';
 import {applyExercise,EXERCISE} from './exercise.js';
