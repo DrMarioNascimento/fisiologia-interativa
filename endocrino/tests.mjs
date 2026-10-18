@@ -1,3 +1,4 @@
+import { signalStyle, signalSVG } from './signals.js';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import fs from 'node:fs';
@@ -16,7 +17,7 @@ test('Todos os cenários permanecem finitos e não negativos por 90 dias',()=>{f
 test('Troca de cenário limpa tempo/histórico e restaurar alcança todos os eixos',()=>{
  const elements=new Map();const document={getElementById(id){if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',hidden:false});return elements.get(id);}};
  const source=fs.readFileSync(new URL('./app.js',import.meta.url),'utf8').replace(/^import .*$/gm,'');
- const env={AXES,PARAM_DEFS,formatParam,BASELINE_STATE,DEFAULT_PARAMS,advance,waterLimitReached,computeLabs,BASELINE_LABS,LAB_DEFS,formatLab,labStatus,SCENARIOS,interpret,document,setInterval:()=>0};
+ const env={signalStyle,signalSVG,AXES,PARAM_DEFS,formatParam,BASELINE_STATE,DEFAULT_PARAMS,advance,waterLimitReached,computeLabs,BASELINE_LABS,LAB_DEFS,formatLab,labStatus,SCENARIOS,interpret,document,setInterval:()=>0};
  const evaluate=new Function(...Object.keys(env),source+'\nreturn {snapshot:()=>({state,params,history,running,scenarioId,axis})};');
  const ui=evaluate(...Object.values(env));const el=id=>document.getElementById(id);
  el('scenario').value='cushing-exo';el('scenario').onchange();for(let i=0;i<30;i++)el('step').onclick();
@@ -55,7 +56,7 @@ function interfaceHarness(){
  const elements=new Map();let interval,blob,downloaded=false;
  const document={getElementById(id){if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',hidden:false});return elements.get(id);},createElement(){return {click(){downloaded=true;}};}};
  const source=fs.readFileSync(new URL('./app.js',import.meta.url),'utf8').replace(/^import .*$/gm,'');
- const env={AXES,PARAM_DEFS,formatParam,BASELINE_STATE,DEFAULT_PARAMS,advance,waterLimitReached,computeLabs,BASELINE_LABS,LAB_DEFS,formatLab,labStatus,SCENARIOS,interpret,document,setInterval:fn=>{interval=fn;},setTimeout:()=>0,URL:{createObjectURL(b){blob=b;return 'blob:teste';},revokeObjectURL(){}}};
+ const env={signalStyle,signalSVG,AXES,PARAM_DEFS,formatParam,BASELINE_STATE,DEFAULT_PARAMS,advance,waterLimitReached,computeLabs,BASELINE_LABS,LAB_DEFS,formatLab,labStatus,SCENARIOS,interpret,document,setInterval:fn=>{interval=fn;},setTimeout:()=>0,URL:{createObjectURL(b){blob=b;return 'blob:teste';},revokeObjectURL(){}}};
  const ui=new Function(...Object.keys(env),source+'\nreturn {snapshot:()=>({state,params,history,running,scenarioId,axis})};')(...Object.values(env));
  const el=id=>document.getElementById(id);const axis=id=>el('tabs').onclick({target:{closest:()=>({dataset:{axis:id}})}});
  const input=(key,value)=>el('sliders').oninput({target:{dataset:{param:key},value:String(value),setAttribute(){}}});
@@ -67,3 +68,14 @@ test('Interface não promete reflexo de ocitocina quando síntese foi bloqueada'
 test('Interface inicia, pausa, interrompe no limite e permite recuperação',()=>{const h=interfaceHarness();h.el('speed').value='.5';h.el('play').onclick();h.tick();assert.ok(h.ui.snapshot().state.t>0);h.el('pause').onclick();const paused=h.ui.snapshot().state.t;h.tick();assert.equal(h.ui.snapshot().state.t,paused);h.axis('neuro');h.input('waterAccess',0);for(let i=0;i<30;i++)h.el('step').onclick();assert.equal(h.el('model-limit').hidden,false);assert.equal(h.el('play').disabled,true);h.input('waterAccess',1);assert.equal(h.el('model-limit').hidden,true);assert.equal(h.el('play').disabled,false);h.el('step').onclick();assert.ok(h.ui.snapshot().state.tbw>28);});
 test('CSV exporta a janela do eixo ativo com tempo e unidades',async()=>{const h=interfaceHarness();h.axis('neuro');h.el('step').onclick();h.el('export').onclick();assert.ok(h.wasDownloaded());const text=await h.getBlob().text();assert.match(text,/"dia";/);assert.match(text,/Balanço hídrico/);assert.match(text,/L\/dia/);assert.equal(text.trim().split('\r\n').length,3);});
 test('Interface distingue faixa normal de equilíbrio dinâmico após estímulo',()=>{const h=interfaceHarness();h.scenario('graves');assert.match(h.el('interpret-title').textContent,/evolução/);h.el('reset').onclick();assert.match(h.el('interpret-title').textContent,/equilíbrio/);});
+
+test('Sinais visuais variam com hormônios e distinguem inibição e alvos paralelos',()=>{
+ const low=signalStyle(.1,1),base=signalStyle(1,1),high=signalStyle(4,1);
+ assert.ok(low.width<base.width&&base.width<high.width);assert.ok(high.duration<base.duration&&base.duration<low.duration);assert.equal(signalStyle(0,1).active,false);
+ assert.match(signalSVG(0,1),/animation-play-state:paused/);assert.match(signalSVG(1,1,{inhibitory:true}),/signal-end/);
+ const h=interfaceHarness();assert.match(h.el('diagram').innerHTML,/1× basal/);
+ h.axis('gh');assert.match(h.el('diagram').innerHTML,/Somatostatina inibe/);assert.match(h.el('diagram').innerHTML,/inhibitory/);
+ h.axis('prolactina');assert.match(h.el('diagram').innerHTML,/Dopamina inibe/);assert.match(h.el('diagram').innerHTML,/TRH estimula/);
+ h.axis('adrenal');h.input('stress',3);h.el('step').onclick();assert.match(h.el('diagram').innerHTML,/signal-flow/);
+ h.axis('ocitocina');assert.match(h.el('diagram').innerHTML,/Alvos em paralelo/);assert.match(h.el('diagram').innerHTML,/0% de estímulo/);h.input('labor',1);assert.match(h.el('diagram').innerHTML,/100% de estímulo/);
+});

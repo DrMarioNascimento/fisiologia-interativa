@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Sistema Endócrino — Fisiologia Interativa</title>
 <meta name="description" content="Unidade 06 de Educação Física: simulação integrada dos eixos hormonais, ACTH, ADH e ocitocina.">
-<link rel="icon" href="../brand/orientador.webp"><link rel="stylesheet" href="style.css?v=20261018-audit2">
+<link rel="icon" href="../brand/orientador.webp"><link rel="stylesheet" href="style.css?v=20261018-signals">
 </head>
 <body>
 <a class="skip" href="#simulacao">Ir para a simulação</a>
@@ -19,12 +19,12 @@
  <nav id="tabs" class="tabs" aria-label="Eixos hormonais"></nav>
  <div class="layout"><div class="content">
   <section class="panel"><h2 id="axis-title"></h2><p id="axis-summary"></p><label class="scenario-label" for="scenario">Estado fisiológico / cenário didático</label><select id="scenario"></select><p id="scenario-description" class="muted"></p></section>
-  <section class="panel"><h2>Fluxo de comunicação hormonal</h2><div id="diagram" class="diagram"></div><div id="feedback" class="feedback"></div></section>
+  <section class="panel"><h2>Fluxo de comunicação hormonal</h2><div id="diagram" class="diagram"></div><p class="signal-guide">Setas: sentido do sinal. Barra transversal: inibição. Espessura e velocidade variam com o valor relativo ao basal; não representam fluxo sanguíneo nem frequência real de pulsos. A animação continua ao pausar o tempo para indicar a atividade no estado exibido.</p><div id="feedback" class="feedback"></div></section>
   <section class="panel interpretation" aria-live="polite" aria-atomic="true"><p id="global-context" class="muted" hidden></p><h2 id="interpret-title"></h2><ul id="interpret-points"></ul></section>
   <section class="panel"><h2>Evolução temporal</h2><p class="muted">Valores em relação ao basal (100%). Passe o cursor ou toque nas linhas para identificar a série. Unidades absolutas no painel abaixo.</p><div id="legend" class="legend"></div><svg id="chart" viewBox="0 0 800 280" role="img" aria-label="Evolução dos hormônios em porcentagem do basal"></svg><p id="chart-time" class="muted"></p></section>
   <section class="panel"><h2>Indicadores do eixo</h2><div id="labs" class="labs"></div><p class="muted">Azul: abaixo da faixa ilustrativa · verde: dentro da faixa · laranja: acima da faixa. Efeitos e atividades relativas sem faixa não recebem classificação. Faixas gerais não ajustadas por idade, gestação ou lactação.</p></section>
  </div><aside class="panel controls"><h2>Variáveis e intervenções</h2><p class="muted">As alterações são aplicadas a todos os eixos; trocar a aba preserva o experimento.</p><p id="cross-axis" class="muted" hidden></p><button id="restore">Restaurar todas as variáveis</button><div id="sliders"></div></aside></div>
 </main>
 <footer class="shell"><p>Uso exclusivamente educacional — não recomendado para diagnóstico ou prescrição a alunos ou pacientes.</p><strong>Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</strong></footer>
-<script type="module" src="app.js?v=20261018-audit3"></script>
+<script type="module" src="app.js?v=20261018-signals"></script>
 </body></html>
