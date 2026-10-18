@@ -2,18 +2,20 @@ import {STAGES,HORMONES,stageById,referenceAt,createState,advance,effects,format
 import {endometriumSVG,tissueState} from '../ciclo/tissues.js?v=4';
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const LIMIT=240;let stageId='peri-inicial',state,expected,forcing={},running=false,history=[],reference=[];
-function init(){running=false;forcing={};state=createState(stageId);expected=createState(stageId);history=[{...state}];reference=[{...expected}];let q={...expected};for(let d=1;d<=LIMIT;d++){q=advance(q,stageId,1);reference.push({...q});}structure();render();}
+function sample(){return {...state,expected:{...expected},forcing:{...forcing}};}
+function resetTime(){state=advance(createState(stageId),stageId,0,forcing);expected=createState(stageId);history=[sample()];}
+function init(){running=false;forcing={};$('loop').checked=false;resetTime();reference=[{...expected}];let q={...expected};for(let d=1;d<=LIMIT;d++){q=advance(q,stageId,1);reference.push({...q});}structure();render();}
 function structure(){
  $('stages').innerHTML=STAGES.map(s=>`<button data-stage="${s.id}" aria-pressed="${stageId===s.id}"><small>${esc(s.short)}</small>${esc(s.name)}</button>`).join('');
  const s=stageById(stageId);$('stage-title').textContent=s.name;$('stage-description').textContent=s.description;
  $('stage-criterion').textContent=stageId==='reprodutiva'?'Comparação: ciclos regulares, com ovulação e fase lútea.':stageId==='peri-inicial'?'STRAW+10: variação persistente de pelo menos 7 dias entre ciclos consecutivos caracteriza a transição inicial.':stageId==='peri-tardia'?'STRAW+10: intervalos de amenorreia de 60 dias ou mais caracterizam a transição tardia.':stageId==='menopausa'?'Marco retrospectivo: 12 meses sem menstruar confirmam que a última menstruação ocorreu. O primeiro ano já pertence à pós-menopausa no STRAW+10.':'Após o marco: os níveis ovarianos permanecem baixos e as gonadotrofinas elevadas; a trajetória individual continua variável.';
  $('sliders').innerHTML=Object.entries(HORMONES).map(([id,h])=>`<div class="control"><label class="fix"><input id="fix-${id}" type="checkbox" data-fix="${id}">Fixar ${esc(h.name)}</label><label for="h-${id}">Concentração imposta (${esc(h.unit)})</label><input id="h-${id}" type="range" min="${h.min}" max="${h.max}" step="${h.step}" value="${Math.min(h.max,Math.max(h.min,state[id]))}" data-hormone="${id}" disabled><output id="v-${id}"></output><p id="r-${id}" class="natural"></p></div>`).join('');
 }
-function jump(days){const dt=Math.min(days,LIMIT-state.t);if(dt<=0){running=false;render();return;}state=advance(state,stageId,dt,forcing);expected=advance(expected,stageId,dt);history.push({...state});if(state.t>=LIMIT-.001)running=false;render();}
+function jump(days){if(state.t>=LIMIT-.001&&running&&$('loop').checked)resetTime();const dt=Math.min(days,LIMIT-state.t);if(dt<=0){running=false;render();return;}state=advance(state,stageId,dt,forcing);expected=advance(expected,stageId,dt);history.push(sample());if(state.t>=LIMIT-.001&&!(running&&$('loop').checked))running=false;render();}
 function render(){
  const stage=stageById(stageId),r=referenceAt(stageId,state.t),e=effects(state,stageId),fixed=Object.keys(forcing);
- $('clock').textContent='Dia do experimento '+format(state.t,1)+' / '+LIMIT;$('play').disabled=running||state.t>=LIMIT-.001;$('pause').disabled=!running;$('step').disabled=state.t>=LIMIT-.001;
- $('experiment-status').textContent=(fixed.length?'Experimento com concentração fixada: '+fixed.map(k=>HORMONES[k].name).join(', ')+'. Os demais hormônios permanecem livres.':'Evolução fisiológica esperada — nenhum hormônio fixado.')+(state.t>=LIMIT-.001?' Janela concluída; reinicie ou restaure para repetir.':'');
+ $('clock').textContent='Dia do experimento '+format(state.t,1)+' / '+LIMIT;$('play').disabled=running;$('pause').disabled=!running;$('step').disabled=state.t>=LIMIT-.001;
+ $('experiment-status').textContent=(fixed.length?'Experimento com concentração fixada: '+fixed.map(k=>HORMONES[k].name).join(', ')+'. Os demais hormônios permanecem livres.':'Evolução fisiológica esperada — nenhum hormônio fixado.')+(state.t>=LIMIT-.001?($('loop').checked?' Janela concluída; repetição automática mantém as concentrações fixadas.':' Janela concluída; inicie novamente ou reinicie o tempo.'):'');
  $('labs').innerHTML=Object.entries(HORMONES).map(([id,h])=>`<div class="lab"><small>${esc(h.name)}</small><b style="color:${h.color}">${format(state[id],id==='p4'?2:1)}</b><small>${esc(h.unit)} · ${Object.hasOwn(forcing,id)?'fixado':'livre'}</small><small class="reference">Esperado no mesmo dia: ${format(expected[id],id==='p4'?2:1)} ${esc(h.unit)}</small></div>`).join('');
  $('inhibin').textContent='Inibina B do modelo: '+format(state.inhibin)+' pg/mL · referência: '+format(expected.inhibin)+' pg/mL. A redução da inibina diminui a inibição seletiva do FSH.';
  for(const [id,h]of Object.entries(HORMONES)){$('v-'+id).textContent=format(Object.hasOwn(forcing,id)?forcing[id]:state[id],id==='p4'?2:1)+' '+h.unit+' · '+(Object.hasOwn(forcing,id)?'fixado':'livre');$('r-'+id).textContent='Esperado: '+format(expected[id],id==='p4'?2:1)+' '+h.unit;if(!Object.hasOwn(forcing,id))$('h-'+id).value=state[id];}
@@ -40,7 +42,18 @@ function response(r,e,stage){const points=[];
  $('response').innerHTML=points.map(p=>`<p>${esc(p)}</p>`).join('')+`<div class="response-indicators"><div><strong>Sinal estrogênico tecidual</strong><br>${e.lowEstrogen?'Baixo no modelo':'Preservado no modelo'} · adaptação com atraso de dias.</div><div><strong>Tendência de reabsorção óssea</strong><br>${format(e.boneSignal,2)}× a referência didática (E2 60 pg/mL). É um índice mecanístico; não mede densidade óssea ou fratura.</div></div><p class="muted">${r.cycle===null?'Tempo desde a última menstruação nesta trajetória: aproximadamente '+format(e.months,0)+' meses.':'Calendário de referência: intervalo '+r.period+' dias · '+esc(r.phase)+'. O experimento pode divergir desse calendário.'}</p>`;
 }
  $('stages').onclick=e=>{const b=e.target.closest('[data-stage]');if(!b)return;stageId=b.dataset.stage;init();};
- $('sliders').onchange=e=>{const id=e.target.dataset.fix;if(!id)return;if(e.target.checked)forcing[id]=Math.min(HORMONES[id].max,Math.max(HORMONES[id].min,+$('h-'+id).value));else delete forcing[id];$('h-'+id).disabled=!e.target.checked;state=advance(state,stageId,0,forcing);history.push({...state});render();};
- $('sliders').oninput=e=>{const id=e.target.dataset.hormone;if(!id||!Object.hasOwn(forcing,id))return;const h=HORMONES[id],v=+e.target.value;if(!Number.isFinite(v))return;forcing[id]=Math.min(h.max,Math.max(h.min,v));state=advance(state,stageId,0,forcing);history.push({...state});render();};
- $('play').onclick=()=>{running=true;render();};$('pause').onclick=()=>{running=false;render();};$('step').onclick=()=>{running=false;jump(7);};$('restore').onclick=init;$('reset').onclick=()=>{running=false;state=advance(createState(stageId),stageId,0,forcing);expected=createState(stageId);history=[{...state}];render();};
+ $('sliders').onchange=e=>{const id=e.target.dataset.fix;if(!id)return;if(e.target.checked)forcing[id]=Math.min(HORMONES[id].max,Math.max(HORMONES[id].min,+$('h-'+id).value));else delete forcing[id];$('h-'+id).disabled=!e.target.checked;state=advance(state,stageId,0,forcing);history.push(sample());render();};
+ $('sliders').oninput=e=>{const id=e.target.dataset.hormone;if(!id||!Object.hasOwn(forcing,id))return;const h=HORMONES[id],v=+e.target.value;if(!Number.isFinite(v))return;forcing[id]=Math.min(h.max,Math.max(h.min,v));state=advance(state,stageId,0,forcing);history.push(sample());render();};
+ $('play').onclick=()=>{if(state.t>=LIMIT-.001)resetTime();running=true;render();};$('pause').onclick=()=>{running=false;render();};$('step').onclick=()=>{running=false;jump(7);};$('restore').onclick=init;$('reset').onclick=()=>{running=false;resetTime();render();};
+ $('loop').onchange=render;
+ $('export').onclick=exportCSV;
  setInterval(()=>{if(running)jump(+$('speed').value*.25);},250);init();
+
+function exportCSV(){
+ const keys=Object.keys(HORMONES),headers=['Etapa','Dia do experimento',...keys.flatMap(k=>[HORMONES[k].name+' esperado ('+HORMONES[k].unit+')',HORMONES[k].name+' experimento ('+HORMONES[k].unit+')',HORMONES[k].name+' fixado']),'Inibina B esperada (pg/mL)','Inibina B experimento (pg/mL)','Endométrio esperado (mm)','Endométrio experimento (mm)'];
+ const rows=history.map(p=>[stageById(stageId).name,p.t,...keys.flatMap(k=>[p.expected[k],p[k],Object.hasOwn(p.forcing,k)?'sim':'não']),p.expected.inhibin,p.inhibin,p.expected.endo,p.endo]);
+ const cell=v=>'"'+String(typeof v==='number'?v.toFixed(4).replace('.',','):v).replaceAll('"','""')+'"';
+ const csv='\uFEFF'+[headers,...rows].map(row=>row.map(cell).join(';')).join('\r\n');
+ const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
+ const link=document.createElement('a');link.href=url;link.download='transicao-menopausal-'+stageId+'.csv';document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
