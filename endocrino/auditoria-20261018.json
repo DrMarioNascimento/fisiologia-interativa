@@ -1,0 +1,2893 @@
+{
+  "date": "2026-10-18",
+  "scope": "Modelo didático; checagem qualitativa e numérica, não validação clínica",
+  "baseline": {
+    "trh": 1.0026466569218768,
+    "tsh": 1.9962281584280686,
+    "ft4": 1.2477993055918366,
+    "t3": 119.78873333590565,
+    "goiter": 11.990942462514187,
+    "hr": 71.95560859056879,
+    "bmr": 99.91193344470321,
+    "crh": 1.0024733591077806,
+    "acth": 24.902197929572225,
+    "cortisol": 11.957726543155575,
+    "gcActivity": 99.64772119296312,
+    "adrenalMass": 99.80420427724145,
+    "gnrh": 1,
+    "lh": 5,
+    "fsh": 5,
+    "testo": 550,
+    "inhibin": 180,
+    "gnrhR": 100,
+    "ghrh": 1.000076298023288,
+    "sst": 0.9998022298898642,
+    "gh": 0.9995762280779641,
+    "igf1": 199.94914305866723,
+    "dopamine": 1.0001731168933559,
+    "prl": 12.004155165074515,
+    "posm": 284.55231626123873,
+    "na": 137.27615813061936,
+    "adh": 1.9209265044954922,
+    "uosm": 666.6666666670211,
+    "urine": 1.199999999999362,
+    "intake": 2,
+    "tbw": 42.06607824274644,
+    "waterBalance": 6.379341499496149e-13,
+    "oxytocin": 1,
+    "contraction": 0,
+    "milk": 0
+  },
+  "scenarios": [
+    {
+      "id": "normal",
+      "axis": "tireoide",
+      "params": {},
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.996228,
+            "ft4": 1.247799,
+            "t3": 119.788733,
+            "goiter": 11.990942
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.996228,
+            "ft4": 1.247799,
+            "t3": 119.788733,
+            "goiter": 11.990942
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.996228,
+            "ft4": 1.247799,
+            "t3": 119.788733,
+            "goiter": 11.990942
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.996228,
+            "ft4": 1.247799,
+            "t3": 119.788733,
+            "goiter": 11.990942
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.996228,
+            "ft4": 1.247799,
+            "t3": 119.788733,
+            "goiter": 11.990942
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.996228,
+            "ft4": 1.247799,
+            "t3": 119.788733,
+            "goiter": 11.990942
+          }
+        }
+      ]
+    },
+    {
+      "id": "hashimoto",
+      "axis": "tireoide",
+      "params": {
+        "thyroidFn": 0.07
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.051438,
+            "ft4": 1.236257,
+            "t3": 117.973688,
+            "goiter": 11.991112
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 3.623475,
+            "ft4": 1.138708,
+            "t3": 104.632626,
+            "goiter": 12.048549
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hipotireoidismo primário",
+          "labs": {
+            "tsh": 44.842703,
+            "ft4": 0.722305,
+            "t3": 65.329141,
+            "goiter": 15.43579
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hipotireoidismo primário",
+          "labs": {
+            "tsh": 114.195849,
+            "ft4": 0.521445,
+            "t3": 50.357057,
+            "goiter": 27.804771
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hipotireoidismo primário",
+          "labs": {
+            "tsh": 56.21927,
+            "ft4": 0.67133,
+            "t3": 64.496041,
+            "goiter": 35.256546
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hipotireoidismo primário",
+          "labs": {
+            "tsh": 51.654733,
+            "ft4": 0.68575,
+            "t3": 65.832022,
+            "goiter": 35.999988
+          }
+        }
+      ]
+    },
+    {
+      "id": "hashimoto-levo",
+      "axis": "tireoide",
+      "params": {
+        "thyroidFn": 0.07,
+        "levothyroxine": 0.9
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.025263,
+            "ft4": 1.247449,
+            "t3": 118.006567,
+            "goiter": 11.991032
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.566429,
+            "ft4": 1.245025,
+            "t3": 107.194225,
+            "goiter": 12.016158
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 3.241931,
+            "ft4": 1.241352,
+            "t3": 97.618246,
+            "goiter": 12.506181
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 3.144309,
+            "ft4": 1.247453,
+            "t3": 98.176773,
+            "goiter": 13.685876
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 3.058024,
+            "ft4": 1.252946,
+            "t3": 98.683885,
+            "goiter": 14.192659
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 3.054123,
+            "ft4": 1.253199,
+            "t3": 98.70708,
+            "goiter": 14.214246
+          }
+        }
+      ]
+    },
+    {
+      "id": "graves",
+      "axis": "tireoide",
+      "params": {
+        "trab": 2.5
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.954798,
+            "ft4": 1.256901,
+            "t3": 121.220038,
+            "goiter": 12.03235
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.293025,
+            "ft4": 1.334231,
+            "t3": 131.799776,
+            "goiter": 12.384512
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hipertireoidismo subclínico",
+          "labs": {
+            "tsh": 0.260052,
+            "ft4": 1.736746,
+            "t3": 171.361354,
+            "goiter": 14.21447
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hipertireoidismo (Graves)",
+          "labs": {
+            "tsh": 0.022642,
+            "ft4": 2.621514,
+            "t3": 253.627284,
+            "goiter": 17.952855
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hipertireoidismo (Graves)",
+          "labs": {
+            "tsh": 0.007074,
+            "ft4": 3.190131,
+            "t3": 306.437798,
+            "goiter": 20.150941
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hipertireoidismo (Graves)",
+          "labs": {
+            "tsh": 0.006365,
+            "ft4": 3.247523,
+            "t3": 311.762201,
+            "goiter": 20.367656
+          }
+        }
+      ]
+    },
+    {
+      "id": "graves-mmi",
+      "axis": "tireoide",
+      "params": {
+        "trab": 2.5,
+        "methimazole": 0.6
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.014097,
+            "ft4": 1.243999,
+            "t3": 119.191118,
+            "goiter": 12.032423
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.394826,
+            "ft4": 1.213488,
+            "t3": 115.033045,
+            "goiter": 12.405051
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 3.507375,
+            "ft4": 1.136599,
+            "t3": 108.772449,
+            "goiter": 14.7631
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.508295,
+            "ft4": 1.306016,
+            "t3": 125.884076,
+            "goiter": 19.474022
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 0.873781,
+            "ft4": 1.431959,
+            "t3": 137.494778,
+            "goiter": 21.180934
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 0.851314,
+            "ft4": 1.43826,
+            "t3": 138.072923,
+            "goiter": 21.255492
+          }
+        }
+      ]
+    },
+    {
+      "id": "iodo",
+      "axis": "tireoide",
+      "params": {
+        "iodine": 0.08
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.039062,
+            "ft4": 1.238794,
+            "t3": 118.372683,
+            "goiter": 11.991074
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 3.116947,
+            "ft4": 1.165493,
+            "t3": 108.374173,
+            "goiter": 12.033809
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hipotireoidismo subclínico",
+          "labs": {
+            "tsh": 11.406909,
+            "ft4": 0.932624,
+            "t3": 87.809968,
+            "goiter": 13.790557
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hipotireoidismo subclínico",
+          "labs": {
+            "tsh": 8.20785,
+            "ft4": 0.980993,
+            "t3": 94.357372,
+            "goiter": 19.287835
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hipotireoidismo subclínico",
+          "labs": {
+            "tsh": 7.25885,
+            "ft4": 1.002704,
+            "t3": 96.260423,
+            "goiter": 20.086385
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hipotireoidismo subclínico",
+          "labs": {
+            "tsh": 7.254135,
+            "ft4": 1.002819,
+            "t3": 96.270655,
+            "goiter": 20.09109
+          }
+        }
+      ]
+    },
+    {
+      "id": "levo-excesso",
+      "axis": "tireoide",
+      "params": {
+        "levothyroxine": 2.2
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.936892,
+            "ft4": 1.275098,
+            "t3": 119.859598,
+            "goiter": 11.990756
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.026343,
+            "ft4": 1.490442,
+            "t3": 123.539517,
+            "goiter": 11.936424
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Tireotoxicose",
+          "labs": {
+            "tsh": 0.113529,
+            "ft4": 2.210723,
+            "t3": 166.106623,
+            "goiter": 10.759783
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Tireotoxicose",
+          "labs": {
+            "tsh": 0.028917,
+            "ft4": 2.744977,
+            "t3": 211.12654,
+            "goiter": 7.896864
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Tireotoxicose",
+          "labs": {
+            "tsh": 0.026676,
+            "ft4": 2.780447,
+            "t3": 214.119597,
+            "goiter": 6.17208
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Tireotoxicose",
+          "labs": {
+            "tsh": 0.02675,
+            "ft4": 2.779253,
+            "t3": 214.008327,
+            "goiter": 6.000003
+          }
+        }
+      ]
+    },
+    {
+      "id": "central",
+      "axis": "tireoide",
+      "params": {
+        "thyrotropeFn": 0.03
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Redução do estímulo central — resposta em evolução",
+          "labs": {
+            "tsh": 0.615518,
+            "ft4": 1.24449,
+            "t3": 119.265531,
+            "goiter": 11.981594
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Redução do estímulo central — resposta em evolução",
+          "labs": {
+            "tsh": 0.070381,
+            "ft4": 1.152058,
+            "t3": 106.314993,
+            "goiter": 11.771633
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hipotireoidismo central",
+          "labs": {
+            "tsh": 0.122132,
+            "ft4": 0.69857,
+            "t3": 62.389655,
+            "goiter": 10.540127
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hipotireoidismo central",
+          "labs": {
+            "tsh": 0.315856,
+            "ft4": 0.284527,
+            "t3": 27.01377,
+            "goiter": 7.809327
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hipotireoidismo central",
+          "labs": {
+            "tsh": 0.387345,
+            "ft4": 0.23497,
+            "t3": 22.548088,
+            "goiter": 6.313781
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hipotireoidismo central",
+          "labs": {
+            "tsh": 0.391002,
+            "ft4": 0.232916,
+            "t3": 22.359936,
+            "goiter": 6.246561
+          }
+        }
+      ]
+    },
+    {
+      "id": "eutireoidiano-doente",
+      "axis": "tireoide",
+      "params": {
+        "deiodinase": 0.4,
+        "trhDrive": 0.7
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 1.805922,
+            "ft4": 1.247483,
+            "t3": 115.141723,
+            "goiter": 11.990035
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.90991,
+            "ft4": 1.255943,
+            "t3": 88.48197,
+            "goiter": 12.015113
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Síndrome do eutireoidiano doente",
+          "labs": {
+            "tsh": 2.708431,
+            "ft4": 1.405124,
+            "t3": 72.456172,
+            "goiter": 12.494646
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Síndrome do eutireoidiano doente",
+          "labs": {
+            "tsh": 2.365517,
+            "ft4": 1.449186,
+            "t3": 72.361695,
+            "goiter": 12.757441
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Síndrome do eutireoidiano doente",
+          "labs": {
+            "tsh": 2.351071,
+            "ft4": 1.450765,
+            "t3": 72.422425,
+            "goiter": 12.80069
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Síndrome do eutireoidiano doente",
+          "labs": {
+            "tsh": 2.350834,
+            "ft4": 1.45079,
+            "t3": 72.423454,
+            "goiter": 12.801418
+          }
+        }
+      ]
+    },
+    {
+      "id": "frio",
+      "axis": "tireoide",
+      "params": {
+        "trhDrive": 2
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.703932,
+            "ft4": 1.248791,
+            "t3": 119.945602,
+            "goiter": 11.99385
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.786244,
+            "ft4": 1.272011,
+            "t3": 123.168939,
+            "goiter": 12.063815
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.223401,
+            "ft4": 1.322148,
+            "t3": 127.236902,
+            "goiter": 12.232467
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.146225,
+            "ft4": 1.331092,
+            "t3": 127.788017,
+            "goiter": 12.314412
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.141125,
+            "ft4": 1.331631,
+            "t3": 127.836594,
+            "goiter": 12.331288
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Eixo tireoidiano em equilíbrio",
+          "labs": {
+            "tsh": 2.141036,
+            "ft4": 1.33164,
+            "t3": 127.837443,
+            "goiter": 12.331584
+          }
+        }
+      ]
+    },
+    {
+      "id": "addison",
+      "axis": "adrenal",
+      "params": {
+        "adrenalFn": 0.08
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Insuficiência adrenal primária",
+          "labs": {
+            "acth": 195.851801,
+            "cortisol": 2.801205,
+            "gcActivity": 23.343373,
+            "adrenalMass": 99.655555
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Insuficiência adrenal primária",
+          "labs": {
+            "acth": 675.383328,
+            "cortisol": 1.76344,
+            "gcActivity": 14.69533,
+            "adrenalMass": 98.350636
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Insuficiência adrenal primária",
+          "labs": {
+            "acth": 764.859204,
+            "cortisol": 1.641859,
+            "gcActivity": 13.682159,
+            "adrenalMass": 91.002668
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Insuficiência adrenal primária",
+          "labs": {
+            "acth": 1000,
+            "cortisol": 1.398884,
+            "gcActivity": 11.657367,
+            "adrenalMass": 76.650217
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Insuficiência adrenal primária",
+          "labs": {
+            "acth": 1000,
+            "cortisol": 1.283281,
+            "gcActivity": 10.694011,
+            "adrenalMass": 70.331095
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Insuficiência adrenal primária",
+          "labs": {
+            "acth": 1000,
+            "cortisol": 1.277224,
+            "gcActivity": 10.643535,
+            "adrenalMass": 70
+          }
+        }
+      ]
+    },
+    {
+      "id": "cushing-exo",
+      "axis": "adrenal",
+      "params": {
+        "exoGlucocorticoid": 2.5
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Cushing iatrogênico com eixo suprimido",
+          "labs": {
+            "acth": 3.769903,
+            "cortisol": 6.311081,
+            "gcActivity": 302.59234,
+            "adrenalMass": 99.580888
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Cushing iatrogênico com eixo suprimido",
+          "labs": {
+            "acth": 4.170871,
+            "cortisol": 4.491368,
+            "gcActivity": 287.428064,
+            "adrenalMass": 96.988366
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Cushing iatrogênico com eixo suprimido",
+          "labs": {
+            "acth": 4.294395,
+            "cortisol": 3.893342,
+            "gcActivity": 282.444516,
+            "adrenalMass": 82.521945
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Cushing iatrogênico com eixo suprimido",
+          "labs": {
+            "acth": 4.560093,
+            "cortisol": 2.696595,
+            "gcActivity": 272.471624,
+            "adrenalMass": 55.036577
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Cushing iatrogênico com eixo suprimido",
+          "labs": {
+            "acth": 4.682694,
+            "cortisol": 2.181655,
+            "gcActivity": 268.180455,
+            "adrenalMass": 43.80497
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Cushing iatrogênico com eixo suprimido",
+          "labs": {
+            "acth": 4.688366,
+            "cortisol": 2.15836,
+            "gcActivity": 267.986331,
+            "adrenalMass": 43.305271
+          }
+        }
+      ]
+    },
+    {
+      "id": "retirada-gc",
+      "axis": "adrenal",
+      "params": {},
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Insuficiência adrenal primária",
+          "labs": {
+            "acth": 217.050395,
+            "cortisol": 3.89927,
+            "gcActivity": 32.493917,
+            "adrenalMass": 21.288886
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Recuperação de adrenal atrofiada",
+          "labs": {
+            "acth": 99.054181,
+            "cortisol": 5.374303,
+            "gcActivity": 44.785859,
+            "adrenalMass": 30.169066
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Recuperação de adrenal atrofiada",
+          "labs": {
+            "acth": 41.820752,
+            "cortisol": 8.83598,
+            "gcActivity": 73.633167,
+            "adrenalMass": 61.326366
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Eixo adrenal em equilíbrio",
+          "labs": {
+            "acth": 26.558113,
+            "cortisol": 11.515451,
+            "gcActivity": 95.96209,
+            "adrenalMass": 93.711375
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Eixo adrenal em equilíbrio",
+          "labs": {
+            "acth": 24.918663,
+            "cortisol": 11.953099,
+            "gcActivity": 99.609155,
+            "adrenalMass": 99.739319
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Eixo adrenal em equilíbrio",
+          "labs": {
+            "acth": 24.902198,
+            "cortisol": 11.957727,
+            "gcActivity": 99.647721,
+            "adrenalMass": 99.804204
+          }
+        }
+      ]
+    },
+    {
+      "id": "acth-ectopico",
+      "axis": "adrenal",
+      "params": {
+        "ectopicActh": 5
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "ACTH ectópico — resposta adrenal em evolução",
+          "labs": {
+            "acth": 138.303252,
+            "cortisol": 17.882465,
+            "gcActivity": 149.020545,
+            "adrenalMass": 100.371557
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "ACTH ectópico — resposta adrenal em evolução",
+          "labs": {
+            "acth": 135.273774,
+            "cortisol": 20.184334,
+            "gcActivity": 168.202787,
+            "adrenalMass": 106.213804
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Cushing por ACTH ectópico",
+          "labs": {
+            "acth": 131.602897,
+            "cortisol": 26.230702,
+            "gcActivity": 218.589186,
+            "adrenalMass": 138.473499
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Cushing por ACTH ectópico",
+          "labs": {
+            "acth": 128.605831,
+            "cortisol": 37.653831,
+            "gcActivity": 313.781925,
+            "adrenalMass": 199.282477
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Cushing por ACTH ectópico",
+          "labs": {
+            "acth": 127.950849,
+            "cortisol": 42.480249,
+            "gcActivity": 354.002077,
+            "adrenalMass": 224.943882
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Cushing por ACTH ectópico",
+          "labs": {
+            "acth": 127.923672,
+            "cortisol": 42.717821,
+            "gcActivity": 355.981844,
+            "adrenalMass": 226.206694
+          }
+        }
+      ]
+    },
+    {
+      "id": "estresse",
+      "axis": "adrenal",
+      "params": {
+        "stress": 2.5
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Resposta ao estresse",
+          "labs": {
+            "acth": 39.779246,
+            "cortisol": 13.85799,
+            "gcActivity": 115.483247,
+            "adrenalMass": 99.916743
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Resposta ao estresse",
+          "labs": {
+            "acth": 37.298566,
+            "cortisol": 14.026146,
+            "gcActivity": 116.884551,
+            "adrenalMass": 100.912716
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Resposta ao estresse",
+          "labs": {
+            "acth": 35.367966,
+            "cortisol": 14.462935,
+            "gcActivity": 120.52446,
+            "adrenalMass": 105.94085
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Resposta ao estresse",
+          "labs": {
+            "acth": 33.041204,
+            "cortisol": 15.04245,
+            "gcActivity": 125.35375,
+            "adrenalMass": 112.823862
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Resposta ao estresse",
+          "labs": {
+            "acth": 32.614817,
+            "cortisol": 15.155713,
+            "gcActivity": 126.29761,
+            "adrenalMass": 114.197598
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Resposta ao estresse",
+          "labs": {
+            "acth": 32.610598,
+            "cortisol": 15.156846,
+            "gcActivity": 126.307047,
+            "adrenalMass": 114.21138
+          }
+        }
+      ]
+    },
+    {
+      "id": "hipogonadismo-primario",
+      "axis": "gonadas",
+      "params": {
+        "testicularFn": 0.15
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Hipogonadismo primário (hipergonadotrófico)",
+          "labs": {
+            "lh": 20.82402,
+            "fsh": 6.468969,
+            "testo": 228.508979,
+            "inhibin": 146.43978,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Hipogonadismo primário (hipergonadotrófico)",
+          "labs": {
+            "lh": 20.901191,
+            "fsh": 18.562398,
+            "testo": 259.068598,
+            "inhibin": 57.59416,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hipogonadismo primário (hipergonadotrófico)",
+          "labs": {
+            "lh": 20.901191,
+            "fsh": 20.412469,
+            "testo": 259.068599,
+            "inhibin": 54.553991,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hipogonadismo primário (hipergonadotrófico)",
+          "labs": {
+            "lh": 20.901191,
+            "fsh": 20.412469,
+            "testo": 259.068599,
+            "inhibin": 54.553991,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hipogonadismo primário (hipergonadotrófico)",
+          "labs": {
+            "lh": 20.901191,
+            "fsh": 20.412469,
+            "testo": 259.068599,
+            "inhibin": 54.553991,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hipogonadismo primário (hipergonadotrófico)",
+          "labs": {
+            "lh": 20.901191,
+            "fsh": 20.412469,
+            "testo": 259.068599,
+            "inhibin": 54.553991,
+            "gnrhR": 100
+          }
+        }
+      ]
+    },
+    {
+      "id": "anabolizante",
+      "axis": "gonadas",
+      "params": {
+        "exoTestosterone": 2.5
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Supressão por androgênio exógeno",
+          "labs": {
+            "lh": 0.928518,
+            "fsh": 3.817492,
+            "testo": 1647.785965,
+            "inhibin": 177.368284,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Supressão por androgênio exógeno",
+          "labs": {
+            "lh": 0.747643,
+            "fsh": 3.205941,
+            "testo": 1495.265767,
+            "inhibin": 146.468373,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Supressão por androgênio exógeno",
+          "labs": {
+            "lh": 0.747643,
+            "fsh": 3.256999,
+            "testo": 1495.265767,
+            "inhibin": 145.276806,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Supressão por androgênio exógeno",
+          "labs": {
+            "lh": 0.747643,
+            "fsh": 3.256999,
+            "testo": 1495.265767,
+            "inhibin": 145.276806,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Supressão por androgênio exógeno",
+          "labs": {
+            "lh": 0.747643,
+            "fsh": 3.256999,
+            "testo": 1495.265767,
+            "inhibin": 145.276806,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Supressão por androgênio exógeno",
+          "labs": {
+            "lh": 0.747643,
+            "fsh": 3.256999,
+            "testo": 1495.265767,
+            "inhibin": 145.276806,
+            "gnrhR": 100
+          }
+        }
+      ]
+    },
+    {
+      "id": "agonista-gnrh",
+      "axis": "gonadas",
+      "params": {
+        "gnrhAgonist": 1
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Flare do agonista de GnRH",
+          "labs": {
+            "lh": 8.518136,
+            "fsh": 7.519698,
+            "testo": 843.87308,
+            "inhibin": 185.590164,
+            "gnrhR": 97.543275
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Flare do agonista de GnRH",
+          "labs": {
+            "lh": 7.288858,
+            "fsh": 7.081411,
+            "testo": 746.990787,
+            "inhibin": 218.287607,
+            "gnrhR": 77.990128
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Dessensibilização por GnRH contínuo",
+          "labs": {
+            "lh": 3.810423,
+            "fsh": 2.791673,
+            "testo": 444.539001,
+            "inhibin": 138.710186,
+            "gnrhR": 17.788452
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Dessensibilização por GnRH contínuo",
+          "labs": {
+            "lh": 0.847149,
+            "fsh": 0.330522,
+            "testo": 132.969351,
+            "inhibin": 46.434662,
+            "gnrhR": 0.552546
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Dessensibilização por GnRH contínuo",
+          "labs": {
+            "lh": 0.80996,
+            "fsh": 0.310122,
+            "testo": 128.220557,
+            "inhibin": 44.82844,
+            "gnrhR": 0.497512
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Dessensibilização por GnRH contínuo",
+          "labs": {
+            "lh": 0.80996,
+            "fsh": 0.310122,
+            "testo": 128.220556,
+            "inhibin": 44.828439,
+            "gnrhR": 0.497512
+          }
+        }
+      ]
+    },
+    {
+      "id": "kallmann",
+      "axis": "gonadas",
+      "params": {
+        "gnrhDrive": 0.01
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Hipogonadismo hipogonadotrófico",
+          "labs": {
+            "lh": 0.840579,
+            "fsh": 3.047307,
+            "testo": 293.966975,
+            "inhibin": 176.118324,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Hipogonadismo hipogonadotrófico",
+          "labs": {
+            "lh": 1.158909,
+            "fsh": 1.038506,
+            "testo": 170.775745,
+            "inhibin": 92.102021,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hipogonadismo hipogonadotrófico",
+          "labs": {
+            "lh": 1.158909,
+            "fsh": 1.14687,
+            "testo": 170.775742,
+            "inhibin": 86.207413,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hipogonadismo hipogonadotrófico",
+          "labs": {
+            "lh": 1.158909,
+            "fsh": 1.14687,
+            "testo": 170.775742,
+            "inhibin": 86.207413,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hipogonadismo hipogonadotrófico",
+          "labs": {
+            "lh": 1.158909,
+            "fsh": 1.14687,
+            "testo": 170.775742,
+            "inhibin": 86.207413,
+            "gnrhR": 100
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hipogonadismo hipogonadotrófico",
+          "labs": {
+            "lh": 1.158909,
+            "fsh": 1.14687,
+            "testo": 170.775742,
+            "inhibin": 86.207413,
+            "gnrhR": 100
+          }
+        }
+      ]
+    },
+    {
+      "id": "acromegalia",
+      "axis": "gh",
+      "params": {
+        "ghTumor": 8
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo GH/IGF-1 em equilíbrio",
+          "labs": {
+            "gh": 8.482877,
+            "igf1": 267.112694,
+            "sst": 2.474148
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Excesso de GH (acromegalia)",
+          "labs": {
+            "gh": 8.185505,
+            "igf1": 610.20356,
+            "sst": 3.82717
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Excesso de GH (acromegalia)",
+          "labs": {
+            "gh": 8.151821,
+            "igf1": 704.343537,
+            "sst": 4.113505
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Excesso de GH (acromegalia)",
+          "labs": {
+            "gh": 8.151219,
+            "igf1": 704.309614,
+            "sst": 4.113217
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Excesso de GH (acromegalia)",
+          "labs": {
+            "gh": 8.151166,
+            "igf1": 704.30671,
+            "sst": 4.113191
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Excesso de GH (acromegalia)",
+          "labs": {
+            "gh": 8.151165,
+            "igf1": 704.306654,
+            "sst": 4.113191
+          }
+        }
+      ]
+    },
+    {
+      "id": "deficiencia-gh",
+      "axis": "gh",
+      "params": {
+        "somatotropeFn": 0.08
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo GH/IGF-1 em equilíbrio",
+          "labs": {
+            "gh": 0.096236,
+            "igf1": 182.517725,
+            "sst": 0.827523
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Deficiência de GH",
+          "labs": {
+            "gh": 0.178233,
+            "igf1": 90.10766,
+            "sst": 0.58155
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Deficiência de GH",
+          "labs": {
+            "gh": 0.207224,
+            "igf1": 77.778355,
+            "sst": 0.541214
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Deficiência de GH",
+          "labs": {
+            "gh": 0.207363,
+            "igf1": 77.815826,
+            "sst": 0.541359
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Deficiência de GH",
+          "labs": {
+            "gh": 0.207375,
+            "igf1": 77.81867,
+            "sst": 0.54137
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Deficiência de GH",
+          "labs": {
+            "gh": 0.207375,
+            "igf1": 77.81872,
+            "sst": 0.541371
+          }
+        }
+      ]
+    },
+    {
+      "id": "laron",
+      "axis": "gh",
+      "params": {
+        "liverIgf": 0.25
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Eixo GH/IGF-1 em equilíbrio",
+          "labs": {
+            "gh": 1.07919,
+            "igf1": 177.062535,
+            "sst": 0.962375
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Resistência ao GH (Laron)",
+          "labs": {
+            "gh": 1.940801,
+            "igf1": 92.047685,
+            "sst": 0.786269
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Resistência ao GH (Laron)",
+          "labs": {
+            "gh": 2.201482,
+            "igf1": 80.275494,
+            "sst": 0.760408
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Resistência ao GH (Laron)",
+          "labs": {
+            "gh": 2.202158,
+            "igf1": 80.293203,
+            "sst": 0.760564
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Resistência ao GH (Laron)",
+          "labs": {
+            "gh": 2.202216,
+            "igf1": 80.294538,
+            "sst": 0.760577
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Resistência ao GH (Laron)",
+          "labs": {
+            "gh": 2.202218,
+            "igf1": 80.294562,
+            "sst": 0.760577
+          }
+        }
+      ]
+    },
+    {
+      "id": "prolactinoma",
+      "axis": "prolactina",
+      "params": {
+        "prolactinoma": 10
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Prolactinoma",
+          "labs": {
+            "prl": 121.351766,
+            "dopamine": 3.080255,
+            "lh": 3.029573,
+            "testo": 439.554446
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Prolactinoma",
+          "labs": {
+            "prl": 124.503601,
+            "dopamine": 3.221071,
+            "lh": 3.459292,
+            "testo": 409.615605
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Prolactinoma",
+          "labs": {
+            "prl": 124.503601,
+            "dopamine": 3.221071,
+            "lh": 3.459292,
+            "testo": 409.615606
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Prolactinoma",
+          "labs": {
+            "prl": 124.503601,
+            "dopamine": 3.221071,
+            "lh": 3.459292,
+            "testo": 409.615606
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Prolactinoma",
+          "labs": {
+            "prl": 124.503601,
+            "dopamine": 3.221071,
+            "lh": 3.459292,
+            "testo": 409.615606
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Prolactinoma",
+          "labs": {
+            "prl": 124.503601,
+            "dopamine": 3.221071,
+            "lh": 3.459292,
+            "testo": 409.615606
+          }
+        }
+      ]
+    },
+    {
+      "id": "antipsicotico",
+      "axis": "prolactina",
+      "params": {
+        "d2Blockade": 0.85
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Hiperprolactinemia por bloqueio D2",
+          "labs": {
+            "prl": 28.520035,
+            "dopamine": 1.525989,
+            "lh": 4.418835,
+            "testo": 521.94639
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Hiperprolactinemia por bloqueio D2",
+          "labs": {
+            "prl": 28.381423,
+            "dopamine": 1.537894,
+            "lh": 4.584596,
+            "testo": 513.130204
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hiperprolactinemia por bloqueio D2",
+          "labs": {
+            "prl": 28.381423,
+            "dopamine": 1.537894,
+            "lh": 4.584596,
+            "testo": 513.130204
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hiperprolactinemia por bloqueio D2",
+          "labs": {
+            "prl": 28.381423,
+            "dopamine": 1.537894,
+            "lh": 4.584596,
+            "testo": 513.130204
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hiperprolactinemia por bloqueio D2",
+          "labs": {
+            "prl": 28.381423,
+            "dopamine": 1.537894,
+            "lh": 4.584596,
+            "testo": 513.130204
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hiperprolactinemia por bloqueio D2",
+          "labs": {
+            "prl": 28.381423,
+            "dopamine": 1.537894,
+            "lh": 4.584596,
+            "testo": 513.130204
+          }
+        }
+      ]
+    },
+    {
+      "id": "lactacao",
+      "axis": "prolactina",
+      "params": {
+        "suckling": 0.9
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Hiperprolactinemia fisiológica (lactação)",
+          "labs": {
+            "prl": 166.359834,
+            "dopamine": 0.441667,
+            "lh": 2.806242,
+            "testo": 433.166592
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Hiperprolactinemia fisiológica (lactação)",
+          "labs": {
+            "prl": 166.626623,
+            "dopamine": 0.454431,
+            "lh": 3.272503,
+            "testo": 391.823773
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hiperprolactinemia fisiológica (lactação)",
+          "labs": {
+            "prl": 166.626623,
+            "dopamine": 0.454431,
+            "lh": 3.272504,
+            "testo": 391.823774
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hiperprolactinemia fisiológica (lactação)",
+          "labs": {
+            "prl": 166.626623,
+            "dopamine": 0.454431,
+            "lh": 3.272504,
+            "testo": 391.823774
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hiperprolactinemia fisiológica (lactação)",
+          "labs": {
+            "prl": 166.626623,
+            "dopamine": 0.454431,
+            "lh": 3.272504,
+            "testo": 391.823774
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hiperprolactinemia fisiológica (lactação)",
+          "labs": {
+            "prl": 166.626623,
+            "dopamine": 0.454431,
+            "lh": 3.272504,
+            "testo": 391.823774
+          }
+        }
+      ]
+    },
+    {
+      "id": "haste",
+      "axis": "prolactina",
+      "params": {
+        "stalk": 0.05
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Efeito haste",
+          "labs": {
+            "prl": 28.986317,
+            "dopamine": 1.529035,
+            "lh": 1.170556,
+            "testo": 278.282049
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Efeito haste",
+          "labs": {
+            "prl": 29.242508,
+            "dopamine": 1.561005,
+            "lh": 1.761174,
+            "testo": 238.691758
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Efeito haste",
+          "labs": {
+            "prl": 29.419419,
+            "dopamine": 1.565759,
+            "lh": 1.759155,
+            "testo": 238.468556
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Efeito haste",
+          "labs": {
+            "prl": 29.451704,
+            "dopamine": 1.566623,
+            "lh": 1.758788,
+            "testo": 238.428169
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Efeito haste",
+          "labs": {
+            "prl": 29.453985,
+            "dopamine": 1.566684,
+            "lh": 1.758762,
+            "testo": 238.425346
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Efeito haste",
+          "labs": {
+            "prl": 29.45403,
+            "dopamine": 1.566685,
+            "lh": 1.758762,
+            "testo": 238.425291
+          }
+        }
+      ]
+    },
+    {
+      "id": "sheehan",
+      "axis": "prolactina",
+      "params": {
+        "adenoFn": 0.12
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Hipoprolactinemia",
+          "labs": {
+            "prl": 2.442882,
+            "dopamine": 0.488421,
+            "lh": 1.547832,
+            "testo": 298.949205
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Hipoprolactinemia",
+          "labs": {
+            "prl": 2.483229,
+            "dopamine": 0.454825,
+            "lh": 2.155588,
+            "testo": 280.568735
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hipoprolactinemia",
+          "labs": {
+            "prl": 2.613575,
+            "dopamine": 0.466655,
+            "lh": 2.155588,
+            "testo": 280.568736
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hipoprolactinemia",
+          "labs": {
+            "prl": 2.772593,
+            "dopamine": 0.480672,
+            "lh": 2.155588,
+            "testo": 280.568736
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hipoprolactinemia",
+          "labs": {
+            "prl": 2.801603,
+            "dopamine": 0.483184,
+            "lh": 2.155588,
+            "testo": 280.568736
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hipoprolactinemia",
+          "labs": {
+            "prl": 2.802551,
+            "dopamine": 0.483266,
+            "lh": 2.155588,
+            "testo": 280.568736
+          }
+        }
+      ]
+    },
+    {
+      "id": "di-central",
+      "axis": "neuro",
+      "params": {
+        "magnocellularFn": 0.04
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.091573,
+            "posm": 285.849497,
+            "na": 137.924749,
+            "uosm": 124.109463,
+            "urine": 6.445923,
+            "intake": 2,
+            "tbw": 41.875183,
+            "waterBalance": -5.245923,
+            "oxytocin": 0.040044,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.237764,
+            "posm": 294.612006,
+            "na": 142.306003,
+            "uosm": 154.292268,
+            "urine": 5.184965,
+            "intake": 5.967204,
+            "tbw": 40.629709,
+            "waterBalance": -0.017761,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.238103,
+            "posm": 294.631468,
+            "na": 142.315734,
+            "uosm": 154.473538,
+            "urine": 5.178881,
+            "intake": 5.978881,
+            "tbw": 40.627025,
+            "waterBalance": 0,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.238103,
+            "posm": 294.631468,
+            "na": 142.315734,
+            "uosm": 154.473538,
+            "urine": 5.178881,
+            "intake": 5.978881,
+            "tbw": 40.627025,
+            "waterBalance": 0,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.238103,
+            "posm": 294.631468,
+            "na": 142.315734,
+            "uosm": 154.473538,
+            "urine": 5.178881,
+            "intake": 5.978881,
+            "tbw": 40.627025,
+            "waterBalance": 0,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.238103,
+            "posm": 294.631468,
+            "na": 142.315734,
+            "uosm": 154.473538,
+            "urine": 5.178881,
+            "intake": 5.978881,
+            "tbw": 40.627025,
+            "waterBalance": 0,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "di-restricao",
+      "axis": "neuro",
+      "params": {
+        "magnocellularFn": 0.04,
+        "waterAccess": 0.25
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.105665,
+            "posm": 286.851891,
+            "na": 138.425946,
+            "uosm": 128.179586,
+            "urine": 6.241243,
+            "intake": 0.5,
+            "tbw": 41.728852,
+            "waterBalance": -6.541243,
+            "oxytocin": 0.040044,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.433892,
+            "posm": 306.961524,
+            "na": 148.480762,
+            "uosm": 231.649104,
+            "urine": 3.453499,
+            "intake": 3.344229,
+            "tbw": 38.995115,
+            "waterBalance": -0.909271,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.496065,
+            "posm": 310.754081,
+            "na": 150.377041,
+            "uosm": 256.976569,
+            "urine": 3.113124,
+            "intake": 3.913112,
+            "tbw": 38.519204,
+            "waterBalance": -0.000012,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.496066,
+            "posm": 310.754134,
+            "na": 150.377067,
+            "uosm": 256.976914,
+            "urine": 3.11312,
+            "intake": 3.91312,
+            "tbw": 38.519198,
+            "waterBalance": 0,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.496066,
+            "posm": 310.754134,
+            "na": 150.377067,
+            "uosm": 256.976914,
+            "urine": 3.11312,
+            "intake": 3.91312,
+            "tbw": 38.519198,
+            "waterBalance": 0,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Diabetes insípido central",
+          "labs": {
+            "adh": 0.496066,
+            "posm": 310.754134,
+            "na": 150.377067,
+            "uosm": 256.976914,
+            "urine": 3.11312,
+            "intake": 3.91312,
+            "tbw": 38.519198,
+            "waterBalance": 0,
+            "oxytocin": 0.04,
+            "contraction": 0,
+            "milk": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "di-nefrogenico",
+      "axis": "neuro",
+      "params": {
+        "renalAdhSensitivity": 0.04
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Diabetes insípido nefrogênico",
+          "labs": {
+            "adh": 2.497622,
+            "posm": 286.466763,
+            "na": 138.233382,
+            "uosm": 110.370077,
+            "urine": 7.248341,
+            "intake": 2,
+            "tbw": 41.784952,
+            "waterBalance": -6.048341,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Diabetes insípido nefrogênico",
+          "labs": {
+            "adh": 5.944983,
+            "posm": 294.614056,
+            "na": 142.307028,
+            "uosm": 154.311369,
+            "urine": 5.184323,
+            "intake": 5.968434,
+            "tbw": 40.629426,
+            "waterBalance": -0.015889,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Diabetes insípido nefrogênico",
+          "labs": {
+            "adh": 5.952587,
+            "posm": 294.631468,
+            "na": 142.315734,
+            "uosm": 154.473538,
+            "urine": 5.178881,
+            "intake": 5.978881,
+            "tbw": 40.627025,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Diabetes insípido nefrogênico",
+          "labs": {
+            "adh": 5.952587,
+            "posm": 294.631468,
+            "na": 142.315734,
+            "uosm": 154.473538,
+            "urine": 5.178881,
+            "intake": 5.978881,
+            "tbw": 40.627025,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Diabetes insípido nefrogênico",
+          "labs": {
+            "adh": 5.952587,
+            "posm": 294.631468,
+            "na": 142.315734,
+            "uosm": 154.473538,
+            "urine": 5.178881,
+            "intake": 5.978881,
+            "tbw": 40.627025,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Diabetes insípido nefrogênico",
+          "labs": {
+            "adh": 5.952587,
+            "posm": 294.631468,
+            "na": 142.315734,
+            "uosm": 154.473538,
+            "urine": 5.178881,
+            "intake": 5.978881,
+            "tbw": 40.627025,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "siadh",
+      "axis": "neuro",
+      "params": {
+        "ectopicAdh": 12
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "ADH inapropriado — retenção hídrica em evolução",
+          "labs": {
+            "adh": 13.837209,
+            "posm": 284.30074,
+            "na": 137.15037,
+            "uosm": 1172.220789,
+            "urine": 0.682465,
+            "intake": 2,
+            "tbw": 42.103302,
+            "waterBalance": 0.517535,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "ADH inapropriado — retenção hídrica em evolução",
+          "labs": {
+            "adh": 12.565041,
+            "posm": 281.118191,
+            "na": 135.559095,
+            "uosm": 1192.585697,
+            "urine": 0.670811,
+            "intake": 2,
+            "tbw": 42.579955,
+            "waterBalance": 0.529189,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "SIADH",
+          "labs": {
+            "adh": 12.1,
+            "posm": 274.858652,
+            "na": 132.429326,
+            "uosm": 1190.906888,
+            "urine": 0.671757,
+            "intake": 1.485865,
+            "tbw": 43.549657,
+            "waterBalance": 0.014108,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "SIADH",
+          "labs": {
+            "adh": 12.1,
+            "posm": 274.71757,
+            "na": 132.358785,
+            "uosm": 1190.906888,
+            "urine": 0.671757,
+            "intake": 1.471757,
+            "tbw": 43.572022,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "SIADH",
+          "labs": {
+            "adh": 12.1,
+            "posm": 274.71757,
+            "na": 132.358785,
+            "uosm": 1190.906888,
+            "urine": 0.671757,
+            "intake": 1.471757,
+            "tbw": 43.572022,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "SIADH",
+          "labs": {
+            "adh": 12.1,
+            "posm": 274.71757,
+            "na": 132.358785,
+            "uosm": 1190.906888,
+            "urine": 0.671757,
+            "intake": 1.471757,
+            "tbw": 43.572022,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "hemorragia",
+      "axis": "neuro",
+      "params": {
+        "bloodVolume": 0.78
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Resposta à hipovolemia",
+          "labs": {
+            "adh": 6.817249,
+            "posm": 284.239305,
+            "na": 137.119652,
+            "uosm": 1104.950542,
+            "urine": 0.724014,
+            "intake": 2.132,
+            "tbw": 42.112402,
+            "waterBalance": 0.607986,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Resposta à hipovolemia",
+          "labs": {
+            "adh": 3.534395,
+            "posm": 280.846328,
+            "na": 135.423164,
+            "uosm": 931.145424,
+            "urine": 0.859157,
+            "intake": 2.132,
+            "tbw": 42.621173,
+            "waterBalance": 0.472843,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Hiponatremia hipovolêmica",
+          "labs": {
+            "adh": 2.679729,
+            "posm": 276.688606,
+            "na": 133.344303,
+            "uosm": 806.285608,
+            "urine": 0.992204,
+            "intake": 1.800861,
+            "tbw": 43.26163,
+            "waterBalance": 0.008656,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Hiponatremia hipovolêmica",
+          "labs": {
+            "adh": 2.679729,
+            "posm": 276.602042,
+            "na": 133.301021,
+            "uosm": 806.285608,
+            "urine": 0.992204,
+            "intake": 1.792204,
+            "tbw": 43.275169,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Hiponatremia hipovolêmica",
+          "labs": {
+            "adh": 2.679729,
+            "posm": 276.602042,
+            "na": 133.301021,
+            "uosm": 806.285608,
+            "urine": 0.992204,
+            "intake": 1.792204,
+            "tbw": 43.275169,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Hiponatremia hipovolêmica",
+          "labs": {
+            "adh": 2.679729,
+            "posm": 276.602042,
+            "na": 133.301021,
+            "uosm": 806.285608,
+            "urine": 0.992204,
+            "intake": 1.792204,
+            "tbw": 43.275169,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "polidipsia",
+      "axis": "neuro",
+      "params": {
+        "waterAccess": 3
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Polidipsia primária",
+          "labs": {
+            "adh": 1.00047,
+            "posm": 281.934756,
+            "na": 135.967378,
+            "uosm": 517.812707,
+            "urine": 1.54496,
+            "intake": 6,
+            "tbw": 42.456631,
+            "waterBalance": 3.65504,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Polidipsia primária",
+          "labs": {
+            "adh": 0.23764,
+            "posm": 280.341282,
+            "na": 135.170641,
+            "uosm": 154.793792,
+            "urine": 5.168166,
+            "intake": 6,
+            "tbw": 42.697957,
+            "waterBalance": 0.031834,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Polidipsia primária",
+          "labs": {
+            "adh": 0.236604,
+            "posm": 280.341509,
+            "na": 135.170755,
+            "uosm": 153.846154,
+            "urine": 5.2,
+            "intake": 6,
+            "tbw": 42.697922,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Polidipsia primária",
+          "labs": {
+            "adh": 0.236604,
+            "posm": 280.341509,
+            "na": 135.170755,
+            "uosm": 153.846154,
+            "urine": 5.2,
+            "intake": 6,
+            "tbw": 42.697922,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Polidipsia primária",
+          "labs": {
+            "adh": 0.236604,
+            "posm": 280.341509,
+            "na": 135.170755,
+            "uosm": 153.846154,
+            "urine": 5.2,
+            "intake": 6,
+            "tbw": 42.697922,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Polidipsia primária",
+          "labs": {
+            "adh": 0.236604,
+            "posm": 280.341509,
+            "na": 135.170755,
+            "uosm": 153.846154,
+            "urine": 5.2,
+            "intake": 6,
+            "tbw": 42.697922,
+            "waterBalance": 0,
+            "oxytocin": 1,
+            "contraction": 0,
+            "milk": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "parto",
+      "axis": "neuro",
+      "params": {
+        "labor": 0.9
+      },
+      "points": [
+        {
+          "requestedDays": 0.1,
+          "simulatedDays": 0.1,
+          "interpretation": "Osmorregulação em equilíbrio",
+          "labs": {
+            "adh": 1.920927,
+            "posm": 284.552316,
+            "na": 137.276158,
+            "uosm": 666.666667,
+            "urine": 1.2,
+            "intake": 2,
+            "tbw": 42.066078,
+            "waterBalance": 0,
+            "oxytocin": 8.35736,
+            "contraction": 36.761423,
+            "milk": 100
+          }
+        },
+        {
+          "requestedDays": 1,
+          "simulatedDays": 1,
+          "interpretation": "Ação da ocitocina",
+          "labs": {
+            "adh": 1.920927,
+            "posm": 284.552316,
+            "na": 137.276158,
+            "uosm": 666.666667,
+            "urine": 1.2,
+            "intake": 2,
+            "tbw": 42.066078,
+            "waterBalance": 0,
+            "oxytocin": 20.8,
+            "contraction": 99.999999,
+            "milk": 100
+          }
+        },
+        {
+          "requestedDays": 7,
+          "simulatedDays": 7,
+          "interpretation": "Ação da ocitocina",
+          "labs": {
+            "adh": 1.920927,
+            "posm": 284.552316,
+            "na": 137.276158,
+            "uosm": 666.666667,
+            "urine": 1.2,
+            "intake": 2,
+            "tbw": 42.066078,
+            "waterBalance": 0,
+            "oxytocin": 20.8,
+            "contraction": 100,
+            "milk": 100
+          }
+        },
+        {
+          "requestedDays": 30,
+          "simulatedDays": 30,
+          "interpretation": "Ação da ocitocina",
+          "labs": {
+            "adh": 1.920927,
+            "posm": 284.552316,
+            "na": 137.276158,
+            "uosm": 666.666667,
+            "urine": 1.2,
+            "intake": 2,
+            "tbw": 42.066078,
+            "waterBalance": 0,
+            "oxytocin": 20.8,
+            "contraction": 100,
+            "milk": 100
+          }
+        },
+        {
+          "requestedDays": 90,
+          "simulatedDays": 90,
+          "interpretation": "Ação da ocitocina",
+          "labs": {
+            "adh": 1.920927,
+            "posm": 284.552316,
+            "na": 137.276158,
+            "uosm": 666.666667,
+            "urine": 1.2,
+            "intake": 2,
+            "tbw": 42.066078,
+            "waterBalance": 0,
+            "oxytocin": 20.8,
+            "contraction": 100,
+            "milk": 100
+          }
+        },
+        {
+          "requestedDays": 365,
+          "simulatedDays": 365,
+          "interpretation": "Ação da ocitocina",
+          "labs": {
+            "adh": 1.920927,
+            "posm": 284.552316,
+            "na": 137.276158,
+            "uosm": 666.666667,
+            "urine": 1.2,
+            "intake": 2,
+            "tbw": 42.066078,
+            "waterBalance": 0,
+            "oxytocin": 20.8,
+            "contraction": 100,
+            "milk": 100
+          }
+        }
+      ]
+    }
+  ]
+}

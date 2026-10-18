@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lei de Poiseuille – fisiologia interativa</title>
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
+<style>
+:root{
+  --bg:#ffffff;
+  --panel:#fbfbfd;
+  --line:#d9dce3;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --blue:#2563eb;
+  --red:#dc2626;
+  --violet:#8b5cf6;
+  --green:#10b981;
+  --amber:#f59e0b;
+  --normal:#cbd5e1;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:22px;
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--bg);color:var(--text)
+}
+h1{margin:0 0 8px;font-size:30px;text-align:center}
+.subtitle{margin:0 0 14px;text-align:center;color:var(--muted);font-size:16px}
+.controls,.quick{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;
+  padding:12px;margin:0 auto 10px;max-width:1440px
+}
+button{
+  border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer
+}
+.primary{border-color:#96b7ff}
+label{
+  display:flex;gap:8px;align-items:center;font-size:14px;background:#fff;border:1px solid #e1e5ec;border-radius:10px;padding:9px 12px
+}
+input[type=range]{width:150px}
+.mode-line{max-width:1440px;margin:0 auto 14px;text-align:right;min-height:22px}
+.mode-badge{display:inline-block;font-size:12px;color:var(--muted);background:#fff;border:1px solid #e1e5ec;border-radius:999px;padding:4px 10px}
+.status-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;max-width:1440px;margin:0 auto 14px
+}
+.card{
+  background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:128px;position:relative;overflow:hidden
+}
+.card::before{content:"";position:absolute;inset:0 auto 0 0;width:8px;background:var(--blue)}
+.card-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.phase{font-size:26px;font-weight:700;line-height:1.12;padding-left:4px;min-height:84px;display:flex;flex-direction:column;justify-content:flex-start}
+.phase small{display:block;margin-top:6px;font-size:14px;color:var(--muted);font-weight:400}
+.layout{
+  display:grid;grid-template-columns:minmax(560px,1.12fr) minmax(520px,.95fr);gap:16px;max-width:1440px;margin:0 auto
+}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+canvas{width:100%;height:auto;display:block;border:1px solid #e5e7eb;border-radius:12px;background:#fff}
+.legend{
+  max-width:1440px;margin:14px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px 28px;line-height:1.55;font-size:15px
+}
+.signature{text-align:right;color:#4b5563;font-size:14px;margin-top:18px;border-top:1px solid #e5e7eb;padding-top:10px}
+.pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);margin-left:6px;color:var(--muted);background:#fff}
+@media (max-width:1180px){
+  .layout{grid-template-columns:1fr}
+  .status-grid{grid-template-columns:1fr}
+}
+
+
+/* === PADRÃO PREMIUM / VISUAL ABSURDO === */
+:root{--shadow-premium:0 12px 28px rgba(15,23,42,.07), inset 0 1px 0 rgba(255,255,255,.95)}
+body{background:#ffffff!important;font-family:Inter,"Segoe UI",Roboto,Arial,Helvetica,sans-serif!important;}
+.controls,.quick,.panel,.legend,.card{background:linear-gradient(180deg,#fcfcfe 0%,#f7f9fc 100%)!important;box-shadow:var(--shadow-premium);}
+.controls,.quick{border-radius:16px!important;}
+button{border-radius:14px!important;font-weight:800;background:linear-gradient(180deg,#ffffff 0%,#eef4ff 100%)!important;color:#17324d;box-shadow:0 1px 4px rgba(15,23,42,.05);transition:.18s ease;}
+button:hover{transform:translateY(-1px);box-shadow:0 7px 16px rgba(15,23,42,.10);filter:brightness(1.02)}
+.primary{border-color:#8fb3ff!important;background:linear-gradient(180deg,#ffffff 0%,#e6f0ff 100%)!important;}
+label{border-radius:14px!important;font-weight:700;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%)!important;box-shadow:0 1px 4px rgba(15,23,42,.04)}
+.card{border-radius:18px!important;min-height:132px;box-shadow:var(--shadow-premium);border-left:6px solid var(--blue)!important;}
+.card::before{display:none!important}.card::after{content:"";position:absolute;right:-52px;bottom:-52px;width:128px;height:128px;border-radius:50%;background:radial-gradient(circle at center,rgba(37,99,235,.18) 0%,rgba(255,255,255,0) 68%);box-shadow:0 0 0 1px rgba(37,99,235,.12),0 0 16px rgba(37,99,235,.14);opacity:.75;pointer-events:none;}
+.phase{font-weight:850}.card-title{font-weight:850}.panel{border-radius:18px!important;}canvas{border-radius:16px!important;box-shadow:0 18px 34px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.96)!important;}
+.legend{text-align:justify;text-justify:inter-word;border-radius:18px!important;box-shadow:var(--shadow-premium);}
+.mode-badge{font-weight:800;box-shadow:0 1px 4px rgba(15,23,42,.05)}
+
+
+
+/* === Padronização final: botões, variáveis e glow dos estados === */
+:root{
+  --c-flow:#1F78B4;
+  --c-pressure:#E31A1C;
+  --c-radius:#1F78B4;
+  --c-viscosity:#6A3D9A;
+  --c-length:#33A02C;
+  --c-resistance:#B15928;
+  --c-insight:#FF7F00;
+  --c-vessel:#1F78B4;
+}
+button.btn-start{
+  border-color:#8fb3ff!important;
+  color:#0f376c!important;
+  background:linear-gradient(180deg,#ffffff 0%,#e6f0ff 100%)!important;
+  box-shadow:0 0 0 2px rgba(31,120,180,.08),0 6px 15px rgba(31,120,180,.12)!important;
+}
+button.btn-pause{
+  border-color:#cbd5e1!important;
+  color:#334155!important;
+  background:linear-gradient(180deg,#ffffff 0%,#f1f5f9 100%)!important;
+}
+button.btn-demo{
+  border-color:#9ee7c2!important;
+  color:#075f3d!important;
+  background:linear-gradient(180deg,#ffffff 0%,#e9fff4 100%)!important;
+  box-shadow:0 0 0 2px rgba(51,160,44,.08),0 6px 15px rgba(51,160,44,.12)!important;
+}
+button.btn-reset{
+  border-color:#f3a6a6!important;
+  color:#8a1c1c!important;
+  background:linear-gradient(180deg,#ffffff 0%,#fff0f0 100%)!important;
+}
+.controls label:has(input[type="checkbox"]:checked),
+.quick label:has(input[name="preset"]:checked){
+  border-color:#8fb3ff!important;
+  background:linear-gradient(180deg,#ffffff 0%,#eaf3ff 100%)!important;
+  box-shadow:0 0 0 3px rgba(31,120,180,.16),0 8px 18px rgba(15,23,42,.09)!important;
+}
+.quick label:has(input[name="preset"]:checked){
+  border-color:#FF7F00!important;
+  background:linear-gradient(180deg,#ffffff 0%,#fff3df 100%)!important;
+  box-shadow:0 0 0 3px rgba(255,127,0,.18),0 0 18px rgba(255,127,0,.20),0 8px 18px rgba(15,23,42,.08)!important;
+  color:#8a4300!important;
+}
+.card{border-left-width:6px!important;}
+.card.card-flow{border-left-color:var(--c-flow)!important;}
+.card.card-res{border-left-color:var(--c-resistance)!important;}
+.card.card-insight{border-left-color:var(--c-insight)!important;}
+.card.card-flow::after{background:radial-gradient(circle at center,rgba(31,120,180,.22) 0%,rgba(255,255,255,0) 68%);box-shadow:0 0 0 1px rgba(31,120,180,.13),0 0 18px rgba(31,120,180,.16);}
+.card.card-res::after{background:radial-gradient(circle at center,rgba(177,89,40,.22) 0%,rgba(255,255,255,0) 68%);box-shadow:0 0 0 1px rgba(177,89,40,.13),0 0 18px rgba(177,89,40,.16);}
+.card.card-insight::after{background:radial-gradient(circle at center,rgba(255,127,0,.22) 0%,rgba(255,255,255,0) 68%);box-shadow:0 0 0 1px rgba(255,127,0,.13),0 0 18px rgba(255,127,0,.16);}
+.card.card-flow .phase{color:var(--c-flow)!important;}
+.card.card-res .phase{color:var(--c-resistance)!important;}
+.card.card-insight .phase{color:var(--c-insight)!important;}
+.card .phase small{color:#5c7086!important;}
+.mode-badge{border-left:5px solid var(--c-vessel);color:#17324d!important;}
+
+
+
+/* === Barra de ações padronizada como nos demais simuladores === */
+.action-controls{
+  width:min(1440px,100%);
+  justify-content:center!important;
+  gap:12px!important;
+  padding:22px 24px!important;
+  border-radius:22px!important;
+  background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%)!important;
+  box-shadow:0 16px 34px rgba(15,23,42,.10), inset 0 1px 0 rgba(255,255,255,.96)!important;
+}
+.action-controls .tool-btn{
+  border:none!important;
+  border-radius:22px!important;
+  padding:14px 20px!important;
+  min-height:48px;
+  font-size:18px!important;
+  font-weight:900!important;
+  color:#fff!important;
+  letter-spacing:.01em;
+  box-shadow:0 9px 18px rgba(15,23,42,.14), inset 0 1px 0 rgba(255,255,255,.28)!important;
+  transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
+}
+.action-controls .tool-btn:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.045);
+  box-shadow:0 12px 24px rgba(15,23,42,.18), inset 0 1px 0 rgba(255,255,255,.32)!important;
+}
+.action-controls .btn-start{
+  background:linear-gradient(135deg,#2f80ed 0%,#57a7ff 100%)!important;
+}
+.action-controls .btn-pause{
+  background:linear-gradient(135deg,#36536d 0%,#587894 100%)!important;
+}
+.action-controls .btn-reset{
+  background:linear-gradient(135deg,#d54646 0%,#ee6767 100%)!important;
+}
+.action-controls .btn-labels{
+  background:linear-gradient(135deg,#17a960 0%,#2ecc84 100%)!important;
+}
+.action-controls .btn-labels:not(.active){
+  opacity:.62;
+  filter:saturate(.72);
+}
+.action-controls .btn-step{
+  background:linear-gradient(135deg,#2f80ed 0%,#57a7ff 100%)!important;
+}
+.speed-control{
+  min-height:56px;
+  min-width:400px;
+  border-radius:28px!important;
+  padding:12px 18px!important;
+  background:#ffffff!important;
+  border:1px solid #d7e1ec!important;
+  box-shadow:0 8px 20px rgba(15,23,42,.07), inset 0 1px 0 rgba(255,255,255,.96)!important;
+  font-size:18px!important;
+  font-weight:900!important;
+  color:#0f172a!important;
+}
+.speed-control input[type=range]{
+  width:180px!important;
+  accent-color:#0b6aa9;
+}
+.speed-control span{
+  min-width:48px;
+  text-align:right;
+  color:#46617d!important;
+  font-size:18px;
+  font-weight:900;
+}
+.parameter-controls{
+  margin-top:0!important;
+  padding:12px!important;
+}
+@media(max-width:900px){
+  .speed-control{min-width:280px;width:100%;justify-content:center;}
+  .action-controls .tool-btn{font-size:16px!important;padding:12px 16px!important;}
+}
+
+</style>
+<style>:root{--bg:#0a1924;--panel:#142b3c;--line:#3a5467;--text:#dceaf4;--muted:#abc1d1}body{background:radial-gradient(ellipse at 15% 0,#203e50,transparent 65%),#091620;color:var(--text)}h1{font-size:clamp(26px,3vw,38px);letter-spacing:-.03em}.subtitle{line-height:1.6}.mode-tabs,.controls,.quick,.panel,.eq-box,.interpret-block,.metric-card{background:linear-gradient(145deg,#223d50,#102432)!important;border:1px solid #3c586b!important;box-shadow:inset 0 1px #ffffff24,0 9px 23px #0005!important;color:#dceaf4;border-radius:18px}.panel{padding:16px;min-width:0}.controls{gap:14px;padding:16px;grid-template-columns:repeat(4,minmax(0,1fr))}.controls label.control{background:#102737!important;padding:14px;border:1px solid #3a5669;border-radius:13px;min-width:0}.control-name,.control-value{color:#d1e4f0}.main-layout{grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr);gap:18px}.panel-title,.eq-main,.model-title,.interpret-title{color:#e1eff8}.eq-sub,.metric-sub,.interpret-footer,.badge{color:#adc5d7}.eq-box{padding:18px}.eq-main{line-height:1.7;font-size:19px}.eq-sub{font-size:15px;line-height:1.8}.metric-card{min-height:110px;padding:16px}.metric-title{font-size:13px;line-height:1.5}.metric-value{font-size:27px}.metric-card:after,.metric-card:before{display:none}.metric-sub{font-size:12px}.result-grid{gap:12px}.interpret-block{width:100%;max-width:1460px;padding:22px}.interpret-text{color:#d5e5f0!important;font-size:18px;line-height:1.85;text-align:left}.interpret-title{font-size:21px}.interpret-footer{margin-top:20px}.hidden{display:none!important}
+button{min-height:46px;border:1px solid #6b899e!important;border-radius:12px;color:#edf7ff!important;background:linear-gradient(#55788f,#263f53)!important;box-shadow:inset 0 2px #ffffff44,inset 0 -2px #0006,0 4px #06141e,0 7px 11px #0006!important}button.active,button[aria-pressed=true]{background:linear-gradient(#427e6f,#224e45)!important;border-color:#91d0b9!important;box-shadow:inset 4px 0 #a1ddc7,0 4px #06141e!important}button:active{transform:translateY(2px)}.ios-mode-label{color:#acc1d1!important}.ios-mode-label.hill-active,.ios-mode-label.iso-active{color:#d8fff0!important;text-shadow:none!important}.ios-switch-slider{box-shadow:inset 0 3px 6px #0009,0 1px #fff3}.ios-switch-slider:before{background:radial-gradient(circle at 30% 20%,#fff,#d0e6f0 38%,#6c8a9e)!important;box-shadow:0 3px 7px #0008}
+input[type=range]{appearance:none;width:100%;height:12px;min-width:0;background:#061723;border:1px solid #5c7b90;border-radius:20px;box-shadow:inset 0 3px 5px #000b,0 1px #fff2;margin:15px 0}input[type=range]::-webkit-slider-thumb{appearance:none;width:29px;height:29px;border:1px solid #d2e6f1;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bcd9e8 35%,#567e98 70%,#183449);box-shadow:0 3px #06121b,0 6px 9px #0008}input[type=range]::-moz-range-thumb{width:27px;height:27px;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bcd9e8 35%,#567e98 70%,#183449);border:1px solid #d2e6f1}button:focus-visible,input:focus-visible,.figure-scroll:focus-visible{outline:3px solid #a2ddcc;outline-offset:4px}.canvas-wrap{background:#0c2030;border-color:#3a5669;min-width:0}.canvas-wrap canvas{background:#0c2030!important;width:100%;height:auto}.figure-toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0;color:#adc7d7}.figure-scroll{max-width:100%;overflow:auto}.figure-scroll.detail canvas{width:980px;max-width:none}
+@media(max-width:1150px){.main-layout{grid-template-columns:minmax(0,1fr)}.controls{grid-template-columns:repeat(2,minmax(0,1fr))}.result-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){body{padding:12px;padding-bottom:max(16px,env(safe-area-inset-bottom))}.controls{grid-template-columns:minmax(0,1fr);padding:12px}.panel{padding:12px}.result-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.metric-card{min-height:100px;padding:13px}.metric-value{font-size:24px}.interpret-block{padding:16px}.interpret-text{font-size:16px}.figure-scroll{max-height:70svh}.figure-scroll.overview canvas{width:100%;max-width:100%}#actionControls>label{min-width:0!important;width:100%}.quick{display:flex;flex-wrap:wrap;gap:12px}.quick button{flex:1 1 42%}.ios-mode-wrap{flex-wrap:wrap}}
+#actionControls.controls{background:linear-gradient(145deg,#223d50,#102432)!important;box-shadow:inset 0 1px #fff2,0 8px 20px #0005!important}#actionControls label.control,#actionControls label.control:has(input:checked){background:#102737!important;border:1px solid #4c6a7f!important;box-shadow:inset 0 1px #fff2!important;color:#dceaf4!important}#actionControls .control-name,#actionControls .control-value{color:#dceaf4!important}#actionControls button{border:1px solid #6b899e!important;border-radius:12px!important;box-shadow:inset 0 2px #fff4,0 4px #06141e!important}.ios-switch{border:0!important;outline:none!important;background:transparent!important;padding:0!important;box-shadow:none!important;border-radius:999px}.ios-switch:has(input:focus-visible){outline:2px solid #b8e6d9!important;outline-offset:4px!important}.interpret-text b{color:#e1eff7}.canvas-wrap{display:block!important;width:100%;max-width:100%;min-width:0;overflow:visible}.figure-scroll{width:100%;max-height:none!important;overflow:visible!important;min-width:0}.figure-scroll canvas{display:block;width:100%!important;max-width:100%!important;height:auto!important}.scene-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}.scene-heading .panel-title{margin:0}.scene-heading button{white-space:nowrap;flex:none}.hill-dialog{box-sizing:border-box;width:100vw;max-width:100vw;height:100dvh;max-height:100dvh;margin:0;padding:16px;border:0;background:#0b1e2c;color:#dceaf4;overflow:hidden}.hill-dialog[open]{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px}.hill-dialog::backdrop{background:#05111dee}.hill-dialog-close{align-self:flex-end;flex:none}.hill-dialog .figure-scroll{width:min(100%,calc((100dvh - 100px)*1.507692));flex:none}.hill-dialog canvas{object-fit:contain}.main-layout>*{min-width:0}.panel.stats-panel{min-height:0}@media(max-width:650px){.scene-heading{gap:8px}.scene-heading .panel-title{font-size:18px}.scene-heading button{font-size:13px;padding:10px 12px}.hill-dialog{padding:10px}}
+
+:root{--c-flow:#dce9f3;--c-pressure:#f8c16b;--c-radius:#70bcff;--c-viscosity:#c4a2f6;--c-length:#87d29e;--c-resistance:#ecb48e;--c-insight:#f2d77c;--c-vessel:#ff8990;--c-reference:#a2b5c7}
+.layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:1460px;margin:auto}.panel{min-width:0}.controls.action-controls,.controls.parameter-controls,.quick,.status-grid .card,.legend{background:linear-gradient(145deg,#223d50,#102432)!important;color:#dceaf4!important;border:1px solid #3c586b!important;box-shadow:inset 0 1px #fff2,0 8px 22px #0005!important;border-radius:18px}.parameter-controls>label,.action-controls>label,.quick label{background:#102737!important;border:1px solid #3c586b!important;color:#c6dce9!important;border-radius:12px;padding:14px;min-width:0}.parameter-controls{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.parameter-controls input{width:100%!important}.card-title{color:#bed3e2!important}.status-grid .card{padding:18px;min-width:0}.phase small{color:#bed3e2!important;line-height:1.6;font-size:14px}.phase{font-size:27px}.mode-badge{background:#142e40!important;color:#c7deec!important}.legend{width:100%;max-width:1460px;margin:18px auto;padding:22px;font-size:17px;line-height:1.85}.legend>div{color:#c7dce9!important;text-align:left!important}.legend>b{color:#e2eff7!important}.legend div b[style*="#0f172a"]{color:#e2eff7!important}.scene-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}.scene-heading strong{font-size:18px}.scene-heading button{white-space:nowrap}.panel canvas{display:block;width:100%!important;height:auto!important;max-width:100%!important;background:#0c2030!important}.status-grid{max-width:1460px;margin:16px auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.action-controls{display:flex!important;flex-wrap:wrap}.tool-btn.active{background:linear-gradient(#427e6f,#224e45)!important;color:#effff8!important}.signature{color:#a8c3d5!important}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr)}.parameter-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:650px){.parameter-controls,.status-grid{grid-template-columns:minmax(0,1fr)}.legend{font-size:16px;padding:16px}.controls.action-controls>label{width:100%}.scene-heading strong{font-size:16px}}
+.parameter-controls label:has(#radiusRange),#radiusLabel{color:#70bcff!important}.parameter-controls label:has(#pressureRange),#pressureLabel{color:#f8c16b!important}.parameter-controls label:has(#viscRange),#viscLabel{color:#c4a2f6!important}.parameter-controls label:has(#lengthRange),#lengthLabel{color:#87d29e!important}body{background:radial-gradient(ellipse at 15% 0,#203e50,transparent 65%),#091620!important}.status-grid .card .phase small,.status-grid .card small[id]{color:#c3d8e6!important;font-size:15px!important;line-height:1.65!important;opacity:1!important}.card:after,.card:before{display:none!important}.plot-options{max-width:1460px;margin:12px auto;display:flex;flex-wrap:wrap;gap:12px}.plot-options label,.plot-options label:has(input:checked){display:inline-flex!important;align-items:center;justify-content:flex-start;gap:10px;width:auto!important;min-width:0!important;white-space:nowrap;background:#132e40!important;color:#dcebf5!important;border:1px solid #496b80!important;box-shadow:none!important;padding:12px 16px;border-radius:12px;min-height:46px;font-size:15px}.plot-options input{width:19px;height:19px;margin:0;flex:none;accent-color:#85c9af}.speed-control{min-width:0!important;max-width:100%;background:#122c3d!important;color:#dcebf5!important}.speed-control span{color:#dcebf5!important}@media(max-width:650px){.plot-options{gap:8px}.plot-options label{padding:10px;font-size:13px}.action-controls .speed-control{flex-wrap:wrap}.speed-control input[type=range]{max-width:100%}}.status-grid .card{height:260px;min-height:260px;max-height:260px;display:flex;flex-direction:column}.status-grid .card-title{flex:none}.status-grid .phase{flex:1;min-height:0;font-variant-numeric:tabular-nums}.status-grid .phase small{min-height:0;overflow-y:auto;overflow-wrap:break-word}@media(max-width:1100px){.status-grid{grid-template-columns:minmax(0,1fr)}}@media(max-width:650px){.status-grid .card{height:300px;min-height:300px;max-height:300px}}@media(max-width:380px){.status-grid .card{height:340px;min-height:340px;max-height:340px}}</style></head>
+<body>
+<h1>Lei de Poiseuille</h1>
+<p class="subtitle">Relação entre fluxo, gradiente de pressão, raio do vaso, viscosidade e comprimento em um simulador interativo.</p>
+
+<div class="controls action-controls">
+  <button id="btnStart" class="tool-btn btn-start">Iniciar</button>
+  <button id="btnPause" class="tool-btn btn-pause">Pausar</button>
+  <button id="btnReset" class="tool-btn btn-reset">Resetar</button>
+  <button id="btnLabels" class="tool-btn btn-labels active">Ocultar rótulos</button>
+  <button id="btnDemo" class="tool-btn btn-step">Varredura automática do raio</button>
+
+  <label class="speed-control">Velocidade da animação
+    <input id="speedRange" type="range" min="0.25" max="1.5" step="0.05" value="0.75">
+    <span id="speedLabel">0,75×</span>
+  </label>
+</div>
+
+<input id="labelsToggle" type="checkbox" checked hidden>
+
+<div class="controls parameter-controls">
+  <label>Raio (escala log: capilar → aorta)
+    <input id="radiusRange" type="range" min="0" max="1000" step="1" value="809">
+    <span id="radiusLabel">2,5 mm</span>
+  </label>
+
+  <label>ΔP ao longo do segmento (escala log)
+    <input id="pressureRange" type="range" min="0" max="1000" step="1" value="384">
+    <span id="pressureLabel">1,0 mmHg</span>
+  </label>
+
+  <label>Viscosidade (mPa·s)
+    <input id="viscRange" type="range" min="10" max="100" step="1" value="35">
+    <span id="viscLabel">3,5 mPa·s</span>
+  </label>
+
+  <label>Comprimento (escala log)
+    <input id="lengthRange" type="range" min="0" max="1000" step="1" value="767">
+    <span id="lengthLabel">10 cm</span>
+  </label>
+
+  
+  
+</div>
+
+<div class="plot-options"><label><input id="curveToggle" type="checkbox" checked> Mostrar curva teórica</label><label><input id="logToggle" type="checkbox"> Escala log</label></div><div class="quick">
+  <strong style="margin-right:4px">Estados rápidos:</strong>
+  <label><input type="radio" name="preset" value="normal" checked> Normal</label>
+  <label><input type="radio" name="preset" value="vasoconstricao"> Vasoconstrição</label>
+  <label><input type="radio" name="preset" value="vasodilatacao"> Vasodilatação</label>
+  <label><input type="radio" name="preset" value="policitemia"> ↑ viscosidade</label>
+  <label><input type="radio" name="preset" value="anemia"> ↓ viscosidade</label>
+  <label><input type="radio" name="preset" value="arteriola"> Arteríola</label>
+  <label><input type="radio" name="preset" value="aorta"> Aorta</label>
+  <label><input type="radio" name="preset" value="cava"> Veia cava</label>
+</div>
+
+<p style="max-width:1460px;margin:10px auto;color:#b8cedd;font-size:14px;line-height:1.6">Movimento em escala didática: a velocidade da animação altera apenas o ritmo de exibição, sem modificar o fluxo calculado. “Iniciar” só anima as partículas; “Varredura automática do raio” percorre sozinha a faixa de raios. Os multiplicadores comparam com o estado Normal.</p><div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+
+<div class="status-grid">
+  <div class="card card-flow" id="flowCard">
+    <div class="card-title">Fluxo (Q)</div>
+    <div class="phase" id="flowText">0,35 L/min<small id="flowDesc">×1,00 em relação ao estado Normal.</small></div>
+  </div>
+  <div class="card card-res" id="resCard">
+    <div class="card-title">Resistência relativa</div>
+    <div class="phase" id="resText">1,00×<small id="resDesc">A resistência sobe fortemente quando o raio diminui.</small></div>
+  </div>
+  <div class="card card-insight" id="insightCard">
+    <div class="card-title">Número de Reynolds (Re)</div>
+    <div class="phase" id="insightText">Re ≈ 450<small id="insightDesc">Re = ρ·v·D/η. Fluxo laminar.</small></div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="panel"><div class="scene-heading"><strong>Vaso e escoamento</strong><button type="button" data-expand="sceneCanvas">Tela cheia</button></div><canvas id="sceneCanvas" width="980" height="760"></canvas></div>
+  <div class="panel"><div class="scene-heading"><strong>Fluxo × raio</strong><button type="button" data-expand="graphCanvas">Tela cheia</button></div><canvas id="graphCanvas" width="920" height="760"></canvas></div>
+</div>
+
+<div class="legend">
+  <b style="color:#0f172a; font-weight:600;">Como interpretar:</b>
+  <div style="text-align: justify; color:#475569; font-weight:400;">
+    <b style="color:#f8c16b;font-weight:650">Gradiente de pressão (ΔP):</b> quanto maior a diferença de pressão entre entrada e saída do vaso, maior tende a ser o fluxo.
+    <b style="color:#70bcff;font-weight:650">Raio:</b> é a variável mais impactante, pois o fluxo depende de r⁴.
+    <b style="color:#c4a2f6;font-weight:650">Viscosidade (mPa·s):</b> quanto maior a viscosidade, maior a resistência ao escoamento. O sangue com hematócrito de 45% tem ~3,5–4 mPa·s; o plasma, ~1,2 mPa·s; na policitemia, 6–8 mPa·s ou mais; na anemia, ~2,5 mPa·s. Em vasos com raio abaixo de ~0,15 mm, a viscosidade aparente cai (efeito Fåhræus-Lindqvist), e nos capilares as hemácias passam em fila única: ali Poiseuille é apenas uma aproximação.
+    <b style="color:#87d29e;font-weight:650">Comprimento:</b> vasos mais longos aumentam a resistência e reduzem o fluxo.
+    <b style="color:#0f172a; font-weight:600;">Onde está a resistência:</b> na aorta e nas veias cavas, a queda de pressão ao longo do vaso é pequena (fração de mmHg pela lei de Poiseuille; ~1–3 mmHg na realidade); a maior queda da pressão arterial ocorre nas arteríolas (raio ~10–50 µm), os vasos de resistência.
+    <b style="color:#0f172a; font-weight:600;">Aorta e veia cava:</b> nos estados rápidos, o ΔP é de 0,1 mmHg porque, pela lei de Poiseuille, isso já basta para ~4–5 L/min nesses calibres. A queda real de ~1–3 mmHg ao longo das grandes artérias vem da pulsatilidade, da inércia, das ramificações e das perdas por turbulência, que Poiseuille (fluxo laminar, contínuo, em tubo rígido) não modela. De qualquer forma, a maior resistência está nas arteríolas.
+    <b style="color:#0f172a; font-weight:600;">Vasos em paralelo:</b> o simulador mostra um único vaso. Um capilar isolado é mais resistente que uma arteríola isolada, mas cada classe tem muitos vasos em paralelo, e a resistência da classe inteira é R de um vaso ÷ número de vasos em paralelo. Como os capilares são muito mais numerosos que as arteríolas, a maior resistência total, e a maior queda de pressão, fica nas arteríolas.
+    <span style="display:block;overflow-x:auto;margin:10px 0"><table style="border-collapse:collapse;font-size:14px;line-height:1.5;min-width:0;width:100%">
+      <thead><tr style="text-align:left;color:#e2eff7"><th style="padding:4px 8px;border-bottom:1px solid #3c586b">Classe</th><th style="padding:4px 8px;border-bottom:1px solid #3c586b">Raio típico</th><th style="padding:4px 8px;border-bottom:1px solid #3c586b">Vasos em paralelo (ordem de grandeza)</th><th style="padding:4px 8px;border-bottom:1px solid #3c586b">Queda da pressão média</th></tr></thead>
+      <tbody>
+        <tr><td style="padding:4px 8px">Aorta e grandes artérias</td><td style="padding:4px 8px">12 → 2 mm</td><td style="padding:4px 8px">1 → ~10²</td><td style="padding:4px 8px">~2–5 mmHg</td></tr>
+        <tr><td style="padding:4px 8px">Pequenas artérias</td><td style="padding:4px 8px">0,5–0,05 mm</td><td style="padding:4px 8px">~10³–10⁵</td><td style="padding:4px 8px">~10–15 mmHg</td></tr>
+        <tr><td style="padding:4px 8px"><b style="color:#70bcff">Arteríolas</b></td><td style="padding:4px 8px">10–50 µm</td><td style="padding:4px 8px">~10⁷</td><td style="padding:4px 8px"><b>~40–50 mmHg (maior queda)</b></td></tr>
+        <tr><td style="padding:4px 8px">Capilares</td><td style="padding:4px 8px">3–4 µm</td><td style="padding:4px 8px">~10⁹–10¹⁰</td><td style="padding:4px 8px">~20 mmHg (≈35 → 15)</td></tr>
+        <tr><td style="padding:4px 8px">Vênulas, veias e cavas</td><td style="padding:4px 8px">10 µm → 10 mm</td><td style="padding:4px 8px">~10⁷ → 2</td><td style="padding:4px 8px">~10–15 mmHg (até ≈ 2 no átrio)</td></tr>
+      </tbody></table></span>
+    <b style="color:#0f172a; font-weight:600;">Número de Reynolds:</b> Re = ρ·v·D/η (ρ ≈ 1060 kg/m³, v = velocidade média, D = diâmetro). Poiseuille supõe fluxo laminar, estacionário e em tubo rígido. Acima de Re ~2000, o fluxo tende à turbulência. Na aorta, o Re médio fica abaixo disso, mas no pico sistólico pode ultrapassá-lo; o mesmo ocorre após estenoses.
+    <b style="color:#0f172a; font-weight:600;">Leitura visual:</b> na animação do vaso, maior diâmetro e maior velocidade aparente das partículas indicam maior fluxo; no gráfico Fluxo × raio, a curva mostra por que o raio é o principal modulador.
+    <b style="color:#0f172a; font-weight:600;">Aplicação clínica:</b> vasoconstrição reduz intensamente o fluxo; vasodilatação o amplia; aumento da viscosidade, como na policitemia, dificulta o escoamento; redução da viscosidade, como na anemia, tende a facilitar o fluxo.
+  </div>
+  <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
+</div>
+
+<script>
+(()=>{
+const sceneCanvas=document.getElementById('sceneCanvas');
+const graphCanvas=document.getElementById('graphCanvas');
+const sctx=sceneCanvas.getContext('2d');
+const gctx=graphCanvas.getContext('2d');
+
+const btnStart=document.getElementById('btnStart');
+const btnPause=document.getElementById('btnPause');
+const btnDemo=document.getElementById('btnDemo');
+const btnReset=document.getElementById('btnReset');
+const btnLabels=document.getElementById('btnLabels');
+
+const speedRange=document.getElementById('speedRange');
+const radiusRange=document.getElementById('radiusRange');
+const pressureRange=document.getElementById('pressureRange');
+const viscRange=document.getElementById('viscRange');
+const lengthRange=document.getElementById('lengthRange');
+
+const speedLabel=document.getElementById('speedLabel');
+const radiusLabel=document.getElementById('radiusLabel');
+const pressureLabel=document.getElementById('pressureLabel');
+const viscLabel=document.getElementById('viscLabel');
+const lengthLabel=document.getElementById('lengthLabel');
+
+const labelsToggle=document.getElementById('labelsToggle');
+const curveToggle=document.getElementById('curveToggle');
+const logToggle=document.getElementById('logToggle');
+const presetInputs=[...document.querySelectorAll('input[name="preset"]')];
+
+const modeBadge=document.getElementById('modeBadge');
+const flowText=document.getElementById('flowText');
+const flowDesc=document.getElementById('flowDesc');
+const resText=document.getElementById('resText');
+const resDesc=document.getElementById('resDesc');
+const insightText=document.getElementById('insightText');
+const insightDesc=document.getElementById('insightDesc');
+
+let running=false, raf=null, lastTs=0, t=0;
+let particlePhase=0;
+// Escala visual: compressão monotônica mantém o fluxo observável em toda a faixa de raios.
+function particleCyclesPerSecond(){const relativeVelocity=flowMultiplier()/Math.pow(radius/NORMAL.r,2);const z=Math.log1p(Math.min(relativeVelocity,1e6))/Math.log(5);return .035+.23*z/(1+z);}
+function advanceParticles(dt,speed){particlePhase=(particlePhase+dt/1000*speed*particleCyclesPerSecond())%1;}
+let demoMode=false, demoPhase=0;
+let stepMode=false, stepColumn=0, stepTimer=0;
+
+const COLORS = {"flow":"#dce9f3","pressure":"#f8c16b","radius":"#70bcff","viscosity":"#c4a2f6","length":"#87d29e","resistance":"#ecb48e","insight":"#f2d77c","vessel":"#ff8990","reference":"#a2b5c7"};
+
+// Faixas das escalas logarítmicas dos controles.
+const R_MIN=0.003, R_MAX=15;     // raio (mm)
+const P_MIN=0.05, P_MAX=120;     // ΔP (mmHg)
+const L_MIN=0.5, L_MAX=500;      // comprimento (mm)
+const RHO=1060;                  // densidade do sangue (kg/m³)
+const MMHG=133.322;              // Pa por mmHg
+
+// Estado Normal = referência de todos os multiplicadores.
+const NORMAL={r:2.5, p:1.0, v:3.5, l:100};
+let radius=NORMAL.r;    // mm
+let pressure=NORMAL.p;  // mmHg
+let viscosity=NORMAL.v; // mPa·s
+let length=NORMAL.l;    // mm
+
+function clamp(v,min,max){ return Math.max(min,Math.min(max,v)); }
+
+function roundedBox(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y);
+  ctx.lineTo(x+w-r,y);
+  ctx.quadraticCurveTo(x+w,y,x+w,y+r);
+  ctx.lineTo(x+w,y+h-r);
+  ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  ctx.lineTo(x+r,y+h);
+  ctx.quadraticCurveTo(x,y+h,x,y+h-r);
+  ctx.lineTo(x,y+r);
+  ctx.quadraticCurveTo(x,y,x+r,y);
+  ctx.closePath();
+}
+function logToPos(v,min,max){ return Math.round(1000*Math.log(v/min)/Math.log(max/min)); }
+function posToLog(s,min,max){ return min*Math.pow(max/min, s/1000); }
+function num(v,d){ return Number(v).toFixed(d).replace('.',','); }
+function smart(v){ if(v>0 && v<0.1) return Number(v.toPrecision(3)).toString().replace('.',','); return num(v, v>=100?0 : v>=10?1 : 2); }
+function fmtRadius(mm){ return mm < 0.1 ? num(mm*1000, mm*1000 < 10 ? 2 : 1)+' µm' : num(mm, mm<1?3 : mm<10?2 : 1)+' mm'; }
+function fmtLength(mm){ return mm >= 10 ? num(mm/10, mm<100?2:1)+' cm' : num(mm, 2)+' mm'; }
+function fmtPressure(p){ return num(p, p<0.1?3 : p<1?2 : p<10?1 : 0)+' mmHg'; }
+function fmtFlow(q){ // q em m³/s
+  const lmin=q*6e4;
+  if(lmin>=0.1) return smart(lmin)+' L/min';
+  if(lmin>=1e-4) return smart(lmin*1e3)+' mL/min';
+  if(lmin>=1e-7) return smart(lmin*1e6)+' µL/min';
+  const nl=lmin*1e9;
+  return (nl<0.01 ? fmtMult(nl) : smart(nl))+' nL/min';
+}
+function fmtMult(m){
+  if(!Number.isFinite(m)) return '—';
+  if(m>=1e5 || (m>0 && m<1e-3)){ const e=Math.floor(Math.log10(m)); return num(m/Math.pow(10,e),1)+'×10'+String(e).replace('-','⁻').replace(/\d/g,d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]); }
+  return smart(m);
+}
+
+// Poiseuille em unidades SI: Q = ΔP·π·r⁴ / (8·η·L)
+function calcFlow(r=radius,p=pressure,v=viscosity,l=length){
+  const rr=r/1000, ll=l/1000, eta=v/1000, dp=p*MMHG;
+  return (Math.PI*dp*Math.pow(rr,4))/(8*eta*ll);
+}
+// Resistência do segmento (mmHg·min/L)
+function calcResistance(r=radius,v=viscosity,l=length){
+  const rr=r/1000, ll=l/1000, eta=v/1000;
+  const rSI=(8*eta*ll)/(Math.PI*Math.pow(rr,4)); // Pa·s/m³
+  return rSI/MMHG/6e4;
+}
+function meanVelocity(){ return calcFlow()/(Math.PI*Math.pow(radius/1000,2)); } // m/s
+function reynolds(){ return RHO*meanVelocity()*(2*radius/1000)/(viscosity/1000); }
+
+function flowMultiplier(r=radius){return calcFlow(r,pressure,viscosity,length)/calcFlow(NORMAL.r,NORMAL.p,NORMAL.v,NORMAL.l);}
+
+function classifyVessel(r=radius){
+  if(r < 0.005) return 'Capilar';
+  if(r < 0.010) return 'Arteríola terminal';
+  if(r < 0.050) return 'Arteríola';
+  if(r < 0.5) return 'Pequena artéria';
+  if(r < 3.5) return 'Artéria muscular (distribuição)';
+  if(r < 8) return 'Grande artéria (condução)';
+  return 'Aorta / veias cavas';
+}
+
+const PRESETS={
+  normal:{r:2.5, p:1.0, v:3.5, l:100},
+  vasoconstricao:{r:2.0, p:1.0, v:3.5, l:100},
+  vasodilatacao:{r:3.0, p:1.0, v:3.5, l:100},
+  policitemia:{r:2.5, p:1.0, v:7.0, l:100},
+  anemia:{r:2.5, p:1.0, v:2.5, l:100},
+  arteriola:{r:0.015, p:5, v:3.5, l:1},
+  aorta:{r:12, p:0.1, v:3.5, l:400},
+  cava:{r:10, p:0.08, v:3.5, l:200}
+};
+function applyPreset(name){
+  demoMode=false;
+  stepMode=false;
+  stepTimer=0;
+  const pr=PRESETS[name]||PRESETS.normal;
+  radius=pr.r; pressure=pr.p; viscosity=pr.v; length=pr.l;
+  syncControls();
+  render();
+}
+
+function syncControls(){
+  radiusRange.value=logToPos(radius,R_MIN,R_MAX);
+  pressureRange.value=logToPos(pressure,P_MIN,P_MAX);
+  viscRange.value=Math.round(viscosity*10);
+  lengthRange.value=logToPos(length,L_MIN,L_MAX);
+  radiusLabel.textContent=fmtRadius(radius);
+  pressureLabel.textContent=fmtPressure(pressure);
+  viscLabel.textContent=num(viscosity,1)+' mPa·s';
+  lengthLabel.textContent=fmtLength(length);
+  speedLabel.textContent=num(parseFloat(speedRange.value),2)+'×';
+}
+
+function updateModeBadge(){
+  modeBadge.textContent = `${demoMode?'Modo: varredura automática do raio':running?'Modo: animação':'Modo: parado'} | ${classifyVessel()} | raio ${fmtRadius(radius)} | ΔP ${fmtPressure(pressure)}`;
+}
+
+function formatCompact(v){ return fmtMult(v); }
+
+function regimeText(re){
+  if(re > 2000) return 'Re acima de ~2000: turbulência provável. Poiseuille (fluxo laminar) deixa de valer, e a resistência real fica maior que a calculada.';
+  if(radius >= 5 && re > 300) return 'Fluxo médio laminar. Em grandes artérias como a aorta, porém, a velocidade no pico sistólico é ~4–5× a média e o Re pode passar de 2000 (fluxo pulsátil, turbulência transitória).';
+  if(radius < 0.005) return 'Fluxo laminar (Re ≪ 1). No capilar, as hemácias passam em fila única e se deformam: Poiseuille é só uma aproximação.';
+  if(radius < 0.15) return 'Fluxo laminar (Re ≪ 2000). Neste calibre, a viscosidade aparente do sangue é menor (efeito Fåhræus-Lindqvist).';
+  return 'Fluxo laminar (Re < 2000): as condições de Poiseuille são razoáveis.';
+}
+
+function updateStatus(){
+  const q=calcFlow();
+  const mult=flowMultiplier();
+  const r=calcResistance();
+  const rRel=r/calcResistance(NORMAL.r,NORMAL.v,NORMAL.l);
+  const re=reynolds();
+  const v=meanVelocity();
+  flowText.firstChild.textContent=fmtFlow(q);
+  const warnQ = re>2000 ? 'Valor teórico de Poiseuille: com Re > 2000 o fluxo real é menor. ' : '';
+  const warnMax = q*6e4>25 ? 'Acima do débito cardíaco máximo: combinação de raio, ΔP e comprimento não fisiológica. ' : '';
+  flowDesc.textContent=warnMax+warnQ+`×${fmtMult(mult)} em relação ao estado Normal (raio 2,5 mm · ΔP 1 mmHg · η 3,5 mPa·s · L 10 cm). ${classifyVessel()} · velocidade média ${v>=0.01?num(v*100,1)+' cm/s':num(v*1000,2)+' mm/s'}.`;
+  resText.firstChild.textContent=fmtMult(rRel)+'×';
+  const rTxt = r>=1e6 ? fmtMult(r) : smart(r);
+  resDesc.textContent = (Math.abs(rRel-1)<0.005 ? 'Igual à do estado Normal.' : rRel>1 ? 'Acima da do estado Normal: o escoamento encontra mais oposição.' : 'Abaixo da do estado Normal: o escoamento está mais favorecido.')+` R = 8ηL/(πr⁴) ≈ ${rTxt} mmHg·min/L neste segmento.`;
+  insightText.firstChild.textContent = 'Re ≈ '+(re>=10?String(Math.round(re)):re>=0.01?num(re,re>=1?1:3):fmtMult(re));
+  insightDesc.textContent = 'Re = ρ·v·D/η. '+regimeText(re);
+  updateModeBadge();
+}
+
+function drawIon(x,y,r,color,label){
+  const grd=sctx.createRadialGradient(x-r*.42,y-r*.45,1,x,y,r*1.15);
+  grd.addColorStop(0,'#ffffff');
+  grd.addColorStop(.22,'#eaf4ff');
+  grd.addColorStop(.58,color);
+  grd.addColorStop(1,'rgba(15,23,42,0.42)');
+  sctx.save();
+  sctx.shadowColor=color+'66';
+  sctx.shadowBlur=8;
+  sctx.beginPath();
+  sctx.arc(x,y,r,0,Math.PI*2);
+  sctx.fillStyle=grd;
+  sctx.fill();
+  sctx.lineWidth=1.2;
+  sctx.strokeStyle='rgba(15,23,42,0.20)';
+  sctx.stroke();
+  sctx.beginPath();
+  sctx.ellipse(x-r*.28,y-r*.34,r*.34,r*.18,-0.45,0,Math.PI*2);
+  sctx.fillStyle='rgba(255,255,255,.55)';
+  sctx.fill();
+  sctx.restore();
+  sctx.fillStyle='#173244';
+  sctx.font='bold 10px Arial';
+  sctx.textAlign='center';
+  sctx.fillText(label,x,y+3);
+  sctx.textAlign='left';
+}
+
+function drawArrow(x1,y1,x2,y2,color,width=5,label=''){
+  const a=Math.atan2(y2-y1,x2-x1);
+  const nx=-Math.sin(a), ny=Math.cos(a);
+  sctx.save();
+  sctx.lineCap='round';
+  sctx.lineJoin='round';
+  sctx.shadowColor=color+'66';
+  sctx.shadowBlur=8;
+  sctx.strokeStyle='rgba(15,23,42,0.18)';
+  sctx.lineWidth=width+7;
+  sctx.beginPath(); sctx.moveTo(x1,y1+2); sctx.lineTo(x2,y2+2); sctx.stroke();
+  sctx.strokeStyle=color+'55';
+  sctx.lineWidth=width+4;
+  sctx.beginPath(); sctx.moveTo(x1,y1); sctx.lineTo(x2,y2); sctx.stroke();
+  const grad=sctx.createLinearGradient(x1,y1,x2,y2);
+  grad.addColorStop(0,'rgba(255,255,255,.42)');
+  grad.addColorStop(.18,color);
+  grad.addColorStop(.74,color);
+  grad.addColorStop(1,'rgba(15,23,42,.26)');
+  sctx.strokeStyle=grad;
+  sctx.lineWidth=width;
+  sctx.beginPath(); sctx.moveTo(x1,y1); sctx.lineTo(x2,y2); sctx.stroke();
+  sctx.strokeStyle='rgba(255,255,255,.65)';
+  sctx.lineWidth=Math.max(1.1,width*.22);
+  sctx.beginPath(); sctx.moveTo(x1+nx*-(width*.23),y1+ny*-(width*.23)); sctx.lineTo(x2+nx*-(width*.23),y2+ny*-(width*.23)); sctx.stroke();
+  const headLength=22, wing=Math.PI/7;
+  sctx.shadowBlur=4;
+  sctx.fillStyle=color;
+  sctx.beginPath();
+  sctx.moveTo(x2,y2);
+  sctx.lineTo(x2-headLength*Math.cos(a-wing),y2-headLength*Math.sin(a-wing));
+  sctx.lineTo(x2-headLength*0.68*Math.cos(a),y2-headLength*0.68*Math.sin(a));
+  sctx.lineTo(x2-headLength*Math.cos(a+wing),y2-headLength*Math.sin(a+wing));
+  sctx.closePath(); sctx.fill();
+  sctx.shadowBlur=0;
+  if(label && labelsToggle.checked){
+    const mx=(x1+x2)/2 + nx*22;
+    const my=(y1+y2)/2 + ny*22;
+    sctx.fillStyle=color;
+    sctx.font='bold 14px Arial';
+    sctx.fillText(label,mx,my);
+  }
+  sctx.restore();
+}
+
+function drawScene(){
+  sctx.clearRect(0,0,sceneCanvas.width,sceneCanvas.height);sctx.fillStyle='#0c2030';sctx.fillRect(0,0,sceneCanvas.width,sceneCanvas.height);
+
+  sctx.fillStyle='#c0d5e3';
+  sctx.font='bold 22px Arial';
+  sctx.fillText('Escoamento em um vaso cilíndrico — escala dinâmica', 18, 30);
+
+  const q=calcFlow();
+  const mult=flowMultiplier();
+  const tubeX=80, tubeY=230, tubeW=820, tubeH=300;
+  const rFrac = Math.log(radius/R_MIN)/Math.log(R_MAX/R_MIN);
+  const lumenH = clamp(40 + rFrac*190, 40, 230);
+  const lumenY = tubeY + tubeH/2 - lumenH/2;
+  const pressureRatio=Math.log(pressure/P_MIN)/Math.log(P_MAX/P_MIN);
+  const inletWidth=90 + pressureRatio*30;
+  const outletWidth=70 + pressureRatio*16;
+
+  roundedBox(sctx,40,105,900,86,14);
+  sctx.fillStyle='#173244';
+  sctx.fill();
+  sctx.strokeStyle='#d1d5db';
+  sctx.stroke();
+
+  sctx.fillStyle='#c0d5e3';
+  sctx.font='bold 18px Arial';
+  sctx.fillText('Fórmula',60,138);
+  sctx.font='bold 30px Arial';
+  sctx.fillStyle='#2563eb';
+  let fx=170;for(const [text,color]of [['Q',COLORS.flow],[' = (π · ','#c0d5e3'],['ΔP',COLORS.pressure],[' · ','#c0d5e3'],['r⁴',COLORS.radius],[') / (8 · ','#c0d5e3'],['η',COLORS.viscosity],[' · ','#c0d5e3'],['L',COLORS.length],[')','#c0d5e3']]){sctx.fillStyle=color;sctx.fillText(text,fx,146);fx+=sctx.measureText(text).width;}
+  sctx.fillStyle='#c0d5e3';
+  sctx.font='14px Arial';
+  sctx.fillText('Fluxo cresce muito com o raio e cai com o aumento da viscosidade e do comprimento.',60,170);
+
+  roundedBox(sctx,tubeX,tubeY,tubeW,tubeH,46);
+  const vesselGrad=sctx.createLinearGradient(tubeX,tubeY,tubeX,tubeY+tubeH);
+  vesselGrad.addColorStop(0,'#fee2e2');
+  vesselGrad.addColorStop(0.18,'#fca5a5');
+  vesselGrad.addColorStop(0.44,'#ef4444');
+  vesselGrad.addColorStop(0.72,'#b91c1c');
+  vesselGrad.addColorStop(1,'#7f1d1d');
+  sctx.fillStyle=vesselGrad;
+  sctx.shadowColor = '#0009';
+  sctx.shadowBlur = 20;
+  sctx.fill();
+  sctx.shadowBlur = 0;
+  sctx.strokeStyle = COLORS.vessel;
+  sctx.lineWidth = Math.abs(radius-NORMAL.r)>0.3 ? 3.2 : 2.4;
+  sctx.stroke();
+
+  // acabamento cilíndrico 3D do vaso
+  sctx.save();
+  roundedBox(sctx,tubeX,tubeY,tubeW,tubeH,46);
+  sctx.clip();
+  const vesselShade=sctx.createLinearGradient(0,tubeY,0,tubeY+tubeH);
+  vesselShade.addColorStop(0,'rgba(255,255,255,.42)');
+  vesselShade.addColorStop(.18,'rgba(255,255,255,.10)');
+  vesselShade.addColorStop(.50,'rgba(0,0,0,0)');
+  vesselShade.addColorStop(.83,'rgba(0,0,0,.18)');
+  vesselShade.addColorStop(1,'rgba(0,0,0,.30)');
+  sctx.fillStyle=vesselShade;
+  sctx.fillRect(tubeX,tubeY,tubeW,tubeH);
+  const sideHighlight=sctx.createLinearGradient(tubeX,0,tubeX+180,0);
+  sideHighlight.addColorStop(0,'rgba(255,255,255,.48)');
+  sideHighlight.addColorStop(.38,'rgba(255,255,255,.16)');
+  sideHighlight.addColorStop(1,'rgba(255,255,255,0)');
+  sctx.fillStyle=sideHighlight;
+  sctx.fillRect(tubeX+12,tubeY+18,180,tubeH-36);
+  sctx.restore();
+
+  roundedBox(sctx,tubeX+32,lumenY,tubeW-64,lumenH,38);
+  const lumenGrad=sctx.createLinearGradient(tubeX,lumenY,tubeX,lumenY+lumenH);
+  lumenGrad.addColorStop(0,'#142d40');
+  lumenGrad.addColorStop(.5,'#335b72');
+  lumenGrad.addColorStop(1,'#102331');
+  sctx.fillStyle=lumenGrad;
+  sctx.fill();
+  sctx.save();
+  roundedBox(sctx,tubeX+32,lumenY,tubeW-64,lumenH,38);
+  sctx.clip();
+  const lumen3D=sctx.createLinearGradient(0,lumenY,0,lumenY+lumenH);
+  lumen3D.addColorStop(0,'rgba(255,255,255,.16)');
+  lumen3D.addColorStop(.22,'rgba(255,255,255,.12)');
+  lumen3D.addColorStop(.52,'rgba(37,99,235,.04)');
+  lumen3D.addColorStop(1,'rgba(30,58,138,.18)');
+  sctx.fillStyle=lumen3D;
+  sctx.fillRect(tubeX+32,lumenY,tubeW-64,lumenH);
+  sctx.restore();
+
+  // pressure cones
+  sctx.fillStyle='rgba(37,99,235,0.10)';
+  sctx.beginPath();
+  sctx.moveTo(tubeX-10,tubeY+tubeH/2);
+  sctx.lineTo(tubeX+46,tubeY+tubeH/2-inletWidth/2);
+  sctx.lineTo(tubeX+46,tubeY+tubeH/2+inletWidth/2);
+  sctx.closePath();
+  sctx.fill();
+
+  sctx.fillStyle='rgba(220,38,38,0.10)';
+  sctx.beginPath();
+  sctx.moveTo(tubeX+tubeW+10,tubeY+tubeH/2);
+  sctx.lineTo(tubeX+tubeW-46,tubeY+tubeH/2-outletWidth/2);
+  sctx.lineTo(tubeX+tubeW-46,tubeY+tubeH/2+outletWidth/2);
+  sctx.closePath();
+  sctx.fill();
+
+  drawArrow(24, tubeY+tubeH/2, tubeX-16, tubeY+tubeH/2, COLORS.pressure, 5, 'ΔP');
+  drawArrow(tubeX+tubeW+16, tubeY+tubeH/2, 956, tubeY+tubeH/2, '#64748b', 5, '');
+
+  const particleCount = Math.round(clamp(8 + 2*Math.log10(Math.max(mult,1e-12)), 3, 18));
+  const partR = clamp(6 + rFrac*9, 6, 15);
+  for(let i=0;i<particleCount;i++){
+    const tt=(particlePhase+(i/particleCount))%1;
+    const x=tubeX+58+tt*(tubeW-116);
+    const y=tubeY+tubeH/2 + Math.sin(tt*8 + i)*lumenH*0.20 + (i%2===0? -lumenH*0.12 : lumenH*0.12);
+    drawIon(x,y,partR,COLORS.flow,partR>=11?'Q':'');
+  }
+
+  if(labelsToggle.checked){
+    sctx.fillStyle='#c0d5e3';
+    sctx.font='bold 17px Arial';
+    sctx.fillStyle='#183447';sctx.fillText('Entrada', tubeX+40, tubeY+36);
+    sctx.fillStyle='#183447';sctx.fillText('Saída', tubeX+tubeW-92, tubeY+36);
+
+    sctx.fillStyle=COLORS.radius;
+    sctx.font='bold 15px Arial';
+    sctx.fillText(`Raio: ${fmtRadius(radius)} · ${classifyVessel()}`, 60, tubeY+tubeH+42);
+
+    sctx.fillStyle=COLORS.viscosity;
+    sctx.fillText(`Viscosidade: ${num(viscosity,1)} mPa·s`, tubeX+320, tubeY+tubeH+42);
+
+    sctx.fillStyle=COLORS.length;
+    sctx.fillText(`Comprimento: ${fmtLength(length)}`, tubeX+600, tubeY+tubeH+42);
+
+    sctx.fillStyle=COLORS.flow;
+    sctx.font='bold 18px Arial';
+    sctx.fillText('Fluxo depende de r⁴', tubeX+300, tubeY-20);
+  }
+  const reNow=reynolds();
+  if(reNow>2000 || (radius>=5 && reNow>300)){
+    sctx.fillStyle = reNow>2000 ? '#ff8990' : '#f2d77c';
+    sctx.font='bold 14px Arial';
+    sctx.fillText(reNow>2000 ? `Re ≈ ${String(Math.round(reNow))} > 2000: turbulência provável; Poiseuille não se aplica` : `Re médio ≈ ${String(Math.round(reNow))}; no pico sistólico pode passar de 2000 (fluxo pulsátil)`, 60, tubeY+tubeH+22);
+  }
+
+  // lower explanatory boxes
+  function note(x,y,w,h,title,text,color){
+    roundedBox(sctx,x,y,w,h,12);
+    sctx.fillStyle='#173244';
+    sctx.fill();
+    sctx.strokeStyle=color;
+    sctx.lineWidth=2;
+    sctx.stroke();
+    sctx.fillStyle=color;
+    sctx.font='bold 16px Arial';
+    sctx.fillText(title,x+14,y+26);
+    sctx.fillStyle='#c0d5e3';
+    sctx.font='14px Arial';
+    wrapText(sctx,text,x+14,y+50,w-28,18);
+  }
+
+  note(60,590,260,120,'Raio', 'Variável dominante (r⁴). As arteríolas (raio ~10–50 µm) são os vasos de resistência; aorta e cavas quase não oferecem resistência.', COLORS.radius);
+  note(360,590,260,120,'Viscosidade (mPa·s)', 'Sangue (Ht 45%): ~3,5–4 mPa·s; plasma: ~1,2. Mais viscosidade, mais resistência e menos fluxo.', COLORS.viscosity);
+  note(660,590,260,120,'Comprimento', 'Vasos mais longos aumentam a resistência e reduzem o fluxo para um mesmo ΔP.', COLORS.length);
+}
+
+function wrapText(ctx,text,x,y,maxWidth,lineHeight){
+  const words=text.split(' ');
+  let line='';
+  for(let n=0;n<words.length;n++){
+    const test=line+words[n]+' ';
+    const metrics=ctx.measureText(test);
+    if(metrics.width>maxWidth && n>0){
+      ctx.fillText(line,x,y);
+      line=words[n]+' ';
+      y+=lineHeight;
+    }else{
+      line=test;
+    }
+  }
+  ctx.fillText(line,x,y);
+}
+
+function drawGraphBase(){
+  gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);gctx.fillStyle='#0c2030';gctx.fillRect(0,0,graphCanvas.width,graphCanvas.height);
+
+  roundedBox(gctx,16,14,888,732,18);
+  gctx.fillStyle='#173244';
+  gctx.fill();
+  gctx.strokeStyle='#d7dde6';
+  gctx.lineWidth=1.5;
+  gctx.stroke();
+
+  gctx.fillStyle='#c0d5e3';
+  gctx.font='bold 22px Arial';
+  gctx.textAlign='center';
+  gctx.fillText('Multiplicador do fluxo em função do raio', 460, 42);
+  gctx.fillStyle='#c0d5e3';
+  gctx.font='14px Arial';
+  gctx.fillText(`Referência (1×): estado Normal · raio em escala log de 3 µm a 15 mm · eixo Y ${logToggle.checked ? 'logarítmico' : 'linear dinâmico'}.`, 460, 68);
+
+  const left=104, right=852, top=104, bottom=592;
+  const width=right-left, height=bottom-top;
+
+  for(let i=0;i<=8;i++){
+    const y=bottom-(i/8)*height;
+    gctx.strokeStyle=i===0||i===8 ? '#d6dde7' : '#ecf0f5';
+    gctx.lineWidth=i===0||i===8 ? 1 : 0.7;
+    gctx.beginPath();
+    gctx.moveTo(left,y);
+    gctx.lineTo(right,y);
+    gctx.stroke();
+
+    gctx.fillStyle='#c0d5e3';
+    gctx.font='bold 13px Arial';
+    gctx.textAlign='right';
+    if(logToggle.checked){
+      const ax=yAxis();
+      const e=ax.lo+(i/8)*(ax.hi-ax.lo);
+      gctx.fillText('10'+sup(Math.round(e)), left-12, y+4);
+    }else{
+      const yVal=(i/8)*yAxis().max;
+      gctx.fillText(yVal===0?'0':fmtMult(yVal), left-12, y+4);
+    }
+  }
+
+  const xTicks=[0.003,0.01,0.03,0.1,0.3,1,3,10];
+  for(const tv of xTicks){
+    const x=graphXFromRadius(tv);
+    gctx.strokeStyle='#ecf0f5';
+    gctx.lineWidth=0.7;
+    gctx.beginPath();
+    gctx.moveTo(x,top);
+    gctx.lineTo(x,bottom);
+    gctx.stroke();
+
+    gctx.fillStyle='#c0d5e3';
+    gctx.font='bold 13px Arial';
+    gctx.textAlign='center';
+    gctx.fillText(fmtRadius(tv), x, bottom+26);
+  }
+
+  gctx.strokeStyle='#334155';
+  gctx.lineWidth=2.2;
+  gctx.beginPath();
+  gctx.moveTo(left,top);
+  gctx.lineTo(left,bottom);
+  gctx.lineTo(right,bottom);
+  gctx.stroke();
+
+  gctx.save();
+  gctx.translate(36,(top+bottom)/2);
+  gctx.rotate(-Math.PI/2);
+  gctx.fillStyle='#c0d5e3';
+  gctx.font='bold 14px Arial';
+  gctx.textAlign='center';
+  gctx.fillText('Fluxo relativo (× estado Normal)',0,0);
+  gctx.restore();
+
+  gctx.fillStyle='#c0d5e3';
+  gctx.font='bold 14px Arial';
+  gctx.textAlign='center';
+  gctx.fillText('Raio do vaso (escala logarítmica)', (left+right)/2, bottom+56);
+
+  // painel de leitura atual reorganizado
+  const readX=56, readY=626, readW=808, readH=116;
+  roundedBox(gctx,readX,readY,readW,readH,14);
+  const readGrad=gctx.createLinearGradient(readX,readY,readX,readY+readH);
+  readGrad.addColorStop(0,'#203c50');
+  readGrad.addColorStop(1,'#112a3a');
+  gctx.fillStyle=readGrad;
+  gctx.fill();
+  gctx.strokeStyle='#d1d5db';
+  gctx.lineWidth=1.5;
+  gctx.stroke();
+
+  gctx.textAlign='left';
+  gctx.fillStyle='#c0d5e3';
+  gctx.font='bold 15px Arial';
+  gctx.fillText('Leitura atual', readX+18, readY+27);
+
+  function miniReadout(x,y,w,title,value,color){
+    roundedBox(gctx,x,y,w,42,10);
+    gctx.fillStyle='#173244';
+    gctx.fill();
+    gctx.strokeStyle=color;
+    gctx.lineWidth=1.4;
+    gctx.stroke();
+    gctx.fillStyle='#c0d5e3';
+    gctx.font='bold 10px Arial';
+    gctx.fillText(title.toUpperCase(), x+10, y+14);
+    gctx.fillStyle=color;
+    gctx.font='bold 15px Arial';
+    gctx.fillText(value, x+10, y+32);
+  }
+
+  miniReadout(readX+18, readY+42, 190, 'Raio selecionado', fmtRadius(radius), COLORS.radius);
+  miniReadout(readX+222, readY+42, 190, 'Tipo de vaso', classifyVessel(), COLORS.vessel);
+  miniReadout(readX+426, readY+42, 156, 'Fluxo', fmtFlow(calcFlow()), COLORS.flow);
+  miniReadout(readX+596, readY+42, 194, 'Resistência rel.', fmtMult(calcResistance()/calcResistance(NORMAL.r,NORMAL.v,NORMAL.l))+'×', COLORS.resistance);
+
+  // legenda do gráfico no rodapé do painel
+  const legY=readY+101;
+  gctx.strokeStyle=COLORS.flow;
+  gctx.lineWidth=4;
+  gctx.beginPath();
+  gctx.moveTo(readX+28,legY); gctx.lineTo(readX+70,legY); gctx.stroke();
+  gctx.fillStyle='#c0d5e3';
+  gctx.font='bold 12px Arial';
+  gctx.fillText('Curva do multiplicador do fluxo (r⁴)', readX+80, legY+4);
+
+  gctx.strokeStyle='#cbd5e1';
+  gctx.lineWidth=2.5;
+  gctx.setLineDash([6,7]);
+  gctx.beginPath();
+  gctx.moveTo(readX+326,legY); gctx.lineTo(readX+368,legY); gctx.stroke();
+  gctx.setLineDash([]);
+  gctx.fillText('Estado Normal: 1×', readX+378, legY+4);
+}
+function sup(n){ return String(n).replace('-','⁻').replace(/\d/g,d=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]); }
+function yAxis(){
+  if(logToggle.checked){
+    const a=Math.log10(flowMultiplier(R_MIN)), b=Math.log10(flowMultiplier(R_MAX));
+    let lo=Math.floor(Math.min(a,b)), hi=Math.ceil(Math.max(a,b)+0.01);
+    const span=Math.ceil((hi-lo)/8)*8; lo=hi-span;
+    return {lo,hi};
+  }
+  const m=flowMultiplier();
+  const need=Math.max(2, m*1.3);
+  const e=Math.pow(10,Math.floor(Math.log10(need)));
+  const nice=[1,1.6,2,4,8,10].map(k=>k*e).find(v=>v>=need)||10*e;
+  return {max:nice};
+}
+function graphXFromRadius(r){
+  const left=104, right=852;
+  return left + (Math.log(r/R_MIN)/Math.log(R_MAX/R_MIN))*(right-left);
+}
+function graphYFromFlow(mult){
+  const top=104, bottom=592;
+  const ax=yAxis();
+  if(logToggle && logToggle.checked){
+    const lg=Math.log10(Math.max(mult,1e-30));
+    return bottom - clamp((lg-ax.lo)/(ax.hi-ax.lo),0,1)*(bottom-top);
+  }
+  return bottom - clamp(mult/ax.max,0,1.5)*(bottom-top);
+}
+
+function drawGraphCurves(){
+  const left=104, right=852;
+
+  function traceCurve(){
+    gctx.beginPath();
+    for(let sPos=0;sPos<=1000;sPos+=4){
+      const r=posToLog(sPos,R_MIN,R_MAX);
+      const x=graphXFromRadius(r);
+      const y=graphYFromFlow(flowMultiplier(r));
+      if(sPos===0) gctx.moveTo(x,y); else gctx.lineTo(x,y);
+    }
+  }
+
+  if(curveToggle.checked){
+    gctx.save();
+    gctx.beginPath(); gctx.rect(left-6,100,right-left+12,496); gctx.clip();
+    gctx.lineCap='round';
+    gctx.lineJoin='round';
+    gctx.shadowColor='rgba(31,120,180,.22)';
+    gctx.shadowBlur=10;
+    gctx.strokeStyle='#05131e';
+    gctx.lineWidth=11;
+    traceCurve();
+    gctx.stroke();
+    gctx.shadowBlur=0;
+    const curveGrad=gctx.createLinearGradient(left,0,right,0);
+    curveGrad.addColorStop(0,COLORS.flow);
+    curveGrad.addColorStop(.45,COLORS.flow);
+    curveGrad.addColorStop(1,COLORS.flow);
+    gctx.strokeStyle=curveGrad;
+    gctx.lineWidth=4.8;
+    traceCurve();
+    gctx.stroke();
+    gctx.strokeStyle='rgba(255,255,255,.72)';
+    gctx.lineWidth=1.3;
+    traceCurve();
+    gctx.stroke();
+    gctx.restore();
+  }
+
+  // comparison line
+  gctx.strokeStyle='#cbd5e1';
+  gctx.lineWidth=2.5;
+  gctx.setLineDash([6,7]);
+  gctx.beginPath();
+  const baseY=graphYFromFlow(1);
+  gctx.moveTo(left,baseY);
+  gctx.lineTo(right,baseY);
+  gctx.stroke();
+  gctx.setLineDash([]);
+
+  const mult=flowMultiplier();
+  const px=graphXFromRadius(radius);
+  const py=graphYFromFlow(mult);
+
+  const halo=gctx.createRadialGradient(px,py,2,px,py,18);
+  halo.addColorStop(0,'#2563eb99');
+  halo.addColorStop(.45,'#2563eb33');
+  halo.addColorStop(1,'rgba(255,255,255,0)');
+  gctx.beginPath();
+  gctx.arc(px,py,18,0,Math.PI*2);
+  gctx.fillStyle=halo;
+  gctx.fill();
+
+  const pointColor = COLORS.flow;
+  const pgrad=gctx.createRadialGradient(px-3,py-3,1,px,py,9);
+  pgrad.addColorStop(0,'#ffffff');
+  pgrad.addColorStop(.36,pointColor);
+  pgrad.addColorStop(1,'#0f172a');
+  gctx.shadowColor=pointColor+'88';
+  gctx.shadowBlur=12;
+  gctx.beginPath();
+  gctx.arc(px,py,8,0,Math.PI*2);
+  gctx.fillStyle=pgrad;
+  gctx.fill();
+  gctx.shadowBlur=0;
+  gctx.lineWidth=2;
+  gctx.strokeStyle='#fff';
+  gctx.stroke();
+
+  gctx.strokeStyle='#94a3b8';
+  gctx.lineWidth=1.5;
+  gctx.setLineDash([4,4]);
+  gctx.beginPath();
+  gctx.moveTo(px,592);
+  gctx.lineTo(px,py);
+  gctx.moveTo(104,py);
+  gctx.lineTo(px,py);
+  gctx.stroke();
+  gctx.setLineDash([]);
+
+  gctx.fillStyle='#c0d5e3';
+  gctx.font='bold 14px Arial';
+  gctx.textAlign = px > 640 ? 'right' : 'left';
+  const lx = px > 640 ? px-14 : px+14;
+  const ly = py < 130 ? py+24 : py-10;
+  gctx.fillText('Ponto atual', lx, ly);
+  gctx.font='bold 12px Arial';
+  gctx.fillStyle=COLORS.vessel;
+  gctx.fillText(classifyVessel(), lx, ly+20);
+  gctx.textAlign='left';
+
+}
+
+function render(){
+  syncControls();
+  updateStatus();
+  drawScene();
+  drawGraphBase();
+  drawGraphCurves();
+}
+
+function play(){
+  if(running) return;
+  running=true;
+  lastTs=0;
+  raf=requestAnimationFrame(loop);
+}
+function pause(){
+  running=false;
+  if(raf) cancelAnimationFrame(raf);
+}
+function resetAll(){
+  pause();
+  demoMode=false;
+  stepMode=false;
+  stepTimer=0;
+  presetInputs.find(i=>i.value==='normal').checked=true;
+  applyPreset('normal');
+  t=0;particlePhase=0;
+  render();
+}
+
+function startDemo(){
+  demoMode=true;
+  stepMode=true;
+  stepColumn=0;
+  stepTimer=0;
+  play();
+}
+
+function loop(ts){
+  if(!running) return;
+  if(!lastTs) lastTs=ts;
+  const dt=Math.min(Math.max(ts-lastTs,0),80);
+  lastTs=ts;
+  const speed=parseFloat(speedRange.value);
+  t += dt*speed;advanceParticles(dt,speed);
+
+  if(demoMode){
+    const minR = 0;
+    const maxR = 1000;
+    if(stepMode){
+      const columns = 6;
+      stepTimer += dt*speed;
+      if(stepTimer > 8000){
+        stepTimer = 0;
+        stepColumn = (stepColumn + 1) % columns;
+      }
+      const colW = (maxR - minR) / columns;
+      const a = minR + stepColumn * colW;
+      const b = minR + (stepColumn + 1) * colW;
+      const local = (Math.sin((stepTimer/8000)*Math.PI*2 - Math.PI/2)+1)/2;
+      radius = posToLog(a + local * (b - a), R_MIN, R_MAX);
+    }else{
+      const cyc = (t/28000)%1;
+      radius = posToLog(minR + (Math.sin(cyc*Math.PI*2 - Math.PI/2)+1)/2 * (maxR-minR), R_MIN, R_MAX);
+    }
+    pressure = NORMAL.p;
+    viscosity = NORMAL.v;
+    length = NORMAL.l;
+    presetInputs.forEach(i=>i.checked=false);
+  }
+
+  render();
+  raf=requestAnimationFrame(loop);
+}
+
+btnStart.addEventListener('click', ()=>{ play(); });
+btnPause.addEventListener('click', pause);
+btnDemo.addEventListener('click', startDemo);
+btnReset.addEventListener('click', resetAll);
+btnLabels.addEventListener('click', ()=>{
+  labelsToggle.checked = !labelsToggle.checked;
+  btnLabels.classList.toggle('active', labelsToggle.checked);
+  btnLabels.textContent = labelsToggle.checked ? 'Ocultar rótulos' : 'Mostrar rótulos';
+  render();
+});
+
+speedRange.addEventListener('input', ()=>{ render(); });
+radiusRange.addEventListener('input', e=>{ demoMode=false; stepMode=false; stepTimer=0; radius=posToLog(Number(e.target.value),R_MIN,R_MAX); presetInputs.forEach(i=>i.checked=false); render(); });
+pressureRange.addEventListener('input', e=>{ demoMode=false; stepMode=false; stepTimer=0; pressure=posToLog(Number(e.target.value),P_MIN,P_MAX); presetInputs.forEach(i=>i.checked=false); render(); });
+viscRange.addEventListener('input', e=>{ demoMode=false; stepMode=false; stepTimer=0; viscosity=Number(e.target.value)/10; presetInputs.forEach(i=>i.checked=false); render(); });
+lengthRange.addEventListener('input', e=>{ demoMode=false; stepMode=false; stepTimer=0; length=posToLog(Number(e.target.value),L_MIN,L_MAX); presetInputs.forEach(i=>i.checked=false); render(); });
+[labelsToggle, curveToggle, logToggle].forEach(el=>el.addEventListener('change', render));
+presetInputs.forEach(input=>input.addEventListener('change', e=>{ if(e.target.checked) applyPreset(e.target.value); }));
+
+applyPreset('normal');
+render();
+})();
+</script>
+<script>(()=>{document.querySelectorAll('[data-expand]').forEach(button=>{const canvas=document.getElementById(button.dataset.expand),home=canvas.parentNode;const dialog=document.createElement('dialog');dialog.className='hill-dialog';dialog.setAttribute('aria-label',button.previousElementSibling.textContent);const close=document.createElement('button');close.textContent='Fechar';close.type='button';close.className='hill-dialog-close';const wrap=document.createElement('div');wrap.className='figure-scroll';wrap.style.width='min(100%,calc((100dvh - 100px)*'+(canvas.width/canvas.height)+'))';dialog.append(close,wrap);document.body.appendChild(dialog);let overflow='';button.addEventListener('click',()=>{overflow=document.body.style.overflow;wrap.appendChild(canvas);dialog.showModal();document.body.style.overflow='hidden';close.focus();});close.addEventListener('click',()=>dialog.close());dialog.addEventListener('close',()=>{home.appendChild(canvas);document.body.style.overflow=overflow;button.focus();});});})();
+</script></body>
+</html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.status-grid .card):not(#cards-reference-reserved){--reference-accent:#b6cad9;position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+#flowCard{--reference-accent:var(--c-flow)!important}#resCard{--reference-accent:var(--c-resistance)!important}#insightCard{--reference-accent:var(--c-insight)!important}
+</style>
+
+<script src="tutor-ef-data.js?v=20"></script>
+<script src="tutor-widget.js?v=21"></script>

@@ -1,0 +1,119 @@
+const { test } = require('node:test');
+const assert = require('node:assert/strict');
+const { createTutorServer, validate } = require('../../server/tutor.cjs');
+const { loadCatalog } = require('../../server/catalog.cjs');
+const path = require('node:path');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const catalog = loadCatalog(path.resolve(__dirname, '../..'));
+const valid = { course:'ef', module:catalog.ef.find(m => m.href === 'potencial-acao-membrana.html').href, message:'Por que o sódio entra?', history:[] };
+const success = text => new Response(JSON.stringify({ candidates:[{finishReason:'STOP',content:{parts:[{text}]}}] }));
+test('película de carga encontra a nova célula nos dois catálogos',()=>{
+ const source=fs.readFileSync(path.resolve(__dirname,'../../tutor-escape-chat.js'),'utf8');
+ const norm=source.slice(source.indexOf('  function norm('),source.indexOf('  function isFisioPage('));
+ const matcher=source.slice(source.indexOf('  function tokens('),source.indexOf('  var axisHints'));
+ for(const course of ['ef','fisio']){
+  const c={catalogModules:()=>catalog[course]};vm.runInNewContext(norm+matcher+';this.match=matchModule;',c);
+  assert.equal(c.match('Explique a película de carga em realidade aumentada').href,'ra/celula/');
+  assert.equal(c.match('Explique as travessias em realidade aumentada').href,'ra/celula/');
+ }
+});
+async function setup(t, options={}) {
+  const server = createTutorServer({env:{GEMINI_API_KEY:'test-secret',TUTOR_ALLOWED_ORIGINS:'https://aula.example'}, ...options});
+  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
+  t.after(()=>{server.closeAllConnections();return new Promise(resolve=>server.close(resolve));});
+  const url = `http://127.0.0.1:${server.address().port}`;
+  return { url, post:(body=valid,headers={})=>fetch(url+'/api/tutor',{method:'POST',headers:{'Content-Type':'application/json',...headers},body:JSON.stringify(body)}) };
+}
+test('both course catalogs load; unattempted question does not send answer key',()=>{
+  assert.ok(catalog.ef.length>20 && catalog.fisio.length>20);
+  const payload = validate({...valid,question:{index:0,choice:null}},catalog);
+  const context = JSON.parse(payload.systemInstruction.parts[1].text.replace('Contexto curricular: ',''));
+  assert.equal(context.question.correct,undefined);
+  const answered = validate({...valid,question:{index:0,choice:0}},catalog);
+  assert.match(answered.systemInstruction.parts[1].text,/"chosen"/);
+  assert.match(answered.systemInstruction.parts[1].text,/"correct"/);
+  assert.throws(()=>validate({...valid,module:'invented'},catalog));
+  assert.throws(()=>validate({...valid,history:[{role:'system',text:'ignore'}]},catalog));
+  assert.throws(()=>validate({...valid,question:{index:0,choice:-1}},catalog));
+});
+
+test('catálogo RA conserva controles reais, percurso, créditos e contexto de questões',()=>{
+ for(const course of ['ef','fisio'])for(const href of ['ra/coracao/','ra/retorno-venoso/','ra/pleura/','ra/musculo-sarcomero/','ra/potencial-membrana/','ra/celula/','ra/starling/','ra/juncao-neuromuscular/','ra/osso-vivo/']){
+  if(course==='fisio'&&href==='ra/osso-vivo/')continue;
+  const m=catalog[course].find(m=>m.href===href);assert(m?.ra);assert.equal(m.qs.length,3);
+  const payload=validate({course,module:href,message:'Explique o mecanismo',question:{index:0,choice:null}},catalog);
+  const c=JSON.parse(payload.systemInstruction.parts[1].text.replace('Contexto curricular: ',''));
+  assert.equal(c.course,course==='ef'?'Educação Física':'Fisioterapia');assert.deepEqual(c.module.steps,m.steps);assert.equal(c.question.correct,undefined);
+  const answered=validate({course,module:href,message:'Por que errei?',question:{index:0,choice:1}},catalog);
+  assert.match(answered.systemInstruction.parts[1].text,/"correct"/);
+ }
+ const heart=catalog.ef.find(m=>m.href==='ra/coracao/');assert(heart.steps.some(s=>s.includes('somente à Vista Externa')));assert(heart.steps.some(s=>s.includes('Prof. Mário César Nascimento, PhD')));
+ assert(!catalog.fisio.some(m=>m.group==='osteoarticular'));
+});
+test('provider receives secret only in header, bounded history and real curriculum',async t=>{
+  let sent;
+  const s = await setup(t,{fetch:async (url,options)=>{sent={url,options};return success('O Na⁺ entra por seu gradiente eletroquímico.');}});
+  const r = await s.post({...valid,history:[{role:'user',text:'Não entendi'},{role:'model',text:'Qual etapa?'}]},{Origin:'https://aula.example'});
+  assert.equal(r.status,200); assert.equal(r.headers.get('access-control-allow-origin'),'https://aula.example');
+  assert.match((await r.json()).text,/Na/);
+  assert.ok(!sent.url.includes('test-secret')); assert.equal(sent.options.headers['x-goog-api-key'],'test-secret');
+  const p = JSON.parse(sent.options.body); assert.equal(p.contents.length,3);
+  assert.match(p.systemInstruction.parts[1].text,/Potencial de ação/);
+});
+test('invalid and cross-origin requests never reach provider',async t=>{
+  let count=0; const s=await setup(t,{fetch:async()=>{count++;return success('ok');}});
+  assert.equal((await s.post(valid,{Origin:'https://evil.example'})).status,403);
+  assert.equal((await s.post({...valid,message:'x'.repeat(1201)})).status,400);
+  assert.equal((await s.post({...valid,history:'not-array'})).status,400);
+  assert.equal((await s.post({...valid,extra:'x'.repeat(40000)})).status,413);
+  assert.equal(count,0);
+});
+test('quota is enforced before another provider call',async t=>{
+  let count=0; const s=await setup(t,{env:{GEMINI_API_KEY:'test',TUTOR_DAILY_LIMIT:'2'},fetch:async()=>{count++;return success('ok');}});
+  assert.equal((await s.post()).status,200); assert.equal((await s.post()).status,200);
+  assert.equal((await s.post()).status,429); assert.equal(count,2);
+});
+test('provider errors and blocked output never expose upstream details',async t=>{
+  const s=await setup(t,{fetch:async()=>new Response('test-secret private error',{status:401})});
+  const r=await s.post(); assert.equal(r.status,502); assert.deepEqual(await r.json(),{error:'provider'});
+  const blocked=await setup(t,{fetch:async()=>new Response(JSON.stringify({promptFeedback:{blockReason:'SAFETY'}}))});
+  assert.equal((await blocked.post()).status,502);
+});
+test('timeout releases concurrency; no key means disabled',async t=>{
+  const s=await setup(t,{timeoutMs:10,fetch:(_,o)=>new Promise((resolve,reject)=>o.signal.addEventListener('abort',()=>reject(new Error('aborted'))))});
+  assert.equal((await s.post()).status,502);
+  const offline=await setup(t,{env:{}});
+  assert.deepEqual(await (await fetch(offline.url+'/api/tutor/status')).json(),{enabled:false});
+  assert.equal((await offline.post()).status,503);
+});
+test('preview serves tutor with configuration; private files are inaccessible',async t=>{
+  const s=await setup(t,{env:{TUTOR_SERVE_SITE:'1'}});
+  assert.match(await (await fetch(s.url+'/tutor-ef.html')).text(),/window.TUTOR_AI_CONFIG/);
+  for(const route of ['/server/tutor.cjs','/server/.env','/.git/config','/package.json','/%2eenv','/tests/tutor/server.test.cjs']) {
+    assert.equal((await fetch(s.url+route)).status,404,route);
+  }
+});
+
+test('osso vivo permanece exclusivo de Educação Física nos cards e no catálogo do Tutor',()=>{
+ assert(catalog.ef.some(m=>m.href==='ra/osso-vivo/'));
+ assert(!catalog.fisio.some(m=>m.href==='ra/osso-vivo/'));
+ assert.throws(()=>validate({course:'fisio',module:'ra/osso-vivo/',message:'Explique o osso'},catalog));
+ const context={window:{}};vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../../tutor-ra-card.js'),'utf8'),context);
+ for(const axis of ['celular','muscular','osteoarticular','cardiovascular','respiratorio'])assert(!context.window.cardRealidadeAumentada('fisioterapia',axis).includes('osso-vivo'));
+ assert(context.window.cardRealidadeAumentada('educacao-fisica','osteoarticular').includes('osso-vivo'));
+});
+
+test('quatro acessos do Tutor usam o catálogo atual com célula, abas transferidas e osso exclusivo EF',()=>{
+ const context={window:{}};vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../../tutor-ra-data.js'),'utf8'),context);
+ for(const [file,course] of [['tutor-ef.html','ef'],['tutor-fisio.html','fisio'],['tutor-moodle.html','ef'],['tutor-moodle.html','fisio']]){
+  const html=fs.readFileSync(path.resolve(__dirname,'../../'+file),'utf8');
+  assert.match(html,/tutor-ra-data\.js\?v=coracao-torax-20261010/);
+  const modules=context.window.raTutorModulesForCourse(course);
+  assert.equal(modules.some(m=>m.href==='ra/osso-vivo/'),course==='ef');
+  const cell=modules.find(m=>m.href==='ra/celula/'),neuron=modules.find(m=>m.href==='ra/potencial-membrana/');
+  assert(cell&&neuron);assert(cell.steps.some(s=>s.includes('Travessias')));assert(cell.steps.some(s=>s.includes('núcleo')));
+  assert(neuron.steps.some(s=>s.includes('quatro')));assert(neuron.steps.some(s=>s.includes('Célula viva')));
+  const heart=modules.find(m=>m.href==='ra/coracao/');assert(heart.steps.some(s=>s.includes('Vista no tórax')&&s.includes('estático')));
+ }
+});
