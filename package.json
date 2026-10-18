@@ -2,6 +2,7 @@
   "name": "fisiologia-interativa-visual-tests",
   "private": true,
   "scripts": {
+    "dev": "pnpm --dir endocrino/origem-v0 dev",
     "start:tutor": "node --env-file-if-exists=server/.env server/tutor.cjs",
     "test:tutor": "node --test tests/tutor/server.test.cjs",
     "test:tutor:browser": "playwright test --config=tests/tutor/playwright.config.cjs",
