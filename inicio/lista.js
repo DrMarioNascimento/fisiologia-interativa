@@ -15,7 +15,7 @@
   D.unidades.forEach(u => {
     const a = document.createElement('a');
     a.href = '#u-' + u.id; a.style.setProperty('--c', cor(u.id));
-    a.title = u.num + ' · ' + u.nome; a.setAttribute('aria-label', 'Ir para ' + u.num + ' · ' + u.nome);
+    a.title = (u.num ? u.num + ' · ' : '') + u.nome; a.setAttribute('aria-label', 'Ir para ' + (u.num ? u.num + ' · ' : '') + u.nome);
     dots.appendChild(a);
   });
 

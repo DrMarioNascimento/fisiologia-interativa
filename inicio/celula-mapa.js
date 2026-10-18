@@ -271,8 +271,8 @@ function frame(t){
     const ed=k==='muscular'?ss*1.2:k==='cardiovascular'?ss*1.25:ss*1.08;
     const lx=p.x+ux*ed,ly=p.y+uy*ed; if(UNITS[k].sala) {c.fillStyle='#0c1219';c.strokeStyle='#E8B05C';c.lineWidth=1.2;c.beginPath();c.arc(lx,ly,9,0,7);c.fill();c.stroke();drawLock(lx,ly+.5,5.5,'#E8B05C'); hits.push({x:lx,y:ly,r:10,k,type:'lock',name:'Sala: '+salaNome(k)});}
     // número + nome circulando em volta da própria célula
-    const num=String(ORDER[course].indexOf(k)+1).padStart(2,'0');
-    const txt=num+' · '+UNITS[k].curto.toUpperCase();
+    const num=UNITS[k].num;
+    const txt=(num?num+' · ':'')+UNITS[k].curto.toUpperCase();
     const rr=k==='integracao'?ss*1.4:ss*(k==='muscular'?2.3:2.1), spin=RM?0:t*.00012*(k==='integracao'?-1:1);
     const fs=Math.max(8,Math.round(R*.034));
     CX0=p.x;CY0=p.y;
@@ -303,7 +303,7 @@ function select(k){
 function renderPills(){
   const el=document.getElementById('pills');el.innerHTML='';
   ORDER[course].forEach((k,i)=>{const b=document.createElement('button');b.type='button';b.style.setProperty('--c',COL[k]);
-    b.innerHTML=`<i></i>${String(i+1).padStart(2,'0')} ${UNITS[k].curto}`;b.setAttribute('aria-current',sel===k);b.onclick=()=>select(k);el.appendChild(b);});
+    b.innerHTML=`<i></i>${UNITS[k].num?UNITS[k].num+' ':''}${UNITS[k].curto}`;b.setAttribute('aria-current',sel===k);b.onclick=()=>select(k);el.appendChild(b);});
 }
 /* mapa mental ampliado */
 const dlg=document.getElementById('mapdlg'); let mapIdx=0;
@@ -312,7 +312,7 @@ function openMap(i,k){k=k||mapUnit||sel;mapUnit=k;const L=UNITS[k].mapas; mapIdx
   document.getElementById('md-img').src=L[mapIdx].src;
   document.getElementById('md-img').alt='Mapa mental: '+L[mapIdx].t;
   document.getElementById('md-t').textContent=L[mapIdx].t;
-  document.getElementById('md-u').textContent=String(ORDER[course].indexOf(k)+1).padStart(2,'0')+' · '+UNITS[k].nome+(L.length>1?' · mapa '+(mapIdx+1)+' de '+L.length:'');
+  document.getElementById('md-u').textContent=(UNITS[k].num?UNITS[k].num+' · ':'')+UNITS[k].nome+(L.length>1?' · mapa '+(mapIdx+1)+' de '+L.length:'');
   document.getElementById('md-nav').hidden=L.length<2; dlg.style.setProperty('--c',COL[k]);
   if(!dlg.open) dlg.showModal();}
 document.getElementById('md-x').onclick=()=>dlg.close();
@@ -330,8 +330,8 @@ function renderPanel(){renderPanelRaw();const idx=rooms().findIndex(r=>r.k===sel
 function renderPanelRaw(){
   const u=UNITS[sel],i=ORDER[course].indexOf(sel),n=ORDER[course].length,p=document.getElementById('panel');
   p.style.setProperty('--c',COL[sel]);
-  document.getElementById('p-num').textContent=String(i+1).padStart(2,'0');
-  document.getElementById('p-of').textContent='DE '+String(n).padStart(2,'0');
+  document.getElementById('p-num').textContent=u.num||'';
+  document.getElementById('p-of').textContent=u.num?'DE '+String(ORDER[course].filter(k=>UNITS[k].num).length).padStart(2,'0'):'UNIDADES 4 E 5';
   document.getElementById('p-name').textContent=u.nome;
   document.getElementById('p-cell').textContent=u.cel;
   const ul=document.getElementById('p-sims');ul.innerHTML='';
@@ -377,7 +377,7 @@ function renderTutor(){
   const t=document.getElementById('tutorbox');
   const i=ORDER[course].indexOf(sel), u=UNITS[sel];
   t.style.setProperty('--c',COL[sel]);
-  t.innerHTML=`<div class="tbtns"><a class="pri" href="${esc(D.tutor)}?eixo=${esc(sel)}" title="${esc(u.nome)}">Estudar ${String(i+1).padStart(2,'0')} · ${esc(u.curto)} com o tutor</a></div>`;
+  t.innerHTML=`<div class="tbtns"><a class="pri" href="${esc(D.tutor)}?eixo=${esc(sel)}" title="${esc(u.nome)}">Estudar ${u.num?u.num+' · ':''}${esc(u.curto)} com o tutor</a></div>`;
 }
 /* Operação Secreta: mesma confirmação usada nos tutores */
 document.addEventListener('click',e=>{const a=e.target.closest('a.enter[data-op="1"]');if(!a)return;e.preventDefault();

@@ -279,33 +279,15 @@ window.FI_DADOS = {
    }
   },
   {
-   "id": "endocrino",
-   "num": "06",
-   "nome": "Sistema Endócrino",
-   "curto": "Endócrino",
-   "desc": "Hipotálamo, hipófise, glândulas-alvo e regulação hormonal: tireoide, ACTH/cortisol, gônadas, GH, prolactina, ADH e ocitocina.",
-   "cel": "célula secretora e vesículas hormonais",
-   "mapas": [],
-   "sims": [
-    {
-     "t": "Hipotálamo, hipófise e eixos endócrinos",
-     "cat": "Sistema Endócrino",
-     "obj": "Manipular estímulos e respostas hormonais, acompanhar ACTH e cortisol, ADH e balanço hídrico, ocitocina e reflexos do parto e da ejeção do leite; comparar retroalimentação negativa e positiva.",
-     "href": "endocrino/index.html"
-    }
-   ],
-   "sala": null
-  },
-  {
    "id": "integracao",
-   "num": "07",
-   "nome": "Integração cardiorrespiratória",
+   "num": "",
+   "nome": "Integração Cardiorrespiratória das Unidades 4 e 5",
    "curto": "Integração",
    "desc": "Respostas integradas do coração, pulmões, circulação e metabolismo em diferentes estados fisiológicos.",
    "cel": "capilar com hemácias",
    "mapas": [
     {
-     "t": "Integração cardiorrespiratória",
+     "t": "Integração Cardiorrespiratória das Unidades 4 e 5",
      "src": "assets/maps/integracao-cardiorrespiratoria.webp"
     }
    ],
@@ -342,6 +324,24 @@ window.FI_DADOS = {
     "grande": "assets/salas/grande/sala-base.webp",
     "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/integracao?origem=site"
    }
+  },
+  {
+   "id": "endocrino",
+   "num": "06",
+   "nome": "Sistema Endócrino",
+   "curto": "Endócrino",
+   "desc": "Hipotálamo, hipófise, glândulas-alvo e regulação hormonal: tireoide, ACTH/cortisol, gônadas, GH, prolactina, ADH e ocitocina.",
+   "cel": "célula secretora e vesículas hormonais",
+   "mapas": [],
+   "sims": [
+    {
+     "t": "Hipotálamo, hipófise e eixos endócrinos",
+     "cat": "Sistema Endócrino",
+     "obj": "Manipular estímulos e respostas hormonais, acompanhar ACTH e cortisol, ADH e balanço hídrico, ocitocina e reflexos do parto e da ejeção do leite; comparar retroalimentação negativa e positiva.",
+     "href": "endocrino/index.html"
+    }
+   ],
+   "sala": null
   }
  ],
  "operacao": {
