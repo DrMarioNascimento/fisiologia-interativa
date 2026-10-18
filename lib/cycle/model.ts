@@ -69,7 +69,7 @@ export function cycleAt(day: number, cycleLength: number): Snapshot {
   const x = day - ov
   const follicularStretch = Math.sqrt(ov / 14)
 
-  const e2 = 35 + 235 * skewGauss(x, -1, 2.4 * follicularStretch, 0.9) + 105 * gauss(x, 7, 2.8)
+  const e2 = 35 + 235 * skewGauss(x, -1.8, 2.4 * follicularStretch, 1.1) + 105 * gauss(x, 7, 2.8)
   const p4 = 0.4 + 13 * gauss(x, 7, 2.6)
   const surge = skewGauss(x, -0.6, 0.9, 0.7)
 
@@ -81,10 +81,10 @@ export function cycleAt(day: number, cycleLength: number): Snapshot {
 
   const prl = 11 + 4 * gauss(x, 7, 4)
   const oxt = 1.4 + 0.7 * gauss(x, -0.5, 1.5)
-  const gnrh = 16 + 6 * clamp01((e2 - 40) / 230) - 11 * (p4 / (p4 + 3))
+  const gnrh = 16 + 6 * clamp01((e2 - 40) / 230) - 13 * (p4 / (p4 + 3))
 
   let endometrium: number
-  if (day < 5) endometrium = Math.max(2, 7 - day * 1.2)
+  if (day < 5) endometrium = 2 + 11 * (1 - smoothstep(0, 4, day))
   else if (x < 0) endometrium = 2 + 8 * clamp01((day - 5) / Math.max(1, ov - 5))
   else endometrium = 10 + 3 * clamp01(x / 7)
 
@@ -95,16 +95,23 @@ export function cycleAt(day: number, cycleLength: number): Snapshot {
 
 function gestationalHcg(d: number) {
   if (d < 21) return 0
-  const rise = 10 ** (0.7 + 4.3 * sigmoid((d - 40) / 5))
+  // Log-hCG rises with a progressively longer doubling time (~1.5–2 days at first).
+  const rise = 10 ** (0.7 + 4.35 * (1 - Math.exp(-Math.max(0, d - 22) / 16.8)))
   const decline = 0.2 + 0.8 * Math.exp(-((Math.max(0, d - 65) / 25) ** 2))
   const lateRise = 1 + 0.4 * sigmoid((d - 240) / 15)
   return rise * decline * lateRise * sigmoid((d - 22) / 0.5)
 }
 
+export const HCG_PEAK_DAY = (() => {
+  let best = 21
+  for (let d = 21; d < 140; d += 0.5) if (gestationalHcg(d) > gestationalHcg(best)) best = d
+  return best
+})()
+
 function gestationalSteroids(d: number) {
   const progress = clamp01((d - 21) / (TERM_DAY - 21))
-  const corpusLuteum = 24 * (1 - sigmoid((d - 63) / 6))
-  const placentalP4 = 150 * clamp01((d - 42) / (TERM_DAY - 42)) ** 1.2
+  const corpusLuteum = 24 * (1 - sigmoid((d - 60) / 5))
+  const placentalP4 = 150 * clamp01((d - 35) / (TERM_DAY - 35))
   return {
     p4: corpusLuteum + placentalP4,
     corpusLuteumP4: corpusLuteum,
@@ -121,13 +128,19 @@ export const corpusLuteumShare = (d: number) => {
   return s.corpusLuteumP4 / Math.max(s.p4, 1e-6)
 }
 
+const recovery = (pp: number, center: number, width: number) => {
+  const start = sigmoid(-center / width)
+  return (sigmoid((pp - center) / width) - start) / (1 - start)
+}
+
 const laborOxytocin = (d: number) => 30 * gauss(d, TERM_DAY, 0.5)
 
 export function pregnancyAt(d: number, breastfeeding: boolean): Snapshot {
   if (d < 21) return cycleAt(d, PREGNANCY_CYCLE_LENGTH)
 
   if (d < TERM_DAY) {
-    const luteal = cycleAt(Math.min(d, PREGNANCY_CYCLE_LENGTH - 0.01), PREGNANCY_CYCLE_LENGTH)
+    // hCG rescues the corpus luteum, so steroids hold at the mid-luteal level instead of declining.
+    const luteal = cycleAt(21, PREGNANCY_CYCLE_LENGTH)
     const preg = gestationalSteroids(d)
     const w = smoothstep(21, 30, d)
     const mix = (a: number, b: number) => a * (1 - w) + b * w
@@ -159,9 +172,9 @@ export function pregnancyAt(d: number, breastfeeding: boolean): Snapshot {
   const oxtBase = breastfeeding
     ? term.oxt + 2 * sigmoid((pp - 1) / 0.5)
     : 1.5 + (term.oxt - 1.5) * Math.exp(-pp / 2)
-  const fsh = breastfeeding ? 0.3 + 3.5 * sigmoid((pp - 21) / 7) : 0.3 + 5 * sigmoid((pp - 21) / 5)
-  const lh = breastfeeding ? 0.3 + 1.5 * sigmoid((pp - 30) / 10) : 0.3 + 5 * sigmoid((pp - 35) / 6)
-  const gnrh = breastfeeding ? 3 + 3 * sigmoid((pp - 28) / 10) : 3 + 14 * sigmoid((pp - 28) / 7)
+  const fsh = breastfeeding ? 0.3 + 3.5 * recovery(pp, 21, 7) : 0.3 + 5 * recovery(pp, 21, 5)
+  const lh = breastfeeding ? 0.3 + 1.5 * recovery(pp, 30, 10) : 0.3 + 5 * recovery(pp, 35, 6)
+  const gnrh = breastfeeding ? 3 + 3 * recovery(pp, 28, 10) : 3 + 14 * recovery(pp, 28, 7)
 
   return { gnrh, fsh, lh, prl, oxt: oxtBase + laborOxytocin(d), e2, p4, hcg, endometrium: null, temperature: null }
 }

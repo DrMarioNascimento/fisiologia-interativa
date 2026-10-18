@@ -1,4 +1,4 @@
-import { type Mode, ovulationDay, PREGNANCY_TOTAL_DAYS, TERM_DAY } from './model'
+import { HCG_PEAK_DAY, type Mode, ovulationDay, PREGNANCY_TOTAL_DAYS, TERM_DAY } from './model'
 
 export type FeedbackType = 'negativa' | 'positiva' | 'estímulo'
 
@@ -39,16 +39,16 @@ export function landmarks(mode: Mode, cycleLength: number): Landmark[] {
     const ov = ovulationDay(cycleLength)
     return [
       { label: 'Menstruação', day: 0 },
-      { label: 'Pico de estradiol', day: ov - 1.2 },
+      { label: 'Pico de estradiol', day: ov - 1.8 },
       { label: 'Pico de LH', day: ov - 0.6 },
       { label: 'Pico de progesterona', day: ov + 7 },
       { label: 'Luteólise', day: cycleLength - 2 },
     ]
   }
   return [
-    { label: 'Ovulação', day: 13.5 },
+    { label: 'Ovulação', day: 14 },
     { label: 'Implantação', day: 22 },
-    { label: 'Pico de hCG', day: 66 },
+    { label: 'Pico de hCG', day: HCG_PEAK_DAY },
     { label: 'Transição lúteo-placentária', day: 56 },
     { label: 'Parto', day: TERM_DAY - 0.5 },
     { label: 'Puerpério', day: TERM_DAY + 14 },
@@ -83,7 +83,7 @@ function cyclePhase(day: number, cycleLength: number): PhaseInfo {
     return {
       id: 'folicular-media',
       title: 'Fase folicular média',
-      period: `Dias 6–${ov - 4}`,
+      period: `Dias 6–${Math.max(6, ov - 4)}`,
       text: [
         'Seleção do folículo dominante. Teoria das duas células: o LH estimula a teca a produzir androgênios e o FSH induz a aromatase da granulosa, que os converte em estradiol.',
         'Estradiol e inibina B reduzem o FSH; os folículos menos sensíveis sofrem atresia. O endométrio entra na fase proliferativa.',
@@ -100,9 +100,9 @@ function cyclePhase(day: number, cycleLength: number): PhaseInfo {
     return {
       id: 'folicular-tardia',
       title: 'Fase folicular tardia · pico de estradiol',
-      period: `Dias ${ov - 3}–${ov - 1}`,
+      period: `Dias ${Math.max(6, ov - 3)}–${ov - 1}`,
       text: [
-        'Estradiol acima de ~200 pg/mL mantido por ~36–48 h inverte a retroalimentação: neurônios de kisspeptina (região AVPV) aumentam a frequência do GnRH e a sensibilidade dos gonadotrofos.',
+        'Estradiol acima de ~200 pg/mL mantido por ~36–48 h inverte a retroalimentação: neurônios de kisspeptina (região AVPV) aumentam a frequência do GnRH e a sensibilidade dos gonadotrofos. O pico de estradiol precede o pico de LH em ~24–36 h.',
         'O folículo pré-ovulatório (de Graaf) atinge ~20 mm e o endométrio fica trilaminar.',
       ],
       feedback: [
@@ -119,7 +119,7 @@ function cyclePhase(day: number, cycleLength: number): PhaseInfo {
       title: 'Pico de LH e ovulação',
       period: `Dias ${ov}–${ov + 1}`,
       text: [
-        'O pico de LH ocorre ~36 h antes da ovulação: o oócito retoma a meiose I (até metáfase II), a granulosa luteiniza e enzimas proteolíticas rompem a parede folicular.',
+        'A ovulação ocorre ~36 h após o início do pico de LH (~10–12 h após o seu ápice): o oócito retoma a meiose I (até metáfase II), a granulosa luteiniza e enzimas proteolíticas rompem a parede folicular.',
         'Há um pico menor de FSH. O estradiol cai transitoriamente e a progesterona começa a subir. A ocitocina tem um discreto aumento e contribui para a contratilidade tubária e uterina.',
       ],
       feedback: [
@@ -169,7 +169,7 @@ function cyclePhase(day: number, cycleLength: number): PhaseInfo {
     title: 'Fase lútea tardia · luteólise',
     period: `Dias ${ov + 11}–${cycleLength}`,
     text: [
-      'Sem hCG, o corpo lúteo regride (luteólise) e vira corpo albicans. Estradiol e progesterona caem, a temperatura basal volta ao basal e o endométrio isquemia — o ciclo recomeça.',
+      'Sem hCG, o corpo lúteo regride (luteólise) e vira corpo albicans. Estradiol e progesterona caem, a temperatura basal volta ao basal e o endométrio entra em isquemia — o ciclo recomeça.',
       'A remoção da retroalimentação negativa permite que o FSH volte a subir já no fim deste ciclo, recrutando os folículos do próximo.',
     ],
     feedback: [
@@ -205,7 +205,7 @@ function pregnancyPhase(day: number, breastfeeding: boolean): PhaseInfo {
       title: 'Implantação e reconhecimento materno da gravidez',
       period: 'Semanas 3–5',
       text: [
-        'O blastocisto se implanta ~6–7 dias após a ovulação. O sinciciotrofoblasto secreta hCG, análogo do LH, que se liga ao receptor de LH/hCG e resgata o corpo lúteo da luteólise.',
+        'O blastocisto se implanta ~6–10 dias após a ovulação (geralmente 8–9). O sinciciotrofoblasto secreta hCG, análogo do LH, que se liga ao receptor de LH/hCG e resgata o corpo lúteo da luteólise.',
         'O β-hCG fica detectável no sangue ~8–10 dias após a ovulação e dobra a cada ~48 h. Não há menstruação: é o primeiro sinal clínico.',
       ],
       feedback: [
@@ -225,7 +225,7 @@ function pregnancyPhase(day: number, breastfeeding: boolean): PhaseInfo {
       text: shift
         ? [
             'Entre 7 e 9 semanas a placenta assume a produção de progesterona (transição lúteo-placentária). Antes disso, a retirada do corpo lúteo provoca abortamento; depois, não.',
-            'O hCG atinge o pico em 8–10 semanas (~100.000 mUI/mL) e passa a cair. Seu efeito tireotrófico pode reduzir o TSH e causar náuseas intensas (hiperêmese) quando muito alto.',
+            'O hCG atinge o pico em 8–11 semanas (~50.000–100.000 mUI/mL) e passa a cair. Por homologia com o TSH, estimula a tireoide e pode reduzir o TSH; níveis muito altos também se associam a náuseas e hiperêmese gravídica.',
           ]
         : [
             'O corpo lúteo gravídico, sustentado pelo hCG, é a principal fonte de progesterona, que mantém o endométrio transformado em decídua e o miométrio quiescente.',
@@ -246,7 +246,7 @@ function pregnancyPhase(day: number, breastfeeding: boolean): PhaseInfo {
       period: 'Semanas 14–27',
       text: [
         'O hCG se estabiliza em ~10–20% do pico. A unidade feto-placentária produz estrogênios: o feto fornece DHEA-S (adrenal fetal) e a placenta o aromatiza — principalmente em estriol.',
-        'Estrogênio estimula a hiperplasia dos lactotrofos (a hipófise aumenta até ~2×) e a prolactina sobe. A lactação ainda é bloqueada pela progesterona e estrogênio altos agindo na mama.',
+        'Estrogênio estimula a hiperplasia dos lactotrofos (a hipófise aumenta de volume, podendo crescer até ~1/3 ou mais) e a prolactina sobe. A lactação ainda é bloqueada pela progesterona e estrogênio altos agindo na mama.',
       ],
       feedback: [
         { type: 'estímulo', text: 'Estrogênio placentário → hiperplasia de lactotrofos → prolactina crescente.' },
