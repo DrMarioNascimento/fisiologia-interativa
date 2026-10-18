@@ -12,7 +12,7 @@
  <div class="titlebar"><a class="brand" href="../index.html#u-endocrino"><img src="../assets/avatar-prof-mario.webp" alt=""><span>Fisiologia Interativa<small>Educação Física · Unidade 06</small></span></a><a class="button" href="../index.html#u-endocrino">Voltar às unidades</a></div>
  <h1>Sistema Endócrino</h1><p class="subtitle">Do estímulo à resposta: explore a comunicação hormonal e as alças de retroalimentação.</p>
  <details class="panel objectives"><summary>Objetivos didáticos e como usar</summary><ol><li>Selecione um eixo e reconheça a origem, o hormônio e o tecido-alvo.</li><li>Comece no basal; preveja o efeito de uma mudança.</li><li>Altere uma variável e acompanhe o tempo, os indicadores e o gráfico.</li><li>Explique a resposta e compare retroalimentação negativa e positiva.</li></ol><p>Modelo conceitual simplificado, com tempo acelerado. As faixas são ilustrativas, variam com horário, idade e contexto; os padrões apresentados não constituem diagnóstico nem prescrição. A atividade de ocitocina e GH é representativa e não reproduz pulsos reais.</p></details>
-</header>
+<nav class="tabs" aria-label="Simuladores do Sistema Endócrino"><a class="button" href="ciclo/index.html?modo=ciclo">Ciclo menstrual</a><a class="button" href="ciclo/index.html?modo=gestacao">Gestação e puerpério</a></nav></header>
 <main class="shell" id="simulacao">
  <section class="panel toolbar" aria-label="Controles da simulação"><button id="play" class="primary">Iniciar</button><button id="pause">Pausar</button><button id="reset" class="danger">Resetar</button><button id="step">Avançar 1 dia</button><label>Velocidade <select id="speed"><option value="0.05">0,05 dia/s</option><option value="0.5" selected>0,5 dia/s</option><option value="2">2 dias/s</option></select></label><output id="clock">Dia 0,00</output><button id="export">Exportar janela CSV</button></section>
  <p id="model-limit" class="panel limit" role="status" hidden></p>
@@ -25,6 +25,6 @@
   <section class="panel"><h2>Indicadores do eixo</h2><div id="labs" class="labs"></div><p class="muted">Azul: abaixo da faixa ilustrativa · verde: dentro da faixa · laranja: acima da faixa. Efeitos e atividades relativas sem faixa não recebem classificação. Faixas gerais não ajustadas por idade, gestação ou lactação.</p></section>
  </div><aside class="panel controls"><h2>Variáveis e intervenções</h2><p class="muted">As alterações são aplicadas a todos os eixos; trocar a aba preserva o experimento.</p><p id="cross-axis" class="muted" hidden></p><button id="restore">Restaurar todas as variáveis</button><div id="sliders"></div></aside></div>
 </main>
-<footer class="shell"><p>Uso exclusivamente educacional — não recomendado para diagnóstico ou prescrição a alunos ou pacientes.</p><strong>Prof. Mário César Nascimento. PhD ©</strong></footer>
+<footer class="shell"><p>Uso exclusivamente educacional — não recomendado para diagnóstico ou prescrição a alunos ou pacientes.</p><strong>Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</strong></footer>
 <script type="module" src="app.js?v=20261018-audit3"></script>
 </body></html>
