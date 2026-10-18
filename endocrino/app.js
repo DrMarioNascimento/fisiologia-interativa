@@ -44,7 +44,7 @@ function renderValues(){
  }
  if(axis.id==='ocitocina') {
    const stimulus=params.labor>0||params.suckling>0;
-   result.title=stimulus&&params.magnocellularFn*params.stalk<.5?'Resposta de ocitocina comprometida':params.labor>0?(labs.contraction<10?'Estiramento cervical — resposta em desenvolvimento':'Reflexo de Ferguson — amplificação positiva'):params.suckling>0?(labs.milk<10?'Sucção — resposta em desenvolvimento':'Reflexo de ejeção do leite'):labs.oxytocin>1.1?'Estímulo removido — resposta em relaxamento':'Ocitocina em condição basal';
+   result.title=stimulus&&params.magnocellularFn*params.stalk<.5?'Resposta de ocitocina comprometida':params.labor>0?(labs.contraction<10?'Estiramento cervical — resposta em desenvolvimento':'Reflexo de Ferguson — amplificação positiva'):params.suckling>0?(labs.milk<10?'Sucção — resposta em desenvolvimento':'Reflexo de ejeção do leite'):labs.oxytocin>1.1?'Estímulo removido — resposta em relaxamento':labs.oxytocin<.9?'Recuperação da atividade basal de ocitocina':'Ocitocina em condição basal';
    result.points=[...(stimulus&&params.magnocellularFn*params.stalk<.5?['Há estímulo sensorial, mas a síntese/transporte foi reduzida; o estímulo não garante uma resposta hormonal preservada.']:[]),...axis.feedback.map(f=>f.text),'O indicador de ejeção representa potencial de ativação mioepitelial, não volume de leite. A ejeção efetiva exige leite disponível, que não é simulado.'];
  }
  const context=params.adenoFn<.2?'Contexto do experimento: falência adeno-hipofisária global (pan-hipopituitarismo anterior). Compare tireoide, adrenal, gônadas, GH e prolactina.':params.stalk<.1?'Contexto do experimento: interrupção da haste hipofisária. Compare os déficits dos eixos e a perda da inibição dopaminérgica da prolactina.':'';
