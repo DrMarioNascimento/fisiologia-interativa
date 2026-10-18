@@ -341,6 +341,7 @@ window.FI_DADOS = {
      "href": "endocrino/index.html"
     },
     {
+
      "t": "Ciclo menstrual e controle hormonal",
      "cat": "Sistema Endócrino",
      "obj": "Relacionar GnRH, FSH, LH, estradiol e progesterona às fases ovarianas e endometriais; comparar os momentos dos picos e explorar uma hipótese de exercício agudo.",
@@ -351,6 +352,12 @@ window.FI_DADOS = {
      "cat": "Sistema Endócrino",
      "obj": "Acompanhar hCG, transição lúteo-placentária, prolactina e ocitocina; comparar o puerpério com e sem amamentação.",
      "href": "endocrino/ciclo/index.html?modo=gestacao"
+  },
+  {
+  "t": "Tireoide: TRH, TSH, T4 e T3",
+  "cat": "Sistema Endócrino",
+  "obj": "Explorar feedback, Hashimoto, hipotireoidismo primário e central, Graves e reposição de T4.",
+  "href": "endocrino/thyroid.html"
     }
    ],
    "sala": null
