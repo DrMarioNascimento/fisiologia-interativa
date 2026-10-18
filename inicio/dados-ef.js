@@ -345,6 +345,12 @@ window.FI_DADOS = {
      "cat": "Sistema Endócrino",
      "obj": "Acompanhar GnRH, FSH, LH, prolactina, ocitocina, estradiol, progesterona e hCG ao longo do ciclo menstrual e da gestação; comparar respostas agudas ao exercício de baixa, moderada e alta intensidade.",
      "href": "endocrino/ciclo.html"
+    },
+    {
+     "t": "Tireoide: TRH, TSH, T4 e T3",
+     "cat": "Sistema Endócrino",
+     "obj": "Explorar feedback, Hashimoto, hipotireoidismo primário e central, Graves e reposição de T4.",
+     "href": "endocrino/thyroid.html"
     }
    ],
    "sala": null
