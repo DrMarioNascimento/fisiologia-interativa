@@ -1,4 +1,5 @@
-import { Baby, CalendarDays, Pause, Play, RotateCcw } from 'lucide-react'
+import { Activity, Baby, CalendarDays, Pause, Play, RotateCcw } from 'lucide-react'
+import { EXERCISE } from '@/lib/cycle/exercise'
 import { Button } from '@/components/ui/button'
 import { CYCLE_SPEEDS, type CycleSim } from '@/hooks/use-cycle-sim'
 import { formatTime, type HormoneId, type Mode, type Snapshot } from '@/lib/cycle/model'
@@ -66,27 +67,52 @@ export function CycleHeader({ sim, snap, trends, monitor }: Props) {
           </div>
         </div>
 
-        <div role="tablist" aria-label="Modo do simulador" className="grid grid-cols-2 gap-1 rounded-xl bg-muted p-1">
-          {MODES.map(({ id, label, Icon }) => {
-            const active = sim.mode === id
-            return (
-              <button
-                key={id}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                onClick={() => !active && sim.setMode(id)}
-                className={cn(
-                  'flex h-11 items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors',
-                  active ? 'bg-foreground text-background shadow-sm' : 'text-muted-foreground hover:text-foreground',
-                )}
-              >
-                <Icon className="size-4" aria-hidden />
-                {label}
-              </button>
-            )
-          })}
-        </div>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={sim.mode === 'gestacao'}
+          aria-label={`Modo: ${sim.mode === 'ciclo' ? 'Ciclo menstrual' : 'Gestação'}. Toque para alternar`}
+          onClick={() => sim.setMode(sim.mode === 'ciclo' ? 'gestacao' : 'ciclo')}
+          className="relative grid h-12 w-full grid-cols-2 rounded-xl bg-muted p-1 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <span
+            aria-hidden
+            className={cn(
+              'absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-lg bg-foreground shadow-sm transition-transform duration-300 motion-reduce:transition-none',
+              sim.mode === 'gestacao' && 'translate-x-full',
+            )}
+          />
+          {MODES.map(({ id, label, Icon }) => (
+            <span
+              key={id}
+              className={cn(
+                'relative flex items-center justify-center gap-2 text-sm font-medium transition-colors',
+                sim.mode === id ? 'text-background' : 'text-muted-foreground',
+              )}
+            >
+              <Icon className="size-4" aria-hidden />
+              {label}
+            </span>
+          ))}
+        </button>
+
+        {sim.exercise && (
+          <div className="flex items-center justify-between gap-2 rounded-lg bg-primary px-3 py-1.5 text-primary-foreground">
+            <p className="flex min-w-0 items-center gap-2 text-xs font-medium">
+              <Activity className="size-3.5 shrink-0" aria-hidden />
+              <span className="truncate">
+                Exercício de intensidade {EXERCISE[sim.exercise].label.toLowerCase()} · valores pós-treino
+              </span>
+            </p>
+            <button
+              type="button"
+              onClick={() => sim.setExercise(null)}
+              className="shrink-0 rounded px-1.5 py-0.5 text-xs font-semibold underline-offset-2 hover:underline"
+            >
+              Repouso
+            </button>
+          </div>
+        )}
 
         <div className="grid grid-cols-3 gap-2" aria-label="Hormônios principais">
           {monitor.map((id) => (

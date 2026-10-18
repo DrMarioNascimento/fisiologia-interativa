@@ -14,7 +14,9 @@ import {
   TERM_DAY,
 } from '@/lib/cycle/model'
 import { describePhase } from '@/lib/cycle/phases'
+import { applyExercise } from '@/lib/cycle/exercise'
 import { CycleControls } from './cycle-controls'
+import { ExercisePanel } from './exercise-panel'
 import { CycleHeader } from './cycle-header'
 import { HormoneCharts } from './hormone-charts'
 import { type Trend, trendOf } from './hormone-chip'
@@ -25,8 +27,9 @@ import { PhaseTimeline } from './phase-timeline'
 export function CycleSimulator() {
   const sim = useCycleSim()
   const settings = { mode: sim.mode, cycleLength: sim.cycleLength, breastfeeding: sim.breastfeeding }
-  const snap = snapshotAt(sim.day, settings)
-  const before = snapshotAt(Math.max(0, sim.day - (sim.mode === 'ciclo' ? 0.25 : 1)), settings)
+  const rest = snapshotAt(sim.day, settings)
+  const snap = sim.exercise ? applyExercise(rest, sim.exercise) : rest
+  const before = sim.exercise ? rest : snapshotAt(Math.max(0, sim.day - (sim.mode === 'ciclo' ? 0.25 : 1)), settings)
   const ids = sim.mode === 'ciclo' ? CYCLE_HORMONES : PREGNANCY_HORMONES
   const trends = Object.fromEntries(PREGNANCY_HORMONES.map((id) => [id, trendOf(snap[id], before[id])])) as Record<
     HormoneId,
@@ -59,6 +62,7 @@ export function CycleSimulator() {
           <PhaseCard phase={phase} />
         </div>
         <aside className="flex flex-col gap-4 lg:sticky lg:top-52 lg:col-start-2 lg:row-span-5 lg:row-start-1 lg:max-h-[calc(100dvh-14rem)] lg:overflow-y-auto">
+          <ExercisePanel sim={sim} rest={rest} active={snap} ids={ids} />
           <CycleControls sim={sim} />
           <section aria-labelledby="all-title" className="rounded-xl border bg-card p-4">
             <h2 id="all-title" className="text-base font-semibold">

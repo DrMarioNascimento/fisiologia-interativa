@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import type { ExerciseLevel } from '@/lib/cycle/exercise'
 import { type Mode, PREGNANCY_TOTAL_DAYS, totalDays } from '@/lib/cycle/model'
 
 export const CYCLE_SPEEDS: Record<Mode, { label: string; rate: number }[]> = {
@@ -27,6 +28,7 @@ export function useCycleSim() {
   const [speedIndex, setSpeedIndex] = useState(0)
   const [cycleLength, setCycleLengthState] = useState(28)
   const [breastfeeding, setBreastfeeding] = useState(true)
+  const [exercise, setExerciseState] = useState<ExerciseLevel | null>(null)
 
   const total = totalDays({ mode, cycleLength })
 
@@ -53,7 +55,13 @@ export function useCycleSim() {
   const setMode = useCallback((m: Mode) => {
     setModeState(m)
     setClock({ day: 0, cycle: 1 })
+    setExerciseState(null)
     setRunning(true)
+  }, [])
+
+  const setExercise = useCallback((level: ExerciseLevel | null) => {
+    setExerciseState(level)
+    if (level) setRunning(false)
   }, [])
 
   const setCycleLength = useCallback((len: number) => {
@@ -72,10 +80,14 @@ export function useCycleSim() {
       setRunning(true)
       return
     }
+    if (!running) setExerciseState(null)
     setRunning((r) => !r)
-  }, [finished])
+  }, [finished, running])
 
-  const reset = useCallback(() => setClock({ day: 0, cycle: 1 }), [])
+  const reset = useCallback(() => {
+    setClock({ day: 0, cycle: 1 })
+    setExerciseState(null)
+  }, [])
 
   return {
     mode,
@@ -86,7 +98,9 @@ export function useCycleSim() {
     speedIndex,
     cycleLength,
     breastfeeding,
+    exercise,
     setMode,
+    setExercise,
     setCycleLength,
     setBreastfeeding,
     setSpeed: setSpeedIndex,

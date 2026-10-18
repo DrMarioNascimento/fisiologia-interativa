@@ -1,4 +1,4 @@
-import { Baby, SlidersHorizontal } from 'lucide-react'
+import { Baby, CalendarDays, SlidersHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
 import type { CycleSim } from '@/hooks/use-cycle-sim'
@@ -78,6 +78,10 @@ export function CycleControls({ sim }: { sim: CycleSim }) {
             Muda prolactina, ocitocina e o retorno do GnRH, FSH e LH após o parto. O tempo é contado em semanas desde a data
             da última menstruação (DUM); a ovulação ocorre na semana 2.
           </p>
+          <Button variant="outline" className="mt-2 h-11 w-full" onClick={() => sim.setMode('ciclo')}>
+            <CalendarDays className="size-4" aria-hidden />
+            Voltar ao ciclo menstrual
+          </Button>
         </div>
       )}
     </section>
