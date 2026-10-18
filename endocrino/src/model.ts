@@ -146,6 +146,7 @@ const INITIAL_STATE: SimState = {
 const BODY_SOLUTE = 285 * 42
 const OSMOLAR_LOAD = 800
 const INSENSIBLE_LOSS = 0.8
+export const WATER_LIMITS = { min: 28, max: 60 } as const
 export const DT = 0.005
 
 const clamp = (x: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, x))
@@ -163,7 +164,15 @@ export function waterFlows(s: SimState, p: Params) {
     Math.min(p.waterAccess, 1) *
     (0.6 * Math.max(0, posm - 288) + 0.6 * Math.max(0, 1 - p.bloodVolume))
   const intake = p.waterAccess * 2 * lowOsmBrake + thirst
-  return { posm, urine, intake }
+  const balance = intake - urine - INSENSIBLE_LOSS
+  return { posm, urine, intake, insensible: INSENSIBLE_LOSS, balance }
+}
+
+/** The bounded water compartment must never be presented as an equilibrium. */
+export function waterLimitReached(s: SimState, p: Params) {
+  const { balance } = waterFlows(s, p)
+  return (s.tbw <= WATER_LIMITS.min + 1e-8 && balance < 0) ||
+    (s.tbw >= WATER_LIMITS.max - 1e-8 && balance > 0)
 }
 
 export function step(s: SimState, p: Params, dt = DT): SimState {
@@ -183,9 +192,10 @@ export function step(s: SimState, p: Params, dt = DT): SimState {
   // A damaged pituitary cannot mount the full compensatory TSH rise, so its
   // feedback gain is capped by the remaining thyrotrope reserve.
   const thyrotropeReserve = A * p.thyrotropeFn
-  const feedbackGain = Math.min(F ** -5, 1 + 79 * Math.min(1, thyrotropeReserve) ** 2)
+  const centralThyroidReserve = thyrotropeReserve * (0.1 + 0.9 * H)
+  const feedbackGain = Math.min(F ** -5, 1 + 79 * Math.min(1, centralThyroidReserve) ** 2)
   const tshRaw =
-    thyrotropeReserve * (0.15 + 0.85 * trhPortal ** 0.7) * feedbackGain * cortOnTsh
+    thyrotropeReserve * (0.05 + 0.95 * trhPortal ** 0.7) * feedbackGain * cortOnTsh * (2 / (1 + s.sst * H))
   const tshT = (80 * tshRaw) / (80 + tshRaw)
   const iodineFactor = (1.3 * p.iodine) / (0.3 + p.iodine)
   const stim = (s.tsh + p.trab) ** 0.8
@@ -199,12 +209,14 @@ export function step(s: SimState, p: Params, dt = DT): SimState {
   const crhT = p.stress * C ** -0.7
   const crhPortal = s.crh * H
   const adhSynergy = clamp(1 + 0.25 * (s.adh / 2 - 1), 0.75, 2)
+  const corticotropeReserve = A * p.corticotropeFn * (0.1 + 0.9 * H)
+  const cortisolFeedback = Math.min(C ** -1.2, 1 + 39 * Math.min(1, corticotropeReserve) ** 2)
   const acthT = Math.min(
     40,
-    A * p.corticotropeFn * (0.1 + 0.9 * crhPortal ** 0.8) * adhSynergy * C ** -1.2 +
+    A * p.corticotropeFn * (0.1 + 0.9 * crhPortal ** 0.8) * adhSynergy * cortisolFeedback +
       p.ectopicActh,
   )
-  const acthDrive = floor(s.acth) ** 0.8
+  const acthDrive = Math.max(0, s.acth) ** 0.8
   const cortEndoT = (p.adrenalFn * s.adrenalMass * 2 * acthDrive) / (1 + acthDrive)
   // A destroyed cortex cannot hypertrophy in response to ACTH.
   const massT = clamp(s.acth ** 0.5, 0.15, 0.5 + 2.5 * Math.min(1, p.adrenalFn))
@@ -228,7 +240,7 @@ export function step(s: SimState, p: Params, dt = DT): SimState {
 
   // GH / IGF-1
   const igf = floor(s.igf1)
-  const sstT = p.somatostatinTone * igf ** 0.5
+  const sstT = p.somatostatinTone * igf ** 0.5 * ((1 + 0.2 * s.gh) / 1.2)
   const ghrhT = p.ghrhDrive * igf ** -0.3
   const t3OnGh = clamp(floor(s.t3) ** 0.4, 0.3, 1.5)
   const cortOnGh = C > 1.5 ? (C / 1.5) ** -0.6 : 1
@@ -246,7 +258,8 @@ export function step(s: SimState, p: Params, dt = DT): SimState {
   const igfT = p.liverIgf * s.gh ** 0.6
 
   // Prolactina
-  const daT = Math.min(5, p.dopamineTone * floor(s.prl) ** 0.5)
+  // Suckling inhibits TIDA dopamine secretion despite the short PRL feedback.
+  const daT = Math.min(5, p.dopamineTone * floor(s.prl) ** 0.5) / (1 + 8 * p.suckling)
   const daEffective = s.dopamine * H * (1 - p.d2Blockade)
   const trhOnPrl = 0.7 + 0.3 * trhPortal ** 0.6
   const prlT = Math.min(
@@ -257,7 +270,7 @@ export function step(s: SimState, p: Params, dt = DT): SimState {
   // Neuro-hipófise
   const { posm, urine, intake } = waterFlows(s, p)
   const volumeFactor = Math.exp(4 * (1 - p.bloodVolume))
-  const magno = p.magnocellularFn * (0.15 + 0.85 * H)
+  const magno = p.magnocellularFn * H
   const baroreceptorAdh = 25 * Math.max(0, 1 - p.bloodVolume) ** 1.5
   const adhT = Math.min(
     60,
@@ -266,7 +279,7 @@ export function step(s: SimState, p: Params, dt = DT): SimState {
   )
   const effectiveAdh = s.adh * p.renalAdhSensitivity
   const uosmT = 50 + 1150 * (1 - Math.exp(-effectiveAdh / 2.5))
-  const tbw = clamp(s.tbw + (intake - urine - INSENSIBLE_LOSS) * dt, 28, 60)
+  const tbw = clamp(s.tbw + (intake - urine - INSENSIBLE_LOSS) * dt, WATER_LIMITS.min, WATER_LIMITS.max)
   const otT = Math.min(40, magno * (1 + 8 * p.suckling + p.labor * (2 + 20 * s.contraction)))
   const contractionT = Math.min(1, (p.labor * s.oxytocin) / 12)
 
@@ -302,9 +315,15 @@ export function step(s: SimState, p: Params, dt = DT): SimState {
 }
 
 export function advance(s: SimState, p: Params, days: number) {
+  if (!Number.isFinite(days) || days < 0) throw new RangeError('Tempo de avanço inválido')
   let next = s
-  const steps = Math.round(days / DT)
-  for (let i = 0; i < steps; i++) next = step(next, p)
+  const steps = Math.floor(days / DT)
+  for (let i = 0; i < steps; i++) {
+    if (waterLimitReached(next, p)) return next
+    next = step(next, p)
+  }
+  const remainder = days - steps * DT
+  if (remainder > 1e-12 && !waterLimitReached(next, p)) next = step(next, p, remainder)
   return next
 }
 

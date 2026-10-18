@@ -1,0 +1,16 @@
+name: Testes do Sistema Endócrino
+on:
+  push:
+    paths: ['endocrino/**', '.github/workflows/endocrino-tests.yml']
+  pull_request:
+    paths: ['endocrino/**', '.github/workflows/endocrino-tests.yml']
+jobs:
+  endocrino:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verificar modelo, cenários e controles
+        run: node --test endocrino/tests.mjs

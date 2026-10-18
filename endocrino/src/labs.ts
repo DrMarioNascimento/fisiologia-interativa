@@ -32,6 +32,7 @@ export type LabId =
   | 'urine'
   | 'intake'
   | 'tbw'
+  | 'waterBalance'
   | 'oxytocin'
   | 'contraction'
   | 'milk'
@@ -87,13 +88,14 @@ export const LAB_DEFS: Record<LabId, LabDef> = {
   urine: { label: 'Diurese', short: 'Diurese', unit: 'L/dia', low: 0.8, high: 2.5, decimals: 1, kind: 'efeito' },
   intake: { label: 'Ingestão hídrica', short: 'Ingestão', unit: 'L/dia', low: 1, high: 3, decimals: 1, kind: 'efeito' },
   tbw: { label: 'Água corporal total', short: 'ACT', unit: 'L', low: 39, high: 45, decimals: 1, kind: 'efeito' },
-  oxytocin: { label: 'Ocitocina', short: 'OT', unit: 'pg/mL', low: 0.8, high: 5, decimals: 1, kind: 'lab' },
+  waterBalance: { label: 'Balanço hídrico (inclui perdas insensíveis)', short: 'Balanço', unit: 'L/dia', decimals: 2, kind: 'efeito' },
+  oxytocin: { label: 'Ocitocina (atividade relativa)', short: 'OT', unit: '× basal', decimals: 2, kind: 'relativo' },
   contraction: { label: 'Contração uterina', short: 'Útero', unit: '%', decimals: 0, kind: 'efeito' },
-  milk: { label: 'Ejeção de leite', short: 'Leite', unit: '%', decimals: 0, kind: 'efeito' },
+  milk: { label: 'Potencial de ejeção (ativação mioepitelial)', short: 'Ejeção', unit: '%', decimals: 0, kind: 'efeito' },
 }
 
 export function computeLabs(s: SimState, p: Params): Labs {
-  const { urine, intake } = waterFlows(s, p)
+  const { urine, intake, balance } = waterFlows(s, p)
   const posm = plasmaOsm(s)
   return {
     trh: s.trh,
@@ -126,15 +128,19 @@ export function computeLabs(s: SimState, p: Params): Labs {
     prl: s.prl * 12,
 
     posm,
+    // Illustrative relation Posm ≈ 2 × Na + 10: glucose/urea held constant.
     na: (posm - 10) / 2,
     adh: s.adh,
     uosm: s.uosm,
     urine,
     intake,
     tbw: s.tbw,
-    oxytocin: s.oxytocin * 1.5,
+    waterBalance: balance,
+    oxytocin: s.oxytocin,
     contraction: s.contraction * 100,
-    milk: Math.min(1, (p.suckling * s.oxytocin) / 6) * 100,
+    // Relative target activation, not milk volume. It follows circulating OT,
+    // including the decay after suckling stops; milk availability is not modeled.
+    milk: Math.min(1, Math.max(0, s.oxytocin - 1) / 5) * 100,
   }
 }
 

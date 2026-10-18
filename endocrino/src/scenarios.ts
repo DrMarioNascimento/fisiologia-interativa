@@ -210,9 +210,9 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     id: 'di-restricao',
-    name: 'DI central + sem acesso à água',
+    name: 'DI central + acesso restrito à água',
     axis: 'neuro',
-    description: 'Sem sede efetiva, a poliúria leva rapidamente à hipernatremia.',
+    description: 'Acesso restrito limita a ingestão compensatória e favorece hipernatremia; não representa ausência total de água.',
     params: { magnocellularFn: 0.04, waterAccess: 0.25 },
   },
   {
@@ -231,9 +231,9 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     id: 'hemorragia',
-    name: 'Hemorragia (hipovolemia)',
+    name: 'Hipovolemia sustentada (estímulo de volume)',
     axis: 'neuro',
-    description: 'Barorreceptores estimulam ADH mesmo com osmolalidade normal.',
+    description: 'Volume efetivo imposto em 78% estimula ADH. O modelo não retira sangue nem simula a recuperação do volume sanguíneo.',
     params: { bloodVolume: 0.78 },
   },
   {
