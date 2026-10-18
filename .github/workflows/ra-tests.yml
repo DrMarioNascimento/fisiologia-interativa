@@ -1,0 +1,17 @@
+name: Testes de realidade aumentada
+on:
+  push:
+    branches: [main]
+    paths: ['ra/**', '.github/workflows/ra-tests.yml']
+  pull_request:
+    paths: ['ra/**', '.github/workflows/ra-tests.yml']
+  workflow_dispatch:
+jobs:
+  ra:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm --prefix ra test

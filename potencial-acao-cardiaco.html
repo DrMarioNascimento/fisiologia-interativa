@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Potencial de Ação do Cardiomiócito Ventricular</title>
+<link rel="icon" href="brand/orientador.webp">
+<link rel="stylesheet" href="tutor-widget.css?v=4">
+  <style>
+    :root{
+      --bg:#ffffff; --panel:#fbfbfd; --line:#d9dce3; --text:#1f2937; --muted:#6b7280;
+      --phase:#70bcff; --curve-primary:#111827; --na:#70bcff; --k:#ff8990; --ligand:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;padding:22px;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
+    h1{margin:0 0 8px;font-size:30px;text-align:center}
+    .subtitle{margin:0 0 12px;text-align:center;color:var(--muted);font-size:16px}
+    .controls{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin:0 auto 8px;max-width:1440px}
+    .mode-line{max-width:1440px;margin:0 auto 14px;text-align:right;min-height:22px}
+    .mode-badge{display:inline-block;font-size:12px;color:var(--muted);background:#fff;border:1px solid #e1e5ec;border-radius:999px;padding:4px 10px}
+    button{border:1px solid #b9c0cc;border-radius:10px;padding:10px 14px;font-size:15px;background:#fff;cursor:pointer}
+    .primary{border-color:#96b7ff}
+    label{display:flex;gap:8px;align-items:center;font-size:14px;background:#fff;border:1px solid #e1e5ec;border-radius:10px;padding:9px 12px}
+    input[type="range"]{width:140px}
+    .stage-map{max-width:1440px;margin:0 auto 12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+    .stage-track{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+    .stage-node{min-height:84px;padding:10px 12px;border-radius:14px;border:2px solid #d7dce5;background:#fff}
+    .stage-num{display:inline-flex;width:24px;height:24px;align-items:center;justify-content:center;border-radius:999px;background:#eef2ff;color:#1e3a8a;font-size:12px;font-weight:700;margin-bottom:8px}
+    .stage-name{font-size:14px;font-weight:700;line-height:1.2}
+    .stage-mini{margin-top:6px;color:var(--muted);font-size:12px;line-height:1.3}
+    .status-grid{display:grid;grid-template-columns:1.15fr .9fr .95fr;gap:12px;max-width:1440px;margin:0 auto 14px}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:126px;position:relative;overflow:hidden}
+    .card::before{content:"";position:absolute;inset:0 auto 0 0;width:8px;background:var(--phase)}
+    .card-title{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+    .phase{font-size:26px;font-weight:700;line-height:1.12;padding-left:4px;min-height:86px;display:flex;flex-direction:column;justify-content:flex-start}
+    .phase small{display:block;margin-top:6px;font-size:14px;color:var(--muted);font-weight:400}
+    .layout{display:grid;grid-template-columns:minmax(560px,1.12fr) minmax(520px,.95fr);gap:16px;max-width:1440px;margin:0 auto}
+    .panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:12px}
+    canvas{width:100%;height:auto;display:block;background:#fff;border:1px solid #e5e7eb;border-radius:12px}
+    .legend{max-width:1440px;margin:14px auto 0;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px 28px;line-height:1.55;font-size:15px}
+    .signature{text-align:right;color:#4b5563;font-size:14px;margin-top:18px;border-top:1px solid #e5e7eb;padding-top:10px}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--line);margin-left:6px;color:var(--muted);background:#fff}
+    @media (max-width:1180px){.layout{grid-template-columns:1fr}.status-grid{grid-template-columns:1fr}.stage-track{grid-template-columns:1fr 1fr}}
+  
+.graph-dot{
+  filter: drop-shadow(0 0 6px rgba(37,99,235,.6));
+  animation: dotPulse 1.6s ease-in-out infinite;
+}
+@keyframes dotPulse{
+  0%{filter: drop-shadow(0 0 4px rgba(37,99,235,.4));}
+  50%{filter: drop-shadow(0 0 12px rgba(37,99,235,.9));}
+  100%{filter: drop-shadow(0 0 4px rgba(37,99,235,.4));}
+}
+
+.pro-graph-note{font-size:13px;color:#64748b;text-align:right;max-width:1440px;margin:4px auto 0;padding-right:8px}
+
+
+/* === PADRÃO VISUAL CONSOLIDADO — PROF. MÁRIO === */
+:root{
+  --shadow:0 10px 24px rgba(18,42,66,.10);
+  --soft-shadow:0 4px 14px rgba(15,23,42,.08);
+  --radius:18px;
+}
+body{
+  font-family:Inter,"Segoe UI",Arial,Helvetica,sans-serif;
+  background:linear-gradient(180deg,#f8fbff 0%,#eef4fb 100%);
+  color:#17324d;
+}
+h1{font-size:32px;letter-spacing:-.02em;color:#17324d;}
+.subtitle{font-size:16px;color:#5c7086;}
+.controls,.stage-map,.panel,.legend,.card{
+  background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
+  border:1px solid #d7e1ec;
+  box-shadow:var(--shadow);
+}
+.controls{border-radius:18px;}
+button{
+  border:1px solid #c7ceda;
+  border-radius:14px;
+  padding:10px 16px;
+  font-size:14px;
+  font-weight:800;
+  background:linear-gradient(180deg,#ffffff 0%,#eef4ff 100%);
+  color:#17324d;
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+button:hover{transform:translateY(-1px);box-shadow:var(--soft-shadow);filter:brightness(1.03);}
+button.primary{
+  border-color:#8fb3ff;
+  background:linear-gradient(135deg,#2f80ed,#57a7ff);
+  color:#fff;
+}
+label{
+  border:1px solid #d7e1ec;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 1px 4px rgba(18,42,66,.05);
+  font-weight:700;
+}
+.mode-badge{
+  border:1px solid #d7e1ec;
+  box-shadow:0 1px 4px rgba(18,42,66,.05);
+  font-weight:800;
+}
+.card{
+  min-height:142px;
+  height:142px;
+  border-radius:18px;
+  isolation:isolate;
+}
+.card::before{
+  width:9px;
+  top:10px;
+  bottom:10px;
+  inset:10px auto 10px -4px;
+  border-radius:999px;
+  background:linear-gradient(180deg,var(--phase),color-mix(in srgb,var(--phase) 68%,#ffffff 32%));
+  box-shadow:0 0 10px color-mix(in srgb,var(--phase) 42%,transparent);
+}
+.card::after{
+  content:"";
+  position:absolute;
+  right:-54px;
+  bottom:-54px;
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  background:radial-gradient(circle at center,color-mix(in srgb,var(--phase) 20%,transparent) 0%,rgba(255,255,255,0) 68%);
+  opacity:.55;
+  pointer-events:none;
+}
+.card-title{font-weight:900;color:#5c7086;}
+.phase{min-height:96px;font-size:25px;position:relative;z-index:1;overflow:hidden;}
+.phase small{font-size:14px;line-height:1.28;color:#5c7086;}
+.stage-node{
+  border-radius:16px;
+  box-shadow:0 1px 5px rgba(18,42,66,.06);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+.stage-node:hover{transform:translateY(-1px);}
+.panel{border-radius:18px;}
+canvas{
+  border:1px solid #d7e1ec;
+  border-radius:16px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 8px 18px rgba(18,42,66,.05);
+}
+.legend{border-radius:18px;text-align:justify;text-justify:inter-word;}
+.signature{
+  color:#5c7086;
+  font-weight:700;
+}
+.pill{
+  border-radius:999px;
+  font-weight:800;
+  background:#ffffff;
+  border-color:#d7e1ec;
+}
+
+/* Modulação farmacológica com glow por opção selecionada */
+#pharmControls strong{color:#c4d8e6;font-weight:900;}
+#pharmControls input[name="pharm"]{display:none;}
+#pharmControls label{
+  position:relative;
+  cursor:pointer;
+  transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+  user-select:none;
+}
+#pharmControls label:hover{transform:translateY(-1px);box-shadow:var(--soft-shadow);}
+#pharmControls label:has(input[name="pharm"]:checked){
+  border-color:var(--pharm-color,#2f80ed);
+  background:linear-gradient(180deg,#ffffff 0%, color-mix(in srgb,var(--pharm-color,#2f80ed) 10%,#ffffff 90%) 100%);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--pharm-color,#2f80ed) 20%,transparent),
+             0 0 18px color-mix(in srgb,var(--pharm-color,#2f80ed) 24%,transparent);
+  color:#17324d;
+}
+#pharmControls label:has(input[value="normal"]:checked){--pharm-color:#2f80ed;}
+#pharmControls label:has(input[value="lido"]:checked){--pharm-color:#1f78b4;}
+#pharmControls label:has(input[value="flec"]:checked){--pharm-color:#60d2c5;}
+#pharmControls label:has(input[value="vera"]:checked){--pharm-color:#f4e76a;}
+#pharmControls label:has(input[value="amio"]:checked){--pharm-color:#ff8990;}
+
+.pro-graph-note{font-weight:700;color:#5c7086;}
+
+</style>
+<style>:root{color-scheme:dark;--bg:#0a1722;--panel:#142a3a;--line:#385466;--text:#dcebf5;--ink:#dcebf5;--muted:#a0b8c9;--na:#70bcff;--k:#ff8990;--ca:#f4e76a;--curve-primary:#e0edf5}
+*{box-sizing:border-box}body{margin:0;padding:24px;background:radial-gradient(ellipse at 15% 0,#1c3b4c,transparent 60%),#091620;color:var(--text);font-family:Segoe UI,Arial,sans-serif}h1{color:#e5f2fa;font-size:clamp(24px,3vw,34px);letter-spacing:-.035em;line-height:1.2}.subtitle,.title p{color:var(--muted);line-height:1.6}.app{padding:0;max-width:1400px;margin:auto}.controls,.scenario-row,.timeline,.card,.panel,.legend,.stage-map,.topbar{background:linear-gradient(145deg,#223b4d,#112432);border:1px solid #385466;box-shadow:inset 0 1px 0 #ffffff20,0 10px 25px #0005;border-radius:19px}.controls,.status-grid,.layout,.legend,.timeline,.stage-map,.mode-line,.scenario-row,.pro-graph-note{max-width:1400px;margin-left:auto;margin-right:auto}.controls{padding:15px;gap:12px;display:flex;flex-wrap:wrap}.controls label,.controls .pill,.scenario-label{min-height:46px;padding:10px 12px;border:1px solid #3b576b;background:#102635;color:#c7dce9;border-radius:12px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}.controls button,button{min-height:46px;border:1px solid #638398;border-radius:12px;padding:11px 16px;color:#eaf8ff;background:linear-gradient(165deg,#55778e,#2d4a60 50%,#193345);box-shadow:inset 0 2px 1px #ffffff50,inset 0 -2px 1px #0006,0 4px 0 #06111a,0 7px 10px #0006;cursor:pointer;font-size:14px}button.primary,#playBtn{background:linear-gradient(#559886,#255c53);border-color:#8fbfb1}button:active{transform:translateY(3px);box-shadow:inset 0 2px 4px #0006,0 1px 0 #06111a}button:focus-visible,input:focus-visible,.figure-scroll:focus-visible{outline:3px solid #8de0d3;outline-offset:4px}input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:#75c9b4;flex:none}input[type=range]{appearance:none;width:140px;max-width:100%;height:12px;border-radius:20px;background:#061521;border:1px solid #58798d;box-shadow:inset 0 3px 5px #0009,0 1px 0 #fff2;margin:12px 0}input[type=range]::-webkit-slider-thumb{appearance:none;width:29px;height:29px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:inset 0 1px 2px #fff,0 3px 0 #07111b,0 6px 9px #0008}input[type=range]::-moz-range-thumb{width:27px;height:27px;border:1px solid #d4e9f4;border-radius:50%;background:radial-gradient(circle at 30% 20%,#fff,#bfddea 30%,#5a8098 65%,#173447);box-shadow:0 4px 7px #0008}.status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.status-grid .card{height:auto;min-height:155px;overflow:visible;padding:17px 20px}.card .phase{font-size:23px;min-height:0;color:#dcebf5;line-height:1.3}.card .phase small,.card-title{color:#a5bdce;line-height:1.5}.card-title{font-size:11px}.mode-badge,.pill{background:#112a3a;border-color:#385466;color:#b9cedc}.layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.layout .panel{min-width:0;overflow:hidden;padding:12px;height:auto}.panel canvas{display:block;max-width:100%;width:100%;height:auto;background:#0d2030;border:1px solid #37566a;border-radius:12px}.legend{color:#c4d7e4;line-height:1.75;text-align:left;padding:22px;font-size:15px}.signature,.mini-note,.pro-graph-note{color:#9eb7c8}.timeline-step,.stage-chip,.stage-item{background:#142c3c;color:#a9c4d7;border-color:#3b596e}.timeline-step.active,.stage-chip.active,.stage-item.active,.pharm-label.active{background:#20483f!important;color:#eafff7!important;border-color:#7dc5ad!important;box-shadow:inset 4px 0 #80c5af!important}.scenario-label:has(input:checked),.controls label:has(input[type=radio]:checked){background:#20483f;border-color:#7dc5ad}.ion-key{max-width:1400px;margin:16px auto;display:flex;gap:10px;flex-wrap:wrap}.ion-key span{padding:7px 10px;border:1px solid #385466;border-radius:8px;background:#102838;font-size:13px}.figure-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px;flex-wrap:wrap;color:#bfd7e5;font-size:13px}.figure-toolbar button{font-size:12px;min-height:44px}.figure-scroll{max-width:100%;overflow:auto;overscroll-behavior-x:contain;border-radius:12px}.figure-hint{display:none;color:#a4c0d1;font-size:12px;line-height:1.5;margin:8px 0}.figure-scroll.detail canvas{width:var(--figure-width);max-width:none}.card#valueCard .phase,.card#mvCard .phase{color:#e0edf5}.card#valueCard,.card#mvCard{--phase:#e0edf5!important}
+@media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:650px){body{padding:12px;padding-bottom:max(16px,env(safe-area-inset-bottom))}.topbar{display:block;padding:16px}.controls{gap:12px;padding:12px}.controls button{flex:1 1 40%}.controls label,.controls .pill{flex:1 1 100%;font-size:14px;justify-content:space-between}.status-grid{grid-template-columns:minmax(0,1fr)}.status-grid .card{min-height:0}.scenario-row{display:grid;grid-template-columns:minmax(0,1fr);padding:12px}.scenario-label{margin:0;white-space:normal}.timeline-row,.stage-track{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.timeline-step:after{display:none}.timeline-step{min-width:0}.figure-scroll canvas{width:var(--figure-width);max-width:none}.figure-scroll.overview canvas{width:100%;max-width:100%}.figure-hint{display:block}.legend{padding:17px}.layout .panel{padding:10px}.figure-scroll{max-height:70svh}.phase small{font-size:14px}.ion-key{gap:7px}.mode-line{text-align:left}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.ion-na{color:#70bcff;font-weight:650}.ion-k{color:#ff8990;font-weight:650}.ion-ca{color:#f4e76a;font-weight:650}.ion-glucose{color:#87d29e;font-weight:650}.ion-atp{color:#c4a2f6;font-weight:650}.ion-adp{color:#a6c5ee;font-weight:650}.ion-pi{color:#d8cb9a;font-weight:650}.ion-sglt{color:#60d2c5;font-weight:650}.ion-pump{color:#ff9b42;font-weight:650}.ion-vm{color:#e0edf5;font-weight:650}.ion-gradient{color:#b3d6ef;font-weight:650}.ion-flux{color:#a9e1c0;font-weight:650}.ion-activity{color:#d4c095;font-weight:650}</style></head>
+<body>
+  <h1>Potencial de Ação do Cardiomiócito Ventricular</h1>
+  <p class="subtitle">Simulador didático do potencial de ação ventricular com platô, canais de Na⁺ rápido, Ca²⁺ tipo L e K⁺.</p>
+
+  <div class="controls">
+    <button id="btnStart" class="primary">Iniciar</button>
+    <button id="btnPause">Pausar</button>
+    <button id="btnStep">Próxima etapa</button>
+    <button id="btnReset">Resetar</button>
+
+    <label>Velocidade
+      <input id="speedRange" type="range" min="0.4" max="2.4" step="0.1" value="1.2">
+      <span id="speedLabel">1,2x</span>
+    </label>
+
+    <label><input id="loopToggle" type="checkbox" checked> Loop contínuo</label>
+    <label><input id="stepModeToggle" type="checkbox"> Executar por etapas</label>
+    <label><input id="labelsToggle" type="checkbox" checked> Mostrar rótulos</label>
+  </div>
+
+  <div class="controls" id="pharmControls" style="margin-top:6px">
+<strong style="margin-right:4px">Modulação farmacológica:</strong>
+<label><input type="radio" name="pharm" value="normal" checked> Normal</label>
+<label><input type="radio" name="pharm" value="lido"> Lidocaína (Na⁺, IB)</label>
+<label><input type="radio" name="pharm" value="flec"> Flecainida (Na⁺, IC)</label>
+<label><input type="radio" name="pharm" value="vera"> Verapamil (Ca²⁺, IV)</label>
+<label><input type="radio" name="pharm" value="amio"> Amiodarona (K⁺, III)</label>
+</div>
+
+
+  <div class="mode-line"><div id="modeBadge" class="mode-badge">Modo: contínuo</div></div>
+  <div class="stage-map"><div id="stageTrack" class="stage-track"></div></div>
+
+  <div class="status-grid">
+    <div class="card" id="phaseCard">
+      <div class="card-title">Fase atual</div>
+      <div class="phase" id="phaseText">Fase 4. Repouso<small id="phaseDesc">Potencial de repouso estável em torno de -90 mV, sustentado pela IK1.</small></div>
+    </div>
+    <div class="card" id="valueCard">
+      <div class="card-title">Potencial de membrana</div>
+      <div class="phase" id="valueText">-90 mV<small id="valueDesc">Valor instantâneo do potencial transmembrana.</small></div>
+    </div>
+    <div class="card" id="flowCard">
+      <div class="card-title">Evento predominante</div>
+      <div class="phase" id="flowText">IK1 (K⁺) mantém -90 mV<small id="flowDesc">A IK1 (retificador de influxo) mantém o potencial próximo do equilíbrio do K⁺.</small></div>
+    </div>
+  </div>
+
+  <div class="pro-graph-note">Gráfico com contraste ampliado e leitura otimizada para projeção em sala.</div>
+
+  <div class="ion-key" aria-label="Cores dos componentes"><span class="ion-na">Na⁺</span><span class="ion-k">K⁺</span><span class="ion-ca">Ca²⁺</span><span class="ion-vm">Potencial de membrana</span></div><div class="layout">
+    <div class="panel"><div class="figure-toolbar"><strong>Animação</strong><button type="button" data-figure="view-sceneCanvas" aria-controls="view-sceneCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-sceneCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Animação ampliável" style="--figure-width:980px"><canvas id="sceneCanvas" width="980" height="760"></canvas></div></div>
+    <div class="panel"><div class="figure-toolbar"><strong>Gráfico</strong><button type="button" data-figure="view-graphCanvas" aria-controls="view-graphCanvas">Ampliar detalhes</button></div><p class="figure-hint">Deslize a figura para explorar. Use “Visão geral” para ver o conjunto.</p><div id="view-graphCanvas" class="figure-scroll" tabindex="0" role="region" aria-label="Gráfico ampliável" style="--figure-width:920px"><canvas id="graphCanvas" width="920" height="660"></canvas></div></div>
+  </div>
+
+  <div class="legend">
+    <b>Como interpretar:</b> a cena à esquerda mostra a <b>membrana do cardiomiócito ventricular</b> com três grupos de canais: <b><span class="ion-na">Na⁺</span> rápido</b> (INa), <b><span class="ion-ca">Ca²⁺</span> tipo L</b> (ICaL) e <b><span class="ion-k">K⁺</span></b> (Ito, IKr, IKs e IK1). O gráfico à direita acompanha as <b>fases 4, 0, 1, 2 e 3</b> em escala real de tempo: repouso em −90 mV (IK1), limiar em torno de −70 mV, fase 0 em ~1–2 ms (INa), entalhe da fase 1 (Ito), <b>platô</b> de ~180 ms (ICaL × IKs/IKr) e fase 3 de ~90 ms (IKr/IKs, completada pela IK1); a duração do potencial de ação (DPA₉₀) fica em torno de 260 ms. Como a fase 0 é muito breve, a reprodução passa por uma <b>lupa temporal</b> (câmera lenta rotulada) e o quadro ampliado mostra as fases 0–1; o eixo do gráfico permanece em milissegundos reais. <b>Lidocaína</b> (classe IB) bloqueia INa de forma dependente do uso: no tecido normal a fase 0 fica praticamente preservada e a DPA encurta levemente. <b>Flecainida</b> (classe IC) reduz bastante a velocidade e a amplitude da fase 0. <b>Verapamil</b> (classe IV) reduz a ICaL: platô mais baixo e mais curto, com DPA menor; no ventrículo o efeito é modesto, e o principal alvo clínico são os nós sinoatrial e atrioventricular. <b>Amiodarona</b> (classe III) bloqueia sobretudo a IKr e prolonga a DPA (e o QT) em cerca de 15–25%. A linha tracejada mostra o traçado normal para comparação. Os gradientes iônicos são restaurados por mecanismos como <b><span class="ion-na">Na⁺</span>/<span class="ion-k">K⁺</span>-<span class="ion-atp">ATP</span>ase</b>, <b>NCX</b> e <b>SERCA</b>. Aberturas de canais são esquemáticas.
+    <span class="pill">eletrofisiologia cardíaca</span>
+    <span class="pill">cardiomiócito ventricular</span>
+    <span class="pill">potencial com platô</span>
+    <div class="signature">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</div>
+  </div>
+
+<script>function semanticHTML(value){const names={'Na⁺':'na','Na+':'na','K⁺':'k','K+':'k','Ca²⁺':'ca','Ca2+':'ca','ATP':'atp','ADP':'adp','Pi':'pi','glicose':'glucose','SGLT':'sglt'};return String(value).split(/(<[^>]*>)/).map(s=>s.startsWith('<')?s:s.replace(/Na⁺\/K⁺[- ]ATPase|Na⁺|Na\+|K⁺|K\+|Ca²⁺|Ca2\+|\bATP\b|\bADP\b|\bPi\b|glicose|SGLT/g,t=>'<span class="ion-'+(names[t]||'pump')+'">'+t+'</span>')).join('');}function semanticLead(el,text){if(el.firstChild.nodeType===3){const lead=document.createElement('span');el.replaceChild(lead,el.firstChild);}el.firstChild.innerHTML=semanticHTML(text);}(()=>{const P={"na":"#70bcff","k":"#ff8990","ca":"#f4e76a","glucose":"#87d29e","atp":"#c4a2f6","adp":"#a6c5ee","pi":"#d8cb9a","sglt":"#60d2c5","pump":"#ff9b42","vm":"#e0edf5","gradient":"#b3d6ef","flux":"#a9e1c0","activity":"#d4c095"};document.querySelectorAll('canvas').forEach(canvas=>{const ctx=canvas.getContext('2d'),original=ctx.fillText.bind(ctx);ctx.fillText=function(value,x,y,maxWidth){const s=String(value),old=this.fillStyle;let col;if(s.length>48)col='#bfd3e2';else if(/Na.*ATPase|Bomba primária/.test(s))col=P.pump;else if(/SGLT|Transportador secundário/.test(s))col=P.sglt;else if(/gradiente de Na/i.test(s))col=P.gradient;else if(/(fluxo|entrada) de glicose/i.test(s))col=P.flux;else if(/ATPase ativa/.test(s))col=P.activity;else if(/^ATP$/.test(s))col=P.atp;else if(/^ADP$/.test(s))col=P.adp;else if(/^Pi$/.test(s))col=P.pi;else if(/Na[⁺+]|^Na$/.test(s)&&!/[KC]a|K[⁺+]/.test(s))col=P.na;else if(/Ca[²+]|^Ca$/.test(s))col=P.ca;else if(/K[⁺+]|^K$/.test(s))col=P.k;else if(/glicose/i.test(s))col=P.glucose;else if(/mV/.test(s))col=P.vm;else if(typeof old==='string'&&/^#[0-9a-f]{6}$/i.test(old)){const n=parseInt(old.slice(1),16);if(((n>>16)*.2126+((n>>8)&255)*.7152+(n&255)*.0722)<130)col='#bfd3e2';}if(col)this.fillStyle=col;if(/^(Na|K|Ca|ATP|ADP|Pi|Glicose)[⁺²+]*$/.test(s)){this.save();this.strokeStyle='#102838';this.lineWidth=3;this.lineJoin='round';this.strokeText(s,x,y);this.restore();}if(maxWidth===undefined)original(s,x,y);else original(s,x,y,maxWidth);this.fillStyle=old;};});})();</script><script>// Shared schematic materials: bilayer, transmembrane bundles and gates.
+const MembraneArt=(()=>{
+ const lipid='#9cb4c5';
+ function tint(hex,f){const n=parseInt(hex.slice(1),16);return '#'+[n>>16,(n>>8)&255,n&255].map(v=>Math.round(f<1?v*f:v+(255-v)*(f-1)).toString(16).padStart(2,'0')).join('');}
+ function ball(c,x,y,r,color){const g=c.createRadialGradient(x-r*.35,y-r*.4,r*.03,x,y,r);g.addColorStop(0,tint(color,1.8));g.addColorStop(.32,tint(color,1.25));g.addColorStop(.67,color);g.addColorStop(1,tint(color,.3));c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill();}
+ function strand(c,pts,w,color){c.lineCap='round';c.lineJoin='round';for(const [d,col]of [[0,tint(color,.28)],[-w*.18,color],[-w*.3,tint(color,1.4)]]){c.strokeStyle=col;c.lineWidth=d===0?w:d===-w*.18?w*.56:w*.15;c.beginPath();pts.forEach(([x,y],i)=>i?c.lineTo(x+d,y):c.moveTo(x+d,y));c.stroke();}}
+ function bilayer(c,x,top,w,h){c.save();const step=h<100?18:23,r=step*.39;
+ const bg=c.createLinearGradient(0,top,0,top+h);bg.addColorStop(0,'#314f61');bg.addColorStop(.2,'#172d3b');bg.addColorStop(.5,'#071621');bg.addColorStop(.8,'#172d3b');bg.addColorStop(1,'#314f61');c.fillStyle=bg;c.fillRect(x,top,w,h);
+ // A rear row supplies depth; every leaflet has inward-facing paired tails.
+ for(const rear of [true,false]){c.globalAlpha=rear?.38:1;const shift=rear?step*.48:0,dy=rear?-r*.6:0;
+ for(let px=x+r+shift;px<x+w-r;px+=step){for(const side of [1,-1]){const yy=(side===1?top:top+h)+dy;const len=h*.42-r;
+ for(const branch of [-1,1]){const bx=px+branch*r*.32;strand(c,[[bx,yy+side*r*.7],[bx+branch*2,yy+side*(r+len*.32)],[bx-branch*1.5,yy+side*(r+len*.57)],[bx+branch*3,yy+side*(r+len*.8)],[bx+branch*2,yy+side*(r+len)]],Math.max(2.2,r*.37),lipid);}
+ ball(c,px,yy,r,lipid);}}
+ }c.restore();}
+ function protein(c,x,y,w,h,color,opening=.65,carrier=false,showGate=true){c.save();c.translate(x,y);
+ // Subunits surround a recessed aqueous vestibule; the silhouette is lobulated.
+ c.shadowColor='#000b';c.shadowBlur=w*.16;c.shadowOffsetY=5;
+ c.fillStyle='#071721';c.beginPath();c.ellipse(w*.5,h*.51,w*.39,h*.49,0,0,Math.PI*2);c.fill();c.shadowBlur=0;c.shadowOffsetY=0;
+ for(const rear of [true,false]){for(const side of [-1,1]){const bx=w*.5+side*w*(rear?.15:.27),bw=w*(rear?.3:.36);
+ const g=c.createLinearGradient(bx-bw*.6,0,bx+bw*.6,0);g.addColorStop(0,tint(color,.28));g.addColorStop(.28,color);g.addColorStop(.43,tint(color,1.6));g.addColorStop(.65,color);g.addColorStop(1,tint(color,.32));c.fillStyle=g;
+ c.beginPath();c.moveTo(bx,y*0+h*.02);c.bezierCurveTo(bx-bw,h*-.02,bx-bw*.6,h*.24,bx-bw*.38,h*.42);c.bezierCurveTo(bx-bw*.5,h*.7,bx-bw*.8,h*.95,bx,h*.98);c.bezierCurveTo(bx+bw*.75,h*1.02,bx+bw*.53,h*.74,bx+bw*.4,h*.56);c.bezierCurveTo(bx+bw*.46,h*.3,bx+bw*.8,h*.04,bx,h*.02);c.fill();
+ c.save();c.clip();for(let i=0;i<13;i++){const yy=h*.08+i*h*.068;c.strokeStyle=tint(color,.5);c.lineWidth=2;c.beginPath();c.moveTo(bx-bw,yy);c.bezierCurveTo(bx-bw*.4,yy+h*.035,bx+bw*.4,yy+h*.045,bx+bw,yy+h*.008);c.stroke();c.strokeStyle=tint(color,1.25);c.lineWidth=.7;c.stroke();}c.restore();
+ }}
+ if(carrier){ // Alternating-access transporter: a solid central occlusion, not an open tube.
+ ball(c,w*.5,h*(.42+.15*opening),w*.21,color);
+ }else if(showGate)gate(c,w*.5,h*.45,opening,color,w*.45);
+ c.restore();}
+ function gate(c,x,y,open,color,w=42){c.save();const gap=Math.max(.035,Math.min(1,open))*w*.34;for(const s of [-1,1]){strand(c,[[x+s*w*.5,y-12],[x+s*(gap+3),y],[x+s*w*.5,y+12]],Math.max(4,w*.17),color);}c.restore();}
+ function curve(c){c.save();const color=c.strokeStyle,w=c.lineWidth;c.lineCap='round';c.lineJoin='round';c.strokeStyle='#06121c';c.lineWidth=w+4;c.stroke();c.strokeStyle=color;c.lineWidth=w;c.stroke();c.strokeStyle='#ffffff55';c.lineWidth=Math.max(.8,w*.22);c.stroke();c.restore();}
+ function marker(c,x,y,r,color){c.save();c.shadowColor='#000b';c.shadowBlur=5;c.shadowOffsetY=2;ball(c,x,y,r,color);c.shadowBlur=0;c.shadowOffsetY=0;c.strokeStyle='#06121c';c.lineWidth=1.6;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.stroke();c.strokeStyle=color;c.lineWidth=.9;c.beginPath();c.arc(x,y,r+1.8,0,Math.PI*2);c.stroke();c.restore();}
+ return {bilayer,protein,gate,curve,marker};
+})();
+</script><script>
+(() => {
+let pharmMode='normal';
+  // Modelo temporal em milissegundos (eixo linear). A fase 0 dura ~1,5 ms;
+  // para enxergá-la, a reprodução usa uma lupa temporal rotulada.
+  const TOTAL = 400;            // janela exibida, em ms
+  const T0 = 30;                // início da fase 0 (limiar atingido)
+  const REST = -90, THRESHOLD = -70;
+  const LUPA = Object.freeze({start:T0-4, end:T0+12, factor:15});
+  // Parâmetros de forma por condição (mV e ms). platEnd = fim da fase 2; p3 = duração da fase 3.
+  const DRUGS = Object.freeze({
+    normal:{peak:28, up:1.5, notch:6, dome:12, platV:-4,  platEnd:222, p3:88,  na:1,    naLate:1, ca:1,    kr:1},
+    lido:  {peak:27, up:1.7, notch:6, dome:11, platV:-6,  platEnd:208, p3:86,  na:0.85, naLate:0, ca:1,    kr:1},
+    flec:  {peak:14, up:3.5, notch:5, dome:9,  platV:-4,  platEnd:224, p3:88,  na:0.4,  naLate:0.5, ca:1, kr:1},
+    vera:  {peak:28, up:1.5, notch:3, dome:3,  platV:-12, platEnd:204, p3:84,  na:1,    naLate:1, ca:0.4,  kr:1},
+    amio:  {peak:28, up:1.5, notch:6, dome:12, platV:-3,  platEnd:262, p3:100, na:1,    naLate:1, ca:1,    kr:0.55}
+  });
+  const PHARM_NAMES = {normal:'Normal', lido:'Lidocaína (classe IB)', flec:'Flecainida (classe IC)', vera:'Verapamil (classe IV)', amio:'Amiodarona (classe III)'};
+  const PHARM_EFFECT = {
+    normal:'Farmacologia: Normal',
+    lido:'Lidocaína (IB): fase 0 quase preservada; DPA levemente menor',
+    flec:'Flecainida (IC): fase 0 lenta e de menor amplitude',
+    vera:'Verapamil (IV): platô mais baixo e curto; efeito maior nos nós SA/AV',
+    amio:'Amiodarona (III): bloqueio de IKr; DPA/QT prolongados'
+  };
+
+const pharmInputs = [...document.querySelectorAll('input[name="pharm"]')];
+pharmInputs.forEach(r=>{
+  r.addEventListener('change',e=>{pharmMode=e.target.value; if (frame > TOTAL) frame = TOTAL; render();});
+});
+function isLido(){ return pharmMode === 'lido'; }
+function isFlec(){ return pharmMode === 'flec'; }
+function isVera(){ return pharmMode === 'vera'; }
+function isAmio(){ return pharmMode === 'amio'; }
+  const drug = (mode=pharmMode) => DRUGS[mode] || DRUGS.normal;
+  const phaseTimes = (mode=pharmMode) => { const p = drug(mode); const t1 = T0 + p.up, t2 = t1 + 8, t3 = t2 + 26; return {t1, t2, t3, t4:p.platEnd, t5:p.platEnd + p.p3}; };
+
+  function buildStages(mode=pharmMode){
+    const t = phaseTimes(mode);
+    return [
+      { name:'Fase 4. Repouso', short:'Fase 4', start:0, end:T0 - 3, color:'#70bcff', desc:'Potencial de repouso estável em torno de -90 mV, sustentado pela IK1.', event:'IK1 (K⁺) mantém -90 mV', eventDesc:'A IK1 (retificador de influxo) mantém o potencial próximo do equilíbrio do K⁺.' },
+      { name:'Fase 4. Despolarização eletrotônica até o limiar', short:'Até o limiar', start:T0 - 3, end:T0, color:'#8fd0ff', desc:'A corrente vinda das células vizinhas (junções comunicantes) leva a membrana de -90 mV ao limiar, ~-70 mV.', event:'Corrente das células vizinhas', eventDesc:'Ao atingir ~-70 mV, os canais rápidos de Na⁺ começam a abrir.' },
+      { name:'Fase 0. Despolarização rápida', short:'Fase 0', start:T0, end:t.t1, color:'#ff8990', desc:'Abertura abrupta dos canais rápidos de Na⁺ (INa): ascensão em ~1–2 ms.', event:'Entrada rápida de Na⁺ (INa)', eventDesc:'A fase 0 do cardiomiócito ventricular depende do influxo rápido de Na⁺; a IK1 se fecha por retificação.' },
+      { name:'Fase 1. Repolarização inicial', short:'Fase 1', start:t.t1, end:t.t2, color:'#f97316', desc:'Pequena queda após o pico (entalhe).', event:'Ito (saída transitória de K⁺)', eventDesc:'Os canais rápidos de Na⁺ inativam e a corrente transitória de saída de K⁺ (Ito) produz o entalhe.' },
+      { name:'Fase 2. Platô', short:'Fase 2', start:t.t2, end:t.t4, color:'#f4e76a', desc:'Equilíbrio entre a entrada de Ca²⁺ (ICaL) e a saída de K⁺ (IKs/IKr) sustenta o platô por ~180 ms.', event:'ICaL × IKs/IKr', eventDesc:'A entrada de Ca²⁺ pelos canais tipo L equilibra a saída de K⁺ pelos retificadores tardios.' },
+      { name:'Fase 3. Repolarização', short:'Fase 3', start:t.t4, end:t.t5, color:'#5fd4bf', desc:'A ICaL inativa; IKr e IKs predominam e a IK1 completa a repolarização.', event:'Saída de K⁺ (IKr/IKs → IK1)', eventDesc:'A saída de K⁺ domina e leva o potencial de volta a -90 mV em ~90 ms.' },
+      { name:'Fase 4. Repouso restabelecido', short:'Fase 4', start:t.t5, end:TOTAL, color:'#70bcff', desc:'De volta a -90 mV; a célula recupera a excitabilidade.', event:'IK1 restabelece o repouso', eventDesc:'Os gradientes são mantidos pela Na⁺/K⁺-ATPase e pelo NCX; o período refratário termina com a repolarização.' }
+    ];
+  }
+
+  const sceneCanvas = document.getElementById('sceneCanvas');
+  const graphCanvas = document.getElementById('graphCanvas');
+  const sctx = sceneCanvas.getContext('2d');
+  const gctx = graphCanvas.getContext('2d');
+
+  const btnStart = document.getElementById('btnStart');
+  const btnPause = document.getElementById('btnPause');
+  const btnStep = document.getElementById('btnStep');
+  const btnReset = document.getElementById('btnReset');
+  const speedRange = document.getElementById('speedRange');
+  const speedLabel = document.getElementById('speedLabel');
+  const loopToggle = document.getElementById('loopToggle');
+  const stepModeToggle = document.getElementById('stepModeToggle');
+  const labelsToggle = document.getElementById('labelsToggle');
+  const modeBadge = document.getElementById('modeBadge');
+  const stageTrack = document.getElementById('stageTrack');
+
+  const phaseText = document.getElementById('phaseText');
+  const phaseDesc = document.getElementById('phaseDesc');
+  const valueText = document.getElementById('valueText');
+  const valueDesc = document.getElementById('valueDesc');
+  const flowText = document.getElementById('flowText');
+  const flowDesc = document.getElementById('flowDesc');
+  const phaseCard = document.getElementById('phaseCard');
+  const valueCard = document.getElementById('valueCard');
+  const flowCard = document.getElementById('flowCard');
+
+  let running = false, frame = 0, raf = null, lastTs = 0, stepAwaitPlay = false, tick = 0;
+
+  const clamp = (v,min,max)=>Math.max(min,Math.min(max,v));
+  const lerp = (a,b,t)=>a+(b-a)*t;
+  const ease = t => { t = clamp(t,0,1); return 0.5 - 0.5*Math.cos(Math.PI*t); };
+  const getSpeed = ()=>parseFloat(speedRange.value);
+  const getStages = ()=> buildStages();
+  const getStage = f => { const st = getStages(); return st.find(s => f >= s.start && f <= s.end) || st[st.length-1]; };
+  const getPauseFrames = ()=> getStages().map(s => s.end);
+  const setCardsColor = color => { phaseCard.style.setProperty('--phase', color); valueCard.style.setProperty('--phase', color); flowCard.style.setProperty('--phase', color); };
+  const GRAPH = Object.freeze({left:75, top:82, right:845, bottom:500});
+  const pressureToY = v => 492 - ((v + 92) / 130) * 350;
+  const timeToX = t => GRAPH.left + (t / TOTAL) * (GRAPH.right - GRAPH.left);
+  const inLupa = t => t >= LUPA.start && t < LUPA.end;
+  const fmt = (v, d=0) => v.toFixed(d).replace('.', ',');
+
+  function vmFor(mode, t){
+    const p = drug(mode), s = phaseTimes(mode);
+    if (t < T0 - 3) return REST;
+    if (t < T0) return lerp(REST, THRESHOLD, ease((t - (T0 - 3)) / 3));      // eletrotônico até o limiar
+    if (t < s.t1) return lerp(THRESHOLD, p.peak, Math.sin(((t - T0) / p.up) * Math.PI / 2));
+    if (t < s.t2) return lerp(p.peak, p.notch, 1 - Math.pow(1 - (t - s.t1) / 8, 2));
+    if (t < s.t3) return lerp(p.notch, p.dome, ease((t - s.t2) / 26));
+    if (t < s.t4) return lerp(p.dome, p.platV, Math.pow((t - s.t3) / (s.t4 - s.t3), 1.8));
+    if (t < s.t5) return lerp(p.platV, REST, ease((t - s.t4) / p.p3));
+    return REST;
+  }
+  const getVm = t => vmFor(pharmMode, t);
+  const getVmBase = t => vmFor('normal', t);
+
+  // DPA90: do início da fase 0 até 90% de repolarização.
+  const apdCache = {};
+  function apd90(mode=pharmMode){
+    if (apdCache[mode]) return apdCache[mode];
+    let peak = -1e9, pt = 0;
+    for (let t = T0; t <= TOTAL; t += 0.05){ const v = vmFor(mode, t); if (v > peak){ peak = v; pt = t; } }
+    const level = REST + 0.1 * (peak - REST);
+    let end = TOTAL;
+    for (let t = pt; t <= TOTAL; t += 0.05){ if (vmFor(mode, t) <= level){ end = t; break; } }
+    return (apdCache[mode] = {apd:end - T0, end, peak});
+  }
+
+  // Aberturas relativas (esquemáticas, sem ajuste quantitativo de condutância).
+  function getNaOpen(t){
+    const p = drug(), s = phaseTimes();
+    let base = 0.02;
+    if (t >= T0 - 1.2 && t < T0 + 0.6) base = lerp(0.04, 1, ease((t - (T0 - 1.2)) / 1.8));
+    else if (t >= T0 + 0.6 && t < s.t1 + 2) base = lerp(1, 0.04, ease((t - (T0 + 0.6)) / (s.t1 + 2 - (T0 + 0.6))));
+    else if (t >= s.t1 + 2 && t < s.t4) base = 0.04 * p.naLate; // componente tardio (INa-late)
+    return t >= s.t1 + 2 ? base : base * p.na;
+  }
+  function getCaOpen(t){
+    const p = drug(), s = phaseTimes();
+    let base;
+    if (t < T0 + 1) base = 0.03;
+    else if (t < T0 + 9) base = lerp(0.03, 0.92, ease((t - T0 - 1) / 8));
+    else if (t < s.t4) base = lerp(0.92, 0.36, ease((t - T0 - 9) / (s.t4 - T0 - 9)));
+    else if (t < s.t4 + 40) base = lerp(0.36, 0.03, ease((t - s.t4) / 40));
+    else base = 0.03;
+    return base * p.ca;
+  }
+  function getKOpen(t){
+    const p = drug(), s = phaseTimes();
+    const ik1 = t < T0 ? 0.10 : t < s.t4 ? 0.02 : t < s.t5 ? lerp(0.02, 0.10, ease((t - s.t4 - p.p3*0.4) / (p.p3*0.6))) : 0.10;
+    const ito = t >= T0 && t < s.t2 + 6 ? 0.55 * Math.sin(Math.PI * clamp((t - T0) / (s.t2 + 6 - T0), 0, 1)) : 0;
+    let delayed = 0;
+    if (t >= s.t2 && t < s.t4) delayed = lerp(0.10, 0.32, ease((t - s.t2) / (s.t4 - s.t2)));
+    else if (t >= s.t4 && t < s.t5) { const u = (t - s.t4) / p.p3; delayed = u < 0.55 ? lerp(0.32, 0.9, ease(u / 0.55)) : lerp(0.9, 0.05, ease((u - 0.55) / 0.45)); }
+    return clamp(ik1 + ito + delayed * p.kr, 0, 1);
+  }
+  function kCurrentName(t){
+    const s = phaseTimes();
+    if (t < T0 || t >= s.t5) return 'IK1';
+    if (t < s.t2) return 'Ito';
+    if (t < s.t4) return 'IKs/IKr';
+    return 'IKr/IKs → IK1';
+  }
+
+  function updateStatus(){
+    const st = getStage(frame), vm = getVm(frame), polarity = vm >= 0 ? 'Interior positivo' : 'Interior negativo';
+    semanticLead(phaseText,st.name);
+    phaseDesc.textContent = st.desc;
+    semanticLead(valueText,`${Math.round(vm)} mV`);
+    valueDesc.textContent = `${polarity}; repouso -90 mV; limiar ≈ -70 mV.`;
+    semanticLead(flowText,st.event);
+    flowDesc.textContent = st.eventDesc;
+    setCardsColor(st.color);
+    const bits = [stepModeToggle.checked ? (stepAwaitPlay ? 'Modo: etapas (pausado)' : 'Modo: etapas') : 'Modo: contínuo', 'Farmacologia: ' + PHARM_NAMES[pharmMode]];
+    if (inLupa(frame)) bits.push(`Lupa temporal ×${LUPA.factor}`);
+    modeBadge.textContent = bits.join(' · ');
+  }
+
+  function renderStageMap(){
+    const stages = getStages();
+    const currentStageIndex = stages.indexOf(getStage(frame));
+    stageTrack.style.gridTemplateColumns = `repeat(${matchMedia('(max-width:1180px)').matches ? 2 : stages.length},minmax(0,1fr))`;
+    stageTrack.innerHTML = stages.map((s, idx) => {
+      const active = idx === currentStageIndex;
+      return `
+      <div class="stage-node" style="border-color:${s.color};box-shadow:${active ? '0 0 0 2px ' + s.color + '55, 0 10px 24px ' + s.color + '22, inset 0 0 0 1px ' + s.color + '30' : 'inset 0 0 0 1px ' + s.color + '20'};background:${active ? s.color + '22' : '#142c3c'}">
+        <div class="stage-num" style="background:${active ? s.color : '#223b4d'};color:${active ? '#0a1722' : '#c4d8e6'}">${idx+1}</div>
+        <div class="stage-name" style="color:${s.color}">${s.short}</div>
+        <div class="stage-mini" style="font-weight:${active ? '700' : '400'};color:${active ? '#e5f2fa' : '#a9c4d7'}">${semanticHTML(s.event)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function roundedBox(ctx, x, y, w, h, r){
+    ctx.beginPath(); ctx.moveTo(x+r, y); ctx.lineTo(x+w-r, y); ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+    ctx.lineTo(x+w, y+h-r); ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h); ctx.lineTo(x+r, y+h);
+    ctx.quadraticCurveTo(x, y+h, x, y+h-r); ctx.lineTo(x, y+r); ctx.quadraticCurveTo(x, y, x+r, y); ctx.closePath();
+  }
+
+  function drawProtein(x,y,w,h,color1,color2){MembraneArt.protein(sctx,x,y,w,h,color2,1,false,false);}
+
+  function drawGate(cx,cy,openness,color){MembraneArt.gate(sctx,cx,cy+62,openness,color,44);}
+
+  function drawIon(x, y, r, color, label){
+    const grd = sctx.createRadialGradient(x - r * .4, y - r * .4, 1, x, y, r); grd.addColorStop(0, '#ffffff'); grd.addColorStop(.55, color); grd.addColorStop(1, 'rgba(15,23,42,0.9)');
+    sctx.save();
+    sctx.shadowColor = color + '55'; sctx.shadowBlur = 8;
+    sctx.beginPath(); sctx.arc(x, y, r, 0, Math.PI * 2); sctx.fillStyle = grd; sctx.fill();
+    sctx.restore();
+    sctx.strokeStyle = 'rgba(17,24,39,0.08)'; sctx.lineWidth = 0.8; sctx.stroke();
+    sctx.fillStyle = '#102838'; sctx.font = 'bold 10px Arial'; sctx.textAlign = 'center'; sctx.fillText(label, x, y + 3); sctx.textAlign = 'left';
+  }
+  function drawFlowArrows(cx, topY, bottomY, count, color, direction){
+    sctx.save();
+    sctx.strokeStyle = color; sctx.fillStyle = color; sctx.lineWidth = 3.5; sctx.shadowColor = color + '44'; sctx.shadowBlur = 8;
+    for (let i = 0; i < count; i++) {
+      const x = cx + (i - (count - 1) / 2) * 18, fromY = direction === 'down' ? topY : bottomY, toY = direction === 'down' ? bottomY : topY;
+      sctx.beginPath(); sctx.moveTo(x, fromY); sctx.lineTo(x, toY); sctx.stroke(); sctx.beginPath();
+      if (direction === 'down') { sctx.moveTo(x, toY); sctx.lineTo(x - 6, toY - 10); sctx.lineTo(x + 6, toY - 10); }
+      else { sctx.moveTo(x, toY); sctx.lineTo(x - 6, toY + 10); sctx.lineTo(x + 6, toY + 10); }
+      sctx.closePath(); sctx.fill();
+    }
+    sctx.restore();
+  }
+  function drawLabel(text, x, y, color='#374151', font='15px Arial'){ sctx.fillStyle = color; sctx.font = font; sctx.fillText(text, x, y); }
+  function drawParticleStream(cx, direction, progress, color, label, radius=8){
+    for (let i = 0; i < 7; i++) {
+      const phase = (progress * 0.018 + i / 7) % 1; const y = direction === 'down' ? 196 + phase * 310 : 548 - phase * 310; const x = cx + Math.sin(progress * 0.014 + i) * 7;
+      drawIon(x, y, radius, color, label);
+    }
+  }
+  function drawBlock(cx, topMem, color, text){
+    sctx.save();
+    sctx.strokeStyle = color; sctx.lineWidth = 3.2;
+    sctx.beginPath(); sctx.arc(cx, topMem + 19, 24, 0, Math.PI * 2); sctx.stroke();
+    sctx.beginPath(); sctx.moveTo(cx - 18, topMem + 2); sctx.lineTo(cx + 18, topMem + 36); sctx.stroke();
+    sctx.fillStyle = color; sctx.font = 'bold 12px Arial'; sctx.textAlign = 'center'; sctx.fillText(text, cx, topMem - 8); sctx.textAlign = 'left';
+    sctx.restore();
+  }
+
+  function drawScene(){
+    sctx.clearRect(0, 0, sceneCanvas.width, sceneCanvas.height);
+    sctx.fillStyle='#0d2030'; sctx.fillRect(0,0,sceneCanvas.width,sceneCanvas.height);
+    const vm = getVm(frame), naOpen = getNaOpen(frame), caOpen = getCaOpen(frame), kOpen = getKOpen(frame), showLabels = labelsToggle.checked;
+    const st = getStage(frame);
+    sctx.fillStyle = '#c4d8e6'; sctx.font = 'bold 21px Arial'; sctx.fillText('Membrana plasmática', 18, 30);
+
+    const topMem = 226, bottomMem = 408;
+    MembraneArt.bilayer(sctx,88,topMem,744,bottomMem-topMem);
+
+    drawProtein(205, topMem - 34, 96, 250, '#dbeafe', '#70bcff');
+    drawProtein(413, topMem - 34, 96, 250, '#fffbd0', '#f4e76a');
+    drawProtein(621, topMem - 34, 96, 250, '#fee2e2', '#ff8990');
+    drawGate(253, topMem + 17, naOpen, '#70bcff'); drawGate(461, topMem + 17, caOpen, '#f4e76a'); drawGate(669, topMem + 17, kOpen, '#ff8990');
+
+    if (isLido()) drawBlock(253, topMem, '#70bcff', 'INa ↓ (IB)');
+    if (isFlec()) drawBlock(253, topMem, '#70bcff', 'INa ↓↓ (IC)');
+    if (isVera()) drawBlock(461, topMem, '#f4e76a', 'ICaL ↓');
+    if (isAmio()) drawBlock(669, topMem, '#ff8990', 'IKr ↓');
+
+    if (naOpen > 0.15) { drawFlowArrows(253, 170, 482, Math.max(1, Math.round(naOpen * 4)), '#70bcff', 'down'); drawParticleStream(253, 'down', tick, '#70bcff', 'Na', 8); }
+    if (caOpen > 0.12) { drawFlowArrows(461, 170, 482, Math.max(1, Math.round(caOpen * 4)), '#f4e76a', 'down'); drawParticleStream(461, 'down', tick, '#f4e76a', 'Ca', 8); }
+    if (kOpen > 0.12) { drawFlowArrows(669, 170, 482, Math.max(1, Math.round(kOpen * 4)), '#ff8990', 'up'); drawParticleStream(669, 'up', tick * 0.9, '#ff8990', 'K', 8); }
+
+    for (let i = 0; i < 8; i++) {
+      const t = (tick * 0.01 + i / 8) % 1;
+      drawIon(110 + i * 82 + Math.sin(tick * 0.02 + i) * 6, 128 + t * 18, 12, '#70bcff', 'Na');
+      drawIon(108 + i * 82 + Math.cos(tick * 0.017 + i) * 6, 514 - t * 15, 12, '#ff8990', 'K');
+    }
+
+    if (showLabels) {
+      drawLabel('Meio extracelular', 88, 80, '#111827', 'bold 17px Arial');
+      drawLabel('Meio intracelular', 88, 560, '#111827', 'bold 17px Arial');
+    }
+
+    roundedBox(sctx, 764, 78, 172, 62, 14); sctx.fillStyle = '#102838'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.lineWidth = 1.4; sctx.stroke();
+    sctx.fillStyle = vm >= 0 ? '#ff8990' : '#111827'; sctx.font = 'bold 25px Arial'; sctx.fillText(`${Math.round(vm)} mV`, 782, 117);
+    sctx.fillStyle = '#a0b8c9'; sctx.font = '13px Arial'; sctx.fillText(`t = ${fmt(frame, frame < 60 ? 1 : 0)} ms`, 782, 160);
+    if (inLupa(frame)) { sctx.fillStyle = '#f4e76a'; sctx.font = 'bold 13px Arial'; sctx.fillText(`Lupa temporal ×${LUPA.factor}`, 782, 180); }
+
+    roundedBox(sctx, 24, 576, 700, 100, 16); sctx.fillStyle = '#102838'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.stroke();
+    sctx.fillStyle = '#c4d8e6'; sctx.font = 'bold 16px Arial'; sctx.fillText('Resumo fisiológico', 40, 599); sctx.font = '14px Arial';
+    sctx.fillStyle = '#475569'; sctx.fillText(`Etapa atual: ${st.name}`, 40, 622);
+    sctx.fillStyle = '#f4e76a'; sctx.fillText(PHARM_EFFECT[pharmMode], 40, 668);
+    sctx.fillStyle = '#70bcff'; sctx.fillText(`Abertura Na⁺: ${Math.round(naOpen * 100)}%`, 40, 645);
+    sctx.fillStyle = '#f4e76a'; sctx.fillText(`Abertura Ca²⁺: ${Math.round(caOpen * 100)}%`, 230, 645);
+    sctx.fillStyle = '#ff8990'; sctx.fillText(`Abertura K⁺ (${kCurrentName(frame)}): ${Math.round(kOpen * 100)}%`, 420, 645);
+
+    roundedBox(sctx, 24, 688, 900, 54, 16); sctx.fillStyle = '#102838'; sctx.fill(); sctx.strokeStyle = '#d1d5db'; sctx.stroke();
+    sctx.font = '14px Arial';
+    sctx.fillStyle = '#70bcff'; sctx.fillText('■ Canal rápido de Na⁺ (INa)', 40, 706);
+    sctx.fillStyle = '#f4e76a'; sctx.fillText('■ Canal de Ca²⁺ tipo L (ICaL)', 308, 706);
+    sctx.fillStyle = '#ff8990'; sctx.fillText('■ Canais de K⁺ (Ito, IKr, IKs, IK1)', 598, 706);
+    sctx.fillStyle = '#70bcff'; sctx.fillText('▲ Na⁺ → dentro', 40, 728);
+    sctx.fillStyle = '#f4e76a'; sctx.fillText('▲ Ca²⁺ → dentro', 218, 728);
+    sctx.fillStyle = '#ff8990'; sctx.fillText('▲ K⁺ → fora', 424, 728);
+  }
+
+  function drawGraphBase(){
+    gctx.clearRect(0,0,graphCanvas.width,graphCanvas.height);
+    gctx.fillStyle='#0d2030'; gctx.fillRect(0,0,graphCanvas.width,graphCanvas.height);
+    const {left,top,right,bottom}=GRAPH, width=right-left, height=bottom-top;
+
+    const bg = gctx.createLinearGradient(0, 12, 0, 638);
+    bg.addColorStop(0, '#193344');
+    bg.addColorStop(1, '#0d2030');
+    gctx.fillStyle = bg;
+    roundedBox(gctx, 14, 12, 892, 626, 18);
+    gctx.fill();
+    gctx.strokeStyle = '#d7dde6';
+    gctx.lineWidth = 1.5;
+    gctx.stroke();
+
+    gctx.fillStyle = '#c4d8e6';
+    gctx.font = 'bold 24px Arial';
+    gctx.textAlign = 'center';
+    gctx.fillText('Gráfico do potencial de ação cardíaco', 460, 38);
+    gctx.fillStyle = '#64748b';
+    gctx.font = '15px Arial';
+    gctx.fillText('Cardiomiócito ventricular · tempo em escala real (ms)', 460, 62);
+    gctx.textAlign = 'left';
+
+    gctx.fillStyle = '#193344';
+    roundedBox(gctx, left-16, top-10, width+28, height+26, 16);
+    gctx.fill();
+    gctx.strokeStyle = '#cbd5e1';
+    gctx.lineWidth = 1.4;
+    gctx.stroke();
+
+    [-90,-70,-40,0,30].forEach(v=>{
+      const y=pressureToY(v), thr = v===THRESHOLD, rest = v===REST;
+      gctx.strokeStyle = thr ? '#f59e0b' : (rest ? '#cbd5e1' : '#ecf0f5');
+      gctx.setLineDash(thr ? [6,6] : []);
+      gctx.lineWidth = thr ? 2.1 : (rest ? 1.8 : 1.1);
+      gctx.beginPath(); gctx.moveTo(left,y); gctx.lineTo(right,y); gctx.stroke();
+      gctx.fillStyle = thr ? '#b45309' : '#334155';
+      gctx.font='bold 14px Arial'; gctx.fillText(`${v} mV`, 16, y+5);
+    });
+    gctx.setLineDash([]);
+
+    gctx.strokeStyle = '#334155';
+    gctx.lineWidth = 2.6;
+    gctx.beginPath(); gctx.moveTo(left,top); gctx.lineTo(left,bottom); gctx.lineTo(right,bottom); gctx.stroke();
+
+    gctx.font='12px Arial'; gctx.fillStyle='#a0b8c9'; gctx.textAlign='center';
+    for (let t = 0; t <= TOTAL; t += 50){ const x = timeToX(t); gctx.strokeStyle='#4b6577'; gctx.lineWidth=1; gctx.beginPath(); gctx.moveTo(x,bottom); gctx.lineTo(x,bottom+6); gctx.stroke(); gctx.fillText(String(t), x, bottom+20); }
+    gctx.textAlign='left';
+
+    gctx.fillStyle='#b45309'; gctx.font='bold 14px Arial'; gctx.fillText('Limiar', 854, pressureToY(THRESHOLD)+5);
+    gctx.fillStyle='#475569'; gctx.fillText('Repouso', 854, pressureToY(REST)+5);
+    gctx.fillStyle='#475569'; gctx.font='bold 15px Arial'; gctx.textAlign = 'center'; gctx.fillText('Tempo (ms)', (left+right)/2, 548); gctx.textAlign = 'left';
+
+    let narrowRow = 0;
+    getStages().forEach((st, idx)=>{
+      const sx=timeToX(st.start), ex=timeToX(st.end);
+      gctx.fillStyle = st.color+'30'; roundedBox(gctx, sx, 566, Math.max(3, ex-sx), 16, Math.min(7, Math.max(1,(ex-sx)/2))); gctx.fill();
+      if(labelsToggle.checked){
+        const narrow = ex - sx < 40;
+        gctx.fillStyle=st.color; gctx.font= narrow ? 'bold 12px Arial' : 'bold 13px Arial'; gctx.textAlign= narrow ? 'left' : 'center';
+        if (narrow) { gctx.fillText(st.short, sx + 4 + narrowRow * 8, 598 + narrowRow * 14); narrowRow++; }
+        else gctx.fillText(st.short, (sx + ex)/2, 604);
+        gctx.textAlign='left';
+      }
+    });
+  }
+
+  function tracePath(ctx, fn, t0, t1, mapX, mapY, step=0.5){
+    ctx.beginPath();
+    let first = true;
+    for (let t = t0; t <= t1 + 1e-9; t += step){ const x = mapX(t), y = mapY(fn(t)); if (first){ ctx.moveTo(x,y); first = false; } else ctx.lineTo(x,y); }
+  }
+
+  function drawNormalReferenceCurve(){
+    if (pharmMode === 'normal') return;
+    gctx.save();
+    gctx.strokeStyle = 'rgba(148,163,184,0.75)';
+    gctx.lineWidth = 3;
+    gctx.setLineDash([6,6]);
+    gctx.lineJoin='round';
+    gctx.lineCap='round';
+    tracePath(gctx, getVmBase, 0, TOTAL, timeToX, pressureToY, 0.25);
+    gctx.stroke();
+    gctx.setLineDash([]);
+    if (labelsToggle.checked){ gctx.fillStyle = '#a0b8c9'; gctx.font = 'bold 12px Arial'; gctx.fillText('- - Normal (referência)', GRAPH.left + 12, GRAPH.top + 18); }
+    gctx.restore();
+  }
+
+  function drawLupaInset(){
+    // Lupa da fase 0–1: mesma curva, eixo temporal ampliado (T0-3 a T0+12 ms).
+    const bx = 610, by = 96, bw = 222, bh = 128, t0 = T0 - 3, t1 = T0 + 12;
+    const mx = t => bx + 34 + (t - t0) / (t1 - t0) * (bw - 44);
+    const my = v => by + 20 + (40 - v) / 135 * (bh - 40);
+    gctx.save();
+    roundedBox(gctx, bx, by, bw, bh, 10); gctx.fillStyle = '#0d2030ee'; gctx.fill(); gctx.strokeStyle = '#f4e76a88'; gctx.lineWidth = 1.2; gctx.stroke();
+    gctx.fillStyle = '#f4e76a'; gctx.font = 'bold 12px Arial'; gctx.fillText(`Lupa temporal: fases 0–1 (${fmt(t1 - t0, 0)} ms)`, bx + 10, by + 15);
+    gctx.strokeStyle = '#4b6577'; gctx.lineWidth = 1;
+    [0, -90].forEach(v => { gctx.beginPath(); gctx.moveTo(mx(t0), my(v)); gctx.lineTo(mx(t1), my(v)); gctx.stroke(); gctx.fillStyle = '#a0b8c9'; gctx.font = '10px Arial'; gctx.fillText(String(v), bx + 6, my(v) + 3); });
+    gctx.textAlign = 'center';
+    [T0, T0 + 5, T0 + 10].forEach(t => { gctx.fillStyle = '#a0b8c9'; gctx.font = '10px Arial'; gctx.fillText(`${t - T0} ms`, mx(t), by + bh - 4); });
+    gctx.textAlign = 'left';
+    if (pharmMode !== 'normal'){ gctx.strokeStyle = 'rgba(148,163,184,0.75)'; gctx.lineWidth = 1.6; gctx.setLineDash([4,4]); tracePath(gctx, getVmBase, t0, t1, mx, my, 0.05); gctx.stroke(); gctx.setLineDash([]); }
+    gctx.strokeStyle = '#e0edf5'; gctx.lineWidth = 2.4; tracePath(gctx, getVm, t0, t1, mx, my, 0.05); gctx.stroke();
+    if (frame >= t0 && frame <= t1){ gctx.fillStyle = '#e0edf5'; gctx.beginPath(); gctx.arc(mx(frame), my(getVm(frame)), 4, 0, Math.PI*2); gctx.fill(); }
+    gctx.restore();
+  }
+
+  function drawCurve(){
+    const {left,top,right,bottom}=GRAPH, st = getStage(frame);
+    const currentStart = timeToX(st.start), currentEnd = timeToX(st.end);
+    gctx.fillStyle = '#e0edf5' + '10';
+    roundedBox(gctx, currentStart, top+2, Math.max(4, currentEnd - currentStart), bottom - top - 4, Math.min(10, Math.max(1,(currentEnd-currentStart)/2)));
+    gctx.fill();
+
+    gctx.save();
+    tracePath(gctx, getVm, 0, TOTAL, timeToX, pressureToY, 0.25);
+    gctx.lineTo(right, bottom);
+    gctx.lineTo(left, bottom);
+    gctx.closePath();
+    const fill = gctx.createLinearGradient(0, top, 0, bottom);
+    fill.addColorStop(0, '#e0edf5' + '24');
+    fill.addColorStop(1, 'rgba(255,255,255,0)');
+    gctx.fillStyle = fill;
+    gctx.fill();
+    gctx.restore();
+
+    gctx.strokeStyle='#e0edf5';
+    gctx.lineWidth=5.2;
+    gctx.lineJoin = 'round';
+    gctx.lineCap = 'round';
+    tracePath(gctx, getVm, 0, TOTAL, timeToX, pressureToY, 0.25);
+    MembraneArt.curve(gctx);
+
+    gctx.strokeStyle='#e0edf5' + '66';
+    gctx.lineWidth=2.2;
+    gctx.setLineDash([4,5]);
+    getPauseFrames().filter(f => f < TOTAL).forEach(f=>{ const px = timeToX(f); gctx.beginPath(); gctx.moveTo(px, top+4); gctx.lineTo(px, bottom - 4); gctx.stroke(); });
+    gctx.setLineDash([]);
+
+    // DPA90 (duração do potencial de ação a 90% de repolarização).
+    const a = apd90(), n = apd90('normal'), lvl = REST + 0.1 * (a.peak - REST), yA = pressureToY(lvl);
+    gctx.save();
+    gctx.strokeStyle = '#a9e1c0'; gctx.lineWidth = 1.6;
+    gctx.beginPath(); gctx.moveTo(timeToX(T0), yA - 10); gctx.lineTo(timeToX(T0), yA + 4); gctx.moveTo(timeToX(T0), yA - 3); gctx.lineTo(timeToX(a.end), yA - 3); gctx.moveTo(timeToX(a.end), yA - 10); gctx.lineTo(timeToX(a.end), yA + 4); gctx.stroke();
+    gctx.fillStyle = '#a9e1c0'; gctx.font = 'bold 13px Arial'; gctx.textAlign = 'right';
+    gctx.fillText(`DPA₉₀ ≈ ${Math.round(a.apd)} ms`, right - 10, 256);
+    if (pharmMode !== 'normal'){ const pct = (a.apd / n.apd - 1) * 100; gctx.font = '12px Arial'; gctx.fillText(`normal ${Math.round(n.apd)} ms · ${pct >= 0 ? '+' : '−'}${fmt(Math.abs(pct), 0)}%`, right - 10, 274); }
+    gctx.textAlign = 'left';
+    gctx.restore();
+
+    if (labelsToggle.checked) drawLupaInset();
+
+    const px = timeToX(frame);
+    const py = pressureToY(getVm(frame));
+    MembraneArt.marker(gctx,px,py,9,'#e0edf5');
+  }
+
+  function render(){ updateStatus(); renderStageMap(); drawScene(); drawGraphBase(); drawNormalReferenceCurve(); drawCurve(); }
+  function pauseNow(markAwait){ running = false; if (raf) cancelAnimationFrame(raf); if (markAwait) stepAwaitPlay = true; render(); }
+  function play(){ if (running) return; running = true; stepAwaitPlay = false; lastTs = 0; raf = requestAnimationFrame(loop); render(); }
+  function nextStage(){ running = false; if (raf) cancelAnimationFrame(raf); const pauseFrames = getPauseFrames(); if (frame >= TOTAL) { if (loopToggle.checked) frame = 0; else { render(); return; } } const next = pauseFrames.find(p => p > frame + 1e-6); if (next == null) { frame = loopToggle.checked ? 0 : TOTAL; render(); return; } frame = next; stepAwaitPlay = true; render(); }
+  function resetAll(){ running = false; if (raf) cancelAnimationFrame(raf); frame = 0; stepAwaitPlay = false; render(); }
+
+  function loop(ts){
+    if (!running) return; if (!lastTs) lastTs = ts; const dt = Math.min(64, ts - lastTs); lastTs = ts;
+    tick += dt * 0.055 * getSpeed();
+    const inc = dt * 0.055 * getSpeed() / (inLupa(frame) ? LUPA.factor : 1);
+    const prev = frame; frame += inc; if (frame > TOTAL) frame = TOTAL;
+    if (stepModeToggle.checked) { const crossed = getPauseFrames().find(p => p > prev && p <= frame); if (crossed !== undefined) { frame = crossed; pauseNow(true); return; } }
+    render(); if (frame >= TOTAL) { if (loopToggle.checked) { frame = 0; if (stepModeToggle.checked) { pauseNow(true); return; } } else { running = false; render(); return; } } raf = requestAnimationFrame(loop);
+  }
+
+  [btnStart, btnPause, btnStep, btnReset].forEach(btn => btn.style.userSelect = 'none');
+  btnStart.addEventListener('click', play); btnPause.addEventListener('click', () => pauseNow(false)); btnStep.addEventListener('click', nextStage); btnReset.addEventListener('click', resetAll);
+  speedRange.addEventListener('input', () => speedLabel.textContent = fmt(parseFloat(speedRange.value), 1) + 'x');
+  stepModeToggle.addEventListener('change', () => { if (stepModeToggle.checked && running) pauseNow(true); else stepAwaitPlay = false; render(); });
+  [labelsToggle, loopToggle].forEach(el => el.addEventListener('change', render));
+  speedLabel.textContent = fmt(parseFloat(speedRange.value), 1) + 'x';
+  graphCanvas.dataset.apd = JSON.stringify(Object.fromEntries(Object.keys(DRUGS).map(k => [k, Math.round(apd90(k).apd * 10) / 10])));
+  render();
+})();
+</script>
+<script>(()=>{
+ const mobile=matchMedia('(max-width:650px)');
+ document.querySelectorAll('.figure-scroll').forEach(view=>{
+   const button=document.querySelector('[data-figure="'+view.id+'"]');
+   let detail=mobile.matches;
+   const update=()=>{view.classList.toggle('detail',detail);view.classList.toggle('overview',!detail);button.textContent=detail?'Visão geral':'Ampliar detalhes';button.setAttribute('aria-pressed',String(detail));};
+   button.addEventListener('click',()=>{detail=!detail;update();});update();
+ });
+})();
+</script></body>
+</html>
+<style id="cards-referencia-aprovada">
+/* Referência aprovada: Contrações. Somente acabamento; conservar dimensões e layout. */
+:is(.status-grid .card):not(#cards-reference-reserved){--reference-accent:var(--phase,#b6cad9);position:relative;isolation:isolate;overflow:hidden!important;
+background:linear-gradient(140deg,#0a1824,#1a3040)!important;
+border-top-color:#7892a3!important;border-right-color:#405d70!important;border-bottom-color:#051621!important;border-left-color:var(--reference-accent)!important;
+box-shadow:inset 0 2px 1px #ffffff35,inset 2px 0 3px #ffffff0d,inset -2px 0 4px #0003,inset 0 -4px 5px #0006,0 4px 0 #05141e,0 6px 2px #0007,0 10px 14px #0005!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::before{content:''!important;display:block!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;right:auto!important;width:5px!important;height:auto!important;border:0!important;border-radius:0!important;background:var(--reference-accent)!important;box-shadow:none!important;opacity:1!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)::after{content:''!important;display:block!important;position:absolute!important;right:-54px!important;bottom:-54px!important;left:auto!important;top:auto!important;width:128px!important;height:128px!important;border-radius:50%!important;border:0!important;background:radial-gradient(circle at center,var(--reference-accent) 0%,transparent 68%)!important;box-shadow:0 0 0 1.25px var(--reference-accent),0 0 11px 2px var(--reference-accent)!important;opacity:.34!important;transform:none!important;filter:none!important;pointer-events:none;z-index:0!important;}
+:is(.status-grid .card):not(#cards-reference-reserved)>*{position:relative;z-index:1;}
+
+</style>
+
+<script src="tutor-ef-data.js?v=20"></script>
+<script src="tutor-widget.js?v=21"></script>
