@@ -9,10 +9,14 @@ type Props = {
   axis: AxisConfig
   params: Params
   onChange: (key: ParamKey, value: number) => void
+  onResetAll: () => void
 }
 
-export function ControlPanel({ axis, params, onChange }: Props) {
-  const changed = axis.params.some((k) => params[k] !== DEFAULT_PARAMS[k])
+const PARAM_KEYS = Object.keys(DEFAULT_PARAMS) as ParamKey[]
+
+export function ControlPanel({ axis, params, onChange, onResetAll }: Props) {
+  const changed = PARAM_KEYS.some((k) => params[k] !== DEFAULT_PARAMS[k])
+  const changedElsewhere = PARAM_KEYS.some((k) => !axis.params.includes(k) && params[k] !== DEFAULT_PARAMS[k])
 
   return (
     <section aria-labelledby="controls-title" className="rounded-xl border bg-card p-4">
@@ -26,14 +30,20 @@ export function ControlPanel({ axis, params, onChange }: Props) {
           size="sm"
           className="h-11 text-muted-foreground"
           disabled={!changed}
-          onClick={() => axis.params.forEach((k) => onChange(k, DEFAULT_PARAMS[k]))}
+          onClick={onResetAll}
+          aria-label="Restaurar todos os parâmetros para o normal"
         >
-          Restaurar
+          Restaurar tudo
         </Button>
       </div>
       <p className="mt-1 text-sm text-muted-foreground text-pretty">
         Ajuste e acompanhe o eixo buscar um novo equilíbrio ao longo dos dias.
       </p>
+      {changedElsewhere && (
+        <p className="mt-2 rounded-md bg-accent px-2.5 py-1.5 text-xs text-accent-foreground text-pretty">
+          Há parâmetros alterados em outros eixos que também influenciam este.
+        </p>
+      )}
 
       <div className="mt-4 flex flex-col gap-5">
         {axis.params.map((key) => {

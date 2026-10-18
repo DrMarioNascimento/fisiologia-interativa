@@ -1,13 +1,8 @@
 import { ArrowDown, ArrowUp } from 'lucide-react'
-import { LAB_DEFS, labStatus, type LabId } from '@/lib/sim/labs'
+import { formatLab, LAB_DEFS, labStatus, type LabId } from '@/lib/sim/labs'
 import { cn } from '@/lib/utils'
 
-export function formatLab(id: LabId, value: number) {
-  return value.toLocaleString('pt-BR', {
-    minimumFractionDigits: LAB_DEFS[id].decimals,
-    maximumFractionDigits: LAB_DEFS[id].decimals,
-  })
-}
+export { formatLab }
 
 export const STATUS_STYLES = {
   baixo: 'bg-low/10 text-low',
