@@ -1,10 +1,55 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BASELINE_STATE as base, DEFAULT_PARAMS, advance } from './model.js';
+import { BASELINE_STATE as base, DEFAULT_PARAMS, advance, initialState, flows } from './thyroid-model.js';
 import { scenarios, describeState } from './thyroid-scenarios.js';
 
-const run = (name, days = 56) => advance({ ...base, t: 0 }, { ...DEFAULT_PARAMS, ...scenarios[name].params }, days);
+const run = (name, days = 56) => {
+  const p = { ...DEFAULT_PARAMS, ...scenarios[name].params };
+  return advance(initialState(p), p, days);
+};
+const experiment = (changes, days) => advance(initialState(), { ...DEFAULT_PARAMS, ...changes }, days);
+test('TPO bloqueada preserva liberação inicial, mas esgota reservas', () => {
+  assert.equal(flows(base, { ...DEFAULT_PARAMS, tpo: 0 }).coupling4, 0);
+  assert(flows(base, { ...DEFAULT_PARAMS, tpo: 0 }).release4 > 0);
+  assert(experiment({ tpo: 0 }, 7).t4 > run('absent', 7).t4);
+  assert(experiment({ tpo: 0 }, 120).store4 < base.store4 * 0.01);
+});
+test('NIS e iodeto limitam síntese; pendrina possui transporte residual', () => {
+  assert.equal(flows(base, { ...DEFAULT_PARAMS, nis: 0 }).uptake, 0);
+  assert.equal(flows(base, { ...DEFAULT_PARAMS, iodine: 0 }).uptake, 0);
+  for (const changes of [{ nis: 0 }, { iodine: 0 }]) assert(experiment(changes, 90).t4 < 0.2);
+  assert(flows(base, { ...DEFAULT_PARAMS, pendrin: 0 }).apical > 0);
+  assert(experiment({ pendrin: 0 }, 1).iodide > base.iodide);
+});
+test('Excesso inibe organificação e escape permite recuperação', () => {
+  assert(flows(base, { ...DEFAULT_PARAMS, iodine: 5 }).inhibition < 0.1);
+  const escape = experiment({ iodine: 5 }, 90);
+  const blocked = experiment({ iodine: 5, escapeEnabled: false }, 90);
+  assert(escape.t4 > blocked.t4 && escape.escape > 0.99);
+});
+test('Lesão libera reservas finitas, causa excesso transitório e depois deficiência', () => {
+  assert(run('destructive', 7).t4 > 1);
+  const late = run('destructive', 180);
+  assert(late.t4 < 0.2 && late.tissue < 0.01 && late.store4 < 0.1);
+});
+test('Conversão consome T4 além de fornecer T3', () => {
+  const stopped = experiment({ deiodinase: 0 }, 1);
+  assert(stopped.t4 > base.t4 && stopped.t3 < base.t3);
+});
+test('Integração em etapas equivale ao avanço contínuo', () => {
+  const p = { ...DEFAULT_PARAMS, tpo: 0.2 };
+  const direct = advance(initialState(), p, 14);
+  const split = advance(advance(initialState(), p, 7), p, 7);
+  for (const key of Object.keys(base)) assert(Math.abs(direct[key] - split[key]) < 1e-8, key);
+});
 
+test('Combinações extremas dos novos controles permanecem não negativas e finitas', () => {
+  for (let i = 0; i < 16; i++) {
+    const p = { ...DEFAULT_PARAMS, iodine: i & 1 ? 5 : 0, nis: i & 2 ? 1.5 : 0, tpo: i & 4 ? 1 : 0, pendrin: i & 8 ? 1.5 : 0, trab: 5, deiodinase: 1.5, destruction: 0.1 };
+    const s = advance(initialState(p), p, 180);
+    for (const [key, value] of Object.entries(s)) assert(Number.isFinite(value) && value >= 0, `${i}: ${key}`);
+  }
+});
 test('Equilíbrio basal e Hashimoto com função preservada', () => {
   for (const name of ['normal', 'hashimotoPreserved']) {
     const state = run(name, 180);
