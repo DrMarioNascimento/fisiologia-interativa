@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { SiteNav } from '@/components/site-nav'
 import { useSimulation } from '@/hooks/use-simulation'
 import { AXIS_MAP, type AxisId } from '@/lib/sim/axes'
 import { interpret } from '@/lib/sim/interpret'
@@ -27,6 +28,7 @@ export function Simulator() {
 
   return (
     <div className="min-h-dvh">
+      <SiteNav current="eixos" />
       <SimHeader
         day={sim.sim.t}
         running={sim.running}
