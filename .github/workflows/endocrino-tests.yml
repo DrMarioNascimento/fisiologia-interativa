@@ -14,6 +14,8 @@ jobs:
           node-version: '24'
       - name: Verificar modelo, cenários e controles
         run: node --test endocrino/tests.mjs
+      - name: Verificar curvas esperadas e preservação da referência
+        run: node --test endocrino/thyroid-reference-tests.mjs
       - name: Verificar núcleo tireoidiano compartilhado e dados publicados
         run: node endocrino/thyroid-evidence-tests.mjs
       - name: Verificar ciclo menstrual e gestação

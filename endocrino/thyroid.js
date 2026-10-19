@@ -1,11 +1,12 @@
-import { mountDailyView } from './thyroid-daily-ui.js?v=20261019-evidence2';
-import { recordSample, chartBounds, exportCSV } from './thyroid-recording.js?v=20261019-evidence2';
-import { BASELINE_STATE, DEFAULT_PARAMS, advance, scenarioState, flows } from './thyroid-model.js?v=20261019-evidence2';
+import { referenceTrajectory } from './thyroid-reference.js?v=20261019-reference3';
+import { mountDailyView } from './thyroid-daily-ui.js?v=20261019-reference3';
+import { recordSample, chartBounds, exportCSV } from './thyroid-recording.js?v=20261019-reference3';
+import { BASELINE_STATE, DEFAULT_PARAMS, advance, scenarioState, flows } from './thyroid-model.js?v=20261019-reference3';
 const bindings = [['capacity', 'thyroidFn'], ['replacement', 'levothyroxine'], ['conversion', 'deiodinase'], ['iodine', 'iodine'], ['nis', 'nis'], ['tpo', 'tpo'], ['pendrin', 'pendrin'], ['destruction', 'destruction'], ['trab', 'trab']];
 
 const $ = (id) => document.getElementById(id);
-import { scenarios, describeState } from './thyroid-scenarios.js?v=20261019-evidence2';
-let state, params, history, timer, dailyView;
+import { scenarios, describeState } from './thyroid-scenarios.js?v=20261019-reference3';
+let state, params, history, timer, dailyView, referenceRows, referenceParams;
 const enableExperiment = () => dailyView?.showExperiment();
 const visibleHormones = new Set(['trh', 'tsh', 't4', 't3']);
 const colors = { trh: '#c4a2f6', tsh: '#ffab73', t4: '#70bcff', t3: '#87d29e' };
@@ -45,6 +46,8 @@ function reset() {
   pause(); params = { ...DEFAULT_PARAMS, ...scenarios[$('scenario').value].params };
   const scenario = scenarios[$('scenario').value];
   state = scenarioState(scenario);
+  referenceParams = { ...params };
+  referenceRows = referenceTrajectory(scenario);
   $('lesion-days').value = params.lesionDays;
   $('permanent').value = params.permanentFraction;
   $('escape').checked = params.escapeEnabled;
@@ -110,7 +113,9 @@ function logIntervention(label) {
 const escapeText = text => String(text).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;');
 function drawProfiles() {
   const visible = ids.filter(id => visibleHormones.has(id));
-  const { xMax, yMax, step } = chartBounds(history, visible, BASELINE_STATE);
+  const xMax = Math.max(42, Math.ceil(state.t / 7) * 7);
+  const referenceWindow = referenceRows.filter(row => row.t <= xMax);
+  const { yMax, step } = chartBounds([...history, ...referenceWindow], visible, BASELINE_STATE);
   const width = Math.max(280, Math.min(900, $('thyroid-chart').clientWidth || 900));
   const height = width < 500 ? 310 : 340;
   const left = width < 500 ? 58 : 78;
@@ -130,6 +135,10 @@ function drawProfiles() {
   }
   svg += '<text x="' + left + '" y="18">% do basal</text><text x="' + (left + box.width / 2) + '" y="' + (height - 11) + '" text-anchor="middle">Dias do experimento</text>';
   svg += '<line class="basal-line" x1="' + left + '" x2="' + right + '" y1="' + y(100) + '" y2="' + y(100) + '"/>';
+  for (const id of visible) {
+    const expected = referenceWindow.map(row => x(row.t).toFixed(2) + ',' + y(percent(id, row[id])).toFixed(2)).join(' ');
+    svg += '<polyline class="expected-hormone-line" data-reference-series="' + id + '" points="' + expected + '" fill="none" stroke="' + colors[id] + '" stroke-width="2.5" stroke-dasharray="2 6" opacity="0.8"><title>' + id.toUpperCase() + ' — trajetória original do cenário (modelo)</title></polyline>';
+  }
   const changes = history.filter(row => row.kind === 'intervention');
   const grouped = new Map();
   for (const change of changes) {
@@ -146,7 +155,7 @@ function drawProfiles() {
     svg += '<circle cx="' + x(last.t) + '" cy="' + y(percent(id, last[id])) + '" r="4" fill="' + colors[id] + '"><title>' + id.toUpperCase() + ': ' + fmt(percent(id, last[id])) + '% do basal</title></circle>';
   }
   $('thyroid-chart').innerHTML = svg;
-  $('chart-caption').textContent = 'Dia ' + fmt(state.t) + ' · ' + history.filter(row => row.kind !== 'intervention').length + ' amostras · referência tracejada: 100% do basal · marcadores dourados: intervenções.';
+  $('chart-caption').textContent = 'Dia ' + fmt(state.t) + ' · ' + history.filter(row => row.kind !== 'intervention').length + ' amostras · pontilhadas: cenário original (modelo) · contínuas: seu experimento · basal: 100% · marcadores dourados: intervenções.';
   $('intervention-count').textContent = '(' + changes.length + ')';
   const items = changes.map(change => {
     const item = document.createElement('li');
@@ -175,7 +184,7 @@ for (const button of document.querySelectorAll('[data-hormone]')) {
   });
 }
 $('export-csv').addEventListener('click', () => {
-  const blob = new Blob([exportCSV(history, BASELINE_STATE)], { type: 'text/csv;charset=utf-8' });
+  const blob = new Blob([exportCSV([...history, ...referenceRows.filter(row => row.t <= Math.max(42, Math.ceil(state.t / 7) * 7)).map(row => recordSample(row, referenceParams, $('scenario').value, 'Trajetória original do cenário sem personalização (modelo)', 'reference'))], BASELINE_STATE)], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url; link.download = 'tireoide-' + $('scenario').value + '-dia-' + Math.round(state.t) + '.csv';

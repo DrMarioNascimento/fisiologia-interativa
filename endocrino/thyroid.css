@@ -206,3 +206,15 @@ footer.wrap{padding:20px 0 32px;font-size:13px;color:var(--muted)}
 
 .module-badge{display:inline-flex;padding:7px 11px;border:1px solid #80c5af;border-radius:99px;color:#b6e3d4;font-size:.78rem;font-weight:700}.titlebar{flex-wrap:wrap;gap:12px}.titlebar .button{padding:9px 14px;border-radius:12px;background:linear-gradient(#1c3c4b,#102937);color:var(--text,#eef6fa);text-decoration:none;border:1px solid #456779;box-shadow:0 3px 0 #061522}select{max-width:100%;min-width:0;white-space:normal}#daily-description{line-height:1.55}#daily-adult-controls[hidden],#daily-adult-results[hidden],#daily-pediatric[hidden],#daily-readouts[hidden]{display:none}#daily-pediatric h3{color:#a5d9c5}#daily-pediatric p{line-height:1.6}.titlebar .brand{margin-right:auto}
 .experiment-workspace.pediatric-view{grid-template-columns:minmax(0,1fr);grid-template-areas:"investigation" "results" "data"}
+
+.scenario-picker{display:block;padding:18px!important;border:2px solid #e9bd82;border-radius:16px;background:linear-gradient(135deg,#294b57,#16313e);box-shadow:0 0 0 4px #e9bd8215}
+.scenario-picker-title{display:flex;align-items:center;justify-content:space-between;gap:14px;color:#ffdc9d;font-size:17px;font-weight:800}
+.scenario-picker-title>span{font-size:27px;line-height:1}.scenario-picker-hint{display:block;margin:5px 0 12px;color:#cfdee7;font-size:13px;line-height:1.5}
+#scenario{cursor:pointer!important;border:2px solid #e9bd82!important;background-color:#102b3b!important;font-weight:700;min-height:54px;padding-right:36px!important;appearance:auto!important}
+#scenario:hover,#scenario:focus-visible{border-color:#ffe2a9!important;outline:3px solid #e9bd8245;outline-offset:3px}
+.comparison-key{font-size:13px;line-height:1.65;padding:12px 14px;border-left:4px solid #e9bd82;background:#0c2432;border-radius:10px}.expected-key,.actual-key{font-weight:800;color:#ffe1a2;font-size:18px;white-space:nowrap}
+#daily-choose-reference{font-size:12px;white-space:normal;max-width:100%}
+#daily-results.reference-compact{padding:14px;border:1px solid #7196a4;border-radius:14px;background:#0c2432;margin-bottom:22px}
+.reference-compact #daily-description,.reference-compact #daily-legend,.reference-compact #sex-legend,.reference-compact .chart-actions,.reference-compact .interpretation,.reference-compact details,.reference-compact #daily-export,.reference-compact #daily-pediatric{display:none!important}
+.reference-compact #daily-chart{max-height:210px}.reference-compact #daily-chart polyline{stroke-dasharray:2 5}.reference-compact #daily-chart .daily-cursor{display:none}.reference-compact #daily-heading{font-size:15px}.reference-compact #expected-study-note{font-size:12px;line-height:1.5}
+@media(max-width:640px){.scenario-picker{padding:13px!important}.scenario-picker-title{font-size:16px}.reference-compact #daily-chart{max-height:none}.reference-compact .profile-heading{gap:10px}}

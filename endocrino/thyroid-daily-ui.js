@@ -1,4 +1,4 @@
-import { HOURS, DAILY_HORMONES, STUDIES, studyGroups, groupLabel, studyValue, studyCSV } from './thyroid-daily-data.js?v=20261019-evidence2';
+import { HOURS, DAILY_HORMONES, STUDIES, studyGroups, groupLabel, studyValue, studyCSV } from './thyroid-daily-data.js?v=20261019-reference3';
 export function mountDailyView({pauseExperiment,drawExperiment}) {
  const $=id=>document.getElementById(id);let mode='daily',hour=8,timer=null;
  const visible=new Set(['tsh','ft4','ft3']);
@@ -7,14 +7,17 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
  const time=h=>{const m=Math.round(h*60);return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');};
  const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
  function stop(){clearInterval(timer);timer=null;$('daily-play').textContent='Animar 24 h';}
- function setView(next){stop();pauseExperiment();mode=next;const daily=next==='daily';
+ function setView(next){if(next===mode)return;stop();pauseExperiment();mode=next;const daily=next==='daily';
   document.querySelector('.experiment-workspace').classList.remove('pediatric-view');
-  $('daily-results').hidden=$('daily-controls').hidden=!daily;
+  $('daily-results').hidden=false;$('daily-controls').hidden=!daily;
+  $('daily-results').classList.toggle('reference-compact',!daily);
+  $('expected-study-note').hidden=daily;$('daily-choose-reference').hidden=daily;
+  $('daily-heading').textContent=daily?'Padrão esperado · dados dos estudos':'Padrão publicado · referência em 24 horas';
   $('experiment-results').hidden=$('experiment-controls').hidden=$('experiment-data').hidden=daily;
   $('view-daily').setAttribute('aria-pressed',String(daily));$('view-experiment').setAttribute('aria-pressed',String(!daily));
   $('investigation-mode-title').textContent=daily?'Compare estudos e populações':'Modifique uma variável';
   $('investigation-mode-description').textContent=daily?'Escolha a fonte e a referência percentual.':'Preveja a resposta, altere um controle e avance os dias.';
-  if(daily)render();else drawExperiment();
+  if(daily)render();else { $('expected-study-note').textContent=$('daily-study').value==='children'?'Pediatria: os estudos recuperados não fornecem uma curva horária completa. Consulte as janelas no painel de estudos.':'Linhas pontilhadas: referência publicada em adultos saudáveis. Este gráfico usa horas; seu experimento abaixo usa dias. A referência permanece intacta, sem prever a curva da doença.';drawExperiment(); }
  }
  function render(){if(mode!=='daily')return;
   const study=$('daily-study').value,ref=$('daily-reference').value,children=study==='children';
@@ -51,6 +54,7 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
   const cards=ids.map(h=>{const el=document.createElement('article');el.className='daily-readout metric-card';el.style.setProperty('--series',DAILY_HORMONES[h].color);const title=document.createElement('h3');title.textContent=DAILY_HORMONES[h].label;el.append(title);for(const g of groups){const d=read(g,h,hour),p=document.createElement('p');p.textContent=groupLabel(g)+': '+num(d.value)+' '+d.unit+' · '+delta(d.percent-100)+' da referência';el.append(p);}return el;});$('daily-readouts').replaceChildren(...cards);
   const rows=[];for(const t of study==='zhang'?HOURS:Array.from({length:13},(_,i)=>i*2))for(const g of groups){const tr=document.createElement('tr');for(const v of [time(t),groupLabel(g),...['tsh','ft4','ft3'].flatMap(h=>{const d=read(g,h,t);return[num(d.value)+' '+d.unit,delta(d.percent-100)];}),read(g,'tsh',t).origin]){const td=document.createElement('td');td.textContent=v;tr.append(td);}rows.push(tr);}$('daily-table').replaceChildren(...rows);
  }
+ $('daily-choose-reference').onclick=()=>setView('daily');
  $('view-daily').onclick=()=>setView('daily');$('view-experiment').onclick=()=>setView('experiment');
  for(const id of ['daily-study','daily-sex','daily-reference'])$(id).addEventListener('change',()=>{stop();render();});
  $('daily-hour').oninput=()=>{stop();hour=Number($('daily-hour').value);render();};$('daily-step').onclick=()=>{stop();hour=(hour+1)%24;render();};$('daily-reset').onclick=()=>{stop();hour=8;render();};
