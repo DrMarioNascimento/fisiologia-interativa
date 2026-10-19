@@ -63,11 +63,11 @@ function draw(){
  const visible=rows.filter(r=>r.t>=start&&r.t<=end);
  const ymax=Math.max(160,Math.ceil(Math.max(...visible.flatMap(r=>[r.cortisol,r.acth,r.sym,r.baseline]))/50)*50);
  const x=t=>left+(t-start)/(extent-start)*w,y=n=>top+h-n/ymax*h;
- for(const r of visible){const dx=Math.max(1,x(r.t+10)-x(r.t));if(r.asleep){ctx.fillStyle='#eef0f5';ctx.fillRect(x(r.t),top,dx,h);}if(r.exercise){ctx.fillStyle='#d5a657';ctx.fillRect(x(r.t),top+h-5,dx,5);}if(r.stress){ctx.fillStyle='#9575b7';ctx.fillRect(x(r.t),top,dx,5);}}
- ctx.font='11px system-ui';ctx.fillStyle='#52655f';ctx.textAlign='right';ctx.setLineDash([]);
- for(let i=0;i<=4;i++){const n=ymax*i/4;ctx.strokeStyle='#dbe3dc';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,y(n));ctx.lineTo(width-right,y(n));ctx.stroke();ctx.fillText(String(Math.round(n)),left-7,y(n)+4);}
+ for(const r of visible){const dx=Math.max(1,x(r.t+10)-x(r.t));if(r.asleep){ctx.fillStyle='#102537';ctx.fillRect(x(r.t),top,dx,h);}if(r.exercise){ctx.fillStyle='#ffb764';ctx.fillRect(x(r.t),top+h-5,dx,5);}if(r.stress){ctx.fillStyle='#c4a2f6';ctx.fillRect(x(r.t),top,dx,5);}}
+ ctx.font='11px system-ui';ctx.fillStyle='#a0b8c9';ctx.textAlign='right';ctx.setLineDash([]);
+ for(let i=0;i<=4;i++){const n=ymax*i/4;ctx.strokeStyle='#385466';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,y(n));ctx.lineTo(width-right,y(n));ctx.stroke();ctx.fillText(String(Math.round(n)),left-7,y(n)+4);}
  ctx.textAlign='center';for(let i=0;i<=4;i++){const t=start+(extent-start)*i/4;ctx.fillText(params.days>1&&$('chart-window').value==='all'?`${fmt(t/1440)} d`:`${Math.floor(t/60)%24}h`,x(t),height-12);}
- for(const [key,color,dash] of [['baseline','#7c8985',[5,5]],['sym','#946019',[]],['acth','#73519c',[]],['cortisol','#08766c',[]]]){
+ for(const [key,color,dash] of [['baseline','#9fb3c2',[5,5]],['sym','#ffb764',[]],['acth','#c4a2f6',[]],['cortisol','#80d4c0',[]]]){
  ctx.beginPath();ctx.strokeStyle=color;ctx.lineWidth=key==='cortisol'?2.5:1.7;ctx.setLineDash(dash);visible.forEach((r,i)=>i?ctx.lineTo(x(r.t),y(r[key])):ctx.moveTo(x(r.t),y(r[key])));ctx.stroke();
  if(visible.length===1){ctx.beginPath();ctx.arc(x(visible[0].t),y(visible[0][key]),3,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();}
  }
