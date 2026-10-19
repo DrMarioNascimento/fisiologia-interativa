@@ -64,7 +64,7 @@ Each course home page also offers:
 
 - mind maps for review and visual reading guides for the in-depth modules;
 - a guided study **tutor** per course, with an optional AI mode (Google Gemini) that the student turns on voluntarily; without it, the guided tutor, maps and questions keep working locally;
-- escape rooms for the existing course axes (the new endocrine unit has no room yet) from the companion project [Fisiologia em Fuga](https://fisiologia-em-fuga.drmarionascimento.com.br/), plus a final "Operação Secreta" covering all units.
+- escape rooms for the existing course axes (the new endocrine unit has no room yet) from the companion project [Fisiologia em Fuga](https://fisiologia-em-fuga.drmarionascimento.com.br/), plus a final "Operação Secreta" covering the axes available in the escape-room catalog.
 
 ### Augmented reality
 
@@ -288,7 +288,7 @@ A API do tutor roda à parte, no Google Cloud Run (`server/tutor.cjs`, imagem de
 
 ### Fisiologia em Fuga
 
-Cada unidade termina com uma sala de fuga do projeto [Fisiologia em Fuga](https://fisiologia-em-fuga.drmarionascimento.com.br/), acessível pela roleta abaixo do mapa e pelo cadeado da unidade na lista. A **Operação Secreta** reúne todas as unidades e pede confirmação antes de abrir. Os desafios de fechamento da integração são o **Box do Atleta** (Educação Física) e a **UTI fisiológica** (Fisioterapia).
+Os eixos já contemplados no catálogo de salas oferecem uma experiência do projeto [Fisiologia em Fuga](https://fisiologia-em-fuga.drmarionascimento.com.br/), acessível pela roleta abaixo do mapa e pelo cadeado da unidade na lista. A **Operação Secreta** reúne os eixos disponíveis no catálogo do Escape Room e pede confirmação antes de abrir. A Unidade 06 — Sistema Endócrino ainda não integra esses percursos. Os desafios de fechamento da integração são o **Box do Atleta** (Educação Física) e a **UTI fisiológica** (Fisioterapia).
 
 ## Características técnicas
 
