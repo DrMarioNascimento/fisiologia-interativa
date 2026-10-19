@@ -18,12 +18,12 @@ export const PARAM_DEFS                             = {
 
   trhDrive: { label: 'Estímulo hipotalâmico de TRH', hint: 'Frio ↑ · doença grave/jejum ↓', min: 0, max: 3, step: 0.05, format: 'multiplier' },
   thyrotropeFn: { label: 'Função dos tireotrofos', hint: 'Células da adeno-hipófise que secretam TSH.', min: 0, max: 1.5, step: 0.01, format: 'percent' },
-  thyroidFn: { label: 'Massa funcional da tireoide', hint: 'Hashimoto, tireoidectomia ou radioiodo ↓', min: 0, max: 1.5, step: 0.01, format: 'percent' },
+  thyroidFn: { label: 'Massa funcional da tireoide', hint: 'Capacidade funcional; alterar o controle preserva as reservas anteriores.', min: 0, max: 1.5, step: 0.01, format: 'percent' },
   iodine: { label: 'Disponibilidade de iodo', hint: 'Necessário para organificação da tireoglobulina.', min: 0, max: 2, step: 0.01, format: 'percent' },
   trab: { label: 'TRAb estimulador (Graves)', hint: 'Anticorpo que ativa o receptor de TSH.', min: 0, max: 4, step: 0.05, format: 'multiplier' },
   methimazole: { label: 'Metimazol (bloqueio da TPO)', hint: 'Inibe a síntese de T4/T3.', min: 0, max: 0.95, step: 0.01, format: 'percent' },
   deiodinase: { label: 'Atividade das desiodases (T4→T3)', hint: 'D1/D2 convertem T4 em T3 ativo.', min: 0.1, max: 1.5, step: 0.01, format: 'percent' },
-  levothyroxine: { label: 'Levotiroxina (T4 exógeno)', hint: '1× ≈ dose plena de reposição.', min: 0, max: 3, step: 0.05, format: 'dose' },
+  levothyroxine: { label: 'Levotiroxina (T4 exógeno)', hint: 'Entrada normalizada de T4, sem equivalência de dose clínica.', min: 0, max: 3, step: 0.05, format: 'dose' },
 
   stress: { label: 'Estresse (estímulo de CRH)', hint: 'Dor, cirurgia, infecção, hipoglicemia ↑', min: 0.2, max: 3, step: 0.05, format: 'multiplier' },
   corticotropeFn: { label: 'Função dos corticotrofos', hint: 'Células que clivam POMC em ACTH.', min: 0, max: 1.5, step: 0.01, format: 'percent' },
