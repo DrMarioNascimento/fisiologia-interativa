@@ -339,7 +339,11 @@
   }
 
   function enableDrag() {
-    const btn = launcher(); let start=null, moved=false;
+    const btn = launcher();
+    if (window.tutorEFCoin && location.pathname.endsWith('/tutor-ef.html')) {
+      return window.tutorEFCoin.attach(btn, () => panel().hidden ? openTutor() : closeTutor(), placePanel);
+    }
+    let start=null, moved=false;
     const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
     btn.addEventListener('pointerdown', e => { start={x:e.clientX,y:e.clientY,left:btn.offsetLeft,top:btn.offsetTop}; moved=false; btn.setPointerCapture(e.pointerId); btn.classList.add('is-dragging'); });
     btn.addEventListener('pointermove', e => { if(!start)return; const dx=e.clientX-start.x,dy=e.clientY-start.y; if(Math.hypot(dx,dy)>5)moved=true; if(!moved)return; btn.style.left=clamp(start.left+dx,6,innerWidth-btn.offsetWidth-6)+'px'; btn.style.top=clamp(start.top+dy,6,innerHeight-btn.offsetHeight-6)+'px'; btn.style.right='auto'; btn.style.bottom='auto'; placePanel(); });

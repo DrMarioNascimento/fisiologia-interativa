@@ -1,9 +1,9 @@
 name: Identidade visual de Educação Física e Fisioterapia
 on:
   push:
-    paths: ['*.html', 'ef-simuladores*', 'fi-simuladores*', 'inicio/dados-*.js', 'fisioterapia/**', 'endocrino/**', 'tests/ef-identidade.test.mjs', 'tutor-ef-endocrino.js', 'tutor-widget.js', 'tests/tutor-ef-endocrino.test.mjs', '.github/workflows/ef-identidade.yml']
+    paths: ['*.html', 'ef-simuladores*', 'fi-simuladores*', 'inicio/dados-*.js', 'fisioterapia/**', 'endocrino/**', 'tests/ef-identidade.test.mjs', 'tutor-ef-endocrino.js', 'tutor-widget.js', 'tests/tutor-ef-endocrino.test.mjs', 'tutor-ef-coin.*', 'assets/tutor/**', 'tests/tutor-ef-coin.test.mjs', '.github/workflows/ef-identidade.yml']
   pull_request:
-    paths: ['*.html', 'ef-simuladores*', 'fi-simuladores*', 'inicio/dados-*.js', 'fisioterapia/**', 'endocrino/**', 'tests/ef-identidade.test.mjs', 'tutor-ef-endocrino.js', 'tutor-widget.js', 'tests/tutor-ef-endocrino.test.mjs', '.github/workflows/ef-identidade.yml']
+    paths: ['*.html', 'ef-simuladores*', 'fi-simuladores*', 'inicio/dados-*.js', 'fisioterapia/**', 'endocrino/**', 'tests/ef-identidade.test.mjs', 'tutor-ef-endocrino.js', 'tutor-widget.js', 'tests/tutor-ef-endocrino.test.mjs', 'tutor-ef-coin.*', 'assets/tutor/**', 'tests/tutor-ef-coin.test.mjs', '.github/workflows/ef-identidade.yml']
 jobs:
   cobertura:
     runs-on: ubuntu-latest
@@ -12,4 +12,4 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - run: node --test tests/ef-identidade.test.mjs tests/tutor-ef-endocrino.test.mjs
+      - run: node --test tests/ef-identidade.test.mjs tests/tutor-ef-endocrino.test.mjs tests/tutor-ef-coin.test.mjs
