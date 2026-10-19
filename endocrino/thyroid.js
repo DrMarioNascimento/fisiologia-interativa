@@ -1,10 +1,12 @@
+import { mountDailyView } from './thyroid-daily-ui.js';
 import { recordSample, chartBounds, exportCSV } from './thyroid-recording.js';
 import { BASELINE_STATE, DEFAULT_PARAMS, advance, scenarioState, flows } from './thyroid-model.js';
 const bindings = [['capacity', 'thyroidFn'], ['replacement', 'levothyroxine'], ['conversion', 'deiodinase'], ['iodine', 'iodine'], ['nis', 'nis'], ['tpo', 'tpo'], ['pendrin', 'pendrin'], ['destruction', 'destruction'], ['trab', 'trab']];
 
 const $ = (id) => document.getElementById(id);
 import { scenarios, describeState } from './thyroid-scenarios.js';
-let state, params, history, timer;
+let state, params, history, timer, dailyView;
+const enableExperiment = () => dailyView?.showExperiment();
 const visibleHormones = new Set(['trh', 'tsh', 't4', 't3']);
 const colors = { trh: '#c4a2f6', tsh: '#ffab73', t4: '#70bcff', t3: '#87d29e' };
 const ids = ['trh', 'tsh', 't4', 't3'];
@@ -61,10 +63,11 @@ function tick(days) {
   render();
   if (state.t >= 180) { pause(); $('clock').textContent += ' · limite do experimento'; $('graph-clock').textContent = $('clock').textContent; }
 }
-$('scenario').addEventListener('change', reset);
-$('reset').addEventListener('click', reset);
-$('step').addEventListener('click', () => { pause(); tick(7); });
+$('scenario').addEventListener('change', () => { enableExperiment(); reset(); });
+$('reset').addEventListener('click', () => { enableExperiment(); reset(); });
+$('step').addEventListener('click', () => { enableExperiment(); pause(); tick(7); });
 function togglePlayback() {
+  enableExperiment();
   if (timer) { pause(); return; }
   if (state.t >= 180) reset();
   $('play').textContent = $('graph-play').textContent = 'Pausar';
@@ -76,6 +79,7 @@ $('graph-step').addEventListener('click', () => { pause(); tick(7); });
 $('graph-reset').addEventListener('click', reset);
 for (const [id, key] of bindings) {
   $(id).addEventListener('input', () => {
+    enableExperiment();
     const previous = params[key];
     params[key] = Number($(id).value) / 100;
     if (key === 'destruction') params.lesionStart = state.t;
@@ -180,3 +184,4 @@ $('export-csv').addEventListener('click', () => {
 });
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 reset();
+dailyView = mountDailyView({ pauseExperiment: pause, drawExperiment: drawProfiles });

@@ -162,3 +162,43 @@ footer.wrap{padding:20px 0 32px;font-size:13px;color:var(--muted)}
 .thyroid-steps .experiment-data>details:first-child{margin-top:0}
 .thyroid-steps .experiment-data .notice{margin-bottom:0}
 @media(max-width:800px){.experiment-workspace{grid-template-areas:"investigation" "results" "data"}}
+
+/* Cores por etapa e por card, seguindo a lateral curva da identidade compartilhada. */
+.thyroid-steps>.experiment{--card-accent:#ffb764}
+.thyroid-steps>.axis-panel{--card-accent:#70bcff}
+.experiment-workspace>.investigation{--card-accent:#bca8eb}
+.experiment-workspace>.results-panel{--card-accent:#64d8d0}
+.experiment-workspace>.experiment-data{--card-accent:#e9bd82}
+.thyroid-steps>.learning-panel{--card-accent:#f0a7aa}
+.thyroid-steps .control-group:nth-child(3n+1){--card-accent:#70bcff}
+.thyroid-steps .control-group:nth-child(3n+2){--card-accent:#ffb764}
+.thyroid-steps .control-group:nth-child(3n+3){--card-accent:#bca8eb}
+.thyroid-steps .panel details{border-left-color:var(--card-accent,#80c5af)}
+.thyroid-steps .panel details:nth-of-type(5n+1){--card-accent:#ffb764}
+.thyroid-steps .panel details:nth-of-type(5n+2){--card-accent:#70bcff}
+.thyroid-steps .panel details:nth-of-type(5n+3){--card-accent:#bca8eb}
+.thyroid-steps .panel details:nth-of-type(5n+4){--card-accent:#88c9a1}
+.thyroid-steps .panel details:nth-of-type(5n+5){--card-accent:#f0a7aa}
+.profile-views{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.profile-views button{flex:1 1 170px;font-size:14px;padding:12px 16px}
+.profile-views button[aria-pressed=true]{background:linear-gradient(#438b7c,#20483f);border-color:#91d6c0;outline:1px solid #91d6c0;outline-offset:2px}
+#daily-export{font-size:13px;min-height:44px;padding:10px 14px}
+.sex-legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:0 0 12px;font-size:12px;color:var(--muted)}
+.sex-legend span{display:flex;align-items:center;gap:8px}
+.sex-legend i{display:inline-block;width:26px;height:0;border-top:3px solid #dcebf5}
+.sex-legend .women-line{border-top-style:dashed}
+#daily-chart{display:block;width:100%;height:auto;min-width:0;background:#0b202e;border:1px solid var(--line);border-radius:14px}
+#daily-chart text{font-family:"Segoe UI",Arial,sans-serif;fill:#b4cad8;font-size:13px}
+#daily-chart .daily-grid{stroke:#385466;stroke-width:1}
+#daily-chart .daily-basal{stroke:#b4cad8;stroke-dasharray:6 5}
+#daily-chart .daily-cursor{stroke:#f4e76a;stroke-width:1.5}
+.daily-readouts{display:grid;gap:12px}
+.daily-readout{min-width:0;padding:12px 14px;background:linear-gradient(145deg,#173244,#102430);border:1px solid var(--line);border-left:5px solid var(--series);border-radius:16px;--card-accent:var(--series)}
+.daily-readout h3{margin:0 0 6px;color:var(--series);font-size:15px}
+.daily-readout p{margin:4px 0;font-size:12px;line-height:1.6}
+#daily-reading{font-size:14px;line-height:1.6;margin:0}
+#daily-table{font-size:12px}
+#daily-table td{padding:12px 8px}
+#daily-results>details{margin-top:14px}
+#experiment-data[hidden],#daily-controls[hidden],#experiment-controls[hidden],#daily-results[hidden],#experiment-results[hidden]{display:none!important}
+@media(max-width:640px){.profile-views button{flex-basis:100%}#daily-chart text{font-size:13px}.profile-heading h3{font-size:16px}#daily-export{font-size:12px}}
