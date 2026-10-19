@@ -10,9 +10,11 @@ test('Todas as unidades e todos os acessos EF recebem a identidade, incluindo os
  for(const u of catalog.unidades)for(const s of u.sims){count++;const path=s.href.split(/[?#]/)[0];assert.ok(manifest[path],path);assert.equal(manifest[path].unit,u.id);assert.equal(manifest[path].number,u.num);assert.match(read(path),/ef-simuladores\.js/);}
  assert.equal(count,34);assert.equal(manifest['endocrino/index.html'].number,'06');assert.equal(manifest['cardiopulmonar-integrado.html'].number,'');
 });
-test('Cortisol entra como aprofundamento endócrino com identidade e sem leitura inexistente',()=>{
+test('Cortisol entra como aprofundamento endócrino com identidade e leitura publicada',()=>{
  const unit=catalog.unidades.find(u=>u.id==='endocrino'),cards=unit.sims.filter(s=>s.href==='endocrino/cortisol.html');
- assert.equal(cards.length,1);assert.equal(cards[0].deep,'módulo de aprofundamento');assert.equal(cards[0].leitura,undefined);
+ assert.equal(cards.length,1);assert.equal(cards[0].deep,'módulo de aprofundamento');assert.match(cards[0].leitura,/^assets\/leituras\/Cortisol_Guia_Visual_Prof_Mario_Nascimento\.pdf(?:\?|$)/);
+ const readingPath=cards[0].leitura.split('?')[0];assert.equal(fs.readFileSync(new URL(readingPath,root)).subarray(0,5).toString(),'%PDF-');
+ assert.ok(read('endocrino/cortisol.html').includes('../'+cards[0].leitura));
  assert.equal(manifest[cards[0].href].unit,'endocrino');assert.equal(manifest[cards[0].href].number,'06');
  assert.match(read('endocrino/cortisol.html'),/ef-simuladores\.js/);assert.match(read('endocrino/cortisol.html'),/Prof\. Dr\. Mário César Nascimento/);
  assert.match(read('endocrino/index.html'),/class="button module-deep" href="cortisol\.html"/);
