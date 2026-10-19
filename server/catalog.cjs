@@ -14,7 +14,7 @@ function loadCatalog(root) {
   vm.runInContext(fs.readFileSync(path.join(root, 'tutor-ra-data.js'), 'utf8'), context, { timeout: 1000 });
   const ra=context.window.raTutorModules;
   const extras = loadExtras(root);
-  return JSON.parse(JSON.stringify({ ef:ef.concat(ra, extras.ef), fisio:context.window.fisioterapiaTutor.modules.concat(context.window.raTutorModulesForCourse('fisio'), extras.fisio) }));
+  return JSON.parse(JSON.stringify({ ef:ef.concat(loadEndocrine(root), ra, extras.ef), fisio:context.window.fisioterapiaTutor.modules.concat(context.window.raTutorModulesForCourse('fisio'), extras.fisio) }));
 }
 
 // Desafios de fechamento da integração (Box do Atleta na EF, UTI fisiológica na Fisio).
@@ -33,5 +33,19 @@ function loadExtras(root) {
     return fisio ? context.window.fisioterapiaTutor.modules : context.modules;
   };
   return { ef: run(false), fisio: run(true) };
+}
+
+// Mesma unidade exclusiva da página EF, sem ampliar o catálogo da Fisioterapia.
+function loadEndocrine(root) {
+  const file = path.join(root, 'tutor-ef-endocrino.js');
+  if (!fs.existsSync(file)) return [];
+  const context = vm.createContext({
+    window: {}, URLSearchParams, location: { pathname: '/tutor-ef.html', search: '' },
+    maps: {}, axes: [], modules: [], active: 'celular',
+    renderAxes() {}, renderCards() {}, axesEl: { addEventListener() {} },
+    document: { documentElement: { style: { setProperty() {} } } }
+  });
+  vm.runInContext(fs.readFileSync(file, 'utf8'), context, { timeout: 1000 });
+  return context.modules;
 }
 module.exports = { loadCatalog };

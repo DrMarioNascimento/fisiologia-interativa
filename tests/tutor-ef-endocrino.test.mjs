@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
+import {fileURLToPath} from 'node:url';
 const root = new URL('../', import.meta.url);
 const read = path => fs.readFileSync(new URL(path, root), 'utf8');
 const json = value => JSON.parse(JSON.stringify(value));
@@ -47,6 +48,14 @@ test('A extensão não altera nenhum dado fora da página de Tutor EF',()=>{
     const context=environment('https://site.test'+path),before=capture(context);add(context);
     assert.deepEqual(capture(context),before,path);assert.equal(context.window.educacaoFisicaTutor,undefined);
   }
+});
+test('O catálogo de contexto da IA inclui as mesmas questões apenas na Educação Física',async()=>{
+  const {loadCatalog}=await import('../server/catalog.cjs');
+  const catalog=loadCatalog(fileURLToPath(root));
+  const context=environment('https://site.test/tutor-ef.html');add(context);
+  const client=capture(context).modules.filter(m=>m.group==='endocrino');
+  assert.deepEqual(catalog.ef.filter(m=>m.group==='endocrino'),client);
+  assert.equal(catalog.fisio.filter(m=>m.group==='endocrino').length,0);
 });
 test('Busca, mapa, leitura e quiz do widget reconhecem os percursos endócrinos apenas no Tutor EF',()=>{
   const context=environment('https://site.test/tutor-ef.html?eixo=endocrino');add(context);const api=widget(context);
