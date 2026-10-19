@@ -8,3 +8,4 @@ test-results/
 server/.env
 # Arquivos entregues pelo app do Claude (nao fazem parte do site)
 Claude outputs/
+*.html
