@@ -1,3 +1,4 @@
+import { initialState as initialThyroidState, advance as advanceThyroid, DEFAULT_PARAMS as THYROID_DEFAULTS } from './thyroid-model.js?v=20261019-evidence2';
                       
                  
                
@@ -113,6 +114,7 @@ export const DEFAULT_PARAMS         = {
 }
 
 const INITIAL_STATE           = {
+  thyroid: initialThyroidState(),
   t: 0,
   trh: 1,
   tsh: 1,
@@ -183,27 +185,16 @@ export function step(s          , p        , dt = DT)           {
   const A = p.adenoFn
   const C = floor(s.cortisolEndo + p.exoGlucocorticoid)
   const T = floor(s.testoEndo + p.exoTestosterone)
-
-  // Tireoide
-  const F = floor(0.6 * s.t4 + 0.4 * s.t3)
-  const trhT = p.trhDrive * F ** -1.5
   const trhPortal = s.trh * H
-  const cortOnTsh = C > 1.2 ? (C / 1.2) ** -0.4 : 1
-  // A damaged pituitary cannot mount the full compensatory TSH rise, so its
-  // feedback gain is capped by the remaining thyrotrope reserve.
-  const thyrotropeReserve = A * p.thyrotropeFn
-  const centralThyroidReserve = thyrotropeReserve * (0.1 + 0.9 * H)
-  const feedbackGain = Math.min(F ** -5, 1 + 79 * Math.min(1, centralThyroidReserve) ** 2)
-  const tshRaw =
-    thyrotropeReserve * (0.05 + 0.95 * trhPortal ** 0.7) * feedbackGain * cortOnTsh * (2 / (1 + s.sst * H))
-  const tshT = (80 * tshRaw) / (80 + tshRaw)
-  const iodineFactor = (1.3 * p.iodine) / (0.3 + p.iodine)
-  const stim = (s.tsh + p.trab) ** 0.8
-  const secretion =
-    p.thyroidFn * iodineFactor * (1 - p.methimazole) * s.goiter * ((3 * stim) / (2 + stim))
-  const t4T = secretion + p.levothyroxine
-  const t3T = 0.2 * secretion + 0.8 * s.t4 * p.deiodinase
-  const goiterT = clamp((s.tsh + 1.5 * p.trab) ** 0.4, 0.5, 3)
+
+  // O mesmo núcleo HHT usado no aprofundamento, com entradas dos outros eixos.
+  const thyroid = advanceThyroid(s.thyroid, {
+    ...THYROID_DEFAULTS, thyroidFn: p.thyroidFn, thyrotropeFn: p.thyrotropeFn,
+    levothyroxine: p.levothyroxine, deiodinase: p.deiodinase, trab: p.trab,
+    iodine: p.iodine, methimazole: p.methimazole, trhDrive: p.trhDrive,
+    portalTransmission: H, adenoFn: A, somatostatinTone: s.sst,
+    glucocorticoidIndex: C,
+  }, dt);
 
   // Adrenal
   const crhT = p.stress * C ** -0.7
@@ -285,11 +276,12 @@ export function step(s          , p        , dt = DT)           {
 
   return {
     t: s.t + dt,
-    trh: relax(s.trh, trhT, 0.02),
-    tsh: relax(s.tsh, tshT, 0.08),
-    t4: relax(s.t4, t4T, 10),
-    t3: relax(s.t3, t3T, 1.2),
-    goiter: relax(s.goiter, goiterT, 25),
+    thyroid,
+    trh: thyroid.trh,
+    tsh: thyroid.tsh,
+    t4: thyroid.t4,
+    t3: thyroid.t3,
+    goiter: p.thyroidFn * thyroid.tissue * (1 - thyroid.injury) * thyroid.growth,
     crh: relax(s.crh, crhT, 0.01),
     acth: relax(s.acth, acthT, 0.02),
     cortisolEndo: relax(s.cortisolEndo, cortEndoT, 0.05),
@@ -330,5 +322,7 @@ export function advance(s          , p        , days        ) {
 export const BASELINE_STATE           = {
   ...advance(INITIAL_STATE, DEFAULT_PARAMS, 200),
   t: 0,
+  thyroid: { ...initialThyroidState(), t: 0, iodineIn: 0, iodineOut: 0 },
 }
+
 

@@ -1,4 +1,5 @@
 // Registros independentes da apresentação: histórico completo e parâmetros por amostra.
+import { MODEL_VERSION } from './thyroid-model.js?v=20261019-evidence2';
 export function recordSample(state, parameters, scenario, event = '', kind = 'observation') {
   return { ...state, parameters: { ...parameters }, scenario, event, kind };
 }
@@ -19,9 +20,10 @@ export function exportCSV(records, baseline) {
   const parameterKeys = [...new Set(records.flatMap(row => Object.keys(row.parameters)))].sort();
   const number = value => Number.isFinite(value) ? value.toLocaleString('pt-BR', { useGrouping: false, maximumFractionDigits: 8 }) : '';
   const cell = value => '"' + String(value).replaceAll('"', '""') + '"';
-  const headers = ['Cenário', 'Dia', 'TRH (% do basal)', 'TSH (% do basal)', 'T4 (% do basal)', 'T3 (% do basal)', 'Tipo de registro', 'Intervenção',
+  const headers = ['Modelo', 'Natureza', 'Cenário', 'Dia', 'TRH (% do basal)', 'TSH (% do basal)', 'T4 (% do basal)', 'T3 (% do basal)', 'Tipo de registro', 'Intervenção',
     ...parameterKeys.map(key => 'Parâmetro ' + key + ' (valor do modelo)')];
-  const rows = records.map(row => [row.scenario, number(row.t), ...ids.map(id => number(percentOfBaseline(id, row[id], baseline))), row.kind, row.event,
+  const rows = records.map(row => [MODEL_VERSION, 'Estimativa conceitual; não é dosagem', row.scenario, number(row.t), ...ids.map(id => number(percentOfBaseline(id, row[id], baseline))), row.kind, row.event,
     ...parameterKeys.map(key => typeof row.parameters[key] === 'number' ? number(row.parameters[key]) : String(row.parameters[key] ?? ''))]);
   return '\ufeff' + [headers, ...rows].map(row => row.map(cell).join(';')).join('\r\n');
 }
+

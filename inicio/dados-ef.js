@@ -358,17 +358,20 @@ window.FI_DADOS = {
      "href": "endocrino/ciclo/index.html?modo=gestacao"
     },
     {
-     "t": "Tireoide: TRH, TSH, T4 e T3",
-     "cat": "Sistema Endócrino",
-     "obj": "Explorar feedback, Hashimoto, hipotireoidismo primário e central, Graves e reposição de T4.",
-     "href": "endocrino/thyroid.html"
-    },
-    {
      "t": "Perimenopausa, menopausa e pós-menopausa",
      "cat": "Sistema Endócrino",
      "obj": "Comparar a fase reprodutiva e a transição menopausal; manipular estradiol, progesterona, FSH e LH e observar retroalimentação, ovulação e resposta endometrial em um modelo didático.",
      "href": "endocrino/menopausa/index.html"
     },
+    {
+     "t": "Tireoide: hormônios, tempo e feedback",
+     "cat": "Sistema Endócrino",
+     "obj": "Explorar feedback, Hashimoto, hipotireoidismo primário e central, Graves e reposição de T4.",
+     "href": "endocrino/thyroid.html",
+     "deep": "módulo de aprofundamento",
+     "leitura": "assets/leituras/Tireoide_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20261019"
+    },
+
     {
      "t": "Cortisol: estresse, sono e exercício",
      "cat": "Sistema Endócrino",
@@ -397,3 +400,4 @@ window.FI_DADOS = {
   "href": "atleta-box.html?percurso=educacao-fisica"
  }
 };
+

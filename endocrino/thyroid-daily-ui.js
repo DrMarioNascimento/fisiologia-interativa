@@ -1,107 +1,57 @@
-import { HOURS, DAILY_GROUPS, DAILY_HORMONES, groupsFor, dailyValue, dailyCSV } from './thyroid-daily-data.js';
-export function mountDailyView({ pauseExperiment, drawExperiment }) {
-  const $ = id => document.getElementById(id);
-  let mode = 'daily', hour = 8, timer = null;
-  const visible = new Set(['tsh', 'ft4', 'ft3']);
-  const number = value => value.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
-  const delta = value => (value >= 0 ? '+' : '') + number(value) + '%';
-  const time = value => { const minutes = Math.round(value * 60); return String(Math.floor(minutes / 60)).padStart(2, '0') + ':' + String(minutes % 60).padStart(2, '0'); };
-  const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('"', '&quot;');
-  function stop() { clearInterval(timer); timer = null; $('daily-play').textContent = 'Animar 24 h'; }
-  function setView(next) {
-    if (next === mode) return;
-    stop(); pauseExperiment(); mode = next;
-    const daily = mode === 'daily';
-    $('daily-results').hidden = $('daily-controls').hidden = !daily;
-    $('experiment-results').hidden = $('experiment-controls').hidden = $('experiment-data').hidden = daily;
-    $('view-daily').setAttribute('aria-pressed', String(daily));
-    $('view-experiment').setAttribute('aria-pressed', String(!daily));
-    $('investigation-mode-title').textContent = daily ? 'Explore o ritmo diário' : 'Modifique uma variável';
-    $('investigation-mode-description').textContent = daily ? 'Compare os grupos e percorra os horários observados.' : 'Faça uma previsão, altere um controle e avance o tempo para testar sua hipótese.';
-    if (daily) render(); else drawExperiment();
+import { HOURS, DAILY_HORMONES, STUDIES, studyGroups, groupLabel, studyValue, studyCSV } from './thyroid-daily-data.js?v=20261019-evidence2';
+export function mountDailyView({pauseExperiment,drawExperiment}) {
+ const $=id=>document.getElementById(id);let mode='daily',hour=8,timer=null;
+ const visible=new Set(['tsh','ft4','ft3']);
+ const num=v=>v.toLocaleString('pt-BR',{maximumFractionDigits:3});
+ const delta=v=>(v>=0?'+':'')+num(v)+'%';
+ const time=h=>{const m=Math.round(h*60);return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');};
+ const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
+ function stop(){clearInterval(timer);timer=null;$('daily-play').textContent='Animar 24 h';}
+ function setView(next){stop();pauseExperiment();mode=next;const daily=next==='daily';
+  $('daily-results').hidden=$('daily-controls').hidden=!daily;
+  $('experiment-results').hidden=$('experiment-controls').hidden=$('experiment-data').hidden=daily;
+  $('view-daily').setAttribute('aria-pressed',String(daily));$('view-experiment').setAttribute('aria-pressed',String(!daily));
+  $('investigation-mode-title').textContent=daily?'Compare estudos e populações':'Modifique uma variável';
+  $('investigation-mode-description').textContent=daily?'Escolha a fonte e a referência percentual.':'Preveja a resposta, altere um controle e avance os dias.';
+  if(daily)render();else drawExperiment();
+ }
+ function render(){if(mode!=='daily')return;
+  const study=$('daily-study').value,ref=$('daily-reference').value,children=study==='children';
+  $('daily-description').textContent=STUDIES[study].description;
+  $('daily-sex-label').hidden=$('daily-sex').hidden=study!=='zhang';
+  $('daily-reference-label').hidden=$('daily-reference').hidden=children;
+  $('daily-adult-controls').hidden=children;$('daily-adult-results').hidden=children;$('daily-pediatric').hidden=!children;$('daily-readouts').hidden=children;
+  if(children){stop();$('daily-readouts').replaceChildren();return;}
+  const groups=studyGroups(study,$('daily-sex').value),ids=[...visible],read=(g,h,t)=>studyValue(study,g,h,t,ref);
+  $('daily-hour').value=hour;$('daily-clock').textContent=$('daily-hour-value').textContent=time(hour);
+  const width=Math.max(280,Math.min(900,$('daily-chart').clientWidth||900)),height=width<500?310:340,left=width<500?61:72,right=width-24,bottom=height-60;
+  const times=study==='zhang'?[...HOURS,24]:Array.from({length:97},(_,i)=>i/4);
+  const vals=groups.flatMap(g=>ids.flatMap(h=>times.map(t=>read(g,h,t).percent))),lo=Math.min(100,...vals),hi=Math.max(100,...vals),raw=Math.max(10,hi-lo+10)/4,mag=10**Math.floor(Math.log10(raw)),f=raw/mag,step=(f<=1?1:f<=2?2:f<=5?5:10)*mag;
+  const min=Math.max(0,Math.floor((lo-5)/step)*step),max=Math.ceil((hi+5)/step)*step,x=t=>left+t/24*(right-left),y=v=>30+(bottom-30)*(max-v)/(max-min);
+  $('daily-chart').setAttribute('viewBox',`0 0 ${width} ${height}`);
+  let svg='<title id="daily-chart-title">'+esc(STUDIES[study].label)+'</title><desc id="daily-chart-desc">Zhang: pontos publicados e interpolação. Russell: ajuste coletivo reconstruído, sem pontos medidos.</desc>';
+  for(let v=min;v<=max+step/10;v+=step)svg+=`<line class="daily-grid" x1="${left}" x2="${right}" y1="${y(v)}" y2="${y(v)}"/><text x="${left-8}" y="${y(v)+4}" text-anchor="end">${num(v)}%</text>`;
+  for(const t of [...HOURS,24])svg+=`<text x="${x(t)}" y="${bottom+22}" text-anchor="middle">${t}h</text>`;
+  const reference=ref==='08h'?'valor às 08h':study==='zhang'?'média de 6 medianas':'mesor publicado';
+  svg+=`<text x="${left}" y="17">100% = ${esc(reference)}</text><line class="daily-basal" x1="${left}" x2="${right}" y1="${y(100)}" y2="${y(100)}"/>`;
+  for(const g of groups)for(const h of ids){const info=DAILY_HORMONES[h],dash=g==='women'?' stroke-dasharray="7 5"':'',bodyTimes=study==='zhang'?HOURS:times;
+   svg+=`<polyline fill="none" stroke="${info.color}" stroke-width="2.5"${dash} points="${bodyTimes.map(t=>x(t)+','+y(read(g,h,t).percent)).join(' ')}"/>`;
+   if(study==='zhang'){svg+=`<line x1="${x(20)}" y1="${y(read(g,h,20).percent)}" x2="${x(24)}" y2="${y(read(g,h,24).percent)}" stroke="${info.color}" stroke-width="2" stroke-dasharray="2 6"/>`;
+    for(const t of HOURS){const d=read(g,h,t);svg+=`<circle cx="${x(t)}" cy="${y(d.percent)}" r="3" fill="${g==='women'?'#0b202e':info.color}" stroke="${info.color}"><title>${esc(groupLabel(g)+' · '+time(t)+' · '+info.label+': '+num(d.value)+' '+d.unit)}</title></circle>`;}
+   }
   }
-  function render() {
-    if (mode !== 'daily') return;
-    const groups = groupsFor($('daily-sex').value);
-    const ids = [...visible];
-    $('daily-hour').value = hour;
-    $('daily-clock').textContent = $('daily-hour-value').textContent = time(hour);
-    const width = Math.max(280, Math.min(900, $('daily-chart').clientWidth || 900));
-    const height = width < 500 ? 310 : 340, left = width < 500 ? 60 : 72, right = width - 24, bottom = height - 60;
-    const values = groups.flatMap(group => ids.flatMap(id => HOURS.map(h => dailyValue(group, id, h).percent)));
-    const low = Math.min(100, ...values), high = Math.max(100, ...values);
-    const spread = Math.max(10, high - low + 10), rawStep = spread / 4;
-    const magnitude = 10 ** Math.floor(Math.log10(rawStep));
-    const fraction = rawStep / magnitude;
-    const step = (fraction <= 1 ? 1 : fraction <= 2 ? 2 : fraction <= 5 ? 5 : 10) * magnitude;
-    const yMin = Math.max(0, Math.floor((low - 5) / step) * step), yMax = Math.ceil((high + 5) / step) * step;
-    const x = value => left + value / 24 * (right - left);
-    const y = value => 30 + (bottom - 30) * (yMax - value) / (yMax - yMin);
-    $('daily-chart').setAttribute('viewBox', '0 0 ' + width + ' ' + height);
-    let svg = '<title id="daily-chart-title">Perfis diários: ' + groups.map(g => DAILY_GROUPS[g].label).join(' e ') + '</title><desc id="daily-chart-desc">Medianas publicadas em seis horários. Linhas interpoladas; percentual da média de cada grupo.</desc>';
-    for (let value = yMin; value <= yMax + step / 10; value += step) svg += '<line class="daily-grid" x1="' + left + '" x2="' + right + '" y1="' + y(value) + '" y2="' + y(value) + '"/><text x="' + (left - 8) + '" y="' + (y(value) + 4) + '" text-anchor="end">' + number(value) + '%</text>';
-    for (const value of [...HOURS, 24]) svg += '<line class="daily-grid" x1="' + x(value) + '" x2="' + x(value) + '" y1="30" y2="' + bottom + '"/><text x="' + x(value) + '" y="' + (bottom + 22) + '" text-anchor="middle">' + (width < 500 ? value : String(value).padStart(2, '0') + 'h') + '</text>';
-    svg += '<text x="' + left + '" y="17">% da média do grupo</text><text x="' + ((left + right) / 2) + '" y="' + (height - 10) + '" text-anchor="middle">Horário · horas</text><line class="daily-basal" x1="' + left + '" x2="' + right + '" y1="' + y(100) + '" y2="' + y(100) + '"/>';
-    for (const group of groups) for (const id of ids) {
-      const info = DAILY_HORMONES[id], dashed = group === 'women' ? ' stroke-dasharray="7 5"' : '';
-      const points = [...HOURS, 24].map(h => x(h) + ',' + y(dailyValue(group, id, h).percent)).join(' ');
-      svg += '<polyline class="daily-series" data-group="' + group + '" data-daily-series="' + id + '" points="' + points + '" fill="none" stroke="' + info.color + '" stroke-width="2.5"' + dashed + '/>';
-      for (const h of HOURS) {
-        const value = dailyValue(group, id, h);
-        svg += '<circle cx="' + x(h) + '" cy="' + y(value.percent) + '" r="3" fill="' + (group === 'women' ? '#0b202e' : info.color) + '" stroke="' + info.color + '" stroke-width="1.5"><title>' + escape(DAILY_GROUPS[group].label + ' · ' + time(h) + ' · ' + info.label + ': ' + number(value.value) + ' ' + info.unit) + '</title></circle>';
-      }
-    }
-    svg += '<line class="daily-cursor" x1="' + x(hour) + '" x2="' + x(hour) + '" y1="30" y2="' + bottom + '"/>';
-    $('daily-chart').innerHTML = svg;
-    $('daily-caption').textContent = time(hour) + ' · ' + (hour % 4 === 0 && hour < 24 ? 'horário de coleta publicado' : hour === 24 ? 'repetição de 00:00 para fechar o ciclo' : 'valor interpolado entre coletas') + ' · fonte: Zhang et al., 2023.';
-    const cards = ids.map(id => {
-      const article = document.createElement('article'); article.className = 'daily-readout metric-card';
-      article.style.setProperty('--series', DAILY_HORMONES[id].color);
-      const title = document.createElement('h3'); title.textContent = DAILY_HORMONES[id].label; article.append(title);
-      for (const group of groups) {
-        const data = dailyValue(group, id, hour), line = document.createElement('p');
-        line.textContent = DAILY_GROUPS[group].label + ': ' + number(data.value) + ' ' + DAILY_HORMONES[id].unit + ' · ' + delta(data.percent - 100) + ' da média';
-        article.append(line);
-      }
-      return article;
-    });
-    $('daily-readouts').replaceChildren(...cards);
-    const rows = [];
-    for (const h of HOURS) for (const group of groups) {
-      const row = document.createElement('tr');
-      const cells = [time(h), DAILY_GROUPS[group].label, ...['tsh', 'ft4', 'ft3'].flatMap(id => { const data = dailyValue(group, id, h); return [number(data.value), delta(data.percent - 100)]; })];
-      for (const value of cells) { const cell = document.createElement('td'); cell.textContent = value; row.append(cell); }
-      rows.push(row);
-    }
-    $('daily-table').replaceChildren(...rows);
-    $('daily-reading').textContent = 'TSH: valores maiores na madrugada nesta coorte. Compare a oscilação mais ampla do TSH às mudanças pequenas de T4 livre e T3 livre. Uma diferença entre medianas de grupos não prevê o perfil de uma pessoa.';
-    const keyItems = $('sex-legend').querySelectorAll('span');
-    keyItems[0].hidden = !groups.includes('men'); keyItems[1].hidden = !groups.includes('women');
-  }
-  $('view-daily').addEventListener('click', () => setView('daily'));
-  $('view-experiment').addEventListener('click', () => setView('experiment'));
-  $('daily-sex').addEventListener('change', render);
-  $('daily-hour').addEventListener('input', () => { stop(); hour = Number($('daily-hour').value); render(); });
-  $('daily-step').addEventListener('click', () => { stop(); hour = (hour + 1) % 24; render(); });
-  $('daily-reset').addEventListener('click', () => { stop(); hour = 8; render(); });
-  $('daily-play').addEventListener('click', () => {
-    if (timer) { stop(); return; }
-    $('daily-play').textContent = 'Pausar';
-    timer = setInterval(() => { hour = (hour + 0.25) % 24; render(); }, 500);
-  });
-  for (const button of document.querySelectorAll('[data-daily-hormone]')) button.addEventListener('click', () => {
-    const id = button.dataset.dailyHormone;
-    if (visible.has(id)) { if (visible.size === 1) return; visible.delete(id); } else visible.add(id);
-    for (const item of document.querySelectorAll('[data-daily-hormone]')) { const selected = visible.has(item.dataset.dailyHormone); item.setAttribute('aria-pressed', String(selected)); item.disabled = selected && visible.size === 1; }
-    render();
-  });
-  $('daily-export').addEventListener('click', () => {
-    const blob = new Blob([dailyCSV($('daily-sex').value)], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob), link = document.createElement('a');
-    link.href = url; link.download = 'tireoide-24h-' + $('daily-sex').value + '.csv'; document.body.append(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(url), 1000);
-  });
-  document.defaultView?.addEventListener('resize', render);
-  document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
-  render();
-  return { showExperiment: () => setView('experiment') };
+  svg+=`<line class="daily-cursor" x1="${x(hour)}" x2="${x(hour)}" y1="30" y2="${bottom}"/>`;$('daily-chart').innerHTML=svg;
+  $('daily-caption').textContent=time(hour)+' · '+read(groups[0],ids[0],hour).origin+' · '+STUDIES[study].label;
+  $('daily-reading').textContent=study==='zhang'?'As medianas representam esta coorte. FT3 e FT4 não tiveram variação intradiária significativa; ligar pontos não demonstra ritmo universal.':'Ajuste coletivo: amplitude relativa do TSH ≈24,66%, FT3 ≈3,45% e FT4 ≈0,60% em relação ao mesor. Não equivale à média das amplitudes individuais. Sem banda de confiança ou previsão individual.';
+  $('sex-legend').textContent=groups.map(g=>groupLabel(g)+(g==='women'?' · tracejada':g==='men'?' · contínua':' · ajuste coletivo')).join(' | ')+(study==='zhang'?' | pontilhado fino: fechamento assumido':'');
+  const cards=ids.map(h=>{const el=document.createElement('article');el.className='daily-readout metric-card';el.style.setProperty('--series',DAILY_HORMONES[h].color);const title=document.createElement('h3');title.textContent=DAILY_HORMONES[h].label;el.append(title);for(const g of groups){const d=read(g,h,hour),p=document.createElement('p');p.textContent=groupLabel(g)+': '+num(d.value)+' '+d.unit+' · '+delta(d.percent-100)+' da referência';el.append(p);}return el;});$('daily-readouts').replaceChildren(...cards);
+  const rows=[];for(const t of study==='zhang'?HOURS:Array.from({length:13},(_,i)=>i*2))for(const g of groups){const tr=document.createElement('tr');for(const v of [time(t),groupLabel(g),...['tsh','ft4','ft3'].flatMap(h=>{const d=read(g,h,t);return[num(d.value)+' '+d.unit,delta(d.percent-100)];}),read(g,'tsh',t).origin]){const td=document.createElement('td');td.textContent=v;tr.append(td);}rows.push(tr);}$('daily-table').replaceChildren(...rows);
+ }
+ $('view-daily').onclick=()=>setView('daily');$('view-experiment').onclick=()=>setView('experiment');
+ for(const id of ['daily-study','daily-sex','daily-reference'])$(id).addEventListener('change',()=>{stop();render();});
+ $('daily-hour').oninput=()=>{stop();hour=Number($('daily-hour').value);render();};$('daily-step').onclick=()=>{stop();hour=(hour+1)%24;render();};$('daily-reset').onclick=()=>{stop();hour=8;render();};
+ $('daily-play').onclick=()=>{if(timer){stop();return;}$('daily-play').textContent='Pausar';timer=setInterval(()=>{hour=(hour+.25)%24;render();},500);};
+ for(const b of document.querySelectorAll('[data-daily-hormone]'))b.onclick=()=>{const h=b.dataset.dailyHormone;if(visible.has(h)){if(visible.size===1)return;visible.delete(h);}else visible.add(h);for(const x of document.querySelectorAll('[data-daily-hormone]')){const yes=visible.has(x.dataset.dailyHormone);x.setAttribute('aria-pressed',String(yes));x.disabled=yes&&visible.size===1;}render();};
+ $('daily-export').onclick=()=>{const s=$('daily-study').value,u=URL.createObjectURL(new Blob([studyCSV(s,$('daily-sex').value,$('daily-reference').value)],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='tireoide-estudo-'+s+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);};
+ document.defaultView?.addEventListener('resize',render);document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});render();return{showExperiment:()=>setView('experiment')};
 }

@@ -1,4 +1,4 @@
-import { labStatus } from './labs.js?v=20261018-audit2';
+import { labStatus } from './labs.js?v=20261019-evidence2';
 
 
 
@@ -175,4 +175,5 @@ export function interpret(axis        , labs      , params        )             
       return neuro(labs, params)
   }
 }
+
 

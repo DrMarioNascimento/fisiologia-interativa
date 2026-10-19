@@ -103,7 +103,7 @@ export const AXES               = [
     id: 'tireoide',
     name: 'Eixo hipotálamo-hipófise-tireoide',
     tabLabel: 'Tireoide',
-    summary: 'TRH → TSH → T4/T3, com conversão periférica de T4 em T3.',
+    summary: 'TRH → TSH → T4/T3. Núcleo comum ao aprofundamento, com estoques glandulares e influência dos outros eixos; respostas ao longo de dias, sem ritmo circadiano imposto.',
     params: ['trhDrive', 'thyrotropeFn', 'thyroidFn', 'iodine', 'trab', 'methimazole', 'deiodinase', 'levothyroxine'],
     monitor: ['tsh', 'ft4', 't3'],
     panel: ['trh', 'tsh', 'ft4', 't3', 'goiter', 'hr', 'bmr'],
@@ -269,4 +269,5 @@ export const AXES               = [
 ]
 
 export const AXIS_MAP = Object.fromEntries(AXES.map((a) => [a.id, a]))                              
+
 

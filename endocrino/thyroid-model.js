@@ -1,4 +1,7 @@
-export const DEFAULT_PARAMS = Object.freeze({ thyroidFn: 1, thyrotropeFn: 1, levothyroxine: 0, deiodinase: 1, trab: 0, iodine: 1, nis: 1, tpo: 1, pendrin: 1, destruction: 0, lesionDays: 21, lesionStart: 0, permanentFraction: 1, escapeEnabled: true });
+// Núcleo comum ao simulador integrado e ao aprofundamento. Tempo em dias;
+// índices mecanísticos, sem calibração de concentrações ou ritmos humanos.
+export const MODEL_VERSION = 'hht-shared-20261019';
+export const DEFAULT_PARAMS = Object.freeze({ thyroidFn: 1, thyrotropeFn: 1, levothyroxine: 0, deiodinase: 1, trab: 0, iodine: 1, nis: 1, tpo: 1, pendrin: 1, destruction: 0, lesionDays: 21, lesionStart: 0, permanentFraction: 1, escapeEnabled: true, trhDrive: 1, portalTransmission: 1, adenoFn: 1, somatostatinTone: 1, glucocorticoidIndex: 1, methimazole: 0 });
 export const BASELINE_STATE = Object.freeze({ t: 0, trh: 1, tsh: 1, t4: 1, t3: 1, iodide: 1, colloid: 1, mit: 1, dit: 1, tg: 10, store4: 9, store3: 3, tissue: 1, injury: 0, growth: 1, escape: 0, centralT3: 1, peripheralD: 1, pituitaryReserve: 1, iodineIn: 0, iodineOut: 0 });
 const clamp = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
 const sat = x => 2 * x / (1 + x);
@@ -30,7 +33,7 @@ export function flows(s, input) {
   const apical = 2.3 * mass * stimulus * (0.3 + 0.7 * p.pendrin) * sat(intracellular);
   const efflux = 0.3 * s.iodide;
   const colloidEfflux = 0.2 * s.colloid;
-  const activity = mass > 0 ? stimulus * p.tpo * inhibition : 0;
+  const activity = mass > 0 ? stimulus * p.tpo * (1 - p.methimazole) * inhibition : 0;
   const organification = 1.2 * activity * sat(s.colloid / volume) * s.tg / 10;
   const secondIodination = 0.9 * activity * sat(s.colloid / volume) * s.mit;
   const coupling4 = 0.3 * activity * s.dit * sat(s.dit / volume);
@@ -54,7 +57,7 @@ export function advance(state, input, days, maxStep = 0.005) {
   const p = { ...DEFAULT_PARAMS, ...input };
   if (!Number.isFinite(days) || days < 0 || days > 365) throw new RangeError('Intervalo inválido');
   for (const [key, value] of Object.entries(p)) if (key !== 'escapeEnabled' && (!Number.isFinite(value) || value < 0)) throw new RangeError(`Parâmetro inválido: ${key}`);
-  if (p.permanentFraction > 1 || typeof p.escapeEnabled !== 'boolean') throw new RangeError('Fração ou opção inválida');
+  if (p.permanentFraction > 1 || p.methimazole > 1 || p.portalTransmission > 1 || typeof p.escapeEnabled !== 'boolean') throw new RangeError('Fração ou opção inválida');
   let s = { ...state };
   for (const key of Object.keys(BASELINE_STATE)) if (!Number.isFinite(s[key]) || s[key] < 0) throw new RangeError(`Estado inválido: ${key}`);
   if (!Number.isFinite(maxStep) || maxStep < 0.001 || maxStep > 0.005) throw new RangeError('Passo numérico inválido');
@@ -63,12 +66,15 @@ export function advance(state, input, days, maxStep = 0.005) {
   for (let i = 0; i < steps; i++) {
     const f = flows(s, p);
     const feedback = Math.max(0.05, s.centralT3);
-    const tshTarget = Math.min(80, p.thyrotropeFn * s.pituitaryReserve * (0.05 + 0.95 * s.trh ** 0.7) * Math.min(feedback ** -3, 1 + 79 * Math.min(1, p.thyrotropeFn) ** 2));
+    const reserve = p.thyrotropeFn * p.adenoFn;
+    const centralReserve = reserve * (0.1 + 0.9 * p.portalTransmission);
+    const cortisolBrake = p.glucocorticoidIndex > 1.2 ? (p.glucocorticoidIndex / 1.2) ** -0.4 : 1;
+    const tshTarget = Math.min(80, reserve * s.pituitaryReserve * (0.05 + 0.95 * (s.trh * p.portalTransmission) ** 0.7) * Math.min(feedback ** -3, 1 + 79 * Math.min(1, centralReserve) ** 2) * cortisolBrake * 2 / (1 + p.somatostatinTone * p.portalTransmission));
     const conversion = p.deiodinase * s.peripheralD;
     const centralD = clamp(1 / Math.sqrt(Math.max(0.05, s.t4)), 0.6, 1.6);
     const injuryIodineLoss = f.lesion * (s.iodide + s.colloid + s.mit + 2 * s.dit);
     const next = { ...s, t: s.t + dt,
-      trh: relax(s.trh, Math.min(30, feedback ** -1), 0.02, dt),
+      trh: relax(s.trh, Math.min(30, p.trhDrive * feedback ** -1), 0.02, dt),
       tsh: relax(s.tsh, tshTarget, 2, dt),
       centralT3: relax(s.centralT3, 0.8 * centralD * s.t4 + 0.2 * s.t3, 0.5, dt),
       peripheralD: relax(s.peripheralD, clamp(1 / Math.sqrt(Math.max(0.05, s.t3)), 0.6, 1.5), 5, dt),
@@ -113,3 +119,4 @@ export function scenarioState(scenario) {
   }
   return s;
 }
+

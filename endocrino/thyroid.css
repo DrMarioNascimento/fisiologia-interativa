@@ -202,3 +202,6 @@ footer.wrap{padding:20px 0 32px;font-size:13px;color:var(--muted)}
 #daily-results>details{margin-top:14px}
 #experiment-data[hidden],#daily-controls[hidden],#experiment-controls[hidden],#daily-results[hidden],#experiment-results[hidden]{display:none!important}
 @media(max-width:640px){.profile-views button{flex-basis:100%}#daily-chart text{font-size:13px}.profile-heading h3{font-size:16px}#daily-export{font-size:12px}}
+
+
+.module-badge{display:inline-flex;padding:7px 11px;border:1px solid #80c5af;border-radius:99px;color:#b6e3d4;font-size:.78rem;font-weight:700}.titlebar{flex-wrap:wrap;gap:12px}.titlebar .button{padding:9px 14px;border-radius:12px;background:linear-gradient(#1c3c4b,#102937);color:var(--text,#eef6fa);text-decoration:none;border:1px solid #456779;box-shadow:0 3px 0 #061522}select{max-width:100%;min-width:0;white-space:normal}#daily-description{line-height:1.55}#daily-adult-controls[hidden],#daily-adult-results[hidden],#daily-pediatric[hidden],#daily-readouts[hidden]{display:none}#daily-pediatric h3{color:#a5d9c5}#daily-pediatric p{line-height:1.6}.titlebar .brand{margin-right:auto}

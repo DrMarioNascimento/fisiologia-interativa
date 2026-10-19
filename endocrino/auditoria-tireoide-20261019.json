@@ -1,0 +1,517 @@
+{
+  "tests": 47,
+  "results": [
+    {
+      "name": "Basal tireoidiano estável por 180 dias",
+      "status": "PASS"
+    },
+    {
+      "name": "Sem tireoide, hormônios caem e TSH aumenta",
+      "status": "PASS"
+    },
+    {
+      "name": "Deficiência central sem aumento compensatório de TSH",
+      "status": "PASS"
+    },
+    {
+      "name": "Graves: excesso com supressão de TSH",
+      "status": "PASS"
+    },
+    {
+      "name": "TPO bloqueada reduz produção no Graves",
+      "status": "PASS"
+    },
+    {
+      "name": "Conversão reduzida diminui T3",
+      "status": "PASS"
+    },
+    {
+      "name": "Iodo insuficiente reduz T4 e eleva TSH",
+      "status": "PASS"
+    },
+    {
+      "name": "Reposição parte de deficiência e recupera T4/T3 sem glândula",
+      "status": "PASS"
+    },
+    {
+      "name": "Lesão libera estoques no início e perde tecido",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário normal",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário hashimotoPreserved",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário hashimoto",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário destructive",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário transient",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário absent",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário central",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário graves",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário replacement",
+      "status": "PASS"
+    },
+    {
+      "name": "Estado finito no cenário excess",
+      "status": "PASS"
+    },
+    {
+      "name": "Balanço glandular de iodo contabilizado",
+      "status": "PASS"
+    },
+    {
+      "name": "Convergência ao reduzir passo numérico",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado usa exatamente o núcleo compartilhado em cada passo",
+      "status": "PASS"
+    },
+    {
+      "name": "Basal integrado permanece estável",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito normal",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito primary",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado: primário esperado",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito central",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado: falha central central",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito graves",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado: Graves esperado",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito mmi",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito replacement",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito adeno",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado: falha central adeno",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito stalk",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado: falha central stalk",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito cortisol",
+      "status": "PASS"
+    },
+    {
+      "name": "Integrado finito lowConversion",
+      "status": "PASS"
+    },
+    {
+      "name": "Pontos de Zhang preservados mentsh",
+      "status": "PASS"
+    },
+    {
+      "name": "Pontos de Zhang preservados menft3",
+      "status": "PASS"
+    },
+    {
+      "name": "Pontos de Zhang preservados menft4",
+      "status": "PASS"
+    },
+    {
+      "name": "Pontos de Zhang preservados womentsh",
+      "status": "PASS"
+    },
+    {
+      "name": "Pontos de Zhang preservados womenft3",
+      "status": "PASS"
+    },
+    {
+      "name": "Pontos de Zhang preservados womenft4",
+      "status": "PASS"
+    },
+    {
+      "name": "Cosinor: horários e amplitudes coletivas",
+      "status": "PASS"
+    },
+    {
+      "name": "Sem curva pediátrica inventada",
+      "status": "PASS"
+    },
+    {
+      "name": "Exportação distingue observações e reconstruções",
+      "status": "PASS"
+    }
+  ],
+  "integrated": [
+    {
+      "name": "normal",
+      "t4": 1,
+      "t3": 1,
+      "tsh": 1,
+      "trh": 1,
+      "ft4": 1.25,
+      "t3total": 120
+    },
+    {
+      "name": "primary",
+      "t4": 0.30217392673799987,
+      "t3": 0.49033945093885745,
+      "tsh": 16.34695822745166,
+      "trh": 2.0735609456250357,
+      "ft4": 0.37771740842249985,
+      "t3total": 58.84073411266289
+    },
+    {
+      "name": "central",
+      "t4": 0.107337036522314,
+      "t3": 0.15430924991814485,
+      "tsh": 0.11827277106184156,
+      "trh": 5.938043647278744,
+      "ft4": 0.13417129565289249,
+      "t3total": 18.51710999017738
+    },
+    {
+      "name": "graves",
+      "t4": 2.7032546385789806,
+      "t3": 1.9415546251299898,
+      "tsh": 0.0485999221281456,
+      "trh": 0.5871980796656779,
+      "ft4": 3.379068298223726,
+      "t3total": 232.98655501559878
+    },
+    {
+      "name": "mmi",
+      "t4": 1.8118436847440964,
+      "t3": 1.4988842130796727,
+      "tsh": 0.16434512077432858,
+      "trh": 0.7266938096632021,
+      "ft4": 2.2648046059301206,
+      "t3total": 179.86610556956072
+    },
+    {
+      "name": "replacement",
+      "t4": 0.9836478002176192,
+      "t3": 0.8523527994692509,
+      "tsh": 1.1544721929024002,
+      "trh": 1.0374489029651799,
+      "ft4": 1.2295597502720241,
+      "t3total": 102.2823359363101
+    },
+    {
+      "name": "adeno",
+      "t4": 0.0695039068471249,
+      "t3": 0.09929179709497479,
+      "tsh": 0.07081044977758165,
+      "trh": 9.182743251376067,
+      "ft4": 0.08687988355890613,
+      "t3total": 11.915015651396976
+    },
+    {
+      "name": "stalk",
+      "t4": 0.15307100677802135,
+      "t3": 0.22243139621242403,
+      "tsh": 0.17900000000000557,
+      "trh": 4.152588093478444,
+      "ft4": 0.19133875847252668,
+      "t3total": 26.691767545490883
+    },
+    {
+      "name": "cortisol",
+      "t4": 0.9248158499879637,
+      "t3": 0.9493704592741146,
+      "tsh": 0.9385931037776164,
+      "trh": 1.0425153477598545,
+      "ft4": 1.1560198124849546,
+      "t3total": 113.92445511289375
+    },
+    {
+      "name": "lowConversion",
+      "t4": 1.1639136268502326,
+      "t3": 0.6634688019321779,
+      "tsh": 1.0388250635473208,
+      "trh": 1.0042480767855166,
+      "ft4": 1.4548920335627908,
+      "t3total": 79.61625623186136
+    }
+  ],
+  "detailed": {
+    "normal": {
+      "t": 179.9999999999088,
+      "trh": 1,
+      "tsh": 1,
+      "t4": 1,
+      "t3": 1,
+      "iodide": 1,
+      "colloid": 1,
+      "mit": 1,
+      "dit": 1,
+      "tg": 10,
+      "store4": 9,
+      "store3": 3,
+      "tissue": 1,
+      "injury": 0,
+      "growth": 1,
+      "escape": 0,
+      "centralT3": 1,
+      "peripheralD": 1,
+      "pituitaryReserve": 1,
+      "iodineIn": 359.9999999998176,
+      "iodineOut": 359.9999999998176
+    },
+    "removed": {
+      "t": 179.9999999999088,
+      "trh": 19.999999999999993,
+      "tsh": 79.99999999999716,
+      "t4": 2.7452630574924012e-9,
+      "t3": 3.795294549528376e-9,
+      "iodide": 0,
+      "colloid": 0,
+      "mit": 0,
+      "dit": 0,
+      "tg": 0,
+      "store4": 0,
+      "store3": 0,
+      "tissue": 0,
+      "injury": 0,
+      "growth": 1.8853596289338608,
+      "escape": 0,
+      "centralT3": 4.523006903106538e-9,
+      "peripheralD": 1.499999999999889,
+      "pituitaryReserve": 1,
+      "iodineIn": 0,
+      "iodineOut": 0
+    },
+    "central": {
+      "t": 179.9999999999088,
+      "trh": 7.255086543462806,
+      "tsh": 0.12355489647580756,
+      "t4": 0.08752786647099552,
+      "t3": 0.12843075053569475,
+      "iodide": 0.37878077731372406,
+      "colloid": 0.20716693244953163,
+      "mit": 0.8845050459019308,
+      "dit": 0.4286942929885027,
+      "tg": 11.639181010874031,
+      "store4": 5.699392529898353,
+      "store3": 2.3223331800760816,
+      "tissue": 1,
+      "injury": 0,
+      "growth": 0.7961199289717735,
+      "escape": 0,
+      "centralT3": 0.13782948750728619,
+      "peripheralD": 1.499999999999889,
+      "pituitaryReserve": 1,
+      "iodineIn": 42.20111574971491,
+      "iodineOut": 60.10870474825076
+    },
+    "graves": {
+      "t": 179.9999999999088,
+      "trh": 0.5610936208764484,
+      "tsh": 0.03839446650883246,
+      "t4": 2.8679362261871155,
+      "t3": 2.029316253976691,
+      "iodide": 1.3755202709560124,
+      "colloid": 2.275183989738962,
+      "mit": 1.0385836504692922,
+      "dit": 1.3387242857845234,
+      "tg": 9.817249164752365,
+      "store4": 12.54087593151306,
+      "store3": 3.232491718250134,
+      "tissue": 1,
+      "injury": 0,
+      "growth": 1.2251030359521027,
+      "escape": 0,
+      "centralT3": 1.7822440575866763,
+      "peripheralD": 0.7023825370072768,
+      "pituitaryReserve": 0.31677781657669407,
+      "iodineIn": 824.4801934337738,
+      "iodineOut": 807.2524780702452
+    },
+    "treated": {
+      "t": 179.9999999999088,
+      "trh": 0.7007520097103451,
+      "tsh": 0.13445369032655807,
+      "t4": 1.9354429818647576,
+      "t3": 1.5710324686706052,
+      "iodide": 1.4839041612004455,
+      "colloid": 5.917900023609164,
+      "mit": 1.7410770240774016,
+      "dit": 1.9319335382567806,
+      "tg": 18.515559792207682,
+      "store4": 8.446964468092046,
+      "store3": 2.5338038717294786,
+      "tissue": 1,
+      "injury": 0,
+      "growth": 1.2365578315671233,
+      "escape": 0.015135918499941066,
+      "centralT3": 1.4270439481676076,
+      "peripheralD": 0.7983164046928906,
+      "pituitaryReserve": 0.4931135823626584,
+      "iodineIn": 767.5999732353703,
+      "iodineOut": 763.2039554624231
+    },
+    "lowD": {
+      "t": 179.9999999999088,
+      "trh": 1.008404156424637,
+      "tsh": 1.0311519406713208,
+      "t4": 1.15466851604302,
+      "t3": 0.6601103984493748,
+      "iodide": 1.0115112539278577,
+      "colloid": 1.028188660106763,
+      "mit": 0.9999565899598405,
+      "dit": 1.0103186304119034,
+      "tg": 9.97449145126319,
+      "store4": 9.111262318806421,
+      "store3": 3.0055436780993685,
+      "tissue": 1,
+      "injury": 0,
+      "growth": 1.0061443984445129,
+      "escape": 0,
+      "centralT3": 0.9916658942680571,
+      "peripheralD": 1.2308167296597612,
+      "pituitaryReserve": 1,
+      "iodineIn": 372.9342651241227,
+      "iodineOut": 372.4122910497845
+    },
+    "iodine": {
+      "t": 179.9999999999088,
+      "trh": 2.0224456374459194,
+      "tsh": 13.305063260021806,
+      "t4": 0.2819988076853653,
+      "t3": 0.6677751471371633,
+      "iodide": 0.17373593590165998,
+      "colloid": 0.08064644929534301,
+      "mit": 1.816281958253448,
+      "dit": 0.27224509625236776,
+      "tg": 50.82386396775161,
+      "store4": 0.6910430296414853,
+      "store3": 1.5284487576444707,
+      "tissue": 1,
+      "injury": 0,
+      "growth": 1.6541419374072701,
+      "escape": 0,
+      "centralT3": 0.4944535652838899,
+      "peripheralD": 1.2251824178150845,
+      "pituitaryReserve": 1,
+      "iodineIn": 131.8333061575772,
+      "iodineOut": 171.86863323012454
+    },
+    "recovered": {
+      "t": 179.9999999999088,
+      "trh": 1.0374528952652042,
+      "tsh": 1.144276379545829,
+      "t4": 0.9836407236996529,
+      "t3": 0.8523494048100094,
+      "iodide": 0,
+      "colloid": 0,
+      "mit": 0,
+      "dit": 0,
+      "tg": 0,
+      "store4": 0,
+      "store3": 0,
+      "tissue": 0,
+      "injury": 0,
+      "growth": 1.0631514319693252,
+      "escape": 0,
+      "centralT3": 0.9638991848675662,
+      "peripheralD": 1.0831564160531764,
+      "pituitaryReserve": 1,
+      "iodineIn": 0,
+      "iodineOut": 0
+    },
+    "destructive": {
+      "t": 6.999999999999873,
+      "trh": 0.8126763280935906,
+      "tsh": 0.4772696446189369,
+      "t4": 1.4400480358615004,
+      "t3": 1.348281430027253,
+      "iodide": 0.6057764986639107,
+      "colloid": 0.5671593697164775,
+      "mit": 0.6979468569438708,
+      "dit": 0.6601947540004373,
+      "tg": 7.142477724106416,
+      "store4": 6.31732062863353,
+      "store3": 2.1103973938161973,
+      "tissue": 0.7046572551500971,
+      "injury": 0,
+      "growth": 0.9933665784570519,
+      "escape": 0,
+      "centralT3": 1.23046880686576,
+      "peripheralD": 0.8985603272195211,
+      "pituitaryReserve": 0.8709984209200441,
+      "iodineIn": 9.201800473963681,
+      "iodineOut": 24.410053544655735
+    },
+    "late": {
+      "t": 179.9999999999088,
+      "trh": 1.2028509020741942,
+      "tsh": 1.9673169848106173,
+      "t4": 0.7161455482791025,
+      "t3": 0.7719126138971562,
+      "iodide": 0.4423744274902389,
+      "colloid": 0.6462719855836614,
+      "mit": 0.3542558244282131,
+      "dit": 0.4332528155524704,
+      "tg": 3.385340283628634,
+      "store4": 4.022418173496661,
+      "store3": 1.0894958172169193,
+      "tissue": 0.34989181514024714,
+      "injury": 0,
+      "growth": 1.1535785033210377,
+      "escape": 0,
+      "centralT3": 0.8313594107487677,
+      "peripheralD": 1.138527035287589,
+      "pituitaryReserve": 0.9989780060277809,
+      "iodineIn": 220.88349807709625,
+      "iodineOut": 249.21593006285283
+    }
+  }
+}

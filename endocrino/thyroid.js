@@ -1,10 +1,10 @@
-import { mountDailyView } from './thyroid-daily-ui.js';
-import { recordSample, chartBounds, exportCSV } from './thyroid-recording.js';
-import { BASELINE_STATE, DEFAULT_PARAMS, advance, scenarioState, flows } from './thyroid-model.js';
+import { mountDailyView } from './thyroid-daily-ui.js?v=20261019-evidence2';
+import { recordSample, chartBounds, exportCSV } from './thyroid-recording.js?v=20261019-evidence2';
+import { BASELINE_STATE, DEFAULT_PARAMS, advance, scenarioState, flows } from './thyroid-model.js?v=20261019-evidence2';
 const bindings = [['capacity', 'thyroidFn'], ['replacement', 'levothyroxine'], ['conversion', 'deiodinase'], ['iodine', 'iodine'], ['nis', 'nis'], ['tpo', 'tpo'], ['pendrin', 'pendrin'], ['destruction', 'destruction'], ['trab', 'trab']];
 
 const $ = (id) => document.getElementById(id);
-import { scenarios, describeState } from './thyroid-scenarios.js';
+import { scenarios, describeState } from './thyroid-scenarios.js?v=20261019-evidence2';
 let state, params, history, timer, dailyView;
 const enableExperiment = () => dailyView?.showExperiment();
 const visibleHormones = new Set(['trh', 'tsh', 't4', 't3']);
@@ -185,3 +185,4 @@ $('export-csv').addEventListener('click', () => {
 document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); });
 reset();
 dailyView = mountDailyView({ pauseExperiment: pause, drawExperiment: drawProfiles });
+

@@ -10,6 +10,9 @@
                                 
  
 
+import { scenarioState } from './thyroid-model.js?v=20261019-evidence2';
+const chronicThyroid = scenarioState({ params: { thyroidFn: 0.15 }, established: true });
+const chronicPatch = { thyroid: chronicThyroid, trh: chronicThyroid.trh, tsh: chronicThyroid.tsh, t4: chronicThyroid.t4, t3: chronicThyroid.t3, goiter: 0.15 * chronicThyroid.growth };
 export const SCENARIOS             = [
   {
     id: 'normal',
@@ -22,15 +25,17 @@ export const SCENARIOS             = [
     id: 'hashimoto',
     name: 'Hashimoto (hipotireoidismo primário)',
     axis: 'tireoide',
-    description: 'Destruição autoimune da tireoide reduz a síntese de T4/T3.',
-    params: { thyroidFn: 0.07 },
+    description: 'Perda crônica de capacidade funcional, com reservas proporcionais e 720 dias de estabilização matemática antes do dia zero. Representa a consequência funcional, sem simular anticorpos ou progressão autoimune.',
+    params: { thyroidFn: 0.15 },
+    statePatch: chronicPatch,
   },
   {
     id: 'hashimoto-levo',
     name: 'Hashimoto + levotiroxina',
     axis: 'tireoide',
-    description: 'Reposição de T4 sintético normaliza a retroalimentação e o TSH.',
-    params: { thyroidFn: 0.07, levothyroxine: 0.9 },
+    description: 'A entrada de T4 pode recuperar o sinal hormonal e reduzir TSH ao longo dos dias; o resultado depende dos parâmetros, sem equivalência de dose clínica.',
+    params: { thyroidFn: 0.15, levothyroxine: 0.9 },
+    statePatch: chronicPatch,
   },
   {
     id: 'graves',
@@ -251,4 +256,5 @@ export const SCENARIOS             = [
     params: { labor: 0.9 },
   },
 ]
+
 

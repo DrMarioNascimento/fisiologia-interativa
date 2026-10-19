@@ -29,3 +29,49 @@ export function dailyCSV(selection) {
   }
   return '\ufeff' + rows.map(row => row.map(value => '"' + String(value).replaceAll('"', '""') + '"').join(';')).join('\r\n');
 }
+
+// Russell et al., 2008, table 2 (p.2303), checked against the rendered article.
+// Group cosinor coefficients; these are NOT mean individual amplitudes.
+export const STUDIES = Object.freeze({
+  zhang: { label:'Zhang 2023 · medianas por sexo', doi:'10.1093/labmed/lmac105', kind:'medians', n:31, reference:'média das seis medianas', description:'17 homens e 14 mulheres. Pontos publicados em seis horários; linhas interpoladas. O fechamento 20h–24h repete 00h. TSH variou com o horário; FT3/FT4 não tiveram diferenças intradiárias significativas. Diferenças entre grupos não estabelecem um efeito universal do sexo.' },
+  russell: { label:'Russell 2008 · ajuste de adultos mistos', doi:'10.1210/jc.2007-2674', kind:'cosinor', n:33, reference:'mesor do ajuste', description:'Grupo misto: 24 homens e 9 mulheres; TSH n=33 e hormônios livres n=29. Linhas reconstruídas dos parâmetros publicados, sem dosagens individuais. Não há separação por sexo nem faixa de normalidade. A amplitude coletiva é menor que a média das amplitudes individuais.' },
+  children: { label:'Crianças e lactentes · evidência disponível', kind:'summary', description:'Há evidência de ritmo do TSH, mas os resultados recuperados não identificam uma curva horária completa. Não extrapole a curva adulta para recém-nascidos ou para todas as idades.' },
+});
+export const GROUP_COSINOR = Object.freeze({
+  tsh:{mesor:1.78, amplitude:0.439, peak:2+40/60, unit:'mUI/L'},
+  ft3:{mesor:5.42, amplitude:0.187, peak:4+4/60, unit:'pmol/L'},
+  ft4:{mesor:16.2, amplitude:0.097, peak:16+20/60, unit:'pmol/L'},
+});
+export function studyGroups(study, selection) {
+  if(study==='children') return [];
+  if(study==='russell') return ['mixed'];
+  if(study!=='zhang' || !['men','women','both'].includes(selection)) throw new RangeError('Estudo ou grupo inválido');
+  return groupsFor(selection);
+}
+export function groupLabel(group) { return group==='mixed'?'Adultos · grupo misto':DAILY_GROUPS[group].label; }
+export function studyValue(study, group, hormone, hour, reference='study') {
+  if(!Number.isFinite(hour) || !DAILY_HORMONES[hormone] || !['study','08h'].includes(reference)) throw new RangeError('Perfil inválido');
+  let value, baseline, unit, origin;
+  if(study==='zhang' && DAILY_GROUPS[group]) {
+    const v=dailyValue(group,hormone,hour);
+    value=v.value; unit=DAILY_HORMONES[hormone].unit;
+    baseline=reference==='08h'?DAILY_GROUPS[group][hormone][2]:groupMean(group,hormone);
+    const t=((hour%24)+24)%24;
+    origin=hour<0||hour>=24||t>20?'fechamento periódico assumido':v.observed?'mediana publicada':'interpolação linear';
+  } else if(study==='russell' && group==='mixed') {
+    const m=GROUP_COSINOR[hormone], at=t=>m.mesor+m.amplitude*Math.cos(2*Math.PI*(t-m.peak)/24);
+    value=at(hour); baseline=reference==='08h'?at(8):m.mesor; unit=m.unit; origin='reconstrução do cosinor publicado';
+  } else throw new RangeError('Curva indisponível para esta população');
+  return {value,unit,baseline,percent:100*value/baseline,origin,observed:origin==='mediana publicada'};
+}
+export function studyCSV(study, selection, reference='study') {
+  if(study==='children') return '\ufeffEstudo;População;Indicador;Valor;Unidade;Origem\r\nRose 1989;5–18 anos;Média dos mínimos individuais;1.6;mUI/L;Resumo publicado\r\nRose 1989;5–18 anos;Média dos máximos individuais;3.7;mUI/L;Resumo publicado\r\nRose 1989;5–18 anos;Média do aumento individual vale-pico;144;% do vale individual;Resumo publicado\r\nMantagos 1992;1–2 meses;Média janela 11h;2.8;mUI/L;Resumo publicado\r\nMantagos 1992;1–2 meses;Média janela 23h;3.5;mUI/L;Resumo publicado\r\nMantagos 1992;3–4 meses;Média janela 11h;3;mUI/L;Resumo publicado\r\nMantagos 1992;3–4 meses;Média janela 23h;4.1;mUI/L;Resumo publicado\r\nMantagos 1992;5–6 meses;Média janela 11h;1.8;mUI/L;Resumo publicado\r\nMantagos 1992;5–6 meses;Média janela 23h;2.6;mUI/L;Resumo publicado';
+  const rows=[['Estudo','DOI','Grupo','Horário (h)','Hormônio','Valor','Unidade','Referência percentual','Valor da referência','Variação (%)','Origem']];
+  const times=study==='zhang'?HOURS:Array.from({length:97},(_,i)=>i/4);
+  for(const g of studyGroups(study,selection)) for(const t of times) for(const h of ['tsh','ft4','ft3']) {
+    const d=studyValue(study,g,h,t,reference);
+    rows.push([STUDIES[study].label,STUDIES[study].doi,groupLabel(g),t,DAILY_HORMONES[h].label,d.value,d.unit,reference==='08h'?'valor da série às 08h':STUDIES[study].reference,d.baseline,d.percent-100,d.origin]);
+  }
+  return '\ufeff'+rows.map(row=>row.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\r\n');
+}
+

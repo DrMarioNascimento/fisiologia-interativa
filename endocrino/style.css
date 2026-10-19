@@ -36,3 +36,9 @@
 #labs>.lab:nth-child(7n+6){--card-accent:#64d8d0}
 #labs>.lab:nth-child(7n+7){--card-accent:#e9bd82}
 @media(max-width:550px){#labs{gap:10px}#labs>.lab{padding:10px; border-left-width:4px}#labs>.lab>b{font-size:23px}#labs>.lab>small:first-child{font-size:11px}}
+
+
+/* Metadados e leitura do eixo */
+.axis-depth{display:flex;gap:10px;flex-wrap:wrap}.axis-depth[hidden]{display:none}
+.lab .status{white-space:normal;overflow-wrap:anywhere;line-height:1.4}
+.pathway-buttons button strong{overflow-wrap:anywhere}
