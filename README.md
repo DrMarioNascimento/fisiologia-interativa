@@ -1,5 +1,11 @@
 # Fisiologia Interativa
 
+## Situação atual — 19 de outubro de 2026
+
+O percurso de EF contém as Unidades 01–06 e uma seção de integração cardiorrespiratória entre as Unidades 4 e 5. A **Unidade 06 — Sistema Endócrino** reúne seis entradas de simuladores, mapa mental e questões no Tutor EF. A Fisioterapia conserva seu percurso próprio; a inclusão endócrina e a moeda interativa não devem ser presumidas nos outros tutores.
+
+A página inicial recebeu ajustes no enquadramento do avatar e na abertura dos mapas. Os recursos compartilhados de apresentação da EF ficam em `ef-simuladores.js`, `ef-simuladores.css` e `ef-simuladores-manifest.json`. O Tutor EF usa `tutor-ef-endocrino.js` para a unidade nova e `tutor-ef-coin.js`/`tutor-ef-coin.css` para a moeda arrastável e suas interações.
+
 ## Acessos oficiais de Fisiologia
 
 - **Educação Física (EF):** https://fisiologia.drmarionascimento.com.br/
@@ -14,7 +20,7 @@ Os recursos têm finalidade exclusivamente educacional. Por meio de visualizaç�
 Portal do autor: https://www.drmarionascimento.com.br/
 
 
-## Estado e manutenção — 10 de outubro de 2026
+## Registro anterior de manutenção — 10 de outubro de 2026
 
 O catálogo de RA tem nove experiências em Educação Física e oito em Fisioterapia. **Célula viva** contém Célula, Película e Travessias; **Do neurônio ao impulso** contém Neurônio, Comunicação, Interior e A onda. **Viagem ao osso vivo** é exclusiva do percurso de Educação Física.
 
@@ -52,12 +58,13 @@ Both courses share the same simulator files; each has its own learning path, def
 | Cardiovascular system | yes | yes |
 | Respiratory system | yes | yes, plus the **Neonatal Pulmonary Ventilation** module |
 | Cardiorespiratory integration | yes, closing challenge **Athlete's Box** | yes, closing challenge **Physiological ICU** |
+| Endocrine system (Unit 06) | yes, six catalog entries and mind map | — |
 
 Each course home page also offers:
 
 - mind maps for review and visual reading guides for the in-depth modules;
 - a guided study **tutor** per course, with an optional AI mode (Google Gemini) that the student turns on voluntarily; without it, the guided tutor, maps and questions keep working locally;
-- one escape room per unit from the companion project [Fisiologia em Fuga](https://fisiologia-em-fuga.drmarionascimento.com.br/), plus a final "Operação Secreta" covering all units.
+- escape rooms for the existing course axes (the new endocrine unit has no room yet) from the companion project [Fisiologia em Fuga](https://fisiologia-em-fuga.drmarionascimento.com.br/), plus a final "Operação Secreta" covering all units.
 
 ### Augmented reality
 
@@ -153,14 +160,16 @@ Este projeto tem finalidade exclusivamente **didática e educacional**. Os simul
 
 Os dois cursos usam os mesmos arquivos de simuladores, mas cada um tem percurso pedagógico próprio: a diferença está na organização das unidades, nos textos de orientação e na ordem dos cards, não na duplicação de arquivos ou de modelos.
 
-**Educação Física** — seis unidades:
+**Educação Física** — seis unidades numeradas e uma seção de integração:
 
 1. Fisiologia celular, transporte de substâncias e potenciais de ação
 2. Excitabilidade e Sistema Muscular
 3. Sistema Osteoarticular
 4. Sistema cardiovascular
 5. Sistema respiratório
-6. Integração cardiorrespiratória — desafio de fechamento: **Box do Atleta**
+6. Sistema Endócrino — eixos hormonais, ciclo menstrual, gestação, tireoide, transição menopausal e cortisol
+
+A **Integração Cardiorrespiratória das Unidades 4 e 5** aparece como seção própria, com o desafio de fechamento **Box do Atleta**, sem número de unidade.
 
 **Fisioterapia** — cinco unidades:
 
@@ -171,6 +180,21 @@ Os dois cursos usam os mesmos arquivos de simuladores, mas cada um tem percurso 
 5. Integração cardiorrespiratória — desafio de fechamento: **UTI fisiológica**
 
 A unidade de Sistema Osteoarticular (Homeostase do cálcio e Mecanotransdução Óssea e Lei de Wolff) faz parte apenas do percurso da Educação Física; os arquivos permanecem no projeto, mas não são exibidos no índice da Fisioterapia.
+
+
+### Sistema Endócrino — Unidade 06 (EF)
+
+| Recurso | Entrada |
+|---|---|
+| Hipotálamo, hipófise e eixos endócrinos | [Abrir](endocrino/index.html) |
+| Ciclo menstrual e controle hormonal | [Abrir](endocrino/ciclo/index.html?modo=ciclo) |
+| Gestação, parto e puerpério | [Abrir](endocrino/ciclo/index.html?modo=gestacao) |
+| Tireoide: TRH, TSH, T4 e T3 | [Abrir](endocrino/thyroid.html) |
+| Perimenopausa, menopausa e pós-menopausa | [Abrir](endocrino/menopausa/index.html) |
+| Cortisol: estresse, sono e exercício | [Abrir](endocrino/cortisol.html) |
+| Mapa mental — hormônios, tempo e feedback | [Imagem](assets/maps/sistema-endocrino.webp) |
+
+O aprofundamento de cortisol inclui leitura complementar. Os modelos são didáticos e não orientam diagnóstico ou terapia hormonal. A unidade não possui sala de Escape Room cadastrada nesta revisão.
 
 ### Simuladores disponíveis
 

@@ -1,5 +1,11 @@
 # Forças de Starling · Unidade 1 — Celular
 
+## Manutenção e origem — 19 de outubro de 2026
+
+Módulo de Fisiologia em RA, mantido neste repositório e acessado pelos percursos dos tutores. A Unidade 06 — Sistema Endócrino possui documentação separada em `endocrino/`; sua inclusão não altera a procedência dos modelos desta experiência. Os créditos e as licenças específicos abaixo permanecem aplicáveis.
+
+Consulte o [README principal](../../README.md) e a [licença da raiz](../../LICENSE.md). Créditos e licenças específicos deste módulo permanecem nos documentos abaixo.
+
 Experiência independente do Fisiologia Interativa, transferida da versão aprovada do Lab RA, revisão `5ac3f4cce5b8d62d76d9fc3cced1e0e0bc2f224d`. [Abrir experiência](https://fisiologia.drmarionascimento.com.br/ra/starling/).
 
 App, modelos, física, paleta de variáveis e estilos são cópias integrais da origem aprovada. A adaptação muda somente a identificação do projeto, a assinatura e o retorno ao Tutor do percurso de origem. Não exige Google nem carrega arquivos do Lab RA. Modelos e texturas são procedurais originais, cobertos pela [licença do projeto](../../LICENSE.md); artigos e bibliotecas conservam seus próprios direitos.

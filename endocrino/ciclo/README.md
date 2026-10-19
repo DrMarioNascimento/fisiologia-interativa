@@ -1,5 +1,11 @@
 # Ciclo menstrual, gestação e puerpério
 
+## Manutenção e origem — 19 de outubro de 2026
+
+Este módulo integra a Unidade 06 — Sistema Endócrino, exclusiva do percurso EF. O catálogo vigente está em `inicio/dados-ef.js`, na raiz do projeto, e as questões da unidade em `tutor-ef-endocrino.js`. A integração cardiorrespiratória permanece em seção própria. Não há sala endócrina de Escape Room cadastrada.
+
+Consulte o [README principal](../../README.md) e a [licença da raiz](../../LICENSE.md). Créditos e licenças específicos deste módulo permanecem nos documentos abaixo.
+
 Adaptação estática do simulador v0 para a Unidade 06, exclusiva do percurso de Educação Física. Usa o estilo compartilhado de `endocrino/style.css` e não depende de Next.js em produção.
 
 ## Padronização realizada

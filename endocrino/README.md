@@ -1,5 +1,11 @@
 # Sistema Endócrino — Unidade 06 de Educação Física
 
+## Manutenção e origem — 19 de outubro de 2026
+
+Este módulo integra a Unidade 06 — Sistema Endócrino, exclusiva do percurso EF. O catálogo vigente está em `inicio/dados-ef.js`, na raiz do projeto, e as questões da unidade em `tutor-ef-endocrino.js`. A integração cardiorrespiratória permanece em seção própria. Não há sala endócrina de Escape Room cadastrada. O mapa mental da unidade está em `assets/maps/sistema-endocrino.webp` e a apresentação compartilhada da EF em `ef-simuladores.js` e `ef-simuladores.css`.
+
+Consulte o [README principal](../README.md) e a [licença da raiz](../LICENSE.md). Créditos e licenças específicos deste módulo permanecem nos documentos abaixo.
+
 Aplicação estática para GitHub Pages. Abra `index.html` por HTTP; não requer instalação de dependências ou compilação para uso. Os módulos JavaScript distribuídos foram gerados dos arquivos TypeScript em `src/` com `node build.cjs`. Para validar: `node --test tests.mjs`.
 
 A versão inicial incorporou as correções do v0 presentes no commit `5b8418e37a0c6aaf9f55bc3999da9763b4126a4f`. A cópia completa do projeto Next.js corrigido fica em `origem-v0/`, preservada como referência; ela não substitui a página principal do portal.

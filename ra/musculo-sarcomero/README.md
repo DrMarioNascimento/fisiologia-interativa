@@ -1,5 +1,11 @@
 # Do músculo ao sarcômero · Sistema muscular
 
+## Manutenção e origem — 19 de outubro de 2026
+
+Módulo de Fisiologia em RA, mantido neste repositório e acessado pelos percursos dos tutores. A Unidade 06 — Sistema Endócrino possui documentação separada em `endocrino/`; sua inclusão não altera a procedência dos modelos desta experiência. Os créditos e as licenças específicos abaixo permanecem aplicáveis.
+
+Consulte o [README principal](../../README.md) e a [licença da raiz](../../LICENSE.md). Créditos e licenças específicos deste módulo permanecem nos documentos abaixo.
+
 Experiência independente em `Fisiologia Interativa`, acessível pelo destaque RA do Sistema Muscular nos Tutores de Educação Física e Fisioterapia. “Voltar ao Tutor” preserva o percurso de origem. Não exige Google nem carrega recursos do Lab RA.
 
 Origem: `DrMarioNascimento/lab-ra/musculo-sarcomero`, revisão aprovada `6792eb577870bb72933b845791743bc872bcbad2`. O arquivo `modelos.js` foi transferido sem alterações: ventre contínuo, janela no epimísio, fascículos, tendões e os cinco níveis mantêm a versão aprovada. Não há base em nenhum nível.

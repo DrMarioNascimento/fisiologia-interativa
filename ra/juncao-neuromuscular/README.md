@@ -1,5 +1,11 @@
 # Do nervo à força
 
+## Manutenção e origem — 19 de outubro de 2026
+
+Módulo de Fisiologia em RA, mantido neste repositório e acessado pelos percursos dos tutores. A Unidade 06 — Sistema Endócrino possui documentação separada em `endocrino/`; sua inclusão não altera a procedência dos modelos desta experiência. Os créditos e as licenças específicos abaixo permanecem aplicáveis.
+
+Consulte o [README principal](../../README.md) e a [licença da raiz](../../LICENSE.md). Créditos e licenças específicos deste módulo permanecem nos documentos abaixo.
+
 Experiência original do Sistema Muscular, para EF e Fisioterapia. Cinco ampliações: O encontro, O terminal, A fenda, A tríade e A contração. Sem mesas, pedestais, autenticação Google ou dependências do Lab RA.
 
 Anatomia procedural: axônio com segmentos de mielina e núcleos de Schwann, arborização alongada junto ao sarcolema e núcleos periféricos da fibra. O terminal em corte mostra vesículas de tamanhos variados, algumas junto às zonas ativas, mitocôndrias com cristas e cobertura glial. A fenda mantém as membranas separadas, a bicamada visível na borda, pregas arredondadas com receptores nicotínicos nas cristas, canais de sódio nas regiões profundas e acetilcolinesterase ancorada. Na tríade, o túbulo T cruza o eixo das miofibrilas entre duas cisternas conectadas ao retículo que acompanha os feixes. Texturas, cortes, cores e partículas são ilustrativos; não há escala comum aos cinco níveis.

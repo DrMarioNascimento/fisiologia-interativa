@@ -1,5 +1,11 @@
 # Coração em ação · realidade aumentada
 
+## Manutenção e origem — 19 de outubro de 2026
+
+Módulo de Fisiologia em RA, mantido neste repositório e acessado pelos percursos dos tutores. A Unidade 06 — Sistema Endócrino possui documentação separada em `endocrino/`; sua inclusão não altera a procedência dos modelos desta experiência. Os créditos e as licenças específicos abaixo permanecem aplicáveis.
+
+Consulte o [README principal](../../README.md) e a [licença da raiz](../../LICENSE.md). Créditos e licenças específicos deste módulo permanecem nos documentos abaixo.
+
 Experiência independente do Fisiologia Interativa. Origem confirmada pelo professor: `DrMarioNascimento/lab-ra/bancadas/11-coracao/prototipo/duas-pecas.html`, revisão `85d13200078f5201d251c857efde5326cd53daa7`.
 
 ## Vistas preservadas

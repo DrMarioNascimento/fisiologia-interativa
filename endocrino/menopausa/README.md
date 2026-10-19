@@ -1,5 +1,11 @@
 # Transição menopausal — Unidade 06, Educação Física
 
+## Manutenção e origem — 19 de outubro de 2026
+
+Este módulo integra a Unidade 06 — Sistema Endócrino, exclusiva do percurso EF. O catálogo vigente está em `inicio/dados-ef.js`, na raiz do projeto, e as questões da unidade em `tutor-ef-endocrino.js`. A integração cardiorrespiratória permanece em seção própria. Não há sala endócrina de Escape Room cadastrada.
+
+Consulte o [README principal](../../README.md) e a [licença da raiz](../../LICENSE.md). Créditos e licenças específicos deste módulo permanecem nos documentos abaixo.
+
 Simulador estático independente, baseado na apresentação do ciclo menstrual, com os mesmos cards, controles, assinatura e ilustração endometrial.
 
 ## Escopo

@@ -1,5 +1,11 @@
 # Viagem ao osso vivo
 
+## Manutenção e origem — 19 de outubro de 2026
+
+Módulo de Fisiologia em RA, mantido neste repositório e acessado pelos percursos dos tutores. A Unidade 06 — Sistema Endócrino possui documentação separada em `endocrino/`; sua inclusão não altera a procedência dos modelos desta experiência. Os créditos e as licenças específicos abaixo permanecem aplicáveis.
+
+Consulte o [README principal](../../README.md) e a [licença da raiz](../../LICENSE.md). Créditos e licenças específicos deste módulo permanecem nos documentos abaixo.
+
 Experiência procedural original e independente de outros repositórios. Cinco ampliações: fêmur desmontável; compacto e esponjoso; ósteon vascularizado com corte e lacuna ampliada; osteoclasto em corte com escavação/transcitose; osteoblastos em corte, secreção e colágeno/hidroxiapatita ampliados. A matriz sob as células é o tecido estudado, sem pedestal de apresentação. Three.js 0.180.0 e model-viewer 4.0.0 vêm do CDN; apresentação, geometria e cálculos estão neste repositório.
 
 ## Reprodução e escalas
