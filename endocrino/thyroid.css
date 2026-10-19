@@ -155,3 +155,10 @@ footer.wrap{padding:20px 0 32px;font-size:13px;color:var(--muted)}
 @media(max-width:800px){.experiment-workspace{grid-template-columns:minmax(0,1fr);grid-template-areas:"investigation" "results"}.experiment-workspace .basic-controls{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:640px){.thyroid-steps .experiment-workspace>.panel{padding:16px}.experiment-workspace .basic-controls{grid-template-columns:minmax(0,1fr)}.hormone-legend{gap:10px}.hormone-legend button{flex-basis:40%;font-size:13px}.chart-actions button{flex-basis:100%}.chart-actions output{flex-basis:100%}.profile-heading{align-items:stretch}.profile-heading h3{align-self:center}#thyroid-chart text{font-size:15px}}
 @media print{.experiment-workspace{display:block}.experiment-workspace>.panel{margin-bottom:16px!important}.hormone-legend,.chart-actions,#export-csv{display:none}}
+
+/* Dados expansíveis ocupam a largura inteira, evitando uma lacuna ao lado do gráfico. */
+.experiment-workspace{grid-template-areas:"results investigation" "data data"}
+.experiment-workspace>.experiment-data{grid-area:data}
+.thyroid-steps .experiment-data>details:first-child{margin-top:0}
+.thyroid-steps .experiment-data .notice{margin-bottom:0}
+@media(max-width:800px){.experiment-workspace{grid-template-areas:"investigation" "results" "data"}}

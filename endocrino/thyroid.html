@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tireoide — TRH, TSH, T4 e T3 | Fisiologia Interativa</title><meta name="description" content="Simulador educacional do eixo tireoidiano: feedback, Hashimoto, tireoidectomia e reposição de T4."><link rel="stylesheet" href="thyroid.css?v=20261019-grafico1"><script defer src="../ef-simuladores.js?v=20261018-ef1"></script></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tireoide — TRH, TSH, T4 e T3 | Fisiologia Interativa</title><meta name="description" content="Simulador educacional do eixo tireoidiano: feedback, Hashimoto, tireoidectomia e reposição de T4."><link rel="stylesheet" href="thyroid.css?v=20261019-grafico2"><script defer src="../ef-simuladores.js?v=20261018-ef1"></script></head>
 <body><a class="skip" href="#simulacao">Ir para a simulação</a><header class="wrap"><div class="titlebar"><a class="brand" href="../index.html#u-endocrino"><img src="../assets/avatar-prof-mario.webp" alt=""><span>Fisiologia Interativa<small>Educação Física · Unidade 06</small></span></a></div><h1>Tireoide — TRH, TSH, T4 e T3</h1><p class="intro">Explore como TRH, TSH, T4 e T3 conversam — e o que muda quando a tireoide deixa de responder.</p></header>
 <main class="wrap thyroid-steps" id="simulacao">
 <section class="panel experiment" aria-labelledby="step-scenario">
@@ -34,12 +34,16 @@
 <div class="chart-actions" role="group" aria-label="Controle do tempo junto ao gráfico">
 <button type="button" id="graph-play" class="primary">Iniciar</button><button type="button" id="graph-step">Avançar 7 dias</button><button type="button" id="graph-reset">Reiniciar</button><output id="graph-clock">Dia 0</output>
 </div>
-<details class="interventions-details"><summary>Intervenções no experimento <span id="intervention-count">(0)</span></summary><p class="hint">As linhas tracejadas no gráfico indicam quando os parâmetros foram alterados. O CSV inclui cada alteração e os parâmetros vigentes em cada registro.</p><ol id="intervention-list"></ol></details>
+
 <div class="interpretation"><p id="interpretation" role="status"></p></div>
+
+
+
+</section>
+<section class="panel experiment-data" aria-label="Dados complementares do experimento"><details class="interventions-details"><summary>Intervenções no experimento <span id="intervention-count">(0)</span></summary><p class="hint">As linhas tracejadas no gráfico indicam quando os parâmetros foram alterados. O CSV inclui cada alteração e os parâmetros vigentes em cada registro.</p><ol id="intervention-list"></ol></details>
 <details class="history-details"><summary>Histórico: evolução hormonal ao longo dos dias</summary><p>Todos os valores são percentuais do basal do modelo (100%). TRH representa atividade hipotalâmica, não um exame de sangue. T4 e T3 são compartimentos relativos, sem equivalência diagnóstica.</p><div class="table-wrap"><table><caption>Últimas 12 observações; cada linha registra o estado ao avançar o tempo.</caption><thead><tr><th scope="col">Dia</th><th scope="col">TRH</th><th scope="col">TSH</th><th scope="col">T4</th><th scope="col">T3</th></tr></thead><tbody id="history"></tbody></table></div></details>
 <details class="reserve-details"><summary>Dentro do folículo: precursores, reservas e fluxos</summary><p>MIT e DIT são resultados, não controles independentes. Cada percentual usa seu próprio compartimento basal; não compare esses percentuais como quantidades em mol.</p><div class="concepts"><p>Iodeto no tireócito: <output id="pool-iodide"></output><br>Iodeto no coloide: <output id="pool-colloid"></output></p><p>MIT na tireoglobulina: <output id="pool-mit"></output><br>DIT na tireoglobulina: <output id="pool-dit"></output></p><p>Reserva de T4 na Tg: <output id="pool-store4"></output><br>Reserva de T3 na Tg: <output id="pool-store3"></output></p><p>Tecido viável remanescente: <output id="pool-tissue"></output></p></div><p id="fluxes"></p><p id="adaptations"></p><p class="hint">Tg representa sítios de tirosina disponíveis, não concentração sérica de tireoglobulina. O balanço de iodo é conservado dentro da glândula, com entrada, efluxo, reciclagem e saída hormonal registrados; não é um balanço corporal completo.</p><p class="hint">Compare TPO zero com tireoidectomia: na primeira situação a glândula ainda libera reservas; na segunda, a cirurgia remove glândula e reservas. Capacidade funcional é diferente de remoção anatômica.</p></details>
-<div class="notice">Modelo conceitual: não reproduz pulsos reais, autoimunidade, farmacocinética individual nem o atraso clínico completo do TSH.</div>
-</section>
+<div class="notice">Modelo conceitual: não reproduz pulsos reais, autoimunidade, farmacocinética individual nem o atraso clínico completo do TSH.</div></section>
 </div>
 <section id="audit" class="panel learning-panel" aria-labelledby="step-learning">
 <div class="step-heading"><span class="step-badge" aria-hidden="true">05</span><div><h2 id="step-learning"><span class="sr-only">Etapa 05: </span>Aprofunde o conhecimento</h2><p class="step-subtitle">Abra o tema que deseja explorar.</p></div></div>
