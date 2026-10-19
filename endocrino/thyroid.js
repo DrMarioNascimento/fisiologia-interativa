@@ -114,7 +114,7 @@ const escapeText = text => String(text).replaceAll('&', '&amp;').replaceAll('<',
 function drawProfiles() {
   const visible = ids.filter(id => visibleHormones.has(id));
   const xMax = Math.max(42, Math.ceil(state.t / 7) * 7);
-  const referenceWindow = referenceRows.filter(row => row.t <= xMax);
+  const referenceWindow = referenceRows.filter(row => row.t <= xMax + 1e-8);
   const { yMax, step } = chartBounds([...history, ...referenceWindow], visible, BASELINE_STATE);
   const width = Math.max(280, Math.min(900, $('thyroid-chart').clientWidth || 900));
   const height = width < 500 ? 310 : 340;
@@ -184,7 +184,7 @@ for (const button of document.querySelectorAll('[data-hormone]')) {
   });
 }
 $('export-csv').addEventListener('click', () => {
-  const blob = new Blob([exportCSV([...history, ...referenceRows.filter(row => row.t <= Math.max(42, Math.ceil(state.t / 7) * 7)).map(row => recordSample(row, referenceParams, $('scenario').value, 'Trajetória original do cenário sem personalização (modelo)', 'reference'))], BASELINE_STATE)], { type: 'text/csv;charset=utf-8' });
+  const blob = new Blob([exportCSV([...history, ...referenceRows.filter(row => row.t <= Math.max(42, Math.ceil(state.t / 7) * 7) + 1e-8).map(row => recordSample(row, referenceParams, $('scenario').value, 'Trajetória original do cenário sem personalização (modelo)', 'reference'))], BASELINE_STATE)], { type: 'text/csv;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url; link.download = 'tireoide-' + $('scenario').value + '-dia-' + Math.round(state.t) + '.csv';

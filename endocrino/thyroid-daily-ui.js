@@ -13,6 +13,7 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
   $('daily-results').classList.toggle('reference-compact',!daily);
   $('expected-study-note').hidden=daily;$('daily-choose-reference').hidden=daily;
   $('daily-heading').textContent=daily?'Padrão esperado · dados dos estudos':'Padrão publicado · referência em 24 horas';
+  if(!daily) $('sex-legend').textContent=$('daily-study').value==='zhang'?studyGroups('zhang',$('daily-sex').value).map(g=>groupLabel(g)+(g==='women'?' · marcadores vazados':' · marcadores preenchidos')).join(' | '):'Adultos · grupo misto · ajuste publicado';
   $('experiment-results').hidden=$('experiment-controls').hidden=$('experiment-data').hidden=daily;
   $('view-daily').setAttribute('aria-pressed',String(daily));$('view-experiment').setAttribute('aria-pressed',String(!daily));
   $('investigation-mode-title').textContent=daily?'Compare estudos e populações':'Modifique uma variável';
