@@ -332,7 +332,12 @@ window.FI_DADOS = {
    "curto": "Endócrino",
    "desc": "Hipotálamo, hipófise, glândulas-alvo e regulação hormonal: tireoide, ACTH/cortisol, gônadas, GH, prolactina, ADH e ocitocina.",
    "cel": "célula secretora e vesículas hormonais",
-   "mapas": [],
+   "mapas": [
+    {
+     "t": "Sistema Endócrino — hormônios, tempo e feedback",
+     "src": "assets/maps/sistema-endocrino.webp"
+    }
+   ],
    "sims": [
     {
      "t": "Hipotálamo, hipófise e eixos endócrinos",
