@@ -18,11 +18,11 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
   $('view-daily').setAttribute('aria-pressed',String(daily));$('view-experiment').setAttribute('aria-pressed',String(!daily));
   $('investigation-mode-title').textContent=daily?'Compare estudos e populações':'Modifique uma variável';
   $('investigation-mode-description').textContent=daily?'Escolha a fonte e a referência percentual.':'Preveja a resposta, altere um controle e avance os dias.';
-  if(daily)render();else { $('expected-study-note').textContent=$('daily-study').value==='children'?'Pediatria: os estudos recuperados não fornecem uma curva horária completa. Consulte as janelas no painel de estudos.':'Linhas pontilhadas: referência publicada em adultos saudáveis. Este gráfico usa horas; seu experimento abaixo usa dias. A referência permanece intacta, sem prever a curva da doença.';drawExperiment(); }
+  if(daily)render();else { $('expected-study-note').textContent=$('daily-study').value==='children'?'Pediatria: os estudos recuperados não fornecem uma curva horária completa. Consulte as janelas no painel de estudos.':'Linhas pontilhadas: referência publicada em adultos saudáveis. Este gráfico usa horas; seu experimento abaixo usa dias. A referência permanece intacta, sem prever a curva da doença.';render();drawExperiment(); }
  }
- function render(){if(mode!=='daily')return;
+ function render(){
   const study=$('daily-study').value,ref=$('daily-reference').value,children=study==='children';
-  document.querySelector('.experiment-workspace').classList.toggle('pediatric-view',children);
+  document.querySelector('.experiment-workspace').classList.toggle('pediatric-view',children&&mode==='daily');
   $('daily-interpolation-note').textContent=children?'Sem curva contínua: compare as janelas e os extremos recuperados.':study==='russell'?'Cada ponto da curva é calculado do ajuste coletivo publicado, sem novas dosagens.':'Nos intervalos entre as coletas, os valores mostrados são interpolados. O fechamento em 24 h repete 00:00.';
   $('daily-scope-note').textContent=children?'A idade e o protocolo diferem entre estudos. Recém-nascidos não recebem uma curva adulta.': 'Dados de adultos saudáveis. Cenários e intervenções ficam em “Experimento · dias”.';
   $('daily-description').textContent=STUDIES[study].description;
@@ -32,7 +32,7 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
   if(children){stop();$('daily-readouts').replaceChildren();return;}
   const groups=studyGroups(study,$('daily-sex').value),ids=[...visible],read=(g,h,t)=>studyValue(study,g,h,t,ref);
   $('daily-hour').value=hour;$('daily-clock').textContent=$('daily-hour-value').textContent=time(hour);
-  const width=Math.max(280,Math.min(900,$('daily-chart').clientWidth||900)),height=width<500?310:340,left=width<500?61:72,right=width-24,bottom=height-60;
+  const width=Math.max(280,Math.min(900,$('daily-chart').clientWidth||900)),height=mode==='experiment'?220:width<500?310:340,left=width<500?61:72,right=width-24,bottom=height-60;
   const times=study==='zhang'?[...HOURS,24]:Array.from({length:97},(_,i)=>i/4);
   const vals=groups.flatMap(g=>ids.flatMap(h=>times.map(t=>read(g,h,t).percent))),lo=Math.min(100,...vals),hi=Math.max(100,...vals),raw=Math.max(10,hi-lo+10)/4,mag=10**Math.floor(Math.log10(raw)),f=raw/mag,step=(f<=1?1:f<=2?2:f<=5?5:10)*mag;
   const min=Math.max(0,Math.floor((lo-5)/step)*step),max=Math.ceil((hi+5)/step)*step,x=t=>left+t/24*(right-left),y=v=>30+(bottom-30)*(max-v)/(max-min);
@@ -64,3 +64,4 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
  $('daily-export').onclick=()=>{const s=$('daily-study').value,u=URL.createObjectURL(new Blob([studyCSV(s,$('daily-sex').value,$('daily-reference').value)],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='tireoide-estudo-'+s+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);};
  document.defaultView?.addEventListener('resize',render);document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});render();return{showExperiment:()=>setView('experiment')};
 }
+
