@@ -2,7 +2,8 @@
   'use strict';
 
   const isFisioterapia = location.pathname.includes('/fisioterapia/') || location.pathname.endsWith('/tutor-fisio.html') || new URLSearchParams(location.search).get('percurso') === 'fisioterapia';
-  const courseConfig = isFisioterapia && window.fisioterapiaTutor ? window.fisioterapiaTutor : null;
+  const courseConfig = isFisioterapia && window.fisioterapiaTutor ? window.fisioterapiaTutor
+    : (!isFisioterapia && location.pathname.endsWith('/tutor-ef.html') ? window.educacaoFisicaTutor || null : null);
   const axisNames = courseConfig?.axisNames || {
     celular: '01 Celular e potenciais de ação', muscular: '02 Excitabilidade e sistema muscular',
     osteoarticular: '03 Osteoarticular', cardiovascular: '04 Cardiovascular',
@@ -145,6 +146,7 @@
     if (m.href === 'da-intencao-ao-movimento.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/da-intencao-ao-movimento-guia-visual.pdf?v=20260924'))}" target="_blank" rel="noopener">Leitura de aprofundamento</a>`);
     if (m.href === 'sangue.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/Sangue_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260924'))}" target="_blank" rel="noopener">Guia visual de Sangue</a>`);
     if (m.href === 'ventilacao-pulmonar-neonatal.html') links.push(`<a class="tutor-link" href="${escapeHtml(assetHref('assets/leituras/Ventilacao_Pulmonar_Neonatal_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20260924'))}" target="_blank" rel="noopener">Guia visual neonatal</a>`);
+    if (m.reading) links.push(`<a class="tutor-link" href="${escapeHtml(assetHref(m.reading))}" target="_blank" rel="noopener">Leitura complementar</a>`);
     return links.join(' ');
   }
   function renderMapLinks(items, intro) {
@@ -155,6 +157,7 @@
     const raw = normalize(query);
     const bloodMap = {src:assetHref('assets/maps/cardiovascular-01-sangue.webp'),title:'Sangue'};
     const requestedGroup = [
+      ...(courseConfig?.axisNames?.endocrino ? [['endocrino', /endocrin|hipofis|hormon|tireo|cortisol|menopaus|ciclo menstrual|gestacao|prolactina|ocitocina/]] : []),
       ['celular', /celular|membrana|potencial/],
       ['muscular', /muscular|musculo|excitabilidade|contracao|sarcomero/],
       ['osteoarticular', /osteo|osso|articular|articulacao/],
