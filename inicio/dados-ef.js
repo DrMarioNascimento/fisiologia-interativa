@@ -369,7 +369,8 @@ window.FI_DADOS = {
      "cat": "Sistema Endócrino",
      "obj": "Integrar eixo HHA, vias autonômicas, ritmo circadiano, sono, estresse e exercício; comparar respostas agudas e exposição prolongada em um modelo qualitativo.",
      "href": "endocrino/cortisol.html",
-     "deep": "módulo de aprofundamento"
+     "deep": "módulo de aprofundamento",
+     "leitura": "assets/leituras/Cortisol_Guia_Visual_Prof_Mario_Nascimento.pdf?v=20261019"
     }
    ],
    "sala": null
