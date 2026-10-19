@@ -8,7 +8,14 @@ const catalog=JSON.parse(read('inicio/dados-ef.js').replace(/^[\s\S]*?window\.FI
 test('Todas as unidades e todos os acessos EF recebem a identidade, incluindo os dois modos do ciclo',()=>{
  assert.equal(catalog.unidades.length,7);let count=0;
  for(const u of catalog.unidades)for(const s of u.sims){count++;const path=s.href.split(/[?#]/)[0];assert.ok(manifest[path],path);assert.equal(manifest[path].unit,u.id);assert.equal(manifest[path].number,u.num);assert.match(read(path),/ef-simuladores\.js/);}
- assert.equal(count,33);assert.equal(manifest['endocrino/index.html'].number,'06');assert.equal(manifest['cardiopulmonar-integrado.html'].number,'');
+ assert.equal(count,34);assert.equal(manifest['endocrino/index.html'].number,'06');assert.equal(manifest['cardiopulmonar-integrado.html'].number,'');
+});
+test('Cortisol entra como aprofundamento endócrino com identidade e sem leitura inexistente',()=>{
+ const unit=catalog.unidades.find(u=>u.id==='endocrino'),cards=unit.sims.filter(s=>s.href==='endocrino/cortisol.html');
+ assert.equal(cards.length,1);assert.equal(cards[0].deep,'módulo de aprofundamento');assert.equal(cards[0].leitura,undefined);
+ assert.equal(manifest[cards[0].href].unit,'endocrino');assert.equal(manifest[cards[0].href].number,'06');
+ assert.match(read('endocrino/cortisol.html'),/ef-simuladores\.js/);assert.match(read('endocrino/cortisol.html'),/Prof\. Dr\. Mário César Nascimento/);
+ assert.match(read('endocrino/index.html'),/class="button module-deep" href="cortisol\.html"/);
 });
 test('O acesso seleciona o manifesto do próprio curso sem levar a identidade da EF para Fisioterapia',()=>{
  for(const href of ['https://site.test/fisioterapia/index.html','https://site.test/potencial-acao-membrana.html?percurso=fisioterapia','https://site.test/neuronio-interativo.html?curso=fi']){

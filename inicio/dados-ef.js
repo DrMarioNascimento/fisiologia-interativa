@@ -363,6 +363,13 @@ window.FI_DADOS = {
      "cat": "Sistema Endócrino",
      "obj": "Comparar a fase reprodutiva e a transição menopausal; manipular estradiol, progesterona, FSH e LH e observar retroalimentação, ovulação e resposta endometrial em um modelo didático.",
      "href": "endocrino/menopausa/index.html"
+    },
+    {
+     "t": "Cortisol: estresse, sono e exercício",
+     "cat": "Sistema Endócrino",
+     "obj": "Integrar eixo HHA, vias autonômicas, ritmo circadiano, sono, estresse e exercício; comparar respostas agudas e exposição prolongada em um modelo qualitativo.",
+     "href": "endocrino/cortisol.html",
+     "deep": "módulo de aprofundamento"
     }
    ],
    "sala": null

@@ -173,5 +173,10 @@
     "unit": "endocrino",
     "number": "06",
     "title": "Ciclo menstrual e gestação"
+  },
+  "endocrino/cortisol.html": {
+    "unit": "endocrino",
+    "number": "06",
+    "title": "Cortisol: estresse, sono e exercício"
   }
 }

@@ -18,3 +18,5 @@ jobs:
         run: node endocrino/ciclo/tests.mjs
       - name: Verificar transição menopausal e manipulação hormonal
         run: node --test endocrino/menopausa/tests.mjs
+      - name: Verificar cortisol, cenários temporais e limites do modelo
+        run: node --test endocrino/cortisol-tests.mjs
