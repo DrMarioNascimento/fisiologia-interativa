@@ -51,7 +51,7 @@
       const sims = u.sims.filter(s => !q || norm([s.t, s.obj, s.cat, u.nome].join(' ')).includes(q));
       if (q && !sims.length) return '';
       total += sims.length;
-      const maps = u.mapas.map((m, i) => `<button type="button" data-map="${u.id}" data-i="${i}">${mapIcon}${u.mapas.length > 1 ? 'Mapa ' + String(i + 1).padStart(2, '0') : 'Mapa mental'}</button>`).join('');
+      const maps = u.mapas.map((m, i) => `<a href="${esc(m.src)}" target="_blank" rel="noopener" data-map="${u.id}" data-i="${i}" aria-label="Abrir mapa mental: ${esc(m.t)}">${mapIcon}${u.mapas.length > 1 ? 'Mapa ' + String(i + 1).padStart(2, '0') : 'Mapa mental'}</a>`).join('');
       return `<section class="unit" id="u-${u.id}" style="--c:${cor(u.id)}" aria-labelledby="h-${u.id}">
         <div class="unit-side rv">
           <span class="unit-num" aria-hidden="true">${u.num}</span>
@@ -66,7 +66,10 @@
   }
   list.addEventListener('click', e => {
     const b = e.target.closest('[data-map]'); if (!b) return;
-    if (window.FI_openMap) window.FI_openMap(+b.dataset.i, b.dataset.map);
+    if (window.FI_openMap) {
+      try { window.FI_openMap(+b.dataset.i, b.dataset.map); e.preventDefault(); }
+      catch (err) { /* O link direto mantém o mapa acessível se a janela falhar. */ }
+    }
   });
   search.addEventListener('input', render);
   render();
