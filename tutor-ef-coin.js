@@ -68,7 +68,7 @@
     });
     window.addEventListener('resize', () => position(btn.offsetLeft, btn.offsetTop));
 
-    let sound = read('tutorEFCoinSound') === 'on', audio, lastSound = 0;
+    let sound = read('tutorEFCoinSound') !== 'off', audio, lastSound = 0; // som ligado por padrão
     const soundBtn = document.createElement('button');
     soundBtn.type = 'button'; soundBtn.className = 'tutor-coin-sound';
     const updateSound = () => {
@@ -78,6 +78,20 @@
     };
     updateSound();
     document.querySelector('.tutor-head').insertBefore(soundBtn, document.querySelector('.tutor-close'));
+    // Safari/iPhone só libera áudio criado e "destravado" dentro de um toque do usuário.
+    const unlock = () => {
+      try {
+        const Audio = window.AudioContext || window.webkitAudioContext;
+        if (!Audio) return;
+        audio ||= new Audio();
+        if (audio.state !== 'running') {
+          const b = audio.createBuffer(1, 1, 22050), s = audio.createBufferSource();
+          s.buffer = b; s.connect(audio.destination); s.start(0);
+          void audio.resume().catch(() => {});
+        }
+      } catch (_) {}
+    };
+    ['pointerdown', 'touchend', 'keydown'].forEach(ev => document.addEventListener(ev, unlock, { capture: true, passive: true }));
     function note(frequency, t, dur, type, vol) {
       const oscillator = audio.createOscillator(), gain = audio.createGain();
       oscillator.type = type; oscillator.frequency.value = frequency;
@@ -99,14 +113,14 @@
           // "fiuuu" ascendente acompanhando o giro, depois um "plim"
           const o = audio.createOscillator(), g = audio.createGain();
           o.type = 'triangle'; o.frequency.setValueAtTime(300, t0); o.frequency.exponentialRampToValueAtTime(1100, t0 + 0.35);
-          g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.05, t0 + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.4);
+          g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.16, t0 + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.4);
           o.connect(g); g.connect(audio.destination); o.start(t0); o.stop(t0 + 0.42);
           o.onended = () => { o.disconnect(); g.disconnect(); };
-          note(1318.5, t0 + 0.36, 0.45, 'sine', 0.04);
+          note(1318.5, t0 + 0.36, 0.5, 'sine', 0.14); note(1975.5, t0 + 0.36, 0.6, 'sine', 0.06);
           return;
         }
         const notes = kind === 'correct' ? [660, 880] : kind === 'wrong' ? [330] : [620];
-        notes.forEach((frequency, i) => note(frequency, t0 + i * 0.09, 0.15, 'sine', 0.035));
+        notes.forEach((frequency, i) => note(frequency, t0 + i * 0.09, 0.18, 'sine', 0.12));
       } catch (_) {}
     }
     soundBtn.addEventListener('click', () => { sound = !sound; save('tutorEFCoinSound', sound ? 'on' : 'off'); updateSound(); if (sound) tone('tab'); });
