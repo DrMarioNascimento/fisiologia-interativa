@@ -1,4 +1,5 @@
-/* Floating coin for Tutor EF only. The shared header is intentionally untouched. */
+/* Floating 3D tutor (anatomical bust) for Tutor EF only. The shared header is intentionally untouched.
+   Keeps the original "coin" names (tutorEFCoin, .tutor-coin) so tutor-widget.js needs no change. */
 (function () {
   'use strict';
   if (!location.pathname.endsWith('/tutor-ef.html')) return;
@@ -11,7 +12,7 @@
     btn.classList.add('tutor-coin');
     btn.title = 'Clique para abrir o tutor. Arraste para mover.';
     const portrait = btn.querySelector('.tutor-portrait');
-    portrait.innerHTML = '<img class="tutor-coin-poster" src="' + href('assets/tutor/moeda-ia-face.jpg') + '" alt="" draggable="false">';
+    portrait.innerHTML = '<img class="tutor-coin-poster" src="' + href('assets/tutor/tutor-ia-poster.webp') + '" alt="" draggable="false">';
     btn.querySelector('.tutor-badge').setAttribute('aria-hidden', 'true');
     let pointer = null, suppressClick = false;
     const clamp = (n, max) => Math.max(6, Math.min(Math.max(6, max), n));
@@ -73,10 +74,18 @@
     const updateSound = () => {
       soundBtn.textContent = sound ? 'Som ligado' : 'Som desligado';
       soundBtn.setAttribute('aria-pressed', String(sound));
-      soundBtn.setAttribute('aria-label', sound ? 'Desativar sons da moeda' : 'Ativar sons da moeda');
+      soundBtn.setAttribute('aria-label', sound ? 'Desativar sons do tutor' : 'Ativar sons do tutor');
     };
     updateSound();
     document.querySelector('.tutor-head').insertBefore(soundBtn, document.querySelector('.tutor-close'));
+    function note(frequency, t, dur, type, vol) {
+      const oscillator = audio.createOscillator(), gain = audio.createGain();
+      oscillator.type = type; oscillator.frequency.value = frequency;
+      gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(vol, t + 0.008);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      oscillator.connect(gain); gain.connect(audio.destination); oscillator.start(t); oscillator.stop(t + dur + 0.01);
+      oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+    }
     function tone(kind) {
       if (!sound || document.hidden || performance.now() - lastSound < 150) return;
       try {
@@ -85,18 +94,22 @@
         audio ||= new Audio();
         void audio.resume().catch(() => {});
         lastSound = performance.now();
+        const t0 = audio.currentTime;
+        if (kind === 'open') {
+          // "fiuuu" ascendente acompanhando o giro, depois um "plim"
+          const o = audio.createOscillator(), g = audio.createGain();
+          o.type = 'triangle'; o.frequency.setValueAtTime(300, t0); o.frequency.exponentialRampToValueAtTime(1100, t0 + 0.35);
+          g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.05, t0 + 0.05); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.4);
+          o.connect(g); g.connect(audio.destination); o.start(t0); o.stop(t0 + 0.42);
+          o.onended = () => { o.disconnect(); g.disconnect(); };
+          note(1318.5, t0 + 0.36, 0.45, 'sine', 0.04);
+          return;
+        }
         const notes = kind === 'correct' ? [660, 880] : kind === 'wrong' ? [330] : [620];
-        notes.forEach((frequency, i) => {
-          const oscillator = audio.createOscillator(), gain = audio.createGain(), t = audio.currentTime + i * 0.09;
-          oscillator.type = 'sine'; oscillator.frequency.value = frequency;
-          gain.gain.setValueAtTime(0, t); gain.gain.linearRampToValueAtTime(0.035, t + 0.008);
-          gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.15);
-          oscillator.connect(gain); gain.connect(audio.destination); oscillator.start(t); oscillator.stop(t + 0.16);
-          oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
-        });
+        notes.forEach((frequency, i) => note(frequency, t0 + i * 0.09, 0.15, 'sine', 0.035));
       } catch (_) {}
     }
-    soundBtn.addEventListener('click', () => { sound = !sound; save('tutorEFCoinSound', sound ? 'on' : 'off'); updateSound(); if (sound) tone('open'); });
+    soundBtn.addEventListener('click', () => { sound = !sound; save('tutorEFCoinSound', sound ? 'on' : 'off'); updateSound(); if (sound) tone('tab'); });
 
     let animate = () => {};
     const react = kind => { animate(kind); tone(kind); };
@@ -113,52 +126,66 @@
     async function init3D() {
       const THREE = await import(href('ra/celula/visualizador/vendor/three.module.js'));
       const { GLTFLoader } = await import(href('ra/celula/visualizador/vendor/GLTFLoader.js'));
+      const { RoomEnvironment } = await import(href('assets/tutor/RoomEnvironment.js'));
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' });
       renderer.setClearColor(0, 0); renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
-      const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(35, 1, 0.1, 20);
-      camera.position.z = 3.8;
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x566b64, 3));
-      const light = new THREE.DirectionalLight(0xffffff, 4); light.position.set(-2, 3, 5); scene.add(light);
-      const fill = new THREE.DirectionalLight(0xcfe8ff, 2); fill.position.set(3, -1, 2); scene.add(fill);
-      const gltf = await new GLTFLoader().loadAsync(href('assets/tutor/moeda-ia.glb'));
-      const coin = new THREE.Group();
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(30, 1, 0.1, 20);
+      camera.position.z = 3.9;
+      // The bust is metallic: it needs an environment map to look silver instead of dark.
+      const pmrem = new THREE.PMREMGenerator(renderer);
+      scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+      pmrem.dispose();
+      const gltf = await new GLTFLoader().loadAsync(href('assets/tutor/tutor-ia.glb'));
+      const bust = new THREE.Group();
       const center = new THREE.Box3().setFromObject(gltf.scene).getCenter(new THREE.Vector3());
       gltf.scene.position.sub(center);
-      coin.add(gltf.scene); scene.add(coin);
-      // The source face is oriented with its artwork upside down.
-      coin.rotation.z = Math.PI;
+      bust.add(gltf.scene); scene.add(bust);
       const canvas = renderer.domElement;
       canvas.setAttribute('aria-hidden', 'true'); canvas.className = 'tutor-coin-canvas';
       portrait.appendChild(canvas);
-      let frame = 0, start = 0, kind = '';
-      const rest = () => { coin.rotation.set(0.06, -0.12, Math.PI); coin.position.y = 0; coin.scale.setScalar(1); };
-      function draw() { renderer.render(scene, camera); }
-      function stop() { cancelAnimationFrame(frame); frame = 0; rest(); draw(); }
+
+      let frame = 0, start = 0, kind = '', idle0 = performance.now();
+      const ease = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+      const durations = { open: 1100, correct: 650, wrong: 600, tab: 450 };
+      function pose(now) {
+        // Idle: slow side-to-side turn and "breathing".
+        const s = (now - idle0) / 1000, calm = media.matches;
+        bust.rotation.set(0, calm ? 0 : Math.sin(s * 0.6) * 0.22, 0);
+        bust.position.y = calm ? 0 : Math.sin(s * 1.4) * 0.025;
+        if (!kind) return;
+        const t = Math.min(1, (now - start) / durations[kind]), pulse = Math.sin(Math.PI * t);
+        if (kind === 'open') { bust.rotation.y += Math.PI * 2 * ease(t); bust.position.y += pulse * 0.14; }
+        else if (kind === 'correct') { bust.position.y += Math.abs(Math.sin(t * Math.PI * 2)) * (1 - t) * 0.16; bust.rotation.y += pulse * 0.35; }
+        else if (kind === 'wrong') bust.rotation.y += Math.sin(t * Math.PI * 6) * (1 - t) * 0.35; // "não" com a cabeça
+        else bust.rotation.x = pulse * 0.12; // aceno
+        if (t >= 1) kind = '';
+      }
+      const draw = now => { pose(now); renderer.render(scene, camera); };
       function tick(now) {
         frame = 0;
-        if (document.hidden || media.matches) { stop(); return; }
-        const t = Math.min(1, (now - start) / (kind === 'open' ? 850 : 480));
-        const pulse = Math.sin(Math.PI * t), eased = 1 - Math.pow(1 - t, 3);
-        rest();
-        if (kind === 'open') coin.rotation.y += Math.PI * 2 * eased;
-        else if (kind === 'wrong') coin.rotation.z = Math.PI + Math.sin(t * Math.PI * 4) * pulse * 0.08;
-        else { coin.rotation.y += pulse * 0.45; coin.position.y = pulse * (kind === 'correct' ? 0.15 : 0.06); }
-        draw();
-        if (t < 1) frame = requestAnimationFrame(tick);
-        else { coin.rotation.z = Math.PI; stop(); }
+        if (document.hidden) return;
+        draw(now);
+        if (!media.matches || kind) frame = requestAnimationFrame(tick);
       }
+      const run = () => { if (!frame && !document.hidden) frame = requestAnimationFrame(tick); };
       animate = next => {
-        if (media.matches || document.hidden || pointer?.moved) return;
-        cancelAnimationFrame(frame); kind = next; start = performance.now(); frame = requestAnimationFrame(tick);
+        if (document.hidden || pointer?.moved || media.matches) return;
+        kind = next; start = performance.now(); run();
       };
-      const resize = () => { renderer.setSize(portrait.clientWidth, portrait.clientHeight, false); draw(); };
+      const resize = () => {
+        const w = portrait.clientWidth, h = portrait.clientHeight; if (!w || !h) return;
+        renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); draw(performance.now());
+      };
       new ResizeObserver(resize).observe(portrait);
-      media.addEventListener('change', stop);
-      document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); });
-      canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); cancelAnimationFrame(frame); btn.classList.remove('coin-ready'); btn.dataset.coinState = 'fallback'; });
-      canvas.addEventListener('webglcontextrestored', () => { rest(); draw(); btn.classList.add('coin-ready'); btn.dataset.coinState = 'ready'; });
-      rest(); resize(); btn.classList.add('coin-ready'); btn.dataset.coinState = 'ready';
+      media.addEventListener('change', () => { kind = ''; run(); });
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) run(); });
+      canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); cancelAnimationFrame(frame); frame = 0; btn.classList.remove('coin-ready'); btn.dataset.coinState = 'fallback'; });
+      canvas.addEventListener('webglcontextrestored', () => { draw(performance.now()); run(); btn.classList.add('coin-ready'); btn.dataset.coinState = 'ready'; });
+      resize(); btn.classList.add('coin-ready'); btn.dataset.coinState = 'ready';
+      if (!media.matches) { kind = 'open'; start = performance.now(); } // giro de boas-vindas (sem som)
+      run();
     }
   }};
 })();
