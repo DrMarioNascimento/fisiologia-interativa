@@ -316,3 +316,6 @@ dialog::backdrop{background:rgba(3,5,8,.82);backdrop-filter:blur(4px)}
 @keyframes rolarIn{from{opacity:0}}
 
 :root{--u7:#E8B05C}
+
+/* Reserva a altura do retrato também com a barra fixa e a rolagem restaurada. */
+.bar{padding-top:50px!important;overflow:visible}
