@@ -121,3 +121,37 @@ footer.wrap{padding:20px 0 32px;font-size:13px;color:var(--muted)}
 @media(max-width:900px){.thyroid-steps .axis h3 small{display:block;margin:2px 0 0}.basic-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.thyroid-steps{gap:14px}.thyroid-steps>.panel{padding:16px}.step-heading{grid-template-columns:34px minmax(0,1fr);gap:10px;margin-bottom:14px}.step-badge{min-height:34px;font-size:14px}.step-heading h2{font-size:19px}.step-subtitle{font-size:12px}.basic-controls{grid-template-columns:minmax(0,1fr);gap:12px}.thyroid-steps .axis>li{grid-template-columns:minmax(0,1fr);gap:4px;padding:12px 14px}.thyroid-steps .axis output{grid-column:1;grid-row:auto;text-align:left;font-size:18px;padding:8px 12px;margin-top:6px}.thyroid-steps .axis h3{font-size:21px}.thyroid-steps .toolbar button{flex-basis:100%}.thyroid-steps .panel details{padding-left:12px;padding-right:12px}.thyroid-steps .concepts{grid-template-columns:minmax(0,1fr)}}
 @media print{.thyroid-steps{display:block}.thyroid-steps>.panel{margin-bottom:16px}.basic-controls{display:none}.step-heading{break-after:avoid}.axis>li{break-inside:avoid}}
+
+/* Experimento: observar e modificar lado a lado, na ordem 03 → 04 no celular. */
+.experiment-workspace{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(310px,1fr);grid-template-areas:"results investigation";gap:16px;align-items:start}
+.thyroid-steps .experiment-workspace>.panel{margin:0;padding:20px;min-width:0}
+.experiment-workspace>.investigation{grid-area:investigation}
+.experiment-workspace>.results-panel{grid-area:results}
+.experiment-workspace .basic-controls{grid-template-columns:minmax(0,1fr);gap:12px}
+.experiment-workspace .step-heading{gap:10px;grid-template-columns:36px minmax(0,1fr)}
+.experiment-workspace .step-heading h2{font-size:20px}
+.experiment-workspace .prediction{border-top:1px solid var(--line);padding-top:0}
+.thyroid-steps .experiment-workspace .prediction>summary{font-size:13px}
+.profile-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.profile-heading h3{margin:0;font-size:18px}
+#export-csv{font-size:13px;min-height:44px;padding:10px 14px}
+.hormone-legend{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 18px}
+.hormone-legend button{flex:1 1 95px;min-height:46px;padding:10px 16px;border-left:5px solid var(--series);color:var(--series);background:linear-gradient(145deg,#173244,#102430)}
+.hormone-legend button[aria-pressed="true"]{outline:1px solid var(--series);outline-offset:1px;box-shadow:inset 0 2px 1px #fff3,0 3px 0 #05141e,0 0 12px color-mix(in srgb,var(--series) 20%,transparent)}
+.hormone-legend button[aria-pressed="false"]{opacity:.55;text-decoration:line-through}
+#thyroid-chart{display:block;width:100%;height:auto;min-width:0;border:1px solid var(--line);border-radius:14px;background:#0b202e}
+#thyroid-chart text{font-family:"Segoe UI",Arial,sans-serif;fill:#b4cad8;font-size:13px}
+#thyroid-chart .chart-grid{stroke:#385466;stroke-width:1}
+#thyroid-chart .basal-line{stroke:#b4cad8;stroke-width:1.5;stroke-dasharray:7 5}
+#thyroid-chart .hormone-line{fill:none;stroke-width:3;stroke-linejoin:round;stroke-linecap:round}
+#thyroid-chart .intervention-line{stroke:#e9bd82;stroke-width:1.3;stroke-dasharray:3 5;opacity:.8}
+.chart-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 16px}
+.chart-actions button{font-size:13px;padding:10px 14px;flex:1 1 100px}
+.chart-actions output{flex:1 1 80px;text-align:center;color:#b2e5d6;font-weight:750;font-variant-numeric:tabular-nums}
+.thyroid-steps .results-panel>.interpretation{margin-top:16px}
+#intervention-list{font-size:13px;padding-left:22px;max-height:300px;overflow:auto}
+#intervention-list li{margin:8px 0}
+@media(max-width:1000px){.experiment-workspace{grid-template-columns:minmax(0,1.5fr) minmax(285px,1fr)}}
+@media(max-width:800px){.experiment-workspace{grid-template-columns:minmax(0,1fr);grid-template-areas:"investigation" "results"}.experiment-workspace .basic-controls{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:640px){.thyroid-steps .experiment-workspace>.panel{padding:16px}.experiment-workspace .basic-controls{grid-template-columns:minmax(0,1fr)}.hormone-legend{gap:10px}.hormone-legend button{flex-basis:40%;font-size:13px}.chart-actions button{flex-basis:100%}.chart-actions output{flex-basis:100%}.profile-heading{align-items:stretch}.profile-heading h3{align-self:center}#thyroid-chart text{font-size:15px}}
+@media print{.experiment-workspace{display:block}.experiment-workspace>.panel{margin-bottom:16px!important}.hormone-legend,.chart-actions,#export-csv{display:none}}
