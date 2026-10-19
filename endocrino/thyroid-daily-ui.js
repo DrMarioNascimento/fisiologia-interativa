@@ -1,4 +1,4 @@
-import { HOURS, DAILY_HORMONES, STUDIES, studyGroups, groupLabel, studyValue, studyCSV } from './thyroid-daily-data.js?v=20261019-reference3';
+import { HOURS, DAILY_HORMONES, STUDIES, studyGroups, groupLabel, studyValue, studyCSV } from './thyroid-daily-data.js?v=20261019-reference4';
 export function mountDailyView({pauseExperiment,drawExperiment}) {
  const $=id=>document.getElementById(id);let mode='daily',hour=8,timer=null;
  const visible=new Set(['tsh','ft4','ft3']);
@@ -49,7 +49,7 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
    }
   }
   svg+=`<line class="daily-cursor" x1="${x(hour)}" x2="${x(hour)}" y1="30" y2="${bottom}"/>`;$('daily-chart').innerHTML=svg;
-  $('daily-caption').textContent=time(hour)+' · '+read(groups[0],ids[0],hour).origin+' · '+STUDIES[study].label;
+  $('daily-caption').textContent=mode==='experiment'?'Fonte: '+STUDIES[study].label+' · 100% = '+reference:time(hour)+' · '+read(groups[0],ids[0],hour).origin+' · '+STUDIES[study].label;
   $('daily-reading').textContent=study==='zhang'?'As medianas representam esta coorte. FT3 e FT4 não tiveram variação intradiária significativa; ligar pontos não demonstra ritmo universal.':'Ajuste coletivo: amplitude relativa do TSH ≈24,66%, FT3 ≈3,45% e FT4 ≈0,60% em relação ao mesor. Não equivale à média das amplitudes individuais. Sem banda de confiança ou previsão individual.';
   $('sex-legend').textContent=mode==='experiment'?(study==='zhang'?groups.map(g=>groupLabel(g)+(g==='women'?' · marcadores vazados':' · marcadores preenchidos')).join(' | '):'Adultos · grupo misto · ajuste publicado'):groups.map(g=>groupLabel(g)+(g==='women'?' · tracejada':g==='men'?' · contínua':' · ajuste coletivo')).join(' | ')+(study==='zhang'?' | pontilhado fino: fechamento assumido':'');
   const cards=ids.map(h=>{const el=document.createElement('article');el.className='daily-readout metric-card';el.style.setProperty('--series',DAILY_HORMONES[h].color);const title=document.createElement('h3');title.textContent=DAILY_HORMONES[h].label;el.append(title);for(const g of groups){const d=read(g,h,hour),p=document.createElement('p');p.textContent=groupLabel(g)+': '+num(d.value)+' '+d.unit+' · '+delta(d.percent-100)+' da referência';el.append(p);}return el;});$('daily-readouts').replaceChildren(...cards);
@@ -64,4 +64,3 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
  $('daily-export').onclick=()=>{const s=$('daily-study').value,u=URL.createObjectURL(new Blob([studyCSV(s,$('daily-sex').value,$('daily-reference').value)],{type:'text/csv;charset=utf-8'})),a=document.createElement('a');a.href=u;a.download='tireoide-estudo-'+s+'.csv';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);};
  document.defaultView?.addEventListener('resize',render);document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});render();return{showExperiment:()=>setView('experiment')};
 }
-

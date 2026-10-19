@@ -1,4 +1,4 @@
-import { advance, scenarioState, DEFAULT_PARAMS } from './thyroid-model.js?v=20261019-reference3';
+import { advance, scenarioState, DEFAULT_PARAMS } from './thyroid-model.js?v=20261019-reference4';
 export function referenceTrajectory(scenario, days = 180) {
   if (!Number.isInteger(days) || days < 0 || days > 180) throw new RangeError('Horizonte inválido');
   const params = { ...DEFAULT_PARAMS, ...scenario.params };

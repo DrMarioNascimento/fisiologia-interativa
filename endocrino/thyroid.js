@@ -1,11 +1,11 @@
-import { referenceTrajectory } from './thyroid-reference.js?v=20261019-reference3';
-import { mountDailyView } from './thyroid-daily-ui.js?v=20261019-reference3';
-import { recordSample, chartBounds, exportCSV } from './thyroid-recording.js?v=20261019-reference3';
-import { BASELINE_STATE, DEFAULT_PARAMS, advance, scenarioState, flows } from './thyroid-model.js?v=20261019-reference3';
+import { referenceTrajectory } from './thyroid-reference.js?v=20261019-reference4';
+import { mountDailyView } from './thyroid-daily-ui.js?v=20261019-reference4';
+import { recordSample, chartBounds, exportCSV } from './thyroid-recording.js?v=20261019-reference4';
+import { BASELINE_STATE, DEFAULT_PARAMS, advance, scenarioState, flows } from './thyroid-model.js?v=20261019-reference4';
 const bindings = [['capacity', 'thyroidFn'], ['replacement', 'levothyroxine'], ['conversion', 'deiodinase'], ['iodine', 'iodine'], ['nis', 'nis'], ['tpo', 'tpo'], ['pendrin', 'pendrin'], ['destruction', 'destruction'], ['trab', 'trab']];
 
 const $ = (id) => document.getElementById(id);
-import { scenarios, describeState } from './thyroid-scenarios.js?v=20261019-reference3';
+import { scenarios, describeState } from './thyroid-scenarios.js?v=20261019-reference4';
 let state, params, history, timer, dailyView, referenceRows, referenceParams;
 const enableExperiment = () => dailyView?.showExperiment();
 const visibleHormones = new Set(['trh', 'tsh', 't4', 't3']);
