@@ -8,6 +8,7 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
  const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('"','&quot;');
  function stop(){clearInterval(timer);timer=null;$('daily-play').textContent='Animar 24 h';}
  function setView(next){stop();pauseExperiment();mode=next;const daily=next==='daily';
+  document.querySelector('.experiment-workspace').classList.remove('pediatric-view');
   $('daily-results').hidden=$('daily-controls').hidden=!daily;
   $('experiment-results').hidden=$('experiment-controls').hidden=$('experiment-data').hidden=daily;
   $('view-daily').setAttribute('aria-pressed',String(daily));$('view-experiment').setAttribute('aria-pressed',String(!daily));
@@ -17,6 +18,9 @@ export function mountDailyView({pauseExperiment,drawExperiment}) {
  }
  function render(){if(mode!=='daily')return;
   const study=$('daily-study').value,ref=$('daily-reference').value,children=study==='children';
+  document.querySelector('.experiment-workspace').classList.toggle('pediatric-view',children);
+  $('daily-interpolation-note').textContent=children?'Sem curva contínua: compare as janelas e os extremos recuperados.':study==='russell'?'Cada ponto da curva é calculado do ajuste coletivo publicado, sem novas dosagens.':'Nos intervalos entre as coletas, os valores mostrados são interpolados. O fechamento em 24 h repete 00:00.';
+  $('daily-scope-note').textContent=children?'A idade e o protocolo diferem entre estudos. Recém-nascidos não recebem uma curva adulta.': 'Dados de adultos saudáveis. Cenários e intervenções ficam em “Experimento · dias”.';
   $('daily-description').textContent=STUDIES[study].description;
   $('daily-sex-label').hidden=$('daily-sex').hidden=study!=='zhang';
   $('daily-reference-label').hidden=$('daily-reference').hidden=children;

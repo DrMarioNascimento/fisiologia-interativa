@@ -5,6 +5,7 @@ import { computeLabs } from './labs.js';
 import { interpret } from './interpret.js';
 const ids={tireoide:['tsh','ft4','t3','goiter'],adrenal:['acth','cortisol','gcActivity','adrenalMass'],gonadas:['lh','fsh','testo','inhibin','gnrhR'],gh:['gh','igf1','sst'],prolactina:['prl','dopamine','lh','testo'],neuro:['adh','posm','na','uosm','urine','intake','tbw','waterBalance','oxytocin','contraction','milk']};
 const scenarios=SCENARIOS.map(c=>{const params={...DEFAULT_PARAMS,...c.params};return{id:c.id,axis:c.axis,params:c.params,points:[.1,1,7,30,90,365].map(requestedDays=>{const s=advance({...BASELINE_STATE,...c.statePatch},params,requestedDays),l=computeLabs(s,params);return{requestedDays,simulatedDays:+s.t.toFixed(6),interpretation:interpret(c.axis,l,params).title,labs:Object.fromEntries(ids[c.axis].map(id=>[id,+l[id].toFixed(6)]))};})};});
-const data={date:'2026-10-18',scope:'Modelo didático; checagem qualitativa e numérica, não validação clínica',baseline:computeLabs(BASELINE_STATE,DEFAULT_PARAMS),scenarios};
-fs.writeFileSync(new URL('./auditoria-20261018.json',import.meta.url),JSON.stringify(data,null,2)+'\n');
+const data={date:'2026-10-19',scope:'Modelo didático; checagem qualitativa e numérica, não validação clínica',baseline:computeLabs(BASELINE_STATE,DEFAULT_PARAMS),scenarios};
+fs.writeFileSync(new URL('./auditoria-20261019.json',import.meta.url),JSON.stringify(data,null,2)+'\n');
 console.log(JSON.stringify({scenarios:scenarios.length,timePoints:scenarios.length*6,examples:scenarios.filter(s=>['central','lactacao','addison','haste','sheehan','siadh'].includes(s.id)).map(s=>({id:s.id,day1:s.points[1],day90:s.points[4]}))}));
+
