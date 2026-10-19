@@ -107,19 +107,25 @@ const escapeText = text => String(text).replaceAll('&', '&amp;').replaceAll('<',
 function drawProfiles() {
   const visible = ids.filter(id => visibleHormones.has(id));
   const { xMax, yMax, step } = chartBounds(history, visible, BASELINE_STATE);
-  const box = { left: 78, top: 30, width: 792, height: 248 };
+  const width = Math.max(280, Math.min(900, $('thyroid-chart').clientWidth || 900));
+  const height = width < 500 ? 310 : 340;
+  const left = width < 500 ? 58 : 78;
+  const right = width - 24, bottom = height - 62;
+  const box = { left, top: 30, width: right - left, height: bottom - 30 };
+  $('thyroid-chart').setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+  const axisNumber = value => value >= 10000 ? value.toLocaleString('pt-BR', { notation: 'compact', maximumFractionDigits: 1 }) : fmt(value);
   const x = day => box.left + day / xMax * box.width;
   const y = value => box.top + box.height * (1 - value / yMax);
   let svg = '<title id="profile-chart-title">Perfis hormonais do eixo tireoidiano</title><desc id="profile-chart-desc">Curvas selecionadas: ' + visible.map(id => id.toUpperCase()).join(', ') + '. Percentual do basal por dia; linha de referência em 100%.</desc>';
   for (let value = 0; value <= yMax + step / 10; value += step) {
-    svg += '<line class="chart-grid" x1="' + box.left + '" x2="870" y1="' + y(value) + '" y2="' + y(value) + '"/><text x="68" y="' + (y(value) + 5) + '" text-anchor="end">' + fmt(value) + '%</text>';
+    svg += '<line class="chart-grid" x1="' + box.left + '" x2="' + right + '" y1="' + y(value) + '" y2="' + y(value) + '"/><text x="' + (left - 10) + '" y="' + (y(value) + 5) + '" text-anchor="end">' + axisNumber(value) + '%</text>';
   }
   for (let i = 0; i <= 4; i++) {
     const day = xMax * i / 4;
-    svg += '<line class="chart-grid" x1="' + x(day) + '" x2="' + x(day) + '" y1="30" y2="278"/><text x="' + x(day) + '" y="302" text-anchor="middle">' + fmt(day) + '</text>';
+    svg += '<line class="chart-grid" x1="' + x(day) + '" x2="' + x(day) + '" y1="30" y2="' + bottom + '"/><text x="' + x(day) + '" y="' + (bottom + 24) + '" text-anchor="middle">' + fmt(day) + '</text>';
   }
-  svg += '<text x="78" y="18">% do basal</text><text x="474" y="329" text-anchor="middle">Dias do experimento</text>';
-  svg += '<line class="basal-line" x1="78" x2="870" y1="' + y(100) + '" y2="' + y(100) + '"/>';
+  svg += '<text x="' + left + '" y="18">% do basal</text><text x="' + (left + box.width / 2) + '" y="' + (height - 11) + '" text-anchor="middle">Dias do experimento</text>';
+  svg += '<line class="basal-line" x1="' + left + '" x2="' + right + '" y1="' + y(100) + '" y2="' + y(100) + '"/>';
   const changes = history.filter(row => row.kind === 'intervention');
   const grouped = new Map();
   for (const change of changes) {
@@ -127,7 +133,7 @@ function drawProfiles() {
     grouped.get(change.t).push(change.event);
   }
   for (const [day, events] of grouped) {
-    svg += '<g><title>' + escapeText('Dia ' + fmt(day) + ': ' + events.join('; ')) + '</title><line class="intervention-line" x1="' + x(day) + '" x2="' + x(day) + '" y1="30" y2="278"/><circle cx="' + x(day) + '" cy="30" r="4" fill="#e9bd82"/></g>';
+    svg += '<g><title>' + escapeText('Dia ' + fmt(day) + ': ' + events.join('; ')) + '</title><line class="intervention-line" x1="' + x(day) + '" x2="' + x(day) + '" y1="30" y2="' + bottom + '"/><circle cx="' + x(day) + '" cy="30" r="4" fill="#e9bd82"/></g>';
   }
   for (const id of visible) {
     const points = history.map(row => x(row.t).toFixed(2) + ',' + y(percent(id, row[id])).toFixed(2)).join(' ');
@@ -148,6 +154,7 @@ function drawProfiles() {
   }
   $('intervention-list').replaceChildren(...items);
 }
+document.defaultView?.addEventListener('resize', () => drawProfiles());
 for (const button of document.querySelectorAll('[data-hormone]')) {
   button.addEventListener('click', () => {
     const id = button.dataset.hormone;
