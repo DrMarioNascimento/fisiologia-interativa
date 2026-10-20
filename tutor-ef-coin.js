@@ -151,8 +151,8 @@
     init3D().catch(() => { btn.dataset.coinState = 'fallback'; });
     async function init3D() {
       const THREE = await import(href('ra/celula/visualizador/vendor/three.module.js'));
-      const { GLTFLoader } = await import(href('ra/celula/visualizador/vendor/GLTFLoader.js'));
-      const { RoomEnvironment } = await import(href('assets/tutor/RoomEnvironment.js'));
+      const { GLTFLoader } = await import(href('ra/celula/visualizador/vendor/GLTFLoader.js?v=shared-imports-20261020'));
+      const { RoomEnvironment } = await import(href('assets/tutor/RoomEnvironment.js?v=shared-imports-20261020'));
       const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'low-power' });
       renderer.setClearColor(0, 0); renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
