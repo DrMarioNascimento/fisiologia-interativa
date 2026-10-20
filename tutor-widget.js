@@ -2,9 +2,10 @@
   'use strict';
 
   // Resolve from this shared script, including simulators in nested folders.
-  const tutorAssetsBase = new URL('.', document.currentScript.src);
+  const tutorScriptSrc = document.currentScript?.src;
   const tutorBustVersion = 'shared-20261020';
   async function loadSharedBust() {
+    const tutorAssetsBase = new URL('.', tutorScriptSrc || document.baseURI);
     const stylesheet = new URL('tutor-ef-coin.css?v=' + tutorBustVersion, tutorAssetsBase).href;
     if (!document.querySelector('link[data-tutor-bust-shared]')) {
       const link = document.createElement('link');
