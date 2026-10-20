@@ -129,7 +129,13 @@
     soundBtn.addEventListener('click', () => { sound = !sound; save(soundKey, sound ? 'on' : 'off'); updateSound(); if (sound) tone('tab'); });
 
     let animate = () => {};
-    const react = kind => { animate(kind); tone(kind); };
+    let reactionTimer;
+    const react = kind => {
+      clearTimeout(reactionTimer);
+      btn.dataset.reaction = kind;
+      reactionTimer = setTimeout(() => { delete btn.dataset.reaction; }, 950);
+      animate(kind); tone(kind);
+    };
     new MutationObserver(() => react(btn.getAttribute('aria-expanded') === 'true' ? 'open' : 'tab'))
       .observe(btn, { attributes: true, attributeFilter: ['aria-expanded'] });
     document.addEventListener('click', e => {
