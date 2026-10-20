@@ -48,7 +48,17 @@ body{min-width:0;-webkit-text-size-adjust:100%}
 .app .metric.fc,.app .metric.edv,.app .metric.esv,.app .metric.vs,.app .metric.ef,.app .metric.dc{border-left-color:var(--metric-strong)}
 .app .metric.fc{--metric-strong:var(--c-fc)}.app .metric.edv{--metric-strong:var(--c-edv)}.app .metric.esv{--metric-strong:var(--c-esv)}.app .metric.vs{--metric-strong:var(--c-vs)}.app .metric.ef{--metric-strong:var(--c-ef)}.app .metric.dc{--metric-strong:var(--c-dc)}
 .app .metric.fc small,.app .metric.edv small,.app .metric.esv small,.app .metric.vs small,.app .metric.ef small,.app .metric.dc small{color:var(--metric-strong)}
-</style><script defer src="ef-simuladores.js?v=20261018-ef1"></script></head>
+</style><script defer src="ef-simuladores.js?v=20261018-ef1"></script>
+<style id="respiratory-audio-style">
+.respiratory-audio .resp-audio-label{display:block;font-size:12px;color:#bbd2df;margin:5px 0 9px}
+.respiratory-audio select{appearance:auto;width:100%;min-height:46px;padding:10px 12px;border:1px solid #67899f;border-radius:12px;background:#112838;color:#eef8ff;font:inherit;font-size:14px;box-shadow:inset 0 2px 5px #0006}
+.respiratory-audio select:focus-visible{outline:3px solid var(--accent-light);outline-offset:3px}
+.resp-audio-volume{display:grid;grid-template-columns:1fr auto;align-items:center;gap:5px 10px;margin-top:16px;font-size:12px;color:#bed1df}
+.resp-audio-volume output{font-variant-numeric:tabular-nums;color:var(--accent-light)}
+.resp-audio-volume input{grid-column:1/-1;width:100%;height:44px;margin:0;accent-color:#8bc4ff}
+.resp-audio-preview{width:100%;min-height:44px;margin-top:8px;border:1px solid #6c938f;border-radius:12px;background:linear-gradient(155deg,#325b5b,#173637);box-shadow:inset 0 1px 0 #fff3,0 3px 0 #06171b;font-size:13px}
+#respAudioStatus:empty{display:none}
+</style></head>
 <body>
   <h1 id="seo-title" style="display:none;">Biofeedback Respiratório</h1>
 
@@ -126,6 +136,31 @@ body{min-width:0;-webkit-text-size-adjust:100%}
           <div class="metric-sub">Minutos e segundos</div>
         </div>
       </aside>
+
+
+    <section id="audioDropdown" class="dropdown-card card respiratory-audio">
+      <button class="dropdown-toggle" data-target="audioDropdown" type="button">
+        <span class="left"><span aria-hidden="true">♪</span><span>Guia sonoro</span></span>
+        <span><span id="respAudioCurrent" class="dropdown-current">Desligado</span><span class="chevron" aria-hidden="true">▼</span></span>
+      </button>
+      <div class="dropdown-content">
+        <label class="resp-audio-label" for="respAudioMode">Acompanhar a respiração com</label>
+        <select id="respAudioMode" aria-describedby="respAudioDescription">
+          <option value="off">Desligado</option>
+          <option value="continuous">Tom suave contínuo</option>
+          <option value="voice">Voz em português</option>
+          <option value="chime">Sinal discreto</option>
+        </select>
+        <p id="respAudioDescription" class="ritmo-nota">Escolha um guia para acompanhar a respiração pelo som.</p>
+        <div class="resp-audio-volume">
+          <label for="respAudioVolume">Volume do guia</label><output id="respAudioVolumeValue" for="respAudioVolume">45%</output>
+          <input id="respAudioVolume" type="range" min="0" max="100" step="5" value="45" aria-label="Volume do guia sonoro">
+        </div>
+        <button id="respAudioPreview" class="resp-audio-preview" type="button" aria-pressed="false">▶ Ouvir exemplo</button>
+        <p id="respAudioStatus" class="ritmo-nota" role="status"></p>
+        <p class="ritmo-nota">O guia acompanha o ritmo programado. Ao sair da página, a sessão é pausada. Os sons do tutor têm controle próprio.</p>
+      </div>
+    </section>
 
     <section id="protocolDropdown" class="dropdown-card card">
       <button class="dropdown-toggle" data-target="protocolDropdown">
@@ -253,6 +288,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     </footer>
   </main>
 
+  <script src="biofeedback-audio.js?v=20261020-audio1"></script>
   <script>
     const ids=[
       "modoSwitch","labelProgressivo","labelRegressivo","resetAll",
@@ -267,6 +303,10 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     let executando=false,pausado=false,frameId=null,faseAtual=0,inicioFase=0;
     let tempoAntesPausa=0,ciclos=0,inicioSessao=0,tempoSessaoAcumulado=0,wakeLock=null;
     let presetAtivo=null;
+    const respiratoryAudio=window.createRespiratoryAudio({onChange:sincronizarAudio});
+    function sincronizarAudio(){
+      if(executando&&!pausado)respiratoryAudio.phase(fases()[faseAtual],Math.max(0,(performance.now()-inicioFase)/1000));
+    }
 
     const valores=()=>({
       inspiracao:+r.inspiracao.value,
@@ -345,6 +385,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
       const lista=fases(),f=lista[faseAtual];
       const dec=(t-inicioFase)/1000;
       const p=Math.min(dec/f.dur,1);
+      respiratoryAudio.phase(f,dec);
       const valor=modo()==="progressivo"?Math.min(dec,f.dur):Math.max(f.dur-dec,0);
       const escala=f.a+(f.b-f.a)*p;
 
@@ -376,7 +417,9 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     }
 
     async function iniciar(){
+      void respiratoryAudio.unlock();
       await bloquearTela();
+      respiratoryAudio.setRunning(true);
       if(executando&&pausado){
         pausado=false;
         inicioFase=performance.now()-tempoAntesPausa;
@@ -393,6 +436,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     async function pausar(){
       if(!executando||pausado)return;
       pausado=true;
+      respiratoryAudio.setRunning(false);
       const agora=performance.now();
       tempoAntesPausa=agora-inicioFase;
       tempoSessaoAcumulado+=agora-inicioSessao;
@@ -405,6 +449,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     }
 
     async function resetar(){
+      respiratoryAudio.setRunning(false);
       executando=false;pausado=false;cancelAnimationFrame(frameId);
       faseAtual=0;ciclos=0;tempoAntesPausa=0;tempoSessaoAcumulado=0;
       r.ciclos.textContent="0";
@@ -422,6 +467,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     }
 
     function reconfigurarFase(){
+      respiratoryAudio.stop();
       if(!executando){resetar();return;}
       faseAtual=0;inicioFase=performance.now();tempoAntesPausa=0;
       if(pausado){
@@ -615,7 +661,8 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     document.addEventListener("webkitfullscreenchange",atualizarBotaoTelaCheia);
 
     document.addEventListener("visibilitychange",()=>{
-      if(document.visibilityState==="visible"&&executando&&!pausado)bloquearTela();
+      if(document.hidden&&executando&&!pausado)pausar();
+      else if(document.visibilityState==="visible"&&executando&&!pausado)bloquearTela();
     });
 
     aplicarPaleta();
