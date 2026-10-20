@@ -82,6 +82,62 @@ Plataformas:
   <h1 id="seo-title" style="display:none;">Biofeedback Respiratório</h1>
 
   <main class="app">
+    <section class="main-layout">
+      <section class="visual-card card"><div class="visual-heading"><span>Guia respiratório</span><span>Ritmo visual</span></div>
+        <div class="control-capsule" aria-label="Controles do simulador">
+          <button id="iniciar" class="icon-btn primary" title="Iniciar" aria-label="Iniciar">▶</button>
+          <button id="pausar" class="icon-btn" title="Pausar" aria-label="Pausar" disabled><span class="pause-icon" aria-hidden="true"></span></button>
+          <button id="resetar" class="icon-btn danger" title="Resetar" aria-label="Resetar">↻</button>
+          <button id="telaCheia" class="icon-btn" title="Tela cheia" aria-label="Tela cheia">⛶</button>
+        </div>
+
+        <p id="sessionLive" class="session-live" role="timer" aria-live="off">Tempo livre</p>
+        <div class="orbital">
+          <div class="ring-track"></div>
+          <div id="ringProgress" class="ring-progress"></div>
+
+          <div id="sphereWrap" class="sphere-wrap">
+            <div class="sphere"></div>
+            <div id="display" class="display">
+              <span id="fase" class="display-phase">PRONTO</span>
+              <span id="tempoFase" class="display-time">0,0</span>
+              <span class="display-unit">s</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="instrucao" class="instruction">Respire de forma confortável e sem esforço.</div>
+      </section>
+    </section>
+
+    <aside class="indicators card">
+        <div class="section-title">Indicadores</div>
+
+        <div class="metric">
+          <div class="metric-title">Fase atual</div>
+          <div id="faseCard" class="metric-value">Pronto</div>
+          <div class="metric-sub">Estado respiratório</div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-title">Respirações / min</div>
+          <div id="rpm" class="metric-value">5,0</div>
+          <div class="metric-sub" id="rpmSub">Frequência programada · I:E 1:1,5</div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-title">Ciclos completos</div>
+          <div id="ciclos" class="metric-value">0</div>
+          <div class="metric-sub">Sessão atual</div>
+        </div>
+
+        <div class="metric">
+          <div class="metric-title">Tempo de sessão</div>
+          <div id="tempoSessao" class="metric-value">00:00</div>
+          <div class="metric-sub">Minutos e segundos</div>
+        </div>
+      </aside>
+
     <header class="header card">
       <div class="brand">
         <small>Fisiologia Interativa</small>
@@ -149,62 +205,6 @@ Plataformas:
         <p class="ritmo-nota">A agenda fica salva neste aparelho. Você pode iniciar quando preferir. As notificações com o aplicativo fechado serão acrescentadas na versão nativa.</p>
       </div>
     </section>
-
-    <section class="main-layout">
-      <section class="visual-card card"><div class="visual-heading"><span>Guia respiratório</span><span>Ritmo visual</span></div>
-        <div class="control-capsule" aria-label="Controles do simulador">
-          <button id="iniciar" class="icon-btn primary" title="Iniciar" aria-label="Iniciar">▶</button>
-          <button id="pausar" class="icon-btn" title="Pausar" aria-label="Pausar" disabled><span class="pause-icon" aria-hidden="true"></span></button>
-          <button id="resetar" class="icon-btn danger" title="Resetar" aria-label="Resetar">↻</button>
-          <button id="telaCheia" class="icon-btn" title="Tela cheia" aria-label="Tela cheia">⛶</button>
-        </div>
-
-        <p id="sessionLive" class="session-live" role="timer" aria-live="off">Tempo livre</p>
-        <div class="orbital">
-          <div class="ring-track"></div>
-          <div id="ringProgress" class="ring-progress"></div>
-
-          <div id="sphereWrap" class="sphere-wrap">
-            <div class="sphere"></div>
-            <div id="display" class="display">
-              <span id="fase" class="display-phase">PRONTO</span>
-              <span id="tempoFase" class="display-time">0,0</span>
-              <span class="display-unit">s</span>
-            </div>
-          </div>
-        </div>
-
-        <div id="instrucao" class="instruction">Respire de forma confortável e sem esforço.</div>
-      </section>
-    </section>
-
-    <aside class="indicators card">
-        <div class="section-title">Indicadores</div>
-
-        <div class="metric">
-          <div class="metric-title">Fase atual</div>
-          <div id="faseCard" class="metric-value">Pronto</div>
-          <div class="metric-sub">Estado respiratório</div>
-        </div>
-
-        <div class="metric">
-          <div class="metric-title">Respirações / min</div>
-          <div id="rpm" class="metric-value">5,0</div>
-          <div class="metric-sub" id="rpmSub">Frequência programada · I:E 1:1,5</div>
-        </div>
-
-        <div class="metric">
-          <div class="metric-title">Ciclos completos</div>
-          <div id="ciclos" class="metric-value">0</div>
-          <div class="metric-sub">Sessão atual</div>
-        </div>
-
-        <div class="metric">
-          <div class="metric-title">Tempo de sessão</div>
-          <div id="tempoSessao" class="metric-value">00:00</div>
-          <div class="metric-sub">Minutos e segundos</div>
-        </div>
-      </aside>
 
     <section id="audioDropdown" class="dropdown-card card respiratory-audio">
       <button class="dropdown-toggle" data-target="audioDropdown" type="button">
