@@ -56,8 +56,27 @@ test('Saved position and resized viewport keep the coin reachable; Alt+arrows mo
   s.btn.emit('keydown', { altKey: true, key: 'ArrowLeft', preventDefault() {} });
   assert.equal(s.btn.offsetLeft, 286);
 });
-test('Sound is off initially, opt-in persists, and other tutors are untouched', () => {
-  const s = setup(); assert.equal(s.sound.attributes['aria-pressed'], 'false');
-  s.sound.emit('click'); assert.equal(s.storage.get('tutorEFCoinSound'), 'on');
-  assert.equal(setup('/tutor-fisio.html').context.window.tutorEFCoin, undefined);
+test('Sound follows the EF default and remembers the choice', () => {
+  const s = setup(); assert.equal(s.sound.attributes['aria-pressed'], 'true');
+  s.sound.emit('click'); assert.equal(s.storage.get('tutorEFCoinSound'), 'off');
+  assert.equal(setup('/tutor-ef.html', { tutorEFCoinSound: 'off' }).sound.attributes['aria-pressed'], 'false');
+});
+test('Fisio supports drag and sound with preferences independent of EF', () => {
+  const s = setup('/tutor-fisio.html', { tutorEFPosition: '{"left":100,"top":100}', tutorEFCoinSound: 'off' });
+  assert.ok(s.context.window.tutorEFCoin);
+  assert.equal(s.btn.offsetLeft, 700);
+  assert.equal(s.sound.attributes['aria-pressed'], 'true');
+  s.btn.emit('pointerdown'); s.btn.emit('pointermove', { clientX: 520, clientY: 340 });
+  s.btn.emit('pointerup'); s.btn.emit('click');
+  assert.equal(s.toggles(), 0);
+  assert.deepEqual(JSON.parse(s.storage.get('tutorFisioPosition')), { left: 520, top: 340 });
+  assert.equal(s.storage.get('tutorEFPosition'), '{"left":100,"top":100}');
+  s.sound.emit('click'); assert.equal(s.storage.get('tutorFisioCoinSound'), 'off');
+  const restored = setup('/tutor-fisio.html', Object.fromEntries(s.storage));
+  assert.equal(restored.btn.offsetLeft, 520);
+  assert.equal(restored.sound.attributes['aria-pressed'], 'false');
+  restored.btn.emit('click'); assert.equal(restored.toggles(), 1);
+});
+test('Other tutor pages remain untouched', () => {
+  assert.equal(setup('/tutor-moodle.html').context.window.tutorEFCoin, undefined);
 });
