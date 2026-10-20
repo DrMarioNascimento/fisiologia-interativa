@@ -1,6 +1,6 @@
 /* Offline files for the respiratory app only. Updates activate after open sessions close. */
 const PREFIX='fi-respirar-'+encodeURIComponent(new URL(self.registration.scope).pathname)+'-';
-const CACHE=PREFIX+'5c2d27571b042838';
+const CACHE=PREFIX+'0596299853e9306e';
 const ASSETS=["index.html","app.js","manifest.webmanifest","biofeedback-audio.js","biofeedback-session.js","biofeedback-agenda.js","ef-simuladores.css","avatar-prof-mario.webp","icons/icon-192.png","icons/icon-512.png","icons/apple-touch-icon.png","assets/audio/biofeedback/inspire.mp3","assets/audio/biofeedback/expire.mp3","assets/audio/biofeedback/pausa.mp3","assets/audio/biofeedback/orientacoes.mp3"];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
  const cache=await caches.open(CACHE);
