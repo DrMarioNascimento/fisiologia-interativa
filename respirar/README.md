@@ -22,6 +22,12 @@ O guia sonoro é opcional: tom contínuo, voz em português ou sinal discreto. E
 
 Conferir em iPhone e Android reais: instalação, modo avião após encerrar/reabrir, orientação da tela, áudio, interrupções, bloqueio e retomada. Esta entrega é uma PWA piloto; ainda não inclui pacote nativo Android/iOS para as lojas.
 
-Próximas etapas de produto: duração e término programado da sessão, resumo e histórico local, agenda e lembretes opcionais; depois empacotamento e testes nativos.
+## Minha sessão
+
+Duração livre, 3, 5, 10 minutos ou personalizada entre 1 e 180 minutos inteiros. O tempo ativo exclui pausas. Ao atingir a duração, o guia termina ao concluir o ciclo em andamento, com aviso sonoro opcional, desligado por padrão.
+
+O resumo e o histórico guardam tempo efetivo, quantidade de ciclos completos, duração programada e os ritmos utilizados, inclusive alterações durante a sessão. Encerrar e salvar finaliza manualmente; Resetar registra a parte já realizada como interrompida. O histórico conserva até 100 sessões no armazenamento local deste navegador, sem conta; os registros não são enviados ao servidor. Se o armazenamento falhar, o resumo permanece na tela com um aviso. Preferências de duração e aviso também são locais. Uma sessão ativa não é restaurada depois de recarregar a página.
+
+Próximas etapas de produto: agenda e lembretes opcionais, empacotamento e testes nativos.
 
 Prof. Mário César Nascimento. PhD ©

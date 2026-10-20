@@ -99,3 +99,8 @@ test('Device speech is canceled at the phase deadline and source switching stops
  s.api.phase({nome:'EXPIRAR',dur:4});s.node('respAudioVoiceSource').value='recorded';s.node('respAudioVoiceSource').events.change();await s.api.unlock();assert.equal(s.cancels,2);
  s.api.phase({nome:'PAUSAR',dur:1});assert.equal(s.recordings.length,1);
 });
+
+test('Completion cue is optional, obeys volume, and a new action cancels its second note',async()=>{
+ const s=setup();await s.api.unlock(true);s.api.complete();assert.equal(s.oscillators.length,1);assert.equal(s.oscillators[0].frequency.calls[0][1],659.25);
+ s.api.stop();assert.equal(s.timers.size,0);s.node('respAudioVolume').value='0';s.api.complete();assert.equal(s.oscillators.length,1);
+});

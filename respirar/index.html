@@ -59,6 +59,8 @@ body{min-width:0;-webkit-text-size-adjust:100%}
 .resp-audio-volume input{grid-column:1/-1;width:100%;height:44px;margin:0;accent-color:#8bc4ff}
 .resp-audio-preview{width:100%;min-height:44px;margin-top:8px;border:1px solid #6c938f;border-radius:12px;background:linear-gradient(155deg,#325b5b,#173637);box-shadow:inset 0 1px 0 #fff3,0 3px 0 #06171b;font-size:13px}
 #respAudioStatus:empty{display:none}
+</style><style id="session-style">
+.session-panel{grid-column:1/-1}.session-panel label:not(.session-sound){display:block;font-size:13px;margin:12px 0 8px;color:#bed1df}.session-panel select,.session-panel input[type=number]{box-sizing:border-box;width:100%;min-height:44px;padding:10px;border:1px solid #67899f;border-radius:12px;background:#112838;color:#eef8ff;font:inherit;font-size:14px}.session-panel select:focus-visible,.session-panel input:focus-visible{outline:3px solid #8bc4ff;outline-offset:3px}.session-sound{display:flex;align-items:center;gap:10px;min-height:44px;margin:12px 0;font-size:13px;color:#bed1df}.session-sound input{width:20px;height:20px}.session-live{font-size:14px;color:var(--accent-light);text-align:center;min-height:20px;margin:12px 0 0;font-variant-numeric:tabular-nums}.session-summary,.session-record{padding:14px;border:1px solid #436578;border-radius:18px;border-left:5px solid var(--accent-light);background:linear-gradient(140deg,#102531,#1c3444);margin:14px 0;overflow-wrap:anywhere}.session-summary h2{font-size:17px;margin:0 0 10px}.session-summary p,.session-record p{font-size:13px;line-height:1.6;color:#c1d6e1;margin:7px 0}.session-record .session-record-title{font-weight:700;color:#e8f3f9}.session-history{margin-top:18px;padding:12px;border:1px solid #436578;border-radius:18px}.session-history summary{cursor:pointer;min-height:30px;font-size:14px}.session-history{max-height:500px;overflow:auto}.session-panel [hidden]{display:none!important}
 </style><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="stylesheet" href="ef-simuladores.css"><style>[hidden]{display:none!important}.app-offline{padding:16px}.app-offline h2{font-size:16px;margin:0 0 10px}.app-offline p{font-size:13px;color:#b9d0df;line-height:1.6}.app-offline button{min-height:44px;border:1px solid #64879d;border-radius:12px;background:linear-gradient(#36576c,#172d3e);padding:10px 14px;margin:6px 4px 0 0}.app-offline li{font-size:13px;line-height:1.7;color:#b9d0df}</style></head>
 <body><div class="fi-ef-brand-row"><a class="fi-ef-brand" href="./" aria-label="Fisiologia Interativa — Biofeedback Respiratório"><span class="fi-ef-brand-frame" aria-hidden="true"><svg class="fi-ef-brand-portrait" viewBox="0 0 420 405"><image width="420" height="655" href="avatar-prof-mario.webp"/></svg></span><span class="fi-ef-brand-copy"><b>Fisiologia Interativa</b><small>Biofeedback Respiratório</small></span></a></div>
   <h1 id="seo-title" style="display:none;">Biofeedback Respiratório</h1>
@@ -83,6 +85,24 @@ body{min-width:0;-webkit-text-size-adjust:100%}
       <button id="resetAll" class="reset-all">↻ Redefinir tudo</button>
     </header>
 
+    <section id="sessionDropdown" class="dropdown-card card session-panel">
+      <button class="dropdown-toggle" data-target="sessionDropdown" type="button">
+        <span class="left"><span aria-hidden="true">◷</span><span>Minha sessão</span></span>
+        <span><span id="sessionCurrent" class="dropdown-current">Tempo livre</span><span class="chevron" aria-hidden="true">▼</span></span>
+      </button>
+      <div class="dropdown-content">
+        <label for="sessionDuration">Duração da sessão</label>
+        <select id="sessionDuration"><option value="free">Tempo livre</option><option value="3">3 minutos</option><option value="5">5 minutos</option><option value="10">10 minutos</option><option value="custom">Personalizada</option></select>
+        <div id="sessionCustomWrap" hidden><label for="sessionCustomMinutes">Duração em minutos (1 a 180)</label><input id="sessionCustomMinutes" type="number" min="1" max="180" step="1" value="5" inputmode="numeric"></div>
+        <label class="session-sound"><input id="sessionEndSound" type="checkbox"> Aviso sonoro ao concluir</label>
+        <p class="ritmo-nota">Ao terminar o tempo, a esfera conclui o ciclo em andamento. O aviso usa o volume do guia. Resetar encerra a sessão atual e guarda o tempo realizado.</p>
+        <button id="sessionEnd" class="resp-audio-preview" type="button" disabled>Encerrar e salvar sessão</button>
+        <p id="sessionStatus" class="ritmo-nota" role="status"></p>
+        <div id="sessionSummary" class="session-summary" hidden><h2>Resumo da sessão</h2><div id="sessionSummaryBody"></div></div>
+        <details class="session-history"><summary>Histórico neste aparelho</summary><p class="ritmo-nota">Até 100 sessões, salvas neste navegador, sem conta. Os tempos de pausa não entram na duração.</p><div id="sessionHistory"></div></details>
+      </div>
+    </section>
+
     <section class="main-layout">
       <section class="visual-card card"><div class="visual-heading"><span>Guia respiratório</span><span>Ritmo visual</span></div>
         <div class="control-capsule" aria-label="Controles do simulador">
@@ -92,6 +112,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
           <button id="telaCheia" class="icon-btn" title="Tela cheia" aria-label="Tela cheia">⛶</button>
         </div>
 
+        <p id="sessionLive" class="session-live" role="timer" aria-live="off">Tempo livre</p>
         <div class="orbital">
           <div class="ring-track"></div>
           <div id="ringProgress" class="ring-progress"></div>
@@ -310,6 +331,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
   </main>
 
   <script src="biofeedback-audio.js"></script>
+  <script src="biofeedback-session.js"></script>
   <script>
     const ids=[
       "modoSwitch","labelProgressivo","labelRegressivo","resetAll",
@@ -333,6 +355,32 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     }
     function sincronizarAudio(){
       if(executando&&!pausado)respiratoryAudio.phase(fases()[faseAtual],Math.max(0,(performance.now()-inicioFase)/1000));
+    }
+
+    const sessionUI=window.createRespiratorySessionUI?window.createRespiratorySessionUI({
+      rhythm:()=>({name:r.protocolCurrent.textContent,times:[+r.inspiracao.value,+r.pausaCheia.value,+r.expiracao.value,+r.pausaVazia.value]}),
+      onEnd:encerrarSessao,
+      onSoundChange:()=>{void respiratoryAudio.unlock(true);}
+    }):{soundEnabled:()=>false,canStart:()=>true,start(){},update:()=>false,pause(){},resume(){},reset(){},end(){},rhythmChanged(){},active:false};
+    if(!window.createRespiratorySessionUI){
+      ['sessionDuration','sessionCustomMinutes','sessionEndSound','sessionEnd'].forEach(id=>document.getElementById(id).disabled=true);
+      document.getElementById('sessionStatus').textContent='Minha sessão não carregou. Atualize a página para usar a duração e o histórico; o guia visual continua disponível.';
+    }
+    function tempoAtivo(agora=performance.now()){
+      return tempoSessaoAcumulado+(executando&&!pausado?agora-inicioSessao:0);
+    }
+    function encerrarSessao(){
+      if(!sessionUI.active)return;
+      const elapsed=tempoAtivo();sessionUI.end(elapsed,ciclos);concluirSessao(elapsed,false);
+    }
+    function concluirSessao(elapsed,automatico){
+      startRequest++;executando=false;pausado=false;cancelAnimationFrame(frameId);tempoSessaoAcumulado=elapsed;
+      respiratoryAudio.setRunning(false);
+      if(automatico&&sessionUI.soundEnabled())respiratoryAudio.complete?.();
+      r.iniciar.disabled=false;r.pausar.disabled=true;r.fase.textContent=automatico?'CONCLUÍDA':'ENCERRADA';r.faseCard.textContent=automatico?'Concluída':'Encerrada';
+      r.tempoFase.textContent='0,0';r.tempoSessao.textContent=formatarTempo(elapsed);r.instrucao.textContent=automatico?'Sessão concluída. Respire livremente. O resumo está em Minha sessão.':'Sessão encerrada. O resumo está em Minha sessão.';
+      r.sphereWrap.style.transform='scale(.82)';r.display.style.transform=`scale(${1/.82})`;r.ringProgress.style.setProperty('--angle','0deg');
+      void liberarTela();
     }
 
     const valores=()=>({
@@ -430,6 +478,8 @@ body{min-width:0;-webkit-text-size-adjust:100%}
       r.faseCard.textContent=f.card;
       r.tempoSessao.textContent=formatarTempo(tempoSessaoAcumulado+(t-inicioSessao));
 
+      const elapsed=tempoAtivo(t);
+      sessionUI.update(elapsed,ciclos);
       if(p>=1){
         faseAtual++;
         inicioFase=t;
@@ -438,26 +488,31 @@ body{min-width:0;-webkit-text-size-adjust:100%}
           faseAtual=0;
           ciclos++;
           r.ciclos.textContent=ciclos;
+          if(sessionUI.update(elapsed,ciclos,true)){concluirSessao(elapsed,true);return;}
         }
       }
       frameId=requestAnimationFrame(animar);
     }
 
     async function iniciar(){
+      if(!executando&&!sessionUI.canStart())return;
       const request=++startRequest;
       respiratoryAudio.setRunning(true);
       r.iniciar.disabled=true;
+      if(sessionUI.soundEnabled())await respiratoryAudio.unlock(true);
       await respiratoryAudio.unlock();
       if(request!==startRequest)return;
       if(document.hidden){respiratoryAudio.setRunning(false);r.iniciar.disabled=false;return;}
       await bloquearTela();
       if(request!==startRequest)return;
       if(executando&&pausado){
-        pausado=false;
+        pausado=false;sessionUI.resume();
         inicioFase=performance.now()-tempoAntesPausa;
         inicioSessao=performance.now();
       }else if(!executando){
         executando=true;pausado=false;faseAtual=0;
+        ciclos=0;tempoAntesPausa=0;tempoSessaoAcumulado=0;r.ciclos.textContent="0";
+        sessionUI.start();
         inicioFase=performance.now();inicioSessao=performance.now();
       }
       r.iniciar.disabled=true;
@@ -472,6 +527,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
       const agora=performance.now();
       tempoAntesPausa=agora-inicioFase;
       tempoSessaoAcumulado+=agora-inicioSessao;
+      sessionUI.pause(tempoSessaoAcumulado,ciclos);
       cancelAnimationFrame(frameId);
       r.iniciar.disabled=false;
       r.pausar.disabled=true;
@@ -481,6 +537,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     }
 
     async function resetar(){
+      sessionUI.reset(tempoAtivo(),ciclos);
       startRequest++;
       respiratoryAudio.setRunning(false);
       executando=false;pausado=false;cancelAnimationFrame(frameId);
@@ -503,6 +560,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
       startRequest++;
       respiratoryAudio.stop();
       if(!executando){resetar();return;}
+      sessionUI.rhythmChanged(tempoAtivo());
       faseAtual=0;inicioFase=performance.now();tempoAntesPausa=0;
       if(pausado){
         // Em pausa, o mostrador passa a refletir o início do novo ciclo configurado.

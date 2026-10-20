@@ -217,6 +217,12 @@
     });
     window.addEventListener('pagehide', stop);
     document.addEventListener('visibilitychange', () => { if (document.hidden) { stop(); status.textContent = 'Áudio interrompido ao sair da página.'; } });
-    render(); return {unlock, phase, stop, setRunning};
+    function complete() {
+      stop();
+      if (!context || context.state !== 'running' || +volume.value === 0 || document.hidden) return;
+      oscillator(659.25, 659.25, .16, true);const current=generation;
+      timers.push(setTimeout(() => { if (generation === current) oscillator(783.99, 783.99, .24, true); }, 220));
+    }
+    render(); return {unlock, phase, stop, setRunning, complete};
   };
 })();
