@@ -1,0 +1,17 @@
+name: Biofeedback respiratório — áudio e offline
+on:
+  push:
+    paths: ['biofeedback-*', 'respirar/**', 'ef-simuladores.css', 'assets/avatar-prof-mario.webp', 'assets/audio/biofeedback/**', 'scripts/build-biofeedback.cjs', 'tests/biofeedback-*', '.github/workflows/biofeedback.yml']
+  pull_request:
+    paths: ['biofeedback-*', 'respirar/**', 'ef-simuladores.css', 'assets/avatar-prof-mario.webp', 'assets/audio/biofeedback/**', 'scripts/build-biofeedback.cjs', 'tests/biofeedback-*', '.github/workflows/biofeedback.yml']
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node scripts/build-biofeedback.cjs
+      - run: git diff --exit-code -- respirar
+      - run: node --test tests/biofeedback-audio.test.cjs tests/biofeedback-offline.test.cjs tests/ef-identidade.test.mjs

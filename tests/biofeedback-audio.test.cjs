@@ -9,7 +9,7 @@ function setup(saved) {
  const nodes = new Map(), oscillators = [], recordings = [], requests = [], utterances = [], timers = new Map(), events = {};
  let id = 0, cancels = 0, changes = 0;
  const node = key => {
-  if (!nodes.has(key)) nodes.set(key, {value:key === 'respAudioVolume' ? '45' : 'off',options:['off','continuous','voice','chime'].map(value=>({value})),events:{},addEventListener(type,fn){this.events[type]=fn},setAttribute(){}});
+  if (!nodes.has(key)) nodes.set(key, {value:key === 'respAudioVolume' ? '45' : key === 'respAudioVoiceSource' ? 'recorded' : 'off',options:(key === 'respAudioVoiceSource' ? ['recorded','device'] : ['off','continuous','voice','chime']).map(value=>({value})),replaceChildren(){this.options=[]},append(o){this.options.push(o)},events:{},addEventListener(type,fn){this.events[type]=fn},setAttribute(){}});
   return nodes.get(key);
  };
  const param = () => ({value:0,calls:[],setValueAtTime(v,t){this.value=v;this.calls.push(['set',v,t])},linearRampToValueAtTime(v,t){this.value=v;this.calls.push(['ramp',v,t])},cancelScheduledValues(){},setTargetAtTime(v){this.value=v}});
@@ -21,8 +21,8 @@ function setup(saved) {
   decodeAudioData(){return Promise.resolve({duration:12})}
   resume(){this.state='running';return Promise.resolve()}
  }
- const speech={speaking:false,pending:false,getVoices:()=>[{lang:'en-US'},{lang:'pt-BR',name:'Português'}],cancel(){cancels++;this.speaking=false},speak(u){this.speaking=true;utterances.push(u)}};
- const document={currentScript:{src:'https://example.test/biofeedback-audio.js'},hidden:false,getElementById:node,addEventListener(type,fn){events[type]=fn}};
+ const speech={speaking:false,pending:false,addEventListener(){},getVoices:()=>[{lang:'en-US',voiceURI:'en'},{lang:'pt-BR',name:'Português',voiceURI:'pt-local',localService:true}],cancel(){cancels++;this.speaking=false},speak(u){this.speaking=true;utterances.push(u)}};
+ const document={createElement:()=>({}),currentScript:{src:'https://example.test/biofeedback-audio.js'},hidden:false,getElementById:node,addEventListener(type,fn){events[type]=fn}};
  const storage = new Map(saved ? [['respiratoryAudioPreferences',JSON.stringify(saved)]] : []);
  const context={URL,AbortSignal,fetch:async url=>{requests.push(url.href);return {ok:true,arrayBuffer:async()=>new ArrayBuffer(8)}},window:{AudioContext:Audio,SpeechSynthesisUtterance:class{constructor(text){this.text=text}},speechSynthesis:speech,addEventListener(){}},document,
   localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)},setTimeout(fn){timers.set(++id,fn);return id},clearTimeout(id){timers.delete(id)}};
@@ -80,4 +80,22 @@ test('Page integration is syntactically valid and connects pause, reset, timing 
  for(const [,attributes,script] of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g))if(!/\bsrc=/.test(attributes)&&script.trim())new vm.Script(script);
  assert.match(html,/respiratoryAudio\.phase\(f,dec\)/);
  assert.match(html,/document\.hidden&&executando&&!pausado\)pausar\(\)/);
+});
+
+test('Device voice remains selectable, remembers its source and cancels each preceding cue',async()=>{
+ const s=setup();await s.select('voice');s.node('respAudioVoiceSource').value='device';s.node('respAudioVoiceSource').events.change();await s.api.unlock();
+ s.api.phase({nome:'INSPIRAR',dur:4});s.api.phase({nome:'INSPIRAR',dur:4},1);
+ assert.equal(s.utterances.length,1);assert.equal(s.utterances[0].text,'Inspire');assert.equal(s.utterances[0].voice.voiceURI,'pt-local');
+ s.api.phase({nome:'EXPIRAR',dur:6});assert.equal(s.utterances.length,2);assert.equal(s.utterances[1].text,'Expire');assert.ok(s.cancels>=1);
+ s.node('respAudioDeviceVoice').value='pt-local';s.node('respAudioDeviceVoice').events.change();
+ const saved=JSON.parse(s.storage.get('respiratoryAudioPreferences'));assert.equal(saved.voiceSource,'device');assert.equal(saved.voiceURI,'pt-local');
+ const restored=setup(saved);assert.equal(restored.node('respAudioVoiceSource').value,'device');
+ restored.api.setRunning(true);restored.api.phase({nome:'PAUSAR',dur:1});assert.equal(restored.utterances[0].text,'Pausa');
+ restored.document.hidden=true;restored.events.visibilitychange();assert.equal(restored.cancels,1);
+});
+test('Device speech is canceled at the phase deadline and source switching stops it',async()=>{
+ const s=setup({mode:'voice',voiceSource:'device',volume:45});await s.api.unlock();s.api.phase({nome:'INSPIRAR',dur:2});
+ for(const fn of [...s.timers.values()])fn();assert.equal(s.cancels,1);
+ s.api.phase({nome:'EXPIRAR',dur:4});s.node('respAudioVoiceSource').value='recorded';s.node('respAudioVoiceSource').events.change();await s.api.unlock();assert.equal(s.cancels,2);
+ s.api.phase({nome:'PAUSAR',dur:1});assert.equal(s.recordings.length,1);
 });

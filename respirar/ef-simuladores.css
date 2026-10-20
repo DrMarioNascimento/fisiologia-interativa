@@ -1,0 +1,39 @@
+/* Identidade aprovada dos dois cursos. Preserva modelos, cores e acabamento dos cards. */
+.fi-ef-ui{--fi-ef-unit:#80c5af}
+.fi-ef-ui[data-fi-ef-unit="celular"]{--fi-ef-unit:#b49bff}
+.fi-ef-ui[data-fi-ef-unit="muscular"]{--fi-ef-unit:#ff9f57}
+.fi-ef-ui[data-fi-ef-unit="osteoarticular"]{--fi-ef-unit:#5ed9a6}
+.fi-ef-ui[data-fi-ef-unit="cardiovascular"]{--fi-ef-unit:#ff7478}
+.fi-ef-ui[data-fi-ef-unit="respiratorio"]{--fi-ef-unit:#63b8ff}
+.fi-ef-ui[data-fi-ef-unit="integracao"]{--fi-ef-unit:#3fe0c8}
+.fi-ef-ui .fi-ef-brand-row{display:flex;align-items:center;max-width:1440px;margin:36px auto 18px;padding:0 4px;box-sizing:border-box;overflow:visible}
+.fi-ef-ui a.fi-ef-brand{display:inline-flex!important;flex-wrap:nowrap!important;align-items:center!important;gap:18px!important;min-height:54px!important;max-width:100%;margin:0!important;padding:0 10px 0 0!important;text-decoration:none!important;color:#ecf6fb!important;font:700 15px/1.25 "Segoe UI",Arial,sans-serif!important;background:linear-gradient(110deg,#173748,#0b253400);border:0!important;border-radius:16px!important;box-shadow:none!important;overflow:visible!important;transform:none!important}
+.fi-ef-ui a.fi-ef-brand:focus-visible{outline:3px solid #9fe4d2!important;outline-offset:7px}
+.fi-ef-ui .fi-ef-brand-frame{display:block!important;position:relative!important;flex:0 0 100px!important;width:100px!important;height:62px!important;margin:0 0 -8px!important;padding:0!important;box-sizing:border-box!important;isolation:isolate;border:1px solid #638398!important;border-radius:14px!important;background:radial-gradient(ellipse at 50% 20%,#52778d,#142b3c 80%)!important;box-shadow:inset 0 1px 1px #fff4,0 4px 0 #061521,0 7px 12px #0005!important;overflow:visible!important}
+.fi-ef-ui .fi-ef-brand-portrait{position:absolute!important;display:block!important;width:96px!important;height:93px!important;max-width:none!important;bottom:7px!important;left:1px!important;top:auto!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;overflow:hidden!important;filter:drop-shadow(0 3px 2px #0007)}
+.fi-ef-ui .fi-ef-brand-copy{display:block!important;min-width:0;margin:0!important;padding:0!important}
+.fi-ef-ui .fi-ef-brand-copy b{display:block!important;color:#ecf6fb!important;font:750 15px/1.3 "Segoe UI",Arial,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
+.fi-ef-ui .fi-ef-brand-copy small{display:block!important;color:#bed2df!important;font:500 11px/1.4 "Segoe UI",Arial,sans-serif!important;margin:3px 0 0!important;letter-spacing:0!important;text-transform:none!important}
+/* A borda real acompanha os cantos. A prioridade supera as faixas legadas,
+   inclusive as regras com :not(#cards-reference-reserved) e #dim-root.
+   Fundos, brilhos, sombras, dimensões e posições continuam os já aprovados. */
+.fi-ef-ui [data-fi-ef-card]:not(#fi-curva-reservada):not(#fi-curva-reservada){
+ --fi-ef-card-accent:var(--reference-accent,var(--card-accent,var(--metric-strong,var(--phase,var(--var-color,var(--indicator,var(--accent,var(--c,var(--fi-ef-unit)))))))));
+ border-radius:18px!important;border-left:5px solid var(--fi-ef-card-accent)!important;
+ background-clip:padding-box;
+}
+.fi-ef-ui [data-fi-ef-card]:not(#fi-curva-reservada):not(#fi-curva-reservada).fi-ef-flat-strip::before,
+.fi-ef-ui [data-fi-ef-card]:not(#fi-curva-reservada):not(#fi-curva-reservada).fi-ef-flat-strip-after::after{content:none!important;display:none!important}
+.fi-ef-ui .fi-ef-legacy-label{display:none!important}
+/* As linhas de leitura também precisam de cantos reais nas células externas. */
+.fi-ef-ui table:has(tr[data-fi-ef-card]){border-collapse:separate!important;border-spacing:0 8px!important}
+.fi-ef-ui tr[data-fi-ef-card]>:first-child:not(#fi-curva-reservada):not(#fi-curva-reservada){border-radius:18px 0 0 18px!important;border-left:5px solid var(--fi-ef-card-accent)!important}
+.fi-ef-ui tr[data-fi-ef-card]>:last-child:not(#fi-curva-reservada):not(#fi-curva-reservada){border-radius:0 18px 18px 0!important}
+@media(max-width:540px){
+ .fi-ef-ui .fi-ef-brand-row{margin-top:34px;padding:0}
+ .fi-ef-ui a.fi-ef-brand{gap:14px!important}
+ .fi-ef-ui .fi-ef-brand-copy b{font-size:14px!important}
+ .fi-ef-ui .fi-ef-brand-copy small{font-size:10px!important}
+ .fi-ef-ui [data-fi-ef-card]:not(#fi-curva-reservada):not(#fi-curva-reservada){border-radius:16px!important}
+}
+@media print{.fi-ef-ui .fi-ef-brand-row{margin-top:30px}.fi-ef-ui [data-fi-ef-card]{box-shadow:none!important}}

@@ -1,0 +1,26 @@
+{
+  "id": "./",
+  "name": "Fisiologia Interativa — Biofeedback Respiratório",
+  "short_name": "Respirar",
+  "lang": "pt-BR",
+  "description": "Guia respiratório com ritmos visuais e sonoros opcionais.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071019",
+  "theme_color": "#071019",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

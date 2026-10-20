@@ -12,6 +12,15 @@
     const preview = document.getElementById('respAudioPreview');
     const instructions = document.getElementById('respAudioInstructions');
     const Audio = window.AudioContext || window.webkitAudioContext;
+    const speech = window.speechSynthesis;
+    const deviceAvailable = !!(speech && window.SpeechSynthesisUtterance);
+    const voiceSource = document.getElementById('respAudioVoiceSource');
+    const voiceChoice = document.getElementById('respAudioDeviceVoice');
+    const voiceSettings = document.getElementById('respAudioVoiceSettings');
+    const deviceSettings = document.getElementById('respAudioDeviceSettings');
+    let voiceURI = '', utterance = null, speechTimer = null;
+    if (!Audio && deviceAvailable) voiceSource.value = 'device';
+    for (const option of voiceSource.options) option.disabled = option.value === 'device' ? !deviceAvailable : !Audio;
     const labels = { off: 'Desligado', continuous: 'Tom suave contínuo', voice: 'Voz em português', chime: 'Sinal discreto' };
     const descriptions = {
       off: 'Escolha um guia para acompanhar a respiração pelo som.',
@@ -24,19 +33,23 @@
     let context, master, active, lastPhase = '', running = false, previewing = false, instructing = false;
     let timers = [], generation = 0;
     const buffers = new Map(), loading = new Map();
-    const supported = value => value === 'off' || !!Audio;
+    const supported = value => value === 'off' || (value === 'voice' ? !!Audio || deviceAvailable : !!Audio);
     for (const option of mode.options) if (!supported(option.value)) option.disabled = true;
     try {
       const saved = JSON.parse(localStorage.getItem('respiratoryAudioPreferences'));
       if (saved && Object.hasOwn(labels, saved.mode) && supported(saved.mode)) mode.value = saved.mode;
+      if (saved && ['recorded', 'device'].includes(saved.voiceSource) && (saved.voiceSource === 'device' ? deviceAvailable : !!Audio)) voiceSource.value = saved.voiceSource;
+      if (saved && typeof saved.voiceURI === 'string') voiceURI = saved.voiceURI;
       if (saved && Number.isFinite(saved.volume)) volume.value = Math.max(0, Math.min(100, saved.volume));
     } catch (_) {}
     function save() {
-      try { localStorage.setItem('respiratoryAudioPreferences', JSON.stringify({ mode: mode.value, volume: +volume.value })); } catch (_) {}
+      try { localStorage.setItem('respiratoryAudioPreferences', JSON.stringify({ mode: mode.value, volume: +volume.value, voiceSource: voiceSource.value, voiceURI })); } catch (_) {}
     }
     function render() {
       summary.textContent = labels[mode.value]; description.textContent = descriptions[mode.value];
-      output.textContent = volume.value + '%'; volume.disabled = !Audio;
+      voiceSettings.hidden = mode.value !== 'voice'; deviceSettings.hidden = voiceSource.value !== 'device';
+      if (mode.value === 'voice' && voiceSource.value === 'device') description.textContent = 'A voz do aparelho anuncia cada fase. As vozes e o funcionamento offline dependem do celular e do navegador.';
+      output.textContent = volume.value + '%'; volume.disabled = !Audio && !deviceAvailable;
       preview.disabled = running || mode.value === 'off';
       preview.textContent = previewing ? '■ Parar exemplo' : '▶ Ouvir exemplo';
       preview.setAttribute('aria-pressed', String(previewing));
@@ -44,6 +57,18 @@
       instructions.textContent = instructing ? '■ Parar orientações' : '▶ Ouvir orientações';
       instructions.setAttribute('aria-pressed', String(instructing));
     }
+    function refreshVoices() {
+      if (!deviceAvailable) return;
+      voiceChoice.replaceChildren();
+      const auto = document.createElement('option'); auto.value = ''; auto.textContent = 'Automática · português'; voiceChoice.append(auto);
+      for (const voice of speech.getVoices().filter(v => /^pt(?:[-_]|$)/i.test(v.lang))) {
+        const option = document.createElement('option'); option.value = voice.voiceURI;
+        option.textContent = voice.name + (voice.localService ? ' · no aparelho' : ' · pode usar internet'); voiceChoice.append(option);
+      }
+      voiceChoice.value = [...voiceChoice.options].some(o => o.value === voiceURI) ? voiceURI : '';
+    }
+    refreshVoices();
+    if (deviceAvailable) speech.addEventListener('voiceschanged', refreshVoices);
     async function load(name) {
       if (buffers.has(name)) return buffers.get(name);
       if (!loading.has(name)) {
@@ -58,7 +83,13 @@
       return loading.get(name);
     }
     async function unlock(force = false) {
-      if ((!force && mode.value === 'off') || !Audio) return false;
+      if (!force && mode.value === 'off') return false;
+      if (!force && mode.value === 'voice' && voiceSource.value === 'device') {
+        if (!deviceAvailable) return false;
+        if (speech.paused) speech.resume();
+        refreshVoices(); status.textContent = ''; return true;
+      }
+      if (!Audio) return false;
       try {
         if (!context) {
           context = new Audio(); master = context.createGain(); master.gain.value = +volume.value / 100;
@@ -77,6 +108,8 @@
     }
     function stopSound() {
       lastPhase = '';
+      if (speechTimer !== null) { clearTimeout(speechTimer); speechTimer = null; }
+      if (utterance) { utterance = null; speech.cancel(); }
       if (active) {
         const old = active; active = null;
         try {
@@ -117,11 +150,26 @@
       const cue = cues[name];
       source.start(0, cue.offset, Math.min(cue.duration, remaining, buffer.duration - cue.offset));
     }
+    function deviceCue(f, remaining) {
+      if (!deviceAvailable) return;
+      const u = new window.SpeechSynthesisUtterance(f.nome === 'INSPIRAR' ? 'Inspire' : f.nome === 'EXPIRAR' ? 'Expire' : 'Pausa');
+      const voices = speech.getVoices().filter(v => /^pt(?:[-_]|$)/i.test(v.lang));
+      const selected = voices.find(v => v.voiceURI === voiceURI) || voices.find(v => v.default) || voices.find(v => /^pt[-_]BR$/i.test(v.lang) && v.localService) || voices.find(v => /^pt[-_]BR$/i.test(v.lang)) || voices[0];
+      if (selected) u.voice = selected;
+      u.lang = selected?.lang || 'pt-BR'; u.rate = 1; u.volume = +volume.value / 100; utterance = u;
+      u.onend = () => { if (utterance === u) utterance = null; };
+      u.onerror = event => { if (utterance !== u) return; utterance = null; if (!['canceled', 'interrupted'].includes(event.error)) status.textContent = 'A voz do aparelho não está disponível. Escolha outra voz ou use a voz gravada.'; };
+      speech.speak(u);
+      speechTimer = setTimeout(() => { if (utterance === u) { utterance = null; speech.cancel(); } speechTimer = null; }, remaining * 1000);
+    }
     function phase(f, elapsed = 0) {
-      if (!f || document.hidden || mode.value === 'off' || +volume.value === 0 || !context || context.state !== 'running') return;
+      if (!f || document.hidden || mode.value === 'off' || +volume.value === 0) return;
+      const useDevice = mode.value === 'voice' && voiceSource.value === 'device';
+      if (!useDevice && (!context || context.state !== 'running')) return;
       if (lastPhase === f.nome) return;
       stopSound(); lastPhase = f.nome;
       const remaining = Math.max(.05, f.dur - elapsed), fraction = Math.max(0, Math.min(1, elapsed / f.dur));
+      if (useDevice) { deviceCue(f, remaining); return; }
       if (mode.value === 'continuous') {
         if (f.nome !== 'INSPIRAR' && f.nome !== 'EXPIRAR') return;
         const a = f.nome === 'INSPIRAR' ? 220 : 440, b = f.nome === 'INSPIRAR' ? 440 : 220;
@@ -137,6 +185,11 @@
       stop(); save(); status.textContent = ''; render(); const current = generation;
       void unlock().then(() => { if (generation === current) onChange(); });
     });
+    voiceSource.addEventListener('change', () => {
+      stop(); save(); render(); const current = generation;
+      void unlock().then(() => { if (generation === current) onChange(); });
+    });
+    voiceChoice.addEventListener('change', () => { voiceURI = voiceChoice.value; stop(); save(); render(); if (running) onChange(); });
     volume.addEventListener('input', () => {
       if (master) master.gain.setTargetAtTime(+volume.value / 100, context.currentTime, .025);
       save(); render(); if (+volume.value === 0) { stop(); status.textContent = 'Áudio silenciado.'; } else if (!lastPhase && running) onChange();
