@@ -43,7 +43,7 @@
     }
    }
    function mark(el){
-    if(el.namespaceURI!=='http://www.w3.org/1999/xhtml'||el.closest('.fi-ef-brand,#fi-tutor-widget,.fi-tutor-widget,[data-fi-tutor]'))return;
+    if(el.namespaceURI!=='http://www.w3.org/1999/xhtml'||el.closest('.fi-ef-brand,#fi-tutor-widget,.fi-tutor-widget,[data-fi-tutor],#tutorPanel,#tutorLauncher,#tutorHint,.tutor-panel,.tutor-hint,.tutor-launcher'))return;
     if(el.tagName==='LABEL'&&!el.hasAttribute('data-fi-ef-card')){
      const s=win.getComputedStyle(el);
      const edge=parseFloat(s.borderTopWidth)+parseFloat(s.borderRightWidth)+parseFloat(s.borderBottomWidth)+parseFloat(s.borderLeftWidth);
