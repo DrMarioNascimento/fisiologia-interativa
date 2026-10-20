@@ -246,7 +246,7 @@ Plataformas:
     </footer>
   </main>
 
-  <script src="biofeedback-audio.js?v=20261020-gravados1"></script>
+  <script src="biofeedback-audio.js?v=20261020-gravados2"></script>
   <script>
     const ids=[
       "modoSwitch","labelProgressivo","labelRegressivo","resetAll",
@@ -484,7 +484,7 @@ Plataformas:
     }
 
     document.querySelectorAll(".dropdown-toggle").forEach(btn=>{
-      btn.setAttribute("aria-expanded","true");
+      btn.setAttribute("aria-expanded",String(document.getElementById(btn.dataset.target).classList.contains("open")));
       btn.setAttribute("aria-controls",btn.dataset.target+"Content");
       document.getElementById(btn.dataset.target).querySelector(".dropdown-content").id=btn.dataset.target+"Content";
       btn.addEventListener("click",()=>{

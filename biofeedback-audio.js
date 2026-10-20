@@ -139,7 +139,7 @@
     });
     volume.addEventListener('input', () => {
       if (master) master.gain.setTargetAtTime(+volume.value / 100, context.currentTime, .025);
-      save(); render(); if (+volume.value === 0) stopSound(); else if (!lastPhase && running) onChange();
+      save(); render(); if (+volume.value === 0) { stop(); status.textContent = 'Áudio silenciado.'; } else if (!lastPhase && running) onChange();
     });
     instructions.addEventListener('click', async () => {
       if (instructing) { stop(); status.textContent = ''; return; }

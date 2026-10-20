@@ -57,6 +57,10 @@ test('Instructions are optional even with guide off and are interrupted by sessi
  assert.ok(s.requests[0].endsWith('/orientacoes.mp3'));assert.deepEqual(s.recordings[0].args,[0,.11,10.5]);
  s.api.setRunning(true);assert.equal(s.recordings[0].stopped,true);assert.equal(s.node('respAudioInstructions').disabled,true);
 });
+test('Muting instructions also resets the listen button',async()=>{
+ const s=setup();await s.node('respAudioInstructions').events.click();s.node('respAudioVolume').value='0';s.node('respAudioVolume').events.input();
+ assert.equal(s.recordings[0].stopped,true);assert.equal(s.node('respAudioInstructions').textContent,'▶ Ouvir orientações');
+});
 test('Short phases truncate the recording and volume zero stops it',async()=>{
  const s=setup();await s.select('voice');s.api.phase({nome:'EXPIRAR',dur:1});assert.equal(s.recordings[0].args[2],1);
  s.node('respAudioVolume').value='0';s.node('respAudioVolume').events.input();assert.equal(s.recordings[0].stopped,true);
