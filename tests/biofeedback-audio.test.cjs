@@ -19,7 +19,7 @@ function setup(saved) {
   createOscillator(){const o={frequency:param(),connect(){},disconnect(){},start(){},stop(t){this.stopped=t}};oscillators.push(o);return o}
   resume(){this.state='running';return Promise.resolve()}
  }
- const speech={speaking:false,pending:false,getVoices:()=>[{lang:'en-US'},{lang:'pt-BR',name:'Portugu�s'}],cancel(){cancels++;this.speaking=false},speak(u){this.speaking=true;utterances.push(u)}};
+ const speech={speaking:false,pending:false,getVoices:()=>[{lang:'en-US'},{lang:'pt-BR',name:'Português'}],cancel(){cancels++;this.speaking=false},speak(u){this.speaking=true;utterances.push(u)}};
  const document={hidden:false,getElementById:node,addEventListener(type,fn){events[type]=fn}};
  const storage = new Map(saved ? [['respiratoryAudioPreferences',JSON.stringify(saved)]] : []);
  const context={window:{AudioContext:Audio,SpeechSynthesisUtterance:class{constructor(text){this.text=text}},speechSynthesis:speech,addEventListener(){}},document,

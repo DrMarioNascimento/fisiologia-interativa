@@ -12,11 +12,11 @@
     const Audio = window.AudioContext || window.webkitAudioContext;
     const speech = window.speechSynthesis;
     const voiceAvailable = !!(speech && window.SpeechSynthesisUtterance);
-    const labels = { off: 'Desligado', continuous: 'Tom suave cont�nuo', voice: 'Voz em portugu�s', chime: 'Sinal discreto' };
+    const labels = { off: 'Desligado', continuous: 'Tom suave contínuo', voice: 'Voz em português', chime: 'Sinal discreto' };
     const descriptions = {
-      off: 'Escolha um guia para acompanhar a respira��o pelo som.',
-      continuous: 'O tom sobe na inspira��o e desce na expira��o. Nas pausas, fica em sil�ncio.',
-      voice: 'Uma voz anuncia "inspire", "expire" ou "pausa" no in�cio de cada fase. A voz depende do aparelho e pode precisar de conex�o.',
+      off: 'Escolha um guia para acompanhar a respiração pelo som.',
+      continuous: 'O tom sobe na inspiração e desce na expiração. Nas pausas, fica em silêncio.',
+      voice: 'Uma voz anuncia “inspire”, “expire” ou “pausa” no início de cada fase. A voz depende do aparelho e pode precisar de conexão.',
       chime: 'Uma nota breve marca cada fase: mais aguda para inspirar, mais grave para expirar e baixa nas pausas.'
     };
     let context, master, active, lastPhase = '', running = false, previewing = false;
@@ -37,7 +37,7 @@
       output.textContent = volume.value + '%';
       volume.disabled = mode.value === 'off';
       preview.disabled = running || mode.value === 'off';
-      preview.textContent = previewing ? '� Parar exemplo' : '? Ouvir exemplo';
+      preview.textContent = previewing ? '■ Parar exemplo' : '▶ Ouvir exemplo';
       preview.setAttribute('aria-pressed', String(previewing));
     }
     async function unlock() {
@@ -50,7 +50,7 @@
         }
         if (context.state !== 'running') await context.resume();
         status.textContent = '';
-      } catch (_) { status.textContent = 'N�o foi poss�vel ativar o �udio. Toque em Ouvir exemplo ou tente iniciar novamente.'; }
+      } catch (_) { status.textContent = 'Não foi possível ativar o áudio. Toque em Ouvir exemplo ou tente iniciar novamente.'; }
     }
     function stopSound() {
       lastPhase = '';
@@ -106,7 +106,7 @@
         const selected = voices.find(v => /^pt[-_]BR$/i.test(v.lang)) || voices.find(v => /^pt/i.test(v.lang));
         if (selected) u.voice = selected;
         u.lang = selected?.lang || 'pt-BR'; u.rate = 0.9; u.volume = +volume.value / 100;
-        u.onerror = e => { if (!['canceled', 'interrupted'].includes(e.error)) status.textContent = 'A voz n�o est� dispon�vel. Verifique a voz em portugu�s no aparelho ou escolha outro guia.'; };
+        u.onerror = e => { if (!['canceled', 'interrupted'].includes(e.error)) status.textContent = 'A voz não está disponível. Verifique a voz em português no aparelho ou escolha outro guia.'; };
         speech.speak(u);
       }
     }
@@ -130,15 +130,15 @@
       if (running || mode.value === 'off') return;
       stop(); const current = generation; await unlock();
       if (generation !== current || document.hidden || running) return;
-      previewing = true; render(); status.textContent = 'Exemplo de 10 segundos: inspira��o, pausa, expira��o e pausa.';
+      previewing = true; render(); status.textContent = 'Exemplo de 10 segundos: inspiração, pausa, expiração e pausa.';
       phase({ nome: 'INSPIRAR', dur: 4 });
       for (const [delay, nome, dur] of [[4000, 'SEGURAR', 1], [5000, 'EXPIRAR', 4], [9000, 'PAUSAR', 1]]) {
         timers.push(setTimeout(() => { if (generation === current) phase({ nome, dur }); }, delay));
       }
-      timers.push(setTimeout(() => { if (generation === current) { stop(); status.textContent = 'Exemplo conclu�do.'; } }, 10000));
+      timers.push(setTimeout(() => { if (generation === current) { stop(); status.textContent = 'Exemplo concluído.'; } }, 10000));
     });
     window.addEventListener('pagehide', stop);
-    document.addEventListener('visibilitychange', () => { if (document.hidden) { stop(); status.textContent = '�udio interrompido ao sair da p�gina.'; } });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) { stop(); status.textContent = 'Áudio interrompido ao sair da página.'; } });
     render();
     return { unlock, phase, stop, setRunning };
   };
