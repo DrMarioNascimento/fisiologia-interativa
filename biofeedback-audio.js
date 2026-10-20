@@ -223,6 +223,16 @@
       oscillator(659.25, 659.25, .16, true);const current=generation;
       timers.push(setTimeout(() => { if (generation === current) oscillator(783.99, 783.99, .24, true); }, 220));
     }
-    render(); return {unlock, phase, stop, setRunning, complete};
+    function preferences() { return {mode:mode.value,voiceSource:voiceSource.value,voiceURI,volume:+volume.value}; }
+    function configure(prefs) {
+      if (!prefs || !Object.hasOwn(labels,prefs.mode) || !supported(prefs.mode)) return false;
+      if (prefs.mode === 'voice' && (prefs.voiceSource === 'device' ? !deviceAvailable : !Audio)) return false;
+      stop();mode.value=prefs.mode;
+      if (prefs.voiceSource === 'device' ? deviceAvailable : !!Audio) voiceSource.value=prefs.voiceSource;
+      voiceURI=typeof prefs.voiceURI === 'string'?prefs.voiceURI:'';
+      if (Number.isFinite(prefs.volume)) volume.value=Math.max(0,Math.min(100,prefs.volume));
+      refreshVoices();save();render();status.textContent='';return true;
+    }
+    render(); return {unlock, phase, stop, setRunning, complete, preferences, configure};
   };
 })();

@@ -14,4 +14,4 @@ jobs:
           node-version: '24'
       - run: node scripts/build-biofeedback.cjs
       - run: git diff --exit-code -- respirar
-      - run: node --test tests/biofeedback-audio.test.cjs tests/biofeedback-session.test.cjs tests/biofeedback-offline.test.cjs tests/ef-identidade.test.mjs
+      - run: node --test tests/biofeedback-audio.test.cjs tests/biofeedback-session.test.cjs tests/biofeedback-agenda.test.cjs tests/biofeedback-offline.test.cjs tests/ef-identidade.test.mjs

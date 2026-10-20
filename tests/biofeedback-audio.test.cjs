@@ -104,3 +104,10 @@ test('Completion cue is optional, obeys volume, and a new action cancels its sec
  const s=setup();await s.api.unlock(true);s.api.complete();assert.equal(s.oscillators.length,1);assert.equal(s.oscillators[0].frequency.calls[0][1],659.25);
  s.api.stop();assert.equal(s.timers.size,0);s.node('respAudioVolume').value='0';s.api.complete();assert.equal(s.oscillators.length,1);
 });
+
+test('Agenda audio configuration persists a device voice without starting sound by itself',async()=>{
+ const s=setup();assert.equal(s.api.configure({mode:'voice',voiceSource:'device',voiceURI:'pt-local',volume:35}),true);
+ assert.equal(s.utterances.length,0);assert.equal(s.node('respAudioMode').value,'voice');assert.equal(s.node('respAudioVoiceSource').value,'device');assert.equal(s.node('respAudioVolume').value,35);
+ const prefs=s.api.preferences();assert.equal(prefs.voiceURI,'pt-local');assert.equal(prefs.volume,35);
+ await s.api.unlock();s.api.phase({nome:'INSPIRAR',dur:4});assert.equal(s.utterances[0].volume,.35);
+});

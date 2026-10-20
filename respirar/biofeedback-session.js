@@ -43,7 +43,7 @@
     function time(ms, ceil=false) { const seconds=Math.max(0,(ceil?Math.ceil:Math.floor)(ms/1000));return String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0'); }
     function target() { return duration.value==='free'?null:Math.round((duration.value==='custom'?+custom.value:+duration.value)*60000); }
     function valid() { return duration.value!=='custom'||(Number.isInteger(+custom.value)&&+custom.value>=1&&+custom.value<=180); }
-    function prefs() {
+    function savePreferences() {
       customWrap.hidden=duration.value!=='custom';
       if(!model.active)live.textContent=duration.value==='free'?'Tempo livre':'Sessão programada · '+(valid()?time(target()):'defina a duração');
       $('sessionCurrent').textContent=duration.value==='free'?'Tempo livre':duration.value==='custom'?custom.value+' min':duration.value+' min';
@@ -82,10 +82,16 @@
       if(state.due)status.textContent='O tempo programado terminou. Conclua este ciclo no ritmo da esfera.';
       if(state.complete){finish('completed');return true;}return false;
     }
-    duration.addEventListener('change',prefs);custom.addEventListener('input',prefs);sound.addEventListener('change',()=>{prefs();if(sound.checked)onSoundChange();});
+    duration.addEventListener('change',savePreferences);custom.addEventListener('input',savePreferences);sound.addEventListener('change',()=>{savePreferences();if(sound.checked)onSoundChange();});
     end.addEventListener('click',onEnd);
-    prefs();setActive(false);history();
+    savePreferences();setActive(false);history();
     return {
+      configuration:()=>({minutes:duration.value==='free'?null:target()/60000,endSound:sound.checked}),
+      configure(prefs){
+        if(model.active||!prefs||(prefs.minutes!==null&&(!Number.isInteger(prefs.minutes)||prefs.minutes<1||prefs.minutes>180)))return false;
+        duration.value=prefs.minutes===null?'free':[3,5,10].includes(prefs.minutes)?String(prefs.minutes):'custom';
+        if(prefs.minutes!==null)custom.value=String(prefs.minutes);sound.checked=prefs.endSound===true;savePreferences();return true;
+      },
       soundEnabled:()=>sound.checked,
       canStart:()=>{if(!valid()){$('sessionDropdown').classList.add('open');$('sessionDropdown').querySelector('button').setAttribute('aria-expanded','true');custom.reportValidity();return false;}return true;},
       start(){model.start({targetMs:target(),rhythm:rhythm()});summary.hidden=true;status.textContent='A pausa também interrompe o tempo da sessão.';lastText='';setActive(true);update(0,0);},

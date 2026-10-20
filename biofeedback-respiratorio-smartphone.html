@@ -61,6 +61,9 @@ body{min-width:0;-webkit-text-size-adjust:100%}
 #respAudioStatus:empty{display:none}
 </style><style id="session-style">
 .session-panel{grid-column:1/-1}.session-panel label:not(.session-sound){display:block;font-size:13px;margin:12px 0 8px;color:#bed1df}.session-panel select,.session-panel input[type=number]{box-sizing:border-box;width:100%;min-height:44px;padding:10px;border:1px solid #67899f;border-radius:12px;background:#112838;color:#eef8ff;font:inherit;font-size:14px}.session-panel select:focus-visible,.session-panel input:focus-visible{outline:3px solid #8bc4ff;outline-offset:3px}.session-sound{display:flex;align-items:center;gap:10px;min-height:44px;margin:12px 0;font-size:13px;color:#bed1df}.session-sound input{width:20px;height:20px}.session-live{font-size:14px;color:var(--accent-light);text-align:center;min-height:20px;margin:12px 0 0;font-variant-numeric:tabular-nums}.session-summary,.session-record{padding:14px;border:1px solid #436578;border-radius:18px;border-left:5px solid var(--accent-light);background:linear-gradient(140deg,#102531,#1c3444);margin:14px 0;overflow-wrap:anywhere}.session-summary h2{font-size:17px;margin:0 0 10px}.session-summary p,.session-record p{font-size:13px;line-height:1.6;color:#c1d6e1;margin:7px 0}.session-record .session-record-title{font-weight:700;color:#e8f3f9}.session-history{margin-top:18px;padding:12px;border:1px solid #436578;border-radius:18px}.session-history summary{cursor:pointer;min-height:30px;font-size:14px}.session-history{max-height:500px;overflow:auto}.session-panel [hidden]{display:none!important}
+</style><style id="agenda-style">
+.agenda-panel{min-width:0}.agenda-label{display:block;color:#bed1df;font-size:13px;margin:14px 0 8px}.agenda-panel select,.agenda-panel input[type=time],.agenda-panel input[type=number]{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:10px;border:1px solid #67899f;border-radius:12px;background:#112838;color:#eef8ff;font:inherit;font-size:14px}.agenda-panel :is(select,input,button):focus-visible{outline:3px solid #8bc4ff;outline-offset:3px}.agenda-check{display:flex;align-items:center;gap:10px;min-height:44px;margin:12px 0;font-size:13px;color:#bed1df}.agenda-panel input[type=checkbox]{width:20px;height:20px;accent-color:#8bc4ff}.agenda-days{margin:14px 0;padding:8px 12px 12px;display:flex;flex-wrap:wrap;gap:6px;border:1px solid #436578;border-left:5px solid #8bc4ff;border-radius:18px}.agenda-days legend{font-size:13px;color:#bed1df;padding:0 5px}.agenda-days label{display:flex;align-items:center;gap:5px;min-height:44px;font-size:13px;color:#d7e8f1}.agenda-next{font-size:14px;line-height:1.5;color:#9ce6b9;margin:10px 0;overflow-wrap:anywhere}.agenda-panel input[type=range]{width:100%;height:44px;accent-color:#8bc4ff}.agenda-panel [hidden]{display:none!important}
+@media(max-width:999px){.agenda-panel{grid-column:1/-1}}
 </style></head>
 <body>
   <h1 id="seo-title" style="display:none;">Biofeedback Respiratório</h1>
@@ -100,6 +103,37 @@ body{min-width:0;-webkit-text-size-adjust:100%}
         <p id="sessionStatus" class="ritmo-nota" role="status"></p>
         <div id="sessionSummary" class="session-summary" hidden><h2>Resumo da sessão</h2><div id="sessionSummaryBody"></div></div>
         <details class="session-history"><summary>Histórico neste aparelho</summary><p class="ritmo-nota">Até 100 sessões, salvas neste navegador, sem conta. Os tempos de pausa não entram na duração.</p><div id="sessionHistory"></div></details>
+      </div>
+    </section>
+
+    <section id="agendaDropdown" class="dropdown-card card agenda-panel">
+      <button class="dropdown-toggle" data-target="agendaDropdown" type="button"><span class="left"><span aria-hidden="true">▦</span><span>Minha agenda</span></span><span><span id="agendaCurrent" class="dropdown-current">Não configurada</span><span class="chevron" aria-hidden="true">▼</span></span></button>
+      <div class="dropdown-content">
+        <p id="agendaSummary" class="ritmo-nota"></p><p id="agendaNext" class="agenda-next"></p>
+        <label class="agenda-check"><input id="agendaEnabled" type="checkbox" checked> Agenda ativa</label>
+        <fieldset class="agenda-days"><legend>Dias da semana</legend>
+          <label><input id="agendaDay1" type="checkbox" value="1"> Seg</label>
+          <label><input id="agendaDay2" type="checkbox" value="2"> Ter</label>
+          <label><input id="agendaDay3" type="checkbox" value="3"> Qua</label>
+          <label><input id="agendaDay4" type="checkbox" value="4"> Qui</label>
+          <label><input id="agendaDay5" type="checkbox" value="5"> Sex</label>
+          <label><input id="agendaDay6" type="checkbox" value="6"> Sáb</label>
+          <label><input id="agendaDay0" type="checkbox" value="0"> Dom</label>
+        </fieldset>
+        <label class="agenda-label" for="agendaTime">Horário da sessão</label><input id="agendaTime" type="time" value="08:00" required>
+        <label class="agenda-label" for="agendaProtocol">Protocolo planejado</label><select id="agendaProtocol"><option value="coerencia">Coerência</option><option value="relaxamento">Relaxamento</option><option value="478">Técnica 4–7–8</option><option value="diafragmatica">Diafragmática</option><option value="custom">Personalizado · ritmo copiado da sessão</option></select>
+        <p id="agendaRhythm" class="ritmo-nota"></p>
+        <label class="agenda-label" for="agendaDuration">Duração planejada</label><select id="agendaDuration"><option value="free">Tempo livre</option><option value="3">3 minutos</option><option value="5" selected>5 minutos</option><option value="10">10 minutos</option><option value="custom">Personalizada</option></select>
+        <div id="agendaCustomWrap" hidden><label class="agenda-label" for="agendaMinutes">Minutos planejados (1 a 180)</label><input id="agendaMinutes" type="number" min="1" max="180" step="1" value="5" inputmode="numeric"></div>
+        <label class="agenda-label" for="agendaAudioMode">Guia sonoro planejado</label><select id="agendaAudioMode"><option value="off">Desligado</option><option value="continuous">Tom suave contínuo</option><option value="voice">Voz em português</option><option value="chime">Sinal discreto</option></select>
+        <div id="agendaVoiceWrap" hidden><label class="agenda-label" for="agendaVoiceSource">Voz planejada</label><select id="agendaVoiceSource"><option value="recorded">Voz gravada</option><option value="device">Voz do aparelho</option></select><p class="ritmo-nota">Para guardar uma voz específica do aparelho, escolha-a no guia e toque em Copiar escolhas da sessão.</p></div>
+        <label class="agenda-label" for="agendaVolume">Volume planejado · <output id="agendaVolumeValue" for="agendaVolume">45%</output></label><input id="agendaVolume" aria-label="Volume planejado" type="range" min="0" max="100" step="5" value="45">
+        <label class="agenda-check"><input id="agendaEndSound" type="checkbox"> Aviso sonoro na conclusão planejada</label>
+        <button id="agendaCopy" class="resp-audio-preview" type="button">Copiar escolhas da sessão</button>
+        <button id="agendaSave" class="resp-audio-preview" type="button">Salvar agenda</button>
+        <button id="agendaStart" class="resp-audio-preview" type="button" disabled>Iniciar sessão planejada</button>
+        <p id="agendaStatus" class="ritmo-nota" role="status"></p>
+        <p class="ritmo-nota">A agenda fica salva neste aparelho. Você pode iniciar quando preferir. As notificações com o aplicativo fechado serão acrescentadas na versão nativa.</p>
       </div>
     </section>
 
@@ -323,8 +357,9 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     </footer>
   </main>
 
-  <script src="biofeedback-audio.js?v=20261020-sessao1"></script>
-  <script src="biofeedback-session.js?v=20261020-sessao1"></script>
+  <script src="biofeedback-audio.js?v=20261020-agenda1"></script>
+  <script src="biofeedback-session.js?v=20261020-agenda1"></script>
+  <script src="biofeedback-agenda.js?v=20261020-agenda1"></script>
   <script>
     const ids=[
       "modoSwitch","labelProgressivo","labelRegressivo","resetAll",
@@ -566,6 +601,25 @@ body{min-width:0;-webkit-text-size-adjust:100%}
       }
     }
     const PRESETS={coerencia:[5,0,5,0],relaxamento:[4,0,6,0],"478":[4,7,8,0],diafragmatica:[4,1,6,1]};
+    const agendaUI=window.createRespiratoryAgendaUI?window.createRespiratoryAgendaUI({
+      getCurrent:()=>({protocol:presetAtivo||'custom',times:[+r.inspiracao.value,+r.pausaCheia.value,+r.expiracao.value,+r.pausaVazia.value],...sessionUI.configuration?.(),audio:respiratoryAudio.preferences?.()||{mode:'off',voiceSource:'recorded',voiceURI:'',volume:45}}),
+      isBusy:()=>executando||r.iniciar.disabled,
+      startPlan:iniciarAgenda
+    }):null;
+    if(!agendaUI){
+      ['agendaSave','agendaCopy','agendaStart'].forEach(id=>document.getElementById(id).disabled=true);
+      document.getElementById('agendaStatus').textContent='A agenda não carregou. Atualize a página para tentar novamente.';
+    }
+    async function iniciarAgenda(plan){
+      if(executando||r.iniciar.disabled)return {ok:false,message:'Encerre a sessão atual antes de iniciar a sessão planejada.'};
+      if(!respiratoryAudio.configure?.(plan.audio))return {ok:false,message:'O guia ou a voz escolhida não está disponível neste aparelho. Ajuste a agenda e salve novamente.'};
+      if(!sessionUI.configure?.({minutes:plan.minutes,endSound:plan.endSound}))return {ok:false,message:'Não foi possível preparar a duração da sessão.'};
+      ['inspiracao','pausaCheia','expiracao','pausaVazia'].forEach((id,i)=>r[id].value=String(plan.times[i]));
+      marcarPreset(plan.protocol==='custom'?null:plan.protocol);atualizarControles();reconfigurarFase();
+      await iniciar();
+      return {ok:executando&&!pausado,message:'A sessão não começou. Mantenha a página visível e tente novamente.'};
+    }
+
     function presetDosValores(){
       const v=valores(),atual=[v.inspiracao,v.pausaCheia,v.expiracao,v.pausaVazia].join();
       return Object.keys(PRESETS).find(k=>PRESETS[k].join()===atual)||null;

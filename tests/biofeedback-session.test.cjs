@@ -34,11 +34,11 @@ function page(file='biofeedback-respiratorio-smartphone.html'){
  const defaults={inspiracao:'4',pausaCheia:'1',expiracao:'6',pausaVazia:'1',sessionDuration:'free',sessionCustomMinutes:'5'};
  const get=id=>{if(!nodes.has(id)){const n=new Node(id);n.value=defaults[id]??'';if(id==='protocolCurrent')n.textContent='Diafragmática';nodes.set(id,n);}return nodes.get(id)};
  const doc={getElementById:get,createElement:()=>new Node(),querySelectorAll:()=>[],querySelector:()=>new Node(),addEventListener(){},documentElement:new Node('html'),hidden:false,visibilityState:'visible'};
- const audio={unlock:async()=>true,setRunning(){},phase(){},stop(){},complete(){beeps++}};
+ let audioPrefs=null;const audio={unlock:async()=>true,setRunning(){},phase(){},stop(){},complete(){beeps++},configure(p){audioPrefs={...p};return true},preferences:()=>audioPrefs||{mode:'off',voiceSource:'recorded',voiceURI:'',volume:45}};
  const context=vm.createContext({window:{localStorage:storage,createRespiratoryAudio:()=>audio,addEventListener(){},innerWidth:400,innerHeight:800},document:doc,localStorage:storage,performance:{now:()=>clock},navigator:{userAgent:'test',platform:'',maxTouchPoints:0},requestAnimationFrame(fn){frames.set(++frame,fn);return frame},cancelAnimationFrame:id=>frames.delete(id),setTimeout,clearTimeout,console});
  vm.runInContext(fs.readFileSync(path.join(root,'biofeedback-session.js'),'utf8'),context);
  const html=fs.readFileSync(path.join(root,file),'utf8'),main=[...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)].find(m=>!m[1].includes('src=')&&m[2].includes('const ids='))[2];vm.runInContext(main,context);
- return {get,storage,context,call:s=>vm.runInContext(s,context),setClock:t=>{clock=t},tick(t){clock=t;const callbacks=[...frames.values()];frames.clear();callbacks.forEach(f=>f(t))},get beeps(){return beeps},get pending(){return frames.size},history:()=>JSON.parse(storage.getItem('respiratorySessionHistory.v1')||'[]')};
+ return {get,storage,context,call:s=>vm.runInContext(s,context),setClock:t=>{clock=t},tick(t){clock=t;const callbacks=[...frames.values()];frames.clear();callbacks.forEach(f=>f(t))},get audioPrefs(){return audioPrefs},get beeps(){return beeps},get pending(){return frames.size},history:()=>JSON.parse(storage.getItem('respiratorySessionHistory.v1')||'[]')};
 }
 for(const file of ['biofeedback-respiratorio-smartphone.html','biofeedback-respiratorio.html'])test(file+': pause time is excluded; completion saves once and restart creates a fresh session',async()=>{
  const p=page(file);p.get('sessionDuration').value='custom';p.get('sessionCustomMinutes').value='1';p.get('sessionEndSound').checked=true;
@@ -55,4 +55,10 @@ test('A deadline in the middle of a 13-second cycle waits until 65 seconds',asyn
  const p=page();p.get('sessionDuration').value='custom';p.get('sessionCustomMinutes').value='1';p.get('expiracao').value='7';await p.call('iniciar()');
  for(let t=250;t<=60000;t+=250)p.tick(t);assert.equal(p.history().length,0);assert.equal(p.get('sessionLive').textContent,'Finalizando o ciclo atual…');
  for(let t=60250;t<=65000;t+=250)p.tick(t);assert.equal(p.history()[0].elapsedMs,65000);assert.equal(p.history()[0].cycles,5);assert.equal(p.pending,0);
+});
+
+for(const file of ['biofeedback-respiratorio-smartphone.html','biofeedback-respiratorio.html'])test(file+': a saved plan applies the duration, rhythm and guide before starting, and cannot replace an active session',async()=>{
+ const p=page(file);const plan={protocol:'relaxamento',times:[4,0,6,0],minutes:3,endSound:true,audio:{mode:'voice',voiceSource:'device',voiceURI:'pt-local',volume:35}};
+ const result=await p.call('iniciarAgenda('+JSON.stringify(plan)+')');assert.equal(result.ok,true);assert.equal(p.get('sessionDuration').value,'3');assert.equal(p.get('sessionEndSound').checked,true);assert.equal(p.get('pausaCheia').value,'0');assert.equal(p.get('protocolCurrent').textContent,'Relaxamento');assert.deepEqual(JSON.parse(JSON.stringify(p.audioPrefs)),plan.audio);
+ p.tick(1000);const busy=await p.call('iniciarAgenda('+JSON.stringify({...plan,minutes:10})+')');assert.equal(busy.ok,false);assert.equal(p.get('sessionDuration').value,'3');await p.call('encerrarSessao()');assert.equal(p.history()[0].targetMs,180000);assert.deepEqual(p.history()[0].rhythms[0].times,[4,0,6,0]);
 });

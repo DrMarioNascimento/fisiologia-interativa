@@ -30,7 +30,7 @@ test('After installation, cold navigation, audio and app files work with network
  for(const prefix of ['/respirar/','/fisiologia-interativa/respirar/']){
   const s=worker(prefix);await s.run('install');await s.run('activate');assert.ok(s.claimed);
   const nav=await s.get('./?v=offline','navigate');assert.equal(nav.status,200);assert.match(await nav.text(),/Biofeedback Respiratório/);
-  for(const file of ['biofeedback-audio.js','biofeedback-session.js','app.js','ef-simuladores.css','avatar-prof-mario.webp','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png',...['inspire','expire','pausa','orientacoes'].map(n=>'assets/audio/biofeedback/'+n+'.mp3')]){
+  for(const file of ['biofeedback-audio.js','biofeedback-session.js','biofeedback-agenda.js','app.js','ef-simuladores.css','avatar-prof-mario.webp','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/apple-touch-icon.png',...['inspire','expire','pausa','orientacoes'].map(n=>'assets/audio/biofeedback/'+n+'.mp3')]){
    const response=await s.get(file+'?version=test');assert.equal(response.status,200,file);assert.ok((await response.arrayBuffer()).byteLength>0,file);
   }
   assert.equal(s.network,0);

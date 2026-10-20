@@ -28,6 +28,12 @@ Duração livre, 3, 5, 10 minutos ou personalizada entre 1 e 180 minutos inteiro
 
 O resumo e o histórico guardam tempo efetivo, quantidade de ciclos completos, duração programada e os ritmos utilizados, inclusive alterações durante a sessão. Encerrar e salvar finaliza manualmente; Resetar registra a parte já realizada como interrompida. O histórico conserva até 100 sessões no armazenamento local deste navegador, sem conta; os registros não são enviados ao servidor. Se o armazenamento falhar, o resumo permanece na tela com um aviso. Preferências de duração e aviso também são locais. Uma sessão ativa não é restaurada depois de recarregar a página.
 
-Próximas etapas de produto: agenda e lembretes opcionais, empacotamento e testes nativos.
+## Minha agenda
+
+Uma programação semanal local permite escolher dias, horário, protocolo, duração, guia sonoro, fonte de voz, volume e aviso final. O botão Copiar escolhas da sessão traz o ritmo e as preferências atuais. Salvar agenda conserva a programação neste navegador; Iniciar sessão programada aplica as escolhas salvas e começa a sessão com um toque. Alterações precisam ser salvas antes de iniciar.
+
+A próxima sessão usa o horário local do aparelho. A agenda funciona offline e não envia notificações com o aplicativo fechado. Lembretes em segundo plano ficam para a etapa nativa. Não há sincronização entre aparelhos.
+
+Próximas etapas de produto: validação em aparelhos reais, lembretes opcionais, empacotamento e testes nativos.
 
 Prof. Mário César Nascimento. PhD ©
