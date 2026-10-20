@@ -6,7 +6,7 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const source = fs.readFileSync(path.join(root, 'biofeedback-audio.js'), 'utf8');
 function setup(saved) {
- const nodes = new Map(), oscillators = [], utterances = [], timers = new Map(), events = {};
+ const nodes = new Map(), oscillators = [], recordings = [], requests = [], utterances = [], timers = new Map(), events = {};
  let id = 0, cancels = 0, changes = 0;
  const node = key => {
   if (!nodes.has(key)) nodes.set(key, {value:key === 'respAudioVolume' ? '45' : 'off',options:['off','continuous','voice','chime'].map(value=>({value})),events:{},addEventListener(type,fn){this.events[type]=fn},setAttribute(){}});
@@ -17,17 +17,19 @@ function setup(saved) {
   state='running'; currentTime=0; destination={};
   createGain(){return {gain:param(),connect(){},disconnect(){}}}
   createOscillator(){const o={frequency:param(),connect(){},disconnect(){},start(){},stop(t){this.stopped=t}};oscillators.push(o);return o}
+  createBufferSource(){const o={connect(){},disconnect(){},start(...args){this.args=args},stop(){this.stopped=true}};recordings.push(o);return o}
+  decodeAudioData(){return Promise.resolve({duration:12})}
   resume(){this.state='running';return Promise.resolve()}
  }
  const speech={speaking:false,pending:false,getVoices:()=>[{lang:'en-US'},{lang:'pt-BR',name:'Português'}],cancel(){cancels++;this.speaking=false},speak(u){this.speaking=true;utterances.push(u)}};
- const document={hidden:false,getElementById:node,addEventListener(type,fn){events[type]=fn}};
+ const document={currentScript:{src:'https://example.test/biofeedback-audio.js'},hidden:false,getElementById:node,addEventListener(type,fn){events[type]=fn}};
  const storage = new Map(saved ? [['respiratoryAudioPreferences',JSON.stringify(saved)]] : []);
- const context={window:{AudioContext:Audio,SpeechSynthesisUtterance:class{constructor(text){this.text=text}},speechSynthesis:speech,addEventListener(){}},document,
+ const context={URL,AbortSignal,fetch:async url=>{requests.push(url.href);return {ok:true,arrayBuffer:async()=>new ArrayBuffer(8)}},window:{AudioContext:Audio,SpeechSynthesisUtterance:class{constructor(text){this.text=text}},speechSynthesis:speech,addEventListener(){}},document,
   localStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v)},setTimeout(fn){timers.set(++id,fn);return id},clearTimeout(id){timers.delete(id)}};
  vm.runInNewContext(source,context);
  const api=context.window.createRespiratoryAudio({onChange:()=>changes++});
- return {api,node,oscillators,utterances,speech,document,events,timers,storage,get cancels(){return cancels},get changes(){return changes},
-  async select(value){node('respAudioMode').value=value;node('respAudioMode').events.change();await Promise.resolve();await Promise.resolve()}};
+ return {api,node,oscillators,recordings,requests,utterances,speech,document,events,timers,storage,get cancels(){return cancels},get changes(){return changes},
+  async select(value){node('respAudioMode').value=value;node('respAudioMode').events.change();await api.unlock()}};
 }
 test('Audio is optional and disabled initially; preferences can be restored',()=>{
  const s=setup();s.api.phase({nome:'INSPIRAR',dur:4});assert.equal(s.oscillators.length,0);assert.equal(s.utterances.length,0);
@@ -42,12 +44,22 @@ test('Continuous tone follows the remaining phase and does not restart every fra
  s.api.phase({nome:'EXPIRAR',dur:6});assert.deepEqual(s.oscillators[1].frequency.calls,[['set',440,0],['ramp',220,6]]);
  s.api.setRunning(false);assert.equal(s.oscillators[1].stopped,.03);
 });
-test('Portuguese voice uses phase cues without queued repetitions; switching off cancels speech',async()=>{
+test('Recorded voice is preloaded, once per phase, and stopped before the next cue',async()=>{
  const s=setup();await s.select('voice');s.api.phase({nome:'INSPIRAR',dur:4});s.api.phase({nome:'INSPIRAR',dur:4},1);
- assert.equal(s.utterances.length,1);assert.equal(s.utterances[0].text,'Inspire');assert.equal(s.utterances[0].voice.lang,'pt-BR');
- s.api.phase({nome:'EXPIRAR',dur:6});assert.equal(s.utterances[1].text,'Expire');
- s.api.phase({nome:'PAUSAR',dur:1});assert.equal(s.utterances[2].text,'Pausa');
- await s.select('off');assert(s.cancels>=3);assert.equal(s.node('respAudioPreview').disabled,true);
+ assert.equal(s.recordings.length,1);assert.deepEqual(s.recordings[0].args,[0,.10,1.03]);
+ s.api.phase({nome:'EXPIRAR',dur:6});assert.equal(s.recordings[0].stopped,true);assert.deepEqual(s.recordings[1].args,[0,.13,1.12]);
+ s.api.phase({nome:'PAUSAR',dur:1});assert.deepEqual(s.recordings[2].args,[0,.14,.74]);
+ assert.equal(s.requests.length,3);assert.ok(s.requests.every(url=>url.startsWith('https://example.test/assets/audio/biofeedback/')));
+ await s.select('off');assert.equal(s.recordings[2].stopped,true);assert.equal(s.node('respAudioPreview').disabled,true);
+});
+test('Instructions are optional even with guide off and are interrupted by session start',async()=>{
+ const s=setup();await s.node('respAudioInstructions').events.click();assert.equal(s.recordings.length,1);
+ assert.ok(s.requests[0].endsWith('/orientacoes.mp3'));assert.deepEqual(s.recordings[0].args,[0,.11,10.5]);
+ s.api.setRunning(true);assert.equal(s.recordings[0].stopped,true);assert.equal(s.node('respAudioInstructions').disabled,true);
+});
+test('Short phases truncate the recording and volume zero stops it',async()=>{
+ const s=setup();await s.select('voice');s.api.phase({nome:'EXPIRAR',dur:1});assert.equal(s.recordings[0].args[2],1);
+ s.node('respAudioVolume').value='0';s.node('respAudioVolume').events.input();assert.equal(s.recordings[0].stopped,true);
 });
 test('Discrete cues differ between inspiration, expiration and pause',async()=>{
  const s=setup();await s.select('chime');for(const nome of ['INSPIRAR','EXPIRAR','PAUSAR'])s.api.phase({nome,dur:4});

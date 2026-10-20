@@ -156,6 +156,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
           <label for="respAudioVolume">Volume do guia</label><output id="respAudioVolumeValue" for="respAudioVolume">45%</output>
           <input id="respAudioVolume" type="range" min="0" max="100" step="5" value="45" aria-label="Volume do guia sonoro">
         </div>
+        <button id="respAudioInstructions" class="resp-audio-preview" type="button" aria-pressed="false">▶ Ouvir orientações</button>
         <button id="respAudioPreview" class="resp-audio-preview" type="button" aria-pressed="false">▶ Ouvir exemplo</button>
         <p id="respAudioStatus" class="ritmo-nota" role="status"></p>
         <p class="ritmo-nota">O guia acompanha o ritmo programado. Ao sair da página, a sessão é pausada. Os sons do tutor têm controle próprio.</p>
@@ -288,7 +289,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     </footer>
   </main>
 
-  <script src="biofeedback-audio.js?v=20261020-audio2"></script>
+  <script src="biofeedback-audio.js?v=20261020-gravados1"></script>
   <script>
     const ids=[
       "modoSwitch","labelProgressivo","labelRegressivo","resetAll",
@@ -302,12 +303,12 @@ body{min-width:0;-webkit-text-size-adjust:100%}
 
     let executando=false,pausado=false,frameId=null,faseAtual=0,inicioFase=0;
     let tempoAntesPausa=0,ciclos=0,inicioSessao=0,tempoSessaoAcumulado=0,wakeLock=null;
-    let presetAtivo=null;
+    let presetAtivo=null,startRequest=0;
     const respiratoryAudio=window.createRespiratoryAudio
       ? window.createRespiratoryAudio({onChange:sincronizarAudio})
       : {unlock(){},phase(){},stop(){},setRunning(){}};
     if(!window.createRespiratoryAudio){
-      ["respAudioMode","respAudioVolume","respAudioPreview"].forEach(id=>document.getElementById(id).disabled=true);
+      ["respAudioMode","respAudioVolume","respAudioPreview","respAudioInstructions"].forEach(id=>document.getElementById(id).disabled=true);
       document.getElementById("respAudioStatus").textContent="Guia sonoro indisponível. Recarregue a página para tentar novamente; o ritmo visual continua funcionando.";
     }
     function sincronizarAudio(){
@@ -423,9 +424,14 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     }
 
     async function iniciar(){
-      void respiratoryAudio.unlock();
-      await bloquearTela();
+      const request=++startRequest;
       respiratoryAudio.setRunning(true);
+      r.iniciar.disabled=true;
+      await respiratoryAudio.unlock();
+      if(request!==startRequest)return;
+      if(document.hidden){respiratoryAudio.setRunning(false);r.iniciar.disabled=false;return;}
+      await bloquearTela();
+      if(request!==startRequest)return;
       if(executando&&pausado){
         pausado=false;
         inicioFase=performance.now()-tempoAntesPausa;
@@ -455,6 +461,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     }
 
     async function resetar(){
+      startRequest++;
       respiratoryAudio.setRunning(false);
       executando=false;pausado=false;cancelAnimationFrame(frameId);
       faseAtual=0;ciclos=0;tempoAntesPausa=0;tempoSessaoAcumulado=0;
@@ -473,6 +480,7 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     }
 
     function reconfigurarFase(){
+      startRequest++;
       respiratoryAudio.stop();
       if(!executando){resetar();return;}
       faseAtual=0;inicioFase=performance.now();tempoAntesPausa=0;

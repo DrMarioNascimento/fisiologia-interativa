@@ -1,6 +1,7 @@
-/* Optional respiratory cues. No microphone, recordings or external audio services. */
+/* Optional local respiratory cues; no microphone or external audio service. */
 (function () {
   'use strict';
+  const base = new URL('assets/audio/biofeedback/', document.currentScript.src);
   window.createRespiratoryAudio = function ({ onChange = () => {} } = {}) {
     const mode = document.getElementById('respAudioMode');
     const volume = document.getElementById('respAudioVolume');
@@ -9,19 +10,21 @@
     const description = document.getElementById('respAudioDescription');
     const status = document.getElementById('respAudioStatus');
     const preview = document.getElementById('respAudioPreview');
+    const instructions = document.getElementById('respAudioInstructions');
     const Audio = window.AudioContext || window.webkitAudioContext;
-    const speech = window.speechSynthesis;
-    const voiceAvailable = !!(speech && window.SpeechSynthesisUtterance);
     const labels = { off: 'Desligado', continuous: 'Tom suave contínuo', voice: 'Voz em português', chime: 'Sinal discreto' };
     const descriptions = {
       off: 'Escolha um guia para acompanhar a respiração pelo som.',
       continuous: 'O tom sobe na inspiração e desce na expiração. Nas pausas, fica em silêncio.',
-      voice: 'Uma voz anuncia “inspire”, “expire” ou “pausa” no início de cada fase. A voz depende do aparelho e pode precisar de conexão.',
+      voice: 'Os áudios “Inspire”, “Expire” e “Pausa” anunciam o início de cada fase, acompanhando a esfera.',
       chime: 'Uma nota breve marca cada fase: mais aguda para inspirar, mais grave para expirar e baixa nas pausas.'
     };
-    let context, master, active, lastPhase = '', running = false, previewing = false;
+    // Skip only the leading/trailing silence in the supplied recordings, without changing the voice.
+    const cues = { inspire: {offset: .10, duration: 1.03}, expire: {offset: .13, duration: 1.12}, pausa: {offset: .14, duration: .74}, orientacoes: {offset: .11, duration: 10.5} };
+    let context, master, active, lastPhase = '', running = false, previewing = false, instructing = false;
     let timers = [], generation = 0;
-    const supported = value => value === 'off' || (value === 'voice' ? voiceAvailable : !!Audio);
+    const buffers = new Map(), loading = new Map();
+    const supported = value => value === 'off' || !!Audio;
     for (const option of mode.options) if (!supported(option.value)) option.disabled = true;
     try {
       const saved = JSON.parse(localStorage.getItem('respiratoryAudioPreferences'));
@@ -32,25 +35,45 @@
       try { localStorage.setItem('respiratoryAudioPreferences', JSON.stringify({ mode: mode.value, volume: +volume.value })); } catch (_) {}
     }
     function render() {
-      summary.textContent = labels[mode.value];
-      description.textContent = descriptions[mode.value];
-      output.textContent = volume.value + '%';
-      volume.disabled = mode.value === 'off';
+      summary.textContent = labels[mode.value]; description.textContent = descriptions[mode.value];
+      output.textContent = volume.value + '%'; volume.disabled = !Audio;
       preview.disabled = running || mode.value === 'off';
       preview.textContent = previewing ? '■ Parar exemplo' : '▶ Ouvir exemplo';
       preview.setAttribute('aria-pressed', String(previewing));
+      instructions.disabled = running || !Audio;
+      instructions.textContent = instructing ? '■ Parar orientações' : '▶ Ouvir orientações';
+      instructions.setAttribute('aria-pressed', String(instructing));
     }
-    async function unlock() {
-      if (mode.value === 'off' || mode.value === 'voice' || !Audio) return;
+    async function load(name) {
+      if (buffers.has(name)) return buffers.get(name);
+      if (!loading.has(name)) {
+        const promise = (async () => {
+          const response = await fetch(new URL(name + '.mp3', base), {signal: AbortSignal.timeout(12000)});
+          if (!response.ok) throw Error('Áudio indisponível');
+          const buffer = await context.decodeAudioData(await response.arrayBuffer());
+          buffers.set(name, buffer); return buffer;
+        })().finally(() => loading.delete(name));
+        loading.set(name, promise);
+      }
+      return loading.get(name);
+    }
+    async function unlock(force = false) {
+      if ((!force && mode.value === 'off') || !Audio) return false;
       try {
         if (!context) {
-          context = new Audio(); master = context.createGain();
-          master.gain.value = +volume.value / 100 * 0.12;
+          context = new Audio(); master = context.createGain(); master.gain.value = +volume.value / 100;
           master.connect(context.destination);
         }
         if (context.state !== 'running') await context.resume();
-        status.textContent = '';
-      } catch (_) { status.textContent = 'Não foi possível ativar o áudio. Toque em Ouvir exemplo ou tente iniciar novamente.'; }
+        if (!force && mode.value === 'voice') {
+          status.textContent = 'Preparando a voz…';
+          await Promise.all(['inspire', 'expire', 'pausa'].map(load));
+        }
+        status.textContent = ''; return true;
+      } catch (_) {
+        status.textContent = 'Não foi possível carregar o áudio. Tente novamente ou escolha outro guia; a esfera continua disponível.';
+        return false;
+      }
     }
     function stopSound() {
       lastPhase = '';
@@ -60,86 +83,87 @@
           const t = context.currentTime;
           old.gain.gain.cancelScheduledValues(t);
           old.gain.gain.setValueAtTime(old.gain.gain.value, t);
-          old.gain.gain.linearRampToValueAtTime(0, t + 0.025);
-          old.oscillator.stop(t + 0.03);
+          old.gain.gain.linearRampToValueAtTime(0, t + .025);
+          old.source.stop(t + .03);
         } catch (_) {}
       }
-      if (speech && (speech.speaking || speech.pending)) speech.cancel();
     }
     function stop() {
-      generation++;
-      timers.forEach(clearTimeout); timers = [];
-      previewing = false; stopSound(); render();
+      generation++; timers.forEach(clearTimeout); timers = [];
+      previewing = false; instructing = false; stopSound(); render();
+    }
+    function connect(source, gain, filter) {
+      if (filter) { source.connect(filter); filter.connect(gain); } else source.connect(gain);
+      gain.connect(master); const node = {source, gain}; active = node;
+      source.onended = () => { source.disconnect(); gain.disconnect(); if (filter) filter.disconnect(); if (active === node) active = null; };
+      return node;
     }
     function oscillator(start, end, seconds, chime) {
-      const t = context.currentTime;
-      const o = context.createOscillator(), g = context.createGain();
+      const t = context.currentTime, o = context.createOscillator(), g = context.createGain();
       o.type = 'sine'; o.frequency.setValueAtTime(start, t);
       if (!chime) o.frequency.linearRampToValueAtTime(end, t + seconds);
       g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(1, t + Math.min(0.025, seconds / 3));
-      g.gain.setValueAtTime(1, t + Math.max(0.025, seconds - 0.04));
+      g.gain.linearRampToValueAtTime(.12, t + Math.min(.025, seconds / 3));
+      g.gain.setValueAtTime(.12, t + Math.max(.025, seconds - .04));
       g.gain.linearRampToValueAtTime(0, t + seconds);
-      o.connect(g); g.connect(master);
-      const node = { oscillator: o, gain: g }; active = node;
-      o.onended = () => { o.disconnect(); g.disconnect(); if (active === node) active = null; };
-      o.start(t); o.stop(t + seconds + 0.01);
+      connect(o, g); o.start(t); o.stop(t + seconds + .01);
+    }
+    function recording(name, remaining = Infinity) {
+      const buffer = buffers.get(name); if (!buffer) return;
+      const source = context.createBufferSource(), gain = context.createGain();
+      source.buffer = buffer; gain.gain.value = 1;
+      const node = connect(source, gain), ended = source.onended;
+      source.onended = () => { const current = active === node; ended(); if (name === 'orientacoes' && current) { instructing = false; status.textContent = 'Orientações concluídas.'; render(); } };
+      const cue = cues[name];
+      source.start(0, cue.offset, Math.min(cue.duration, remaining, buffer.duration - cue.offset));
     }
     function phase(f, elapsed = 0) {
-      if (!f || document.hidden || mode.value === 'off' || +volume.value === 0) return;
-      if (mode.value !== 'voice' && (!context || context.state !== 'running')) return;
+      if (!f || document.hidden || mode.value === 'off' || +volume.value === 0 || !context || context.state !== 'running') return;
       if (lastPhase === f.nome) return;
       stopSound(); lastPhase = f.nome;
-      const remaining = Math.max(0.05, f.dur - elapsed);
+      const remaining = Math.max(.05, f.dur - elapsed), fraction = Math.max(0, Math.min(1, elapsed / f.dur));
       if (mode.value === 'continuous') {
         if (f.nome !== 'INSPIRAR' && f.nome !== 'EXPIRAR') return;
-        const a = f.nome === 'INSPIRAR' ? 220 : 440;
-        const b = f.nome === 'INSPIRAR' ? 440 : 220;
-        const fraction = Math.max(0, Math.min(1, elapsed / f.dur));
+        const a = f.nome === 'INSPIRAR' ? 220 : 440, b = f.nome === 'INSPIRAR' ? 440 : 220;
         oscillator(a + (b - a) * fraction, b, remaining, false);
+
       } else if (mode.value === 'chime') {
         const pitch = f.nome === 'INSPIRAR' ? 523.25 : f.nome === 'EXPIRAR' ? 349.23 : 261.63;
-        oscillator(pitch, pitch, Math.min(0.22, remaining), true);
-      } else if (voiceAvailable) {
-        const u = new window.SpeechSynthesisUtterance(f.nome === 'INSPIRAR' ? 'Inspire' : f.nome === 'EXPIRAR' ? 'Expire' : 'Pausa');
-        const voices = speech.getVoices();
-        const selected = voices.find(v => /^pt[-_]BR$/i.test(v.lang)) || voices.find(v => /^pt/i.test(v.lang));
-        if (selected) u.voice = selected;
-        u.lang = selected?.lang || 'pt-BR'; u.rate = 0.9; u.volume = +volume.value / 100;
-        u.onerror = e => { if (!['canceled', 'interrupted'].includes(e.error)) status.textContent = 'A voz não está disponível. Verifique a voz em português no aparelho ou escolha outro guia.'; };
-        speech.speak(u);
-      }
+        oscillator(pitch, pitch, Math.min(.22, remaining), true);
+      } else if (mode.value === 'voice') recording(f.nome === 'INSPIRAR' ? 'inspire' : f.nome === 'EXPIRAR' ? 'expire' : 'pausa', remaining);
     }
-    function setRunning(value) {
-      running = value; stop(); status.textContent = ''; render();
-    }
+    function setRunning(value) { running = value; stop(); status.textContent = ''; render(); }
     mode.addEventListener('change', () => {
-      stop(); save(); status.textContent = ''; render();
-      const current = generation;
+      stop(); save(); status.textContent = ''; render(); const current = generation;
       void unlock().then(() => { if (generation === current) onChange(); });
     });
     volume.addEventListener('input', () => {
-      if (master) master.gain.setTargetAtTime(+volume.value / 100 * 0.12, context.currentTime, 0.025);
-      save(); render();
-      // Zero volume also cancels a spoken cue; restoring it re-syncs with the session.
-      if (+volume.value === 0) stopSound();
-      else if (!lastPhase && running) onChange();
+      if (master) master.gain.setTargetAtTime(+volume.value / 100, context.currentTime, .025);
+      save(); render(); if (+volume.value === 0) stopSound(); else if (!lastPhase && running) onChange();
+    });
+    instructions.addEventListener('click', async () => {
+      if (instructing) { stop(); status.textContent = ''; return; }
+      if (running) return;
+      stop(); const current = generation; instructing = true; render(); status.textContent = 'Carregando orientações…';
+      try {
+        if (!await unlock(true)) { if (generation === current) { instructing = false; render(); } return; }
+        await load('orientacoes');
+        if (generation !== current || running || document.hidden) return;
+        status.textContent = 'Ouvindo orientações.'; recording('orientacoes');
+      } catch (_) { if (generation === current) { instructing = false; render(); status.textContent = 'Não foi possível carregar as orientações. Toque para tentar novamente.'; } }
     });
     preview.addEventListener('click', async () => {
       if (previewing) { stop(); status.textContent = ''; return; }
       if (running || mode.value === 'off') return;
-      stop(); const current = generation; await unlock();
+      stop(); const current = generation; if (!await unlock()) return;
       if (generation !== current || document.hidden || running) return;
       previewing = true; render(); status.textContent = 'Exemplo de 10 segundos: inspiração, pausa, expiração e pausa.';
-      phase({ nome: 'INSPIRAR', dur: 4 });
-      for (const [delay, nome, dur] of [[4000, 'SEGURAR', 1], [5000, 'EXPIRAR', 4], [9000, 'PAUSAR', 1]]) {
-        timers.push(setTimeout(() => { if (generation === current) phase({ nome, dur }); }, delay));
-      }
+      phase({nome: 'INSPIRAR', dur: 4});
+      for (const [delay, nome, dur] of [[4000, 'SEGURAR', 1], [5000, 'EXPIRAR', 4], [9000, 'PAUSAR', 1]]) timers.push(setTimeout(() => { if (generation === current) phase({nome, dur}); }, delay));
       timers.push(setTimeout(() => { if (generation === current) { stop(); status.textContent = 'Exemplo concluído.'; } }, 10000));
     });
     window.addEventListener('pagehide', stop);
     document.addEventListener('visibilitychange', () => { if (document.hidden) { stop(); status.textContent = 'Áudio interrompido ao sair da página.'; } });
-    render();
-    return { unlock, phase, stop, setRunning };
+    render(); return {unlock, phase, stop, setRunning};
   };
 })();
