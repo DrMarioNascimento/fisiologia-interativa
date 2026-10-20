@@ -303,7 +303,13 @@ body{min-width:0;-webkit-text-size-adjust:100%}
     let executando=false,pausado=false,frameId=null,faseAtual=0,inicioFase=0;
     let tempoAntesPausa=0,ciclos=0,inicioSessao=0,tempoSessaoAcumulado=0,wakeLock=null;
     let presetAtivo=null;
-    const respiratoryAudio=window.createRespiratoryAudio({onChange:sincronizarAudio});
+    const respiratoryAudio=window.createRespiratoryAudio
+      ? window.createRespiratoryAudio({onChange:sincronizarAudio})
+      : {unlock(){},phase(){},stop(){},setRunning(){}};
+    if(!window.createRespiratoryAudio){
+      ["respAudioMode","respAudioVolume","respAudioPreview"].forEach(id=>document.getElementById(id).disabled=true);
+      document.getElementById("respAudioStatus").textContent="Guia sonoro indisponível. Recarregue a página para tentar novamente; o ritmo visual continua funcionando.";
+    }
     function sincronizarAudio(){
       if(executando&&!pausado)respiratoryAudio.phase(fases()[faseAtual],Math.max(0,(performance.now()-inicioFase)/1000));
     }
