@@ -1,4 +1,4 @@
-/* Identidade aprovada da Educação Física. Não altera cálculos, escalas ou cores de séries. */
+/* Identidade aprovada dos dois cursos. Preserva modelos, cores e acabamento dos cards. */
 .fi-ef-ui{--fi-ef-unit:#80c5af}
 .fi-ef-ui[data-fi-ef-unit="celular"]{--fi-ef-unit:#b49bff}
 .fi-ef-ui[data-fi-ef-unit="muscular"]{--fi-ef-unit:#ff9f57}
@@ -14,9 +14,26 @@
 .fi-ef-ui .fi-ef-brand-copy{display:block!important;min-width:0;margin:0!important;padding:0!important}
 .fi-ef-ui .fi-ef-brand-copy b{display:block!important;color:#ecf6fb!important;font:750 15px/1.3 "Segoe UI",Arial,sans-serif!important;letter-spacing:0!important;text-transform:none!important}
 .fi-ef-ui .fi-ef-brand-copy small{display:block!important;color:#bed2df!important;font:500 11px/1.4 "Segoe UI",Arial,sans-serif!important;margin:3px 0 0!important;letter-spacing:0!important;text-transform:none!important}
-/* A própria borda acompanha os dois cantos: não é uma faixa retangular sobreposta. */
-.fi-ef-ui [data-fi-ef-card]{border-radius:18px!important;border-left:5px solid var(--card-accent,var(--phase,var(--accent,var(--c,var(--fi-ef-unit)))))!important;box-shadow:inset 0 1px 0 #ffffff28,0 4px 0 #05141e,0 8px 14px #0004!important;background-clip:padding-box}
-.fi-ef-ui .fi-ef-flat-strip::before{display:none!important}
+/* A borda real acompanha os cantos. A prioridade supera as faixas legadas,
+   inclusive as regras com :not(#cards-reference-reserved) e #dim-root.
+   Fundos, brilhos, sombras, dimensões e posições continuam os já aprovados. */
+.fi-ef-ui [data-fi-ef-card]:not(#fi-curva-reservada):not(#fi-curva-reservada){
+ --fi-ef-card-accent:var(--reference-accent,var(--card-accent,var(--metric-strong,var(--phase,var(--var-color,var(--indicator,var(--accent,var(--c,var(--fi-ef-unit)))))))));
+ border-radius:18px!important;border-left:5px solid var(--fi-ef-card-accent)!important;
+ background-clip:padding-box;
+}
+.fi-ef-ui [data-fi-ef-card]:not(#fi-curva-reservada):not(#fi-curva-reservada).fi-ef-flat-strip::before,
+.fi-ef-ui [data-fi-ef-card]:not(#fi-curva-reservada):not(#fi-curva-reservada).fi-ef-flat-strip-after::after{content:none!important;display:none!important}
 .fi-ef-ui .fi-ef-legacy-label{display:none!important}
-@media(max-width:540px){.fi-ef-ui .fi-ef-brand-row{margin-top:34px;padding:0}.fi-ef-ui a.fi-ef-brand{gap:14px!important}.fi-ef-ui .fi-ef-brand-copy b{font-size:14px!important}.fi-ef-ui .fi-ef-brand-copy small{font-size:10px!important}.fi-ef-ui [data-fi-ef-card]{border-radius:16px!important}}
+/* As linhas de leitura também precisam de cantos reais nas células externas. */
+.fi-ef-ui table:has(tr[data-fi-ef-card]){border-collapse:separate!important;border-spacing:0 8px!important}
+.fi-ef-ui tr[data-fi-ef-card]>:first-child:not(#fi-curva-reservada):not(#fi-curva-reservada){border-radius:18px 0 0 18px!important;border-left:5px solid var(--fi-ef-card-accent)!important}
+.fi-ef-ui tr[data-fi-ef-card]>:last-child:not(#fi-curva-reservada):not(#fi-curva-reservada){border-radius:0 18px 18px 0!important}
+@media(max-width:540px){
+ .fi-ef-ui .fi-ef-brand-row{margin-top:34px;padding:0}
+ .fi-ef-ui a.fi-ef-brand{gap:14px!important}
+ .fi-ef-ui .fi-ef-brand-copy b{font-size:14px!important}
+ .fi-ef-ui .fi-ef-brand-copy small{font-size:10px!important}
+ .fi-ef-ui [data-fi-ef-card]:not(#fi-curva-reservada):not(#fi-curva-reservada){border-radius:16px!important}
+}
 @media print{.fi-ef-ui .fi-ef-brand-row{margin-top:30px}.fi-ef-ui [data-fi-ef-card]{box-shadow:none!important}}

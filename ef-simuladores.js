@@ -3,8 +3,8 @@
  'use strict';
  const script=document.currentScript;
  const root=new URL('.',script.src);
- const VERSION='20261019-cortisol1';
- const CARDS='.card,.panel,.lab,.metric,.metric-card,.metric-box,.stat,.stat-card,.kpi,.section-card,.stage,.hypothalamus-origin,.pituitary-group,.lactation-bridge,.stage-node,.top-col,.control-group,.slider-card,.toggle-card,.chart-card,.tissue-card,.concepts>p,.response-indicators>div,.tabs>button,.tabs>a,.states>button,.quick>button,.state-row>button,.stage-track>button,.stage-track>.stage,[class$="-card"],[class*="-card "],.dim-hero,.module-card,.canal,.controls,.toolbar,.states,.quick,.stage-map,.timeline-step,.status-banner,.perm-section,.phase-banner,.intervention-console,.system-reading,.boundary-card,.graph-metric,.activation-panel-clean,.result-pill,.interpret-block,.eq-box,.capacity-panel,.learning-panel,.reading-banner,.equation,.footer-box,.explain-box,.formula-card,.mode-panel,.settings-panel,.control-capsule,.slider-box,.co2-box,.co2-card,.vo2-card,.readout-box,.graph-block,.eq-mini,.interpret-inline,.painel,.caixa,.cartao,.selector-line,.mechanics-line,.actions,.metrics-wide,.fi-ef-ui[data-fi-course="fi"] .monitor,.fi-ef-ui[data-fi-course="fi"] .mini,.fi-ef-ui[data-fi-course="fi"] .tend,.fi-ef-ui[data-fi-course="fi"] .caso-c';
+ const VERSION='20261020-curvas2';
+ const CARDS='.card,.panel,.lab,.metric,.metric-card,.metric-box,.stat,.stat-card,.kpi,.section-card,.stage,.hypothalamus-origin,.pituitary-group,.lactation-bridge,.stage-node,.top-col,.control-group,.slider-card,.toggle-card,.chart-card,.tissue-card,.concepts>p,.response-indicators>div,.tabs>button,.tabs>a,.states>button,.quick>button,.state-row>button,.stage-track>button,.stage-track>.stage,[class$="-card"],[class*="-card "],.dim-hero,.module-card,.canal,.controls,.toolbar,.states,.quick,.stage-map,.timeline-step,.status-banner,.perm-section,.phase-banner,.intervention-console,.system-reading,.boundary-card,.graph-metric,.activation-panel-clean,.result-pill,.interpret-block,.eq-box,.capacity-panel,.learning-panel,.reading-banner,.equation,.footer-box,.explain-box,.formula-card,.mode-panel,.settings-panel,.control-capsule,.slider-box,.co2-box,.co2-card,.vo2-card,.readout-box,.graph-block,.eq-mini,.interpret-inline,.painel,.caixa,.cartao,.selector-line,.mechanics-line,.actions,.metrics-wide,.fi-ef-ui[data-fi-course="fi"] .monitor,.fi-ef-ui[data-fi-course="fi"] .mini,.fi-ef-ui[data-fi-course="fi"] .tend,.fi-ef-ui[data-fi-course="fi"] .caso-c,[class^="card-"],[class*=" card-"],[class$="-box"],[class*="-box "],[class$="-readout"],[class*="-readout "],.readout,.vital-chip,.monitor-chip,.epo-mini,.interpret-card,.modal-box,.formula-box,.current-scenario-card,.scenario-panel,.mobile-topbar,.control-board,.control-accordion,.state-panel,.membrane-control,.comp-control,.comp,.eq,.science,.science-note,.clinical-summary,.molecule-legend,.legend,.scenario-row,.selector,.topbar,.top-ui,.top-grid,.bottom-grid,.footer-block,.time-speed,.modes,.mode-tabs,.chronometer,.protocol,.control,.pick,.toggle,.speed-wrap,.speed-control,.parameter-controls,.action-controls,.variables-controls,.figure-toolbar,.state-section,.settings-grid>label,.physio-alerts>p,.stage-status,.step-box,.note,.howto>p,.flow .node,.cycle-groups .grp,.ux-feedback,.state-group-title,.dim-guide,.dim-control-block,.dim-selected-task,.dim-neural-readout,.dim-pedcell,.dim-parallel-card,.dim-guide-item,.dim-force-compare>div,.dim-mhead-live>span,.readouts>div,.daily-readouts>div,.bone-state-item,.diagram-wrap,.chart-wrap,.mech-cascade,.stage-wrap,.units-stage,.chart,.wide-chart,.setting,.chain,.summary-line:has([id^="graph"]),#readoutBody tr,#interpretationRow>details,#interpretAll,#rum-sim #scenario-guide,#rum-sim #fiber-guide,.fi-ef-ui .monitor,.fi-ef-ui .mini,.fi-ef-ui .tend,.fi-ef-ui .spark,.fi-ef-ui .caso-c,.regras>div,.sinais>div,.avisos>div,.checklist>div,.fluxo-nums>div,.splits>div,.porque,.atend,.limites,.interpret details';
  function isFisio(url){const u=new URL(url,root);return /\/fisioterapia\//i.test(u.pathname)||/tutor-fisio\.html$/i.test(u.pathname)||['fisioterapia','fi','fisio'].includes((u.searchParams.get('percurso')||u.searchParams.get('curso')||'').toLowerCase());}
  if(/\/tutor-(?:ef|fisio)\.html$/i.test(location.pathname))return;
  const fisio=isFisio(location.href),course=fisio?'fi':'ef',courseName=fisio?'Fisioterapia':'Educação Física';
@@ -43,15 +43,21 @@
     }
    }
    function mark(el){
-    if(el.namespaceURI!=='http://www.w3.org/1999/xhtml'||el.closest('.fi-ef-brand,#fi-tutor-widget,.fi-tutor-widget,[data-fi-tutor]')||el.hasAttribute('data-fi-ef-card'))return;
+    if(el.namespaceURI!=='http://www.w3.org/1999/xhtml'||el.closest('.fi-ef-brand,#fi-tutor-widget,.fi-tutor-widget,[data-fi-tutor]'))return;
     el.setAttribute('data-fi-ef-card','');
-    const before=win.getComputedStyle(el,'::before'),width=parseFloat(before.width);
-    if(before.content!=='none'&&before.position==='absolute'&&width>0&&width<=12&&parseFloat(before.left)<=1)el.classList.add('fi-ef-flat-strip');
+    for(const pseudo of ['before','after']){
+     const style=win.getComputedStyle(el,'::'+pseudo),width=parseFloat(style.width);
+     // Only suppress an empty decorative strip, never text, icons or the corner glow.
+     if(!['none','normal','""',"''"].includes(style.content)||style.position!=='absolute'||!(width>0&&width<=12)||!(parseFloat(style.left)<=1)||!(parseFloat(style.top)<=1)||!(parseFloat(style.bottom)<=1||parseFloat(style.height)>=el.clientHeight-4))continue;
+     if(style.content==='none'||style.content==='normal')continue;
+     el.classList.add(pseudo==='before'?'fi-ef-flat-strip':'fi-ef-flat-strip-after');
+    }
    }
    function scan(node){if(node.nodeType!==1)return;if(node.matches(CARDS))mark(node);node.querySelectorAll(CARDS).forEach(mark);}
    scan(doc.body);
+   css.addEventListener('load',()=>scan(doc.body));
    let queued=false;const pending=new Set();
-   const observer=new win.MutationObserver(records=>{for(const r of records)for(const n of r.addedNodes)if(n.nodeType===1)pending.add(n);if(pending.size&&!queued){queued=true;win.requestAnimationFrame(()=>{queued=false;for(const n of pending)if(n.isConnected)scan(n);pending.clear();});}});
+   const observer=new win.MutationObserver(records=>{for(const r of records){if(r.target.nodeType===1&&r.target.matches('style'))pending.add(doc.body);for(const n of r.addedNodes)if(n.nodeType===1)pending.add(n.matches('style,link[rel="stylesheet"]')?doc.body:n);}if(pending.size&&!queued){queued=true;win.requestAnimationFrame(()=>{queued=false;for(const n of pending)if(n.isConnected)scan(n);pending.clear();});}});
    observer.observe(doc.body,{childList:true,subtree:true});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>mount(document,entry),{once:true});else mount(document,entry);
