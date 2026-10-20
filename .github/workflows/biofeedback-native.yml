@@ -1,0 +1,24 @@
+name: Biofeedback — base nativa
+on:
+  push:
+    paths: ['native/respirar/**', 'biofeedback-*', 'respirar/**', 'scripts/build-biofeedback.cjs', 'ef-simuladores.css', '.github/workflows/biofeedback-native.yml']
+  pull_request:
+    paths: ['native/respirar/**', 'biofeedback-*', 'respirar/**', 'scripts/build-biofeedback.cjs', 'ef-simuladores.css', '.github/workflows/biofeedback-native.yml']
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: native/respirar
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: native/respirar/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npx cap add android
+      - run: npx cap sync android
+      - run: git diff --exit-code -- ../../respirar

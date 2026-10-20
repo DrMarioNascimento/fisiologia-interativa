@@ -1,0 +1,7 @@
+{
+  "appId":"br.com.drmarionascimento.respirar",
+  "appName":"Respirar — Fisiologia Interativa",
+  "webDir":"www", "loggingBehavior":"debug",
+  "android":{"allowMixedContent":false},
+  "plugins":{"LocalNotifications":{"iconColor":"#81DBBF"}}
+}

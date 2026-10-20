@@ -37,3 +37,7 @@ A próxima sessão usa o horário local do aparelho. A agenda funciona offline e
 Próximas etapas de produto: validação em aparelhos reais, lembretes opcionais, empacotamento e testes nativos.
 
 Prof. Mário César Nascimento. PhD ©
+
+## Preparação nativa
+
+A base de desenvolvimento Android/iOS e os lembretes locais opcionais estão em [native/respirar](../native/respirar/README.md). Ela reaproveita esta interface. Ainda depende de compilação, assinatura e validação em aparelhos reais; não há APK/IPA distribuído. A PWA mantém o comportamento atual, sem notificações em segundo plano.
