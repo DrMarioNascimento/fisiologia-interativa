@@ -57,7 +57,23 @@ Plataformas:
 #respAudioStatus:empty{display:none}
 </style><style id="session-style">
 .session-panel{grid-column:1/-1}.session-panel label:not(.session-sound){display:block;font-size:13px;margin:12px 0 8px;color:#bed1df}.session-panel select,.session-panel input[type=number]{box-sizing:border-box;width:100%;min-height:44px;padding:10px;border:1px solid #67899f;border-radius:12px;background:#112838;color:#eef8ff;font:inherit;font-size:14px}.session-panel select:focus-visible,.session-panel input:focus-visible{outline:3px solid #8bc4ff;outline-offset:3px}.session-sound{display:flex;align-items:center;gap:10px;min-height:44px;margin:12px 0;font-size:13px;color:#bed1df}.session-sound input{width:20px;height:20px}.session-live{font-size:14px;color:var(--accent-light);text-align:center;min-height:20px;margin:12px 0 0;font-variant-numeric:tabular-nums}.session-summary,.session-record{padding:14px;border:1px solid #436578;border-radius:18px;border-left:5px solid var(--accent-light);background:linear-gradient(140deg,#102531,#1c3444);margin:14px 0;overflow-wrap:anywhere}.session-summary h2{font-size:17px;margin:0 0 10px}.session-summary p,.session-record p{font-size:13px;line-height:1.6;color:#c1d6e1;margin:7px 0}.session-record .session-record-title{font-weight:700;color:#e8f3f9}.session-history{margin-top:18px;padding:12px;border:1px solid #436578;border-radius:18px}.session-history summary{cursor:pointer;min-height:30px;font-size:14px}.session-history{max-height:500px;overflow:auto}.session-panel [hidden]{display:none!important}
-</style></head>
+</style>
+<style id="desktop-workspace-20261020">
+/* Keep the complete session/audio workflow next to the sphere on large screens. */
+@media(min-width:1000px){
+ .app{grid-template-columns:minmax(0,1.35fr) minmax(350px,.85fr);grid-template-areas:"header header" "visual indicators" "visual session" "visual audio" "visual protocols" "settings settings" "signature signature";align-items:start}
+ .app>.header{grid-area:header}
+ .app>.main-layout{grid-area:visual;align-self:start;position:sticky;top:16px}
+ .app>.main-layout>.visual-card{height:auto;min-height:660px}
+ .app>.indicators{grid-area:indicators}
+ .app>#sessionDropdown{grid-area:session}
+ .app>#audioDropdown{grid-area:audio}
+ .app>#protocolDropdown{grid-area:protocols}
+ .app>#configDropdown{grid-area:settings}
+ .app>.signature{grid-area:signature}
+}
+</style>
+</head>
 <body>
   <h1 id="seo-title" style="display:none;">Biofeedback Respiratório</h1>
 
