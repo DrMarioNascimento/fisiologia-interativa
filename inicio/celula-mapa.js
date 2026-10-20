@@ -335,7 +335,12 @@ function renderPanelRaw(){
   document.getElementById('p-name').textContent=u.nome;
   document.getElementById('p-cell').textContent=u.cel;
   const ul=document.getElementById('p-sims');ul.innerHTML='';
-  u.sims.forEach(s=>{const li=document.createElement('li');li.innerHTML=`<a href="${esc(s.href)}" title="${esc(s.obj)}">${esc(s.t)}<span>${s.deep?esc(s.deep)+' →':'abrir →'}</span></a>`;ul.appendChild(li)});
+  u.sims.forEach(s=>{
+    const li=document.createElement('li');
+    const leitura=s.leitura ? `<a class="panel-reading" href="${esc(s.leitura)}" target="_blank" rel="noopener" aria-label="Leitura complementar: ${esc(s.t)}">Leitura complementar ↗</a>` : '';
+    li.innerHTML=`<a href="${esc(s.href)}" title="${esc(s.obj)}">${esc(s.t)}<span>${s.deep?esc(s.deep)+' →':'abrir →'}</span></a>${leitura}`;
+    ul.appendChild(li);
+  });
   const d=document.getElementById('p-doors');
   d.className='chips';
   const ico='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5 9 3l6 2.5 6-2.5v14L15 20l-6-2.5-6 2.5z"/><path d="M9 3v14.5M15 5.5V20"/></svg>';

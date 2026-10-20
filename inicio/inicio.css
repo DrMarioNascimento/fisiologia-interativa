@@ -319,3 +319,7 @@ dialog::backdrop{background:rgba(3,5,8,.82);backdrop-filter:blur(4px)}
 
 /* Reserva a altura do retrato também com a barra fixa e a rolagem restaurada. */
 .bar{padding-top:50px!important;overflow:visible}
+
+/* Mesmas leituras dos cards inferiores no painel do mapa de unidades. */
+.panel li a.panel-reading{width:fit-content;max-width:100%;margin:4px 0 3px;padding:6px 10px;color:var(--c);font-size:12px;line-height:1.35;white-space:normal}
+.panel li a:focus-visible{outline:2px solid var(--c);outline-offset:2px}
