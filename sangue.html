@@ -50,7 +50,7 @@
       html+='<link rel="stylesheet" href="./aprofundamento-visual.css?v=20260908"><link rel="stylesheet" href="./sangue-visual.css?v=20260908-volume">';
       const icone='<link rel="icon" href="./brand/orientador.webp">';const tutorCss=icone+'<link rel="stylesheet" href="./tutor-widget.css?v=4">';html=/<\/head>/i.test(html)?html.replace(/<\/head>/i,tutorCss+'</head>'):tutorCss+html;const tutorTags='<script src="./tutor-ef-data.js?v=20"></scr'+'ipt><script src="./tutor-widget.js?v=21"></scr'+'ipt>';html=/<\/body>/i.test(html)?html.replace(/<\/body>/i,tutorTags+'</body>'):html+tutorTags;document.open();
       document.write(html);
-      document.close();const theme=document.createElement('script');theme.src='ef-simuladores.js?v=20261020-curvas3';document.head.append(theme);
+      document.close();const theme=document.createElement('script');theme.src='ef-simuladores.js?v=20261020-curvas4';document.head.append(theme);
     })().catch(error=>{
       console.error(error);
       const status=document.getElementById('status');

@@ -3,7 +3,7 @@
  'use strict';
  const script=document.currentScript;
  const root=new URL('.',script.src);
- const VERSION='20261020-curvas3';
+ const VERSION='20261020-curvas4';
  const CARDS='.card,.panel,.lab,.metric,.metric-card,.metric-box,.stat,.stat-card,.kpi,.section-card,.stage,.hypothalamus-origin,.pituitary-group,.lactation-bridge,.stage-node,.top-col,.control-group,.slider-card,.toggle-card,.chart-card,.tissue-card,.concepts>p,.response-indicators>div,.tabs>button,.tabs>a,.states>button,.quick>button,.state-row>button,.stage-track>button,.stage-track>.stage,[class$="-card"],[class*="-card "],.dim-hero,.module-card,.canal,.controls,.toolbar,.states,.quick,.stage-map,.timeline-step,.status-banner,.perm-section,.phase-banner,.intervention-console,.system-reading,.boundary-card,.graph-metric,.activation-panel-clean,.result-pill,.interpret-block,.eq-box,.capacity-panel,.learning-panel,.reading-banner,.equation,.footer-box,.explain-box,.formula-card,.mode-panel,.settings-panel,.control-capsule,.slider-box,.co2-box,.co2-card,.vo2-card,.readout-box,.graph-block,.eq-mini,.interpret-inline,.painel,.caixa,.cartao,.selector-line,.mechanics-line,.actions,.metrics-wide,.fi-ef-ui[data-fi-course="fi"] .monitor,.fi-ef-ui[data-fi-course="fi"] .mini,.fi-ef-ui[data-fi-course="fi"] .tend,.fi-ef-ui[data-fi-course="fi"] .caso-c,.card-output,.card-context,.card-wide,[class$="-box"],[class*="-box "],[class$="-readout"],[class*="-readout "],.readout,.vital-chip,.monitor-chip,.epo-mini,.interpret-card,.modal-box,.formula-box,.current-scenario-card,.scenario-panel,.mobile-topbar,.control-board,.control-accordion,.state-panel,.membrane-control,.comp-control,.comp,.eq,.science,.science-note,.clinical-summary,.molecule-legend,.legend,.scenario-row,.selector,.topbar,.top-ui,.top-grid,.bottom-grid,.footer-block,.time-speed,.modes,.mode-tabs,.chronometer,.protocol,.control,.pick,.toggle,.speed-wrap,.speed-control,.parameter-controls,.action-controls,.variables-controls,.figure-toolbar,.state-section,.settings-grid>label,.physio-alerts>p,.stage-status,.step-box,.note,.howto>p,.flow .node,.cycle-groups .grp,.ux-feedback,.state-group-title,.dim-guide,.dim-control-block,.dim-selected-task,.dim-neural-readout,.dim-pedcell,.dim-parallel-card,.dim-guide-item,.dim-force-compare>div,.dim-mhead-live>span,.readouts>div,.daily-readouts>div,.bone-state-item,.diagram-wrap,.chart-wrap,.mech-cascade,.stage-wrap,.units-stage,.chart,.wide-chart,.setting,.chain,.summary-line:has([id^="graph"]),.num,.faixa,.scenario-picker,.scenario-help,.concept-guide,.feedback,.notice,.interpretation,.table-wrap,details,.controls>label,.parameter-controls>label,.action-controls>label,.pharm-label,#readoutBody tr,#interpretationRow>details,#interpretAll,#rum-sim #scenario-guide,#rum-sim #fiber-guide,.fi-ef-ui .monitor,.fi-ef-ui .mini,.fi-ef-ui .tend,.fi-ef-ui .spark,.fi-ef-ui .caso-c,.regras>div,.sinais>div,.avisos>div,.checklist>div,.fluxo-nums>div,.splits>div,.porque,.atend,.limites,.interpret details';
  function isFisio(url){const u=new URL(url,root);return /\/fisioterapia\//i.test(u.pathname)||/tutor-fisio\.html$/i.test(u.pathname)||['fisioterapia','fi','fisio'].includes((u.searchParams.get('percurso')||u.searchParams.get('curso')||'').toLowerCase());}
  if(/\/tutor-(?:ef|fisio)\.html$/i.test(location.pathname))return;
@@ -44,6 +44,12 @@
    }
    function mark(el){
     if(el.namespaceURI!=='http://www.w3.org/1999/xhtml'||el.closest('.fi-ef-brand,#fi-tutor-widget,.fi-tutor-widget,[data-fi-tutor]'))return;
+    if(el.tagName==='LABEL'&&!el.hasAttribute('data-fi-ef-card')){
+     const s=win.getComputedStyle(el);
+     const edge=parseFloat(s.borderTopWidth)+parseFloat(s.borderRightWidth)+parseFloat(s.borderBottomWidth)+parseFloat(s.borderLeftWidth);
+     const transparent=s.backgroundColor==='transparent'||s.backgroundColor==='rgba(0, 0, 0, 0)';
+     if(!edge&&transparent&&s.backgroundImage==='none'&&s.boxShadow==='none')return;
+    }
     el.setAttribute('data-fi-ef-card','');
     for(const pseudo of ['before','after']){
      const style=win.getComputedStyle(el,'::'+pseudo),width=parseFloat(style.width);
@@ -58,12 +64,11 @@
    function surface(el){
     if(el.hasAttribute('data-fi-ef-card')||el.closest(DRAWINGS))return;
     const s=win.getComputedStyle(el);
-    const horizontal=parseFloat(s.borderTopWidth)+parseFloat(s.borderBottomWidth);
     const vertical=parseFloat(s.borderLeftWidth)+parseFloat(s.borderRightWidth);
     const background=s.backgroundColor!=='transparent'&&s.backgroundColor!=='rgba(0, 0, 0, 0)';
     // Detect existing boxes regardless of their local names, including nested grids.
     // Layout wrappers without a visible surface and the physiological drawings are left alone.
-    if(horizontal>0&&vertical>0&&(background||s.backgroundImage!=='none'||s.boxShadow!=='none'))mark(el);
+    if(vertical>0&&(background||s.backgroundImage!=='none'||s.boxShadow!=='none'))mark(el);
    }
    function scan(node){
     if(node.nodeType!==1)return;
