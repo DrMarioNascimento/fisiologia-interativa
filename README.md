@@ -2,9 +2,9 @@
 
 ## Situação atual — 19 de outubro de 2026
 
-O percurso de EF contém as Unidades 01–06 e uma seção de integração cardiorrespiratória entre as Unidades 4 e 5. A **Unidade 06 — Sistema Endócrino** reúne seis entradas de simuladores, mapa mental e questões no Tutor EF. A Fisioterapia conserva seu percurso próprio; a inclusão endócrina e a moeda interativa não devem ser presumidas nos outros tutores.
+O percurso de EF contém as Unidades 01–06 e uma seção de integração cardiorrespiratória entre as Unidades 4 e 5. A **Unidade 06 — Sistema Endócrino** reúne seis entradas de simuladores, mapa mental e questões no Tutor EF. A Fisioterapia conserva seu percurso próprio; a inclusão endócrina permanece exclusiva da EF. Em 20 de outubro, o busto 3D interativo do tutor foi compartilhado entre `tutor-ef.html` e `tutor-fisio.html`, com giro, sons opcionais e arraste; posição e preferência de som são salvas separadamente por curso.
 
-A página inicial recebeu ajustes no enquadramento do avatar e na abertura dos mapas. Os recursos compartilhados de apresentação da EF ficam em `ef-simuladores.js`, `ef-simuladores.css` e `ef-simuladores-manifest.json`. O Tutor EF usa `tutor-ef-endocrino.js` para a unidade nova e `tutor-ef-coin.js`/`tutor-ef-coin.css` para a moeda arrastável e suas interações.
+A página inicial recebeu ajustes no enquadramento do avatar e na abertura dos mapas. Os recursos compartilhados de apresentação da EF ficam em `ef-simuladores.js`, `ef-simuladores.css` e `ef-simuladores-manifest.json`. O Tutor EF usa `tutor-ef-endocrino.js` para a unidade nova e `tutor-ef-coin.js`/`tutor-ef-coin.css` para o busto 3D arrastável e suas interações, também carregado pelo Tutor Fisio.
 
 ## Acessos oficiais de Fisiologia
 
