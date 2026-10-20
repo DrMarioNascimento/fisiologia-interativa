@@ -340,7 +340,7 @@
 
   function enableDrag() {
     const btn = launcher();
-    if (window.tutorEFCoin && location.pathname.endsWith('/tutor-ef.html')) {
+    if (window.tutorEFCoin && (location.pathname.endsWith('/tutor-ef.html') || location.pathname.endsWith('/tutor-fisio.html'))) {
       return window.tutorEFCoin.attach(btn, () => panel().hidden ? openTutor() : closeTutor(), placePanel);
     }
     let start=null, moved=false;
