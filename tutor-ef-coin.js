@@ -1,11 +1,13 @@
-/* Floating 3D tutor (anatomical bust) for Tutor EF and Tutor Fisio. The shared header is intentionally untouched.
+/* Floating 3D tutor (anatomical bust) for the site and Moodle tutors. The shared header is intentionally untouched.
    Keeps the original "coin" names (tutorEFCoin, .tutor-coin) so tutor-widget.js needs no change. */
 (function () {
   'use strict';
-  const isFisio = location.pathname.endsWith('/tutor-fisio.html');
-  if (!isFisio && !location.pathname.endsWith('/tutor-ef.html')) return;
-  const positionKey = isFisio ? 'tutorFisioPosition' : 'tutorEFPosition';
-  const soundKey = isFisio ? 'tutorFisioCoinSound' : 'tutorEFCoinSound';
+  const isMoodle = location.pathname.endsWith('/tutor-moodle.html');
+  const isFisio = location.pathname.endsWith('/tutor-fisio.html') ||
+    (isMoodle && new URLSearchParams(location.search).get('percurso') === 'fisioterapia');
+  if (!isMoodle && !isFisio && !location.pathname.endsWith('/tutor-ef.html')) return;
+  const positionKey = isMoodle ? (isFisio ? 'tutorMoodleFisioPosition' : 'tutorMoodleEFPosition') : (isFisio ? 'tutorFisioPosition' : 'tutorEFPosition');
+  const soundKey = isMoodle ? (isFisio ? 'tutorMoodleFisioSound' : 'tutorMoodleEFSound') : (isFisio ? 'tutorFisioCoinSound' : 'tutorEFCoinSound');
   const base = new URL('.', document.currentScript.src);
   const href = path => new URL(path, base).href;
   const read = key => { try { return localStorage.getItem(key); } catch (_) { return null; } };
@@ -80,7 +82,7 @@
       soundBtn.setAttribute('aria-label', sound ? 'Desativar sons do tutor' : 'Ativar sons do tutor');
     };
     updateSound();
-    document.querySelector('.tutor-head').insertBefore(soundBtn, document.querySelector('.tutor-close'));
+    document.querySelector('.tutor-head, .chat .head').insertBefore(soundBtn, document.querySelector('.tutor-close'));
     // Safari/iPhone só libera áudio criado e "destravado" dentro de um toque do usuário.
     const unlock = () => {
       try {
@@ -142,7 +144,7 @@
       const el = e.target.closest?.('button, a'); if (!el || el.disabled && !el.matches('.tutor-option,.opts button')) return;
       if (el.matches('.tutor-option')) react(el.classList.contains('wrong') ? 'wrong' : 'correct');
       else if (el.matches('.opts button')) react(el.classList.contains('ok') ? 'correct' : 'wrong');
-      else if (el.matches('.axis,[data-map],[data-open],.tutor-chip,.tutor-next,[data-tutor-action]')) react('tab');
+      else if (el.matches('.axis,[data-map],[data-open],.tutor-chip,.tutor-next,[data-tutor-action],.chip,.ai button')) react('tab');
     });
     const media = matchMedia('(prefers-reduced-motion: reduce)');
     init3D().catch(() => { btn.dataset.coinState = 'fallback'; });

@@ -35,9 +35,20 @@
     @media(max-width:640px){.chat{width:min(100%,96vw);height:min(320px,68vh);min-height:250px}.head{min-height:52px}}
     @media(max-height:420px){.chat:has(.ai:not([hidden])){height:calc(100vh - 4px);min-height:0;overflow:auto}.head{min-height:40px;padding:6px 10px}.ai details>div{max-height:70px}}
   </style>
+  <link rel="stylesheet" href="tutor-widget.css?v=5">
+  <link rel="stylesheet" href="tutor-ef-coin.css?v=moodle-20261020">
+  <script type="importmap">{"imports":{"three":"./ra/celula/visualizador/vendor/three.module.js"}}</script>
+  <style>
+    .chat[hidden]{display:none}
+    .chat .head{padding-right:82px;min-height:78px}
+    #moodleTutorLauncher.tutor-coin{top:8px;bottom:auto;right:max(10px,calc((100vw - 500px)/2 + 10px));width:55px;height:62px}
+    #moodleTutorLauncher .tutor-badge{display:none}
+    .chat .tutor-coin-sound{display:inline-block;margin-top:5px;font-size:10px;padding:3px 6px;color:#fff}
+    @media(max-height:420px){.chat .head{min-height:70px}}
+  </style>
 </head>
 <body>
-  <section class="chat" aria-label="Chat do Tutor de Fisiologia">
+  <section class="chat" id="moodleTutorChat" aria-label="Chat do Tutor de Fisiologia">
     <header class="head"><strong>Tutor de Fisiologia</strong><span>Educação Física • estudo guiado</span></header>
     <div class="ai" id="ai" hidden>
       <label><input type="checkbox" id="aiEnabled" disabled> Respostas personalizadas com IA</label>
@@ -162,5 +173,10 @@
       setupAI();
     })();
   </script>
+  <button class="tutor-launcher" id="moodleTutorLauncher" type="button" aria-label="Minimizar Tutor de Fisiologia" aria-expanded="true" aria-controls="moodleTutorChat">
+    <span class="tutor-portrait"></span><span class="tutor-badge" aria-hidden="true">?</span>
+  </button>
+  <script src="tutor-ef-coin.js?v=moodle-20261020"></script>
+  <script src="tutor-moodle-busto.js?v=moodle-20261020"></script>
 </body>
 </html>

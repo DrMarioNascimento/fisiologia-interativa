@@ -21,7 +21,7 @@ function setup(path = '/tutor-ef.html', stored = {}) {
   const btn = new Element(), portrait = new Element(), badge = new Element(), sound = new Element();
   btn.querySelector = selector => selector === '.tutor-portrait' ? portrait : badge;
   const storage = new Map(Object.entries(stored)), resize = [];
-  const context = { URL, location: { pathname: path }, performance: { now: () => 1000 },
+  const context = { URL, URLSearchParams, location: { pathname: path.split('?')[0], search: path.includes('?') ? '?' + path.split('?')[1] : '' }, performance: { now: () => 1000 },
     localStorage: { getItem: k => storage.get(k) ?? null, setItem: (k, v) => storage.set(k, v) },
     innerWidth: 1000, innerHeight: 700,
     document: { currentScript: { src: 'https://example.com/tutor-ef-coin.js' }, createElement: () => sound,
@@ -77,6 +77,17 @@ test('Fisio supports drag and sound with preferences independent of EF', () => {
   assert.equal(restored.sound.attributes['aria-pressed'], 'false');
   restored.btn.emit('click'); assert.equal(restored.toggles(), 1);
 });
-test('Other tutor pages remain untouched', () => {
-  assert.equal(setup('/tutor-moodle.html').context.window.tutorEFCoin, undefined);
+test('Both Moodle courses use the bust with separate saved preferences', () => {
+  for (const [path, key] of [['/tutor-moodle.html','EF'], ['/tutor-moodle.html?percurso=fisioterapia','Fisio']]) {
+    const s = setup(path);
+    assert.ok(s.context.window.tutorEFCoin);
+    s.btn.emit('pointerdown'); s.btn.emit('pointermove', { clientX: 520, clientY: 340 });
+    s.btn.emit('pointerup'); s.btn.emit('click');
+    assert.equal(s.toggles(), 0);
+    assert.deepEqual(JSON.parse(s.storage.get('tutorMoodle' + key + 'Position')), { left: 520, top: 340 });
+    s.sound.emit('click'); assert.equal(s.storage.get('tutorMoodle' + key + 'Sound'), 'off');
+  }
+});
+test('Non-tutor pages remain untouched', () => {
+  assert.equal(setup('/index.html').context.window.tutorEFCoin, undefined);
 });

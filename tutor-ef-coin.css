@@ -13,7 +13,7 @@
 
 /* Anel de interação na base: mantém cabeça e ombros livres. */
 .tutor-launcher.tutor-coin{--tutor-ring:#47ddc5;--tutor-ring-scale:1;isolation:isolate;transition:filter .2s ease,transform .2s ease}
-.tutor-launcher.tutor-coin::before{content:"";position:absolute;left:6%;bottom:0;width:88%;height:19%;box-sizing:border-box;border:2px solid var(--tutor-ring);border-radius:50%;background:radial-gradient(ellipse,transparent 45%,color-mix(in srgb,var(--tutor-ring) 22%,transparent) 72%,transparent 75%);box-shadow:0 0 9px var(--tutor-ring),inset 0 0 7px var(--tutor-ring);transform:scale(var(--tutor-ring-scale));transition:border-color .2s,box-shadow .2s,transform .2s,background .2s;pointer-events:none;z-index:-1}
+.tutor-launcher.tutor-coin::before{content:"";position:absolute;left:50%;bottom:-2%;width:108%;height:21%;box-sizing:border-box;border:2px solid var(--tutor-ring);border-radius:50%;background:radial-gradient(ellipse,transparent 45%,color-mix(in srgb,var(--tutor-ring) 22%,transparent) 72%,transparent 75%);box-shadow:0 0 9px var(--tutor-ring),inset 0 0 7px var(--tutor-ring);transform:translateX(-50%) scale(var(--tutor-ring-scale));transition:border-color .2s,box-shadow .2s,transform .2s,background .2s;pointer-events:none;z-index:-1}
 .tutor-launcher.tutor-coin:focus-visible{--tutor-ring:#8bd5ff;--tutor-ring-scale:1.12}
 @media(hover:hover){.tutor-launcher.tutor-coin:hover{--tutor-ring:#8bd5ff;--tutor-ring-scale:1.12;box-shadow:none;filter:drop-shadow(0 6px 12px #35b6c866)}}
 .tutor-launcher.tutor-coin:active{--tutor-ring:#ffcf70;--tutor-ring-scale:.92;transform:translateY(1px)}
@@ -23,5 +23,5 @@
 .tutor-launcher.tutor-coin[data-reaction="correct"]{--tutor-ring:#7cff9a}
 .tutor-launcher.tutor-coin[data-reaction="wrong"]{--tutor-ring:#ffad70}
 .tutor-launcher.tutor-coin[data-reaction]::before{animation:tutor-ring-pulse .7s ease-out}
-@keyframes tutor-ring-pulse{0%{transform:scale(.94);opacity:.7}45%{transform:scale(1.22);opacity:1}100%{transform:scale(var(--tutor-ring-scale));opacity:1}}
+@keyframes tutor-ring-pulse{0%{transform:translateX(-50%) scale(.94);opacity:.7}45%{transform:translateX(-50%) scale(1.22);opacity:1}100%{transform:translateX(-50%) scale(var(--tutor-ring-scale));opacity:1}}
 @media(prefers-reduced-motion:reduce){.tutor-launcher.tutor-coin,.tutor-launcher.tutor-coin::before{transition:none;animation:none!important}}
