@@ -1,8 +1,11 @@
-/* Floating 3D tutor (anatomical bust) for Tutor EF only. The shared header is intentionally untouched.
+/* Floating 3D tutor (anatomical bust) for Tutor EF and Tutor Fisio. The shared header is intentionally untouched.
    Keeps the original "coin" names (tutorEFCoin, .tutor-coin) so tutor-widget.js needs no change. */
 (function () {
   'use strict';
-  if (!location.pathname.endsWith('/tutor-ef.html')) return;
+  const isFisio = location.pathname.endsWith('/tutor-fisio.html');
+  if (!isFisio && !location.pathname.endsWith('/tutor-ef.html')) return;
+  const positionKey = isFisio ? 'tutorFisioPosition' : 'tutorEFPosition';
+  const soundKey = isFisio ? 'tutorFisioCoinSound' : 'tutorEFCoinSound';
   const base = new URL('.', document.currentScript.src);
   const href = path => new URL(path, base).href;
   const read = key => { try { return localStorage.getItem(key); } catch (_) { return null; } };
@@ -20,11 +23,11 @@
       left = clamp(left, innerWidth - btn.offsetWidth - 6);
       top = clamp(top, innerHeight - btn.offsetHeight - 6);
       Object.assign(btn.style, { left: left + 'px', top: top + 'px', right: 'auto', bottom: 'auto' });
-      if (persist) save('tutorEFPosition', JSON.stringify({ left, top }));
+      if (persist) save(positionKey, JSON.stringify({ left, top }));
       placePanel();
     }
     try {
-      const p = JSON.parse(read('tutorEFPosition'));
+      const p = JSON.parse(read(positionKey));
       if (p && Number.isFinite(p.left) && Number.isFinite(p.top)) position(p.left, p.top);
     } catch (_) {}
     btn.addEventListener('pointerdown', e => {
@@ -68,7 +71,7 @@
     });
     window.addEventListener('resize', () => position(btn.offsetLeft, btn.offsetTop));
 
-    let sound = read('tutorEFCoinSound') !== 'off', audio, lastSound = 0; // som ligado por padrão
+    let sound = read(soundKey) !== 'off', audio, lastSound = 0; // som ligado por padrão
     const soundBtn = document.createElement('button');
     soundBtn.type = 'button'; soundBtn.className = 'tutor-coin-sound';
     const updateSound = () => {
@@ -123,7 +126,7 @@
         notes.forEach((frequency, i) => note(frequency, t0 + i * 0.09, 0.18, 'sine', 0.12));
       } catch (_) {}
     }
-    soundBtn.addEventListener('click', () => { sound = !sound; save('tutorEFCoinSound', sound ? 'on' : 'off'); updateSound(); if (sound) tone('tab'); });
+    soundBtn.addEventListener('click', () => { sound = !sound; save(soundKey, sound ? 'on' : 'off'); updateSound(); if (sound) tone('tab'); });
 
     let animate = () => {};
     const react = kind => { animate(kind); tone(kind); };
