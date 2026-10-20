@@ -2,7 +2,7 @@
 
 A agenda já existe na versão web. Esta base acrescenta lembretes locais opcionais ao aplicativo nativo e reaproveita a mesma interface, os protocolos e os MP3. Não altera a página publicada nem habilita notificações na PWA.
 
-Estado: pacote web nativo gerado, projeto Android criado e sincronizado com o plugin; lógica de lembretes testada com o sistema simulado. Ainda não há APK/IPA assinado ou validação em aparelho real. A primeira distribuição será de teste, antes de lojas.
+Estado: base nativa e lógica de lembretes verificadas. O workflow Biofeedback — base nativa compila um APK Android de teste e um aplicativo para o simulador iOS, disponíveis como artefatos por 30 dias quando os respectivos jobs terminam com sucesso. O pacote iOS do simulador não instala em iPhone. A validação em aparelhos reais permanece pendente; não há distribuição nas lojas.
 
 ## Preparar
 
@@ -61,3 +61,12 @@ Não marcar como validado com base apenas nos testes automatizados. Primeiro ger
 Referências: [Capacitor 8](https://capacitorjs.com/docs), [notificações locais](https://capacitorjs.com/docs/apis/local-notifications), [ambiente de desenvolvimento](https://capacitorjs.com/docs/getting-started/environment-setup).
 
 Prof. Mário César Nascimento. PhD ©
+
+## Pacotes de teste no GitHub
+
+Abra Actions → Biofeedback — base nativa → execução concluída. Em Artifacts:
+
+- **Respirar-Android-Teste**: ZIP com APK debug, identificação do commit e SHA-256. Extraia o ZIP e transfira o APK para um Android de teste. A instalação fora da loja é uma ação da pessoa no próprio aparelho. Não é um pacote de produção.
+- **Respirar-iOS-Simulador**: aplicativo compilado para o simulador no Mac. Não é IPA e não instala no iPhone. Para teste no iPhone, abrir o projeto no Xcode com uma equipe de assinatura válida, ou preparar distribuição assinada pelo TestFlight.
+
+A execução pode ser iniciada novamente pelo botão Run workflow. Compilar com sucesso confirma a construção do pacote, mas não valida a entrega dos lembretes com o aplicativo fechado. Use a matriz de testes acima no aparelho.

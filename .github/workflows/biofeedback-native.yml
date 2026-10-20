@@ -4,9 +4,13 @@ on:
     paths: ['native/respirar/**', 'biofeedback-*', 'respirar/**', 'scripts/build-biofeedback.cjs', 'ef-simuladores.css', '.github/workflows/biofeedback-native.yml']
   pull_request:
     paths: ['native/respirar/**', 'biofeedback-*', 'respirar/**', 'scripts/build-biofeedback.cjs', 'ef-simuladores.css', '.github/workflows/biofeedback-native.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  validar:
+  android:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     defaults:
       run:
         working-directory: native/respirar
@@ -17,8 +21,63 @@ jobs:
           node-version: '24'
           cache: npm
           cache-dependency-path: native/respirar/package-lock.json
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
       - run: npm ci --no-audit --no-fund
       - run: npm test
       - run: npx cap add android
       - run: npx cap sync android
       - run: git diff --exit-code -- ../../respirar
+      - name: Compilar APK de teste
+        run: bash android/gradlew -p android assembleDebug --no-daemon --console=plain
+      - name: Verificar e identificar o pacote
+        run: |
+          mkdir -p packages
+          cp android/app/build/outputs/apk/debug/app-debug.apk packages/Respirar-Android-Teste.apk
+          sha256sum packages/Respirar-Android-Teste.apk > packages/SHA256SUMS.txt
+          printf 'Respirar — pacote Android de teste\nCommit: %s\nAndroid mínimo: 7.0 (API 24)\nAssinatura: debug, sem publicação nas lojas\n' "$GITHUB_SHA" > packages/LEIA-ME.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Respirar-Android-Teste
+          path: native/respirar/packages/
+          if-no-files-found: error
+          retention-days: 30
+  ios:
+    runs-on: macos-15
+    timeout-minutes: 25
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+    defaults:
+      run:
+        working-directory: native/respirar
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: native/respirar/package-lock.json
+      - run: xcodebuild -version
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npx cap add ios
+      - run: npx cap sync ios
+      - name: Compilar para simulador iOS
+        run: >-
+          xcodebuild -project ios/App/App.xcodeproj -scheme App
+          -configuration Debug -sdk iphonesimulator
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath ios-build CODE_SIGNING_ALLOWED=NO build
+      - name: Empacotar aplicativo do simulador
+        run: |
+          mkdir -p packages
+          ditto -c -k --keepParent ios-build/Build/Products/Debug-iphonesimulator/App.app packages/Respirar-iOS-Simulador.zip
+          printf 'Pacote exclusivo para o simulador iOS no Mac. Não instala em iPhone.\nCommit: %s\n' "$GITHUB_SHA" > packages/LEIA-ME.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Respirar-iOS-Simulador
+          path: native/respirar/packages/
+          if-no-files-found: error
+          retention-days: 30
