@@ -3,9 +3,8 @@
 (function () {
   'use strict';
   const isMoodle = location.pathname.endsWith('/tutor-moodle.html');
-  const isFisio = location.pathname.endsWith('/tutor-fisio.html') ||
-    (isMoodle && new URLSearchParams(location.search).get('percurso') === 'fisioterapia');
-  if (!isMoodle && !isFisio && !location.pathname.endsWith('/tutor-ef.html')) return;
+  const isFisio = location.pathname.includes('/fisioterapia/') || location.pathname.endsWith('/tutor-fisio.html') ||
+    new URLSearchParams(location.search).get('percurso') === 'fisioterapia';
   const positionKey = isMoodle ? (isFisio ? 'tutorMoodleFisioPosition' : 'tutorMoodleEFPosition') : (isFisio ? 'tutorFisioPosition' : 'tutorEFPosition');
   const soundKey = isMoodle ? (isFisio ? 'tutorMoodleFisioSound' : 'tutorMoodleEFSound') : (isFisio ? 'tutorFisioCoinSound' : 'tutorEFCoinSound');
   const base = new URL('.', document.currentScript.src);
@@ -14,6 +13,8 @@
   const save = (key, value) => { try { localStorage.setItem(key, value); } catch (_) {} };
 
   window.tutorEFCoin = { attach(btn, toggle, placePanel) {
+    if (btn.dataset.tutorBustAttached) return;
+    btn.dataset.tutorBustAttached = 'true';
     btn.classList.add('tutor-coin');
     btn.title = 'Clique para abrir o tutor. Arraste para mover.';
     const portrait = btn.querySelector('.tutor-portrait');

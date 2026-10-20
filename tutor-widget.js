@@ -1,6 +1,25 @@
 (function () {
   'use strict';
 
+  // Resolve from this shared script, including simulators in nested folders.
+  const tutorAssetsBase = new URL('.', document.currentScript.src);
+  const tutorBustVersion = 'shared-20261020';
+  async function loadSharedBust() {
+    const stylesheet = new URL('tutor-ef-coin.css?v=' + tutorBustVersion, tutorAssetsBase).href;
+    if (!document.querySelector('link[data-tutor-bust-shared]')) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet'; link.href = stylesheet; link.dataset.tutorBustShared = 'true';
+      document.head.appendChild(link);
+    }
+    if (window.tutorEFCoin) return;
+    await new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = new URL('tutor-ef-coin.js?v=' + tutorBustVersion, tutorAssetsBase).href;
+      script.onload = resolve; script.onerror = () => { script.remove(); reject(new Error('Tutor bust unavailable')); };
+      document.head.appendChild(script);
+    });
+  }
+
   const isFisioterapia = location.pathname.includes('/fisioterapia/') || location.pathname.endsWith('/tutor-fisio.html') || new URLSearchParams(location.search).get('percurso') === 'fisioterapia';
   const courseConfig = isFisioterapia && window.fisioterapiaTutor ? window.fisioterapiaTutor
     : (!isFisioterapia && location.pathname.endsWith('/tutor-ef.html') ? window.educacaoFisicaTutor || null : null);
@@ -338,9 +357,10 @@
     }
   }
 
-  function enableDrag() {
+  async function enableDrag() {
     const btn = launcher();
-    if (window.tutorEFCoin && (location.pathname.endsWith('/tutor-ef.html') || location.pathname.endsWith('/tutor-fisio.html'))) {
+    try { await loadSharedBust(); } catch (_) { /* Keep the original portrait and drag controls offline. */ }
+    if (window.tutorEFCoin) {
       return window.tutorEFCoin.attach(btn, () => panel().hidden ? openTutor() : closeTutor(), placePanel);
     }
     let start=null, moved=false;

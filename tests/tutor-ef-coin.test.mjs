@@ -88,6 +88,23 @@ test('Both Moodle courses use the bust with separate saved preferences', () => {
     s.sound.emit('click'); assert.equal(s.storage.get('tutorMoodle' + key + 'Sound'), 'off');
   }
 });
-test('Non-tutor pages remain untouched', () => {
-  assert.equal(setup('/index.html').context.window.tutorEFCoin, undefined);
+test('Simulators share the bust and keep course-specific drag preferences', () => {
+  for (const [path, key] of [
+    ['/biofeedback-respiratorio-smartphone.html', 'tutorEFPosition'],
+    ['/biofeedback-respiratorio-smartphone.html?percurso=fisioterapia', 'tutorFisioPosition'],
+    ['/fisioterapia/simulador.html', 'tutorFisioPosition']
+  ]) {
+    const s = setup(path);
+    assert.ok(s.context.window.tutorEFCoin);
+    s.btn.emit('pointerdown'); s.btn.emit('pointermove', { clientX: 520, clientY: 340 });
+    s.btn.emit('pointerup'); s.btn.emit('click');
+    assert.equal(s.toggles(), 0);
+    assert.deepEqual(JSON.parse(s.storage.get(key)), { left: 520, top: 340 });
+    s.btn.emit('click', { detail: 0 }); assert.equal(s.toggles(), 1);
+  }
+});
+test('Attaching the shared bust twice does not duplicate click handlers', () => {
+  const s = setup();
+  s.context.window.tutorEFCoin.attach(s.btn, () => { throw new Error('duplicate handler'); }, () => {});
+  s.btn.emit('click', { detail: 0 }); assert.equal(s.toggles(), 1);
 });
