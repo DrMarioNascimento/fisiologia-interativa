@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="tutor-glass tutor-moodle-glass">
 <head>
   <meta charset="utf-8"><link rel="icon" href="brand/orientador.webp">
   <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -46,10 +46,11 @@
     .chat .tutor-coin-sound{display:inline-block;margin-top:5px;font-size:10px;padding:3px 6px;color:#fff}
     @media(max-height:420px){.chat .head{min-height:70px}}
   </style>
+  <link rel="stylesheet" href="tutor-glass.css?v=20261021">
 </head>
 <body>
   <section class="chat" id="moodleTutorChat" aria-label="Chat do Tutor de Fisiologia">
-    <header class="head"><strong>Tutor de Fisiologia</strong><span>Educação Física • estudo guiado</span></header>
+    <header class="head"><div><strong>Tutor de Fisiologia</strong><span>Educação Física • estudo guiado</span></div><button class="tutor-close" id="moodleTutorClose" type="button" aria-label="Minimizar tutor">×</button></header>
     <div class="ai" id="ai" hidden>
       <label><input type="checkbox" id="aiEnabled" disabled> Respostas personalizadas com IA</label>
       <details><summary>Sobre a IA e o assunto da conversa</summary><div>
@@ -132,7 +133,7 @@
           const data=await response.json();if(!response.ok||!data.enabled)throw new Error();
           enabled.disabled=false;
           document.getElementById('aiNotice').textContent='Ao ativar, suas perguntas e as últimas mensagens são enviadas ao Gemini. Não envie dados pessoais. No nível gratuito, o Google pode usar esse conteúdo para melhorar seus produtos. Este tutor não salva conversas entre visitas. A IA pode errar; confira no material da disciplina.';
-          document.querySelector('.ai details').open=innerHeight>=480;
+          document.querySelector('.ai details').open=false;
         }catch{document.getElementById('aiNotice').textContent='IA ainda não disponível. Simuladores, mapas e aprofundamentos continuam funcionando.';document.querySelector('.ai details').open=true;}
       }
       const profundos=()=>moduleItems().filter(m=>['da-intencao-ao-movimento.html','sangue.html','ventilacao-pulmonar-neonatal.html','atleta-box.html','fisioterapia/uti-fisiologica.html'].includes(m.href)||/aprofund|integr|sangue|neonatal|intencao|atleta|uti|escape|plantao/i.test(`${m.title||''} ${m.goal||''} ${m.href||''}`));
@@ -177,6 +178,6 @@
     <span class="tutor-portrait"></span><span class="tutor-badge" aria-hidden="true">?</span>
   </button>
   <script src="tutor-ef-coin.js?v=shared-imports-20261020"></script>
-  <script src="tutor-moodle-busto.js?v=moodle-20261020"></script>
+  <script src="tutor-moodle-busto.js?v=glass-20261021"></script>
 </body>
 </html>

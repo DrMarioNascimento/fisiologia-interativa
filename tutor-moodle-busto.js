@@ -10,5 +10,9 @@
     btn.setAttribute('aria-label', chat.hidden ? 'Abrir Tutor de Fisiologia' : 'Minimizar Tutor de Fisiologia');
     if (!chat.hidden) document.querySelector('#input').focus();
   };
+  document.querySelector('#moodleTutorClose')?.addEventListener('click', toggle);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !chat.hidden) { toggle(); btn.focus(); }
+  });
   window.tutorEFCoin.attach(btn, toggle, () => {});
 })();
