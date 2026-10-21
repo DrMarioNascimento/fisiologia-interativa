@@ -1,7 +1,18 @@
 {
-  "appId":"br.com.drmarionascimento.respirar",
-  "appName":"Respirar — Fisiologia Interativa",
-  "webDir":"www", "loggingBehavior":"debug",
-  "android":{"allowMixedContent":false},
-  "plugins":{"LocalNotifications":{"iconColor":"#81DBBF"}}
+  "appId": "br.com.drmarionascimento.respirar",
+  "appName": "Biofeedback Respiratório",
+  "webDir": "www",
+  "loggingBehavior": "none",
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "iconColor": "#81DBBF"
+    },
+    "SystemBars": {
+      "insetsHandling": "native",
+      "style": "DARK"
+    }
+  }
 }

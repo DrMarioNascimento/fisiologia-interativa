@@ -70,3 +70,13 @@ Abra Actions → Biofeedback — base nativa → execução concluída. Em Artif
 - **Respirar-iOS-Simulador**: aplicativo compilado para o simulador no Mac. Não é IPA e não instala no iPhone. Para teste no iPhone, abrir o projeto no Xcode com uma equipe de assinatura válida, ou preparar distribuição assinada pelo TestFlight.
 
 A execução pode ser iniciada novamente pelo botão Run workflow. Compilar com sucesso confirma a construção do pacote, mas não valida a entrega dos lembretes com o aplicativo fechado. Use a matriz de testes acima no aparelho.
+
+## Preparar a versão para Google Play
+
+A fonte inclui o ícone aprovado em `resources/icon.png` e os recursos Android em `resources/android-res/`. O build nativo inclui uma cópia local da política de privacidade e remove o viewport de cobertura para que o tratamento nativo dos insets reserve espaço às barras do Android. O nome instalado é Biofeedback Respiratório.
+
+Depois de `npm ci`, `npm test`, `npx cap add android` (na primeira preparação) e `npx cap sync android`, configure fora do repositório as variáveis `RESPIRAR_KEYSTORE` (caminho absoluto), `RESPIRAR_STORE_PASSWORD` e `RESPIRAR_KEY_PASSWORD`. O alias da chave de upload é `respirar-upload`.
+
+Execute `node prepare-android-release.cjs` e `bash android/gradlew -p android bundleRelease assembleRelease`. O AAB fica em `android/app/build/outputs/bundle/release/app-release.aab`. A versão preparada é 1.0.1, código 2. Nunca envie a chave, as senhas ou os pacotes assinados para o repositório público. Guarde o backup privado da assinatura para as próximas atualizações.
+
+A compilação e os testes automatizados não substituem o teste desta versão assinada em um aparelho Android, incluindo as margens das barras e a abertura da política local.
