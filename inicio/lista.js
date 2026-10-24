@@ -8,7 +8,7 @@
   const colorVar = {celular:'--u1', muscular:'--u2', osteoarticular:'--u3', cardiovascular:'--u4', respiratorio:'--u5', integracao:'--u6', endocrino:'--u7'};
   const cor = id => 'var(' + colorVar[id] + ')';
   const mapIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5 9 3l6 2.5 6-2.5v14L15 20l-6-2.5-6 2.5z"/><path d="M9 3v14.5M15 5.5V20"/></svg>';
-  const lockIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  const lockIcon = '<img src="assets/icons/locks/closed-blue.png" alt="" aria-hidden="true" style="display:inline-block;width:2em;height:2em;max-width:none;object-fit:contain;vertical-align:middle;flex-shrink:0">';
 
   /* pontos coloridos da barra */
   const dots = document.getElementById('dots');
