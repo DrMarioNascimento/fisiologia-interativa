@@ -292,3 +292,13 @@ A atualização dos endereços mantém as condições de uso educacional e os cr
 A Unidade 06 — Sistema Endócrino, seus simuladores, mapa mental e materiais do Tutor EF integram o escopo dos componentes originais já abrangidos por esta licença, ressalvados os direitos de terceiros. A inclusão desses recursos, os ajustes de apresentação e a moeda interativa não mudam as condições de uso educacional.
 
 Esta revisão atualiza a identificação e o escopo documental. Preserva os titulares, as permissões e as restrições existentes. Não substitui nem restringe as licenças próprias de componentes de terceiros.
+
+## Escopo e disponibilidade — 24 de outubro de 2026
+
+A identificação dos componentes originais inclui simuladores endócrinos, mapas, questões, quatro acessos de tutoria, experiências de RA e interfaces de biofeedback respiratório. As entradas educacionais do navegador estão públicas. Artefatos nativos não implicam lançamento em lojas; modelos, bibliotecas e materiais de terceiros mantêm seus créditos e licenças específicos.
+
+Esta revisão documenta o escopo e a disponibilidade atuais; preserva os titulares, as permissões e as restrições existentes, inclusive os direitos e licenças próprios de terceiros. Acesso público não equivale a licença de código aberto.
+
+Inventário de acessos: https://www.drmarionascimento.com.br/#acesso-publico
+
+**English — scope and availability, October 24, 2026:** Original components include endocrine simulators, maps, questions, four tutor entry points, AR experiences and respiratory biofeedback interfaces. Educational browser resources are public; native artifacts do not imply app-store publication. Third-party rights remain unchanged. Existing ownership, grants, restrictions and third-party terms are preserved; public access does not mean open source.

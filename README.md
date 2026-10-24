@@ -1,6 +1,16 @@
 # Fisiologia Interativa
 
-## Situação atual — 19 de outubro de 2026
+## Disponibilidade e novidades — 24 de outubro de 2026
+
+**Público e gratuito**, sem conta Google para os simuladores, mapas e experiências de RA nas entradas de [EF](https://fisiologia.drmarionascimento.com.br/) e [Fisioterapia](https://fisiologia.drmarionascimento.com.br/fisioterapia/). O catálogo EF inclui a Unidade 06 — Sistema Endócrino. Os quatro acessos de tutoria são `tutor-ef.html`, `tutor-fisio.html`, `tutor-moodle.html` e `tutor-moodle.html?percurso=fisioterapia`; serviços de IA dependem de sua configuração e disponibilidade.
+
+As atualizações de RA incluem célula, junção neuromuscular e músculo/sarcômero. Biofeedback respiratório para PC e smartphone e a versão web Respirar são recursos do navegador; a presença do projeto nativo no repositório não significa lançamento em lojas Android/iOS.
+
+O projeto relacionado **Fisiologia em Fuga** aceita qualquer conta Google e inclui os novos Percursos de Fisiologia. **Atividades Extras** tem condução autorizada e entrada da turma por código. Esses controles pertencem aos respectivos projetos.
+
+[Ver todos os recursos públicos](https://www.drmarionascimento.com.br/#acesso-publico). O acesso respeita [LICENSE.md](LICENSE.md).
+
+## Contexto técnico — registro de 19 de outubro de 2026
 
 O percurso de EF contém as Unidades 01–06 e uma seção de integração cardiorrespiratória entre as Unidades 4 e 5. A **Unidade 06 — Sistema Endócrino** reúne seis entradas de simuladores, mapa mental e questões no Tutor EF. A Fisioterapia conserva seu percurso próprio; a inclusão endócrina permanece exclusiva da EF. Em 20 de outubro, o busto 3D interativo foi compartilhado nos quatro acessos: `tutor-ef.html`, `tutor-fisio.html`, `tutor-moodle.html` e `tutor-moodle.html?percurso=fisioterapia`. Inclui giro, sons opcionais, arraste e anel luminoso na base; posição e preferência de som são salvas separadamente por curso e ambiente.
 
