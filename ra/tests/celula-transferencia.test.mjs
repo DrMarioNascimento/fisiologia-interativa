@@ -19,7 +19,7 @@ test('próximo e voltar percorrem 0,1,2,5 sem passar pelas abas transferidas',()
 test('troca de abas preserva o iframe e envia o nível correto com origem limitada',()=>{
  const elements=new Map(),posts=[];function el(id){if(!elements.has(id))elements.set(id,{id,hidden:false,dataset:{},attributes:{},href:'https://example.test/ra/potencial-membrana/',setAttribute(k,v){this.attributes[k]=v},hasAttribute(k){return k==='src'?!!this.src:k in this.attributes},addEventListener(){},contentWindow:{postMessage:(data,origin)=>posts.push({id,data,origin})}});return elements.get(id)}
  const tabs=['celula','pelicula','travessias'].map(name=>{const e=el('tab-'+name);e.dataset.aba=name;return e});const location={href:'https://example.test/ra/celula/?percurso=fisioterapia',search:'?percurso=fisioterapia',origin:'https://example.test'};
- const c={document:{querySelectorAll:()=>tabs,getElementById:el},URL,URLSearchParams,location,history:{replaceState(){}}};vm.runInNewContext(read('celula/tabs.js'),c);
+ const c={addEventListener(){},document:{querySelectorAll:()=>tabs,getElementById:el},URL,URLSearchParams,location,history:{replaceState(){}}};vm.runInNewContext(read('celula/tabs.js'),c);
  tabs[1].onclick();const first=el('membrane-frame').src;assert.match(first,/nivel=4/);assert.match(first,/percurso=fisioterapia/);tabs[2].onclick();assert.equal(el('membrane-frame').src,first);assert(posts.some(p=>p.id==='membrane-frame'&&p.data.nivel===4&&p.origin===location.origin));tabs[0].onclick();assert.equal(el('view-celula').hidden,false);assert.equal(el('view-membrana').hidden,true);
 });
 test('modelo móvel contém organelas, texturas e animação, sem extensões incompatíveis com Android',()=>{
