@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#071219">
+<title>Fisiologia Interativa · Ver na mesa</title>
+<!-- 25/10/2026: realidade aumentada para o Android que não tem o serviço de RA
+     do Google (quatro Xiaomi do Mario). Usa o motor 8th Wall, o mesmo dos jogos
+     Dragon Games, que rastreia a mesa só com a câmera e os sensores do celular.
+     Abre por cima da bancada (ra-android.js), com o modelo que a bancada
+     preparou: ?glb=<endereço do GLB, blob da própria bancada ou arquivo público>. -->
+<style>
+  :root{--fundo:#071219;--texto:#eef7fb;--suave:#a9c6d4;--borda:#8fd8ff99;--ouro:#f2d194}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--fundo);color:var(--texto);font:500 16px/1.4 system-ui,-apple-system,sans-serif;touch-action:none}
+  body.in-ar{background:transparent}
+  #cena{position:fixed;inset:0;width:100vw;height:100dvh;display:block}
+  .topo{position:fixed;left:0;right:0;top:0;z-index:5;display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) clamp(10px,3vw,16px) 10px;background:linear-gradient(#071219ee,#07121900)}
+  .topo b{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .base{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:12px clamp(10px,3vw,16px) max(14px,env(safe-area-inset-bottom));background:linear-gradient(#07121900,#071219ee);text-align:center}
+  #estado{margin:0 auto 10px;max-width:min(520px,100%);min-height:1.4em;text-shadow:0 1px 3px #000}
+  .acoes{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+  button{min-height:48px;padding:10px 16px;border-radius:12px;border:1px solid var(--borda);background:linear-gradient(#2a3d4a,#13222c);color:var(--texto);font:600 clamp(14px,3.6vw,16px) system-ui,sans-serif;box-shadow:inset 0 1px 1px #ffffff30,0 4px 10px #0007}
+  button.forte{background:linear-gradient(#f3d078,#d9a83a);color:#1a1206;border:0}
+  button[hidden]{display:none}
+  button:disabled{opacity:.45}
+</style>
+</head>
+<body>
+<canvas id="cena"></canvas>
+<div class="topo"><button id="btVoltar" type="button">‹ Voltar</button><b id="titulo">Ver na mesa</b></div>
+<div class="base">
+  <p id="estado" role="status">Carregando o modelo…</p>
+  <div class="acoes">
+    <button id="btCamera" class="forte" type="button" hidden>Abrir a câmera</button>
+    <button id="btPousar" class="forte" type="button" hidden disabled>Pousar aqui</button>
+    <button id="btDeNovo" type="button" hidden>Mudar de lugar</button>
+  </div>
+</div>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}</script>
+<script type="module">
+import * as T from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const Q = new URLSearchParams(location.search), $ = id => document.getElementById(id);
+const GLB = Q.get('glb'), TITULO = Q.get('titulo') || 'Ver na mesa';
+$('titulo').textContent = TITULO;
+function estado(t) { $('estado').textContent = t; }
+function voltar() {
+  if (ra && ra.estado().modo === 'ra') ra.sair();
+  if (window.parent !== window) window.parent.postMessage({ raCamera: 'fechar' }, location.origin);
+  else history.length > 1 ? history.back() : location.assign('../');
+}
+$('btVoltar').onclick = voltar;
+
+/* o motor dos jogos é um script clássico que lê THREE do escopo global */
+window.THREE = Object.assign({}, T);
+window.AC_SO_SLAM = true;
+function script(src) { return new Promise((ok, falha) => { const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = () => falha(Error('não carregou ' + src)); document.head.appendChild(s); }); }
+
+const canvas = $('cena');
+const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+renderer.outputColorSpace = T.SRGBColorSpace; renderer.toneMapping = T.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.1;
+const cena = new T.Scene(); cena.background = new T.Color(0x071219);
+const pm = new T.PMREMGenerator(renderer); cena.environment = pm.fromScene(new RoomEnvironment(), .04).texture; pm.dispose();
+cena.add(new T.HemisphereLight(0xe8f4ff, 0x26303a, 1.1));
+const sol = new T.DirectionalLight(0xffffff, 1.4); sol.position.set(1, 2, 1.5); cena.add(sol);
+const camera = new T.PerspectiveCamera(45, 1, 0.01, 50); camera.position.set(0, 1.25, 2.5); camera.lookAt(0, 0.3, 0);
+const raiz = new T.Group(); cena.add(raiz);
+let mixer = null, ra = null, antes = 0;
+
+function medir() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+addEventListener('resize', medir); medir();
+
+function desenhar(t) {
+  const agora = t || performance.now(), dt = Math.min(0.05, (agora - (antes || agora)) / 1000); antes = agora;
+  if (mixer) mixer.update(dt);
+  if (ra) ra.atualizar(dt, null);
+  if (!ra || ra.estado().modo !== 'ra') raiz.rotation.y += dt * 0.25;
+  renderer.render(cena, ra ? ra.cameraAtiva() : camera);
+}
+
+async function carregar() {
+  if (!GLB) throw Error('Nenhum modelo foi indicado.');
+  const L = new GLTFLoader();
+  const draco = new DRACOLoader(); draco.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/'); L.setDRACOLoader(draco);
+  L.setMeshoptDecoder(MeshoptDecoder);
+  const g = await L.loadAsync(GLB);
+  const modelo = g.scene;
+  /* pegada 1 e base em y = 0: o motor da maquete põe 1 = ~42 cm na mesa */
+  const caixa = new T.Box3().setFromObject(modelo), tam = caixa.getSize(new T.Vector3()), c = caixa.getCenter(new T.Vector3());
+  const esc = 1 / Math.max(tam.x, tam.z, tam.y * .8, 1e-6);
+  const ajuste = new T.Group(); ajuste.scale.setScalar(esc); ajuste.position.set(-c.x * esc, -caixa.min.y * esc, -c.z * esc);
+  ajuste.add(modelo); raiz.add(ajuste);
+  modelo.traverse(o => { if (o.isMesh) o.frustumCulled = false; });
+  if (g.animations && g.animations.length) { mixer = new T.AnimationMixer(modelo); g.animations.forEach(a => mixer.clipAction(a).play()); }
+}
+
+function ligarGestos() {
+  let pinca = 0, ang = 0;
+  const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+  const angulo = t => Math.atan2(t[1].clientY - t[0].clientY, t[1].clientX - t[0].clientX);
+  canvas.addEventListener('touchstart', e => { if (e.touches.length === 2) { pinca = dist(e.touches); ang = angulo(e.touches); } }, { passive: true });
+  canvas.addEventListener('touchmove', e => {
+    if (!ra || ra.estado().modo !== 'ra' || e.touches.length !== 2) return;
+    const d = dist(e.touches), a = angulo(e.touches);
+    if (pinca > 0) ra.mudarEscala(d / pinca); ra.girar(a - ang); pinca = d; ang = a;
+  }, { passive: true });
+}
+
+function atualizarBotoes() {
+  if (!ra) return;
+  const e = ra.estado(), naCamera = e.modo === 'ra';
+  $('btCamera').hidden = naCamera;
+  $('btPousar').hidden = !naCamera || e.posta; $('btPousar').disabled = !e.temHit;
+  $('btDeNovo').hidden = !naCamera || !e.posta;
+  if (naCamera && !e.posta) estado(e.temHit ? 'Toque em Pousar aqui.' : 'Mova o celular devagar, apontando para a mesa, até aparecer o círculo.');
+  else if (naCamera) estado('Ande em volta para ver de outros lados. Dois dedos aumentam, diminuem e giram.');
+}
+
+try {
+  await Promise.all([script('ac-ra.js?v=camera-20261025'), carregar()]);
+  await script('ac-maquete-ra.js?v=camera-20261025');
+  ra = ACMaquetteRA.criar({ renderer, cena, camera, raiz, baseY: 0, aoMudar: atualizarBotoes, desenhar });
+  ra.previa();
+  renderer.setAnimationLoop(desenhar);
+  ligarGestos();
+  $('btCamera').hidden = false;
+  estado('O modelo está pronto. Toque em Abrir a câmera e permita o uso da câmera e dos sensores.');
+} catch (e) { estado('O modelo não abriu: ' + (e && e.message || e)); }
+
+$('btCamera').onclick = () => {
+  $('btCamera').disabled = true; estado('Abrindo a câmera… (na primeira vez o motor leva alguns segundos)');
+  ra.entrar('ra').then(() => { $('btCamera').disabled = false; atualizarBotoes(); },
+    e => { $('btCamera').disabled = false; renderer.setAnimationLoop(desenhar); estado('A câmera não abriu: ' + (e && e.message || e) + '. Confira a permissão da câmera e tente de novo.'); });
+};
+$('btPousar').onclick = () => { ra.posicionar(); atualizarBotoes(); };
+$('btDeNovo').onclick = () => { ra.soltar(); atualizarBotoes(); };
+document.addEventListener('visibilitychange', () => { if (document.hidden && ra && ra.estado().modo === 'ra') ra.sair().then(() => { renderer.setAnimationLoop(desenhar); atualizarBotoes(); }); });
+
+/* para conferência */
+window.__raCamera = { estado: () => ({ modelo: raiz.children.length > 0, animacao: !!mixer, ra: ra ? ra.estado() : null }) };
+</script>
+</body>
+</html>
