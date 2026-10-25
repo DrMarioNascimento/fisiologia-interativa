@@ -9,6 +9,8 @@ export function textura(w,h,draw,{repeatX=1,repeatY=1}={}){
 }
 const tecido=()=>textura(64,64,(g,w,h)=>{g.fillStyle='#c7b9a2';g.fillRect(0,0,w,h);});
 export async function preparar(tipo,nivel){
+ let seed=251026+nivel;for(const c of tipo)seed=(seed*31+c.charCodeAt(0))>>>0;
+ Math.random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
  let a,update,duracao=8,titulo,modo='ciclo';
  if(tipo==='osso-vivo'){
   a=(await import('../osso-vivo/modelos.js')).criar(tecido);
