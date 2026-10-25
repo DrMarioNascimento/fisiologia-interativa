@@ -25,7 +25,7 @@ jobs:
       - name: Dependências de autoria
         run: |
           npm install --no-save three@0.180.0 @napi-rs/canvas playwright gltf-validator
-          npx playwright install --with-deps chromium
+          node node_modules/playwright/cli.js install --with-deps chromium
           pip install numpy Pillow usd-core
       - name: Modelos animados e textos sólidos
         run: |
