@@ -12,6 +12,10 @@ O catálogo RA contém objetivos, controles e questões locais. Um pedido explí
 
 **Ordem de publicação:** atualizar primeiro o catálogo na API existente do Cloud Run; verificar que ela aceita `ra/coracao/`, `ra/retorno-venoso/`, `ra/pleura/` e `ra/musculo-sarcomero/` nos dois cursos; depois publicar as páginas do Tutor. Uma API antiga recusa esses identificadores. Testes com respostas simuladas não confirmam que a API pública foi atualizada.
 
+## Atualização de acesso e atividades — 25 de outubro de 2026
+
+Os quatro tutores oferecem acesso ao [Percursos de Fisiologia](https://fisiologia-em-fuga.drmarionascimento.com.br/percursos/): 12 unidades, nove contextos e acesso público sem login Google para EF e Fisioterapia. Os escape rooms tradicionais continuam separados por curso. O arquivo `tutor-percursos.js` contém o acesso compartilhado, sem inserir o percurso no catálogo da API Gemini como se fosse um simulador local. A inclusão no Firebase não altera a API Cloud Run existente nem suas cotas. Testar respostas reais e a atualização do catálogo Cloud Run separadamente.
+
 ## Experimentar no computador
 
 Requer Node.js 22.9+ (testado com 24). O servidor não precisa de pacotes npm em produção.
