@@ -34,6 +34,6 @@ A conversão usa `celula/tools/usdz.py`, com tempos e transformações gravados 
 
 ## Validação
 
-28 testes específicos: ciclo, acesso alternado, proporção 3:2, trajetórias, arquivo portátil, abertura síncrona, iOS sem WebGL, troca de abas, carregamento antigo, pausa, velocidade e erros. GLB: zero erros e avisos no Khronos Validator. USDZ: zero erros no OpenUSD, com 100 trilhas e duração de 16 s em cada arquivo. Os relatórios ficam junto aos arquivos.
+29 testes específicos: ciclo, acesso alternado, proporção 3:2, trajetórias, arquivo portátil, abertura síncrona, iOS sem WebGL, troca de abas, carregamento antigo, pausa, velocidade e erros. GLB: zero erros e avisos no Khronos Validator. USDZ: zero erros no OpenUSD, com 100 trilhas e duração de 16 s em cada arquivo. Os relatórios ficam junto aos arquivos.
 
 A suíte completa ainda registra uma divergência histórica de hash de `README.md` no teste de instalação de Pleura; não corresponde a um defeito destes modelos. A biblioteca celular aprovada e os cálculos fisiológicos continuam com seus hashes originais.

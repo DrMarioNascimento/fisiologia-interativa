@@ -1,6 +1,7 @@
 import {DURACAO,estadoPelicula,estadoTransporte} from './ciclo.js';
 import {nativePlatform} from '../visualizador/ra.js?v=celula-v3-android1';
 const $=id=>document.getElementById(id),viewer=$('membrane-model'),launch=$('launch-ar'),status=$('ar-status');
+const webgl=(()=>{try{const gl=document.createElement('canvas').getContext('webgl2');if(!gl)return false;gl.getExtension('WEBGL_lose_context')?.loseContext();return true;}catch{return false;}})();
 const platform=nativePlatform(),query=new URLSearchParams(location.search);
 let mode='',ready=false,requested='',links={},retry=0,playing=!matchMedia('(prefers-reduced-motion: reduce)').matches,active=true,presenting=false;
 let frame=0,lastPhase='';
@@ -30,10 +31,13 @@ function tick(){frame=0;if((active||presenting)&&!document.hidden){showPhase();f
 function visibility(value){active=value;syncPlayback();if(frame)cancelAnimationFrame(frame);frame=0;if(active||presenting)tick();}
 function requestModel(){
  ready=false;lastPhase='';$('phase').textContent='Carregando a animação…';
- ['play','restart','speed','timeline'].forEach(id=>$(id).disabled=true);
+ ['play','restart','speed','timeline','reset-view'].forEach(id=>$(id).disabled=true);
  launch.disabled=platform!=='ios';$('retry').hidden=true;
  requested=links.glb+(retry?'?tentativa='+retry:'');
- viewer.setAttribute('poster',links.poster);viewer.setAttribute('ios-src',links.usdz);viewer.setAttribute('src',requested);
+ $('model-poster').hidden=false;$('model-poster').src=links.poster;$('model-poster').alt='Prévia do modelo real: '+content[mode].title;
+ viewer.setAttribute('poster',links.poster);viewer.setAttribute('ios-src',links.usdz);
+ if(!webgl){$('phase').textContent='Prévia do modelo';$('explanation').textContent='Este navegador não disponibilizou a visualização 3D. A imagem mostra o modelo real da experiência.';status.textContent=platform==='ios'?'Toque no botão para abrir a animação em RA no iPhone.':'Para explorar o movimento e a RA, abra em um navegador com suporte a 3D, como o Chrome de um Android compatível.';return;}
+ viewer.setAttribute('src',requested);
  status.textContent=platform==='ios'?'O modelo animado já pode ser aberto no iPhone. A prévia está carregando.':'Carregando o modelo animado. Aguarde “Pronto” para abrir a RA.';
 }
 function updateLab(){
@@ -65,13 +69,13 @@ launch.onclick=()=>{
 viewer.addEventListener('load',event=>{
  if(event.detail?.url&&String(event.detail.url)!==requested)return;
  if(viewer.getAttribute('src')!==requested)return;
- ready=true;['play','restart','speed','timeline'].forEach(id=>$(id).disabled=false);
+ ready=true;$('model-poster').hidden=true;['play','restart','speed','timeline','reset-view'].forEach(id=>$(id).disabled=false);
  launch.disabled=platform!=='ios'&&!viewer.canActivateAR;
  viewer.currentTime=0;syncPlayback();showPhase();
  status.textContent=platform==='ios'||viewer.canActivateAR?'Pronto. Toque em Abrir em realidade aumentada para ver o ciclo em movimento.':'Modelo pronto para explorar aqui. Para RA, abra no Safari do iPhone ou no Chrome de um Android compatível.';
 });
 viewer.addEventListener('error',()=>{
- ready=false;launch.disabled=platform!=='ios';['play','restart','speed','timeline'].forEach(id=>$(id).disabled=true);
+ ready=false;$('model-poster').hidden=false;launch.disabled=platform!=='ios';['play','restart','speed','timeline','reset-view'].forEach(id=>$(id).disabled=true);
  $('phase').textContent='Prévia 3D indisponível';$('explanation').textContent='A imagem mostra o modelo real. Tente carregar novamente ou abra em um navegador compatível.';
  status.textContent=platform==='ios'?'Você ainda pode abrir o modelo animado em RA no iPhone pelo botão.':'Não foi possível carregar a prévia 3D neste navegador. Tente novamente ou abra no Chrome do Android.';$('retry').hidden=false;
 });

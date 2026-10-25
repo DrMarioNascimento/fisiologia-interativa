@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#091923"><title>Membrana em movimento · Fisiologia Interativa</title>
-<link rel="stylesheet" href="membrana/style.css?v=movimento1">
+<link rel="stylesheet" href="membrana/style.css?v=movimento2">
 <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@4.1.0/dist/model-viewer.min.js"></script>
 </head>
 <body>
@@ -12,7 +12,7 @@
 <div class="experience">
 <section class="viewport" aria-label="Modelo animado da membrana">
 <div class="scene-top"><span class="live-dot" aria-hidden="true"></span><span id="scene-label">Ciclo demonstrativo · 16 segundos</span><button id="fullscreen" class="small" type="button">Ampliar</button></div>
-<model-viewer id="membrane-model" alt="Película de carga em movimento: duas faces da membrana" ar autoplay ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="auto" camera-controls loading="eager" reveal="auto" shadow-intensity="0" exposure="1.15" camera-orbit="0deg 84deg auto" field-of-view="35deg" touch-action="pan-y" interaction-prompt="none"><span slot="ar-button" hidden></span></model-viewer>
+<div class="model-stack"><img id="model-poster" alt="Prévia do modelo real da membrana"><model-viewer id="membrane-model" alt="Película de carga em movimento: duas faces da membrana" ar autoplay ar-modes="webxr scene-viewer quick-look" ar-placement="floor" ar-scale="auto" camera-controls loading="eager" reveal="auto" shadow-intensity="0" exposure="1.15" camera-orbit="0deg 84deg auto" field-of-view="35deg" touch-action="pan-y" interaction-prompt="none"><span slot="ar-button" hidden></span></model-viewer></div>
 <div class="scene-bottom"><span>Arraste para girar · pinça para aproximar</span><button id="reset-view" class="small" type="button">Restaurar vista</button></div>
 <div class="playback"><button id="play" type="button" disabled>Pausar</button><button id="restart" type="button" disabled>Reiniciar</button><label>Velocidade <select id="speed" aria-label="Velocidade da animação" disabled><option value="0.5">0,5×</option><option value="1" selected>1×</option><option value="1.5">1,5×</option></select></label><span id="clock">0 / 16 s</span><label class="timeline"><span class="sr-only">Instante da animação</span><input id="timeline" type="range" min="0" max="15.99" step="0.01" value="0" disabled></label></div>
 </section>
@@ -26,5 +26,5 @@
 <details id="investigate"><summary><span>Investigar a membrana</span><small>Manipule a permeabilidade e explore os cálculos de Goldman</small><b aria-hidden="true">+</b></summary><p class="lab-note">Neste laboratório, você controla as condições. A experiência em RA acima apresenta um ciclo demonstrativo próprio; os ajustes do laboratório não são transferidos para esse ciclo.</p><iframe id="laboratory" title="Laboratório de permeabilidade e potencial de membrana" allow="fullscreen" allowfullscreen></iframe></details>
 <p class="signature">Prof. Mário César Nascimento, PhD · Fisiologia Interativa</p>
 </main>
-<script type="module" src="membrana/app.js?v=movimento1"></script>
+<script type="module" src="membrana/app.js?v=movimento2"></script>
 </body></html>

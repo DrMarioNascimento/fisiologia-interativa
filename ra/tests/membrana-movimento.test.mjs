@@ -32,9 +32,9 @@ test('bomba exportada possui três Na para fora e dois K para dentro',()=>{
   for(const c of ch){const s=g.animations[0].samplers[c.sampler],t=arr(s.input),v=arr(s.output);const start=role==='naBomba'?1.6:5.6,end=role==='naBomba'?3.6:7.6;const a=t.findIndex(x=>x>=start),b=t.findIndex(x=>x>=end);assert((v[b*3+1]-v[a*3+1])*direction>2.5);}
  }
 });
-function harness(platform='android'){
+function harness(platform='android',webgl=true){
  const elements=new Map(),events={},posts=[],clicks=[];
- class El{constructor(id){this.id=id;this.attributes={};this.listeners={};this.style={};this.disabled=false;this.hidden=false;this.value=id==='speed'?'1':'0';this.currentTime=0;this.canActivateAR=true;this.classList={toggle(){}};}setAttribute(k,v){this.attributes[k]=v;}getAttribute(k){return this.attributes[k]??null;}hasAttribute(k){return k in this.attributes;}addEventListener(k,fn){(this.listeners[k]??=[]).push(fn);}dispatch(k,detail){for(const f of this.listeners[k]||[])f({detail});}append(){}replaceChildren(){}remove(){}click(){clicks.push(this);this.onclick?.();}play(){this.paused=false;}pause(){this.paused=true;}activateAR(){this.activated=(this.activated||0)+1;return Promise.resolve();}getBoundingClientRect(){return {height:1300};}jumpCameraToGoal(){}}
+ class El{constructor(id){this.id=id;this.attributes={};this.listeners={};this.style={};this.disabled=false;this.hidden=false;this.value=id==='speed'?'1':'0';this.currentTime=0;this.canActivateAR=true;this.classList={toggle(){}};}setAttribute(k,v){this.attributes[k]=v;}getAttribute(k){return this.attributes[k]??null;}hasAttribute(k){return k in this.attributes;}addEventListener(k,fn){(this.listeners[k]??=[]).push(fn);}dispatch(k,detail){for(const f of this.listeners[k]||[])f({detail});}append(){}replaceChildren(){}remove(){}click(){clicks.push(this);this.onclick?.();}play(){this.paused=false;}pause(){this.paused=true;}activateAR(){this.activated=(this.activated||0)+1;return Promise.resolve();}getContext(){return webgl?{getExtension:()=>null}:null;}getBoundingClientRect(){return {height:1300};}jumpCameraToGoal(){}}
  const el=id=>{if(!elements.has(id))elements.set(id,new El(id));return elements.get(id);};
  const document={getElementById:el,querySelector:el,createElement:tag=>new El(tag),body:new El('body'),hidden:false};
  const parent={postMessage:(d,o)=>posts.push([d,o])};
@@ -68,4 +68,9 @@ test('erro libera nova tentativa e navegadores sem RA não mostram botão ativo'
 });
 test('sem botão RA duplicado; laboratório mantém Goldman e explica seu escopo',()=>{
  const html=read('membrana.html'),lab=read('laboratorio-membrana.html');assert.match(html,/slot="ar-button" hidden/);assert.match(html,/id="investigate"/);assert.match(html,/não são transferidos/);assert.match(lab,/id="goldmanBox"/);assert.match(lab,/\.ra-box,.topbar/);assert.doesNotMatch(html,/ra-ios.js/);
+});
+
+test('sem WebGL mostra prévia explícita, sem carregamento infinito, e preserva Quick Look',()=>{
+ const h=harness('ios',false);assert.equal(h.el('phase').textContent,'Prévia do modelo');assert(!h.el('model-poster').hidden);assert.match(h.el('model-poster').src,/pelicula-v1.webp$/);assert(!h.el('launch-ar').disabled);assert(h.el('play').disabled);
+ const a=harness('android',false);assert(a.el('launch-ar').disabled);assert(!a.el('membrane-model').getAttribute('src'));
 });
