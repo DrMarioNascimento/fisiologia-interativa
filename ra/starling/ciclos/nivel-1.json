@@ -1,16 +1,16 @@
 {
-  "trilhas": 34,
-  "bytes": 2339128,
+  "trilhas": 157,
+  "bytes": 3644676,
   "titulo": "Microcirculação",
   "duracao": 8,
   "texturas": {
-    "malhas": 92,
+    "malhas": 131,
     "familias": {
       "colageno": 7,
       "citoplasma": 18,
       "nucleo": 3,
       "vaso": 39,
-      "hemacia": 25
+      "hemacia": 64
     }
   }
 }

@@ -304,7 +304,7 @@
     },
     {
       "path": "starling/modelos.js",
-      "sha256": "335dc88ac8640d8a99499952ca9868527cae28237f9a7505e8c7bf4ef3461de7"
+      "sha256": "ed6eac82b5f2cdab8b7ad6f501606a74a59fc0d74a9d4c0876ae0985588ce5d5"
     },
     {
       "path": "starling/README.md",
@@ -588,11 +588,11 @@
     },
     {
       "path": "starling/ciclos/nivel-1.glb",
-      "sha256": "f479ee18dfecef94da56386ee5b66a9735b17e4e1609464752979e6245f50ea3"
+      "sha256": "84a5b0793b42712cb9851df3d8c0ef5b817436f6454b26a7eb625ede70f41acd"
     },
     {
       "path": "starling/ciclos/nivel-1.usdz",
-      "sha256": "7fe754b8ac224c292c3324ac00537b2f1eafd4a95b609a549c3a738c3b8342e6"
+      "sha256": "00326d9e02a1c828d67c2d628d63f2565981b69e11ea4bc9f4c1a4ef28fc1b72"
     },
     {
       "path": "starling/ciclos/nivel-2.glb",
@@ -620,11 +620,11 @@
     },
     {
       "path": "starling/ciclos/nivel-5.glb",
-      "sha256": "bdd3dd1db497c0552d0397639a5055940d4f329a5f0d38d380984c0b04652a25"
+      "sha256": "37b884d60a7231b3966e51707d5b30a0e109dda0769c1d1e9d037ae3979bbb66"
     },
     {
       "path": "starling/ciclos/nivel-5.usdz",
-      "sha256": "1e561e60c77b8826c0055dd2f3184eccbd2b804507093e4be647b58c1a21085c"
+      "sha256": "65f3fb88c0e21ef00dea79340fdb842b90c2c79de60d75223b8dc814cdd8a7bc"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
