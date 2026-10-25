@@ -31,9 +31,10 @@ jobs:
         run: |
           node ra/celula/membrana/tools/construir.mjs
           node ra/scripts/construir-portateis.cjs
+          node ra/scripts/reduzir-deformacoes.mjs ra/coracao/ciclos/nivel-1.glb ra/coracao/ciclos/nivel-2.glb
           python ra/celula/membrana/tools/ios.py
           python ra/scripts/converter-ciclos.py
-          node ra/scripts/comprimir-ciclos.mjs starling
+          node ra/scripts/comprimir-ciclos.mjs starling osso-vivo juncao-neuromuscular pleura retorno-venoso musculo-sarcomero coracao
           node ra/scripts/verificar-portateis.cjs
           node ra/scripts/atualizar-manifesto.cjs
       - name: Conferir fisiologia e abertura móvel

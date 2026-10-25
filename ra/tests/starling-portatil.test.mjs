@@ -11,9 +11,9 @@ test('os cinco ciclos do Starling vão comprimidos em Draco, sem perder moviment
     assert.ok(g.extensionsRequired?.includes('KHR_draco_mesh_compression'), `nível ${n} sem Draco`);
     assert.ok(g.animations?.[0]?.channels.length > 0, `nível ${n} sem animação`);
     assert.ok(g.nodes.some(x => x.extras?.textoRA), `nível ${n} sem placa em relevo`);
-    // O nível 1 carrega as deformações da vasomoção e dos linfângions, que o
-    // Draco não comprime; mesmo assim fica abaixo dos 1,9 MB do arquivo cru antigo.
-    assert.ok(b.length < (n === 1 ? 1_500_000 : 1_000_000), `nível ${n} com ${b.length} bytes`);
+    // As deformações (vasomoção, linfângions, glicocálix) não entram no Draco;
+    // mesmo assim cada nível fica abaixo do arquivo cru publicado antes.
+    assert.ok(b.length < 1_500_000, `nível ${n} com ${b.length} bytes`);
   }
 });
 
@@ -34,6 +34,6 @@ test('o tecido do Starling leva cor, relevo e aspereza no GLB e no USDZ', () => 
 });
 
 test('as texturas são procedurais e determinísticas: nada de Math.random', () => {
-  const src = fs.readFileSync(new URL('../starling/texturas.js', import.meta.url), 'utf8');
+  const src = fs.readFileSync(new URL('../texturas-tecido.js', import.meta.url), 'utf8');
   assert.doesNotMatch(src, /Math\.random\s*\(/);
 });
