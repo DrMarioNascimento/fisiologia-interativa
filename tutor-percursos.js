@@ -24,6 +24,14 @@
   const reset=()=>{link.style.transform='';};
   link.addEventListener('pointerup',reset);link.addEventListener('pointercancel',reset);link.addEventListener('blur',reset);
   card.append(heading,description,link);
+  if (!fisio && location.pathname.endsWith('/tutor-moodle.html')) {
+   const endocrine=document.createElement('a');
+   endocrine.href='https://fisiologia.drmarionascimento.com.br/endocrino/index.html';
+   endocrine.target='_blank';endocrine.rel='noopener noreferrer';
+   endocrine.textContent='Unidade 06 · Sistema Endócrino (somente EF) ↗';
+   endocrine.style.cssText='display:block;margin-top:12px;color:#164c3b;font-weight:700;';
+   card.append(endocrine);
+  }
   // In Moodle keep the compact activity card in the teaching interface,
   // outside the chat history. In site views place it adjacent to the study cards.
   const target=document.querySelector('#cards')||document.querySelector('#moodleTutorChat')||document.querySelector('main');
