@@ -304,7 +304,7 @@
     },
     {
       "path": "starling/modelos.js",
-      "sha256": "6a18be432bd4d3e4e7d8d1a7720372d22f2203348532d7597f21b55b08aa76b1"
+      "sha256": "335dc88ac8640d8a99499952ca9868527cae28237f9a7505e8c7bf4ef3461de7"
     },
     {
       "path": "starling/README.md",
@@ -588,11 +588,11 @@
     },
     {
       "path": "starling/ciclos/nivel-1.glb",
-      "sha256": "e7f9b92bc12a6139eed161a827bc851c96beda242f50437f10fc0849789881be"
+      "sha256": "f479ee18dfecef94da56386ee5b66a9735b17e4e1609464752979e6245f50ea3"
     },
     {
       "path": "starling/ciclos/nivel-1.usdz",
-      "sha256": "74189efebfd1a3262df1a0b7826fe23f30e7f2fad2d0a4a0cf26b69775738d82"
+      "sha256": "7fe754b8ac224c292c3324ac00537b2f1eafd4a95b609a549c3a738c3b8342e6"
     },
     {
       "path": "starling/ciclos/nivel-2.glb",

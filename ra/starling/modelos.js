@@ -133,10 +133,9 @@ function capilar(length=62, radius=4.4) {
   }
   g.add(per); return g;
 }
-function linfatico(g, motion, scale=1) {
-  const pts=[[-19,-14,-2],[-12,-15,-3],[2,-17,-4],[18,-17,-5],[30,-14,-6]];
+function linfatico(g, motion, scale=1, pts=[[-19,-14,-2],[-12,-15,-3],[2,-17,-4],[18,-17,-5],[30,-14,-6]]) {
   const path=curva(pts.map(p=>p.map(n=>n*scale)));
-  g.add(mesh(tubo(path,2.6*scale),M.linfa));
+  g.add(mesh(tubo(path,2.6*scale,pts.length>5?96:48),M.linfa));
   g.add(mesh(organico(2.6*scale),M.linfa,pts[0].map(n=>n*scale),[1.1,1,1]));
   // Sobreposição endotelial: abas de entrada do linfático inicial.
   for(let i=0;i<6;i++) {
@@ -150,17 +149,28 @@ function linfatico(g, motion, scale=1) {
 function rede(motion) {
   const g=new THREE.Group(); fibras(g,112,28);
   [[-22,17,-14],[14,-11,-16],[35,18,-15]].forEach(p=>fibroblasto(g,...p));
-  const left=curva([[-56,12,0],[-38,10,1],[-24,5,0],[-16,-4,-1]]);
-  const right=curva([[17,-4,0],[29,7,-1],[42,10,1],[57,13,0]]);
-  g.add(mesh(tubo(left,3.5,55,12,1.9),M.arterial));
-  g.add(mesh(tubo(right,2.2,55,12,4.2),M.venoso));
+  // Pontas na meia altura da rede: os capilares se abrem em leque para cima e
+  // para baixo, sem grampo de volta (revisão 2026-10-25).
+  const left=curva([[-56,12,0],[-38,10,1],[-26,5,0],[-16,0,-1]]);
+  const right=curva([[16,0,0],[29,7,-1],[42,10,1],[57,13,0]]);
+  // A ponta da arteríola e o começo da vênula afinam até o calibre capilar:
+  // a última arteríola continua no capilar, sem coto aberto (revisão 2026-10-25).
+  const rArt=u=>3.5+(.95-3.5)*u, rVen=u=>.95+(4.2-.95)*u;
+  g.add(mesh(tubo(left,3.5,55,12,.95),M.arterial));
+  g.add(mesh(tubo(right,.95,55,12,4.2),M.venoso));
+  // Trecho de curva entre t0 e t1, para o funil de cada ramificação.
+  const trecho=(path,t0,t1)=>curva(Array.from({length:7},(_,k)=>path.getPointAt(t0+(t1-t0)*k/6)));
   const paths=[];
   for(let i=0;i<5;i++) {
-    const a=left.getPointAt(.32+i*.17), b=right.getPointAt(i*.15);
+    const ua=.32+i*.17, ub=i*.15, a=left.getPointAt(ua), b=right.getPointAt(ub);
     const y=-22+i*10, z=(i%2?2:-3);
-    const path=curva([a,[-24,y*.65,z],[-9,y+Math.sin(i)*2,z+1],[8,y,z],[20,y*.7,z],b]);
+    const path=curva([a,[Math.max(-24,a.x+6),y*.65,z],[-9,y+Math.sin(i)*2,z+1],[8,y,z],[Math.min(20,b.x-5),y*.7,z],b]);
     g.add(mesh(tubo(path,.88,64,10),M.capilar)); paths.push(path);
-    [a,b].forEach(p=>g.add(mesh(esfera(1.2),M.capilar,[p.x,p.y,p.z])));
+    [[a,rArt(ua)],[b,rVen(ub)]].forEach(([p,r])=>g.add(mesh(esfera(Math.min(1.2,r)),M.capilar,[p.x,p.y,p.z])));
+    // Funil na saída da arteríola e na chegada à vênula: o capilar nasce do
+    // vaso maior em vez de atravessar a parede como um fio espetado.
+    g.add(mesh(tubo(trecho(path,0,.13),Math.min(2.2,rArt(ua)*.75),16,10,.88),M.arterial));
+    g.add(mesh(tubo(trecho(path,.87,1),.88,16,10,Math.min(2.6,rVen(ub)*.75)),M.venoso));
   }
   for(let i=0;i<4;i++) {
     const a=paths[i].getPointAt(.36+(i%2)*.14), b=paths[i+1].getPointAt(.5);
@@ -169,7 +179,8 @@ function rede(motion) {
   for(const path of paths) for(let i=0;i<5;i++) {
     const o=mesh(esfera(.58),M.hemacia); g.add(o); motion.blood.push({o,path,offset:i/5,scale:1});
   }
-  linfatico(g,motion,1.2);
+  // Na rede, o linfático atravessa o campo e sai ao lado da vênula (revisão 2026-10-25).
+  linfatico(g,motion,1.2,[[-28,-13,-1],[-19,-14,-2],[-12,-15,-3],[2,-17,-4],[18,-17,-5],[30,-14,-6],[40,-10,-6],[48,-7,-5]]);
   g.userData.rotulos=[
     {nome:'Arteríola',p:[-45,12,0],cor:'arterial'},
     {nome:'Rede capilar',p:[0,22,0],cor:'arterial'},
