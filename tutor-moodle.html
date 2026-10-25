@@ -129,7 +129,7 @@
         enabled.addEventListener('change',()=>{cancel();history=[];input.placeholder=enabled.checked?'Descreva sua dúvida ou seu raciocínio…':'Ex.: potencial de ação, retorno venoso, sangue...';});
         window.addEventListener('pagehide',()=>{cancel();history=[];currentModule=null;box.replaceChildren();enabled.checked=false;});
         try{
-          const response=await fetch(endpoint.replace(/\/$/,'')+'/status',{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(5000)});
+          const response=await fetch(endpoint.replace(/\/$/,'')+'/status',{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(15000)});
           const data=await response.json();if(!response.ok||!data.enabled)throw new Error();
           enabled.disabled=false;
           document.getElementById('aiNotice').textContent='Ao ativar, suas perguntas e as últimas mensagens são enviadas ao Gemini. Não envie dados pessoais. No nível gratuito, o Google pode usar esse conteúdo para melhorar seus produtos. Este tutor não salva conversas entre visitas. A IA pode errar; confira no material da disciplina.';
