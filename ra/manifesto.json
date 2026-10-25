@@ -100,7 +100,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "806031401a956c9f05e1327095d5a8e432c82f3f3dbe462c3e802a7a9a257cdc"
+      "sha256": "064f31836443cf5e69d7b769e9ea691374c42578b3d65f544c066ec30aaca6d5"
     },
     {
       "path": "pleura/modelos.js",
@@ -140,7 +140,7 @@
     },
     {
       "path": "retorno-venoso/index.html",
-      "sha256": "52d8c2c64ff1de30fc60e475d6a4f0481b13b597840fee3bf818ac53e5315789"
+      "sha256": "28de46cd6adf7efe113491061cb945b132d0aae24813cc60568f446a10ba3d74"
     },
     {
       "path": "retorno-venoso/modelos.js",
@@ -192,7 +192,7 @@
     },
     {
       "path": "coracao/index.html",
-      "sha256": "7c23d91ff73af482c9a0b92b5ae954275b34720ae972c94c6edaca4445561a91"
+      "sha256": "4d44e13e4009d69529253326a29ca6e5e3b9853a13acc11668732117aa514678"
     },
     {
       "path": "coracao/legendas-a.js",
@@ -240,7 +240,7 @@
     },
     {
       "path": "musculo-sarcomero/index.html",
-      "sha256": "e871f68eba02145556988c59770a34747ac61830bf35bbb2c933a48c63ef7c47"
+      "sha256": "a563b37580e95ad47a5baacccdee47677923ea9a129362b570cc28579cb7a664"
     },
     {
       "path": "musculo-sarcomero/modelos.js",
@@ -264,7 +264,7 @@
     },
     {
       "path": "potencial-membrana/index.html",
-      "sha256": "819a2c4ab4463977437fac8e8cbd804d9b5229738ce13b55195997dde47d4b0c"
+      "sha256": "80019396ba6b7c8b9d03b8d2691edc892089e57e78e1796d309373563a675554"
     },
     {
       "path": "potencial-membrana/modelos.js",
@@ -300,7 +300,7 @@
     },
     {
       "path": "starling/index.html",
-      "sha256": "a5b0f726d3c34feb44e88a331e96f005ba08763eb3ff61e7c6fab3031a49a3a4"
+      "sha256": "19a6b196e1b3b2386cd31e8a6c127491fc0b3290eb32e37ea94d1172d3b9f834"
     },
     {
       "path": "starling/modelos.js",
@@ -328,7 +328,7 @@
     },
     {
       "path": "juncao-neuromuscular/index.html",
-      "sha256": "3d82a4cc5180b57814cca7950904bf7f686ea4dcac7c37827789eba41548a06a"
+      "sha256": "914529e22c9e3e5c26465c0800e73ed014e76e8b601bb3eaecff842ef5a880ac"
     },
     {
       "path": "juncao-neuromuscular/modelos.js",
@@ -364,7 +364,7 @@
     },
     {
       "path": "osso-vivo/index.html",
-      "sha256": "6eb9838d998111dbff5b68775d51c40234312a8b4d05726dad94ff1096a8e223"
+      "sha256": "da426ea68e9df79f42e0d9273065e6e22ac80ecafad60c95c564e4e947761754"
     },
     {
       "path": "osso-vivo/modelos.js",
@@ -388,7 +388,7 @@
     },
     {
       "path": "pleura/vasos.html",
-      "sha256": "2cc508dad5031f115f199950544b5dc88b06c621fc9e87961729b0f9ef047b1f"
+      "sha256": "5c83735e8a54293430f49bee23d884e244d0315c9153048a683dbc1e9d3a6fa7"
     },
     {
       "path": "pleura/vasos-foco.js",
@@ -400,7 +400,7 @@
     },
     {
       "path": "pleura/modelo-aprovado.html",
-      "sha256": "a5bd991bbf08f2f7204f96fe6fd87d291e3c629e173f435155aaf4e85327b2cd"
+      "sha256": "891cd56c70b3058f5f6abdd14176d3193d4953a833d7f47a65b8cf397f85e569"
     },
     {
       "path": "assets/pleura-duas-camadas.glb",
@@ -408,7 +408,7 @@
     },
     {
       "path": "pleura/pleuras.html",
-      "sha256": "8fe812484c4b5b2285702f9d762cbfbc026069078704e062f34c4e703ff2ac84"
+      "sha256": "1ddae632dcc49722539f6e1c3662a4d73cc22ed24b4b31c6a3b679b3446bbe48"
     },
     {
       "path": "assets/pleura-osso-texturizado.glb",
