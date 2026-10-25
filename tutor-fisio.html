@@ -59,6 +59,14 @@
     .modal-head h2 { margin:0; font-size:1.05rem; } .modal-body { padding:14px; } .modal-body img { width:100%; height:auto; display:block; border-radius:14px; }
     body.modal-open { overflow:hidden; }
     @media (max-width:720px) { .brand span { display:none; } h1 { font-size:1.85rem; } }
+  
+    .closing-grid{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;align-items:stretch}
+    .closing-grid>.escape-card{height:100%;margin:0;min-width:0;box-shadow:inset 0 2px 0 #ffffff40,0 7px 0 #483719,0 17px 28px #091f1e55;transition:transform .2s,box-shadow .2s}
+    .closing-grid>.escape-card:hover{transform:translateY(-3px);box-shadow:inset 0 2px 0 #ffffff40,0 10px 0 #483719,0 23px 34px #091f1e66}
+    .closing-grid>.escape-card:active{transform:translateY(2px)}
+    .closing-grid .percurso-card::before{background-image:url('assets/escape-room-fisiologia.jpg');background-position:center 70%;filter:hue-rotate(45deg) saturate(1.15)}
+    @media(max-width:700px){.closing-grid{grid-template-columns:1fr}}
+    @media(prefers-reduced-motion:reduce){.closing-grid>.escape-card{transition:none}}
   </style>
   <link rel="stylesheet" href="tutor-widget.css?v=5">
   <link rel="stylesheet" href="inicio/tutor-tema.css?v=ra-botoes-3d-20261003">
@@ -132,7 +140,7 @@
         const mapButtons=maps.map((map,index)=>`<button class="btn btn-ghost" type="button" data-map="${index}">${maps.length>1 ? 'Mapa '+(index+1) : 'Ver mapa'}</button>`).join('');
         const questions=(item.qs||[]).map((question,questionIndex)=>`<div class="q"><b>${questionIndex+1}. ${esc(question.q)}</b><div class="opts">${question.opts.map((option,optionIndex)=>`<button type="button" data-option="${optionIndex}" data-answer="${question.a}">${String.fromCharCode(65+optionIndex)}) ${esc(option)}</button>`).join('')}</div><p class="feedback" data-why="${esc(question.why)}"></p></div>`).join('');
         return `<article class="card" data-module="${moduleIndex}"><span class="meta">${esc(config.axisNames[item.group])}</span><h2>${esc(item.title)}</h2><p>${esc(item.goal)}</p><ol class="steps">${(item.steps||[]).map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="actions">${mapButtons}<a class="btn btn-ghost" href="${esc(item.href)}?percurso=fisioterapia">Abrir simulador</a><button class="btn btn-primary" type="button" data-open>Questões</button></div><div class="panel">${questions}</div></article>`;
-      }).join('')+escapeCard+window.cardRealidadeAumentada('fisioterapia',active);
+      }).join('')+(escapeCard?'<section class="closing-grid" aria-label="Desafios de fechamento">'+escapeCard+'<article class="card escape-card percurso-card"><span class="meta">Desafio de fechamento</span><h2>PERCURSOS DE FISIOLOGIA</h2><p class="escape-call">Desafie-se e mostre que pode seguir seu caminho!</p><p>Ou, fique e estude mais!</p><div class="actions"><a class="btn btn-primary" href="https://fisiologia-em-fuga.drmarionascimento.com.br/percursos/" target="_blank" rel="noopener noreferrer">Explorar os Percursos</a></div></article></section>':'')+window.cardRealidadeAumentada('fisioterapia',active);
     }
     axesEl.addEventListener('click',event=>{
       const button=event.target.closest('[data-axis]');
