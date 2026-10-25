@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import * as THREE from 'three';
+import {placaVolume} from '../../../texto-volume.js';
 import {GLTFExporter} from 'three/addons/exporters/GLTFExporter.js';
 import {createCanvas as nativeCanvas, Canvas, ImageData, GlobalFonts} from '@napi-rs/canvas';
 
@@ -10,7 +11,7 @@ import {prepararParaRA} from '../../../potencial-membrana/cores-para-ra.js';
 import {DURACAO, estadoPelicula, estadoTransporte, suave, limitar} from '../ciclo.js';
 
 const createCanvas=(w,h)=>{const c=nativeCanvas(w,h);Object.defineProperty(c,'data',{value:undefined});return c;};
-GlobalFonts.registerFromPath('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf','Membrana');
+for(const f of ['/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf','C:/Windows/Fonts/arial.ttf'])if(fs.existsSync(f)){GlobalFonts.registerFromPath(f,'Membrana');break;}
 const dir=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'../assets');
 fs.mkdirSync(dir,{recursive:true});
 globalThis.document={createElement:()=>createCanvas(1,1)};
@@ -39,12 +40,7 @@ const base=criar(tex);
 base.aplicarPotencial(-70);
 
 function placa(texto,x,y,z,w=2.3,cor='#d6edf4') {
- const c=createCanvas(768,128),ctx=c.getContext('2d');
- ctx.fillStyle='#102b38';ctx.fillRect(0,0,768,128);ctx.fillStyle=cor;ctx.fillRect(0,0,9,128);
- ctx.font='36px Membrana';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(texto,390,64,730);
- const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;
- const m=new THREE.Mesh(new THREE.PlaneGeometry(w,w/6),new THREE.MeshStandardMaterial({map:t,roughness:1,metalness:0,side:THREE.DoubleSide}));
- m.position.set(x,y,z);return m;
+ const p=placaVolume(texto,{largura:w,altura:w/6,espessura:.045,textoCor:cor});p.position.set(x,y,z);return p;
 }
 
 function cargasDoModelo(modelo,animadas) {
@@ -150,7 +146,7 @@ for(const [tipo,indice] of [['pelicula',2],['travessias',3]]) {
   if(mudou(a.scale,3))tracks.push(new THREE.VectorKeyframeTrack(m.name+'.scale',times,a.scale));
  }
  // Remove metadados de execução e usa materiais glTF PBR básicos nos dois sistemas.
- modelo.traverse(o=>{o.userData={};o.visible=true;if(o.isMesh){const old=o.material;const m=new THREE.MeshStandardMaterial();m.copy(old);m.emissiveIntensity=Math.min(m.emissiveIntensity,1);o.material=m;}});
+ modelo.traverse(o=>{o.userData=o.userData.textoRA?{textoRA:o.userData.textoRA}:{};o.visible=true;if(o.isMesh){const old=o.material;const m=new THREE.MeshStandardMaterial();m.copy(old);m.emissiveIntensity=Math.min(m.emissiveIntensity,1);o.material=m;}});
  prepararParaRA(modelo);
  let serial=0;modelo.traverse(o=>{if(!o.name.startsWith(tipo+'_movel_'))o.name=`${tipo}_estrutura_${serial++}`;});
  // Gêmeas de placas dupla face acompanham a animação (a conversão cria irmãos).

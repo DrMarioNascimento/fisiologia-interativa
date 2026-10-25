@@ -65,3 +65,8 @@ A apresentação segue as demais experiências: assinatura, retorno ao Tutor de 
 ## Viagem ao osso vivo
 
 [Nova experiência](https://fisiologia.drmarionascimento.com.br/ra/osso-vivo/) procedural original: desmontagem do osso, compacto e esponjoso, ósteon com vasos e canalículos, osteoclasto com transcitose, osteoblasto com síntese e mineralização extracelular. Colágeno entrelaçado e cristais em placas ganham uma ampliação própria; setas e deformação ampliada tornam a carga visível. Três cenários de carga compartilham um ciclo demonstrativo; valores são volumes relativos escolhidos, sem densitometria ou calendário clínico. Controles de reprodução, rótulos, cinco peças estáticas em RA, roteiro e questões nos quatro Tutores. EF: Osteoarticular; Fisioterapia: Sistema muscular, preservando suas cinco unidades. [Modelo, referências e limites](osso-vivo/README.md).
+
+## Volume e movimento — 25/10/2026
+
+Placas e textos extrudados, ciclos portáteis em GLB e USDZ e preservação das exportações de estado. Consulte [a revisão e os limites de compatibilidade](REVISAO-VOLUME-MOVIMENTO.md).
+
