@@ -1,12 +1,12 @@
 # Fisiologia Interativa
 
-## Disponibilidade e novidades — 24 de outubro de 2026
+## Disponibilidade e novidades — 25 de outubro de 2026
 
 **Público e gratuito**, sem conta Google para os simuladores, mapas e experiências de RA nas entradas de [EF](https://fisiologia.drmarionascimento.com.br/) e [Fisioterapia](https://fisiologia.drmarionascimento.com.br/fisioterapia/). O catálogo EF inclui a Unidade 06 — Sistema Endócrino. Os quatro acessos de tutoria são `tutor-ef.html`, `tutor-fisio.html`, `tutor-moodle.html` e `tutor-moodle.html?percurso=fisioterapia`; serviços de IA dependem de sua configuração e disponibilidade.
 
 As atualizações de RA incluem célula, junção neuromuscular e músculo/sarcômero. Biofeedback respiratório para PC e smartphone e a versão web Respirar são recursos do navegador; a presença do projeto nativo no repositório não significa lançamento em lojas Android/iOS.
 
-O projeto relacionado **Fisiologia em Fuga** aceita qualquer conta Google e inclui os novos Percursos de Fisiologia. **Atividades Extras** tem condução autorizada e entrada da turma por código. Esses controles pertencem aos respectivos projetos.
+O projeto relacionado **Fisiologia em Fuga** está aberto a testes públicos **sem login Google**. Seus escape rooms são separados por Educação Física e Fisioterapia; **Percursos de Fisiologia** é compartilhado pelos dois cursos (12 unidades, nove contextos), com link nos quatro tutores. **Atividades Extras** tem condução autorizada e entrada da turma por código. Esses controles pertencem aos respectivos projetos.
 
 [Ver todos os recursos públicos](https://www.drmarionascimento.com.br/#acesso-publico). O acesso respeita [LICENSE.md](LICENSE.md).
 
