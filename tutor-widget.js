@@ -348,7 +348,7 @@
     enabled.addEventListener('change',()=>{ cancelAI(); aiHistory = []; document.querySelector('#tutorInput').placeholder = enabled.checked ? 'Descreva sua dúvida ou seu raciocínio…' : 'Ex.: onde estudo extração de O₂?'; });
     window.addEventListener('pagehide',()=>{ cancelAI(); aiHistory = []; lastQuiz = null; messages().replaceChildren(); enabled.checked = false; });
     try {
-      const response = await fetch(aiEndpoint.replace(/\/$/,'') + '/status', { signal:AbortSignal.timeout(5000), credentials:'omit',cache:'no-store' });
+      const response = await fetch(aiEndpoint.replace(/\/$/,'') + '/status', { signal:AbortSignal.timeout(15000), credentials:'omit',cache:'no-store' });
       const data = await response.json();
       if (!response.ok || !data.enabled) throw new Error();
       enabled.disabled = false;
