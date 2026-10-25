@@ -1,16 +1,18 @@
-import {configureAR} from './ra.js?v=celula-20261024';
+import {configureAR} from './ra.js?v=celula-v3';
+import {configureLayers} from './layers.js?v=celula-v3';
 import * as T from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {OrbitControls} from './vendor/OrbitControls.js';
 const stage=document.getElementById('cell-stage'),button=id=>document.getElementById(id),status=button('status');
 // Native AR is available even if this browser cannot create a WebGL context.
-configureAR();
+const layers=configureLayers();
+configureAR(layers);
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let renderer;
 try { renderer=new T.WebGLRenderer({antialias:true,alpha:true}); }
 catch(error){
  status.textContent='A prévia 3D não está disponível neste navegador. No celular compatível, use Abrir em realidade aumentada.';
- const poster=document.createElement('img');poster.src='./celula-nova-poster.webp';poster.alt='Novo modelo da célula humana';poster.className='cell-poster';stage.append(poster);
+ const poster=document.createElement('img');poster.src='./celula-v3-'+layers.getVariant()+'.webp';layers.subscribe(()=>{poster.src='./celula-v3-'+layers.getVariant()+'.webp';});poster.alt='Novo modelo da célula humana';poster.className='cell-poster';stage.append(poster);
  for(const id of ['nuc','motion','speed','reset'])button(id).disabled=true;
  console.warn('Prévia 3D indisponível',error);
 }
@@ -23,26 +25,24 @@ async function init(){
  for(const [intensity,pos] of [[2.5,[3,4,4]],[1.5,[-3,1,2]],[1.5,[1,2,-3]]]){const light=new T.DirectionalLight(0xffffff,intensity);light.position.set(...pos);scene.add(light);}
  const loader=new GLTFLoader();let gltf;
  if(matchMedia('(pointer:coarse)').matches){
-  gltf=await loader.loadAsync('./celula-mobile-v2.glb',e=>{if(e.total)status.textContent=`Carregando célula · ${Math.round(100*e.loaded/e.total)}%`;});
+  gltf=await loader.loadAsync('./celula-v3-completa.glb',e=>{if(e.total)status.textContent=`Carregando célula · ${Math.round(100*e.loaded/e.total)}%`;});
  }else{
   // Lossless original, split only for transport. Embedded buffers and textures stay identical.
-  const response=await fetch('./modelo-original-v2/manifest.json');if(!response.ok)throw Error('Manifesto indisponível');const manifest=await response.json();let loaded=0;
-  const parts=await Promise.all(manifest.parts.map(async part=>{const response=await fetch('./modelo-original-v2/'+part.file);if(!response.ok)throw Error('Parte do modelo indisponível');const bytes=new Uint8Array(await response.arrayBuffer());if(bytes.length!==part.bytes)throw Error('Parte incompleta');loaded+=bytes.length;status.textContent=`Carregando célula · ${Math.round(100*loaded/manifest.bytes)}%`;return bytes;}));
+  const response=await fetch('./modelo-original-v3/manifest.json');if(!response.ok)throw Error('Manifesto indisponível');const manifest=await response.json();let loaded=0;
+  const parts=await Promise.all(manifest.parts.map(async part=>{const response=await fetch('./modelo-original-v3/'+part.file);if(!response.ok)throw Error('Parte do modelo indisponível');const bytes=new Uint8Array(await response.arrayBuffer());if(bytes.length!==part.bytes)throw Error('Parte incompleta');loaded+=bytes.length;status.textContent=`Carregando célula · ${Math.round(100*loaded/manifest.bytes)}%`;return bytes;}));
   const bytes=new Uint8Array(manifest.bytes);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}
   gltf=await loader.parseAsync(bytes.buffer,'./');
  }
  const model=gltf.scene,root=new T.Group();root.add(model);scene.add(root);
  const box=new T.Box3().setFromObject(model),center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());
  const scale=2/Math.max(size.x,size.y,size.z);root.scale.setScalar(scale);root.position.copy(center).multiplyScalar(-scale);root.updateMatrixWorld(true);
- const nuclear=[];let membrane=null,open=false,moving=!reduced,activeTab=true;
+ const nuclear=[];let open=false,moving=!reduced,activeTab=true;
  const plane=new T.Plane(new T.Vector3(0,-1,0),0);
- model.traverse(o=>{if(!o.isMesh)return;if(o.name==='membrana_plasmatica')membrane=o;
+ model.traverse(o=>{if(!o.isMesh)return;
    o.material=o.material.clone();if(o.material.transparent)o.material.depthWrite=false;
    if(['envoltorio_nuclear','poros_nucleares','nucleoplasma'].includes(o.name))nuclear.push(o);
  });
- // This upload has no external plasma membrane: do not invent one or show a dead control.
- button('mem').hidden=!membrane;
- button('mem').onclick=()=>{membrane.visible=!membrane.visible;button('mem').setAttribute('aria-pressed',String(membrane.visible));button('mem').textContent=membrane.visible?'Membrana visível':'Membrana oculta';};
+ layers.attachModel(model);
  const mixer=new T.AnimationMixer(model);gltf.animations.forEach(clip=>mixer.clipAction(clip).play());
  function updateClip(){
   if(!nuclear.length)return;
@@ -67,8 +67,8 @@ async function init(){
  renderer.domElement.addEventListener('pointerup',e=>{
   if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>8)return;down=null;
   const rect=renderer.domElement.getBoundingClientRect();ray.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,1-(e.clientY-rect.top)/rect.height*2),camera);
-  const hit=ray.intersectObject(model,true).find(h=>h.object.visible&&!['membrana_plasmatica','nucleoplasma'].includes(h.object.name)&&(!open||!nuclear.includes(h.object)||plane.distanceToPoint(h.point)>=0));
-  const name=hit?.object.name||'';button('tip').textContent=names[name]||(/^mitocondria/.test(name)?'Mitocôndria · cristas':/^ribossomo/.test(name)?'Ribossomo livre':/^vesicula/.test(name)?'Vesícula do complexo de Golgi':/^lisossomo/.test(name)?'Lisossomo':/^peroxissomo/.test(name)?'Peroxissomo':name.replaceAll('_',' '));
+  const hit=ray.intersectObject(model,true).find(h=>h.object.visible&&!['membrana_plasmatica','citosol','nucleoplasma'].includes(h.object.name)&&(!open||!nuclear.includes(h.object)||plane.distanceToPoint(h.point)>=0));
+  const name=hit?.object.name||'';button('tip').textContent=names[name]||(/^mitocondria/.test(name)?(name.endsWith('_membrana')?'Membrana da mitocôndria':'Mitocôndria · cristas'):/^ribossomo/.test(name)?'Ribossomo livre':/^vesicula/.test(name)?'Vesícula do complexo de Golgi':/^lisossomo/.test(name)?'Lisossomo':/^peroxissomo/.test(name)?'Peroxissomo':name.replaceAll('_',' '));
  });
  renderer.domElement.addEventListener('pointercancel',()=>down=null);
  let frameId=null,last=performance.now();

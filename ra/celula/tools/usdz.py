@@ -5,8 +5,8 @@ from PIL import Image
 from pathlib import Path
 import json,struct,zipfile
 
-def convert():
- glb=GLB(ROOT/'celula-mobile-v2.glb');g=glb.g;out=ROOT/'usd-final';out.mkdir(exist_ok=True);(out/'textures').mkdir(exist_ok=True)
+def convert(source=None,destination=None):
+ glb=GLB(source or ROOT/'celula-mobile-v2.glb');g=glb.g;out=ROOT/('usd-'+Path(destination).stem if destination else 'usd-final');out.mkdir(exist_ok=True);(out/'textures').mkdir(exist_ok=True)
  stage=Usd.Stage.CreateNew(str(out/'celula.usdc'));root=UsdGeom.Xform.Define(stage,'/Cell');stage.SetDefaultPrim(root.GetPrim());UsdGeom.SetStageUpAxis(stage,UsdGeom.Tokens.y);UsdGeom.SetStageMetersPerUnit(stage,1);stage.SetTimeCodesPerSecond(24);stage.SetFramesPerSecond(24)
  imgs={}
  for i,img in enumerate(g.get('images',[])):
@@ -51,7 +51,7 @@ def convert():
    i=ch['target']['node'];prop=ch['target']['path'];s=anim['samplers'][ch['sampler']];times=glb.arr(s['input']).flatten();values=glb.arr(s['output']);assert s.get('interpolation','LINEAR')=='LINEAR';op=ops[i][prop];tracks+=1
    for t,v in zip(times,values):
     val=Gf.Quatf(float(v[3]),Gf.Vec3f(*v[:3].astype(float))) if prop=='rotation' else Gf.Vec3d(*v.astype(float)) if prop=='translation' else Gf.Vec3f(*v.astype(float));op.Set(val,float(t)*24);end=max(end,float(t)*24)
- stage.SetStartTimeCode(0);stage.SetEndTimeCode(end);stage.GetRootLayer().Save();dest=ROOT/'celula-ios-v2.usdz'
+ stage.SetStartTimeCode(0);stage.SetEndTimeCode(end);stage.GetRootLayer().Save();dest=Path(destination) if destination else ROOT/'celula-ios-v2.usdz'
  # Package without rewriting the source layer. USDZ requires uncompressed entries and 64-byte alignment.
  with zipfile.ZipFile(dest,'w',compression=zipfile.ZIP_STORED) as z:
   for file in [out/'celula.usdc', *sorted((out/'textures').iterdir())]:
@@ -59,5 +59,5 @@ def convert():
  checkstage=Usd.Stage.Open(str(dest));assert checkstage
  registry=UsdValidation.ValidationRegistry();context=UsdValidation.ValidationContext(registry.GetOrLoadAllValidators());errors=context.Validate(checkstage)
  report={'meshes':meshcount,'tracks':tracks,'duration':end/24,'validation':[e.GetErrorAsString() for e in errors]}
- (ROOT/'usdz-check.json').write_text(json.dumps(report,indent=2));print('USDZ',dest.stat().st_size,'meshes',meshcount,'tracks',tracks,'validation',len(errors));print(report['validation'][:5])
+ (dest.with_suffix('.validation.json')).write_text(json.dumps(report,indent=2));print('USDZ',dest.stat().st_size,'meshes',meshcount,'tracks',tracks,'validation',len(errors));print(report['validation'][:5])
 if __name__=='__main__':convert()

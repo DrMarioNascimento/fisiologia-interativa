@@ -23,7 +23,7 @@ test('troca de abas preserva o iframe e envia o nível correto com origem limita
  tabs[1].onclick();const first=el('membrane-frame').src;assert.match(first,/nivel=4/);assert.match(first,/percurso=fisioterapia/);tabs[2].onclick();assert.equal(el('membrane-frame').src,first);assert(posts.some(p=>p.id==='membrane-frame'&&p.data.nivel===4&&p.origin===location.origin));tabs[0].onclick();assert.equal(el('view-celula').hidden,false);assert.equal(el('view-membrana').hidden,true);
 });
 test('modelo móvel contém organelas, texturas e animação, sem extensões incompatíveis com Android',()=>{
- const b=fs.readFileSync(new URL('../celula/visualizador/celula-mobile-v2.glb',import.meta.url));assert.equal(b.toString('ascii',0,4),'glTF');assert.equal(b.readUInt32LE(8),b.length);assert(b.length<15*1024*1024);
+ const b=fs.readFileSync(new URL('../celula/visualizador/celula-v3-completa.glb',import.meta.url));assert.equal(b.toString('ascii',0,4),'glTF');assert.equal(b.readUInt32LE(8),b.length);assert(b.length<15*1024*1024);
  const j=JSON.parse(b.toString('utf8',20,20+b.readUInt32LE(12)));
  for(const name of ['nucleolo','cromatina','reticulo_endoplasmatico_liso','reticulo_endoplasmatico_rugoso'])assert(j.nodes.some(o=>o.name===name));
  assert.equal(j.animations.length,1);assert(j.animations[0].channels.length>300);assert(!j.extensionsUsed?.length);
@@ -47,7 +47,7 @@ test('célula usa viewport separado e recebe enquadramento e toque na área do c
 test('RA usa arquivos públicos e mantém o gesto direto no iPhone e Android',()=>{
  const html=read('celula/visualizador/index.html'),app=read('celula/visualizador/ra.js');
  assert.match(html,/class="ra-launch"/);assert.match(html,/camera-controls exposure="1.1"/);
- assert.match(app,/celula-ios-v2\.usdz/);assert.match(app,/celula-mobile-v2\.glb/);
+ assert.match(app,/celula-v3-/);assert.match(app,/\.usdz/);assert.match(app,/\.glb/);
  assert.doesNotMatch(app,/createObjectURL|prepareUSDZ|GLTFExporter/);
  assert.doesNotMatch(html,/ra-ios\.js/);
 });
