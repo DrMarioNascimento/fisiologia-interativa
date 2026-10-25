@@ -4,6 +4,8 @@
  'use strict';
  const url='https://fisiologia-em-fuga.drmarionascimento.com.br/percursos/';
  function mount(){
+  // Site tutors render paired closing cards directly in their respective course catalogs.
+  if(!location.pathname.endsWith('/tutor-moodle.html'))return;
   if(document.getElementById('tutor-percursos-link'))return;
   const fisio=location.pathname.endsWith('/tutor-fisio.html')||new URLSearchParams(location.search).get('percurso')==='fisioterapia';
   const card=document.createElement('aside');
@@ -14,7 +16,7 @@
   heading.textContent='Percursos de Fisiologia · EF + Fisioterapia';
   heading.style.display='block';
   const description=document.createElement('span');
-  description.textContent='12 unidades, nove contextos e síntese de investigação. Compartilhado pelos dois cursos · teste público sem login Google.';
+  description.textContent='Desafie-se e mostre que pode seguir seu caminho! Ou, fique e estude mais!';
   description.style.display='block';
   const link=document.createElement('a');
   link.href=url;link.target='_blank';link.rel='noopener noreferrer';
