@@ -1,30 +1,36 @@
-import * as T from 'three';
-import {GLTFExporter} from './vendor/GLTFExporter.js';
-import {mergeGeometries} from './vendor/BufferGeometryUtils.js';
-import {prepararParaRA} from '../../potencial-membrana/cores-para-ra.js';
-import {GLTFLoader} from './vendor/GLTFLoader.js';
-/* Peça de RA leve. celula-aprimorada.glb tem ~2 milhões de vértices sem índice
-   (81 MB); a peça exportada passava de 130 MB e nenhum iPhone a converte em USDZ.
-   celula-ra.glb é a MESMA geometria com os vértices repetidos soldados
-   (gltf-transform weld, sem perda: nenhuma forma muda), 23 MB. A página continua
-   exibindo o modelo completo; só a cópia levada à RA troca cada malha pela
-   equivalente leve, pelo nome do nó. Membrana, núcleo aberto e corte seguem valendo. */
-let leves=null;
-const carregarLeves=()=>leves??=new GLTFLoader().loadAsync('./celula-ra.glb').then(g=>{const m=new Map();g.scene.traverse(o=>{if(o.isMesh&&o.name&&!m.has(o.name))m.set(o.name,o.geometry)});return m}).catch(e=>{console.warn('celula-ra.glb indisponível; a RA usará o modelo completo.',e);return new Map()});
-export function configureAR(root){
- const prepare=document.getElementById('prepare-ar'),launch=document.getElementById('launch-ar'),viewer=document.getElementById('cell-ar'),status=document.getElementById('ar-state');let url,version=0;
- let timer;const invalidate=()=>{clearTimeout(timer);timer=setTimeout(()=>prepare.click(),700);version++;launch.disabled=true;status.textContent='Prepare o estado atual para RA.'};
- ['mem','nuc','motion','cut','speed'].forEach(id=>document.getElementById(id).addEventListener('click',invalidate));
- document.getElementById('cut').addEventListener('input',invalidate);
- prepare.onclick=async()=>{const id=++version;prepare.disabled=true;launch.disabled=true;status.textContent='Preparando a peça…';try{
-  const leve=await carregarLeves();if(id!==version)return;
-  const clone=root.clone(true);clone.updateMatrixWorld(true);const instances=[];
-  clone.traverse(o=>{if(o.isMesh&&!o.isInstancedMesh&&leve.has(o.name))o.geometry=leve.get(o.name)});
-  clone.traverse(o=>{if(o.isInstancedMesh)instances.push(o);if(!o.isMesh||!o.material.clippingPlanes?.length)return;const geo=o.geometry.clone(),pos=geo.attributes.position,idx=geo.index?.array,keep=[],point=new T.Vector3();for(let k=0;k<(idx?idx.length:pos.count);k+=3){point.set(0,0,0);for(let v=0;v<3;v++)point.add(new T.Vector3().fromBufferAttribute(pos,idx?idx[k+v]:k+v));point.multiplyScalar(1/3).applyMatrix4(o.matrixWorld);if(o.material.clippingPlanes.every(p=>p.distanceToPoint(point)>=0))keep.push(idx?idx[k]:k,idx?idx[k+1]:k+1,idx?idx[k+2]:k+2)}geo.setIndex(keep);o.geometry=geo;o.material=o.material.clone();o.material.clippingPlanes=[]});
-  // Expand instancing in the export clone for compatibility with mobile AR viewers.
-  for(const o of instances){const matrix=new T.Matrix4(),pieces=[];for(let i=0;i<o.count;i++){o.getMatrixAt(i,matrix);pieces.push(o.geometry.clone().applyMatrix4(matrix))}const geo=mergeGeometries(pieces);pieces.forEach(g=>g.dispose());const mesh=new T.Mesh(geo,o.material);mesh.name=o.name;mesh.position.copy(o.position);mesh.quaternion.copy(o.quaternion);mesh.scale.copy(o.scale);mesh.visible=o.visible;o.parent.add(mesh);o.removeFromParent()}
-  prepararParaRA(clone);const box=new T.Box3().setFromObject(clone),size=box.getSize(new T.Vector3());clone.scale.multiplyScalar(.6/Math.max(size.x,size.y,size.z));clone.updateMatrixWorld(true);const bounds=new T.Box3().setFromObject(clone),center=bounds.getCenter(new T.Vector3());clone.position.set(-center.x,-bounds.min.y,-center.z);
-  const bytes=await new GLTFExporter().parseAsync(clone,{binary:true,onlyVisible:true});if(id!==version)return;if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(new Blob([bytes],{type:'model/gltf-binary'}));viewer.src=url;status.textContent='Carregando a peça para RA…';
- }catch(e){console.error(e);status.textContent='Não foi possível preparar esta peça para RA.'}finally{prepare.disabled=false}};
- viewer.addEventListener('load',()=>{launch.disabled=!viewer.canActivateAR;status.textContent=viewer.canActivateAR?'Peça pronta. No iPhone, toque em AR após abrir.':'Peça preparada. A câmera RA requer aparelho e navegador compatíveis.'});viewer.addEventListener('error',()=>{launch.disabled=true;status.textContent='A peça não carregou no visualizador RA.'});launch.onclick=()=>viewer.activateAR();prepare.click();
+/* Public, prebuilt assets: native viewers cannot fetch this page's blob URLs. */
+export function nativePlatform(nav=navigator){
+ if(/iPad|iPhone|iPod/.test(nav.userAgent)||(nav.platform==='MacIntel'&&nav.maxTouchPoints>1))return 'ios';
+ return /Android/i.test(nav.userAgent)?'android':'web';
+}
+export function arLinks(base){
+ const glb=new URL('./celula-mobile-v2.glb',base).href,usdz=new URL('./celula-ios-v2.usdz',base).href;
+ const fallback=new URL('../?ar_fallback=1',base).href;
+ const android='intent://arvr.google.com/scene-viewer/1.0?'+new URLSearchParams({file:glb,mode:'ar_preferred',title:'Célula viva',resizable:'true'})+'#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url='+encodeURIComponent(fallback)+';end;';
+ return {glb,usdz,android};
+}
+export function configureAR(){
+ const prepare=document.getElementById('prepare-ar'),launch=document.getElementById('launch-ar'),viewer=document.getElementById('cell-ar'),status=document.getElementById('ar-state');
+ const platform=nativePlatform(),links=arLinks(location.href);
+ viewer.setAttribute('ios-src',links.usdz);
+ launch.disabled=platform==='web';
+ status.textContent=platform==='ios'?'Toque para colocar a célula no ambiente com a câmera do iPhone ou iPad.':platform==='android'?'Toque para abrir a célula no ambiente. Requer um Android compatível com RA.':'Explore em 3D aqui. Para colocar a célula no ambiente, abra esta página no iPhone ou Android.';
+ function nativeOpen(){
+  let doc=document;
+  try{if(window.top.document)doc=window.top.document;}catch{}
+  const link=doc.createElement('a');link.href=platform==='ios'?links.usdz:links.android;
+  if(platform==='ios'){link.rel='ar';const img=doc.createElement('img');img.alt='Célula viva';link.append(img);}
+  link.style.display='none';doc.body.append(link);link.click();setTimeout(()=>link.remove(),4000);
+ }
+ // Synchronous gesture: no conversion, fetch or await between tap and native viewer.
+ launch.onclick=()=>{
+  if(platform!=='web')nativeOpen();
+  else viewer.activateAR().catch(()=>{status.textContent='Este navegador não abriu a RA. Use um celular compatível.';});
+ };
+ prepare.onclick=()=>{viewer.hidden=false;viewer.src=links.glb;status.textContent='Carregando a prévia da peça usada em RA…';};
+ viewer.addEventListener('load',()=>{
+  if(platform==='web')launch.disabled=!viewer.canActivateAR;
+  status.textContent='Prévia pronta. A RA usa o modelo completo; o corte do núcleo é um recurso da exploração nesta página.';
+ });
+ viewer.addEventListener('error',()=>{status.textContent='A prévia da RA não carregou. Você ainda pode tentar o botão de abertura no celular.';});
 }

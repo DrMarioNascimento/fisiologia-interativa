@@ -22,8 +22,13 @@ test('troca de abas preserva o iframe e envia o nível correto com origem limita
  const c={document:{querySelectorAll:()=>tabs,getElementById:el},URL,URLSearchParams,location,history:{replaceState(){}}};vm.runInNewContext(read('celula/tabs.js'),c);
  tabs[1].onclick();const first=el('membrane-frame').src;assert.match(first,/nivel=4/);assert.match(first,/percurso=fisioterapia/);tabs[2].onclick();assert.equal(el('membrane-frame').src,first);assert(posts.some(p=>p.id==='membrane-frame'&&p.data.nivel===4&&p.origin===location.origin));tabs[0].onclick();assert.equal(el('view-celula').hidden,false);assert.equal(el('view-membrana').hidden,true);
 });
-test('GLB da célula permanece íntegro e contém texturas normais e organelas',()=>{
- const b=fs.readFileSync(new URL('../celula/visualizador/celula-aprimorada.glb',import.meta.url));assert.equal(b.toString('ascii',0,4),'glTF');assert.equal(b.readUInt32LE(8),b.length);const j=JSON.parse(b.toString('utf8',20,20+b.readUInt32LE(12)));for(const name of ['nucleolo','cromatina','reticulo_endoplasmatico_liso','reticulo_endoplasmatico_rugoso'])assert(j.nodes.some(o=>o.name===name));assert(j.materials.every(m=>m.normalTexture));
+test('modelo móvel contém organelas, texturas e animação, sem extensões incompatíveis com Android',()=>{
+ const b=fs.readFileSync(new URL('../celula/visualizador/celula-mobile-v2.glb',import.meta.url));assert.equal(b.toString('ascii',0,4),'glTF');assert.equal(b.readUInt32LE(8),b.length);assert(b.length<15*1024*1024);
+ const j=JSON.parse(b.toString('utf8',20,20+b.readUInt32LE(12)));
+ for(const name of ['nucleolo','cromatina','reticulo_endoplasmatico_liso','reticulo_endoplasmatico_rugoso'])assert(j.nodes.some(o=>o.name===name));
+ assert.equal(j.animations.length,1);assert(j.animations[0].channels.length>300);assert(!j.extensionsUsed?.length);
+ for(const mesh of j.meshes)for(const p of mesh.primitives)assert(!('COLOR_0' in p.attributes));
+ assert(j.materials.some(m=>m.pbrMetallicRoughness?.baseColorTexture));
 });
 
 test('célula usa viewport separado e recebe enquadramento e toque na área do canvas',()=>{
@@ -39,8 +44,10 @@ test('célula usa viewport separado e recebe enquadramento e toque na área do c
   assert.ok(Math.asin(1.12/distance)<Math.min(vertical,horizontal)/2);
  }
 });
-test('RA da célula segue a preparação antecipada e mantém o gesto direto para abrir a câmera',()=>{
+test('RA usa arquivos públicos e mantém o gesto direto no iPhone e Android',()=>{
  const html=read('celula/visualizador/index.html'),app=read('celula/visualizador/ra.js');
  assert.match(html,/class="ra-launch"/);assert.match(html,/camera-controls exposure="1.1"/);
- assert.match(app,/launch.onclick=\(\)=>viewer.activateAR\(\);prepare.click\(\)/);
+ assert.match(app,/celula-ios-v2\.usdz/);assert.match(app,/celula-mobile-v2\.glb/);
+ assert.doesNotMatch(app,/createObjectURL|prepareUSDZ|GLTFExporter/);
+ assert.doesNotMatch(html,/ra-ios\.js/);
 });
