@@ -44,5 +44,10 @@ Copie os oito arquivos `celula-v3-*.glb/usdz` para `../visualizador/`. Os interm
 
 - GLB validado com Khronos glTF Validator; USDZ validado com todos os validadores disponíveis do OpenUSD 26.11.
 - Teste de reprodução com AnimationMixer: 24 segundos em todas as variantes; 327, 325, 316 e 314 malhas em movimento, respectivamente.
-- 14 testes automatizados de integração, integridade do original, abertura iOS/Android, alternância independente das camadas e seleção das quatro variantes.
+- 16 testes automatizados de integração, integridade do original, abertura iOS/Android, alternância independente das camadas e seleção das quatro variantes.
 - Mário relatou movimento na RA da versão anterior (v2). A projeção da nova versão pela câmera ainda precisa ser confirmada em aparelhos físicos; a inspeção em navegador sem WebGL usa imagens renderizadas dos modelos reais.
+
+
+## Correção da abertura no Android
+
+Após Mário confirmar a abertura no iPhone e a falha no Android, a célula passou a usar o mesmo fluxo das abas Película/Travessias: preparar o GLB no model-viewer, priorizar `webxr scene-viewer quick-look` e chamar `activateAR()` diretamente no toque, somente depois do carregamento e da confirmação de suporte. No Android, a preparação começa automaticamente; trocar membranas invalida a prontidão anterior até que a nova variante esteja pronta. Falhas de carregamento têm mensagem e nova tentativa; uma sessão WebXR pausa o desenho da cena Three.js de fundo e o retoma ao sair. O caminho direto para o USDZ no iPhone permanece independente da prévia WebGL. Não houve verificação da correção em Android físico.

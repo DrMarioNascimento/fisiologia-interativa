@@ -1,10 +1,10 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';import crypto from 'node:crypto';
 const root=new URL('../celula/visualizador/',import.meta.url),layerCode=fs.readFileSync(new URL('layers.js',root),'utf8').replaceAll('export ',''),code=fs.readFileSync(new URL('ra.js',root),'utf8').replaceAll('export ','');
 function harness(userAgent,platform='',touch=0){
- const opened=[],nodes=new Map();const get=id=>{if(!nodes.has(id))nodes.set(id,{disabled:true,hidden:true,attributes:{},listeners:{},setAttribute(k,v){this.attributes[k]=v;},addEventListener(k,fn){this.listeners[k]=fn;}});return nodes.get(id);};
+ const opened=[],activated=[],presenting=[],nodes=new Map();const get=id=>{if(!nodes.has(id))nodes.set(id,{disabled:true,hidden:true,attributes:{},listeners:{},setAttribute(k,v){this.attributes[k]=v;if(k==='src')this.src=v;},getAttribute(k){return this.attributes[k]??null;},activateAR(){activated.push(this.src);return Promise.resolve();},addEventListener(k,fn){this.listeners[k]=fn;}});return nodes.get(id);};
  const topDoc={createElement:tag=>({tag,style:{},append(i){this.child=i;},click(){opened.push({href:this.href,rel:this.rel,child:this.child?.tag});},remove(){}}),body:{append(){}}};
- const env={document:{getElementById:get},window:{top:{document:topDoc}},navigator:{userAgent,platform,maxTouchPoints:touch},location:{href:'https://fisiologia.drmarionascimento.com.br/ra/celula/visualizador/?v=2'},URL,URLSearchParams,setTimeout(){}};
- vm.createContext(env);vm.runInContext(layerCode+';'+code+';this.layers=configureLayers();configureAR(this.layers);this.platform=nativePlatform();this.links=arLinks(location.href);',env);return {env,get,opened};
+ const env={document:{getElementById:get},window:{top:{document:topDoc}},navigator:{userAgent,platform,maxTouchPoints:touch},location:{href:'https://fisiologia.drmarionascimento.com.br/ra/celula/visualizador/?v=2'},URL,URLSearchParams,setTimeout(){},onPresenting:value=>presenting.push(value)};
+ vm.createContext(env);vm.runInContext(layerCode+';'+code+';this.layers=configureLayers();configureAR({...this.layers,onPresenting});this.platform=nativePlatform();this.links=arLinks(location.href);',env);return {env,get,opened,activated,presenting};
 }
 test('iPhone and iPad open a public USDZ through a top-level rel=ar link in the same gesture',()=>{
  for(const [ua,platform,touch] of [['iPhone','iPhone',5],['Macintosh','MacIntel',5]]){
@@ -12,9 +12,13 @@ test('iPhone and iPad open a public USDZ through a top-level rel=ar link in the 
   assert.equal(h.opened.length,1);assert.equal(h.opened[0].rel,'ar');assert.equal(h.opened[0].child,'img');assert.match(h.opened[0].href,/^https:\/\/.*celula-v3-completa\.usdz$/);
  }
 });
-test('Android uses a public GLB, AR-preferred mode and a valid 3D fallback',()=>{
- const h=harness('Android');h.get('launch-ar').onclick();assert.equal(h.opened.length,1);const url=h.opened[0].href;
- assert(url.startsWith('intent://arvr.google.com/scene-viewer/1.0?'));const query=new URLSearchParams(url.split('?')[1].split('#')[0]);assert.equal(query.get('mode'),'ar_preferred');assert.match(query.get('file'),/^https:\/\/.*celula-v3-completa\.glb$/);assert(url.includes('S.browser_fallback_url=https%3A'));assert(!url.includes('blob:'));
+test('Android prepares the selected GLB and activates WebXR first, like the working membrane tabs',()=>{
+ const h=harness('Android');assert.equal(h.get('cell-ar').attributes['ar-modes'],'webxr scene-viewer quick-look');
+ assert.equal(h.get('cell-ar').hidden,false);assert.equal(h.get('launch-ar').disabled,true);
+ h.get('launch-ar').onclick();assert.equal(h.activated.length,0);assert.equal(h.opened.length,0);
+ assert.match(h.get('cell-ar').src,/celula-v3-completa\.glb$/);
+ h.get('cell-ar').canActivateAR=true;h.get('cell-ar').listeners.load();assert.equal(h.get('launch-ar').disabled,false);
+ h.get('launch-ar').onclick();assert.equal(h.activated.length,1);assert.equal(h.opened.length,0);
 });
 test('Desktop keeps native AR disabled until a compatible WebXR viewer loads',()=>{
  const h=harness('Firefox Windows');assert.equal(h.get('launch-ar').disabled,true);h.get('prepare-ar').onclick();assert.equal(h.get('cell-ar').hidden,false);assert.equal(h.get('cell-ar').src,h.env.links.glb);
@@ -35,15 +39,36 @@ test('Membranes start visible, toggle independently, and preserve organelles and
  h.get('mem').onclick();assert.equal(h.env.layers.getVariant(),'sem-membranas-mitocondriais');assert(nodes.slice(0,2).every(n=>n.visible));
  h.get('mito').onclick();assert(nodes.every(n=>n.visible));
 });
-test('Every layer combination opens the corresponding animated native asset immediately',()=>{
+test('Layer changes select the correct iOS asset and require the new Android model to finish loading',()=>{
  for(const ua of ['iPhone','Android']){
-  const h=harness(ua);
+  const h=harness(ua);h.get('cell-ar').canActivateAR=true;
   for(const [button,variant] of [[null,'completa'],['mem','sem-membrana-celular'],['mito','sem-membranas'],['mem','sem-membranas-mitocondriais']]){
-   if(button)h.get(button).onclick();h.get('launch-ar').onclick();const href=decodeURIComponent(h.opened.at(-1).href);
-   assert(href.includes('celula-v3-'+variant+(ua==='iPhone'?'.usdz':'.glb')));
+   if(button)h.get(button).onclick();
+   if(ua==='Android'){
+    assert.equal(h.get('launch-ar').disabled,true);const count=h.activated.length;
+    h.get('cell-ar').listeners.load({detail:{url:'https://example.test/stale.glb'}});
+    h.get('launch-ar').onclick();assert.equal(h.activated.length,count);
+    h.get('cell-ar').listeners.load({detail:{url:h.get('cell-ar').src}});
+   }
+   h.get('launch-ar').onclick();const href=ua==='iPhone'?h.opened.at(-1).href:h.activated.at(-1);
+   assert(href.endsWith('celula-v3-'+variant+(ua==='iPhone'?'.usdz':'.glb')));
    assert(h.get('cell-ar').attributes['ios-src'].endsWith('celula-v3-'+variant+'.usdz'));
   }
  }
+});
+test('Android load failures, retries and AR lifecycle do not leave a stale enabled button',()=>{
+ const h=harness('Android'),v=h.get('cell-ar');v.canActivateAR=true;v.listeners.load();
+ v.listeners.error();assert.equal(h.get('launch-ar').disabled,true);
+ const first=v.src;h.get('prepare-ar').onclick();assert.notEqual(v.src,first);assert(v.src.includes('?retry=1'));
+ v.listeners.load({detail:{url:first}});assert.equal(h.get('launch-ar').disabled,true);
+ v.listeners.load({detail:{url:v.src}});assert.equal(h.get('launch-ar').disabled,false);
+ v.listeners['ar-status']({detail:{status:'session-started'}});v.listeners['ar-status']({detail:{status:'not-presenting'}});
+ assert.deepEqual(h.presenting,[true,false]);
+ v.listeners['ar-status']({detail:{status:'failed'}});assert.match(h.get('ar-state').textContent,/não abriu/);
+});
+test('Android without AR support keeps an explanation; iOS remains available after preview failure',()=>{
+ const h=harness('Android');h.get('cell-ar').canActivateAR=false;h.get('cell-ar').listeners.load();assert.equal(h.get('launch-ar').disabled,true);assert.match(h.get('ar-state').textContent,/Chrome/);
+ const ios=harness('iPhone');ios.get('cell-ar').listeners.error();assert.equal(ios.get('launch-ar').disabled,false);ios.get('launch-ar').onclick();assert.equal(ios.opened.length,1);
 });
 test('Four variants retain the same animation and hide only the requested membrane meshes',()=>{
  let animation;

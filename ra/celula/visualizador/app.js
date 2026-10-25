@@ -1,4 +1,4 @@
-import {configureAR} from './ra.js?v=celula-v3';
+import {configureAR} from './ra.js?v=celula-v3-android1';
 import {configureLayers} from './layers.js?v=celula-v3';
 import * as T from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
@@ -6,7 +6,8 @@ import {OrbitControls} from './vendor/OrbitControls.js';
 const stage=document.getElementById('cell-stage'),button=id=>document.getElementById(id),status=button('status');
 // Native AR is available even if this browser cannot create a WebGL context.
 const layers=configureLayers();
-configureAR(layers);
+let arPresenting=false,syncRender=()=>{};
+configureAR({...layers,onPresenting(value){arPresenting=value;syncRender();}});
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let renderer;
 try { renderer=new T.WebGLRenderer({antialias:true,alpha:true}); }
@@ -72,11 +73,12 @@ async function init(){
  });
  renderer.domElement.addEventListener('pointercancel',()=>down=null);
  let frameId=null,last=performance.now();
- function frame(now){frameId=null;if(document.hidden||!activeTab)return;const dt=Math.min((now-last)/1000,.05);last=now;
+ function frame(now){frameId=null;if(document.hidden||!activeTab||arPresenting)return;const dt=Math.min((now-last)/1000,.05);last=now;
   if(moving)mixer.update(dt*Number(button('speed').value)/100);if(open)updateClip();controls.update();renderer.render(scene,camera);frameId=requestAnimationFrame(frame);
  }
- function resume(){if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;last=performance.now();if(!document.hidden&&activeTab)frameId=requestAnimationFrame(frame);}
+ function resume(){if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;last=performance.now();if(!document.hidden&&activeTab&&!arPresenting)frameId=requestAnimationFrame(frame);}
  addEventListener('message',event=>{if(event.origin===location.origin&&event.source===parent&&event.data?.type==='celula-visibilidade'){activeTab=event.data.ativa===true;resume();}});
+ syncRender=resume;
  document.addEventListener('visibilitychange',resume);addEventListener('pageshow',resume);resume();
  status.textContent='Organelas · animação original do modelo';window.cellReady=true;
 }
