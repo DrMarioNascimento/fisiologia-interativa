@@ -1,7 +1,7 @@
 from glb_data import GLB
 from pathlib import Path
 ROOT=Path(__file__).parent
-from pxr import Usd,UsdGeom,UsdShade,UsdUtils,Sdf,Gf,Vt
+from pxr import Usd,UsdGeom,UsdShade,UsdSkel,UsdUtils,Sdf,Gf,Vt
 import numpy as np
 from PIL import Image
 from pathlib import Path
@@ -9,7 +9,7 @@ import json,struct,zipfile,re
 
 def convert(source=None,destination=None):
  glb=GLB(source or ROOT/'celula-mobile-v2.glb');g=glb.g;out=ROOT/('usd-'+Path(destination).stem if destination else 'usd-final');out.mkdir(exist_ok=True);(out/'textures').mkdir(exist_ok=True)
- stage=Usd.Stage.CreateNew(str(out/'celula.usdc'));root=UsdGeom.Xform.Define(stage,'/Cell');stage.SetDefaultPrim(root.GetPrim());UsdGeom.SetStageUpAxis(stage,UsdGeom.Tokens.y);UsdGeom.SetStageMetersPerUnit(stage,1);stage.SetTimeCodesPerSecond(24);stage.SetFramesPerSecond(24)
+ stage=Usd.Stage.CreateNew(str(out/'celula.usdc'));root=UsdSkel.Root.Define(stage,'/Cell');stage.SetDefaultPrim(root.GetPrim());UsdGeom.SetStageUpAxis(stage,UsdGeom.Tokens.y);UsdGeom.SetStageMetersPerUnit(stage,1);stage.SetTimeCodesPerSecond(24);stage.SetFramesPerSecond(24)
  imgs={}
  for i,img in enumerate(g.get('images',[])):
   v=g['bufferViews'][img['bufferView']];b=glb.bin[v.get('byteOffset',0):v.get('byteOffset',0)+v['byteLength']];name=f'textures/texture_{i}.'+('jpg' if img.get('mimeType')=='image/jpeg' else 'png');(out/name).write_bytes(b);imgs[i]=name
@@ -52,19 +52,20 @@ def convert(source=None,destination=None):
   for ch in anim['channels']:
    i=ch['target']['node'];prop=ch['target']['path'];s=anim['samplers'][ch['sampler']];times=glb.arr(s['input']).flatten();values=glb.arr(s['output']);assert s.get('interpolation','LINEAR') in ['LINEAR','STEP'];tracks+=1
    if prop=='weights':
-    targets=len(g['meshes'][g['nodes'][i]['mesh']]['primitives'][0]['targets']);weights=values.reshape(len(times),targets)
+    targets=len(g['meshes'][g['nodes'][i]['mesh']]['primitives'][0]['targets']);weights=values.reshape(len(times),targets);names=['shape_'+str(k) for k in range(targets)]
+    skel=UsdSkel.Skeleton.Define(stage,nodePaths[i]+'/Skeleton');skel.CreateJointsAttr(['root']);skel.CreateRestTransformsAttr([Gf.Matrix4d(1)]);skel.CreateBindTransformsAttr([Gf.Matrix4d(1)])
+    animation=UsdSkel.Animation.Define(stage,nodePaths[i]+'/Animation');animation.CreateJointsAttr(['root']);animation.CreateTranslationsAttr([Gf.Vec3f(0)]);animation.CreateRotationsAttr([Gf.Quatf(1)]);animation.CreateScalesAttr([Gf.Vec3h(1)]);animation.CreateBlendShapesAttr(names)
+    UsdSkel.BindingAPI.Apply(skel.GetPrim()).CreateAnimationSourceRel().SetTargets([animation.GetPath()])
+    for t,w in zip(times,weights):animation.CreateBlendShapeWeightsAttr().Set(Vt.FloatArray(w.tolist()),float(t)*24);end=max(end,float(t)*24)
     for mesh,p in meshes[i]:
-     base=glb.arr(p['attributes']['POSITION']).astype(np.float32);deltas=[glb.arr(t['POSITION']).astype(np.float32) for t in p['targets']]
-     normal=glb.arr(p['attributes']['NORMAL']).astype(np.float32) if 'NORMAL' in p['attributes'] else None
-     for t,w in zip(times,weights):
-      pos=base.copy()
-      for factor,delta in zip(w,deltas):pos+=factor*delta
-      mesh.GetPointsAttr().Set(Vt.Vec3fArray.FromNumpy(pos),float(t)*24)
-      if normal is not None and all('NORMAL' in target for target in p['targets']):
-       nor=normal.copy()
-       for factor,target in zip(w,p['targets']):nor+=factor*glb.arr(target['NORMAL'])
-       nor/=np.maximum(np.linalg.norm(nor,axis=1,keepdims=True),1e-8);mesh.GetNormalsAttr().Set(Vt.Vec3fArray.FromNumpy(nor.astype(np.float32)),float(t)*24)
-      mesh.GetExtentAttr().Set([Gf.Vec3f(*pos.min(0).tolist()),Gf.Vec3f(*pos.max(0).tolist())],float(t)*24);end=max(end,float(t)*24)
+     binding=UsdSkel.BindingAPI.Apply(mesh.GetPrim());binding.CreateSkeletonRel().SetTargets([skel.GetPath()]);binding.CreateAnimationSourceRel().SetTargets([animation.GetPath()]);binding.CreateGeomBindTransformAttr(Gf.Matrix4d(1));binding.CreateBlendShapesAttr(names)
+     primvars=UsdGeom.PrimvarsAPI(mesh);primvars.CreatePrimvar('skel:jointIndices',Sdf.ValueTypeNames.IntArray,'constant',1).Set([0]);primvars.CreatePrimvar('skel:jointWeights',Sdf.ValueTypeNames.FloatArray,'constant',1).Set([1.0])
+     paths=[]
+     for k,target in enumerate(p['targets']):
+      shape=UsdSkel.BlendShape.Define(stage,str(mesh.GetPath())+'/Shape_'+str(k));shape.CreateOffsetsAttr(Vt.Vec3fArray.FromNumpy(glb.arr(target['POSITION']).astype(np.float32)))
+      if 'NORMAL' in target:shape.CreateNormalOffsetsAttr(Vt.Vec3fArray.FromNumpy(glb.arr(target['NORMAL']).astype(np.float32)))
+      paths.append(shape.GetPath())
+     binding.CreateBlendShapeTargetsRel().SetTargets(paths)
    else:
     op=ops[i][prop]
     for t,v in zip(times,values):
@@ -79,6 +80,6 @@ def convert(source=None,destination=None):
   from pxr import UsdValidation
   registry=UsdValidation.ValidationRegistry();context=UsdValidation.ValidationContext(registry.GetOrLoadAllValidators());errors=context.Validate(checkstage)
  except ImportError:errors=[]
- report={'meshes':meshcount,'tracks':tracks,'duration':end/24,'validation':[e.GetErrorAsString() for e in errors]}
+ report={'deformation':'UsdSkelBlendShape','meshes':meshcount,'tracks':tracks,'duration':end/24,'validation':[e.GetErrorAsString() for e in errors]}
  (dest.with_suffix('.validation.json')).write_text(json.dumps(report,indent=2));print('USDZ',dest.stat().st_size,'meshes',meshcount,'tracks',tracks,'validation',len(errors));print(report['validation'][:5])
 if __name__=='__main__':convert()
