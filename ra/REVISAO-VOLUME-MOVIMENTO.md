@@ -29,7 +29,13 @@ Há validação de formato, integridade e fisiologia e inspeção visual no nave
 
 Instalar three 0.180.0, @napi-rs/canvas, playwright, gltf-validator e o Chromium; Python com numpy, Pillow e usd-core.
 
-Executar construir.mjs de Película/Travessias, scripts/construir-portateis.cjs, celula/membrana/tools/ios.py, scripts/converter-ciclos.py, scripts/verificar-portateis.cjs e scripts/atualizar-manifesto.cjs.
+Executar construir.mjs de Película/Travessias, scripts/construir-portateis.cjs, celula/membrana/tools/ios.py, scripts/converter-ciclos.py, scripts/comprimir-ciclos.mjs, scripts/verificar-portateis.cjs e scripts/atualizar-manifesto.cjs. A compressão vem depois do USDZ, porque o conversor lê o GLB cru.
 
 O workflow ra-portatil.yml realiza a construção e registra os arquivos gerados.
 
+
+## Piloto Starling — textura e compressão
+
+Os cinco ciclos do Starling ganharam superfície de tecido (starling/texturas.js): cor, relevo e aspereza procedurais para vasos, endotélio, membrana basal, núcleo, citoplasma, colágeno e hemácia. Glicocálix, proteínas, água e setas continuam lisos, por serem moléculas ou esquemas. A textura entra só na cópia exportada; a bancada na tela conserva os materiais aprovados.
+
+Os GLB passam por dedup e Draco (scripts/comprimir-ciclos.mjs): 14,3 MB → 2,9 MB nos cinco níveis, com as mesmas trilhas, nós e placas. O USDZ não é comprimido e cresce de 0,2 a 0,3 MB por nível com as texturas.

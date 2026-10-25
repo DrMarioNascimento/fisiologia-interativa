@@ -11,7 +11,7 @@ const tecido=()=>textura(64,64,(g,w,h)=>{g.fillStyle='#c7b9a2';g.fillRect(0,0,w,
 export async function preparar(tipo,nivel){
  let seed=251026+nivel;for(const c of tipo)seed=(seed*31+c.charCodeAt(0))>>>0;
  Math.random=()=>((seed=(Math.imul(seed,1664525)+1013904223)>>>0)/4294967296);
- let a,update,duracao=8,titulo,modo='ciclo';
+ let a,update,duracao=8,titulo,modo='ciclo',acabamento;
  if(tipo==='osso-vivo'){
   a=(await import('../osso-vivo/modelos.js')).criar(tecido);
   update=u=>a.atualizar(nivel,u,'habitual',0,true);titulo=['Osso vivo','Carga no osso compacto','Carga no osteon','Reabsorção óssea','Formação e mineralização'][nivel];
@@ -26,7 +26,8 @@ export async function preparar(tipo,nivel){
   update=u=>{const L=2.4-.5*(.5-.5*Math.cos(u*2*Math.PI));const m=a.modelos[nivel];if(nivel===4)a.aplicarComprimento(m,L);else for(const s of m.userData.sarcomeros||[])a.aplicarComprimento(s,L);};
   titulo=nivel===4?'Deslizamento dos filamentos':'Contração da miofibrila';
  }else if(tipo==='starling'){
-  const f=await import('../starling/fisica.js');a=(await import('../starling/modelos.js')).criar();
+  const f=await import('../starling/fisica.js'),tx=await import('../starling/texturas.js');a=(await import('../starling/modelos.js')).criar();
+  tx.marcarTecidos(a.modelos);acabamento=tx.texturizar;
   update=u=>{a.animar(u*8,x=>f.pressaoLiquida(x),{encharcado:0,semLinfa:false,nivel,sigma:f.PADRAO.sigma,oncPlasma:f.PADRAO.oncPlasma,kf:f.PADRAO.kf});a.aplicarForcas(nivel,f.PADRAO,f.pressaoCapilar,f.oncExterna);};
   titulo=['Microcirculação','Trocas pela parede capilar','Forças de Starling','Glicocálix','Retorno linfático'][nivel];
  }else if(tipo==='retorno-venoso'){
@@ -38,9 +39,9 @@ export async function preparar(tipo,nivel){
   titulo='Mecânica respiratória';duracao=4;
  }else throw Error('Experiência desconhecida: '+tipo);
  const root=a.modelos[nivel];root.visible=true;update(0);
- return {root,update,duracao,titulo,modo};
+ return {root,update,duracao,titulo,modo,acabamento};
 }
-export async function compilar({root,update,duracao=8,titulo,modo='ciclo'}){
+export async function compilar({root,update,duracao=8,titulo,modo='ciclo',acabamento}){
  update(0);root.updateMatrixWorld(true);
  const wrap=new T.Group(),modelo=new T.Group();wrap.add(modelo);
  const pares=[];let serial=0;
@@ -84,6 +85,8 @@ export async function compilar({root,update,duracao=8,titulo,modo='ciclo'}){
   }
  }
  const tam=limites.getSize(new T.Vector3()),escala=.55/Math.max(tam.x,tam.y,tam.z);modelo.scale.setScalar(escala);modelo.position.set(-(limites.min.x+limites.max.x)/2*escala,-limites.min.y*escala,-(limites.min.z+limites.max.z)/2*escala);
+ // Superfície de tecido medida já na escala final (metros no ambiente).
+ const acabado=acabamento?acabamento(modelo):null;
  const placa=placaVolume(titulo,{largura:.48,altura:.055,espessura:.008});placa.position.set(0,.04,.35);wrap.add(placa);
  wrap.traverse(o=>{if(o.isMesh&&!o.geometry.index)o.geometry.setIndex(Array.from({length:o.geometry.attributes.position.count},(_,i)=>i));});
  prepararParaRA(wrap);
@@ -97,7 +100,7 @@ export async function compilar({root,update,duracao=8,titulo,modo='ciclo'}){
  const clip=new T.AnimationClip('ciclo_didatico',duracao,trilhas);
  if(!trilhas.length)throw Error('Sem movimento: '+titulo);
  const buffer=await new GLTFExporter().parseAsync(wrap,{binary:true,trs:true,onlyVisible:false,animations:[clip]});
- return {base64:await new Promise(resolve=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.readAsDataURL(new Blob([buffer]));}),trilhas:trilhas.length,bytes:buffer.byteLength,titulo,duracao};
+ return {base64:await new Promise(resolve=>{const r=new FileReader();r.onload=()=>resolve(r.result.split(',')[1]);r.readAsDataURL(new Blob([buffer]));}),trilhas:trilhas.length,bytes:buffer.byteLength,titulo,duracao,...(acabado?{texturas:acabado}:{})};
 }
 
 

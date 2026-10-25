@@ -588,43 +588,43 @@
     },
     {
       "path": "starling/ciclos/nivel-1.glb",
-      "sha256": "3ce0882c9a0eff681b6241b545ba88f24ca57d93fc4ebeccb75d2f64354ad7f2"
+      "sha256": "e7f9b92bc12a6139eed161a827bc851c96beda242f50437f10fc0849789881be"
     },
     {
       "path": "starling/ciclos/nivel-1.usdz",
-      "sha256": "725187e36b91b5ae441979c0c47079832f0313c1fe3834db58f413f15170a97a"
+      "sha256": "74189efebfd1a3262df1a0b7826fe23f30e7f2fad2d0a4a0cf26b69775738d82"
     },
     {
       "path": "starling/ciclos/nivel-2.glb",
-      "sha256": "ecf55f9dac750e3bf9110ff98fa0885ccd9d63a46d03eae7d15188d53a0e542f"
+      "sha256": "37da3d6b2dd22c0c5b1af53dccbe888e7789e99feb464cca2019dadc2af71439"
     },
     {
       "path": "starling/ciclos/nivel-2.usdz",
-      "sha256": "9df9ce292139fe7ffdbd9eec77aa4f0e6afba18c640ea1f37ce354748a11d356"
+      "sha256": "8a58782b26e880c0128f672ab2aeae38798f04580bcceea41070799bf9082691"
     },
     {
       "path": "starling/ciclos/nivel-3.glb",
-      "sha256": "e999a1f940eeacd7514abfc8c06bcbde817af13cd4af5fce218c2b7d8e2e15f3"
+      "sha256": "82df79f35ab586d16a6ac71fbe15d3ad0c9c3f5465507f09f4e1d5418e4f336c"
     },
     {
       "path": "starling/ciclos/nivel-3.usdz",
-      "sha256": "9d2ab37018f639c7fcda040bb867f30a52d8942cfc046009eadbc50bfeb1630b"
+      "sha256": "88f76bbac0f8631596e17817168edabe64f7a43e49a0b8cf4dbc042b414b1897"
     },
     {
       "path": "starling/ciclos/nivel-4.glb",
-      "sha256": "95edb63d54627878a6716c9e12c238ececc7f1215c4c1dac0479293e2dc3c913"
+      "sha256": "b797477eb91687c4c2ae838521f93075ff4fb7ed764d9d3e8a018c7c643a93ee"
     },
     {
       "path": "starling/ciclos/nivel-4.usdz",
-      "sha256": "1e658598dc1c7fd1eaf313f2c0aff4c54a8d58b0154469af8f30c5193ed07c4d"
+      "sha256": "cc91f1097b933f23e80f292e0ea8a1ffd47e69eb2e2224487d203e15367125db"
     },
     {
       "path": "starling/ciclos/nivel-5.glb",
-      "sha256": "48380fcd984b2372328547b6f5674623729917fd3febdbbde539b94de4ed09a3"
+      "sha256": "bdd3dd1db497c0552d0397639a5055940d4f329a5f0d38d380984c0b04652a25"
     },
     {
       "path": "starling/ciclos/nivel-5.usdz",
-      "sha256": "956f2dc27df2d831e291f7014ef500a33e8e8d1df18f78d19b2a74ba49e7ab60"
+      "sha256": "1e561e60c77b8826c0055dd2f3184eccbd2b804507093e4be647b58c1a21085c"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
