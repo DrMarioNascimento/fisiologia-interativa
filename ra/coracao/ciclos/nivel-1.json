@@ -49,9 +49,9 @@
     0.0574
   ],
   "alturaRepousoM": 0.1046,
-  "msMedirEMontar": 114.1,
-  "msMedir": 6.8,
-  "msExportar": 3291.8,
+  "msMedirEMontar": 101,
+  "msMedir": 5.5,
+  "msExportar": 3321,
   "preparacaoCores": {
     "assadas": 0,
     "cores": 0,
@@ -62,9 +62,9 @@
     "viradas": 0
   },
   "etapas": {
-    "msMorphs": 77.2,
-    "msPosicionar": 7.6,
-    "msPrepararCores": 15.4
+    "msMorphs": 64.1,
+    "msPosicionar": 12,
+    "msPrepararCores": 13.6
   },
   "porMalha": [
     {
@@ -76,7 +76,7 @@
   ],
   "quadrosPorCiclo": 48,
   "dtMotorS": 0.01667,
-  "msAmostrar": 255.8,
-  "msTotal": 3662.3,
+  "msAmostrar": 233.6,
+  "msTotal": 3656.2,
   "aparelho": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36"
 }

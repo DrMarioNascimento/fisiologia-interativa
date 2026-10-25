@@ -460,11 +460,11 @@
     },
     {
       "path": "coracao/ciclos/nivel-1.glb",
-      "sha256": "2175df05bb13ecad01848be96531ea6cfa9612c687e251d6e1ae17abcfcfd561"
+      "sha256": "954841112cc8c87ac0a0740238853f72638a521d925ab0a4cfacb78f8a7ab478"
     },
     {
       "path": "coracao/ciclos/nivel-1.usdz",
-      "sha256": "7404ce1b5e3243502bebb73e2aa91c4df6207a7c6359e32a2f48d826bc1ca581"
+      "sha256": "0acbd5e93099b2929dc16c2b95f1648e4f632cc1607948e481dc6aa9058703e9"
     },
     {
       "path": "coracao/ciclos/nivel-2.glb",
@@ -472,7 +472,7 @@
     },
     {
       "path": "coracao/ciclos/nivel-2.usdz",
-      "sha256": "bbe3b58b3ecf678fef14cfc039d317b858e34c56fb07722b5c100fb46b6219a0"
+      "sha256": "d53740bcd8e54734a1ca4fb6b13e3b54dd64438cf835214cc5ac30e6a544bd44"
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-1.glb",
@@ -480,7 +480,7 @@
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-1.usdz",
-      "sha256": "8d92045b486c5325c7396ec84d2943cfa3a3ba16dd4c50a5bb4c673c540f7088"
+      "sha256": "9a954a55d79ae49aa0b914ca2968693b5e57fa84eaf4fbf2fa5a271c6e259b51"
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-2.glb",
@@ -488,7 +488,7 @@
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-2.usdz",
-      "sha256": "5dbb263dbe0fae65e12878d967b0d7154a0af8161c72052e4dd77be308354baa"
+      "sha256": "97d53adc887f8ec7ed178066ce40bd79169c9a8071cff3b7e0e169d8f468a2ec"
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-3.glb",
@@ -496,7 +496,7 @@
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-3.usdz",
-      "sha256": "4cdb267946dd5492adabe723692830e2f6d09257dc14afd82aa179f2145168e6"
+      "sha256": "5e994ad3ed7a329872ff87458b61d312129fdf0d676a685ff4d9004c0a288c34"
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-4.glb",
@@ -504,7 +504,7 @@
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-4.usdz",
-      "sha256": "3c24867696881e6d5b82dd3d7e4d0106d8df729e276e09ac2af3dd40a779378c"
+      "sha256": "04d369f30fe6a46c35d7640a9a16428b15491351874182672ea73bb596928a5f"
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-5.glb",
@@ -512,7 +512,7 @@
     },
     {
       "path": "juncao-neuromuscular/ciclos/nivel-5.usdz",
-      "sha256": "470ce6d9a14ee8c1029e2abedc16a0e37cfd0bd623ad36cda9e5fb968846176c"
+      "sha256": "9f4b744edb64a058ce2024078a099a31fff87d615fa7b72cdd019a5921d492cd"
     },
     {
       "path": "musculo-sarcomero/ciclos/nivel-5.glb",
@@ -520,7 +520,7 @@
     },
     {
       "path": "musculo-sarcomero/ciclos/nivel-5.usdz",
-      "sha256": "4ae42730a1c89601d5e3a30c6f6e1c82e50ff8719cb16fc5c1d3a531d6f47297"
+      "sha256": "50143543567410c36d8d1669653ff68f1d3a20d2d9733b408b96fd78b8fec0bd"
     },
     {
       "path": "osso-vivo/ciclos/nivel-1.glb",
@@ -528,7 +528,7 @@
     },
     {
       "path": "osso-vivo/ciclos/nivel-1.usdz",
-      "sha256": "8d6d76fb994474f236d40fbdd3445a6a8a4eb6e09250c2a9160892131b4ebfcb"
+      "sha256": "4f85a2591e546ae57b99b85e67e0890e959898a1899b974524e53a51fd121288"
     },
     {
       "path": "osso-vivo/ciclos/nivel-2.glb",
@@ -536,7 +536,7 @@
     },
     {
       "path": "osso-vivo/ciclos/nivel-2.usdz",
-      "sha256": "ad84b948d1ceb8905de0257f842d734223fabadf5ac610b8bea5906ad5b3601e"
+      "sha256": "ff7c0d21a9881e66fd0ceb74537dc09c7ca3ec645249cda6acf1b3cb58abd6e3"
     },
     {
       "path": "osso-vivo/ciclos/nivel-3.glb",
@@ -544,7 +544,7 @@
     },
     {
       "path": "osso-vivo/ciclos/nivel-3.usdz",
-      "sha256": "c959d8de99d3827076932809835e6883705803449673c3ef19311947b23e059f"
+      "sha256": "0a5147b5b03c5333f7cd499ce7eceab386773ab7ff4a4fdb92f87cc41edef855"
     },
     {
       "path": "osso-vivo/ciclos/nivel-4.glb",
@@ -552,7 +552,7 @@
     },
     {
       "path": "osso-vivo/ciclos/nivel-4.usdz",
-      "sha256": "3e6c063700f8f10b86e97f13d0bad80195b7c13e6378b5ff9f0eb09cc1e461b6"
+      "sha256": "5ce47af4a431db92ae9804de6cace4a08728357d18045c25448730da277463de"
     },
     {
       "path": "osso-vivo/ciclos/nivel-5.glb",
@@ -560,7 +560,7 @@
     },
     {
       "path": "osso-vivo/ciclos/nivel-5.usdz",
-      "sha256": "19be0a1d7c79e9896e937bfbe0d55aeeac0668aa61cd7128ba189191abd1297d"
+      "sha256": "e07e1b42ff619a5e0ea0ee041e501108fb1ee70fac1d74c1d7d1104d3ae21cb7"
     },
     {
       "path": "pleura/ciclos/nivel-2.glb",
@@ -568,7 +568,7 @@
     },
     {
       "path": "pleura/ciclos/nivel-2.usdz",
-      "sha256": "3d0e42f06ce4609484c3767819b863dacc04be0da8161f5d31980d1efc608e34"
+      "sha256": "629763c6d1277aa3e5be4fdcb000c6057f8c35662e0cb271a926a4f29efa75f2"
     },
     {
       "path": "retorno-venoso/ciclos/nivel-3.glb",
@@ -576,7 +576,7 @@
     },
     {
       "path": "retorno-venoso/ciclos/nivel-3.usdz",
-      "sha256": "1f13d9f836966d86ab1d57c8936be43272438aa71fea5c12e20256a570cd02d3"
+      "sha256": "338e895315e8943400ad9bc40b5d66fa2c159c6745367c4f5e9274ef347ef526"
     },
     {
       "path": "retorno-venoso/ciclos/nivel-4.glb",
@@ -584,7 +584,7 @@
     },
     {
       "path": "retorno-venoso/ciclos/nivel-4.usdz",
-      "sha256": "b85c5e89aa0b3909ca31b732a9d05821a09596fc88564d03dc1746dec43f42c7"
+      "sha256": "c00905fd216f02c34d372d0921681295e2f76c37634d1ceebc9ee79048e74df4"
     },
     {
       "path": "starling/ciclos/nivel-1.glb",
@@ -592,7 +592,7 @@
     },
     {
       "path": "starling/ciclos/nivel-1.usdz",
-      "sha256": "7c5c2301b488c4e6007be30d6480c2a9291e3675cd5fde32e5aee3b1fb059d35"
+      "sha256": "725187e36b91b5ae441979c0c47079832f0313c1fe3834db58f413f15170a97a"
     },
     {
       "path": "starling/ciclos/nivel-2.glb",
@@ -600,7 +600,7 @@
     },
     {
       "path": "starling/ciclos/nivel-2.usdz",
-      "sha256": "4aa596c99f060436e30a76a9cb8ac73f3f2c7fd31bb2cdbca4dae3456acb3fd9"
+      "sha256": "9df9ce292139fe7ffdbd9eec77aa4f0e6afba18c640ea1f37ce354748a11d356"
     },
     {
       "path": "starling/ciclos/nivel-3.glb",
@@ -608,7 +608,7 @@
     },
     {
       "path": "starling/ciclos/nivel-3.usdz",
-      "sha256": "7d54d5856f39a8a3384d37d2eac41c90c63f64efd418ec66acc72f9b5f8c4ca0"
+      "sha256": "9d2ab37018f639c7fcda040bb867f30a52d8942cfc046009eadbc50bfeb1630b"
     },
     {
       "path": "starling/ciclos/nivel-4.glb",
@@ -616,7 +616,7 @@
     },
     {
       "path": "starling/ciclos/nivel-4.usdz",
-      "sha256": "2d432e98ab71ae4b28c759b70b106493ec31e0646bfd9e4f07dabecc98e73708"
+      "sha256": "1e658598dc1c7fd1eaf313f2c0aff4c54a8d58b0154469af8f30c5193ed07c4d"
     },
     {
       "path": "starling/ciclos/nivel-5.glb",
@@ -624,7 +624,7 @@
     },
     {
       "path": "starling/ciclos/nivel-5.usdz",
-      "sha256": "a1f5f13a753b3d677220fdacb166af4bbf32fa9ef6a49d62133523b8ed98c4d6"
+      "sha256": "956f2dc27df2d831e291f7014ef500a33e8e8d1df18f78d19b2a74ba49e7ab60"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",

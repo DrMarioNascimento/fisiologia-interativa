@@ -1,4 +1,5 @@
 {
+  "deformation": "UsdSkelBlendShape",
   "meshes": 128,
   "tracks": 108,
   "duration": 8.0,
