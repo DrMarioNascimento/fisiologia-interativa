@@ -27,7 +27,7 @@
     const style = document.createElement("style");
     style.id = "operacao-secreta-style";
     style.textContent = [
-      ".escape-card .actions{width:100%;align-items:center;}",
+      ".escape-card:not(.percurso-card) .actions{width:100%;align-items:center;}",
       ".btn-secret{margin-left:auto;color:#fff;border:1px solid #7a1b1b;background:linear-gradient(180deg,#e35b5b 0%,#c62828 48%,#8e1616 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),inset 0 -5px 9px rgba(80,0,0,.28),0 10px 22px rgba(140,20,20,.28);}",
       ".btn-secret:hover{filter:brightness(1.06);}",
       ".operacao-modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:16px;background:rgba(8,16,18,.72);}",
@@ -61,7 +61,7 @@
     modal.hidden = false;
   }
   function marcarBotoes() {
-    document.querySelectorAll(".escape-card .actions").forEach(function (bar) {
+    document.querySelectorAll(".escape-card:not(.percurso-card) .actions").forEach(function (bar) {
       if (bar.querySelector("[data-operacao-secreta]")) return;
       const btn = document.createElement("button");
       btn.type = "button";
@@ -81,7 +81,7 @@
     const cardsAntigo = renderCards;
     renderCards = function () {
       cardsAntigo();
-      document.querySelectorAll(".escape-card a.btn-primary").forEach(function (link) {
+      document.querySelectorAll(".escape-card:not(.percurso-card) a.btn-primary").forEach(function (link) {
         link.setAttribute("href", comOrigem(link.getAttribute("href"), "site"));
       });
       marcarBotoes();
