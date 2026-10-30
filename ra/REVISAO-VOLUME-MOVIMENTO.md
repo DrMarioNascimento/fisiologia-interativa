@@ -53,8 +53,10 @@ Os GLB passam por dedup e Draco (scripts/comprimir-ciclos.mjs): 14,3 MB → 2,9 
 
 O AR Quick Look reproduz trilhas de transformação e animação de esqueleto, mas não reproduz deformações gravadas como UsdSkelBlendShape. Por isso os dois corações (vistas externa e interna) abriam parados no iPhone, assim como as válvulas do Retorno venoso (níveis 3 e 4) e o ciclo respiratório da Pleura; no Osso vivo (níveis 4 e 5) e no Starling (níveis 1 a 5) as peças deformáveis ficavam paradas enquanto o resto se movia. A Célula viva, a Película/Travessias e a Junção neuromuscular já usavam só transformações e se moviam.
 
-`scripts/esqueleto-ios.py` passa cada deformação para articulações (até 4 por vértice), ajustadas por mínimos quadrados às posições originais em todos os instantes do ciclo, e confere o resultado com o próprio UsdSkel. O erro de cada peça fica registrado no `.validation.json` (`iphone.porPeca`), relativo à excursão da peça: pior caso de 3,8 % a 12,2 % da excursão, com 99 % dos vértices abaixo de 5 %. GLB (Android e prévia na página) não muda. A esteira roda o script logo depois de `converter-ciclos.py`.
+`scripts/esqueleto-ios.py` passa cada deformação para articulações (até 4 por vértice), ajustadas por mínimos quadrados às posições originais em todos os instantes do ciclo, e confere o resultado com o próprio UsdSkel. O erro de cada peça fica registrado no `.validation.json` (`iphone.porPeca`), relativo à excursão da peça: pior caso de 3,8 % a 18,7 % da excursão (no vértice mais difícil). GLB (Android e prévia na página) não muda. A esteira roda o script logo depois de `converter-ciclos.py`.
 
 No Coração, com a peça batendo, o botão principal "Abrir em realidade aumentada" passa a abrir o ciclo em movimento da vista atual (como na Célula viva); pausado, continua levando o instante escolhido. A vista no tórax segue anatômica e estática. Os links levam `?v=esqueleto-20261030` para renovar o cache do iPhone.
 
 A conferência com câmera precisa ser feita em aparelho físico.
+
+Revisão das 16h (30/10): a Vista Externa (128 articulações por peça) continuou parada no iPhone, enquanto a Interna (até 64) se movia. Todas as peças passaram a ter no máximo 64 articulações (`MAX_ARTICULACOES`), e os links mudaram para `?v=esqueleto-20261030b`.

@@ -180,7 +180,7 @@
     },
     {
       "path": "coracao/app.js",
-      "sha256": "5ae3494291e493b8f77c7dc0c1f45a00aec526c663befca90eae1cebb66eb226"
+      "sha256": "8e943eaf9893ea82395b1cd59b46bab92e59440e68ae58fe194eae7fcf31504f"
     },
     {
       "path": "coracao/ATTRIBUTION.md",
@@ -460,7 +460,7 @@
     },
     {
       "path": "ciclo-portatil.js",
-      "sha256": "ce85fb7600be691aa6d850bc32c29e84ba3f11f2e8449643f9afc8f9d35704ff"
+      "sha256": "b7b4b5c77add15a40bea19e1f42a513f51f387df8af56c84dde83cd747ca2118"
     },
     {
       "path": "celula/tools/glb_data.py",
@@ -472,7 +472,7 @@
     },
     {
       "path": "coracao/ciclos/nivel-1.usdz",
-      "sha256": "9f130042f0cdbf9c0890bd8a72ad5c80336ffbd33c8c48643b74613fbd48ab2a"
+      "sha256": "f5074c3953894d3f1b9a62544d115f99a974b997fbdbcc5713814d9eb63eb56c"
     },
     {
       "path": "coracao/ciclos/nivel-2.glb",
@@ -576,7 +576,7 @@
     },
     {
       "path": "pleura/ciclos/nivel-2.usdz",
-      "sha256": "3b8d21e980e9e5d024028b3dc39c654126f2675bd2c58513f5f3ab8cd1c4c5fe"
+      "sha256": "e4401b2cc3fb8fc7dcefc0c77d3c84d3f9067d33a9d09af6fb2d46aa7d3acb4a"
     },
     {
       "path": "retorno-venoso/ciclos/nivel-3.glb",
@@ -608,7 +608,7 @@
     },
     {
       "path": "starling/ciclos/nivel-2.usdz",
-      "sha256": "193c902520c84d20a8d0ef581e065915b2951ce356b7798fa128273b7caed8a8"
+      "sha256": "186cd5db584c0b15e14d4cbfab4af26a35199b9190e4f5347ea37a646bccb581"
     },
     {
       "path": "starling/ciclos/nivel-3.glb",
@@ -624,7 +624,7 @@
     },
     {
       "path": "starling/ciclos/nivel-4.usdz",
-      "sha256": "dcf9c4ca60a1c027fda9f4f64671d149e7848892446197ee7eb30ee523ac4d7d"
+      "sha256": "dbbdb551bc171ccef57c2b2673bc371557e695606c167bea82207a904605fb8d"
     },
     {
       "path": "starling/ciclos/nivel-5.glb",
@@ -632,7 +632,7 @@
     },
     {
       "path": "starling/ciclos/nivel-5.usdz",
-      "sha256": "10ad3ba83bbaa6cbae7ad1552459dee159500fc76be4b39431ed1f30ecc1bcf9"
+      "sha256": "47ffe6256b29d8105d0586dc3ca3f8cdfa8031f0a5faad014c2594acb599c123"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",

@@ -7,7 +7,7 @@
   "iphone": {
     "motivo": "AR Quick Look não reproduz UsdSkelBlendShape; o movimento foi passado para articulações.",
     "pecas": 57,
-    "erroConferidoMaxRel": 0.1173,
+    "erroConferidoMaxRel": 0.1542,
     "porPeca": [
       {
         "peca": "N6_movel_4",
@@ -472,42 +472,42 @@
       {
         "peca": "N76_movel_74",
         "vertices": 12658,
-        "articulacoes": 128,
+        "articulacoes": 64,
         "excursao": 0.008681,
-        "erroMaxRel": 0.0882,
-        "erroP99Rel": 0.0322,
-        "erroConferido": 0.000766,
-        "erroConferidoRel": 0.0882
+        "erroMaxRel": 0.1543,
+        "erroP99Rel": 0.0472,
+        "erroConferido": 0.001339,
+        "erroConferidoRel": 0.1542
       },
       {
         "peca": "N77_movel_75",
         "vertices": 12658,
-        "articulacoes": 128,
+        "articulacoes": 64,
         "excursao": 0.008139,
-        "erroMaxRel": 0.0796,
-        "erroP99Rel": 0.0285,
-        "erroConferido": 0.000648,
-        "erroConferidoRel": 0.0796
+        "erroMaxRel": 0.1102,
+        "erroP99Rel": 0.0511,
+        "erroConferido": 0.000897,
+        "erroConferidoRel": 0.1102
       },
       {
         "peca": "N78_movel_74_avesso",
         "vertices": 12658,
-        "articulacoes": 128,
+        "articulacoes": 64,
         "excursao": 0.008681,
-        "erroMaxRel": 0.0882,
-        "erroP99Rel": 0.0322,
-        "erroConferido": 0.000766,
-        "erroConferidoRel": 0.0882
+        "erroMaxRel": 0.1543,
+        "erroP99Rel": 0.0472,
+        "erroConferido": 0.001339,
+        "erroConferidoRel": 0.1542
       },
       {
         "peca": "N79_movel_75_avesso",
         "vertices": 12658,
-        "articulacoes": 128,
+        "articulacoes": 64,
         "excursao": 0.008139,
-        "erroMaxRel": 0.0796,
-        "erroP99Rel": 0.0285,
-        "erroConferido": 0.000648,
-        "erroConferidoRel": 0.0796
+        "erroMaxRel": 0.1102,
+        "erroP99Rel": 0.0511,
+        "erroConferido": 0.000897,
+        "erroConferidoRel": 0.1102
       },
       {
         "peca": "N85_movel_81",

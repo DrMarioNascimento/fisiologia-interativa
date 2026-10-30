@@ -7,27 +7,27 @@
   "iphone": {
     "motivo": "AR Quick Look não reproduz UsdSkelBlendShape; o movimento foi passado para articulações.",
     "pecas": 2,
-    "erroConferidoMaxRel": 0.0945,
+    "erroConferidoMaxRel": 0.1867,
     "porPeca": [
       {
         "peca": "N8_ciclo0_hartZBrush_defualt_group_Heart_Tex_0",
         "vertices": 12013,
-        "articulacoes": 128,
+        "articulacoes": 64,
         "excursao": 0.137611,
-        "erroMaxRel": 0.0945,
-        "erroP99Rel": 0.0409,
-        "erroConferido": 0.013007,
-        "erroConferidoRel": 0.0945
+        "erroMaxRel": 0.1867,
+        "erroP99Rel": 0.069,
+        "erroConferido": 0.025686,
+        "erroConferidoRel": 0.1867
       },
       {
         "peca": "N9_ciclo1_hartZBrush_defualt_group_Heart_Tex_0_avesso",
         "vertices": 12013,
-        "articulacoes": 128,
+        "articulacoes": 64,
         "excursao": 0.137611,
-        "erroMaxRel": 0.0945,
-        "erroP99Rel": 0.0409,
-        "erroConferido": 0.013007,
-        "erroConferidoRel": 0.0945
+        "erroMaxRel": 0.1867,
+        "erroP99Rel": 0.069,
+        "erroConferido": 0.025686,
+        "erroConferidoRel": 0.1867
       }
     ]
   }

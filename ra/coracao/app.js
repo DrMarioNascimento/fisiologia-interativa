@@ -1373,11 +1373,11 @@ const COMO_ABRIR = ehQuickLook
    continua tudo como antes: o instante escolhido vai à mesa. A vista no tórax
    é anatômica e segue estática. */
 /* var, e não let: prepararRA pode rodar antes desta linha (sem zona morta). */
-var VERSAO_CICLO_RA = 'esqueleto-20261030';
+var VERSAO_CICLO_RA = 'esqueleto-20261030b';
 var cicloRA = null, cicloCarregado = '';
 function prepararCicloRA() {
   const n = atual === 'A' ? 1 : 2;
-  const base = new URL('./ciclos/nivel-' + n, import.meta.url).href, versao = VERSAO_CICLO_RA || 'esqueleto-20261030';
+  const base = new URL('./ciclos/nivel-' + n, import.meta.url).href, versao = VERSAO_CICLO_RA || 'esqueleto-20261030b';
   const links = { glb: base + '.glb?v=' + versao, usdz: base + '.usdz?v=' + versao };
   cicloRA = links;
   const v = $('arViewer');

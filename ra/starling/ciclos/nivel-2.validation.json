@@ -7,17 +7,17 @@
   "iphone": {
     "motivo": "AR Quick Look não reproduz UsdSkelBlendShape; o movimento foi passado para articulações.",
     "pecas": 1,
-    "erroConferidoMaxRel": 0.0621,
+    "erroConferidoMaxRel": 0.1786,
     "porPeca": [
       {
         "peca": "N21_movel_19",
         "vertices": 6300,
-        "articulacoes": 128,
+        "articulacoes": 64,
         "excursao": 0.317646,
-        "erroMaxRel": 0.0621,
-        "erroP99Rel": 0.031,
-        "erroConferido": 0.019722,
-        "erroConferidoRel": 0.0621
+        "erroMaxRel": 0.1786,
+        "erroP99Rel": 0.0538,
+        "erroConferido": 0.056731,
+        "erroConferidoRel": 0.1786
       }
     ]
   }

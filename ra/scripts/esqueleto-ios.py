@@ -30,6 +30,9 @@ from pxr import Usd, UsdGeom, UsdSkel, Sdf, Gf, Vt
 
 RA = Path(__file__).resolve().parents[1]
 INFLUENCIAS = 4
+# Teto de articulações por peça. A Vista Interna (até 64) se moveu no iPhone e a
+# Externa (128) não: o Quick Look não toca esqueletos grandes. Manter <= 64.
+MAX_ARTICULACOES = 64
 LIMITE_MAX_REL = 0.12       # erro máximo <= 12 % da excursão da peça
 LIMITE_P99_REL = 0.05       # e 99 % dos vértices <= 5 %
 
@@ -156,9 +159,9 @@ def converter_no(stage, anim_prim, rng, relatorio):
         Pm, C, idx, w, desloc, erro_v, exc = ajustar(P0s, Fs, J, np.random.default_rng(20261030))
         erro = float(erro_v.max()); p99 = float(np.percentile(erro_v, 99))
         ok = erro <= max(1e-9, LIMITE_MAX_REL * exc) and p99 <= LIMITE_P99_REL * exc
-        if ok or J >= 128 or J >= V:
+        if ok or J >= MAX_ARTICULACOES or J >= V:
             break
-        J = min(J * 2, 128, V)
+        J = min(J * 2, MAX_ARTICULACOES, V)
     J = len(C)
     # Esqueleto: raiz parada + J articulações filhas, só com translação.
     juntas = ['root'] + [f'root/j{j}' for j in range(J)]
