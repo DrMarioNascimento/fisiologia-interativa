@@ -1,7 +1,34 @@
 {
-  "deformation": "UsdSkelBlendShape",
+  "deformation": "UsdSkel joints (skinning)",
   "meshes": 4,
   "tracks": 2,
   "duration": 0.800000011920929,
-  "validation": []
+  "validation": [],
+  "iphone": {
+    "motivo": "AR Quick Look não reproduz UsdSkelBlendShape; o movimento foi passado para articulações.",
+    "pecas": 2,
+    "erroConferidoMaxRel": 0.0945,
+    "porPeca": [
+      {
+        "peca": "N8_ciclo0_hartZBrush_defualt_group_Heart_Tex_0",
+        "vertices": 12013,
+        "articulacoes": 128,
+        "excursao": 0.137611,
+        "erroMaxRel": 0.0945,
+        "erroP99Rel": 0.0409,
+        "erroConferido": 0.013007,
+        "erroConferidoRel": 0.0945
+      },
+      {
+        "peca": "N9_ciclo1_hartZBrush_defualt_group_Heart_Tex_0_avesso",
+        "vertices": 12013,
+        "articulacoes": 128,
+        "excursao": 0.137611,
+        "erroMaxRel": 0.0945,
+        "erroP99Rel": 0.0409,
+        "erroConferido": 0.013007,
+        "erroConferidoRel": 0.0945
+      }
+    ]
+  }
 }

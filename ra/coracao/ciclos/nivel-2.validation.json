@@ -1,7 +1,794 @@
 {
-  "deformation": "UsdSkelBlendShape",
+  "deformation": "UsdSkel joints (skinning)",
   "meshes": 81,
   "tracks": 78,
   "duration": 0.800000011920929,
-  "validation": []
+  "validation": [],
+  "iphone": {
+    "motivo": "AR Quick Look não reproduz UsdSkelBlendShape; o movimento foi passado para articulações.",
+    "pecas": 78,
+    "erroConferidoMaxRel": 0.0964,
+    "porPeca": [
+      {
+        "peca": "N8_ciclo0_miocardio_ve",
+        "vertices": 487,
+        "articulacoes": 32,
+        "excursao": 5.89059,
+        "erroMaxRel": 0.0922,
+        "erroP99Rel": 0.0497,
+        "erroConferido": 0.542973,
+        "erroConferidoRel": 0.0922
+      },
+      {
+        "peca": "N10_ciclo1_musculo_papilar_anterolateral_ve",
+        "vertices": 532,
+        "articulacoes": 32,
+        "excursao": 5.5389,
+        "erroMaxRel": 0.0543,
+        "erroP99Rel": 0.0318,
+        "erroConferido": 0.300829,
+        "erroConferidoRel": 0.0543
+      },
+      {
+        "peca": "N16_ciclo2_musculo_papilar_anterior_vd",
+        "vertices": 580,
+        "articulacoes": 32,
+        "excursao": 6.616963,
+        "erroMaxRel": 0.0964,
+        "erroP99Rel": 0.0419,
+        "erroConferido": 0.637579,
+        "erroConferidoRel": 0.0964
+      },
+      {
+        "peca": "N17_ciclo3_musculo_papilar_posterior_vd",
+        "vertices": 484,
+        "articulacoes": 32,
+        "excursao": 4.857537,
+        "erroMaxRel": 0.0644,
+        "erroP99Rel": 0.041,
+        "erroConferido": 0.313048,
+        "erroConferidoRel": 0.0644
+      },
+      {
+        "peca": "N18_ciclo4_musculo_papilar_septal_vd",
+        "vertices": 539,
+        "articulacoes": 32,
+        "excursao": 4.866468,
+        "erroMaxRel": 0.0461,
+        "erroP99Rel": 0.0332,
+        "erroConferido": 0.224133,
+        "erroConferidoRel": 0.0461
+      },
+      {
+        "peca": "N20_ciclo5_parede_ae",
+        "vertices": 4284,
+        "articulacoes": 64,
+        "excursao": 8.0416,
+        "erroMaxRel": 0.0851,
+        "erroP99Rel": 0.0459,
+        "erroConferido": 0.684003,
+        "erroConferidoRel": 0.0851
+      },
+      {
+        "peca": "N24_ciclo6_parede_ad",
+        "vertices": 9887,
+        "articulacoes": 64,
+        "excursao": 8.02882,
+        "erroMaxRel": 0.0943,
+        "erroP99Rel": 0.0447,
+        "erroConferido": 0.757019,
+        "erroConferidoRel": 0.0943
+      },
+      {
+        "peca": "N28_ciclo7_cuspide_anterior_mitral",
+        "vertices": 4052,
+        "articulacoes": 32,
+        "excursao": 6.053778,
+        "erroMaxRel": 0.0828,
+        "erroP99Rel": 0.0431,
+        "erroConferido": 0.501145,
+        "erroConferidoRel": 0.0828
+      },
+      {
+        "peca": "N29_ciclo8_cuspide_posterior_mitral",
+        "vertices": 2560,
+        "articulacoes": 32,
+        "excursao": 6.46993,
+        "erroMaxRel": 0.0544,
+        "erroP99Rel": 0.0362,
+        "erroConferido": 0.352267,
+        "erroConferidoRel": 0.0544
+      },
+      {
+        "peca": "N32_ciclo9_cuspide_anterior_tricuspide",
+        "vertices": 4282,
+        "articulacoes": 32,
+        "excursao": 7.590795,
+        "erroMaxRel": 0.0468,
+        "erroP99Rel": 0.0288,
+        "erroConferido": 0.355108,
+        "erroConferidoRel": 0.0468
+      },
+      {
+        "peca": "N33_ciclo10_cuspide_posterior_tricuspide",
+        "vertices": 2729,
+        "articulacoes": 32,
+        "excursao": 7.083226,
+        "erroMaxRel": 0.0332,
+        "erroP99Rel": 0.0229,
+        "erroConferido": 0.235257,
+        "erroConferidoRel": 0.0332
+      },
+      {
+        "peca": "N34_ciclo11_cuspide_septal_tricuspide",
+        "vertices": 2591,
+        "articulacoes": 32,
+        "excursao": 8.504566,
+        "erroMaxRel": 0.0304,
+        "erroP99Rel": 0.0201,
+        "erroConferido": 0.258461,
+        "erroConferidoRel": 0.0304
+      },
+      {
+        "peca": "N37_ciclo12_cuspide_anterior_aortica",
+        "vertices": 508,
+        "articulacoes": 32,
+        "excursao": 6.609369,
+        "erroMaxRel": 0.0343,
+        "erroP99Rel": 0.0287,
+        "erroConferido": 0.226415,
+        "erroConferidoRel": 0.0343
+      },
+      {
+        "peca": "N38_ciclo13_cuspide_posterior_direita_aortica",
+        "vertices": 215,
+        "articulacoes": 32,
+        "excursao": 5.280586,
+        "erroMaxRel": 0.0767,
+        "erroP99Rel": 0.0427,
+        "erroConferido": 0.405023,
+        "erroConferidoRel": 0.0767
+      },
+      {
+        "peca": "N39_ciclo14_cuspide_posterior_esquerda_aortica",
+        "vertices": 526,
+        "articulacoes": 32,
+        "excursao": 4.516489,
+        "erroMaxRel": 0.0545,
+        "erroP99Rel": 0.0348,
+        "erroConferido": 0.246367,
+        "erroConferidoRel": 0.0545
+      },
+      {
+        "peca": "N41_ciclo15_cuspide_anterior_esquerda_pulmonar",
+        "vertices": 708,
+        "articulacoes": 32,
+        "excursao": 4.524183,
+        "erroMaxRel": 0.0515,
+        "erroP99Rel": 0.0252,
+        "erroConferido": 0.233191,
+        "erroConferidoRel": 0.0515
+      },
+      {
+        "peca": "N42_ciclo16_cuspide_anterior_direita_pulmonar",
+        "vertices": 769,
+        "articulacoes": 32,
+        "excursao": 4.002399,
+        "erroMaxRel": 0.0426,
+        "erroP99Rel": 0.0281,
+        "erroConferido": 0.170325,
+        "erroConferidoRel": 0.0426
+      },
+      {
+        "peca": "N43_ciclo17_cuspide_posterior_pulmonar",
+        "vertices": 573,
+        "articulacoes": 32,
+        "excursao": 4.999469,
+        "erroMaxRel": 0.0269,
+        "erroP99Rel": 0.0172,
+        "erroConferido": 0.134308,
+        "erroConferidoRel": 0.0269
+      },
+      {
+        "peca": "N55_ciclo18_tronco_coronaria_esquerda",
+        "vertices": 121,
+        "articulacoes": 32,
+        "excursao": 1.330768,
+        "erroMaxRel": 0.0251,
+        "erroP99Rel": 0.0178,
+        "erroConferido": 0.033353,
+        "erroConferidoRel": 0.0251
+      },
+      {
+        "peca": "N56_ciclo19_tronco_descendente_anterior",
+        "vertices": 1549,
+        "articulacoes": 32,
+        "excursao": 7.305531,
+        "erroMaxRel": 0.0586,
+        "erroP99Rel": 0.0251,
+        "erroConferido": 0.428225,
+        "erroConferidoRel": 0.0586
+      },
+      {
+        "peca": "N57_ciclo20_tronco_coronaria_direita",
+        "vertices": 2255,
+        "articulacoes": 32,
+        "excursao": 6.599574,
+        "erroMaxRel": 0.054,
+        "erroP99Rel": 0.0313,
+        "erroConferido": 0.356275,
+        "erroConferidoRel": 0.054
+      },
+      {
+        "peca": "N58_ciclo21_seio_coronario",
+        "vertices": 331,
+        "articulacoes": 32,
+        "excursao": 5.496391,
+        "erroMaxRel": 0.0237,
+        "erroP99Rel": 0.0165,
+        "erroConferido": 0.130313,
+        "erroConferidoRel": 0.0237
+      },
+      {
+        "peca": "N60_ciclo22_FJ2632",
+        "vertices": 91,
+        "articulacoes": 32,
+        "excursao": 5.290091,
+        "erroMaxRel": 0.0021,
+        "erroP99Rel": 0.0016,
+        "erroConferido": 0.011323,
+        "erroConferidoRel": 0.0021
+      },
+      {
+        "peca": "N61_ciclo23_FJ2633",
+        "vertices": 318,
+        "articulacoes": 32,
+        "excursao": 5.34902,
+        "erroMaxRel": 0.0146,
+        "erroP99Rel": 0.0129,
+        "erroConferido": 0.078031,
+        "erroConferidoRel": 0.0146
+      },
+      {
+        "peca": "N62_ciclo24_FJ2634",
+        "vertices": 158,
+        "articulacoes": 32,
+        "excursao": 5.303366,
+        "erroMaxRel": 0.0018,
+        "erroP99Rel": 0.0016,
+        "erroConferido": 0.009312,
+        "erroConferidoRel": 0.0018
+      },
+      {
+        "peca": "N63_ciclo25_FJ2635",
+        "vertices": 495,
+        "articulacoes": 32,
+        "excursao": 7.614153,
+        "erroMaxRel": 0.012,
+        "erroP99Rel": 0.0103,
+        "erroConferido": 0.091433,
+        "erroConferidoRel": 0.012
+      },
+      {
+        "peca": "N64_ciclo26_FJ2636",
+        "vertices": 282,
+        "articulacoes": 32,
+        "excursao": 6.029174,
+        "erroMaxRel": 0.01,
+        "erroP99Rel": 0.0089,
+        "erroConferido": 0.060565,
+        "erroConferidoRel": 0.01
+      },
+      {
+        "peca": "N65_ciclo27_FJ2637",
+        "vertices": 144,
+        "articulacoes": 32,
+        "excursao": 6.884078,
+        "erroMaxRel": 0.0026,
+        "erroP99Rel": 0.0012,
+        "erroConferido": 0.01796,
+        "erroConferidoRel": 0.0026
+      },
+      {
+        "peca": "N66_ciclo28_FJ2638",
+        "vertices": 246,
+        "articulacoes": 32,
+        "excursao": 7.397721,
+        "erroMaxRel": 0.0039,
+        "erroP99Rel": 0.0026,
+        "erroConferido": 0.028768,
+        "erroConferidoRel": 0.0039
+      },
+      {
+        "peca": "N67_ciclo29_FJ2639",
+        "vertices": 122,
+        "articulacoes": 32,
+        "excursao": 6.445117,
+        "erroMaxRel": 0.0016,
+        "erroP99Rel": 0.0012,
+        "erroConferido": 0.010102,
+        "erroConferidoRel": 0.0016
+      },
+      {
+        "peca": "N68_ciclo30_FJ2640",
+        "vertices": 218,
+        "articulacoes": 32,
+        "excursao": 6.445065,
+        "erroMaxRel": 0.0049,
+        "erroP99Rel": 0.0049,
+        "erroConferido": 0.031743,
+        "erroConferidoRel": 0.0049
+      },
+      {
+        "peca": "N69_ciclo31_FJ2641",
+        "vertices": 322,
+        "articulacoes": 32,
+        "excursao": 7.060859,
+        "erroMaxRel": 0.0233,
+        "erroP99Rel": 0.0114,
+        "erroConferido": 0.164387,
+        "erroConferidoRel": 0.0233
+      },
+      {
+        "peca": "N70_ciclo32_FJ2642",
+        "vertices": 525,
+        "articulacoes": 32,
+        "excursao": 5.468499,
+        "erroMaxRel": 0.0233,
+        "erroP99Rel": 0.0202,
+        "erroConferido": 0.127216,
+        "erroConferidoRel": 0.0233
+      },
+      {
+        "peca": "N71_ciclo33_FJ2643",
+        "vertices": 269,
+        "articulacoes": 32,
+        "excursao": 5.509708,
+        "erroMaxRel": 0.0341,
+        "erroP99Rel": 0.0171,
+        "erroConferido": 0.187737,
+        "erroConferidoRel": 0.0341
+      },
+      {
+        "peca": "N72_ciclo34_FJ2644",
+        "vertices": 193,
+        "articulacoes": 32,
+        "excursao": 3.786667,
+        "erroMaxRel": 0.0214,
+        "erroP99Rel": 0.0075,
+        "erroConferido": 0.080947,
+        "erroConferidoRel": 0.0214
+      },
+      {
+        "peca": "N73_ciclo35_FJ2645",
+        "vertices": 224,
+        "articulacoes": 32,
+        "excursao": 5.181237,
+        "erroMaxRel": 0.0141,
+        "erroP99Rel": 0.0103,
+        "erroConferido": 0.073297,
+        "erroConferidoRel": 0.0141
+      },
+      {
+        "peca": "N74_ciclo36_FJ2646",
+        "vertices": 287,
+        "articulacoes": 32,
+        "excursao": 4.732611,
+        "erroMaxRel": 0.0167,
+        "erroP99Rel": 0.0109,
+        "erroConferido": 0.078871,
+        "erroConferidoRel": 0.0167
+      },
+      {
+        "peca": "N75_ciclo37_FJ2647",
+        "vertices": 216,
+        "articulacoes": 32,
+        "excursao": 6.87954,
+        "erroMaxRel": 0.0041,
+        "erroP99Rel": 0.0028,
+        "erroConferido": 0.027985,
+        "erroConferidoRel": 0.0041
+      },
+      {
+        "peca": "N76_ciclo38_FJ2648",
+        "vertices": 203,
+        "articulacoes": 32,
+        "excursao": 5.259214,
+        "erroMaxRel": 0.0124,
+        "erroP99Rel": 0.0117,
+        "erroConferido": 0.06537,
+        "erroConferidoRel": 0.0124
+      },
+      {
+        "peca": "N77_ciclo39_FJ2649",
+        "vertices": 692,
+        "articulacoes": 32,
+        "excursao": 5.950994,
+        "erroMaxRel": 0.026,
+        "erroP99Rel": 0.0173,
+        "erroConferido": 0.154582,
+        "erroConferidoRel": 0.026
+      },
+      {
+        "peca": "N78_ciclo40_FJ2650",
+        "vertices": 316,
+        "articulacoes": 32,
+        "excursao": 5.155451,
+        "erroMaxRel": 0.0038,
+        "erroP99Rel": 0.0032,
+        "erroConferido": 0.019656,
+        "erroConferidoRel": 0.0038
+      },
+      {
+        "peca": "N79_ciclo41_FJ2651",
+        "vertices": 395,
+        "articulacoes": 32,
+        "excursao": 5.039215,
+        "erroMaxRel": 0.0092,
+        "erroP99Rel": 0.0056,
+        "erroConferido": 0.046271,
+        "erroConferidoRel": 0.0092
+      },
+      {
+        "peca": "N80_ciclo42_FJ2652",
+        "vertices": 240,
+        "articulacoes": 32,
+        "excursao": 4.633478,
+        "erroMaxRel": 0.0243,
+        "erroP99Rel": 0.0189,
+        "erroConferido": 0.112429,
+        "erroConferidoRel": 0.0243
+      },
+      {
+        "peca": "N81_ciclo43_FJ2653",
+        "vertices": 232,
+        "articulacoes": 32,
+        "excursao": 4.554433,
+        "erroMaxRel": 0.0098,
+        "erroP99Rel": 0.0035,
+        "erroConferido": 0.044731,
+        "erroConferidoRel": 0.0098
+      },
+      {
+        "peca": "N82_ciclo44_FJ2654",
+        "vertices": 150,
+        "articulacoes": 32,
+        "excursao": 5.669264,
+        "erroMaxRel": 0.0027,
+        "erroP99Rel": 0.0013,
+        "erroConferido": 0.015148,
+        "erroConferidoRel": 0.0027
+      },
+      {
+        "peca": "N83_ciclo45_FJ2656",
+        "vertices": 434,
+        "articulacoes": 32,
+        "excursao": 5.999975,
+        "erroMaxRel": 0.0197,
+        "erroP99Rel": 0.017,
+        "erroConferido": 0.118038,
+        "erroConferidoRel": 0.0197
+      },
+      {
+        "peca": "N84_ciclo46_FJ2667",
+        "vertices": 267,
+        "articulacoes": 32,
+        "excursao": 4.992246,
+        "erroMaxRel": 0.0122,
+        "erroP99Rel": 0.0117,
+        "erroConferido": 0.060766,
+        "erroConferidoRel": 0.0122
+      },
+      {
+        "peca": "N85_ciclo47_FJ2668",
+        "vertices": 176,
+        "articulacoes": 32,
+        "excursao": 4.511172,
+        "erroMaxRel": 0.0049,
+        "erroP99Rel": 0.0025,
+        "erroConferido": 0.02209,
+        "erroConferidoRel": 0.0049
+      },
+      {
+        "peca": "N86_ciclo48_FJ2670",
+        "vertices": 280,
+        "articulacoes": 32,
+        "excursao": 2.27568,
+        "erroMaxRel": 0.0296,
+        "erroP99Rel": 0.0187,
+        "erroConferido": 0.067429,
+        "erroConferidoRel": 0.0296
+      },
+      {
+        "peca": "N87_ciclo49_FJ2671",
+        "vertices": 313,
+        "articulacoes": 32,
+        "excursao": 6.432764,
+        "erroMaxRel": 0.0186,
+        "erroP99Rel": 0.0162,
+        "erroConferido": 0.119672,
+        "erroConferidoRel": 0.0186
+      },
+      {
+        "peca": "N88_ciclo50_FJ2672",
+        "vertices": 447,
+        "articulacoes": 32,
+        "excursao": 6.373032,
+        "erroMaxRel": 0.0086,
+        "erroP99Rel": 0.0071,
+        "erroConferido": 0.055054,
+        "erroConferidoRel": 0.0086
+      },
+      {
+        "peca": "N89_ciclo51_FJ2673",
+        "vertices": 243,
+        "articulacoes": 32,
+        "excursao": 6.238832,
+        "erroMaxRel": 0.0065,
+        "erroP99Rel": 0.0046,
+        "erroConferido": 0.040334,
+        "erroConferidoRel": 0.0065
+      },
+      {
+        "peca": "N90_ciclo52_FJ2674",
+        "vertices": 186,
+        "articulacoes": 32,
+        "excursao": 5.427204,
+        "erroMaxRel": 0.0083,
+        "erroP99Rel": 0.0058,
+        "erroConferido": 0.044837,
+        "erroConferidoRel": 0.0083
+      },
+      {
+        "peca": "N91_ciclo53_FJ2675",
+        "vertices": 148,
+        "articulacoes": 32,
+        "excursao": 5.925344,
+        "erroMaxRel": 0.0018,
+        "erroP99Rel": 0.0009,
+        "erroConferido": 0.010816,
+        "erroConferidoRel": 0.0018
+      },
+      {
+        "peca": "N93_ciclo55_FJ2677",
+        "vertices": 198,
+        "articulacoes": 32,
+        "excursao": 6.008944,
+        "erroMaxRel": 0.0029,
+        "erroP99Rel": 0.0023,
+        "erroConferido": 0.017543,
+        "erroConferidoRel": 0.0029
+      },
+      {
+        "peca": "N94_ciclo56_FJ2692",
+        "vertices": 608,
+        "articulacoes": 32,
+        "excursao": 5.85577,
+        "erroMaxRel": 0.024,
+        "erroP99Rel": 0.0184,
+        "erroConferido": 0.140774,
+        "erroConferidoRel": 0.024
+      },
+      {
+        "peca": "N95_ciclo57_FJ2693",
+        "vertices": 480,
+        "articulacoes": 32,
+        "excursao": 4.716311,
+        "erroMaxRel": 0.0371,
+        "erroP99Rel": 0.0289,
+        "erroConferido": 0.174785,
+        "erroConferidoRel": 0.0371
+      },
+      {
+        "peca": "N96_ciclo58_FJ2694",
+        "vertices": 305,
+        "articulacoes": 32,
+        "excursao": 2.8494,
+        "erroMaxRel": 0.0186,
+        "erroP99Rel": 0.0154,
+        "erroConferido": 0.053142,
+        "erroConferidoRel": 0.0187
+      },
+      {
+        "peca": "N97_ciclo59_FJ2695",
+        "vertices": 163,
+        "articulacoes": 32,
+        "excursao": 4.046333,
+        "erroMaxRel": 0.0034,
+        "erroP99Rel": 0.0029,
+        "erroConferido": 0.013778,
+        "erroConferidoRel": 0.0034
+      },
+      {
+        "peca": "N98_ciclo60_FJ2696",
+        "vertices": 286,
+        "articulacoes": 32,
+        "excursao": 5.322986,
+        "erroMaxRel": 0.0109,
+        "erroP99Rel": 0.0078,
+        "erroConferido": 0.058224,
+        "erroConferidoRel": 0.0109
+      },
+      {
+        "peca": "N99_ciclo61_FJ2697",
+        "vertices": 188,
+        "articulacoes": 32,
+        "excursao": 6.061063,
+        "erroMaxRel": 0.0085,
+        "erroP99Rel": 0.0042,
+        "erroConferido": 0.051464,
+        "erroConferidoRel": 0.0085
+      },
+      {
+        "peca": "N100_ciclo62_FJ2698",
+        "vertices": 195,
+        "articulacoes": 32,
+        "excursao": 6.170628,
+        "erroMaxRel": 0.0041,
+        "erroP99Rel": 0.0035,
+        "erroConferido": 0.025105,
+        "erroConferidoRel": 0.0041
+      },
+      {
+        "peca": "N101_ciclo63_FJ2699",
+        "vertices": 126,
+        "articulacoes": 32,
+        "excursao": 6.156615,
+        "erroMaxRel": 0.0006,
+        "erroP99Rel": 0.0006,
+        "erroConferido": 0.0038,
+        "erroConferidoRel": 0.0006
+      },
+      {
+        "peca": "N102_ciclo64_FJ2700",
+        "vertices": 197,
+        "articulacoes": 32,
+        "excursao": 6.319345,
+        "erroMaxRel": 0.0033,
+        "erroP99Rel": 0.0018,
+        "erroConferido": 0.020711,
+        "erroConferidoRel": 0.0033
+      },
+      {
+        "peca": "N103_ciclo65_FJ2714",
+        "vertices": 482,
+        "articulacoes": 32,
+        "excursao": 4.447553,
+        "erroMaxRel": 0.0399,
+        "erroP99Rel": 0.0324,
+        "erroConferido": 0.177336,
+        "erroConferidoRel": 0.0399
+      },
+      {
+        "peca": "N104_ciclo66_FJ2715",
+        "vertices": 185,
+        "articulacoes": 32,
+        "excursao": 4.911364,
+        "erroMaxRel": 0.0049,
+        "erroP99Rel": 0.0046,
+        "erroConferido": 0.024048,
+        "erroConferidoRel": 0.0049
+      },
+      {
+        "peca": "N105_ciclo67_FJ2716",
+        "vertices": 188,
+        "articulacoes": 32,
+        "excursao": 5.168154,
+        "erroMaxRel": 0.0044,
+        "erroP99Rel": 0.0037,
+        "erroConferido": 0.022485,
+        "erroConferidoRel": 0.0044
+      },
+      {
+        "peca": "N106_ciclo68_FJ2717",
+        "vertices": 259,
+        "articulacoes": 32,
+        "excursao": 4.390321,
+        "erroMaxRel": 0.007,
+        "erroP99Rel": 0.0045,
+        "erroConferido": 0.030568,
+        "erroConferidoRel": 0.007
+      },
+      {
+        "peca": "N107_ciclo69_FJ2718",
+        "vertices": 139,
+        "articulacoes": 32,
+        "excursao": 3.692978,
+        "erroMaxRel": 0.0045,
+        "erroP99Rel": 0.0034,
+        "erroConferido": 0.016531,
+        "erroConferidoRel": 0.0045
+      },
+      {
+        "peca": "N108_ciclo70_FJ2719",
+        "vertices": 299,
+        "articulacoes": 32,
+        "excursao": 2.828031,
+        "erroMaxRel": 0.0363,
+        "erroP99Rel": 0.0225,
+        "erroConferido": 0.102651,
+        "erroConferidoRel": 0.0363
+      },
+      {
+        "peca": "N109_ciclo71_FJ2720",
+        "vertices": 233,
+        "articulacoes": 32,
+        "excursao": 3.197743,
+        "erroMaxRel": 0.0223,
+        "erroP99Rel": 0.0192,
+        "erroConferido": 0.07115,
+        "erroConferidoRel": 0.0222
+      },
+      {
+        "peca": "N110_ciclo72_FJ2721",
+        "vertices": 198,
+        "articulacoes": 32,
+        "excursao": 3.828958,
+        "erroMaxRel": 0.0082,
+        "erroP99Rel": 0.0076,
+        "erroConferido": 0.031256,
+        "erroConferidoRel": 0.0082
+      },
+      {
+        "peca": "N111_ciclo73_FJ2722",
+        "vertices": 244,
+        "articulacoes": 32,
+        "excursao": 4.407249,
+        "erroMaxRel": 0.0072,
+        "erroP99Rel": 0.0042,
+        "erroConferido": 0.031919,
+        "erroConferidoRel": 0.0072
+      },
+      {
+        "peca": "N112_ciclo74_FJ2724",
+        "vertices": 294,
+        "articulacoes": 32,
+        "excursao": 6.531218,
+        "erroMaxRel": 0.0146,
+        "erroP99Rel": 0.0108,
+        "erroConferido": 0.095629,
+        "erroConferidoRel": 0.0146
+      },
+      {
+        "peca": "N113_ciclo75_FJ2731",
+        "vertices": 454,
+        "articulacoes": 32,
+        "excursao": 6.100414,
+        "erroMaxRel": 0.0208,
+        "erroP99Rel": 0.0128,
+        "erroConferido": 0.127187,
+        "erroConferidoRel": 0.0208
+      },
+      {
+        "peca": "N120_ciclo76_FJ2727",
+        "vertices": 627,
+        "articulacoes": 32,
+        "excursao": 6.378184,
+        "erroMaxRel": 0.0264,
+        "erroP99Rel": 0.015,
+        "erroConferido": 0.168624,
+        "erroConferidoRel": 0.0264
+      },
+      {
+        "peca": "N121_ciclo77_FJ2728",
+        "vertices": 190,
+        "articulacoes": 32,
+        "excursao": 5.908189,
+        "erroMaxRel": 0.004,
+        "erroP99Rel": 0.0022,
+        "erroConferido": 0.02358,
+        "erroConferidoRel": 0.004
+      },
+      {
+        "peca": "N122_ciclo78_FJ2729",
+        "vertices": 156,
+        "articulacoes": 32,
+        "excursao": 4.955282,
+        "erroMaxRel": 0.007,
+        "erroP99Rel": 0.0053,
+        "erroConferido": 0.03493,
+        "erroConferidoRel": 0.007
+      }
+    ]
+  }
 }

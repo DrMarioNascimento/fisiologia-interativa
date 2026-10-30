@@ -48,3 +48,13 @@ Os GLB passam por dedup e Draco (scripts/comprimir-ciclos.mjs): 14,3 MB → 2,9 
 - Textura de tecido (texturas-tecido.js) também na pleura (costelas, cartilagens, diafragma, intercostais) e nas válvulas do retorno venoso. Coração, sarcômero e cores de pressão ficam como estavam.
 - Starling: nível 1 com vasomoção, linfângions e hemácias visíveis; níveis 2 a 5 com o glicocálix que se curva com o fluxo e as abas do linfático inicial. Velocidades em voltas inteiras por ciclo, sem salto ao recomeçar.
 - Página: "Ver em 3D · tela cheia" em todos os visualizadores, e aviso no Android sem RA do Google.
+
+## Movimento no iPhone — esqueleto no lugar de blend shapes (30/10/2026)
+
+O AR Quick Look reproduz trilhas de transformação e animação de esqueleto, mas não reproduz deformações gravadas como UsdSkelBlendShape. Por isso os dois corações (vistas externa e interna) abriam parados no iPhone, assim como as válvulas do Retorno venoso (níveis 3 e 4) e o ciclo respiratório da Pleura; no Osso vivo (níveis 4 e 5) e no Starling (níveis 1 a 5) as peças deformáveis ficavam paradas enquanto o resto se movia. A Célula viva, a Película/Travessias e a Junção neuromuscular já usavam só transformações e se moviam.
+
+`scripts/esqueleto-ios.py` passa cada deformação para articulações (até 4 por vértice), ajustadas por mínimos quadrados às posições originais em todos os instantes do ciclo, e confere o resultado com o próprio UsdSkel. O erro de cada peça fica registrado no `.validation.json` (`iphone.porPeca`), relativo à excursão da peça: pior caso de 3,8 % a 12,2 % da excursão, com 99 % dos vértices abaixo de 5 %. GLB (Android e prévia na página) não muda. A esteira roda o script logo depois de `converter-ciclos.py`.
+
+No Coração, com a peça batendo, o botão principal "Abrir em realidade aumentada" passa a abrir o ciclo em movimento da vista atual (como na Célula viva); pausado, continua levando o instante escolhido. A vista no tórax segue anatômica e estática. Os links levam `?v=esqueleto-20261030` para renovar o cache do iPhone.
+
+A conferência com câmera precisa ser feita em aparelho físico.

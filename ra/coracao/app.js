@@ -1364,14 +1364,51 @@ const COMO_ABRIR = ehQuickLook
   ? 'Toque, e depois em "AR" no alto da tela para ir à câmera.'
   : 'Toque para abrir a câmera.';
 
+/* ══ BATENDO → A RA ABRE O CICLO EM MOVIMENTO (como a Célula viva) ══════
+   Com a peça batendo, o botão principal deixa de pedir uma pausa e abre os
+   arquivos públicos do ciclo (ciclos/nivel-1 = Vista Externa, nivel-2 = Vista
+   Interna), os mesmos de "Ciclo em movimento". No iPhone o movimento vai no
+   USDZ por esqueleto (scripts/esqueleto-ios.py): o Quick Look não toca blend
+   shapes, e era por isso que os dois corações chegavam parados. Pausado,
+   continua tudo como antes: o instante escolhido vai à mesa. A vista no tórax
+   é anatômica e segue estática. */
+/* var, e não let: prepararRA pode rodar antes desta linha (sem zona morta). */
+var VERSAO_CICLO_RA = 'esqueleto-20261030';
+var cicloRA = null, cicloCarregado = '';
+function prepararCicloRA() {
+  const n = atual === 'A' ? 1 : 2;
+  const base = new URL('./ciclos/nivel-' + n, import.meta.url).href, versao = VERSAO_CICLO_RA || 'esqueleto-20261030';
+  const links = { glb: base + '.glb?v=' + versao, usdz: base + '.usdz?v=' + versao };
+  cicloRA = links;
+  const v = $('arViewer');
+  v.setAttribute('ios-src', links.usdz);
+  if (v.src !== links.glb || v.getAttribute('src') !== links.glb) { v.removeAttribute('src'); v.setAttribute('src', links.glb); }
+  const pronto = ehQuickLook || (cicloCarregado === links.glb && v.canActivateAR);
+  $('launchAR').disabled = !pronto;
+  $('raStatus').textContent = pronto
+    ? 'Batendo: a RA abre o ciclo cardíaco em movimento (75 bpm, parâmetros de referência; os ajustes da página não mudam o arquivo). ' + COMO_ABRIR
+    : cicloCarregado === links.glb
+      ? 'Batendo: ciclo em movimento pronto, mas este navegador não abre RA. Use o Safari no iPhone/iPad ou o Chrome no Android.'
+      : 'Batendo: carregando o ciclo em movimento para a RA…';
+}
+function abrirCicloIOS() {
+  let doc = document; try { if (top.document) doc = top.document; } catch {}
+  const a = doc.createElement('a'); a.rel = 'ar'; a.href = cicloRA.usdz; a.append(doc.createElement('img'));
+  a.style.display = 'none'; doc.body.append(a); a.click(); setTimeout(() => a.remove(), 4000);
+}
+
 function prepararRA() {
   clearTimeout(temporizador);
   const id=++prepId;
   if (batendo) {
+    if (atual !== 'T') { prepararCicloRA(); return; }
+    cicloRA = null;
     $('launchAR').disabled = true;
     $('raStatus').textContent = 'A peça está batendo. Pare em um instante para mandá-lo à mesa.';
     return;
   }
+  if (cicloRA) { $('arViewer').removeAttribute('ios-src'); $('arViewer').removeAttribute('src'); }
+  cicloRA = null;
   $('launchAR').disabled = true;
   $('raStatus').textContent = 'Preparando o instante para a câmera…';
   temporizador = setTimeout(async () => {
@@ -1440,6 +1477,7 @@ let ultimoPacote = null;
 window.pacoteRA = () => ultimoPacote;
 
 $('arViewer').addEventListener('load', () => {
+  if (cicloRA && $('arViewer').getAttribute('src') === cicloRA.glb) { cicloCarregado = cicloRA.glb; if (batendo) prepararCicloRA(); return; }
   if(batendo||!ultimoPacote||ultimoPacote.id!==prepId)return;
   const mb = ultimoPacote ? (ultimoPacote.bytes / 1048576).toFixed(1) : '?';
   if ($('arViewer').canActivateAR) {
@@ -1456,6 +1494,7 @@ $('arViewer').addEventListener('error', () => {
   $('raStatus').textContent = 'O instante não carregou no visualizador de RA.';
 });
 $('launchAR').addEventListener('click', () => {
+  if (cicloRA && ehQuickLook) { abrirCicloIOS(); return; }
   try { $('arViewer').activateAR(); }
   catch (err) { $('raStatus').textContent = 'A câmera não abriu. Verifique a permissão do navegador.'; }
 });

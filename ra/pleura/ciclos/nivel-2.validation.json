@@ -1,7 +1,584 @@
 {
-  "deformation": "UsdSkelBlendShape",
+  "deformation": "UsdSkel joints (skinning)",
   "meshes": 76,
   "tracks": 61,
   "duration": 4.0,
-  "validation": []
+  "validation": [],
+  "iphone": {
+    "motivo": "AR Quick Look não reproduz UsdSkelBlendShape; o movimento foi passado para articulações.",
+    "pecas": 57,
+    "erroConferidoMaxRel": 0.1173,
+    "porPeca": [
+      {
+        "peca": "N6_movel_4",
+        "vertices": 2688,
+        "articulacoes": 32,
+        "excursao": 0.003288,
+        "erroMaxRel": 0.0,
+        "erroP99Rel": 0.0,
+        "erroConferido": 0.0,
+        "erroConferidoRel": 0.0
+      },
+      {
+        "peca": "N7_movel_5",
+        "vertices": 1492,
+        "articulacoes": 32,
+        "excursao": 0.003288,
+        "erroMaxRel": 0.0,
+        "erroP99Rel": 0.0,
+        "erroConferido": 0.0,
+        "erroConferidoRel": 0.0
+      },
+      {
+        "peca": "N9_movel_7",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.004099,
+        "erroMaxRel": 0.065,
+        "erroP99Rel": 0.0347,
+        "erroConferido": 0.000266,
+        "erroConferidoRel": 0.065
+      },
+      {
+        "peca": "N10_movel_8",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.00345,
+        "erroMaxRel": 0.0059,
+        "erroP99Rel": 0.0025,
+        "erroConferido": 2.1e-05,
+        "erroConferidoRel": 0.0059
+      },
+      {
+        "peca": "N12_movel_10",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.004099,
+        "erroMaxRel": 0.0665,
+        "erroP99Rel": 0.0319,
+        "erroConferido": 0.000273,
+        "erroConferidoRel": 0.0665
+      },
+      {
+        "peca": "N13_movel_11",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.00345,
+        "erroMaxRel": 0.0059,
+        "erroP99Rel": 0.0025,
+        "erroConferido": 2.1e-05,
+        "erroConferidoRel": 0.0059
+      },
+      {
+        "peca": "N15_movel_13",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005818,
+        "erroMaxRel": 0.0445,
+        "erroP99Rel": 0.0266,
+        "erroConferido": 0.000259,
+        "erroConferidoRel": 0.0445
+      },
+      {
+        "peca": "N16_movel_14",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.00384,
+        "erroMaxRel": 0.0196,
+        "erroP99Rel": 0.0097,
+        "erroConferido": 7.5e-05,
+        "erroConferidoRel": 0.0196
+      },
+      {
+        "peca": "N18_movel_16",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005818,
+        "erroMaxRel": 0.0415,
+        "erroP99Rel": 0.0301,
+        "erroConferido": 0.000242,
+        "erroConferidoRel": 0.0415
+      },
+      {
+        "peca": "N19_movel_17",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.00384,
+        "erroMaxRel": 0.0196,
+        "erroP99Rel": 0.0097,
+        "erroConferido": 7.5e-05,
+        "erroConferidoRel": 0.0196
+      },
+      {
+        "peca": "N21_movel_19",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.006632,
+        "erroMaxRel": 0.0407,
+        "erroP99Rel": 0.0215,
+        "erroConferido": 0.00027,
+        "erroConferidoRel": 0.0407
+      },
+      {
+        "peca": "N22_movel_20",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.004787,
+        "erroMaxRel": 0.0187,
+        "erroP99Rel": 0.0076,
+        "erroConferido": 9e-05,
+        "erroConferidoRel": 0.0187
+      },
+      {
+        "peca": "N24_movel_22",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.006632,
+        "erroMaxRel": 0.0408,
+        "erroP99Rel": 0.0221,
+        "erroConferido": 0.000271,
+        "erroConferidoRel": 0.0408
+      },
+      {
+        "peca": "N25_movel_23",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.004787,
+        "erroMaxRel": 0.0187,
+        "erroP99Rel": 0.0076,
+        "erroConferido": 9e-05,
+        "erroConferidoRel": 0.0187
+      },
+      {
+        "peca": "N27_movel_25",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.007075,
+        "erroMaxRel": 0.0464,
+        "erroP99Rel": 0.0231,
+        "erroConferido": 0.000328,
+        "erroConferidoRel": 0.0464
+      },
+      {
+        "peca": "N28_movel_26",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.005712,
+        "erroMaxRel": 0.0099,
+        "erroP99Rel": 0.0086,
+        "erroConferido": 5.7e-05,
+        "erroConferidoRel": 0.0099
+      },
+      {
+        "peca": "N30_movel_28",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.007075,
+        "erroMaxRel": 0.0468,
+        "erroP99Rel": 0.0224,
+        "erroConferido": 0.000331,
+        "erroConferidoRel": 0.0468
+      },
+      {
+        "peca": "N31_movel_29",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.005712,
+        "erroMaxRel": 0.0099,
+        "erroP99Rel": 0.0086,
+        "erroConferido": 5.7e-05,
+        "erroConferidoRel": 0.0099
+      },
+      {
+        "peca": "N33_movel_31",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.006753,
+        "erroMaxRel": 0.0533,
+        "erroP99Rel": 0.0197,
+        "erroConferido": 0.00036,
+        "erroConferidoRel": 0.0533
+      },
+      {
+        "peca": "N34_movel_32",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.00627,
+        "erroMaxRel": 0.0108,
+        "erroP99Rel": 0.0058,
+        "erroConferido": 6.8e-05,
+        "erroConferidoRel": 0.0108
+      },
+      {
+        "peca": "N36_movel_34",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.006753,
+        "erroMaxRel": 0.0527,
+        "erroP99Rel": 0.0208,
+        "erroConferido": 0.000356,
+        "erroConferidoRel": 0.0527
+      },
+      {
+        "peca": "N37_movel_35",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.00627,
+        "erroMaxRel": 0.0108,
+        "erroP99Rel": 0.0058,
+        "erroConferido": 6.8e-05,
+        "erroConferidoRel": 0.0108
+      },
+      {
+        "peca": "N39_movel_37",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.006413,
+        "erroMaxRel": 0.0361,
+        "erroP99Rel": 0.024,
+        "erroConferido": 0.000232,
+        "erroConferidoRel": 0.0361
+      },
+      {
+        "peca": "N40_movel_38",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.006329,
+        "erroMaxRel": 0.0188,
+        "erroP99Rel": 0.0144,
+        "erroConferido": 0.000119,
+        "erroConferidoRel": 0.0188
+      },
+      {
+        "peca": "N42_movel_40",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.006413,
+        "erroMaxRel": 0.0358,
+        "erroP99Rel": 0.0252,
+        "erroConferido": 0.000229,
+        "erroConferidoRel": 0.0358
+      },
+      {
+        "peca": "N43_movel_41",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.006329,
+        "erroMaxRel": 0.0188,
+        "erroP99Rel": 0.0144,
+        "erroConferido": 0.000119,
+        "erroConferidoRel": 0.0188
+      },
+      {
+        "peca": "N45_movel_43",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005789,
+        "erroMaxRel": 0.0661,
+        "erroP99Rel": 0.0267,
+        "erroConferido": 0.000383,
+        "erroConferidoRel": 0.0661
+      },
+      {
+        "peca": "N46_movel_44",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.005763,
+        "erroMaxRel": 0.0268,
+        "erroP99Rel": 0.0098,
+        "erroConferido": 0.000154,
+        "erroConferidoRel": 0.0268
+      },
+      {
+        "peca": "N48_movel_46",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005789,
+        "erroMaxRel": 0.0665,
+        "erroP99Rel": 0.0266,
+        "erroConferido": 0.000385,
+        "erroConferidoRel": 0.0665
+      },
+      {
+        "peca": "N49_movel_47",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.005763,
+        "erroMaxRel": 0.0268,
+        "erroP99Rel": 0.0098,
+        "erroConferido": 0.000154,
+        "erroConferidoRel": 0.0268
+      },
+      {
+        "peca": "N51_movel_49",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005028,
+        "erroMaxRel": 0.0462,
+        "erroP99Rel": 0.0275,
+        "erroConferido": 0.000232,
+        "erroConferidoRel": 0.0462
+      },
+      {
+        "peca": "N52_movel_50",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.005016,
+        "erroMaxRel": 0.0167,
+        "erroP99Rel": 0.0134,
+        "erroConferido": 8.4e-05,
+        "erroConferidoRel": 0.0167
+      },
+      {
+        "peca": "N54_movel_52",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005028,
+        "erroMaxRel": 0.0457,
+        "erroP99Rel": 0.0277,
+        "erroConferido": 0.00023,
+        "erroConferidoRel": 0.0457
+      },
+      {
+        "peca": "N55_movel_53",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.005016,
+        "erroMaxRel": 0.0167,
+        "erroP99Rel": 0.0134,
+        "erroConferido": 8.4e-05,
+        "erroConferidoRel": 0.0167
+      },
+      {
+        "peca": "N57_movel_55",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005086,
+        "erroMaxRel": 0.0364,
+        "erroP99Rel": 0.019,
+        "erroConferido": 0.000185,
+        "erroConferidoRel": 0.0364
+      },
+      {
+        "peca": "N58_movel_56",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.004139,
+        "erroMaxRel": 0.0086,
+        "erroP99Rel": 0.0064,
+        "erroConferido": 3.6e-05,
+        "erroConferidoRel": 0.0086
+      },
+      {
+        "peca": "N60_movel_58",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005086,
+        "erroMaxRel": 0.0367,
+        "erroP99Rel": 0.0191,
+        "erroConferido": 0.000187,
+        "erroConferidoRel": 0.0367
+      },
+      {
+        "peca": "N61_movel_59",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.004139,
+        "erroMaxRel": 0.0086,
+        "erroP99Rel": 0.0064,
+        "erroConferido": 3.6e-05,
+        "erroConferidoRel": 0.0086
+      },
+      {
+        "peca": "N63_movel_61",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005318,
+        "erroMaxRel": 0.0438,
+        "erroP99Rel": 0.0149,
+        "erroConferido": 0.000233,
+        "erroConferidoRel": 0.0438
+      },
+      {
+        "peca": "N64_movel_62",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.003323,
+        "erroMaxRel": 0.0104,
+        "erroP99Rel": 0.0059,
+        "erroConferido": 3.4e-05,
+        "erroConferidoRel": 0.0104
+      },
+      {
+        "peca": "N66_movel_64",
+        "vertices": 1808,
+        "articulacoes": 32,
+        "excursao": 0.005318,
+        "erroMaxRel": 0.0468,
+        "erroP99Rel": 0.0179,
+        "erroConferido": 0.000249,
+        "erroConferidoRel": 0.0468
+      },
+      {
+        "peca": "N67_movel_65",
+        "vertices": 350,
+        "articulacoes": 32,
+        "excursao": 0.003323,
+        "erroMaxRel": 0.0104,
+        "erroP99Rel": 0.0059,
+        "erroConferido": 3.4e-05,
+        "erroConferidoRel": 0.0104
+      },
+      {
+        "peca": "N69_movel_67",
+        "vertices": 1199,
+        "articulacoes": 32,
+        "excursao": 0.005134,
+        "erroMaxRel": 0.029,
+        "erroP99Rel": 0.0177,
+        "erroConferido": 0.000149,
+        "erroConferidoRel": 0.029
+      },
+      {
+        "peca": "N71_movel_69",
+        "vertices": 1199,
+        "articulacoes": 32,
+        "excursao": 0.005134,
+        "erroMaxRel": 0.0308,
+        "erroP99Rel": 0.0175,
+        "erroConferido": 0.000158,
+        "erroConferidoRel": 0.0308
+      },
+      {
+        "peca": "N73_movel_71",
+        "vertices": 1199,
+        "articulacoes": 32,
+        "excursao": 0.005081,
+        "erroMaxRel": 0.0433,
+        "erroP99Rel": 0.0258,
+        "erroConferido": 0.00022,
+        "erroConferidoRel": 0.0433
+      },
+      {
+        "peca": "N75_movel_73",
+        "vertices": 1199,
+        "articulacoes": 32,
+        "excursao": 0.005081,
+        "erroMaxRel": 0.0435,
+        "erroP99Rel": 0.0242,
+        "erroConferido": 0.000221,
+        "erroConferidoRel": 0.0435
+      },
+      {
+        "peca": "N76_movel_74",
+        "vertices": 12658,
+        "articulacoes": 128,
+        "excursao": 0.008681,
+        "erroMaxRel": 0.0882,
+        "erroP99Rel": 0.0322,
+        "erroConferido": 0.000766,
+        "erroConferidoRel": 0.0882
+      },
+      {
+        "peca": "N77_movel_75",
+        "vertices": 12658,
+        "articulacoes": 128,
+        "excursao": 0.008139,
+        "erroMaxRel": 0.0796,
+        "erroP99Rel": 0.0285,
+        "erroConferido": 0.000648,
+        "erroConferidoRel": 0.0796
+      },
+      {
+        "peca": "N78_movel_74_avesso",
+        "vertices": 12658,
+        "articulacoes": 128,
+        "excursao": 0.008681,
+        "erroMaxRel": 0.0882,
+        "erroP99Rel": 0.0322,
+        "erroConferido": 0.000766,
+        "erroConferidoRel": 0.0882
+      },
+      {
+        "peca": "N79_movel_75_avesso",
+        "vertices": 12658,
+        "articulacoes": 128,
+        "excursao": 0.008139,
+        "erroMaxRel": 0.0796,
+        "erroP99Rel": 0.0285,
+        "erroConferido": 0.000648,
+        "erroConferidoRel": 0.0796
+      },
+      {
+        "peca": "N85_movel_81",
+        "vertices": 7014,
+        "articulacoes": 32,
+        "excursao": 0.007476,
+        "erroMaxRel": 0.0426,
+        "erroP99Rel": 0.0124,
+        "erroConferido": 0.000318,
+        "erroConferidoRel": 0.0426
+      },
+      {
+        "peca": "N86_movel_82",
+        "vertices": 1729,
+        "articulacoes": 32,
+        "excursao": 0.007476,
+        "erroMaxRel": 0.0137,
+        "erroP99Rel": 0.0059,
+        "erroConferido": 0.000102,
+        "erroConferidoRel": 0.0137
+      },
+      {
+        "peca": "N87_movel_83",
+        "vertices": 19440,
+        "articulacoes": 32,
+        "excursao": 0.006461,
+        "erroMaxRel": 0.059,
+        "erroP99Rel": 0.0111,
+        "erroConferido": 0.000381,
+        "erroConferidoRel": 0.059
+      },
+      {
+        "peca": "N88_movel_81_avesso",
+        "vertices": 7014,
+        "articulacoes": 32,
+        "excursao": 0.007476,
+        "erroMaxRel": 0.0426,
+        "erroP99Rel": 0.0124,
+        "erroConferido": 0.000318,
+        "erroConferidoRel": 0.0426
+      },
+      {
+        "peca": "N89_movel_82_avesso",
+        "vertices": 1729,
+        "articulacoes": 32,
+        "excursao": 0.007476,
+        "erroMaxRel": 0.0137,
+        "erroP99Rel": 0.0059,
+        "erroConferido": 0.000102,
+        "erroConferidoRel": 0.0137
+      },
+      {
+        "peca": "N107_movel_101",
+        "vertices": 14320,
+        "articulacoes": 64,
+        "excursao": 0.008793,
+        "erroMaxRel": 0.0773,
+        "erroP99Rel": 0.0244,
+        "erroConferido": 0.00068,
+        "erroConferidoRel": 0.0773
+      },
+      {
+        "peca": "N109_movel_103",
+        "vertices": 14909,
+        "articulacoes": 32,
+        "excursao": 0.009042,
+        "erroMaxRel": 0.1173,
+        "erroP99Rel": 0.031,
+        "erroConferido": 0.00106,
+        "erroConferidoRel": 0.1173
+      }
+    ]
+  }
 }

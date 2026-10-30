@@ -18,8 +18,9 @@ export function instalarCicloPortatil({experiencia,nivel=()=>1,niveis,nota='Cicl
  select.onchange=limpar;
  prepare.onclick=async()=>{
   limpar();const id=ticket,n=Number(select.value);
-  const glb=new URL('./'+experiencia+'/ciclos/nivel-'+n+'.glb',import.meta.url).href;
-  const usdz=new URL('./'+experiencia+'/ciclos/nivel-'+n+'.usdz',import.meta.url).href;
+  // ?v= renova o cache do iPhone: os USDZ passaram a levar o movimento por esqueleto (30/10/2026).
+  const glb=new URL('./'+experiencia+'/ciclos/nivel-'+n+'.glb',import.meta.url).href+'?v=esqueleto-20261030';
+  const usdz=new URL('./'+experiencia+'/ciclos/nivel-'+n+'.usdz',import.meta.url).href+'?v=esqueleto-20261030';
   message.textContent='Conferindo os arquivos do ciclo…';
   try{
    const result=await Promise.all([fetch(glb,{method:'HEAD'}),fetch(usdz,{method:'HEAD'})]);

@@ -34,6 +34,7 @@ jobs:
           node ra/scripts/reduzir-deformacoes.mjs ra/coracao/ciclos/nivel-1.glb ra/coracao/ciclos/nivel-2.glb
           python ra/celula/membrana/tools/ios.py
           python ra/scripts/converter-ciclos.py
+          python ra/scripts/esqueleto-ios.py
           node ra/scripts/comprimir-ciclos.mjs starling osso-vivo juncao-neuromuscular pleura retorno-venoso musculo-sarcomero coracao
           node ra/scripts/verificar-portateis.cjs
           node ra/scripts/atualizar-manifesto.cjs

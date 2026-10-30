@@ -1,0 +1,51 @@
+name: Construir RA com volume e movimento
+on:
+  push:
+    branches: [codex/ra-volume-20261025]
+    paths:
+      - '.github/workflows/ra-portatil.yml'
+      - 'ra/scripts/**'
+      - 'ra/texto-volume.js'
+      - 'ra/fonte-ra.js'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependências de autoria
+        run: |
+          npm install --no-save three@0.180.0 @napi-rs/canvas playwright gltf-validator @gltf-transform/core@4 @gltf-transform/extensions@4 @gltf-transform/functions@4 draco3dgltf
+          node node_modules/playwright/cli.js install --with-deps chromium
+          pip install numpy Pillow usd-core
+      - name: Modelos animados e textos sólidos
+        run: |
+          node ra/celula/membrana/tools/construir.mjs
+          node ra/scripts/construir-portateis.cjs
+          node ra/scripts/reduzir-deformacoes.mjs ra/coracao/ciclos/nivel-1.glb ra/coracao/ciclos/nivel-2.glb
+          python ra/celula/membrana/tools/ios.py
+          python ra/scripts/converter-ciclos.py
+          node ra/scripts/comprimir-ciclos.mjs starling osso-vivo juncao-neuromuscular pleura retorno-venoso musculo-sarcomero coracao
+          node ra/scripts/verificar-portateis.cjs
+          node ra/scripts/atualizar-manifesto.cjs
+      - name: Conferir fisiologia e abertura móvel
+        run: |
+          node -e "const fs=require('fs'),p=require('path');function f(d){for(const e of fs.readdirSync(d,{withFileTypes:true})){const a=p.join(d,e.name);if(e.isDirectory())f(a);else if(/\.(js|mjs)$/.test(a))fs.writeFileSync(a,fs.readFileSync(a,'utf8').replace(/\r\n/g,'\n'));}}f('ra');"
+          node --test ra/tests/*.test.mjs
+      - name: Registrar somente os modelos gerados
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add ra/*/ciclos ra/celula/membrana/assets ra/celula/visualizador/celula-v3-* ra/manifesto.json
+          git diff --cached --quiet || git commit -m "Gera GLB e USDZ animados com textos em relevo"
+          git push
+

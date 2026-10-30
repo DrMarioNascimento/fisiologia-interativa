@@ -7,7 +7,10 @@ test('ciclo na mesa: o instante continua como antes e o ciclo é um botão a mai
   const app = ler('coracao/app.js'), html = ler('coracao/index.html');
   // modo instante intacto
   assert.match(app, /const ehQuickLook = \/iPad\|iPhone\|iPod\/\.test\(navigator\.userAgent\)/);
-  assert.match(app, /if \(batendo\) \{\s*\$\('launchAR'\)\.disabled = true;/);
+  // Batendo (vistas externa e interna): o botão principal abre o ciclo em movimento; no tórax, segue pedindo pausa.
+  assert.match(app, /if \(batendo\) \{\s*if \(atual !== 'T'\) \{ prepararCicloRA\(\); return; \}[\s\S]{0,80}\$\('launchAR'\)\.disabled = true;/);
+  assert.match(app, /ciclos\/nivel-' \+ n/);
+  assert.match(app, /if \(cicloRA && ehQuickLook\) \{ abrirCicloIOS\(\); return; \}/);
   assert.match(app, /new GLTFExporter\(\)\.parseAsync\(wrap, \{ binary: true, onlyVisible: true \}\)/);
   assert.match(html, /<model-viewer id="arViewer"[^>]*ar-modes="webxr scene-viewer quick-look"[^>]*ar-placement="floor"[^>]*ar-scale="auto"/);
   // ciclo separado, escondido por padrão e liberado só no Android

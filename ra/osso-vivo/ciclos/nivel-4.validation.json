@@ -1,7 +1,64 @@
 {
-  "deformation": "UsdSkelBlendShape",
+  "deformation": "UsdSkel joints (skinning)",
   "meshes": 96,
   "tracks": 177,
   "duration": 8.0,
-  "validation": []
+  "validation": [],
+  "iphone": {
+    "motivo": "AR Quick Look não reproduz UsdSkelBlendShape; o movimento foi passado para articulações.",
+    "pecas": 5,
+    "erroConferidoMaxRel": 0.0716,
+    "porPeca": [
+      {
+        "peca": "N3_movel_1",
+        "vertices": 3315,
+        "articulacoes": 64,
+        "excursao": 0.404145,
+        "erroMaxRel": 0.0669,
+        "erroP99Rel": 0.0405,
+        "erroConferido": 0.027036,
+        "erroConferidoRel": 0.0669
+      },
+      {
+        "peca": "N4_movel_2",
+        "vertices": 492,
+        "articulacoes": 32,
+        "excursao": 0.034698,
+        "erroMaxRel": 0.0716,
+        "erroP99Rel": 0.0291,
+        "erroConferido": 0.002486,
+        "erroConferidoRel": 0.0716
+      },
+      {
+        "peca": "N10_movel_8",
+        "vertices": 585,
+        "articulacoes": 32,
+        "excursao": 0.534051,
+        "erroMaxRel": 0.0469,
+        "erroP99Rel": 0.0429,
+        "erroConferido": 0.025037,
+        "erroConferidoRel": 0.0469
+      },
+      {
+        "peca": "N14_movel_8_avesso",
+        "vertices": 585,
+        "articulacoes": 32,
+        "excursao": 0.534051,
+        "erroMaxRel": 0.0469,
+        "erroP99Rel": 0.0429,
+        "erroConferido": 0.025037,
+        "erroConferidoRel": 0.0469
+      },
+      {
+        "peca": "N126_movel_2_avesso",
+        "vertices": 492,
+        "articulacoes": 32,
+        "excursao": 0.034698,
+        "erroMaxRel": 0.0716,
+        "erroP99Rel": 0.0291,
+        "erroConferido": 0.002486,
+        "erroConferidoRel": 0.0716
+      }
+    ]
+  }
 }

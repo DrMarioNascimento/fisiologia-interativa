@@ -1,7 +1,134 @@
 {
-  "deformation": "UsdSkelBlendShape",
+  "deformation": "UsdSkel joints (skinning)",
   "meshes": 18,
   "tracks": 12,
   "duration": 2.299999952316284,
-  "validation": []
+  "validation": [],
+  "iphone": {
+    "motivo": "AR Quick Look não reproduz UsdSkelBlendShape; o movimento foi passado para articulações.",
+    "pecas": 12,
+    "erroConferidoMaxRel": 0.0826,
+    "porPeca": [
+      {
+        "peca": "N4_movel_2",
+        "vertices": 2025,
+        "articulacoes": 32,
+        "excursao": 0.018527,
+        "erroMaxRel": 0.0271,
+        "erroP99Rel": 0.0139,
+        "erroConferido": 0.000502,
+        "erroConferidoRel": 0.0271
+      },
+      {
+        "peca": "N5_movel_3",
+        "vertices": 2147,
+        "articulacoes": 32,
+        "excursao": 0.009513,
+        "erroMaxRel": 0.0648,
+        "erroP99Rel": 0.0364,
+        "erroConferido": 0.000617,
+        "erroConferidoRel": 0.0648
+      },
+      {
+        "peca": "N6_movel_4",
+        "vertices": 2147,
+        "articulacoes": 32,
+        "excursao": 0.009097,
+        "erroMaxRel": 0.0826,
+        "erroP99Rel": 0.04,
+        "erroConferido": 0.000752,
+        "erroConferidoRel": 0.0826
+      },
+      {
+        "peca": "N7_movel_5",
+        "vertices": 2147,
+        "articulacoes": 64,
+        "excursao": 0.004055,
+        "erroMaxRel": 0.0756,
+        "erroP99Rel": 0.0347,
+        "erroConferido": 0.000307,
+        "erroConferidoRel": 0.0756
+      },
+      {
+        "peca": "N13_movel_11",
+        "vertices": 627,
+        "articulacoes": 32,
+        "excursao": 0.012775,
+        "erroMaxRel": 0.0625,
+        "erroP99Rel": 0.0439,
+        "erroConferido": 0.000798,
+        "erroConferidoRel": 0.0625
+      },
+      {
+        "peca": "N14_movel_12",
+        "vertices": 627,
+        "articulacoes": 32,
+        "excursao": 0.012774,
+        "erroMaxRel": 0.0535,
+        "erroP99Rel": 0.0336,
+        "erroConferido": 0.000684,
+        "erroConferidoRel": 0.0535
+      },
+      {
+        "peca": "N15_movel_11_avesso",
+        "vertices": 627,
+        "articulacoes": 32,
+        "excursao": 0.012775,
+        "erroMaxRel": 0.0625,
+        "erroP99Rel": 0.0439,
+        "erroConferido": 0.000798,
+        "erroConferidoRel": 0.0625
+      },
+      {
+        "peca": "N16_movel_12_avesso",
+        "vertices": 627,
+        "articulacoes": 32,
+        "excursao": 0.012774,
+        "erroMaxRel": 0.0535,
+        "erroP99Rel": 0.0336,
+        "erroConferido": 0.000684,
+        "erroConferidoRel": 0.0535
+      },
+      {
+        "peca": "N18_movel_14",
+        "vertices": 627,
+        "articulacoes": 64,
+        "excursao": 0.019617,
+        "erroMaxRel": 0.0636,
+        "erroP99Rel": 0.0413,
+        "erroConferido": 0.001248,
+        "erroConferidoRel": 0.0636
+      },
+      {
+        "peca": "N19_movel_15",
+        "vertices": 627,
+        "articulacoes": 32,
+        "excursao": 0.019618,
+        "erroMaxRel": 0.0788,
+        "erroP99Rel": 0.0321,
+        "erroConferido": 0.001546,
+        "erroConferidoRel": 0.0788
+      },
+      {
+        "peca": "N20_movel_14_avesso",
+        "vertices": 627,
+        "articulacoes": 64,
+        "excursao": 0.019617,
+        "erroMaxRel": 0.0636,
+        "erroP99Rel": 0.0413,
+        "erroConferido": 0.001248,
+        "erroConferidoRel": 0.0636
+      },
+      {
+        "peca": "N21_movel_15_avesso",
+        "vertices": 627,
+        "articulacoes": 32,
+        "excursao": 0.019618,
+        "erroMaxRel": 0.0788,
+        "erroP99Rel": 0.0321,
+        "erroConferido": 0.001546,
+        "erroConferidoRel": 0.0788
+      }
+    ]
+  }
 }
