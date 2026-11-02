@@ -1,0 +1,47 @@
+[
+  {
+    "path": "ra/celula/visualizador/celula-desktop-meshopt.glb",
+    "before": 31929480,
+    "after": 18267848,
+    "gzip": 14312825,
+    "sha256": "1a30c29df57c16e3406746eef2abf5b8c2b756f84fb1ca8074c5d981083e1dd9",
+    "sameGeometryAndAnimationData": true,
+    "nodes": 352,
+    "animations": [
+      {
+        "name": "vida_celular",
+        "channels": 359
+      }
+    ]
+  },
+  {
+    "path": "ra/celula/membrana/assets/pelicula-v1-meshopt.glb",
+    "before": 10990068,
+    "after": 5358332,
+    "gzip": 1841483,
+    "sha256": "3bd1b0fd543a980cc0aa4a283faa444b1091313d404eac8ab53412cebd49be74",
+    "sameGeometryAndAnimationData": true,
+    "nodes": 125,
+    "animations": [
+      {
+        "name": "pelicula_ciclo",
+        "channels": 100
+      }
+    ]
+  },
+  {
+    "path": "ra/celula/membrana/assets/travessias-v1-meshopt.glb",
+    "before": 12695336,
+    "after": 6652056,
+    "gzip": 2826249,
+    "sha256": "4d7c1fa22d628eae5f5d2f3cd8caa7a34d69cf134f84cf8d54c474b3007be911",
+    "sameGeometryAndAnimationData": true,
+    "nodes": 125,
+    "animations": [
+      {
+        "name": "travessias_ciclo",
+        "channels": 100
+      }
+    ]
+  }
+]

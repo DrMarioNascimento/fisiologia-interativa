@@ -15,7 +15,7 @@ export function configureAR({getVariant=()=> 'completa',subscribe=()=>{},onPrese
  viewer.setAttribute('ar-modes','webxr scene-viewer quick-look');
  viewer.setAttribute('loading','eager');viewer.setAttribute('reveal','auto');
  launch.disabled=platform!=='ios';
- status.textContent=platform==='ios'?'Toque para colocar a célula no ambiente com a câmera do iPhone ou iPad.':'Explore em 3D aqui. Para colocar a célula no ambiente, abra esta página no iPhone ou Android.';
+ status.textContent=platform==='ios'?'Toque para colocar a célula no ambiente com a câmera do iPhone ou iPad.':'Explore em 3D aqui. Toque em Preparar realidade aumentada para carregar o modelo da câmera.';
  function prepareModel(){
   ready=false;viewer.hidden=false;
   if(platform!=='ios'){launch.disabled=true;launch.textContent='Preparando realidade aumentada…';}
@@ -71,6 +71,5 @@ export function configureAR({getVariant=()=> 'completa',subscribe=()=>{},onPrese
  });
  if(platform==='android'){
   prepare.textContent='Preparar realidade aumentada';
-  prepareModel();
  }
 }

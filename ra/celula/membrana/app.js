@@ -1,3 +1,4 @@
+import {configureMeshopt} from '../../meshopt.js';
 import {DURACAO,estadoPelicula,estadoTransporte} from './ciclo.js';
 import {nativePlatform} from '../visualizador/ra.js?v=volume-20261025';
 const $=id=>document.getElementById(id),viewer=$('membrane-model'),launch=$('launch-ar'),status=$('ar-status');
@@ -29,7 +30,7 @@ function showPhase(){
 }
 function tick(){frame=0;if((active||presenting)&&!document.hidden){showPhase();frame=requestAnimationFrame(tick);}}
 function visibility(value){active=value;syncPlayback();if(frame)cancelAnimationFrame(frame);frame=0;if(active||presenting)tick();}
-function requestModel(){
+async function requestModel(){
  ready=false;lastPhase='';$('phase').textContent='Carregando a animação…';
  ['play','restart','speed','timeline','reset-view'].forEach(id=>$(id).disabled=true);
  launch.disabled=platform!=='ios';$('retry').hidden=true;
@@ -37,7 +38,10 @@ function requestModel(){
  $('model-poster').hidden=false;$('model-poster').src=links.poster;$('model-poster').alt='Prévia do modelo real: '+content[mode].title;
  viewer.setAttribute('poster',links.poster);viewer.setAttribute('ios-src',links.usdz);
  if(!webgl){$('phase').textContent='Prévia do modelo';$('explanation').textContent='Este navegador não disponibilizou a visualização 3D. A imagem mostra o modelo real da experiência.';status.textContent=platform==='ios'?'Toque no botão para abrir a animação em RA no iPhone.':'Para explorar o movimento e a RA, abra em um navegador com suporte a 3D, como o Chrome de um Android compatível.';return;}
- viewer.setAttribute('src',requested);
+ const expected=requested;
+ try{await configureMeshopt();}catch{if(expected===requested){requested=expected.replace('-meshopt.glb','.glb');viewer.setAttribute('src',requested);}return;}
+ if(expected!==requested)return;
+ viewer.setAttribute('src',expected);
  status.textContent=platform==='ios'?'O modelo animado já pode ser aberto no iPhone. A prévia está carregando.':'Carregando o modelo animado. Aguarde “Pronto” para abrir a RA.';
 }
 function updateLab(){
@@ -52,7 +56,7 @@ function select(next){
  viewer.alt=c.alt;$('legend').innerHTML=c.legend;$('scope').textContent=c.scope;
  $('observations').classList.toggle('four',mode==='travessias');
  $('observations').replaceChildren(...c.cards.map(([title,text],i)=>{const a=document.createElement('article'),n=document.createElement('span'),b=document.createElement('b'),p=document.createElement('p');n.className='card-number';n.textContent=String(i+1).padStart(2,'0');b.textContent=title;p.textContent=text;a.append(n,b,p);return a;}));
- links=Object.fromEntries([['glb','glb'],['usdz','usdz'],['poster','webp']].map(([key,ext])=>[key,new URL(`assets/${mode}-v1.${ext}`,import.meta.url).href+'?v=volume-20261025']));
+ links=Object.fromEntries([['glb','glb'],['usdz','usdz'],['poster','webp']].map(([key,ext])=>[key,new URL(`assets/${mode}-v1${key==='glb'?'-meshopt':''}.${ext}`,import.meta.url).href+'?v=volume-20261025']));
  retry=0;requestModel();updateLab();
 }
 function failed(){presenting=false;status.textContent='A RA não abriu. No Android, use o Chrome e confira a permissão de câmera. Toque no botão para tentar novamente.';visibility(active);}
@@ -75,6 +79,7 @@ viewer.addEventListener('load',event=>{
  status.textContent=platform==='ios'||viewer.canActivateAR?'Pronto. Toque em Abrir em realidade aumentada para ver o ciclo em movimento.':'Modelo pronto para explorar aqui. Para RA, abra no Safari do iPhone ou no Chrome de um Android compatível.';
 });
 viewer.addEventListener('error',()=>{
+ if(requested.includes('-meshopt.glb')){requested=requested.replace('-meshopt.glb','.glb');viewer.setAttribute('src',requested);status.textContent='Carregando a versão original do modelo…';return;}
  ready=false;$('model-poster').hidden=false;launch.disabled=platform!=='ios';['play','restart','speed','timeline','reset-view'].forEach(id=>$(id).disabled=true);
  $('phase').textContent='Prévia 3D indisponível';$('explanation').textContent='A imagem mostra o modelo real. Tente carregar novamente ou abra em um navegador compatível.';
  status.textContent=platform==='ios'?'Você ainda pode abrir o modelo animado em RA no iPhone pelo botão.':'Não foi possível carregar a prévia 3D neste navegador. Tente novamente ou abra no Chrome do Android.';$('retry').hidden=false;

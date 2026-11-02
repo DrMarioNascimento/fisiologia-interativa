@@ -1635,12 +1635,14 @@ if (ehAndroid) {
   });
 }
 
+let palcoVisivel=true;
+new IntersectionObserver(entries=>{palcoVisivel=entries[0].isIntersecting;}).observe(canvas);
 let antes = performance.now();
 r.setAnimationLoop(agora => {
   window.__vivo = true;
   const dt = Math.min(.1, (agora - antes) / 1000); antes = agora;
   executarCiclo(dt);
-  ctl.update(); r.render(cena, cam); desenharLegendas();
+  if(palcoVisivel&&!document.hidden){ctl.update(); r.render(cena, cam); desenharLegendas();}
 });
 
 const vistaInicial={pos:cam.position.clone(),alvo:ctl.target.clone()};

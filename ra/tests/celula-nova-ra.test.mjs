@@ -13,7 +13,7 @@ test('iPhone and iPad open a public USDZ through a top-level rel=ar link in the 
  }
 });
 test('Android prepares the selected GLB and activates WebXR first, like the working membrane tabs',()=>{
- const h=harness('Android');assert.equal(h.get('cell-ar').attributes['ar-modes'],'webxr scene-viewer quick-look');
+ const h=harness('Android');assert.equal(h.get('cell-ar').getAttribute('src'),null);assert.equal(h.get('cell-ar').hidden,true);h.get('prepare-ar').onclick();assert.equal(h.get('cell-ar').attributes['ar-modes'],'webxr scene-viewer quick-look');
  assert.equal(h.get('cell-ar').hidden,false);assert.equal(h.get('launch-ar').disabled,true);
  h.get('launch-ar').onclick();assert.equal(h.activated.length,0);assert.equal(h.opened.length,0);
  assert.match(h.get('cell-ar').src,/celula-v3-completa\.glb\?v=volume-20261025$/);
@@ -41,7 +41,7 @@ test('Membranes start visible, toggle independently, and preserve organelles and
 });
 test('Layer changes select the correct iOS asset and require the new Android model to finish loading',()=>{
  for(const ua of ['iPhone','Android']){
-  const h=harness(ua);h.get('cell-ar').canActivateAR=true;
+  const h=harness(ua);if(ua==='Android')h.get('prepare-ar').onclick();h.get('cell-ar').canActivateAR=true;
   for(const [button,variant] of [[null,'completa'],['mem','sem-membrana-celular'],['mito','sem-membranas'],['mem','sem-membranas-mitocondriais']]){
    if(button)h.get(button).onclick();
    if(ua==='Android'){
@@ -57,7 +57,7 @@ test('Layer changes select the correct iOS asset and require the new Android mod
  }
 });
 test('Android load failures, retries and AR lifecycle do not leave a stale enabled button',()=>{
- const h=harness('Android'),v=h.get('cell-ar');v.canActivateAR=true;v.listeners.load();
+ const h=harness('Android'),v=h.get('cell-ar');h.get('prepare-ar').onclick();v.canActivateAR=true;v.listeners.load();
  v.listeners.error();assert.equal(h.get('launch-ar').disabled,true);
  const first=v.src;h.get('prepare-ar').onclick();assert.notEqual(v.src,first);assert(new URL(v.src).searchParams.get('retry')==='1');
  v.listeners.load({detail:{url:first}});assert.equal(h.get('launch-ar').disabled,true);
@@ -67,7 +67,7 @@ test('Android load failures, retries and AR lifecycle do not leave a stale enabl
  v.listeners['ar-status']({detail:{status:'failed'}});assert.match(h.get('ar-state').textContent,/não abriu/);
 });
 test('Android without AR support keeps an explanation; iOS remains available after preview failure',()=>{
- const h=harness('Android');h.get('cell-ar').canActivateAR=false;h.get('cell-ar').listeners.load();assert.equal(h.get('launch-ar').disabled,true);assert.match(h.get('ar-state').textContent,/Chrome/);
+ const h=harness('Android');h.get('prepare-ar').onclick();h.get('cell-ar').canActivateAR=false;h.get('cell-ar').listeners.load();assert.equal(h.get('launch-ar').disabled,true);assert.match(h.get('ar-state').textContent,/Chrome/);
  const ios=harness('iPhone');ios.get('cell-ar').listeners.error();assert.equal(ios.get('launch-ar').disabled,false);ios.get('launch-ar').onclick();assert.equal(ios.opened.length,1);
 });
 test('Four variants retain the same animation and hide only the requested membrane meshes',()=>{

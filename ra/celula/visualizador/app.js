@@ -1,4 +1,5 @@
-import {configureAR} from './ra.js?v=volume-20261025';
+import {configureAR,arLinks} from './ra.js?v=leve-20261102';
+import {MeshoptDecoder} from '../../vendor/meshopt_decoder.module.js';
 import {configureLayers} from './layers.js?v=celula-v3';
 import * as T from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
@@ -6,7 +7,10 @@ import {OrbitControls} from './vendor/OrbitControls.js';
 const stage=document.getElementById('cell-stage'),button=id=>document.getElementById(id),status=button('status');
 // Native AR is available even if this browser cannot create a WebGL context.
 const layers=configureLayers();
-let arPresenting=false,syncRender=()=>{};
+let arPresenting=false,activeTab=true,stageVisible=true,syncRender=()=>{};
+// Listen before the asynchronous model load so an early tab switch is retained.
+addEventListener('message',event=>{if(event.origin===location.origin&&event.source===parent&&event.data?.type==='celula-visibilidade'){activeTab=event.data.ativa===true;syncRender();}});
+new IntersectionObserver(entries=>{stageVisible=entries[0].isIntersecting;syncRender();}).observe(stage);
 configureAR({...layers,onPresenting(value){arPresenting=value;syncRender();}});
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let renderer;
@@ -24,26 +28,29 @@ async function init(){
  controls.enableDamping=true;controls.minDistance=1.3;controls.maxDistance=16;
  scene.add(new T.HemisphereLight(0xffffff,0x8593a3,2));
  for(const [intensity,pos] of [[2.5,[3,4,4]],[1.5,[-3,1,2]],[1.5,[1,2,-3]]]){const light=new T.DirectionalLight(0xffffff,intensity);light.position.set(...pos);scene.add(light);}
- const loader=new GLTFLoader();let gltf;
+ const loader=new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);let gltf;
  if(matchMedia('(pointer:coarse)').matches){
-  gltf=await loader.loadAsync('./celula-v3-completa.glb',e=>{if(e.total)status.textContent=`Carregando célula · ${Math.round(100*e.loaded/e.total)}%`;});
+  gltf=await loader.loadAsync(arLinks(location.href).glb,e=>{if(e.total)status.textContent=`Carregando célula · ${Math.round(100*e.loaded/e.total)}%`;});
  }else{
+  try{gltf=await loader.loadAsync('./celula-desktop-meshopt.glb');}catch(error){
+  console.warn('Carregando cópia original da célula',error);
   // Lossless original, split only for transport. Embedded buffers and textures stay identical.
   const response=await fetch('./modelo-original-v3/manifest.json');if(!response.ok)throw Error('Manifesto indisponível');const manifest=await response.json();let loaded=0;
   const parts=await Promise.all(manifest.parts.map(async part=>{const response=await fetch('./modelo-original-v3/'+part.file);if(!response.ok)throw Error('Parte do modelo indisponível');const bytes=new Uint8Array(await response.arrayBuffer());if(bytes.length!==part.bytes)throw Error('Parte incompleta');loaded+=bytes.length;status.textContent=`Carregando célula · ${Math.round(100*loaded/manifest.bytes)}%`;return bytes;}));
   const bytes=new Uint8Array(manifest.bytes);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}
   gltf=await loader.parseAsync(bytes.buffer,'./');
+  }
  }
  const model=gltf.scene,root=new T.Group();root.add(model);scene.add(root);
  const box=new T.Box3().setFromObject(model),center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());
  const scale=2/Math.max(size.x,size.y,size.z);root.scale.setScalar(scale);root.position.copy(center).multiplyScalar(-scale);root.updateMatrixWorld(true);
- const nuclear=[];let open=false,moving=!reduced,activeTab=true;
+ const nuclear=[];let open=false,moving=!reduced;
  const plane=new T.Plane(new T.Vector3(0,-1,0),0);
  model.traverse(o=>{if(!o.isMesh)return;
    o.material=o.material.clone();if(o.material.transparent)o.material.depthWrite=false;
    if(['envoltorio_nuclear','poros_nucleares','nucleoplasma'].includes(o.name))nuclear.push(o);
  });
- layers.attachModel(model);
+ layers.attachModel(model);layers.subscribe(()=>syncRender());
  const mixer=new T.AnimationMixer(model);gltf.animations.forEach(clip=>mixer.clipAction(clip).play());
  function updateClip(){
   if(!nuclear.length)return;
@@ -52,14 +59,14 @@ async function init(){
   nuclear.forEach(o=>{o.material.clippingPlanes=open?[plane]:[];});
  }
  button('nuc').disabled=!nuclear.length;
- button('nuc').onclick=()=>{open=!open;button('nuc').setAttribute('aria-pressed',String(open));button('nuc').textContent=open?'Restaurar núcleo':'Revelar núcleo';button('cutlabel').hidden=!open;updateClip();};button('cut').oninput=updateClip;
+ button('nuc').onclick=()=>{open=!open;button('nuc').setAttribute('aria-pressed',String(open));button('nuc').textContent=open?'Restaurar núcleo':'Revelar núcleo';button('cutlabel').hidden=!open;updateClip();syncRender();};button('cut').oninput=()=>{updateClip();syncRender();};
  function motionText(){button('motion').setAttribute('aria-pressed',String(moving));button('motion').textContent=moving?'Animação ativa':'Animação pausada';}
- button('motion').onclick=()=>{moving=!moving;motionText();};motionText();
+ button('motion').onclick=()=>{moving=!moving;motionText();syncRender();};motionText();
  function fitView(reset=false){
   const width=Math.max(1,stage.clientWidth),height=Math.max(1,stage.clientHeight);renderer.setSize(width,height);camera.aspect=width/height;camera.updateProjectionMatrix();
   const direction=reset?new T.Vector3(2.7,1.6,3.2):camera.position.clone().sub(controls.target);
   const vertical=T.MathUtils.degToRad(camera.fov),horizontal=2*Math.atan(Math.tan(vertical/2)*camera.aspect),distance=1.12/Math.sin(Math.min(vertical,horizontal)/2)*1.08;
-  controls.target.set(0,0,0);camera.position.copy(direction.normalize().multiplyScalar(distance));controls.update();
+  controls.target.set(0,0,0);camera.position.copy(direction.normalize().multiplyScalar(distance));controls.update();syncRender();
  }
  button('reset').onclick=()=>fitView(true);new ResizeObserver(()=>fitView()).observe(stage);fitView(true);
  const names={reticulo_endoplasmatico_liso:'Retículo endoplasmático liso',reticulo_endoplasmatico_rugoso:'Retículo endoplasmático rugoso',ribossomos_RER:'Ribossomos do retículo rugoso',envoltorio_nuclear:'Envoltório nuclear',poros_nucleares:'Poros nucleares',nucleolo:'Nucléolo',cromatina:'Cromatina',cromatina_densa:'Cromatina densa',cisternas_golgi:'Complexo de Golgi',microtubulos:'Microtúbulos',microfilamentos:'Microfilamentos',centrossomo:'Centrossomo'};
@@ -73,11 +80,12 @@ async function init(){
  });
  renderer.domElement.addEventListener('pointercancel',()=>down=null);
  let frameId=null,last=performance.now();
- function frame(now){frameId=null;if(document.hidden||!activeTab||arPresenting)return;const dt=Math.min((now-last)/1000,.05);last=now;
-  if(moving)mixer.update(dt*Number(button('speed').value)/100);if(open)updateClip();controls.update();renderer.render(scene,camera);frameId=requestAnimationFrame(frame);
+ function frame(now){frameId=null;if(document.hidden||!activeTab||!stageVisible||arPresenting)return;const dt=Math.min((now-last)/1000,.05);last=now;
+  if(moving)mixer.update(dt*Number(button('speed').value)/100);if(open)updateClip();const changed=controls.update();renderer.render(scene,camera);if(moving||changed)schedule();
  }
- function resume(){if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;last=performance.now();if(!document.hidden&&activeTab&&!arPresenting)frameId=requestAnimationFrame(frame);}
- addEventListener('message',event=>{if(event.origin===location.origin&&event.source===parent&&event.data?.type==='celula-visibilidade'){activeTab=event.data.ativa===true;resume();}});
+ function schedule(){if(frameId===null&&!document.hidden&&activeTab&&stageVisible&&!arPresenting)frameId=requestAnimationFrame(frame);}
+ controls.addEventListener('change',schedule);
+ function resume(){if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;last=performance.now();if(!document.hidden&&activeTab&&stageVisible&&!arPresenting)frameId=requestAnimationFrame(frame);}
  syncRender=resume;
  document.addEventListener('visibilitychange',resume);addEventListener('pageshow',resume);resume();
  status.textContent='Organelas · animação original do modelo';window.cellReady=true;
