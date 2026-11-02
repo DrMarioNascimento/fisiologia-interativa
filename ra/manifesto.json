@@ -88,7 +88,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "d67c2426f66d0df7debd6c097a6a1319b5ce1eea1f17db3e810eb79482784cc8"
+      "sha256": "8532a9d432de8e358c6ac651c84b3555be7f78ae47e8e4bbb34fb319a13e5fb2"
     },
     {
       "path": "pleura/estados.js",
@@ -104,7 +104,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "064f31836443cf5e69d7b769e9ea691374c42578b3d65f544c066ec30aaca6d5"
+      "sha256": "12245ef843b00f1f8ebd59681e7b1c4160c201be082ccab4fa1acd55aa8ee852"
     },
     {
       "path": "pleura/modelos.js",
@@ -180,7 +180,7 @@
     },
     {
       "path": "coracao/app.js",
-      "sha256": "8e943eaf9893ea82395b1cd59b46bab92e59440e68ae58fe194eae7fcf31504f"
+      "sha256": "6d2bf5abd72fc9e4112a5d003b7811e8a0a931dc67c768166a33af12137b09ce"
     },
     {
       "path": "coracao/ATTRIBUTION.md",
@@ -196,7 +196,7 @@
     },
     {
       "path": "coracao/index.html",
-      "sha256": "4d44e13e4009d69529253326a29ca6e5e3b9853a13acc11668732117aa514678"
+      "sha256": "d6789b11abc7697106777c4b3ed3c1f9a9d183fb3d285e7cdcd77e1750f17e69"
     },
     {
       "path": "coracao/legendas-a.js",
@@ -460,7 +460,7 @@
     },
     {
       "path": "ciclo-portatil.js",
-      "sha256": "b7b4b5c77add15a40bea19e1f42a513f51f387df8af56c84dde83cd747ca2118"
+      "sha256": "582ffbd5ce8d1a38d435d092c57c0f1685a94e6f2a4a13c0b13106d7a69698dd"
     },
     {
       "path": "celula/tools/glb_data.py",
@@ -633,6 +633,34 @@
     {
       "path": "starling/ciclos/nivel-5.usdz",
       "sha256": "47ffe6256b29d8105d0586dc3ca3f8cdfa8031f0a5faad014c2594acb599c123"
+    },
+    {
+      "path": "meshopt.js",
+      "sha256": "99f9251131b94cb649b32b097dd432064271a53913036959f8ecef594039cd33"
+    },
+    {
+      "path": "vendor/meshopt_decoder.js",
+      "sha256": "fabafaaa29cbb1cfa367f20e896d7f6e95b86e575e2ea86ddb6f8cca1a87152d"
+    },
+    {
+      "path": "vendor/meshopt_decoder.module.js",
+      "sha256": "10b313edaa0e322b0c1b46443f6c8b186b42139fe1eca189d50c09511d0ebedc"
+    },
+    {
+      "path": "vendor/meshoptimizer-LICENSE.md",
+      "sha256": "f03037ca7bad1e3eb7f4a63fa6084a8baabd5ba30d3c239a9a7f35705d873e26"
+    },
+    {
+      "path": "celula/visualizador/celula-desktop-meshopt.glb",
+      "sha256": "1a30c29df57c16e3406746eef2abf5b8c2b756f84fb1ca8074c5d981083e1dd9"
+    },
+    {
+      "path": "celula/membrana/assets/pelicula-v1-meshopt.glb",
+      "sha256": "3bd1b0fd543a980cc0aa4a283faa444b1091313d404eac8ab53412cebd49be74"
+    },
+    {
+      "path": "celula/membrana/assets/travessias-v1-meshopt.glb",
+      "sha256": "4d7c1fa22d628eae5f5d2f3cd8caa7a34d69cf134f84cf8d54c474b3007be911"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
@@ -668,7 +696,7 @@
     }
   },
   "atualizacao": {
-    "data": "2026-10-25",
-    "escopo": "Placas e textos extrudados; ciclos GLB e USDZ derivados dos motores das bancadas; arquivos públicos para Android e iPhone."
+    "data": "2026-11-02",
+    "escopo": "Compressão sem perdas na entrega GLB; carregamento sob demanda e pausa de prévias ocultas. USDZ originais preservados."
   }
 }
