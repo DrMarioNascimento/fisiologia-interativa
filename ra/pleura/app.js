@@ -345,6 +345,8 @@ function ajustar() {
 addEventListener('resize', ajustar);
 function desenhar() { desenharCurva(); renderer.render(scene, camera); posicionarLegendaFresta(); posicionarPerfil(); }
 
+let palcoVisivel=true;
+new IntersectionObserver(entries=>{palcoVisivel=entries[0].isIntersecting;}).observe(canvas);
 let anterior = performance.now();
 renderer.setAnimationLoop(agora => {
   /* teto no delta: aba em segundo plano volta com um salto de segundos e a
@@ -359,10 +361,9 @@ renderer.setAnimationLoop(agora => {
     else fase=proxima%1;
   }
   if (respirando || Math.abs(grau - antes) > .02) atualizar();
-  controls.update();
-  renderer.render(scene, camera);
-  posicionarLegendaFresta();
-  posicionarPerfil();
+  if(palcoVisivel&&!document.hidden){
+    controls.update();renderer.render(scene, camera);posicionarLegendaFresta();posicionarPerfil();
+  }
 });
 
 /* ------------------------------------------------------------ controles */
@@ -455,13 +456,15 @@ $('resetView').onclick = () => enquadrar(atual);
 
 /* ------------------------------------------------------------ RA */
 let arUrl = null, prepId = 0, temporizador = null;
-let modoRA = 'simulacao';
+let modoRA = 'simulacao',raVisible=false;
+new IntersectionObserver(entries=>{raVisible=entries[0].isIntersecting;if(raVisible)prepararRA();else{++prepId;clearTimeout(temporizador);}},{rootMargin:'200px'}).observe($('visualizacaoRA'));
 const URL_TORAX_COMPLETO = new URL('../assets/torax-completo-lobos-corrigidos.glb?v=20261008-vasos', import.meta.url).href;
 const URL_CORACAO_VASOS = new URL('../assets/coracao-e-vasos-foco.glb?v=20261008-foco', import.meta.url).href;
 const URL_APROVADO = new URL('../assets/torax-apices-nivelados.glb?v=apices-20261009', import.meta.url).href;
 function prepararRA() {
   const id = ++prepId;
   clearTimeout(temporizador);
+  if(!raVisible)return;
   const viewer = $('arViewer');
   viewer.classList.toggle('ra-foco-vasos', modoRA === 'vasos');
   temporizador = setTimeout(async () => {

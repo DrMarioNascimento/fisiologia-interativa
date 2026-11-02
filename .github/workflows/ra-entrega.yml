@@ -1,0 +1,32 @@
+name: Otimizar entrega RA sem perdas
+on:
+  push:
+    branches: [codex/ra-leve-20261102]
+    paths: ['ra/scripts/otimizar-entrega.mjs', 'ra/tools/entrega/**', '.github/workflows/ra-entrega.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  otimizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci --prefix ra/tools/entrega --ignore-scripts
+      - run: npm install --prefix ra --ignore-scripts --no-package-lock
+      - name: Gerar e comparar os modelos
+        run: |
+          ln -s ../tools/entrega/node_modules/@gltf-transform ra/node_modules/@gltf-transform
+          ln -s ../tools/entrega/node_modules/meshoptimizer ra/node_modules/meshoptimizer
+          node ra/scripts/otimizar-entrega.mjs
+          npm --prefix ra test
+      - name: Registrar modelos verificados
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ra/celula/visualizador/celula-desktop-meshopt.glb ra/celula/membrana/assets/*-meshopt.glb ra/otimizacao-modelos.json ra/manifesto.json
+          git diff --cached --quiet || git commit -m "Gera GLB sem perdas e atualiza integridade dos recursos RA"
+          git push
