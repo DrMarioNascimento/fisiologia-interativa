@@ -88,7 +88,7 @@
     },
     {
       "path": "pleura/app.js",
-      "sha256": "8532a9d432de8e358c6ac651c84b3555be7f78ae47e8e4bbb34fb319a13e5fb2"
+      "sha256": "4fdebc944739bbcf7d207e49118ae7fb255d63d135f80d479e5685666646c78a"
     },
     {
       "path": "pleura/estados.js",
@@ -104,7 +104,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "12245ef843b00f1f8ebd59681e7b1c4160c201be082ccab4fa1acd55aa8ee852"
+      "sha256": "e7c431337467aa7f2ff71c0f16b8eb80f6aea256199ac84db3d8e3cd5d05f572"
     },
     {
       "path": "pleura/modelos.js",
@@ -128,7 +128,7 @@
     },
     {
       "path": "retorno-venoso/app.js",
-      "sha256": "13061ec8fa35ad789e690ab90e745365e150571265c703cc32c7a9db32dfca07"
+      "sha256": "0cbe4bbfba04df43b6bc859a42ba160c70198bf0969d1006f281c05cc891a1fc"
     },
     {
       "path": "retorno-venoso/bomba.js",
@@ -144,7 +144,7 @@
     },
     {
       "path": "retorno-venoso/index.html",
-      "sha256": "28de46cd6adf7efe113491061cb945b132d0aae24813cc60568f446a10ba3d74"
+      "sha256": "8fcf9004f848cc1d48d8596ce0decc02f74adeb58ac262ee7c04fdb97ad361df"
     },
     {
       "path": "retorno-venoso/modelos.js",
@@ -180,7 +180,7 @@
     },
     {
       "path": "coracao/app.js",
-      "sha256": "6d2bf5abd72fc9e4112a5d003b7811e8a0a931dc67c768166a33af12137b09ce"
+      "sha256": "e866384d425d001a66b83431994ad20cc63a6e3fecf6a9368065b44c8018f529"
     },
     {
       "path": "coracao/ATTRIBUTION.md",
@@ -196,7 +196,7 @@
     },
     {
       "path": "coracao/index.html",
-      "sha256": "d6789b11abc7697106777c4b3ed3c1f9a9d183fb3d285e7cdcd77e1750f17e69"
+      "sha256": "72dc74b8db5fa775c512876127186060f065facf08ea1e4bf2e706f46dfa7220"
     },
     {
       "path": "coracao/legendas-a.js",
@@ -240,7 +240,7 @@
     },
     {
       "path": "musculo-sarcomero/app.js",
-      "sha256": "134b48f5d510e954526f691809bc4825c3b0141859598d0a21ed50a1fe5005f1"
+      "sha256": "1037b98a286642091c070cdf2f390ca15ae34c80a27760fb80ffd3c8361bac9d"
     },
     {
       "path": "musculo-sarcomero/biceps.js",
@@ -248,7 +248,7 @@
     },
     {
       "path": "musculo-sarcomero/index.html",
-      "sha256": "a563b37580e95ad47a5baacccdee47677923ea9a129362b570cc28579cb7a664"
+      "sha256": "ee977fbb8950a231f686ee207e59f97314ed8ced6b13858e077beba7a8de2744"
     },
     {
       "path": "musculo-sarcomero/modelos.js",
@@ -300,7 +300,7 @@
     },
     {
       "path": "starling/app.js",
-      "sha256": "f0bdd102a647c1474c0637a424df3ec30561b642cdadecf4c7852e99e50c2e0f"
+      "sha256": "8f195eb15f452927ca4a38de7cb2cc7ca23220ebea91ddecbdb00c586496fb20"
     },
     {
       "path": "starling/fisica.js",
@@ -308,7 +308,7 @@
     },
     {
       "path": "starling/index.html",
-      "sha256": "19a6b196e1b3b2386cd31e8a6c127491fc0b3290eb32e37ea94d1172d3b9f834"
+      "sha256": "7af5e9231af724cf6539fc626edf3535fe4cf3d2f61fb76bdf8e12c0ccf46701"
     },
     {
       "path": "starling/modelos.js",
@@ -328,7 +328,7 @@
     },
     {
       "path": "juncao-neuromuscular/app.js",
-      "sha256": "8b3d54d8f8376509a21f9ca0bed2454a79d24136dbd8773107256cd3a242189f"
+      "sha256": "def5fced1cf8c076c2d3aa3d31408519eabec816107a4f05b76cf68d99ec7e26"
     },
     {
       "path": "juncao-neuromuscular/fisica.js",
@@ -336,7 +336,7 @@
     },
     {
       "path": "juncao-neuromuscular/index.html",
-      "sha256": "914529e22c9e3e5c26465c0800e73ed014e76e8b601bb3eaecff842ef5a880ac"
+      "sha256": "c7a38bbc778bc2a6ad1fc1c6993fbfbbc2bdec62fb7289b6626de49c96d6287d"
     },
     {
       "path": "juncao-neuromuscular/modelos.js",
@@ -364,7 +364,7 @@
     },
     {
       "path": "osso-vivo/app.js",
-      "sha256": "e74053bbc4111f444231a85c5f5aeee7ca16413023c2945e16a027898b8a719c"
+      "sha256": "097ebd880ad0a219cc8a01b7a1f95f7fc30546edd1cf3a9e727664cb106500b8"
     },
     {
       "path": "osso-vivo/fisica.js",
@@ -372,7 +372,7 @@
     },
     {
       "path": "osso-vivo/index.html",
-      "sha256": "da426ea68e9df79f42e0d9273065e6e22ac80ecafad60c95c564e4e947761754"
+      "sha256": "a7b96981fd04abd5d10635015324203033fdc333c7263f6217da5cfc9ac63cf3"
     },
     {
       "path": "osso-vivo/modelos.js",
@@ -460,7 +460,7 @@
     },
     {
       "path": "ciclo-portatil.js",
-      "sha256": "582ffbd5ce8d1a38d435d092c57c0f1685a94e6f2a4a13c0b13106d7a69698dd"
+      "sha256": "f6ac8bd825fa5d9a0a7d3f0f4c2ec263dfd854fa90188ea11656e8fed9f8ed64"
     },
     {
       "path": "celula/tools/glb_data.py",
@@ -661,6 +661,10 @@
     {
       "path": "celula/membrana/assets/travessias-v1-meshopt.glb",
       "sha256": "4d7c1fa22d628eae5f5d2f3cd8caa7a34d69cf134f84cf8d54c474b3007be911"
+    },
+    {
+      "path": "rede.js",
+      "sha256": "d30b7d3cf12ba279a1e4817b71f2d0551fa602354a12bfa0afebec147f7cbb0d"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
@@ -697,6 +701,6 @@
   },
   "atualizacao": {
     "data": "2026-11-02",
-    "escopo": "Compressão sem perdas na entrega GLB; carregamento sob demanda e pausa de prévias ocultas. USDZ originais preservados."
+    "escopo": "Entrega sob demanda em rede limitada; modelos e animações originais preservados."
   }
 }

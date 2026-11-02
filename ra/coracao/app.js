@@ -1656,5 +1656,5 @@ atualizarExecucao();
 window.__compilarCiclo=gerarCiclo;
 window.__cicloPronto=()=>Boolean(pecaA.aplicar&&pecaB.aplicar);
 
-import {instalarCicloPortatil} from '../ciclo-portatil.js';
+import {instalarCicloPortatil} from '../ciclo-portatil.js?v=wifi-20261102';
 instalarCicloPortatil({experiencia:'coracao',nivel:()=>atual==='A'?1:2,niveis:[1,2]});
