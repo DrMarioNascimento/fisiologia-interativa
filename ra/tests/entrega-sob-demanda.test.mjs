@@ -31,3 +31,11 @@ test('prévia portátil pausa fechada ou invisível e retoma sem perder a escolh
  state.presenting=true;state.syncPlayback();assert.equal(viewer.paused,false);
  state.document.hidden=true;state.syncPlayback();assert.equal(viewer.paused,true);
 });
+test('troca de aba durante o download já controla a visibilidade da célula',()=>{
+ const code=read('celula/visualizador/app.js'),start=code.indexOf('const stage='),end=code.indexOf('const reduced='),events={};let observer;
+ const parent={},context=vm.createContext({document:{getElementById:()=>({})},parent,location:{origin:'https://example.test'},configureLayers:()=>({}),configureAR(){},addEventListener:(name,fn)=>events[name]=fn,IntersectionObserver:class{constructor(fn){observer=fn;}observe(){}}});
+ vm.runInContext(code.slice(start,end),context);
+ events.message({origin:'https://other.test',source:parent,data:{type:'celula-visibilidade',ativa:false}});assert.equal(vm.runInContext('activeTab',context),true);
+ events.message({origin:'https://example.test',source:parent,data:{type:'celula-visibilidade',ativa:false}});assert.equal(vm.runInContext('activeTab',context),false);
+ observer([{isIntersecting:false}]);assert.equal(vm.runInContext('stageVisible',context),false);
+});

@@ -7,7 +7,10 @@ import {OrbitControls} from './vendor/OrbitControls.js';
 const stage=document.getElementById('cell-stage'),button=id=>document.getElementById(id),status=button('status');
 // Native AR is available even if this browser cannot create a WebGL context.
 const layers=configureLayers();
-let arPresenting=false,syncRender=()=>{};
+let arPresenting=false,activeTab=true,stageVisible=true,syncRender=()=>{};
+// Listen before the asynchronous model load so an early tab switch is retained.
+addEventListener('message',event=>{if(event.origin===location.origin&&event.source===parent&&event.data?.type==='celula-visibilidade'){activeTab=event.data.ativa===true;syncRender();}});
+new IntersectionObserver(entries=>{stageVisible=entries[0].isIntersecting;syncRender();}).observe(stage);
 configureAR({...layers,onPresenting(value){arPresenting=value;syncRender();}});
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let renderer;
@@ -41,7 +44,7 @@ async function init(){
  const model=gltf.scene,root=new T.Group();root.add(model);scene.add(root);
  const box=new T.Box3().setFromObject(model),center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());
  const scale=2/Math.max(size.x,size.y,size.z);root.scale.setScalar(scale);root.position.copy(center).multiplyScalar(-scale);root.updateMatrixWorld(true);
- const nuclear=[];let open=false,moving=!reduced,activeTab=true;
+ const nuclear=[];let open=false,moving=!reduced;
  const plane=new T.Plane(new T.Vector3(0,-1,0),0);
  model.traverse(o=>{if(!o.isMesh)return;
    o.material=o.material.clone();if(o.material.transparent)o.material.depthWrite=false;
@@ -77,13 +80,12 @@ async function init(){
  });
  renderer.domElement.addEventListener('pointercancel',()=>down=null);
  let frameId=null,last=performance.now();
- function frame(now){frameId=null;if(document.hidden||!activeTab||arPresenting)return;const dt=Math.min((now-last)/1000,.05);last=now;
+ function frame(now){frameId=null;if(document.hidden||!activeTab||!stageVisible||arPresenting)return;const dt=Math.min((now-last)/1000,.05);last=now;
   if(moving)mixer.update(dt*Number(button('speed').value)/100);if(open)updateClip();const changed=controls.update();renderer.render(scene,camera);if(moving||changed)schedule();
  }
- function schedule(){if(frameId===null&&!document.hidden&&activeTab&&!arPresenting)frameId=requestAnimationFrame(frame);}
+ function schedule(){if(frameId===null&&!document.hidden&&activeTab&&stageVisible&&!arPresenting)frameId=requestAnimationFrame(frame);}
  controls.addEventListener('change',schedule);
- function resume(){if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;last=performance.now();if(!document.hidden&&activeTab&&!arPresenting)frameId=requestAnimationFrame(frame);}
- addEventListener('message',event=>{if(event.origin===location.origin&&event.source===parent&&event.data?.type==='celula-visibilidade'){activeTab=event.data.ativa===true;resume();}});
+ function resume(){if(frameId!==null)cancelAnimationFrame(frameId);frameId=null;last=performance.now();if(!document.hidden&&activeTab&&stageVisible&&!arPresenting)frameId=requestAnimationFrame(frame);}
  syncRender=resume;
  document.addEventListener('visibilitychange',resume);addEventListener('pageshow',resume);resume();
  status.textContent='Organelas · animação original do modelo';window.cellReady=true;
