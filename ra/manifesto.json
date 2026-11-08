@@ -64,7 +64,7 @@
     },
     {
       "path": "laboratorio.css",
-      "sha256": "628c15d0d7b3af805304793f6d8d80384cf90dbc849291b2735b4f82a3a9e5b7"
+      "sha256": "3d952d2d722255feda9974dce218ee5a1ca03f0d02ddfee0372983f557cf0dd5"
     },
     {
       "path": "ra-botoes-ios.js",
@@ -104,7 +104,7 @@
     },
     {
       "path": "pleura/index.html",
-      "sha256": "e7c431337467aa7f2ff71c0f16b8eb80f6aea256199ac84db3d8e3cd5d05f572"
+      "sha256": "bd3cbb67bad34ce95eab0fb5980310a757a1e15475da4a775115b76b4d0e87fe"
     },
     {
       "path": "pleura/modelos.js",
@@ -144,7 +144,7 @@
     },
     {
       "path": "retorno-venoso/index.html",
-      "sha256": "8fcf9004f848cc1d48d8596ce0decc02f74adeb58ac262ee7c04fdb97ad361df"
+      "sha256": "5080ff5cff6e570785aa175142c1e1c92d8eafbfa164366312ce9fe248fb68a4"
     },
     {
       "path": "retorno-venoso/modelos.js",
@@ -196,7 +196,7 @@
     },
     {
       "path": "coracao/index.html",
-      "sha256": "72dc74b8db5fa775c512876127186060f065facf08ea1e4bf2e706f46dfa7220"
+      "sha256": "9ddb655de31cc44e2f3ec4f5d11d97a7e35a1b1e53c80701d18635c157348140"
     },
     {
       "path": "coracao/legendas-a.js",
@@ -248,7 +248,7 @@
     },
     {
       "path": "musculo-sarcomero/index.html",
-      "sha256": "ee977fbb8950a231f686ee207e59f97314ed8ced6b13858e077beba7a8de2744"
+      "sha256": "3c3b9e04a151705cdaeb19d0026a2c7b68b150a3bd4d82b6c049cf98474fc609"
     },
     {
       "path": "musculo-sarcomero/modelos.js",
@@ -272,7 +272,7 @@
     },
     {
       "path": "potencial-membrana/index.html",
-      "sha256": "80019396ba6b7c8b9d03b8d2691edc892089e57e78e1796d309373563a675554"
+      "sha256": "1a686c42296758be4b0600a1330900cd123f3b4fa4af343f5f2018226617f3d3"
     },
     {
       "path": "potencial-membrana/modelos.js",
@@ -308,7 +308,7 @@
     },
     {
       "path": "starling/index.html",
-      "sha256": "7af5e9231af724cf6539fc626edf3535fe4cf3d2f61fb76bdf8e12c0ccf46701"
+      "sha256": "d0b73c0130ccb8e7250a47e31f03a106348c50b3abd538512321eb79563b0e3e"
     },
     {
       "path": "starling/modelos.js",
@@ -336,7 +336,7 @@
     },
     {
       "path": "juncao-neuromuscular/index.html",
-      "sha256": "c7a38bbc778bc2a6ad1fc1c6993fbfbbc2bdec62fb7289b6626de49c96d6287d"
+      "sha256": "d8893644415ae406491404437dc411769f13ebf4639f7c4b07d1c5f99c673393"
     },
     {
       "path": "juncao-neuromuscular/modelos.js",
@@ -372,7 +372,7 @@
     },
     {
       "path": "osso-vivo/index.html",
-      "sha256": "a7b96981fd04abd5d10635015324203033fdc333c7263f6217da5cfc9ac63cf3"
+      "sha256": "d22c99b3ca170b8f89634edca30c88f4aac11316af9278fb83a272f2d0a3c33c"
     },
     {
       "path": "osso-vivo/modelos.js",
@@ -460,7 +460,7 @@
     },
     {
       "path": "ciclo-portatil.js",
-      "sha256": "f6ac8bd825fa5d9a0a7d3f0f4c2ec263dfd854fa90188ea11656e8fed9f8ed64"
+      "sha256": "65144f6684a395c4ab00e684dde977d2505a0ada716849891853313df8c7f3b2"
     },
     {
       "path": "celula/tools/glb_data.py",
