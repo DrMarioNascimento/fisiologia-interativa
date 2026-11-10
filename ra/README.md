@@ -70,3 +70,11 @@ A apresentação segue as demais experiências: assinatura, retorno ao Tutor de 
 
 Placas e textos extrudados, ciclos portáteis em GLB e USDZ e preservação das exportações de estado. Consulte [a revisão e os limites de compatibilidade](REVISAO-VOLUME-MOVIMENTO.md).
 
+## Bíceps braquial · Sistema muscular — 10/11/2026
+
+[Bíceps braquial RA](https://fisiologia.drmarionascimento.com.br/ra/biceps-braquial/) é uma experiência nova, de anatomia funcional: origens, inserções e trajeto dos tendões do bíceps braquial, com cartilagens articulares e tecido conjuntivo. Ganhou um terceiro botão no card de RA do Sistema Muscular dos dois percursos (EF e Fisioterapia) e uma entrada no catálogo compartilhado dos quatro Tutores, com roteiro e três questões. Não altera "Do músculo ao sarcômero" nem "Do nervo à força".
+
+Modelo (`biceps-braquial/modelo.glb`, 6,1 MB): escápula, clavícula, úmero, rádio, ulna, tendões das duas cabeças e membrana interóssea do BodyParts3D (DBCLS, CC BY), membro superior direito; ventres musculares do modelo do autor, encaixados no trajeto do BodyParts3D; cartilagens articulares e ligamentos (transverso do úmero, anular do rádio, coracoacromial, conoide, trapezoide, acromioclavicular e aponeurose bicipital) modelados sobre a superfície dos ossos, como representação esquemática. Cada peça tem nome próprio no arquivo; a página usa esses nomes para rótulos e botões (rótulos, músculo translúcido, tecido conjuntivo, cartilagens).
+
+RA: no iPhone/iPad, link `rel="ar"` escrito no HTML para `biceps-braquial/modelo.usdz` (gerado do mesmo GLB), sem conversão no toque; no Android, model-viewer com o GLB e `ra-android.js`. O braço aparece em tamanho real. Validação: carga do modelo, rótulos, botões, retorno ao Tutor nos dois percursos e link nativo com agente de iPhone, em navegador automatizado; não testado em aparelho físico.
+

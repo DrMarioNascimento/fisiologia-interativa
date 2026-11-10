@@ -152,7 +152,7 @@ for(const course of ['ef','fisio'])for(const moodle of [false,true])test(`${cour
  await page.goto(`${base}/${moodle?'tutor-moodle':`tutor-${course}`}.html${moodle&&course==='fisio'?'?percurso=fisioterapia':''}`);
  if(!moodle)await page.locator('#tutorLauncher').click();
  const input=page.locator(moodle?'#input':'#tutorInput'),send=page.locator(moodle?'.send':'.tutor-send'),toggle=page.locator(moodle?'#aiEnabled':'#tutorAiEnabled'),messages=page.locator(moodle?'#messages':'#tutorMessages');
- for(const [query,href]of [['onde estudo coração RA','ra/coracao/'],['onde estudo retorno venoso RA','ra/retorno-venoso/'],['onde estudo pleura RA','ra/pleura/'],['onde estudo músculo sarcômero RA','ra/musculo-sarcomero/'],['onde estudo potencial membrana RA','ra/potencial-membrana/'],['onde estudo forças de Starling RA','ra/starling/'],['onde estudo junção neuromuscular RA','ra/juncao-neuromuscular/']]){
+ for(const [query,href]of [['onde estudo coração RA','ra/coracao/'],['onde estudo retorno venoso RA','ra/retorno-venoso/'],['onde estudo pleura RA','ra/pleura/'],['onde estudo músculo sarcômero RA','ra/musculo-sarcomero/'],['onde estudo potencial membrana RA','ra/potencial-membrana/'],['onde estudo forças de Starling RA','ra/starling/'],['onde estudo junção neuromuscular RA','ra/juncao-neuromuscular/'],['onde estudo bíceps braquial RA','ra/biceps-braquial/']]){
   await input.fill(query);await send.click();const link=messages.locator(`a[href*="${href}"]`).last();
   await expect(link).toHaveAttribute('href',new RegExp(`${href}\\?percurso=${course==='fisio'?'fisioterapia':'educacao-fisica'}$`));
   await expect(link).toHaveAttribute('target','_blank');await expect(link).toHaveAttribute('rel','noopener noreferrer');
@@ -184,7 +184,7 @@ for(const course of ['ef','fisio']) test(`${course}: unidades destacam Questões
   if(hasRA){
   await expect(cards.locator('.ra-card h2')).toHaveText('RA - Realidade Aumentada');
   await expect(cards.locator('.ra-call')).toContainText('viagem de aprendizado incrível');
-  const experiencias=axis==='celular'?['potencial-membrana','celula','starling']:axis==='osteoarticular'?['osso-vivo']:axis==='muscular'?['musculo-sarcomero','juncao-neuromuscular']:axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
+  const experiencias=axis==='celular'?['potencial-membrana','celula','starling']:axis==='osteoarticular'?['osso-vivo']:axis==='muscular'?['musculo-sarcomero','juncao-neuromuscular','biceps-braquial']:axis==='cardiovascular'?['coracao','retorno-venoso']:['pleura'];
   await expect(cards.locator('.ra-card a')).toHaveCount(experiencias.length);
   for(let j=0;j<experiencias.length;j++){
    const acesso=cards.locator('.ra-card a').nth(j);
