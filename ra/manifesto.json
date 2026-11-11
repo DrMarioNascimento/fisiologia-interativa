@@ -668,7 +668,7 @@
     },
     {
       "path": "biceps-braquial/index.html",
-      "sha256": "4aa15ea4d5d163f27b4da4317b261f7610d75c7fc5a1e0764ac5eec86d532c48"
+      "sha256": "049ad4385aca43c9b36ab964d86fab01d7a020892c8f34647797541d15b1627f"
     },
     {
       "path": "biceps-braquial/style.css",
@@ -676,7 +676,7 @@
     },
     {
       "path": "biceps-braquial/app.js",
-      "sha256": "93dfd1bccf1e1d256d71d5408dd850ffd0bf0e3cead2631b9ca802ec9deaa3af"
+      "sha256": "e70338ebd44dc25601550a5a70445c24a0bdce5a7f5b9dee07cebbc9a930391e"
     },
     {
       "path": "biceps-braquial/modelo.glb",
