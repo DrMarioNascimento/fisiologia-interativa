@@ -10,6 +10,7 @@ const TETO = { // bytes
   'coracao/ciclos/nivel-2.glb': 5_000_000,   // (37,0 MB)
   'pleura/ciclos/nivel-2.glb': 9_000_000,    // (22,9 MB)
   'osso-vivo/ciclos/nivel-1.glb': 4_000_000, // (18,0 MB)
+  'musculo-sarcomero/ciclos/nivel-1.glb': 4_000_000, // bíceps anatômico com textura de fibras (15,8 MB cru, 11/11/2026)
 };
 const json = b => JSON.parse(b.toString('utf8', 20, 20 + b.readUInt32LE(12)));
 

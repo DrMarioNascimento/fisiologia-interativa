@@ -25,8 +25,11 @@ export async function preparar(tipo,nivel){
   titulo=['Junção neuromuscular','Placa motora','Potencial no sarcolema','Acoplamento excitação-contração','Contração do sarcômero'][nivel];modo='sequencia';
  }else if(tipo==='musculo-sarcomero'){
   a=(await import('../musculo-sarcomero/modelos.js')).criar(textura);
-  update=u=>{const L=2.4-.5*(.5-.5*Math.cos(u*2*Math.PI));const m=a.modelos[nivel];if(nivel===4)a.aplicarComprimento(m,L);else for(const s of m.userData.sarcomeros||[])a.aplicarComprimento(s,L);};
-  titulo=nivel===4?'Deslizamento dos filamentos':'Contração da miofibrila';
+  // 11/11/2026: fascículo (1) e fibra (2) encurtam e engrossam no mesmo ritmo do
+  // sarcômero (L/2,4 no eixo x, volume constante); a miofibrila (3) sai da
+  // página (construir-portateis.cjs, gancho __musculoCiclo); o 01 é o bíceps.
+  update=u=>{const L=2.4-.5*(.5-.5*Math.cos(u*2*Math.PI));const m=a.modelos[nivel];if(nivel===4)a.aplicarComprimento(m,L);else if(nivel===1||nivel===2){const s=L/2.4,r=1/Math.sqrt(s);m.scale.set(s,r,r);}else for(const s of m.userData.sarcomeros||[])a.aplicarComprimento(s,L);};
+  titulo=['Bíceps braquial','Contração do fascículo','Contração da fibra muscular','Contração da miofibrila','Deslizamento dos filamentos'][nivel];
  }else if(tipo==='starling'){
   const f=await import('../starling/fisica.js');a=(await import('../starling/modelos.js')).criar();
   update=u=>{a.animar(u*8,x=>f.pressaoLiquida(x),{encharcado:0,semLinfa:false,nivel,sigma:f.PADRAO.sigma,oncPlasma:f.PADRAO.oncPlasma,kf:f.PADRAO.kf});a.aplicarForcas(nivel,f.PADRAO,f.pressaoCapilar,f.oncExterna);};
