@@ -20,11 +20,11 @@
     },
     {
       "path": "README.md",
-      "sha256": "10e21c315516396bb0716843ede4b659ff502ec327c785bc5745c068dd4be383"
+      "sha256": "c14c990db15138ddda0d5f26acc21ab254359be779157d2da6b9aabab3fe8541"
     },
     {
       "path": "assets/ATRIBUICAO.md",
-      "sha256": "4873bbc19dc714b4957a2a4afd0554df81e9982d0f6f7d0bc521e577aa008a1d"
+      "sha256": "b680a467a47d24e3a2ad8096764e63a90dc60dda89306390ce0a34f84df5dfac"
     },
     {
       "path": "assets/biceps-braquial.glb",
@@ -256,7 +256,7 @@
     },
     {
       "path": "musculo-sarcomero/README.md",
-      "sha256": "9ff1c23c0255057b79945f0032e3432fe6235a81d78c0689c4eb0b1b9d34c3f5"
+      "sha256": "bc1b0b64d5e5740b9515014febaa878f4266e660a423fa9ad368f8f5795dba88"
     },
     {
       "path": "musculo-sarcomero/style.css",
@@ -668,7 +668,7 @@
     },
     {
       "path": "biceps-braquial/index.html",
-      "sha256": "d2e4cdd3ea0d27cfdae0f57f0440636f2cd389f8be8df5e09156cc497d88241b"
+      "sha256": "4aa15ea4d5d163f27b4da4317b261f7610d75c7fc5a1e0764ac5eec86d532c48"
     },
     {
       "path": "biceps-braquial/style.css",
@@ -676,19 +676,19 @@
     },
     {
       "path": "biceps-braquial/app.js",
-      "sha256": "05df2f6a5a8894b3b08681093807f740d26726cd666b61a57b272220c4824be5"
+      "sha256": "93dfd1bccf1e1d256d71d5408dd850ffd0bf0e3cead2631b9ca802ec9deaa3af"
     },
     {
       "path": "biceps-braquial/modelo.glb",
-      "sha256": "12a008936bd556293b000531292b108b7fc85955e1e3d3dbd23b747a45a23930"
+      "sha256": "964177fcc8e51bd7e8aeb6cb7fc143f669d9e5f245712f0fd5e6f13ce7316d5c"
     },
     {
       "path": "biceps-braquial/modelo.usdz",
-      "sha256": "365c236cd3a23bedf9ea2a065efa3684c0a15be60c58afb3193a1e1cc7233f88"
+      "sha256": "2fb44a70d7679c59f20c0d6c405c4e39158f2ef036d7bcfb4e0120a3e710efcc"
     },
     {
       "path": "assets/biceps-braquial-rosca.glb",
-      "sha256": "4dfe7501cfd372e32ea9ca8cfe8499940972e6e2556c0fcbfb7c3d1f54fbfbd9"
+      "sha256": "95de43b8b2d4d6247ddeb4874304a39cd5e56aab9f769cdb4574c9dd0c926382"
     },
     {
       "path": "scripts/compilar-ciclos.js",
@@ -700,11 +700,11 @@
     },
     {
       "path": "musculo-sarcomero/ciclos/nivel-1.glb",
-      "sha256": "32ec3974a5608988f1360aa9856f0f167f0d8ffd005c37f87842c8c384abb75d"
+      "sha256": "d34d26afa5882aeec2c817ff623397bf2d6dc57a1bcc8caea28095675f350e64"
     },
     {
       "path": "musculo-sarcomero/ciclos/nivel-1.usdz",
-      "sha256": "5c3a75afebdd6bcfbf6447d254738787ac3831f029d9f376d035c629b5d6c4a7"
+      "sha256": "806eed9b7066738c513116927a23848c2026a131856dd9dd501626ac74e36bec"
     },
     {
       "path": "musculo-sarcomero/ciclos/nivel-1.json",
@@ -712,7 +712,7 @@
     },
     {
       "path": "musculo-sarcomero/ciclos/nivel-1.validation.json",
-      "sha256": "3ea72449ee4e377213773833338dfc7f66f750e8096602f3d86d81f8faf8fc9b"
+      "sha256": "d3f7280f1c0be5cc76af587266ed0b23e72d926764edf5707830691120cf3ad3"
     },
     {
       "path": "musculo-sarcomero/ciclos/nivel-2.glb",

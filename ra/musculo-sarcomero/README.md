@@ -29,6 +29,10 @@ Origem: `DrMarioNascimento/lab-ra/musculo-sarcomero`, revisão aprovada `6792eb5
 - Limites: na fibra do ciclo em RA continuam as mitocôndrias antigas de `modelos.js` (a troca pelas novas é feita na página); a passagem do bíceps para o fascículo é didática (o fascículo do 02 é genérico); não testado em aparelho físico.
 - Versões anteriores: `app_SUBSTITUIDO_2026-11-11.js`, `biceps_SUBSTITUIDO_2026-11-11.js`, `index_SUBSTITUIDO_2026-11-11.html`, `README_SUBSTITUIDO_2026-11-11.md`, `../scripts/*_SUBSTITUIDO_2026-11-11.*`, `../assets/ATRIBUICAO_SUBSTITUIDO_2026-11-11.md`, `../manifesto_SUBSTITUIDO_2026-11-11.json`.
 
+## Correções de 11/11/2026 (tarde)
+
+Pedidas pelo autor ao ver o modelo: (1) os rótulos "Cabeça longa" e "Cabeça curta" caíam no mesmo ventre — as cabeças agora são separadas por agrupamento (2-médias no plano x-z da faixa do meio do ventre), e não pela metade da caixa; (2) o ligamento anular estava largo e horizontal — agora acompanha o eixo do rádio, com raio da cabeça + cartilagem + 0,6 mm (11,1 mm) e faixa de 6 mm; (3) no início do tendão distal, a superfície do BodyParts3D dentro do ventre abria em abas brancas afastadas do músculo — o tendão agora entra no ventre como um cordão (raio do próprio tendão, 8 mm de sobreposição) e a ponta do ventre afina menos. Valem para a RA "Bíceps braquial" e para o nível 01 / ciclo 01 de Do músculo ao sarcômero. Versões anteriores: `*_SUBSTITUIDO_2026-11-11.*` (ciclos em `musculo-sarcomero/ciclos/_substituido/`).
+
 ## Controles
 
 - Músculo → Fascículo → Fibra → Miofibrila → Sarcômero: níveis e escalas distintas.

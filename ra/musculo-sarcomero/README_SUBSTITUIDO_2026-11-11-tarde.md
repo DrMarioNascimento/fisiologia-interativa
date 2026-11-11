@@ -1,0 +1,67 @@
+# Do músculo ao sarcômero · Sistema muscular
+
+## Manutenção e origem — 19 de outubro de 2026
+
+Módulo de Fisiologia em RA, mantido neste repositório e acessado pelos percursos dos tutores. A Unidade 06 — Sistema Endócrino possui documentação separada em `endocrino/`; sua inclusão não altera a procedência dos modelos desta experiência. Os créditos e as licenças específicos abaixo permanecem aplicáveis.
+
+Consulte o [README principal](../../README.md) e a [licença da raiz](../../LICENSE.md). Créditos e licenças específicos deste módulo permanecem nos documentos abaixo.
+
+Experiência independente em `Fisiologia Interativa`, acessível pelo destaque RA do Sistema Muscular nos Tutores de Educação Física e Fisioterapia. “Voltar ao Tutor” preserva o percurso de origem. Não exige Google nem carrega recursos do Lab RA.
+
+Origem: `DrMarioNascimento/lab-ra/musculo-sarcomero`, revisão aprovada `6792eb577870bb72933b845791743bc872bcbad2`. O arquivo `modelos.js` foi transferido sem alterações: ventre contínuo, janela no epimísio, fascículos, tendões e os cinco níveis mantêm a versão aprovada. Não há base em nenhum nível.
+
+## Nível 01 · bíceps braquial modelado (29/10/2026)
+
+- O músculo do nível 01 deixou de ser o fuso desenhado por código: agora é o bíceps braquial com escápula, úmero, rádio e ulna (`../assets/biceps-braquial.glb`), carregado por `biceps.js`. Fica de pé, na posição anatômica, com a face anterior para a câmera; o giro da página é em torno do eixo vertical.
+- O arquivo veio do designer (`biceps_tendoes_novos.glb`) e foi corrigido antes de entrar: saiu uma peça solta (cone branco a uns 20 cm do braço) e o tendão distal antigo, que terminava no ar à frente do rádio, foi trocado por um tendão contínuo que nasce dentro do ventre, desce à frente do cotovelo, mergulha entre rádio e ulna e se prende na tuberosidade do rádio (face anteromedial, ~2,5 cm abaixo da cabeça do rádio).
+- Peso: de 6,0 MB para 0,9 MB (rádio e ulna vinham em cinco partes com os mesmos vértices; ossos simplificados sem perda visível; texturas no tamanho do que cobrem; malha em Draco, decodificador do three 0.180 no jsDelivr). O USDZ do iPhone fica em ~11,7 MB.
+- Rótulos do 01: ventre muscular, fascículos, epimísio, cabeça longa, origem da cabeça curta (processo coracoide), articulação do cotovelo, inserção (tuberosidade do rádio) e úmero. Texto do painel reescrito para o bíceps: duas cabeças na escápula, cruza ombro e cotovelo, flexiona o cotovelo e supina o antebraço.
+- RA do 01 em tamanho real (≈0,37 m de altura).
+- Reserva: `modelos.js` (aprovado, intocado) continua montando o músculo por código. Ele fica escondido enquanto o arquivo carrega e volta se o GLB não chegar em 20 s; enquanto isso, rótulos e RA do 01 esperam.
+- Limites conhecidos: o ventre das duas cabeças é uma peça só; o antebraço termina cortado; não há aponeurose bicipital; com zoom muito forte do lado de fora do cotovelo ainda aparecem pequenas sobras da malha dos ossos.
+- Versões anteriores: `app.js_SUBSTITUIDO_2026-10-29`, `README.md_SUBSTITUIDO_2026-10-29`, `../assets/ATRIBUICAO.md_SUBSTITUIDO_2026-10-29` e `../manifesto.json_SUBSTITUIDO_2026-10-29`.
+
+## Movimento nos níveis 01 a 04 (11/11/2026)
+
+- **Nível 01 trocado e em movimento.** O bíceps do designer saiu e entrou o bíceps com ossos e tendões do BodyParts3D, o mesmo da RA "Bíceps braquial" (`../biceps-braquial/`): antebraço inteiro, aponeurose bicipital, cartilagens e ligamentos. A janela no epimísio foi refeita nele (elipse na face anterior da cabeça longa, borda do epimísio cortado e fascículos por baixo), e o mergulho para o 02 parte do centro dela. Arquivo: `../assets/biceps-braquial-rosca.glb` (3,6 MB); o anterior, `../assets/biceps-braquial.glb`, continua no repositório. `biceps.js` reescrito (anterior em `biceps_SUBSTITUIDO_2026-11-11.js`).
+- **Rosca direta.** Em 8 s o cotovelo vai de 0° a 100° de flexão e volta, em cosseno, com pico aos 4 s — o mesmo instante em que o sarcômero do ciclo do 05 chega a 1,9 µm. O ventre encurta até 58% e engrossa, na medida que mantém o comprimento dos tendões. Sem pronossupinação. Na página, o movimento roda com o 01 na tela e tem o botão "Pausar rosca direta"; os rótulos ficam presos a vértices e acompanham o braço.
+- **Ciclos em RA para os cinco níveis** (`ciclos/nivel-1..5`, iPhone e Android): 01 bíceps em rosca direta; 02 fascículo e 03 fibra encurtam e engrossam no mesmo ritmo (L/2,4 no eixo, volume constante); 04 miofibrila com sarcômeros, anéis e capa pela mesma função da tela (gancho `window.__musculoCiclo`); 05 inalterado. Gerados por `../scripts/construir-portateis.cjs musculo-sarcomero:2 musculo-sarcomero:3 musculo-sarcomero:4` (o construtor aceita agora `experiência:nível`), o 01 pela mesma esteira do bíceps da RA própria com `legendarGLB`; USDZ por `../celula/tools/usdz.py` e `../scripts/esqueleto-ios.py` (01: 7 peças, erro máximo ~1,7 mm; 04: 0,0%); GLB em Draco.
+- Limites: na fibra do ciclo em RA continuam as mitocôndrias antigas de `modelos.js` (a troca pelas novas é feita na página); a passagem do bíceps para o fascículo é didática (o fascículo do 02 é genérico); não testado em aparelho físico.
+- Versões anteriores: `app_SUBSTITUIDO_2026-11-11.js`, `biceps_SUBSTITUIDO_2026-11-11.js`, `index_SUBSTITUIDO_2026-11-11.html`, `README_SUBSTITUIDO_2026-11-11.md`, `../scripts/*_SUBSTITUIDO_2026-11-11.*`, `../assets/ATRIBUICAO_SUBSTITUIDO_2026-11-11.md`, `../manifesto_SUBSTITUIDO_2026-11-11.json`.
+
+## Controles
+
+- Músculo → Fascículo → Fibra → Miofibrila → Sarcômero: níveis e escalas distintas.
+- Iniciar giro/Pausar giro e Velocidade do giro: rotação da peça, sem efeito nos cálculos. A página abre com o giro pausado.
+- Rótulos, Restaurar vista e Ampliar: exploração da cena.
+- Na Miofibrila e no Sarcômero, Comprimento do sarcômero, Contrair e Relaxar conservam o mecanismo original. O mesmo valor vale para os dois níveis. Restaurar parâmetros retorna a 2,4 µm e ao giro pausado, com velocidade 1×.
+- Abrir em realidade aumentada exporta o nível e o comprimento selecionados como uma peça estática. A ativação da câmera depende de dispositivo compatível.
+
+## Miofibrila contrátil (revisão de 05/10/2026)
+
+- O controle de comprimento passou a valer também no nível 04. Os três sarcômeros internos usam a mesma função aprovada (`aplicarComprimento`); `modelos.js` não foi alterado. Os sarcômeros, os discos Z, os anéis e as tampas se reposicionam com o comprimento escolhido.
+- A capa pintada encurta como tecido, por trechos: a banda A conserva 1,6 µm; a banda I e a zona H encolhem pela mesma regra do sarcômero; o disco Z mantém a largura. A capa tem anéis de vértices somente nas bordas das bandas.
+- Dois acertos de montagem, feitos em `app.js`: os sarcômeros internos eram ampliados também no comprimento (discos Z internos a ±1,61 em vez dos anéis a ±1,2, sobreposição entre vizinhos e discos vazando nas pontas); agora a ampliação é só na espessura. As pontas da capa repetiam três sarcômeros nos próprios 2,3 de comprimento; agora a pintura segue a posição do fundo, e cada sarcômero pintado coincide com o vão entre dois anéis.
+- Na RA, miofibrila e sarcômero usam a escala do repouso (2,4 µm): a peça contraída chega mais curta, na proporção correta (a 1,9 µm, 0,48 m na miofibrila e 0,72 m no sarcômero, contra 0,60 m e 0,90 m em repouso). Antes, cada instante era ajustado ao mesmo tamanho final, e o contraído parecia igual ao relaxado.
+- Testes: `../tests/musculo-miofibrila.test.mjs` confere a ligação do controle, a regra de encurtamento (banda A fixa, zona H, discos Z, sem dobras) e a escala de RA.
+
+## Limites didáticos e referência
+
+A banda A mantém 1,6 µm; banda I e zona H variam com o comprimento, conforme a implementação aprovada. A curva de tensão ativa relativa é uma aproximação por trechos da relação isométrica em fibras musculares de rã de [Gordon, Huxley e Julian (1966)](https://pubmed.ncbi.nlm.nih.gov/5921536/). Não é força absoluta, tensão passiva, curva força–velocidade nem uma medida clínica individual. As contas e o sarcômero não foram modificados na transferência.
+
+Os níveis 02 a 05 e a reserva do 01 são procedurais, criados no código do projeto. O nível 01 usa o bíceps modelado (`../assets/biceps-braquial.glb`); procedência em [ATRIBUICAO.md](../assets/ATRIBUICAO.md). A autoria e a licença principal permanecem em [LICENSE.md](../../LICENSE.md); Three.js e model-viewer conservam suas licenças próprias.
+
+## RA com botões no iPhone (revisão de 05/10/2026; botão único em 09/10/2026)
+
+- No nível 05, no iPhone, o próprio botão "Abrir em realidade aumentada" abre a peça com as placas Contrair e Relaxar. O segundo botão de teste saiu em 09/10/2026. Nos outros níveis e no Android, o botão abre a peça de sempre.
+- A peça abre no comprimento escolhido no controle. À frente dela, no chão, há duas placas: Relaxar (2,4 µm) e Contrair (1,9 µm). Tocar numa placa desliza os discos Z, com as actinas, e estica ou encurta a titina até aquele comprimento, em 1,2 s.
+- As poses de cada estado saem de `aplicarComprimento`, a mesma função da tela. O módulo `../ra-botoes-ios.js` só as empacota: escreve o USDZ com o exportador do three e acrescenta os comportamentos da Apple (`Preliminary_Behavior`: toque na placa → ações `Transform` até alvos com a pose de cada estado), refazendo o arquivo com os dados alinhados a 64 bytes.
+- Testado no iPhone do professor: os toques nas placas movem a peça. Depois de ampliar com a pinça, a peça passava a cobrir as placas e os toques paravam de funcionar; por isso, neste modo, a escala fica travada (tamanho real, sem pinça) e as placas são maiores (16 × 6,5 cm) e ficam 10 cm à frente da peça. Nos outros níveis a RA continua com a pinça.
+- Conferido na biblioteca USD da Pixar: 2 comportamentos, 102 relações, nenhuma quebrada; cena de 0,90 m apoiada no chão. A abertura no Quick Look precisa ser confirmada num iPhone.
+- Para conferir no computador: `?botoesios` faz o botão abrir a versão com placas também fora do iPhone; `pacoteBotoesIOS()` no console devolve tamanho, tempo e alinhamento.
+- Correção de 09/10/2026: no iPhone, tocar em Contrair ou Relaxar separava as peças em vez de deslizar os filamentos. Os alvos de cada estado ficavam ao lado de cada parte, com a pose local (discos Z a ±1,2, sem a escala de 0,37 da peça), e o Quick Look os lia na escala da cena: os discos iam para longe, maiores, e as titinas para o centro. Agora os alvos ficam no topo da cena, com a pose já multiplicada pelos pais. Conferido no USDA gerado: em repouso cada alvo coincide com a parte; na contração os discos Z vão de ±0,442 m a ±0,350 m (proporção 1,9/2,4) e as titinas encurtam presas à banda A. Falta confirmar no iPhone.
+- Exportações mais leves e rápidas: o clone para a RA deixou de copiar os dados internos das peças (`userData`), que eram convertidos em imagem a cada exportação (cerca de 3,6 s) e iam para o arquivo sem uso. Nível 05: 5,9 → 4,1 MB; nível 04: 1,6 → 1,1 MB.
+
+## Mitocôndrias novas na Fibra (09/10/2026)
+
+- As 84 mitocôndrias entre as miofibrilas eram cápsulas lisas fundidas numa malha só em `modelos.js` (aprovado, intocado). Em `app.js` a malha é desfeita cápsula por cápsula (todas têm o mesmo número de vértices); a caixa de cada uma dá o lugar e o comprimento da mitocôndria compartilhada fechada (`../mitocondria.js`) que entra no lugar, deitada no eixo da fibra. Se a estrutura não for a esperada, ou o GLB não chegar, ficam as antigas.
