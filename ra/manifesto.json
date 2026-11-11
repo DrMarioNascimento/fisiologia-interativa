@@ -20,7 +20,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "6f67e3fd23f02da7b5d3f2f4c901775eb0bc25cc66ad3bb104e9ae27c06726dd"
+      "sha256": "983c3af28231ecc538871e1719a18002691590bebfc3d4b6db34715070e650af"
     },
     {
       "path": "assets/ATRIBUICAO.md",
@@ -668,7 +668,7 @@
     },
     {
       "path": "biceps-braquial/index.html",
-      "sha256": "9b99aec9667ba3adae958a517023ca740f348756c9b55d2ebc145fbb374ad8a6"
+      "sha256": "d2e4cdd3ea0d27cfdae0f57f0440636f2cd389f8be8df5e09156cc497d88241b"
     },
     {
       "path": "biceps-braquial/style.css",
@@ -676,15 +676,15 @@
     },
     {
       "path": "biceps-braquial/app.js",
-      "sha256": "6adde0e23069a35b21a4ecb5cfdd352678243cfd1ad3007e846fdbd2591e0d24"
+      "sha256": "05df2f6a5a8894b3b08681093807f740d26726cd666b61a57b272220c4824be5"
     },
     {
       "path": "biceps-braquial/modelo.glb",
-      "sha256": "a508b348091333a4bf6ec71707cc32cefc013e898af51e29d5508247132ac935"
+      "sha256": "12a008936bd556293b000531292b108b7fc85955e1e3d3dbd23b747a45a23930"
     },
     {
       "path": "biceps-braquial/modelo.usdz",
-      "sha256": "644ade5164e407bf984086ec9f0478ec07a78d1ad2e8274d075f1c8e483a50d3"
+      "sha256": "365c236cd3a23bedf9ea2a065efa3684c0a15be60c58afb3193a1e1cc7233f88"
     }
   ],
   "normalizacao": "Textos: UTF-8 e LF; modelos e imagens: bytes originais.",
