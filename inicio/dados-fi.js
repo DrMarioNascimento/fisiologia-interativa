@@ -253,8 +253,110 @@ window.FI_DADOS = {
    }
   },
   {
-   "id": "integracao",
+   "id": "osteoarticular",
    "num": "05",
+   "nome": "Sistema osteoarticular",
+   "curto": "Osteoarticular",
+   "desc": "Tecido ósseo, cartilagem, remodelação, reparo, regulação mineral e resposta às cargas na reabilitação.",
+   "cel": "osteócitos, matriz óssea e articulações",
+   "mapas": [],
+   "sims": [],
+   "pratica": "../tutor-fisio.html?eixo=osteoarticular",
+   "sala": {
+    "nome": "Reconstruindo o Movimento",
+    "img": "../assets/salas/sala-base.webp",
+    "grande": "../assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/osteoarticular?origem=site"
+   }
+  },
+  {
+   "id": "linfatico",
+   "num": "06",
+   "nome": "Sistema linfático e equilíbrio dos líquidos",
+   "curto": "Linfático",
+   "desc": "Linfa, microcirculação, órgãos linfoides, edema, movimento e repercussões funcionais.",
+   "cel": "vasos linfáticos, interstício e linfonodos",
+   "mapas": [],
+   "sims": [],
+   "pratica": "../tutor-fisio.html?eixo=linfatico",
+   "sala": {
+    "nome": "O Retorno da Linfa",
+    "img": "../assets/salas/sala-base.webp",
+    "grande": "../assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/linfatico?origem=site"
+   }
+  },
+  {
+   "id": "urinario",
+   "num": "07",
+   "nome": "Sistema dos líquidos corporais e sistema urinário",
+   "curto": "Líquidos e rim",
+   "desc": "Compartimentos, osmolaridade, equilíbrio hidroeletrolítico, néfron, formação da urina, pressão, ácido-base e micção.",
+   "cel": "compartimentos líquidos, néfron e vias urinárias",
+   "mapas": [],
+   "sims": [],
+   "pratica": "../tutor-fisio.html?eixo=urinario",
+   "sala": {
+    "nome": "Entre Água e Rim",
+    "img": "../assets/salas/sala-base.webp",
+    "grande": "../assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/urinario?origem=site"
+   }
+  },
+  {
+   "id": "digestorio",
+   "num": "08",
+   "nome": "Sistema digestório",
+   "curto": "Digestório",
+   "desc": "Motilidade, secreções, circulação esplâncnica, digestão, absorção, saciedade e repercussões funcionais.",
+   "cel": "tubo digestório, fígado e pâncreas",
+   "mapas": [],
+   "sims": [],
+   "pratica": "../tutor-fisio.html?eixo=digestorio",
+   "sala": {
+    "nome": "Sinais da Digestão",
+    "img": "../assets/salas/sala-base.webp",
+    "grande": "../assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/digestorio?origem=site"
+   }
+  },
+  {
+   "id": "tegumentar",
+   "num": "10A",
+   "nome": "Sistema tegumentar",
+   "curto": "Tegumentar",
+   "desc": "Pele, anexos, barreira, sensibilidade, vascularização, cicatrização e reparo.",
+   "cel": "Sistema tegumentar",
+   "mapas": [],
+   "sims": [],
+   "pratica": "../tutor-fisio.html?eixo=tegumentar",
+   "sala": {
+    "nome": "A Barreira em Reparo",
+    "img": "../assets/salas/sala-base.webp",
+    "grande": "../assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/tegumentar?origem=site"
+   }
+  },
+  {
+   "id": "termorregulacao",
+   "num": "10B",
+   "nome": "Regulação da temperatura corporal",
+   "curto": "Temperatura",
+   "desc": "Balanço de calor, integração hipotalâmica, exercício, ambiente, febre e hipotermia.",
+   "cel": "Regulação da temperatura corporal",
+   "mapas": [],
+   "sims": [],
+   "pratica": "../tutor-fisio.html?eixo=termorregulacao",
+   "sala": {
+    "nome": "O Equilíbrio do Calor",
+    "img": "../assets/salas/sala-base.webp",
+    "grande": "../assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/termorregulacao?origem=site"
+   }
+  },
+  {
+   "id": "integracao",
+   "num": "",
    "nome": "Integração cardiorrespiratória",
    "curto": "Integração",
    "desc": "Respostas integradas do coração, pulmões, circulação e metabolismo em diferentes estados fisiológicos.",

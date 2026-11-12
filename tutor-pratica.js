@@ -27,7 +27,7 @@
       return;
     }
     const linhas = [
-      ...(window.tutorPraticaBanco[eixo] || []),
+      ...(curso === 'fisioterapia' && eixo === 'osteoarticular' ? [] : (window.tutorPraticaBanco[eixo] || [])),
       ...(window.tutorPraticaPorCurso[curso]?.[eixo] || [])
     ];
     const banco = linhas.map(([tema, q, correta, primeira, segunda, why], index) => {

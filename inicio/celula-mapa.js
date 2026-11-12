@@ -4,7 +4,7 @@
 'use strict';
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-const COL = {celular:css('--u1'),muscular:css('--u2'),osteoarticular:css('--u3'),cardiovascular:css('--u4'),respiratorio:css('--u5'),integracao:css('--u6'),endocrino:css('--u7')};
+const COL = {celular:css('--u1'),muscular:css('--u2'),osteoarticular:css('--u3'),cardiovascular:css('--u4'),respiratorio:css('--u5'),integracao:css('--u6'),endocrino:css('--u7'),linfatico:'#75D8AD',urinario:'#F2A989',digestorio:'#EFC66E',reprodutor:'#D9A6E9',snp:'#8FD3ED',snc:'#C0B7F2',tegumentar:'#E8B7A2',termorregulacao:'#F4A16E'};
 
 /* ---------- dados: vêm de inicio/dados-<curso>.js (fonte única) ---------- */
 const D = window.FI_DADOS;
@@ -206,6 +206,36 @@ function drawCell(k,x,y,s,t,hi){
       c.font='600 '+Math.max(8,Math.round(s*.2))+'px "JetBrains Mono", monospace';c.fillStyle='#e9f1f4';c.fillText(g==='O2'?'O₂':'CO₂',lx*br+jx*.5,ly*br+lr*.32);
     }
     c.textAlign='start';c.textBaseline='alphabetic';
+  } else if(k==='tegumentar'||k==='termorregulacao'){
+    c.beginPath();c.arc(0,0,s,0,7);c.fill();c.stroke();
+    for(let i=-1;i<=1;i++){c.beginPath();c.moveTo(-s*.55,i*s*.28);c.lineTo(s*.55,i*s*.28);c.stroke();}
+  } else if(k==='snp'||k==='snc'){
+    c.beginPath();c.arc(0,0,s,0,7);c.fill();c.stroke();
+    c.beginPath();c.moveTo(-s*.55,0);c.lineTo(0,0);c.lineTo(s*.5,-s*.45);
+    c.moveTo(0,0);c.lineTo(s*.5,s*.45);c.stroke();
+    for(const [x,y] of [[-.55,0],[0,0],[.5,-.45],[.5,.45]]){c.beginPath();c.arc(x*s,y*s,s*.11,0,7);c.fill();}
+  } else if(k==='reprodutor'){
+    c.beginPath();c.arc(0,0,s,0,7);c.fill();c.stroke();
+    for(const x of [-.4,0,.4]){c.beginPath();c.arc(x*s,0,s*.15,0,7);c.fill();}
+    c.beginPath();c.moveTo(-s*.25,-s*.36);c.lineTo(s*.25,-s*.36);c.moveTo(-s*.25,s*.36);c.lineTo(s*.25,s*.36);c.stroke();
+  } else if(k==='digestorio'){
+    c.beginPath();c.arc(0,0,s,0,7);c.fill();c.stroke();
+    c.beginPath();c.moveTo(-s*.2,-s*.66);c.lineTo(-s*.2,-s*.3);
+    c.bezierCurveTo(s*.48,-s*.67,s*.7,s*.31,s*.2,s*.35);
+    c.bezierCurveTo(-s*.43,s*.51,-s*.61,s*.1,-s*.35,-s*.08);c.stroke();
+    c.beginPath();c.moveTo(s*.2,s*.35);c.quadraticCurveTo(s*.42,s*.66,-s*.27,s*.61);c.stroke();
+  } else if(k==='urinario'){
+    c.beginPath();c.arc(0,0,s,0,7);c.fill();c.stroke();
+    c.beginPath();c.arc(-s*.36,-s*.28,s*.23,0,7);c.stroke();
+    c.beginPath();c.moveTo(-s*.13,-s*.28);c.lineTo(s*.1,-s*.28);
+    c.lineTo(s*.1,s*.46);c.lineTo(s*.45,s*.46);c.lineTo(s*.45,-s*.42);c.stroke();
+  } else if(k==='linfatico'){
+    c.beginPath();c.arc(0,0,s,0,7);c.fill();c.stroke();
+    c.beginPath();c.moveTo(-s*.55,s*.5);c.lineTo(0,0);c.lineTo(s*.55,-s*.5);c.moveTo(0,0);c.lineTo(-s*.45,-s*.45);c.stroke();
+    c.fillStyle=col;
+    for(const [x,y] of [[-.55,.5],[0,0],[.55,-.5],[-.45,-.45]]){
+      c.beginPath();c.arc(x*s,y*s,s*.12,0,7);c.fill();
+    }
   } else if(k==='endocrino'){
     c.beginPath();c.arc(0,0,s,0,7);c.fill();c.stroke();
     c.fillStyle=hexA(col,.6);c.beginPath();c.arc(-s*.25,0,s*.32,0,7);c.fill();
@@ -267,7 +297,7 @@ function frame(t){
     if(sel===k&&k!=='integracao'){c.strokeStyle=hexA(COL[k],.55);c.setLineDash([3,5]);c.lineWidth=1;c.beginPath();c.arc(p.x,p.y,ss*2.55,0,7);c.stroke();c.setLineDash([]);}
     drawCell(k,p.x,p.y,ss,t,hi);
     const sm=drawSims(k,p.x,p.y,ss,t); hits.push(...sm.map(o=>({...o,type:'sim'})));
-    hits.push({x:p.x,y:p.y,r:ss*1.5,k,type:'unit',name:UNITS[k].curto+' · '+sims(k).length+' simuladores'});
+    hits.push({x:p.x,y:p.y,r:ss*1.5,k,type:'unit',name:UNITS[k].curto+' · '+(UNITS[k].pratica?'questões e sala':sims(k).length+' simuladores')});
     let ux=0,uy=1; if(k!=='integracao'){const dx=p.x-CX,dy=p.y-CY,L=Math.hypot(dx,dy)||1;ux=dx/L;uy=dy/L;}
     const ed=k==='muscular'?ss*1.2:k==='cardiovascular'?ss*1.25:ss*1.08;
     const lx=p.x+ux*ed,ly=p.y+uy*ed; if(UNITS[k].sala) {c.fillStyle='#0c1219';c.strokeStyle='#E8B05C';c.lineWidth=1.2;c.beginPath();c.arc(lx,ly,9,0,7);c.fill();c.stroke();drawLock(lx,ly+.5,5.5,'#E8B05C'); hits.push({x:lx,y:ly,r:10,k,type:'lock',name:'Sala: '+salaNome(k)});}

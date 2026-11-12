@@ -61,7 +61,7 @@
     modal.hidden = false;
   }
   function marcarBotoes() {
-    document.querySelectorAll(".escape-card:not(.percurso-card) .actions").forEach(function (bar) {
+    document.querySelectorAll(".escape-card:not(.percurso-card):not([data-sem-operacao]) .actions").forEach(function (bar) {
       if (bar.querySelector("[data-operacao-secreta]")) return;
       const btn = document.createElement("button");
       btn.type = "button";

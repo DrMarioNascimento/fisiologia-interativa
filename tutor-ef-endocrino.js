@@ -456,9 +456,15 @@
   maps.endocrino = {src:'assets/maps/sistema-endocrino.webp', title:'Sistema Endócrino — hormônios, tempo e feedback'};
   if (!axes.some(axis => axis.id === 'endocrino')) axes.push({id:'endocrino', label:'Endócrino'});
   for (const item of endocrineModules) if (!modules.some(existing => existing.href === item.href)) modules.push(item);
+  if (!axes.some(axis => axis.id === 'linfatico')) axes.push({id:'linfatico', label:'07 Sistema linfático'});
+  if (!axes.some(axis => axis.id === 'urinario')) axes.push({id:'urinario', label:'08 Sistema urinário e líquidos corporais'});
+  if (!axes.some(axis => axis.id === 'digestorio')) axes.push({id:'digestorio', label:'09 Sistema digestório'});
+  if (!axes.some(axis => axis.id === 'reprodutor')) axes.push({id:'reprodutor', label:'10 Sistema reprodutor'});
+  if (!axes.some(axis => axis.id === 'snp')) axes.push({id:'snp', label:'11A Sistema nervoso periférico'});
+  if (!axes.some(axis => axis.id === 'snc')) axes.push({id:'snc', label:'11B Sistema nervoso central'});
   window.educacaoFisicaTutor = {
     courseLabel:'Educação Física', defaultAxis:'celular', maps, modules,
-    axisNames:{celular:'01 Celular e potenciais de ação', muscular:'02 Excitabilidade e sistema muscular', osteoarticular:'03 Osteoarticular', cardiovascular:'04 Cardiovascular', respiratorio:'05 Respiratório', integracao:'Integração cardiorrespiratória — Unidades 4 e 5', endocrino:'06 Sistema Endócrino'}
+    axisNames:{celular:'01 Celular e potenciais de ação', muscular:'02 Excitabilidade e sistema muscular', osteoarticular:'03 Osteoarticular', cardiovascular:'04 Cardiovascular', respiratorio:'05 Respiratório', integracao:'Integração cardiorrespiratória — Unidades 4 e 5', endocrino:'06 Sistema Endócrino', linfatico:'07 Sistema Linfático', urinario:'08 Sistema Urinário e Líquidos Corporais', digestorio:'09 Sistema Digestório', reprodutor:'10 Sistema Reprodutor', snp:'11A Sistema Nervoso Periférico', snc:'11B Sistema Nervoso Central'}
   };
   const requested = query.get('eixo');
   if (axes.some(axis => axis.id === requested)) active = requested;

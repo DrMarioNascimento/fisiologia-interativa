@@ -382,6 +382,108 @@ window.FI_DADOS = {
     }
    ],
    "sala": null
+  },
+  {
+   "id": "linfatico",
+   "num": "07",
+   "nome": "Sistema linfático e defesa do organismo",
+   "curto": "Linfático",
+   "desc": "Formação e composição da linfa, bombeamento e retorno venoso, linfonodos e órgãos linfoides. Imunidade inata e adaptativa, inflamação, vacinação, exercício e estresse.",
+   "cel": "vasos linfáticos, linfonodos e retorno venoso",
+   "mapas": [],
+   "sims": [],
+   "pratica": "tutor-ef.html?eixo=linfatico",
+   "sala": {
+    "nome": "O Caminho da Linfa",
+    "img": "assets/salas/sala-base.webp",
+    "grande": "assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/linfatico?origem=site"
+   }
+  },
+  {
+   "id": "urinario",
+   "num": "08",
+   "nome": "Sistema urinário e líquidos corporais",
+   "curto": "Urinário",
+   "desc": "Néfron, formação da urina, regulação hídrica, eletrolítica e ácido-base. Hidratação no exercício, ambiente térmico e envelhecimento.",
+   "cel": "glomérulo, túbulos renais e aparelho justaglomerular",
+   "mapas": [],
+   "sims": [],
+   "pratica": "tutor-ef.html?eixo=urinario",
+   "sala": {
+    "nome": "O Balanço da Água",
+    "img": "assets/salas/sala-base.webp",
+    "grande": "assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/urinario?origem=site"
+   }
+  },
+  {
+   "id": "digestorio",
+   "num": "09",
+   "nome": "Sistema digestório",
+   "curto": "Digestório",
+   "desc": "Motilidade, secreção, digestão, absorção e regulação da ingestão alimentar. Mastigação, deglutição, órgãos anexos, fome e saciedade. Desconforto gastrointestinal no exercício.",
+   "cel": "tubo digestório, glândulas e órgãos anexos",
+   "mapas": [],
+   "sims": [],
+   "pratica": "tutor-ef.html?eixo=digestorio",
+   "sala": {
+    "nome": "O Percurso do Alimento",
+    "img": "assets/salas/sala-base.webp",
+    "grande": "assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/digestorio?origem=site"
+   }
+  },
+  {
+   "id": "reprodutor",
+   "num": "10",
+   "nome": "Sistema reprodutor e regulação hormonal",
+   "curto": "Reprodutor",
+   "desc": "Organização funcional, eixos hormonais, gametogênese, ciclos ovariano e menstrual, contracepção e prevenção de ISTs.",
+   "cel": "gônadas, eixos hormonais e gametas",
+   "mapas": [],
+   "sims": [],
+   "pratica": "tutor-ef.html?eixo=reprodutor",
+   "sala": {
+    "nome": "As Pistas da Reprodução",
+    "img": "assets/salas/sala-base.webp",
+    "grande": "assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/reprodutor?origem=site"
+   }
+  },
+  {
+   "id": "snp",
+   "num": "11A",
+   "nome": "Sistema nervoso periférico",
+   "curto": "SNP",
+   "desc": "Organização sensorial, receptores, sentidos, dor, propriocepção e controle autonômico.",
+   "cel": "Sistema nervoso periférico",
+   "mapas": [],
+   "sims": [],
+   "pratica": "tutor-ef.html?eixo=snp",
+   "sala": {
+    "nome": "Os Caminhos da Sensação",
+    "img": "assets/salas/sala-base.webp",
+    "grande": "assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/snp?origem=site"
+   }
+  },
+  {
+   "id": "snc",
+   "num": "11B",
+   "nome": "Sistema nervoso central",
+   "curto": "SNC",
+   "desc": "Integração sensorial, controle motor, aprendizagem, sono, emoção, memória, linguagem e comunicação.",
+   "cel": "Sistema nervoso central",
+   "mapas": [],
+   "sims": [],
+   "pratica": "tutor-ef.html?eixo=snc",
+   "sala": {
+    "nome": "O Movimento em Construção",
+    "img": "assets/salas/sala-base.webp",
+    "grande": "assets/salas/grande/sala-base.webp",
+    "href": "https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/ef/snc?origem=site"
+   }
   }
  ],
  "operacao": {

@@ -6,7 +6,8 @@
   const esc = s => String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const colorVar = {celular:'--u1', muscular:'--u2', osteoarticular:'--u3', cardiovascular:'--u4', respiratorio:'--u5', integracao:'--u6', endocrino:'--u7'};
-  const cor = id => 'var(' + colorVar[id] + ')';
+  const cores = { linfatico: '#75D8AD', urinario: '#F2A989', digestorio: '#EFC66E', reprodutor: '#D9A6E9', snp: '#8FD3ED', snc: '#C0B7F2', tegumentar: '#E8B7A2', termorregulacao: '#F4A16E' };
+  const cor = id => cores[id] || 'var(' + colorVar[id] + ')';
   const mapIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5 9 3l6 2.5 6-2.5v14L15 20l-6-2.5-6 2.5z"/><path d="M9 3v14.5M15 5.5V20"/></svg>';
   const lockIcon = '<img src="assets/icons/locks/closed-blue.png" alt="" aria-hidden="true" style="display:inline-block;width:2em;height:2em;max-width:none;object-fit:contain;vertical-align:middle;flex-shrink:0">';
 
@@ -49,8 +50,9 @@
     let total = 0;
     list.innerHTML = D.unidades.filter(u => filtro === 'todos' || filtro === u.id).map(u => {
       const sims = u.sims.filter(s => !q || norm([s.t, s.obj, s.cat, u.nome].join(' ')).includes(q));
-      if (q && !sims.length) return '';
-      total += sims.length;
+      const pratica = u.pratica && (!q || norm([u.nome, u.desc].join(' ')).includes(q));
+      if (q && !sims.length && !pratica) return '';
+      total += sims.length + (pratica ? 1 : 0);
       const maps = u.mapas.map((m, i) => `<a href="${esc(m.src)}" target="_blank" rel="noopener" data-map="${u.id}" data-i="${i}" aria-label="Abrir mapa mental: ${esc(m.t)}">${mapIcon}${u.mapas.length > 1 ? 'Mapa ' + String(i + 1).padStart(2, '0') : 'Mapa mental'}</a>`).join('');
       return `<section class="unit" id="u-${u.id}" style="--c:${cor(u.id)}" aria-labelledby="h-${u.id}">
         <div class="unit-side rv">
@@ -59,7 +61,10 @@
           <p>${esc(u.desc)}</p>
           <div class="chips">${maps}${u.sala ? `<a class="lock" href="${esc(u.sala.href)}">${lockIcon}${esc(u.sala.nome)}</a>` : '<span>Explore os eixos no simulador</span>'}</div>
         </div>
-        <div class="cards">${sims.map((s, k) => card(u, s, k)).join('')}</div>
+        <div class="cards">${sims.map((s, k) => card(u, s, k)).join('')}${pratica ? `<article class="card rv">
+          <h4>Prática da Unidade ${esc(u.num)}</h4><p>Responda às questões comentadas e revise o que errou.</p>
+          <div class="go"><a href="${esc(u.pratica)}">Praticar no Tutor →</a></div>
+        </article>` : ''}</div>
       </section>`;
     }).join('');
     document.getElementById('empty').hidden = total > 0;

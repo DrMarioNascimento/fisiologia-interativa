@@ -37,9 +37,37 @@ window.fisioterapiaTutor = {
     muscular: '02 Excitabilidade e sistema muscular',
     cardiovascular: '03 Sistema cardiovascular',
     respiratorio: '04 Sistema respiratório',
-    integracao: '05 Integração cardiorrespiratória'
+    osteoarticular: '05 Sistema osteoarticular',
+    linfatico: '06 Sistema linfático',
+    urinario: '07 Sistema dos líquidos corporais',
+    digestorio: '08 Sistema digestório',
+    tegumentar: '10A Sistema tegumentar',
+    termorregulacao: '10B Regulação da temperatura corporal',
+    integracao: 'Integração cardiorrespiratória — Unidades 3 e 4'
   },
   escapeRooms: {
+  tegumentar: {title:'A Barreira em Reparo', href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/tegumentar', percurso:false},
+  termorregulacao: {title:'O Equilíbrio do Calor', href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/termorregulacao', percurso:false},
+  digestorio: {
+    title:'Sinais da Digestão',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/digestorio',
+    percurso:false
+  },
+  urinario: {
+    title:'Entre Água e Rim',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/urinario',
+    percurso:false
+  },
+  linfatico: {
+    title:'O Retorno da Linfa',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/linfatico',
+    percurso:false
+  },
+  osteoarticular: {
+    title:'Reconstruindo o Movimento',
+    href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/osteoarticular',
+    percurso:false
+  },
   celular: {
     title:'A Célula Sitiada',
     href:'https://fisiologia-em-fuga.drmarionascimento.com.br/#/escape/fisio/celular',

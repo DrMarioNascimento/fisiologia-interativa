@@ -112,10 +112,10 @@
       <div class="modal-body"><img id="mapImage" alt="Mapa mental do eixo"></div>
     </div>
   </div>
-  <script src="tutor-pratica-banco.js"></script>
-  <script src="tutor-pratica.js"></script>
+  <script src="tutor-pratica-banco.js?v=fisio-pele-temperatura-10ab"></script>
+  <script src="tutor-pratica.js?v=fisio-osteo-05"></script>
   <script src="tutor-ra-card.js?v=osso-somente-ef-20261009"></script>
-  <script src="tutor-fisio-data.js?v=pratica-unidade"></script>
+  <script src="tutor-fisio-data.js?v=fisio-pele-temperatura-10ab"></script>
   <script src="tutor-desafios-extra.js?v=3"></script>
   <script>
     let active = 'celular';
@@ -127,12 +127,18 @@
     const mapTitle = document.querySelector('#mapTitle');
     const closeMap = document.querySelector('#closeMap');
     const esc = value => String(value).replace(/[&<>"']/g, char => ({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[char]));
-    const axisOrder = ['celular','muscular','cardiovascular','respiratorio','integracao'];
+    const axisOrder = ['celular','muscular','cardiovascular','respiratorio','osteoarticular','linfatico','urinario','digestorio','tegumentar','termorregulacao','integracao'];
     const shortAxisNames = {
       celular:'Celular',
       muscular:'Muscular',
       cardiovascular:'Cardiovascular',
       respiratorio:'Respiratório',
+      osteoarticular:'05 Osteoarticular',
+      linfatico:'06 Linfático',
+      urinario:'07 Líquidos e rim',
+      digestorio:'08 Digestório',
+      tegumentar:'10A Tegumentar',
+      termorregulacao:'10B Temperatura',
       integracao:'Integração'
     };
     function groupMaps(group) {
@@ -147,13 +153,13 @@
       window.renderTutorPratica?.('fisioterapia', active, list);
       const escapeRoom=config.escapeRooms?.[active];
       const plantao=config.escapeRooms?.uti;
-      const escapeCard=(escapeRoom ? `<article class="card escape-card"><span class="meta">Desafio opcional</span><h2>ESCAPE ROOM</h2><p class="escape-call">Use pistas fisiológicas para abrir os cadeados.</p><p>Investigue o cenário e resolva as etapas antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="${esc(escapeRoom.href)}" aria-label="Entrar em ${esc(escapeRoom.title)}">Entrar no escape room</a></div></article>` : '');
+      const escapeCard=(escapeRoom ? `<article class="card escape-card" ${escapeRoom.percurso === false ? "data-sem-operacao" : ""}><span class="meta">Desafio opcional</span><h2>ESCAPE ROOM</h2><p class="escape-call">Use pistas fisiológicas para abrir os cadeados.</p><p>Investigue o cenário e resolva as etapas antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="${esc(escapeRoom.href)}" aria-label="Entrar em ${esc(escapeRoom.title)}">Entrar no escape room</a></div></article>` : '');
       cardsEl.innerHTML=list.map((item,moduleIndex)=>{
         const maps=groupMaps(item.group);
         const mapButtons=maps.map((map,index)=>`<button class="btn btn-ghost" type="button" data-map="${index}">${maps.length>1 ? 'Mapa '+(index+1) : 'Ver mapa'}</button>`).join('');
         const questions=(item.qs||[]).map((question,questionIndex)=>`<div class="q"><b>${questionIndex+1}. ${esc(question.q)}</b><div class="opts">${question.opts.map((option,optionIndex)=>`<button type="button" data-option="${optionIndex}" data-answer="${question.a}">${String.fromCharCode(65+optionIndex)}) ${esc(option)}</button>`).join('')}</div><p class="feedback" data-why="${esc(question.why)}"></p></div>`).join('');
         return `<article class="card" data-module="${moduleIndex}"><span class="meta">${esc(config.axisNames[item.group])}</span><h2>${esc(item.title)}</h2><p>${esc(item.goal)}</p><ol class="steps">${(item.steps||[]).map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="actions">${mapButtons}<a class="btn btn-ghost" href="${esc(item.href)}?percurso=fisioterapia">Abrir simulador</a><button class="btn btn-primary" type="button" data-open>Questões do simulador</button></div><div class="panel">${questions}</div></article>`;
-      }).join('')+(escapeCard?'<details class="desafios-opcionais"><summary>Desafios opcionais</summary><div class="closing-grid">'+escapeCard+'<article class="card escape-card percurso-card"><span class="meta">Desafio opcional</span><h2>PERCURSOS DE FISIOLOGIA</h2><p class="escape-call">Desafie-se e mostre que pode seguir seu caminho!</p><p>Ou, fique e estude mais!</p><div class="actions"><a class="btn btn-primary" href="https://fisiologia-em-fuga.drmarionascimento.com.br/percursos/" target="_blank" rel="noopener noreferrer">Explorar os Percursos</a></div></article></div></details>':'')+window.cardRealidadeAumentada('fisioterapia',active);
+      }).join('')+(escapeCard?'<details class="desafios-opcionais"><summary>Desafios opcionais</summary><div class="closing-grid">'+escapeCard+(escapeRoom.percurso === false ? '' : '<article class="card escape-card percurso-card"><span class="meta">Desafio opcional</span><h2>PERCURSOS DE FISIOLOGIA</h2><p class="escape-call">Desafie-se e mostre que pode seguir seu caminho!</p><p>Ou, fique e estude mais!</p><div class="actions"><a class="btn btn-primary" href="https://fisiologia-em-fuga.drmarionascimento.com.br/percursos/" target="_blank" rel="noopener noreferrer">Explorar os Percursos</a></div></article>')+'</div></details>':'')+window.cardRealidadeAumentada('fisioterapia',active);
     }
     axesEl.addEventListener('click',event=>{
       const button=event.target.closest('[data-axis]');
@@ -189,7 +195,7 @@
     renderAxes();
     renderCards();
   </script>
-  <script src="tutor-ligacao-fuga.js?v=4"></script>
+  <script src="tutor-ligacao-fuga.js?v=fisio-pele-temperatura-10ab"></script>
   <script src="tutor-ra-data.js?v=coracao-torax-20261010"></script>
   <script src="tutor-ef-coin.js?v=shared-imports-20261020"></script>
   <script src="tutor-widget.js?v=glass-20261021"></script>
