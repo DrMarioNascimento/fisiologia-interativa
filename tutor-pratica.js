@@ -48,15 +48,10 @@
     root.replaceChildren(details);
     unidades.set(chave, { assinatura, details });
 
-    const label = element('label', 'Tema ');
-    const filter = element('select', '');
-    filter.append(new Option('Todos os temas', ''));
-    for (const tema of new Set(banco.map(item => item.tema))) filter.append(new Option(tema, tema));
-    label.append(filter);
     const review = button('Refazer questões erradas');
     const controls = element('div', '');
     controls.className = 'actions';
-    controls.append(label, review);
+    controls.append(review);
     const content = element('div', '');
     panel.append(controls, content);
 
@@ -72,7 +67,7 @@
           : 'Prática concluída.'));
         return;
       }
-      const posicao = element('p', (index + 1) + ' de ' + fila.length + ' · ' + item.tema);
+      const posicao = element('p', (index + 1) + ' de ' + fila.length);
       const pergunta = element('h2', item.q);
       pergunta.tabIndex = -1;
       const opcoes = element('div', '');
@@ -107,13 +102,7 @@
       posicao.tabIndex = -1;
       content.replaceChildren(posicao, pergunta, opcoes, retorno, next);
     }
-    filter.addEventListener('change', () => {
-      fila = filter.value ? banco.filter(item => item.tema === filter.value) : banco;
-      index = 0;
-      render();
-    });
     review.addEventListener('click', () => {
-      filter.value = '';
       fila = [...erros];
       index = 0;
       render();
