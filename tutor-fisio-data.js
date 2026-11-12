@@ -41,8 +41,8 @@ window.fisioterapiaTutor = {
     linfatico: '06 Sistema linfático',
     urinario: '07 Sistema dos líquidos corporais',
     digestorio: '08 Sistema digestório',
-    tegumentar: '10A Sistema tegumentar',
-    termorregulacao: '10B Regulação da temperatura corporal',
+    tegumentar: '09A Sistema tegumentar',
+    termorregulacao: '09B Regulação da temperatura corporal',
     integracao: 'Integração cardiorrespiratória — Unidades 3 e 4'
   },
   escapeRooms: {

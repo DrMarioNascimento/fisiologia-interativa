@@ -322,7 +322,7 @@ window.FI_DADOS = {
   },
   {
    "id": "tegumentar",
-   "num": "10A",
+   "num": "09A",
    "nome": "Sistema tegumentar",
    "curto": "Tegumentar",
    "desc": "Pele, anexos, barreira, sensibilidade, vascularização, cicatrização e reparo.",
@@ -339,7 +339,7 @@ window.FI_DADOS = {
   },
   {
    "id": "termorregulacao",
-   "num": "10B",
+   "num": "09B",
    "nome": "Regulação da temperatura corporal",
    "curto": "Temperatura",
    "desc": "Balanço de calor, integração hipotalâmica, exercício, ambiente, febre e hipotermia.",
