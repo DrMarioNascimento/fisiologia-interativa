@@ -113,7 +113,7 @@
     </div>
   </div>
   <script src="tutor-pratica-banco.js?v=fisio-pele-temperatura-09ab"></script>
-  <script src="tutor-pratica.js?v=pratica-sem-temas-20261112"></script>
+  <script src="tutor-pratica.js?v=cards-questoes-20261112"></script>
   <script src="tutor-ra-card.js?v=osso-somente-ef-20261009"></script>
   <script src="tutor-fisio-data.js?v=fisio-pele-temperatura-09ab"></script>
   <script src="tutor-desafios-extra.js?v=3"></script>
@@ -160,6 +160,7 @@
         const questions=(item.qs||[]).map((question,questionIndex)=>`<div class="q"><b>${questionIndex+1}. ${esc(question.q)}</b><div class="opts">${question.opts.map((option,optionIndex)=>`<button type="button" data-option="${optionIndex}" data-answer="${question.a}">${String.fromCharCode(65+optionIndex)}) ${esc(option)}</button>`).join('')}</div><p class="feedback" data-why="${esc(question.why)}"></p></div>`).join('');
         return `<article class="card" data-module="${moduleIndex}"><span class="meta">${esc(config.axisNames[item.group])}</span><h2>${esc(item.title)}</h2><p>${esc(item.goal)}</p><ol class="steps">${(item.steps||[]).map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="actions">${mapButtons}<a class="btn btn-ghost" href="${esc(item.href)}?percurso=fisioterapia">Abrir simulador</a><button class="btn btn-primary" type="button" data-open>Questões do simulador</button></div><div class="panel">${questions}</div></article>`;
       }).join('')+(escapeCard?'<details class="desafios-opcionais"><summary>Desafios opcionais</summary><div class="closing-grid">'+escapeCard+(escapeRoom.percurso === false ? '' : '<article class="card escape-card percurso-card"><span class="meta">Desafio opcional</span><h2>PERCURSOS DE FISIOLOGIA</h2><p class="escape-call">Desafie-se e mostre que pode seguir seu caminho!</p><p>Ou, fique e estude mais!</p><div class="actions"><a class="btn btn-primary" href="https://fisiologia-em-fuga.drmarionascimento.com.br/percursos/" target="_blank" rel="noopener noreferrer">Explorar os Percursos</a></div></article>')+'</div></details>':'')+window.cardRealidadeAumentada('fisioterapia',active);
+      window.renderTutorCardsQuestoes?.('fisioterapia', active, list, cardsEl);
     }
     axesEl.addEventListener('click',event=>{
       const button=event.target.closest('[data-axis]');
