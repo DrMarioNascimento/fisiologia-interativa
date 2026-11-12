@@ -6,7 +6,7 @@ const root=new URL('../',import.meta.url),read=p=>fs.readFileSync(new URL(p,root
 const manifest=JSON.parse(read('ef-simuladores-manifest.json')),script=read('ef-simuladores.js');
 const catalog=JSON.parse(read('inicio/dados-ef.js').replace(/^[\s\S]*?window\.FI_DADOS\s*=\s*/,'').replace(/;\s*$/,''));
 test('Todas as unidades e todos os acessos EF recebem a identidade, incluindo os dois modos do ciclo',()=>{
- assert.equal(catalog.unidades.length,7);let count=0;
+ assert.equal(catalog.unidades.length,13);let count=0;
  for(const u of catalog.unidades)for(const s of u.sims){count++;const path=s.href.split(/[?#]/)[0];assert.ok(manifest[path],path);assert.equal(manifest[path].unit,u.id);assert.equal(manifest[path].number,u.num);assert.match(read(path),/ef-simuladores\.js/);}
  assert.equal(count,34);assert.equal(manifest['endocrino/index.html'].number,'06');assert.equal(manifest['cardiopulmonar-integrado.html'].number,'');
 });
@@ -27,9 +27,9 @@ test('O acesso seleciona o manifesto do próprio curso sem levar a identidade da
 });
 test('Todos os 27 simuladores de Fisioterapia seguem as cinco unidades do curso',()=>{
  const data=JSON.parse(read('inicio/dados-fi.js').replace(/^[\s\S]*?window\.FI_DADOS\s*=\s*/,'').replace(/;\s*$/,'')),fi=JSON.parse(read('fi-simuladores-manifest.json'));let count=0;
- assert.equal(data.unidades.length,5);
+ assert.equal(data.unidades.length,11);
  for(const u of data.unidades)for(const s of u.sims){count++;const url=new URL(s.href,'https://site.test/fisioterapia/'),p=url.pathname.slice(1);assert.equal(url.searchParams.get('percurso'),'fisioterapia');assert.ok(fi[p],p);assert.equal(fi[p].unit,u.id);assert.equal(fi[p].number,u.num);assert.match(read(p),/ef-simuladores\.js/);}
- assert.equal(count,27);assert.equal(fi['hemodinamica-pa-dc-rpt.html'].number,'03');assert.equal(fi['ventilacao-pulmonar-neonatal.html'].number,'04');assert.equal(fi['fisioterapia/uti-fisiologica.html'].number,'05');
+ assert.equal(count,27);assert.equal(fi['hemodinamica-pa-dc-rpt.html'].number,'03');assert.equal(fi['ventilacao-pulmonar-neonatal.html'].number,'04');assert.equal(fi['fisioterapia/uti-fisiologica.html'].number,'');
  assert.equal(manifest['hemodinamica-pa-dc-rpt.html'].number,'04');assert.equal(manifest['ventilacao-pulmonar.html'].number,'05');
 });
 test('A página de Fisioterapia também funciona por endereço de pasta',async()=>{

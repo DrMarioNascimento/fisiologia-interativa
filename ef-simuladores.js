@@ -26,7 +26,7 @@
    }
    const a=doc.createElement('a');a.className='fi-ef-brand';a.href=home.href+(info.unit==='inicio'?'':'#u-'+info.unit);
    a.setAttribute('aria-label','Fisiologia Interativa - '+courseName+(info.number?' - Unidade '+info.number:''));
-   const label=info.number?courseName+' · Unidade '+info.number:info.unit==='integracao'?courseName+' · Integração 4 e 5':courseName+' · Todas as unidades';
+   const label=info.number?courseName+' · Unidade '+info.number:info.unit==='integracao'?courseName+(course==='fi'?' · Integração 3 e 4':' · Integração 4 e 5'):courseName+' · Todas as unidades';
    a.innerHTML='<span class="fi-ef-brand-frame" aria-hidden="true"><svg class="fi-ef-brand-portrait" viewBox="0 0 420 405" focusable="false"><image width="420" height="655"/></svg></span><span class="fi-ef-brand-copy"><b>Fisiologia Interativa</b><small></small></span>';
    a.querySelector('image').setAttribute('href',new URL('assets/avatar-prof-mario.webp',root));a.querySelector('small').textContent=label;
    const native=[...doc.querySelectorAll('a.brand')].find(e=>!e.querySelector('h1,input,button'));
