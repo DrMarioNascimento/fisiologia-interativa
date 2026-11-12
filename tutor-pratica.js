@@ -1,0 +1,124 @@
+(function () {
+  'use strict';
+
+  const unidades = new Map();
+
+  function element(tag, text) {
+    const node = document.createElement(tag);
+    node.textContent = text;
+    return node;
+  }
+
+  function button(label, primary = false) {
+    const node = element('button', label);
+    node.type = 'button';
+    node.className = 'btn ' + (primary ? 'btn-primary' : 'btn-ghost');
+    return node;
+  }
+
+  window.renderTutorPratica = function (curso, eixo, modulos) {
+    const root = document.getElementById('pratica-unidade');
+    if (!root) return;
+    const chave = curso + ':' + eixo;
+    const assinatura = modulos.map(modulo => modulo.href + ':' + (modulo.qs || []).length).join('|');
+    const salva = unidades.get(chave);
+    if (salva?.assinatura === assinatura) {
+      if (root.firstElementChild !== salva.details) root.replaceChildren(salva.details);
+      return;
+    }
+    const linhas = [
+      ...(window.tutorPraticaBanco[eixo] || []),
+      ...(window.tutorPraticaPorCurso[curso]?.[eixo] || [])
+    ];
+    const banco = linhas.map(([tema, q, correta, primeira, segunda, why], index) => {
+      const opts = [primeira, segunda];
+      const a = [1, 0, 2, 1, 2, 0][index % 6];
+      opts.splice(a, 0, correta);
+      return { tema, q, opts, a, why };
+    });
+    for (const modulo of modulos) {
+      for (const item of modulo.qs || []) banco.push({ ...item, tema: modulo.title });
+    }
+
+    const details = element('details', '');
+    details.className = 'card';
+    const title = element('summary', 'Praticar esta unidade · ' + banco.length + ' questões');
+    const panel = element('div', '');
+    details.append(title, panel);
+    root.replaceChildren(details);
+    unidades.set(chave, { assinatura, details });
+
+    const label = element('label', 'Tema ');
+    const filter = element('select', '');
+    filter.append(new Option('Todos os temas', ''));
+    for (const tema of new Set(banco.map(item => item.tema))) filter.append(new Option(tema, tema));
+    label.append(filter);
+    const review = button('Refazer questões erradas');
+    const controls = element('div', '');
+    controls.className = 'actions';
+    controls.append(label, review);
+    const content = element('div', '');
+    panel.append(controls, content);
+
+    const erros = new Set();
+    let fila = banco;
+    let index = 0;
+    function render() {
+      review.disabled = !erros.size;
+      const item = fila[index];
+      if (!item) {
+        content.replaceChildren(element('p', erros.size
+          ? 'Prática concluída. Você pode refazer as questões erradas.'
+          : 'Prática concluída.'));
+        return;
+      }
+      const posicao = element('p', (index + 1) + ' de ' + fila.length + ' · ' + item.tema);
+      const pergunta = element('h2', item.q);
+      pergunta.tabIndex = -1;
+      const opcoes = element('div', '');
+      opcoes.className = 'opts';
+      const retorno = element('p', '');
+      retorno.className = 'feedback show';
+      retorno.setAttribute('role', 'status');
+      const next = button('Próxima questão', true);
+      next.disabled = true;
+      let respondida = false;
+      item.opts.forEach((opcao, resposta) => {
+        const escolha = button(opcao);
+        escolha.addEventListener('click', () => {
+          if (respondida) return;
+          respondida = true;
+          const correto = resposta === item.a;
+          if (correto) erros.delete(item);
+          else erros.add(item);
+          escolha.classList.add(correto ? 'ok' : 'bad');
+          retorno.textContent = (correto ? 'Certo. ' : 'Resposta correta: ' + item.opts[item.a] + '. ') + item.why;
+          for (const outra of opcoes.children) outra.setAttribute('aria-disabled', 'true');
+          next.disabled = false;
+          review.disabled = !erros.size;
+        });
+        opcoes.append(escolha);
+      });
+      next.addEventListener('click', () => {
+        index += 1;
+        render();
+        content.querySelector('h2, p')?.focus();
+      });
+      posicao.tabIndex = -1;
+      content.replaceChildren(posicao, pergunta, opcoes, retorno, next);
+    }
+    filter.addEventListener('change', () => {
+      fila = filter.value ? banco.filter(item => item.tema === filter.value) : banco;
+      index = 0;
+      render();
+    });
+    review.addEventListener('click', () => {
+      filter.value = '';
+      fila = [...erros];
+      index = 0;
+      render();
+      content.querySelector('h2')?.focus();
+    });
+    render();
+  };
+})();

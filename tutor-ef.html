@@ -67,6 +67,13 @@
     .closing-grid .percurso-card::before{background-image:url('assets/escape-room-fisiologia.jpg');background-position:center 70%;filter:hue-rotate(45deg) saturate(1.15)}
     @media(max-width:700px){.closing-grid{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){.closing-grid>.escape-card{transition:none}}
+    .desafios-opcionais{grid-column:1/-1}
+    .desafios-opcionais summary{cursor:pointer;font-weight:700;margin-bottom:14px}
+    #pratica-unidade{margin-block:0 20px}
+    #pratica-unidade summary{cursor:pointer;font-weight:700}
+    #pratica-unidade select{max-width:100%;font:inherit}
+    #pratica-unidade .opts button[aria-disabled="true"]{cursor:default}
+    #pratica-unidade .btn:disabled{opacity:.55;cursor:default}
   </style>
   <link rel="stylesheet" href="tutor-widget.css?v=5">
   <link rel="stylesheet" href="inicio/tutor-tema.css?v=ra-botoes-3d-20261003">
@@ -95,6 +102,7 @@
       <div class="note"><b>Material didático.</b> Não use para prescrição a alunos ou pacientes.</div>
       <div class="axes" id="axes" role="group" aria-label="Eixos da disciplina"></div>
     </section>
+    <section id="pratica-unidade" aria-label="Prática da unidade"></section>
     <section class="grid" id="cards"></section>
   </main>
   <footer class="shell">Prof. Mário César Nascimento. PhD © — Fisiologia Interativa • Educação Física</footer>
@@ -104,8 +112,10 @@
       <div class="modal-body"><img id="mapImage" alt="Mapa mental do eixo"></div>
     </div>
   </div>
+  <script src="tutor-pratica-banco.js"></script>
+  <script src="tutor-pratica.js"></script>
   <script src="tutor-ra-card.js?v=osso-somente-ef-20261009"></script>
-  <script src="tutor-ef-data.js?v=retorno-20261002"></script>
+  <script src="tutor-ef-data.js?v=pratica-unidade"></script>
   <script src="tutor-desafios-extra.js?v=3"></script>
   <script src="tutor-ligacao-fuga.js?v=4"></script>
   <script src="tutor-ra-data.js?v=coracao-torax-20261010"></script>

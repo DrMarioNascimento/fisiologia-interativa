@@ -67,6 +67,13 @@
     .closing-grid .percurso-card::before{background-image:url('assets/escape-room-fisiologia.jpg');background-position:center 70%;filter:hue-rotate(45deg) saturate(1.15)}
     @media(max-width:700px){.closing-grid{grid-template-columns:1fr}}
     @media(prefers-reduced-motion:reduce){.closing-grid>.escape-card{transition:none}}
+    .desafios-opcionais{grid-column:1/-1}
+    .desafios-opcionais summary{cursor:pointer;font-weight:700;margin-bottom:14px}
+    #pratica-unidade{margin-block:0 20px}
+    #pratica-unidade summary{cursor:pointer;font-weight:700}
+    #pratica-unidade select{max-width:100%;font:inherit}
+    #pratica-unidade .opts button[aria-disabled="true"]{cursor:default}
+    #pratica-unidade .btn:disabled{opacity:.55;cursor:default}
   </style>
   <link rel="stylesheet" href="tutor-widget.css?v=5">
   <link rel="stylesheet" href="inicio/tutor-tema.css?v=ra-botoes-3d-20261003">
@@ -95,6 +102,7 @@
       <div class="note"><b>Material didático.</b> Não use para prescrição a alunos ou pacientes.</div>
       <div class="axes" id="axes" role="group" aria-label="Eixos da disciplina"></div>
     </section>
+    <section id="pratica-unidade" aria-label="Prática da unidade"></section>
     <section class="grid" id="cards"></section>
   </main>
   <footer class="shell">Prof. Mário César Nascimento. PhD © — Fisiologia Interativa • Fisioterapia</footer>
@@ -104,8 +112,10 @@
       <div class="modal-body"><img id="mapImage" alt="Mapa mental do eixo"></div>
     </div>
   </div>
+  <script src="tutor-pratica-banco.js"></script>
+  <script src="tutor-pratica.js"></script>
   <script src="tutor-ra-card.js?v=osso-somente-ef-20261009"></script>
-  <script src="tutor-fisio-data.js?v=9"></script>
+  <script src="tutor-fisio-data.js?v=pratica-unidade"></script>
   <script src="tutor-desafios-extra.js?v=3"></script>
   <script>
     let active = 'celular';
@@ -134,15 +144,16 @@
     }
     function renderCards() {
       const list=config.modules.filter(item=>item.group===active);
+      window.renderTutorPratica?.('fisioterapia', active, list);
       const escapeRoom=config.escapeRooms?.[active];
       const plantao=config.escapeRooms?.uti;
-      const escapeCard=(escapeRoom ? `<article class="card escape-card"><span class="meta">Desafio de fechamento</span><h2>ESCAPE ROOM</h2><p class="escape-call">Liberte seu conhecimento — ou fique preso na sala.</p><p>Use o que aprendeu nesta unidade para abrir os cadeados antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="${esc(escapeRoom.href)}" aria-label="Entrar em ${esc(escapeRoom.title)}">Entrar no escape room</a></div></article>` : '');
+      const escapeCard=(escapeRoom ? `<article class="card escape-card"><span class="meta">Desafio opcional</span><h2>ESCAPE ROOM</h2><p class="escape-call">Use pistas fisiológicas para abrir os cadeados.</p><p>Investigue o cenário e resolva as etapas antes que o tempo termine.</p><div class="actions"><a class="btn btn-primary" href="${esc(escapeRoom.href)}" aria-label="Entrar em ${esc(escapeRoom.title)}">Entrar no escape room</a></div></article>` : '');
       cardsEl.innerHTML=list.map((item,moduleIndex)=>{
         const maps=groupMaps(item.group);
         const mapButtons=maps.map((map,index)=>`<button class="btn btn-ghost" type="button" data-map="${index}">${maps.length>1 ? 'Mapa '+(index+1) : 'Ver mapa'}</button>`).join('');
         const questions=(item.qs||[]).map((question,questionIndex)=>`<div class="q"><b>${questionIndex+1}. ${esc(question.q)}</b><div class="opts">${question.opts.map((option,optionIndex)=>`<button type="button" data-option="${optionIndex}" data-answer="${question.a}">${String.fromCharCode(65+optionIndex)}) ${esc(option)}</button>`).join('')}</div><p class="feedback" data-why="${esc(question.why)}"></p></div>`).join('');
-        return `<article class="card" data-module="${moduleIndex}"><span class="meta">${esc(config.axisNames[item.group])}</span><h2>${esc(item.title)}</h2><p>${esc(item.goal)}</p><ol class="steps">${(item.steps||[]).map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="actions">${mapButtons}<a class="btn btn-ghost" href="${esc(item.href)}?percurso=fisioterapia">Abrir simulador</a><button class="btn btn-primary" type="button" data-open>Questões</button></div><div class="panel">${questions}</div></article>`;
-      }).join('')+(escapeCard?'<section class="closing-grid" aria-label="Desafios de fechamento">'+escapeCard+'<article class="card escape-card percurso-card"><span class="meta">Desafio de fechamento</span><h2>PERCURSOS DE FISIOLOGIA</h2><p class="escape-call">Desafie-se e mostre que pode seguir seu caminho!</p><p>Ou, fique e estude mais!</p><div class="actions"><a class="btn btn-primary" href="https://fisiologia-em-fuga.drmarionascimento.com.br/percursos/" target="_blank" rel="noopener noreferrer">Explorar os Percursos</a></div></article></section>':'')+window.cardRealidadeAumentada('fisioterapia',active);
+        return `<article class="card" data-module="${moduleIndex}"><span class="meta">${esc(config.axisNames[item.group])}</span><h2>${esc(item.title)}</h2><p>${esc(item.goal)}</p><ol class="steps">${(item.steps||[]).map(step=>`<li>${esc(step)}</li>`).join('')}</ol><div class="actions">${mapButtons}<a class="btn btn-ghost" href="${esc(item.href)}?percurso=fisioterapia">Abrir simulador</a><button class="btn btn-primary" type="button" data-open>Questões do simulador</button></div><div class="panel">${questions}</div></article>`;
+      }).join('')+(escapeCard?'<details class="desafios-opcionais"><summary>Desafios opcionais</summary><div class="closing-grid">'+escapeCard+'<article class="card escape-card percurso-card"><span class="meta">Desafio opcional</span><h2>PERCURSOS DE FISIOLOGIA</h2><p class="escape-call">Desafie-se e mostre que pode seguir seu caminho!</p><p>Ou, fique e estude mais!</p><div class="actions"><a class="btn btn-primary" href="https://fisiologia-em-fuga.drmarionascimento.com.br/percursos/" target="_blank" rel="noopener noreferrer">Explorar os Percursos</a></div></article></div></details>':'')+window.cardRealidadeAumentada('fisioterapia',active);
     }
     axesEl.addEventListener('click',event=>{
       const button=event.target.closest('[data-axis]');
