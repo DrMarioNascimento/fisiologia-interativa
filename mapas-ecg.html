@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#09151e">
+<title>Mapas de eletrocardiografia · Fisiologia Interativa</title>
+<style>
+  :root{color-scheme:dark;--ink:#f2f7fa;--muted:#b6c9d5;--bg:#09151e;--panel:#112632;--line:#355265;--mint:#88f1d9;--blue:#a7d8ff;--peach:#ffd09b;--eye:#bdf8ee;font:16px/1.55 system-ui,sans-serif}
+  *{box-sizing:border-box}
+  html{scroll-padding-top:1.15rem}
+  body{margin:0;color:var(--ink);background:radial-gradient(ellipse 75% 26rem at 65% 0,#1a3c49,transparent),var(--bg)}
+  a{color:var(--mint);text-underline-offset:.2em}
+  :focus-visible{outline:3px solid var(--peach);outline-offset:4px}
+  .wrap{width:min(100% - 2rem,72rem);margin-inline:auto}
+  .site-nav,.tabs{display:flex;flex-wrap:wrap;gap:.65rem;align-items:center}
+  .site-nav{justify-content:space-between;padding-block:1rem}
+  .button{display:inline-flex;align-items:center;min-height:44px;padding:.5rem .95rem;border:1px solid #557588;border-radius:.8rem;background:linear-gradient(#244352,#132834);box-shadow:inset 0 1px #ffffff24,0 4px #050d14;text-decoration:none;color:var(--ink);font-weight:680}
+  .button:hover{border-color:var(--mint);color:var(--mint)}
+  .brand,.eyebrow{color:var(--mint);font-weight:750;letter-spacing:.08em;font-size:.8rem;text-transform:uppercase}
+  .hero{padding:clamp(1.5rem,5vw,4rem) 0 2.25rem}
+  h1,h2,h3,p,figure{margin:0}
+  h1,h2{line-height:1.12;letter-spacing:-.035em;text-wrap:balance}
+  h1{font-size:clamp(2.35rem,6vw,5rem);margin:.25rem 0 .7rem}
+  h2{font-size:clamp(1.65rem,4vw,2.6rem)}
+  h3{font-size:1.1rem;line-height:1.28}
+  p{color:var(--muted)}
+  .hero p{max-width:58ch}
+  .tabs{margin-top:1.1rem}
+  .map{margin-block:0 2.5rem;padding:clamp(.85rem,3.2vw,2.1rem);border:1px solid var(--line);border-radius:1.35rem;background:linear-gradient(153deg,#183642,#0c1d29 60%);box-shadow:inset 0 1px #ffffff22,0 8px #061018,0 20px 45px #03090e66}
+  .map > h2{margin-bottom:.8rem}
+  .map:target{border-color:#7bc5ba}
+  .tree{--branch:#537f8e;display:grid;gap:1.55rem;margin-top:1.2rem}
+  .root,.node,.figure-panel,.callout{border:1px solid var(--line);border-radius:1rem;background:linear-gradient(152deg,#1b3240,#10232f);box-shadow:inset 0 1px #ffffff1f,0 5px #07131b}
+  .root{position:relative;width:min(100%,29rem);padding:1rem 1.2rem;justify-self:center;text-align:center;border-color:#669a9d;background:radial-gradient(ellipse at 50% 0,#2b555d,#142c39);box-shadow:inset 0 1px #ffffff2e,0 5px #08131a,0 0 35px #67decb24}
+  .root strong{display:block;color:var(--mint);font-size:clamp(1.5rem,3.5vw,2.3rem);line-height:1.1}
+  .root svg{display:block;width:min(100%,17rem);height:3rem;margin:.5rem auto 0}
+  .branches{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.8rem}
+  .branches::before{content:"";position:absolute;left:12.5%;right:12.5%;top:-.8rem;border-top:2px solid var(--branch)}
+  .root::after,.branches .node::before{content:"";position:absolute;height:.8rem;border-left:2px solid var(--branch);left:50%}
+  .root::after{top:100%}
+  .branches .node::before{bottom:100%}
+  .node{position:relative;padding:1rem;border-top:3px solid var(--node-color,var(--mint))}
+  .node h3{color:var(--node-color,var(--mint));margin-bottom:.4rem}
+  .node p+p{margin-top:.45rem}
+  .node a{display:inline-block;margin-top:.45rem}
+  .reading-grid,.diagram-pair{display:grid;gap:1rem;margin-top:1.1rem}
+  .reading-grid{grid-template-columns:1.05fr 1fr;align-items:start}
+  .diagram-pair{grid-template-columns:1fr 1fr}
+  .figure-panel{padding:clamp(.55rem,2vw,1rem);min-width:0}
+  .figure-panel h3{margin:.2rem .4rem .45rem}
+  .drawing{display:block;width:100%;height:auto;color:var(--ink);border-radius:.75rem;background:#0b1b26;font:700 18px system-ui,sans-serif}
+  .drawing text{fill:currentColor}
+  .drawing .minor{fill:#b6c9d5;font-size:15px}
+  .drawing .bone{fill:none;stroke:#9daeb1;stroke-width:3}
+  .drawing .point{fill:#92f2d8;stroke:#0a1922;stroke-width:2.5}
+  .drawing .point-label{fill:#072329;font-weight:850;text-anchor:middle;dominant-baseline:central}
+  figcaption{padding:.65rem .35rem .2rem;color:var(--muted);font-size:.9rem}
+  .sites{display:grid;gap:.5rem;margin:0}
+  .sites > div{display:grid;grid-template-columns:3rem 1fr;gap:.65rem;align-items:center;padding:.46rem .65rem;border:1px solid var(--line);border-radius:.65rem;background:#102634}
+  .sites dt{font-weight:800;text-align:center;color:var(--mint);background:#173a43;border-radius:.4rem;padding:.17rem}
+  .sites dd{margin:0}
+  .callout{margin-top:1rem;padding:.9rem 1rem;border-left:4px solid var(--peach)}
+  .callout h3{margin-bottom:.3rem;color:var(--peach)}
+  .callout p+p{margin-top:.5rem}
+  table{width:100%;border-collapse:collapse;margin-top:1.1rem;font-variant-numeric:tabular-nums}
+  th,td{padding:.47rem .6rem;text-align:left;border-bottom:1px solid var(--line)}
+  thead th{background:#254654;color:#fff;font-size:.9rem}
+  tbody th{color:var(--mint)}
+  .angle{white-space:nowrap;color:var(--blue)}
+  .formula{white-space:normal;overflow-wrap:anywhere}
+  .references{padding:0 .25rem 2.75rem}
+  .references h2{font-size:1.25rem}
+  .references ul{padding-left:1.3rem;margin:.5rem 0 1.2rem}
+  @media(max-width:830px){
+    .branches{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .branches::before,.root::after,.branches .node::before{display:none}
+    .map{margin-bottom:1.7rem}
+  }
+  @media(max-width:650px){
+    .reading-grid,.diagram-pair{grid-template-columns:minmax(0,1fr)}
+  }
+  @media(max-width:410px){
+    .wrap{width:calc(100% - 1.25rem)}
+    .node{padding:.7rem}
+    .branches{gap:.55rem}
+    .branches p{font-size:.91rem}
+    .sites > div{grid-template-columns:2.5rem 1fr}
+    th,td{padding:.42rem .35rem}
+  }
+  @media print{
+    :root{color-scheme:light;--ink:#111;--muted:#25343d;--mint:#074b49;--blue:#123f66;--line:#a1b3bc;--peach:#603913}
+    body,.map,.node,.root,.figure-panel,.sites > div,.sites dt,.callout,thead th{background:#fff;color:var(--ink);box-shadow:none}
+    .site-nav,.tabs{display:none}
+    .hero{padding:0 0 1rem}
+    .map + .map{break-before:page}
+    .figure-panel,.callout,tr{break-inside:avoid}
+    .node h3{color:#173d50}
+    .drawing{print-color-adjust:exact;-webkit-print-color-adjust:exact;color:#fff}
+  }
+</style>
+</head>
+<body>
+<nav class="wrap site-nav" aria-label="Fisiologia Interativa">
+  <a class="button" id="voltar" href="./#u-optativo">← Voltar ao card de ECG</a>
+  <a class="button" href="eletrocardiografia.html?v=graus-20261119">Abrir simulador →</a>
+</nav>
+<main class="wrap">
+  <header class="hero">
+    <span class="brand">Fisiologia Interativa</span>
+    <h1>Mapas de eletrocardiografia</h1>
+    <p>Da atividade elétrica ao traçado. Consulte os pontos de colocação dos eletrodos e o sistema de referência das 12 derivações.</p>
+    <nav class="tabs" aria-label="Mapas">
+      <a class="button" href="#visao-geral">Visão geral</a>
+      <a class="button" href="#eletrodos">Posição dos eletrodos</a>
+      <a class="button" href="#derivacoes">Derivações e graus</a>
+    </nav>
+  </header>
+
+  <section class="map" id="visao-geral" aria-labelledby="geral-t">
+    <span class="eyebrow">Mapa 1</span>
+    <h2 id="geral-t">Da pele ao traçado</h2>
+    <div class="tree">
+      <div class="root">
+        <strong>ECG de 12 derivações</strong>
+        <svg viewBox="0 0 280 46" aria-hidden="true">
+          <path d="M0 28H48Q53 17 61 22T70 28H111L115 33 122 4 128 40 135 28H173Q187 7 201 20T214 28H280" fill="none" stroke="#8ff5da" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="branches">
+        <article class="node" style="--node-color:#8df3db">
+          <h3>Captação · 10 eletrodos</h3>
+          <p>Quatro eletrodos nos membros e seis no tórax. Cada derivação registra uma diferença de potencial entre dois polos.</p>
+          <a href="#eletrodos">Ver colocação</a>
+        </article>
+        <article class="node" style="--node-color:#aed7ff">
+          <h3>Projeção · dois planos</h3>
+          <p><b>Frontal</b> · I, II, III, aVR, aVL e aVF.</p>
+          <p><b>Horizontal</b> · V1 a V6.</p>
+          <a href="#derivacoes">Ver eixos e polos</a>
+        </article>
+        <article class="node" style="--node-color:#e3bfff">
+          <h3>Ondas · atividade elétrica</h3>
+          <p><b>P</b> · Despolarização atrial.</p>
+          <p><b>QRS</b> · Despolarização ventricular.</p>
+          <p><b>T</b> · Repolarização ventricular.</p>
+        </article>
+        <article class="node" style="--node-color:#ffd09b">
+          <h3>Escala · tempo e tensão</h3>
+          <p><b>25 mm/s</b> · 1 mm = 40 ms.</p>
+          <p><b>50 mm/s</b> · 1 mm = 20 ms.</p>
+          <p><b>10 mm/mV</b> · 1 mm = 0,1 mV.</p>
+        </article>
+      </div>
+    </div>
+    <aside class="callout"><h3>Do eixo à deflexão</h3><p>Quando o vetor elétrico instantâneo aponta para o polo positivo de uma derivação, a deflexão tende a subir. Quando aponta para o polo negativo, tende a descer. Uma projeção pequena gera pouca deflexão.</p></aside>
+  </section>
+
+  <section class="map" id="eletrodos" aria-labelledby="eletrodos-t">
+    <span class="eyebrow">Mapa 2 · ECG convencional de repouso</span>
+    <h2 id="eletrodos-t">Posição dos eletrodos</h2>
+    <div class="reading-grid">
+      <figure class="figure-panel">
+        <svg class="drawing" viewBox="0 0 520 450" role="img" aria-label="Vista anterior do tórax com ângulo de Louis, espaços intercostais e posições de V1 a V6" xmlns="http://www.w3.org/2000/svg">
+
+          <defs>
+            <linearGradient id="skin" x2=".8" y2="1">
+              <stop stop-color="#648695"/><stop offset="1" stop-color="#243b4b"/>
+            </linearGradient>
+          </defs>
+          <text x="22" y="30" class="minor">Direita do paciente</text>
+          <text x="498" y="30" class="minor" text-anchor="end">Esquerda do paciente</text>
+          <path d="M167 54L166 78Q150 92 95 99Q52 105 42 146L20 213L55 230 74 190 69 278Q69 329 55 377L431 377Q411 338 417 279L440 209 469 232 509 206 476 145Q461 113 423 104L268 85Q251 80 244 67V54Z" fill="url(#skin)" stroke="#8ca3af" stroke-width="2"/>
+          <g class="bone">
+            <path d="M193 111Q166 92 138 106L87 123M223 111Q253 93 299 103L400 126" stroke-width="5" stroke-linecap="round"/>
+            <path d="M195 142L187 153L192 173L191 252L196 285L208 299L220 284L225 250L224 173L231 153L220 142Z" fill="#a9b9bb" stroke="#d9e3e1" opacity=".85"/>
+            <path d="M190 157C166 142 124 141 91 156M226 157C244 145 276 141 301 148M191 173C166 159 121 159 88 175M225 173C254 162 276 162 303 171M191 201C161 190 113 187 83 200M225 201C259 187 297 195 327 206M191 230C158 219 113 214 80 227M225 230C256 218 286 221 311 231M191 262C153 245 105 244 77 252M225 262C253 246 276 244 310 253M194 280C150 278 105 272 76 278M222 280C248 281 270 300 319 305M207 300Q153 337 80 309M209 300Q264 327 314 309" stroke-linecap="round"/>
+          </g>
+          <g fill="none" stroke="#c5deef" stroke-dasharray="5 5" stroke-width="1.65" opacity=".85">
+            <path d="M300 116V337M365 152V337M419 159V337"/>
+          </g>
+          <g text-anchor="middle">
+            <text class="minor" x="300" y="359">LHC</text>
+            <text class="minor" x="365" y="359">LAA</text>
+            <text class="minor" x="419" y="359">LAM</text>
+          </g>
+          <path d="M289 288H449" stroke="#ffd09b" stroke-width="2" stroke-dasharray="5 4"/>
+          <text x="449" y="317" text-anchor="end" fill="#ffd09b" style="fill:#ffd09b;font-size:16px">Nível de V4</text>
+          <path d="M195 173H221M204 173L165 128H90" fill="none" stroke="#ffd09b" stroke-width="2"/>
+          <text x="90" y="111" style="fill:#ffd09b;font-size:16px">Ângulo de Louis</text>
+          <path d="M164 247H119" stroke="#c5deef" stroke-width="1.6"/>
+          <text x="110" y="252" text-anchor="end">4º EIC</text>
+          <path d="M283 288H253" stroke="#c5deef" stroke-width="1.6"/>
+          <text x="247" y="293" text-anchor="end">5º EIC</text>
+          <path d="M231 247L300 288" fill="none" stroke="#8ee7d5" stroke-width="2" stroke-dasharray="3 4"/>
+          <circle class="point" cx="184" cy="247" r="16"/><text class="point-label" x="184" y="247">V1</text>
+          <circle class="point" cx="231" cy="247" r="16"/><text class="point-label" x="231" y="247">V2</text>
+          <circle class="point" cx="265.5" cy="267.5" r="16"/><text class="point-label" x="265.5" y="267.5">V3</text>
+          <circle class="point" cx="300" cy="288" r="16"/><text class="point-label" x="300" y="288">V4</text>
+          <circle class="point" cx="365" cy="288" r="16"/><text class="point-label" x="365" y="288">V5</text>
+          <circle class="point" cx="419" cy="288" r="16"/><text class="point-label" x="419" y="288">V6</text>
+
+          <text x="22" y="404" class="minor">EIC · espaço intercostal</text>
+          <text x="22" y="429" class="minor">LHC · linha hemiclavicular</text>
+          <text x="270" y="404" class="minor">LAA · linha axilar anterior</text>
+          <text x="270" y="429" class="minor">LAM · linha axilar média</text>
+        </svg>
+        <figcaption>Vista anterior. O lado esquerdo do paciente aparece à direita no desenho. O tórax está esquematizado com a lateral esquerda aberta para mostrar V5 e V6.</figcaption>
+      </figure>
+      <dl class="sites">
+        <div><dt>V1</dt><dd>4º espaço intercostal, junto à borda esternal direita.</dd></div>
+        <div><dt>V2</dt><dd>4º espaço intercostal, junto à borda esternal esquerda.</dd></div>
+        <div><dt>V3</dt><dd>Ponto médio entre V2 e V4. Coloque V4 primeiro.</dd></div>
+        <div><dt>V4</dt><dd>5º espaço intercostal esquerdo, na linha hemiclavicular.</dd></div>
+        <div><dt>V5</dt><dd>Linha axilar anterior esquerda, no nível horizontal de V4.</dd></div>
+        <div><dt>V6</dt><dd>Linha axilar média esquerda, no nível horizontal de V4 e V5.</dd></div>
+      </dl>
+    </div>
+    <aside class="callout">
+      <h3>Comece pela palpação do ângulo de Louis</h3>
+      <p>Palpe a junção manúbrio-esternal e siga lateralmente até a 2ª costela. O espaço logo abaixo é o 2º espaço intercostal. Conte até o 4º para V1 e V2 e localize o 5º para V4.</p>
+      <p>Use V4 como nível horizontal para V5 e V6. Quando a mama recobrir o ponto anatômico, posicione o eletrodo na parede torácica sob a mama e preserve a privacidade.</p>
+    </aside>
+    <div class="reading-grid">
+      <figure class="figure-panel">
+        <h3>Eletrodos dos membros</h3>
+        <svg class="drawing" viewBox="0 0 520 363" role="img" aria-label="RA e LA próximos aos punhos direito e esquerdo, RL e LL próximos aos tornozelos direito e esquerdo" xmlns="http://www.w3.org/2000/svg">
+
+          <defs>
+            <linearGradient id="body" x2="1" y2="1"><stop stop-color="#6d97a5"/><stop offset="1" stop-color="#294656"/></linearGradient>
+          </defs>
+          <text class="minor" x="22" y="31">Direita do paciente</text>
+          <text class="minor" x="498" y="31" text-anchor="end">Esquerda do paciente</text>
+          <circle cx="260" cy="61" r="23" fill="url(#body)" stroke="#86a4ae" stroke-width="2"/>
+          <path d="M247 83L245 96L222 101Q211 104 205 115L159 200Q153 211 162 218Q171 224 179 212L222 155L229 199L218 239L213 312Q213 326 200 330Q185 337 202 343H233Q239 342 241 331L257 235H263L279 331Q281 342 287 343H318Q335 337 320 330Q307 326 307 312L302 239L291 199L298 155L341 212Q349 224 358 218Q367 211 361 200L315 115Q309 104 298 101L275 96L273 83" fill="url(#body)" stroke="#86a4ae" stroke-width="2"/>
+          <path d="M171 199H75" stroke="#98c7d8" stroke-width="1.5"/><circle class="point" cx="171" cy="199" r="8"/><text x="67" y="205" text-anchor="end">RA</text>
+          <path d="M349 199H445" stroke="#98c7d8" stroke-width="1.5"/><circle class="point" cx="349" cy="199" r="8"/><text x="453" y="205" text-anchor="start">LA</text>
+          <path d="M226 314H75" stroke="#98c7d8" stroke-width="1.5"/><circle class="point" cx="226" cy="314" r="8"/><text x="67" y="320" text-anchor="end">RL</text>
+          <path d="M294 314H445" stroke="#98c7d8" stroke-width="1.5"/><circle class="point" cx="294" cy="314" r="8"/><text x="453" y="320" text-anchor="start">LL</text>
+
+        </svg>
+        <figcaption>Posições distais usuais. Confirme os lados no paciente e identifique os cabos pelas siglas do aparelho.</figcaption>
+      </figure>
+      <dl class="sites" aria-label="Correspondência dos cabos AHA e IEC">
+        <div><dt>RA / R</dt><dd>Braço direito.</dd></div>
+        <div><dt>LA / L</dt><dd>Braço esquerdo.</dd></div>
+        <div><dt>RL / N</dt><dd>Perna direita. Eletrodo neutro do sistema.</dd></div>
+        <div><dt>LL / F</dt><dd>Perna esquerda.</dd></div>
+      </dl>
+    </div>
+    <aside class="callout">
+      <h3>Posicionamento modificado no exercício</h3>
+      <p>Em configurações como Mason–Likar, os eletrodos dos membros são deslocados para o tronco. V1 a V6 seguem os pontos precordiais habituais. Registre a configuração usada porque a mudança pode alterar o traçado.</p>
+    </aside>
+  </section>
+
+  <section class="map" id="derivacoes" aria-labelledby="derivacoes-t">
+    <span class="eyebrow">Mapa 3 · Plano frontal</span>
+    <h2 id="derivacoes-t">Derivações e graus</h2>
+    <p>Os graus localizam o polo positivo de cada derivação no plano frontal. A referência de 0° aponta para a esquerda anatômica do paciente.</p>
+    <div class="diagram-pair">
+      <figure class="figure-panel">
+        <h3>Sistema hexaxial</h3>
+        <svg class="drawing" viewBox="0 0 460 350" role="img" aria-label="Eixos frontais com polos positivos em 0, mais 60, mais 120, menos 150, menos 30 e mais 90 graus" xmlns="http://www.w3.org/2000/svg">
+
+          <defs>
+            <marker id="axis-tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+              <path d="M0 0L10 5 0 10 2 5Z" fill="context-stroke"/>
+            </marker>
+          </defs>
+          <circle cx="230" cy="174" r="118" fill="#132d3a" stroke="#4b6b7a" stroke-width="1.5"/>
+          <circle cx="230" cy="174" r="74" fill="none" stroke="#315263"/>
+          <circle cx="230" cy="174" r="38" fill="none" stroke="#315263"/>
+          <text x="20" y="31" class="minor">Direita do paciente</text>
+          <text x="440" y="31" class="minor" text-anchor="end">Esquerda do paciente</text>
+          <path d="M230 174L114.0 174.0" stroke="#7496a9" stroke-width="1.7" stroke-dasharray="4 5"/>
+          <path d="M230 174L346.0 174.0" stroke="#91efd9" stroke-width="3.1" marker-end="url(#axis-tip)"/>
+          <text x="388.0" y="172.0" text-anchor="middle" style="fill:#91efd9">I<tspan x="388.0" dy="19" class="minor">0°</tspan></text>
+          <path d="M230 174L172.0 73.5" stroke="#7496a9" stroke-width="1.7" stroke-dasharray="4 5"/>
+          <path d="M230 174L288.0 274.5" stroke="#a6d9ff" stroke-width="3.1" marker-end="url(#axis-tip)"/>
+          <text x="335.5" y="299.3" text-anchor="middle" style="fill:#a6d9ff">II<tspan x="335.5" dy="19" class="minor">+60°</tspan></text>
+          <path d="M230 174L288.0 73.5" stroke="#7496a9" stroke-width="1.7" stroke-dasharray="4 5"/>
+          <path d="M230 174L172.0 274.5" stroke="#d6baff" stroke-width="3.1" marker-end="url(#axis-tip)"/>
+          <text x="133.5" y="299.3" text-anchor="middle" style="fill:#d6baff">III<tspan x="133.5" dy="19" class="minor">+120°</tspan></text>
+          <path d="M230 174L330.5 232.0" stroke="#7496a9" stroke-width="1.7" stroke-dasharray="4 5"/>
+          <path d="M230 174L129.5 116.0" stroke="#ffc5b7" stroke-width="3.1" marker-end="url(#axis-tip)"/>
+          <text x="97.7" y="104.5" text-anchor="middle" style="fill:#ffc5b7">aVR<tspan x="97.7" dy="19" class="minor">−150°</tspan></text>
+          <path d="M230 174L129.5 232.0" stroke="#7496a9" stroke-width="1.7" stroke-dasharray="4 5"/>
+          <path d="M230 174L330.5 116.0" stroke="#f9dda2" stroke-width="3.1" marker-end="url(#axis-tip)"/>
+          <text x="367.3" y="104.5" text-anchor="middle" style="fill:#f9dda2">aVL<tspan x="367.3" dy="19" class="minor">−30°</tspan></text>
+          <path d="M230 174L230.0 58.0" stroke="#7496a9" stroke-width="1.7" stroke-dasharray="4 5"/>
+          <path d="M230 174L230.0 290.0" stroke="#a7ead1" stroke-width="3.1" marker-end="url(#axis-tip)"/>
+          <text x="230.0" y="312.0" text-anchor="middle" style="fill:#a7ead1">aVF<tspan x="230.0" dy="19" class="minor">+90°</tspan></text>
+          <circle cx="230" cy="174" r="4" fill="#f5fbff"/>
+        </svg>
+        <figcaption>As setas apontam para os polos positivos. O segmento tracejado de cada eixo se estende na direção do polo negativo.</figcaption>
+      </figure>
+      <figure class="figure-panel">
+        <h3>Triângulo de Einthoven</h3>
+        <svg class="drawing" viewBox="0 0 460 350" role="img" aria-label="Triângulo com I de RA a LA, II de RA a LL e III de LA a LL" xmlns="http://www.w3.org/2000/svg">
+
+          <defs>
+            <marker id="triangle-tip" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+              <path d="M0 0L10 5 0 10 2 5Z" fill="context-stroke"/>
+            </marker>
+          </defs>
+          <text x="20" y="31" class="minor">Direita do paciente</text>
+          <text x="440" y="31" class="minor" text-anchor="end">Esquerda do paciente</text>
+          <path d="M111 97H349L230 303Z" fill="#152e3e" stroke="#456477" stroke-width="2"/>
+          <path d="M139 97H321" fill="none" stroke="#91efd9" stroke-width="3.1" marker-end="url(#triangle-tip)"/>
+          <path d="M127 121L216 279" fill="none" stroke="#a6d9ff" stroke-width="3.1" marker-end="url(#triangle-tip)"/>
+          <path d="M333 121L244 279" fill="none" stroke="#d6baff" stroke-width="3.1" marker-end="url(#triangle-tip)"/>
+          <text x="230" y="79" text-anchor="middle" style="fill:#91efd9">I · 0°</text>
+          <text x="124" y="211" text-anchor="end" style="fill:#a6d9ff">II · +60°</text>
+          <text x="330" y="211" style="fill:#d6baff">III · +120°</text>
+          <g class="point">
+            <circle cx="111" cy="97" r="22"/><circle cx="349" cy="97" r="22"/><circle cx="230" cy="303" r="22"/>
+          </g>
+          <g class="point-label">
+            <text x="111" y="97">RA</text><text x="349" y="97">LA</text><text x="230" y="303">LL</text>
+          </g>
+        </svg>
+        <figcaption>I, II e III comparam os potenciais de dois eletrodos por vez. As setas vão do polo negativo ao positivo.</figcaption>
+      </figure>
+    </div>
+    <table>
+      <thead><tr><th scope="col">Derivação</th><th scope="col">Ângulo</th><th scope="col">Polo positivo − referência</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">I</th><td class="angle">0°</td><td>LA − RA</td></tr>
+        <tr><th scope="row">II</th><td class="angle">+60°</td><td>LL − RA</td></tr>
+        <tr><th scope="row">III</th><td class="angle">+120°</td><td>LL − LA</td></tr>
+        <tr><th scope="row">aVR</th><td class="angle">−150°</td><td class="formula">RA − (LA + LL) / 2</td></tr>
+        <tr><th scope="row">aVL</th><td class="angle">−30°</td><td class="formula">LA − (RA + LL) / 2</td></tr>
+        <tr><th scope="row">aVF</th><td class="angle">+90°</td><td class="formula">LL − (RA + LA) / 2</td></tr>
+      </tbody>
+    </table>
+    <aside class="callout"><h3>V1 a V6 · plano horizontal</h3><p>Cada derivação precordial compara o potencial do eletrodo no tórax com o terminal central de Wilson, obtido pela média dos potenciais de RA, LA e LL. Os ângulos do sistema hexaxial se aplicam às seis derivações do plano frontal. <a href="#eletrodos">Consulte os pontos precordiais no mapa 2</a>.</p></aside>
+  </section>
+
+  <footer class="references">
+    <h2>Referências técnicas</h2>
+    <ul>
+      <li><a href="https://www.scielo.br/j/abc/a/6v97HMjszjSvFvhGbV3x7vJ/?format=html">SBC · Diretriz Brasileira de Ergometria em População Adulta (2024)</a></li>
+      <li><a href="https://doi.org/10.1161/CIRCULATIONAHA.106.180200">AHA/ACCF/HRS · Padronização do ECG de 12 derivações</a></li>
+      <li><a href="https://www.bmj.com/sites/default/files/response_attachments/2016/09/CAC_SCST_Recording_a_12-lead_ECG_final_version_2014_CS2v2.0.pdf">SCST · Técnica de registro do ECG de 12 derivações</a></li>
+    </ul>
+    <p>Fisiologia Interativa · Prof. Mário César Nascimento</p>
+  </footer>
+</main>
+<script>
+  if (new URLSearchParams(location.search).get('curso') === 'fi') {
+    document.getElementById('voltar').href = 'fisioterapia/#u-optativo';
+  }
+</script>
+</body>
+</html>

@@ -339,22 +339,16 @@ function renderPills(){
 /* mapa mental ampliado */
 const dlg=document.getElementById('mapdlg'); let mapIdx=0;
 let mapUnit=null;
-const ecgPrefix = course === 'fi' ? '../' : '';
-const ecgMaps = [
-  {src:ecgPrefix+'assets/maps/ecg-mapa-mental.png?v=20261119b', t:'ECG — mapa mental'},
-  {src:ecgPrefix+'assets/maps/ecg-posicionamento.png?v=20261119b', t:'Posicionamento dos eletrodos precordiais'},
-  {src:ecgPrefix+'assets/maps/ecg-membros-derivacoes.png?v=20261119b', t:'Membros e derivações frontais'}
-];
 function openMap(i,k){
   k=k||mapUnit||sel;
-  const unit=k==='optativo' ? {num:'',nome:'Conteúdo Optativo',mapas:ecgMaps} : UNITS[k];
+  const unit=UNITS[k];
   if(!unit || !unit.mapas || !unit.mapas.length) throw new Error('Mapa indisponível');
   const L=unit.mapas; mapUnit=k; mapIdx=(i+L.length)%L.length;
   document.getElementById('md-img').src=L[mapIdx].src;
   document.getElementById('md-img').alt='Mapa mental: '+L[mapIdx].t;
   document.getElementById('md-t').textContent=L[mapIdx].t;
   document.getElementById('md-u').textContent=(unit.num?unit.num+' · ':'')+unit.nome+(L.length>1?' · mapa '+(mapIdx+1)+' de '+L.length:'');
-  document.getElementById('md-nav').hidden=L.length<2; dlg.style.setProperty('--c',k==='optativo'?'#91C9F5':COL[k]);
+  document.getElementById('md-nav').hidden=L.length<2; dlg.style.setProperty('--c',COL[k]);
   if(!dlg.open) dlg.showModal();
 }
 document.getElementById('md-x').onclick=()=>dlg.close();

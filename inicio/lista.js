@@ -39,19 +39,24 @@
   function card(u, s, k) {
     const deep = !!s.deep;
     const leitura = s.leitura ? `<a href="${esc(s.leitura)}" target="_blank" rel="noopener">Leitura complementar ↗</a>` : '';
-    const mapa = s.mapa ? [
-      ['ecg-mapa-mental.png','Mapa 1 · ECG'],
-      ['ecg-posicionamento.png','Mapa 2 · Eletrodos'],
-      ['ecg-membros-derivacoes.png','Mapa 3 · Derivações']
-    ].map(([file,label],i) => `<a href="${esc(s.mapa.replace('ecg-mapa-mental.png',file))}?v=20261119b" target="_blank" rel="noopener" data-map="optativo" data-i="${i}" aria-label="Abrir ${esc(label)}">${mapIcon}${esc(label)}</a>`).join('') : '';
+    const mapas = s.mapas ? s.mapas.map(([id, label]) =>
+      `<a href="${esc(s.guia)}#${id}">${mapIcon}${esc(label)}</a>`
+    ).join('') : '';
     return `<article class="card rv${deep ? ' deep' : ''}" style="--c:${cor(u.id)};--i:${(k % 3) + 1}">
       ${deep ? `<span class="badge">${esc(s.deep)}</span>` : `<span class="cat">${esc(s.cat || u.curto)}</span>`}
       <h4>${esc(s.t)}</h4><p>${esc(s.obj)}</p>
-      <div class="go"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}${mapa}</div>
+      <div class="go"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}${mapas}</div>
     </article>`;
   }
   const optativo = {id:'optativo', curto:'Conteúdo optativo', nome:'Conteúdo Optativo', desc:'Explore conteúdos complementares de fisiologia.'};
-  const ecg = {mapa:D.curso === 'fi' ? '../assets/maps/ecg-mapa-mental.png' : 'assets/maps/ecg-mapa-mental.png', t:'ECG', cat:'Conteúdo optativo', obj:'Explore as derivações, o eixo elétrico e exemplos esquemáticos de traçados de eletrocardiografia.', href:D.curso === 'fi' ? '../eletrocardiografia.html?v=graus-20261119' : 'eletrocardiografia.html?v=graus-20261119'};
+  const prefixo = D.curso === 'fi' ? '../' : '';
+  const ecg = {
+    t:'ECG', cat:'Conteúdo optativo',
+    obj:'Explore as derivações, o eixo elétrico e exemplos esquemáticos de traçados de eletrocardiografia.',
+    href:prefixo + 'eletrocardiografia.html?v=graus-20261119',
+    guia:prefixo + 'mapas-ecg.html' + (D.curso === 'fi' ? '?curso=fi' : ''),
+    mapas:[['visao-geral','Mapa 1 · Visão geral'], ['eletrodos','Mapa 2 · Eletrodos'], ['derivacoes','Mapa 3 · Derivações e graus']]
+  };
   function render() {
     const q = norm(search.value.trim());
     let total = 0;
