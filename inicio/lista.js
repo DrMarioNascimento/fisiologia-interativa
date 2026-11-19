@@ -6,7 +6,7 @@
   const esc = s => String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   const colorVar = {celular:'--u1', muscular:'--u2', osteoarticular:'--u3', cardiovascular:'--u4', respiratorio:'--u5', integracao:'--u6', endocrino:'--u7'};
-  const cores = { linfatico: '#75D8AD', urinario: '#F2A989', digestorio: '#EFC66E', reprodutor: '#D9A6E9', snp: '#8FD3ED', snc: '#C0B7F2', tegumentar: '#E8B7A2', termorregulacao: '#F4A16E' };
+  const cores = { linfatico: '#75D8AD', urinario: '#F2A989', digestorio: '#EFC66E', reprodutor: '#D9A6E9', snp: '#8FD3ED', snc: '#C0B7F2', tegumentar: '#E8B7A2', termorregulacao: '#F4A16E', optativo: '#91C9F5' };
   const cor = id => cores[id] || 'var(' + colorVar[id] + ')';
   const mapIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5 9 3l6 2.5 6-2.5v14L15 20l-6-2.5-6 2.5z"/><path d="M9 3v14.5M15 5.5V20"/></svg>';
   const lockIcon = '<img src="assets/icons/locks/closed-blue.png" alt="" aria-hidden="true" style="display:inline-block;width:2em;height:2em;max-width:none;object-fit:contain;vertical-align:middle;flex-shrink:0">';
@@ -22,7 +22,7 @@
 
   /* filtros */
   const filters = document.getElementById('filters');
-  const fdata = [{id:'todos', t:'Todas'}].concat(D.unidades.map(u => ({id:u.id, t:u.curto})));
+  const fdata = [{id:'todos', t:'Todas'}].concat(D.unidades.map(u => ({id:u.id, t:u.curto})), [{id:'optativo', t:'Optativo'}]);
   let filtro = 'todos';
   fdata.forEach(f => {
     const b = document.createElement('button');
@@ -45,9 +45,12 @@
       <div class="go"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}</div>
     </article>`;
   }
+  const optativo = {id:'optativo', curto:'Conteúdo optativo', nome:'Conteúdo Optativo', desc:'Explore conteúdos complementares de fisiologia em desenvolvimento.'};
+  const ecg = {t:'ECG - Em Construção', cat:'Conteúdo optativo · Em construção', obj:'Explore as derivações, o eixo elétrico e exemplos esquemáticos de traçados de eletrocardiografia.', href:D.curso === 'fi' ? '../eletrocardiografia.html' : 'eletrocardiografia.html'};
   function render() {
     const q = norm(search.value.trim());
     let total = 0;
+    const showOptional = (filtro === 'todos' || filtro === 'optativo') && (!q || norm([ecg.t, ecg.obj, ecg.cat, optativo.nome, 'eletrocardiograma'].join(' ')).includes(q));
     list.innerHTML = D.unidades.filter(u => filtro === 'todos' || filtro === u.id).map(u => {
       const sims = u.sims.filter(s => !q || norm([s.t, s.obj, s.cat, u.nome].join(' ')).includes(q));
       const pratica = u.pratica && (!q || norm([u.nome, u.desc].join(' ')).includes(q));
@@ -66,7 +69,11 @@
           <div class="go"><a href="${esc(u.pratica)}">Praticar no Tutor →</a></div>
         </article>` : ''}</div>
       </section>`;
-    }).join('');
+    }).join('') + (showOptional ? `<section class="unit" id="u-optativo" style="--c:${cor('optativo')}" aria-labelledby="h-optativo">
+        <div class="unit-side rv"><h3 id="h-optativo">${esc(optativo.nome)}</h3><p>${esc(optativo.desc)}</p></div>
+        <div class="cards">${card(optativo, ecg, 0)}</div>
+      </section>` : '');
+    if (showOptional) total += 1;
     document.getElementById('empty').hidden = total > 0;
   }
   list.addEventListener('click', e => {
