@@ -39,14 +39,15 @@
   function card(u, s, k) {
     const deep = !!s.deep;
     const leitura = s.leitura ? `<a href="${esc(s.leitura)}" target="_blank" rel="noopener">Leitura complementar ↗</a>` : '';
+    const mapa = s.mapa ? `<a href="${esc(s.mapa)}" target="_blank" rel="noopener" data-map="optativo" data-i="0" aria-label="Abrir mapas de ECG e posicionamento dos eletrodos">${mapIcon}Mapa mental</a>` : '';
     return `<article class="card rv${deep ? ' deep' : ''}" style="--c:${cor(u.id)};--i:${(k % 3) + 1}">
       ${deep ? `<span class="badge">${esc(s.deep)}</span>` : `<span class="cat">${esc(s.cat || u.curto)}</span>`}
       <h4>${esc(s.t)}</h4><p>${esc(s.obj)}</p>
-      <div class="go"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}</div>
+      <div class="go"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}${mapa}</div>
     </article>`;
   }
   const optativo = {id:'optativo', curto:'Conteúdo optativo', nome:'Conteúdo Optativo', desc:'Explore conteúdos complementares de fisiologia.'};
-  const ecg = {t:'ECG', cat:'Conteúdo optativo', obj:'Explore as derivações, o eixo elétrico e exemplos esquemáticos de traçados de eletrocardiografia.', href:D.curso === 'fi' ? '../eletrocardiografia.html?v=graus-20261119' : 'eletrocardiografia.html?v=graus-20261119'};
+  const ecg = {mapa:D.curso === 'fi' ? '../assets/maps/ecg-mapa-mental.png' : 'assets/maps/ecg-mapa-mental.png', t:'ECG', cat:'Conteúdo optativo', obj:'Explore as derivações, o eixo elétrico e exemplos esquemáticos de traçados de eletrocardiografia.', href:D.curso === 'fi' ? '../eletrocardiografia.html?v=graus-20261119' : 'eletrocardiografia.html?v=graus-20261119'};
   function render() {
     const q = norm(search.value.trim());
     let total = 0;

@@ -339,13 +339,24 @@ function renderPills(){
 /* mapa mental ampliado */
 const dlg=document.getElementById('mapdlg'); let mapIdx=0;
 let mapUnit=null;
-function openMap(i,k){k=k||mapUnit||sel;mapUnit=k;const L=UNITS[k].mapas; mapIdx=(i+L.length)%L.length;
+const ecgPrefix = course === 'fi' ? '../' : '';
+const ecgMaps = [
+  {src:ecgPrefix+'assets/maps/ecg-mapa-mental.png', t:'ECG — mapa mental'},
+  {src:ecgPrefix+'assets/maps/ecg-posicionamento.png', t:'Posicionamento dos eletrodos precordiais'},
+  {src:ecgPrefix+'assets/maps/ecg-membros-derivacoes.png', t:'Membros e derivações frontais'}
+];
+function openMap(i,k){
+  k=k||mapUnit||sel;
+  const unit=k==='optativo' ? {num:'',nome:'Conteúdo Optativo',mapas:ecgMaps} : UNITS[k];
+  if(!unit || !unit.mapas || !unit.mapas.length) throw new Error('Mapa indisponível');
+  const L=unit.mapas; mapUnit=k; mapIdx=(i+L.length)%L.length;
   document.getElementById('md-img').src=L[mapIdx].src;
   document.getElementById('md-img').alt='Mapa mental: '+L[mapIdx].t;
   document.getElementById('md-t').textContent=L[mapIdx].t;
-  document.getElementById('md-u').textContent=(UNITS[k].num?UNITS[k].num+' · ':'')+UNITS[k].nome+(L.length>1?' · mapa '+(mapIdx+1)+' de '+L.length:'');
-  document.getElementById('md-nav').hidden=L.length<2; dlg.style.setProperty('--c',COL[k]);
-  if(!dlg.open) dlg.showModal();}
+  document.getElementById('md-u').textContent=(unit.num?unit.num+' · ':'')+unit.nome+(L.length>1?' · mapa '+(mapIdx+1)+' de '+L.length:'');
+  document.getElementById('md-nav').hidden=L.length<2; dlg.style.setProperty('--c',k==='optativo'?'#91C9F5':COL[k]);
+  if(!dlg.open) dlg.showModal();
+}
 document.getElementById('md-x').onclick=()=>dlg.close();
 document.getElementById('md-p').onclick=()=>openMap(mapIdx-1);
 document.getElementById('md-n').onclick=()=>openMap(mapIdx+1);
