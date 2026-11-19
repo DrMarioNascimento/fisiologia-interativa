@@ -40,12 +40,12 @@
     const deep = !!s.deep;
     const leitura = s.leitura ? `<a href="${esc(s.leitura)}" target="_blank" rel="noopener">Leitura complementar ↗</a>` : '';
     const apostila = s.apostila
-      ? `<a href="${esc(s.apostila)}" target="_blank" rel="noopener">${mapIcon}Abrir apostila de ECG (PDF) ↗</a>`
+      ? `<a class="ecg-apostila" href="${esc(s.apostila)}" target="_blank" rel="noopener"><img src="${esc(s.tracado)}" width="192" height="64" alt=""><span>Abrir apostila de ECG (PDF) ↗</span></a>`
       : '';
     return `<article class="card rv${deep ? ' deep' : ''}" style="--c:${cor(u.id)};--i:${(k % 3) + 1}">
       ${deep ? `<span class="badge">${esc(s.deep)}</span>` : `<span class="cat">${esc(s.cat || u.curto)}</span>`}
       <h4>${esc(s.t)}</h4><p>${esc(s.obj)}</p>
-      <div class="go"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}${apostila}</div>
+      <div class="go${s.apostila ? ' ecg-acoes' : ''}"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}${apostila}</div>
     </article>`;
   }
   const optativo = {id:'optativo', curto:'Conteúdo optativo', nome:'Conteúdo Optativo', desc:'Explore conteúdos complementares de fisiologia.'};
@@ -54,6 +54,7 @@
     t:'ECG', cat:'Conteúdo optativo',
     obj:'Aprenda a posicionar os eletrodos e a interpretar o traçado. Compare o porquê de cada padrão na apostila e no simulador.',
     href:prefixo + 'eletrocardiografia.html?v=graus-20261119',
+    tracado:prefixo + 'assets/icons/ecg-tracado.webp',
     apostila:prefixo + 'assets/leituras/ECG_Da_Pele_ao_Tracado_Guia_Visual.pdf?v=eixo-20261119'
   };
   function render() {

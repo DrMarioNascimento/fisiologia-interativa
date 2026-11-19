@@ -209,6 +209,11 @@ section+section::before{content:"";position:absolute;top:0;left:0;right:0;height
 .card .go{margin-top:auto;padding-top:8px;font:600 12px var(--f-body);color:var(--c);position:relative;z-index:1;display:flex;gap:14px;flex-wrap:wrap}
 .card .go a{color:var(--c);text-decoration:none}
 .card .go a:hover{text-decoration:underline;text-underline-offset:3px}
+.card .ecg-acoes{flex-direction:column;align-items:flex-start;gap:0;padding-top:2px;font-size:.875rem}
+.ecg-acoes a{display:flex;align-items:center;min-height:44px;max-width:100%}
+.ecg-acoes .ecg-apostila{position:relative;align-items:flex-end;padding:4px 0 .64rem 3.5rem}
+.ecg-apostila img{position:absolute;left:0;bottom:.5rem;width:3.25rem;height:auto;transform:translateY(30%)}
+.ecg-apostila::after{content:"";position:absolute;bottom:.5rem;left:3.06rem;right:0;border-bottom:1px solid currentColor;opacity:.65;pointer-events:none}
 .card.deep{border-color:color-mix(in srgb,var(--c) 45%,transparent)}
 .card .badge{align-self:flex-start;font:600 9.5px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:#03201b;background:var(--c);border-radius:999px;padding:3px 8px}
 .empty{color:var(--ink3);text-align:center;padding:30px}
