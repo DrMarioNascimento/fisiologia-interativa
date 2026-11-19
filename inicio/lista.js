@@ -46,7 +46,7 @@
     </article>`;
   }
   const optativo = {id:'optativo', curto:'Conteúdo optativo', nome:'Conteúdo Optativo', desc:'Explore conteúdos complementares de fisiologia.'};
-  const ecg = {t:'ECG', cat:'Conteúdo optativo', obj:'Explore as derivações, o eixo elétrico e exemplos esquemáticos de traçados de eletrocardiografia.', href:D.curso === 'fi' ? '../eletrocardiografia.html?v=vetores-20261119' : 'eletrocardiografia.html?v=vetores-20261119'};
+  const ecg = {t:'ECG', cat:'Conteúdo optativo', obj:'Explore as derivações, o eixo elétrico e exemplos esquemáticos de traçados de eletrocardiografia.', href:D.curso === 'fi' ? '../eletrocardiografia.html?v=graus-20261119' : 'eletrocardiografia.html?v=graus-20261119'};
   function render() {
     const q = norm(search.value.trim());
     let total = 0;
