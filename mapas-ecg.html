@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#09151e">
-<title>Mapas de eletrocardiografia · Fisiologia Interativa</title>
+<title>ECG · Da pele ao traçado | Fisiologia Interativa</title>
 <style>
   :root{color-scheme:dark;--ink:#f2f7fa;--muted:#b6c9d5;--bg:#09151e;--panel:#112632;--line:#355265;--mint:#88f1d9;--blue:#a7d8ff;--peach:#ffd09b;--eye:#bdf8ee;font:16px/1.55 system-ui,sans-serif}
   *{box-sizing:border-box}
@@ -30,6 +30,21 @@
   .map{margin-block:0 2.5rem;padding:clamp(.85rem,3.2vw,2.1rem);border:1px solid var(--line);border-radius:1.35rem;background:linear-gradient(153deg,#183642,#0c1d29 60%);box-shadow:inset 0 1px #ffffff22,0 8px #061018,0 20px 45px #03090e66}
   .map > h2{margin-bottom:.8rem}
   .map:target{border-color:#7bc5ba}
+  .guide-cover{margin-top:1.3rem;border-radius:1.25rem;overflow:hidden;border:1px solid var(--line);box-shadow:0 8px #061018,0 20px 45px #03090e66}
+  .guide-cover img{width:100%;height:clamp(13rem,45vw,31rem);display:block;object-fit:cover;object-position:50% 47%}
+  .guide-intro{margin-top:1.6rem}
+  .guide-intro p{max-width:68ch;margin:.7rem 0}
+  .button.primary{background:linear-gradient(#9ef7e4,#73cdbd);border-color:#b9f7ea;color:#0b2b32}
+  .guide-intro .primary{margin:.35rem 0 .65rem}
+  .guide-list{padding-inline-start:1.45rem;margin:.8rem 0 1.4rem}
+  .guide-list li+li{margin-top:.8rem}
+  .guide-list h3{color:var(--mint);margin-bottom:.25rem}
+  .states-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;margin-top:1rem;align-items:start}
+  .states-grid details{border:1px solid var(--line);border-radius:.75rem;background:#122a38;box-shadow:0 3px #07131b}
+  .states-grid summary{cursor:pointer;min-height:48px;padding:.65rem .85rem;font-weight:740}
+  .states-grid details[open] summary{color:var(--mint)}
+  .states-grid details p{padding:0 .85rem .65rem}
+  @media(max-width:650px){.states-grid{grid-template-columns:minmax(0,1fr)}}
   .tree{--branch:#537f8e;display:grid;gap:1.55rem;margin-top:1.2rem}
   .root,.node,.figure-panel,.callout{border:1px solid var(--line);border-radius:1rem;background:linear-gradient(152deg,#1b3240,#10232f);box-shadow:inset 0 1px #ffffff1f,0 5px #07131b}
   .root{position:relative;width:min(100%,29rem);padding:1rem 1.2rem;justify-self:center;text-align:center;border-color:#669a9d;background:radial-gradient(ellipse at 50% 0,#2b555d,#142c39);box-shadow:inset 0 1px #ffffff2e,0 5px #08131a,0 0 35px #67decb24}
@@ -91,7 +106,7 @@
   @media print{
     :root{color-scheme:light;--ink:#111;--muted:#25343d;--mint:#074b49;--blue:#123f66;--line:#a1b3bc;--peach:#603913}
     body,.map,.node,.root,.figure-panel,.sites > div,.sites dt,.callout,thead th{background:#fff;color:var(--ink);box-shadow:none}
-    .site-nav,.tabs{display:none}
+    .site-nav,.tabs,.guide-cover,.guide-intro .button{display:none}
     .hero{padding:0 0 1rem}
     .map + .map{break-before:page}
     .figure-panel,.callout,tr{break-inside:avoid}
@@ -108,12 +123,23 @@
 <main class="wrap">
   <header class="hero">
     <span class="brand">Fisiologia Interativa</span>
-    <h1>Mapas de eletrocardiografia</h1>
-    <p>Da atividade elétrica ao traçado. Consulte os pontos de colocação dos eletrodos e o sistema de referência das 12 derivações.</p>
+    <h1>ECG · Da pele ao traçado</h1>
+    <p>Guia visual de aquisição e leitura para profissionais da saúde.</p>
+    <figure class="guide-cover">
+      <img src="assets/leituras/ecg-capa.webp" width="1050" height="650" alt="Ilustração conceitual de um coração humano sobre fundo azul-petróleo">
+    </figure>
+    <div class="guide-intro">
+      <h2>Como dez eletrodos produzem doze derivações?</h2>
+      <p>Quando o coração se ativa, diferenças de potencial podem ser registradas na superfície do corpo. Cada derivação compara esses potenciais de um modo próprio. Por isso, o mesmo batimento pode parecer positivo, negativo ou quase isoelétrico, dependendo da direção em que é observado.</p>
+      <p>Comece pela origem do sinal, siga para a colocação dos eletrodos e compare os padrões no simulador. Para consulta rápida, vá direto ao mapa que você precisa.</p>
+      <a class="button primary" href="assets/leituras/ECG_Da_Pele_ao_Tracado_Guia_Visual.pdf">Abrir apostila em PDF</a>
+    </div>
     <nav class="tabs" aria-label="Mapas">
       <a class="button" href="#visao-geral">Visão geral</a>
       <a class="button" href="#eletrodos">Posição dos eletrodos</a>
       <a class="button" href="#derivacoes">Derivações e graus</a>
+      <a class="button" href="#aquisicao">Aquisição e leitura</a>
+      <a class="button" href="#estados">Estados rápidos</a>
     </nav>
   </header>
 
@@ -337,13 +363,150 @@
     <aside class="callout"><h3>V1 a V6 · plano horizontal</h3><p>Cada derivação precordial compara o potencial do eletrodo no tórax com o terminal central de Wilson, obtido pela média dos potenciais de RA, LA e LL. Os ângulos do sistema hexaxial se aplicam às seis derivações do plano frontal. <a href="#eletrodos">Consulte os pontos precordiais no mapa 2</a>.</p></aside>
   </section>
 
+  <section class="map" id="aquisicao" aria-labelledby="aquisicao-t">
+    <h2 id="aquisicao-t">Da aquisição à leitura</h2>
+    <p>Revise a montagem antes de interpretar o traçado. As etapas a seguir se aplicam ao ECG convencional de repouso.</p>
+    <ol class="guide-list">
+<li><h3>Identifique e explique</h3><p>Confirme a identidade, explique o exame, preserve a privacidade e registre os sintomas e o horário. Para o ECG convencional de repouso, acomode em decúbito dorsal quando possível e documente outra posição.</p></li>
+<li><h3>Prepare a pele</h3><p>Mantenha a pele limpa e seca. Remova pelos no ponto de contato, se necessário e conforme o protocolo. Verifique a aderência dos eletrodos e alivie a tração dos cabos.</p></li>
+<li><h3>Posicione os 10 eletrodos</h3><p>Confira as siglas e a lateralidade. Use os membros para RA, LA, RL e LL na montagem convencional e os marcos anatômicos para V1–V6. Posicione V4 antes de V3.</p></li>
+<li><h3>Configure e registre</h3><p>Confira velocidade, ganho e qualidade do sinal. No repouso, peça que a pessoa relaxe, evite falar e permaneça imóvel durante a aquisição. Reavalie o contato antes de usar filtros adicionais.</p></li>
+<li><h3>Revise antes de liberar</h3><p>Confirme as 12 derivações, a calibração, a estabilidade da linha de base e a coerência entre derivações. Identifique modificações na posição ou montagem e registre as circunstâncias da aquisição.</p></li>
+    </ol>
+    <h3>Roteiro de leitura</h3>
+    <ol class="guide-list">
+<li><h3>Qualidade e calibração</h3><p>Confirme identificação, data, velocidade, ganho, artefatos e montagem. A 25 mm/s, um quadrado de 1 mm equivale a 40 ms. A 50 mm/s, equivale a 20 ms. Com ganho de 10 mm/mV, 1 mm na vertical vale 0,1 mV.</p></li>
+<li><h3>Frequência e regularidade</h3><p>Em ritmo regular, use FC = 60 ÷ RR em segundos. A 25 mm/s, três quadrados grandes entre picos R correspondem a 0,60 s e 100 bpm. Em ritmo irregular, conte os QRS em um intervalo conhecido e extrapole por minuto.</p></li>
+<li><h3>Atividade atrial e relação AV</h3><p>Identifique ondas P ou atividade atrial alternativa. Compare os intervalos PP e RR. Meça o PR do início da P ao início do QRS e verifique se existe condução 1:1.</p></li>
+<li><h3>Eixo, largura e morfologia do QRS</h3><p>Examine a polaridade líquida em I e aVF para estimar o quadrante e use DII quando I for positivo e aVF negativo. Compare largura, progressão de R e morfologia nas precordiais e derivações dos membros.</p></li>
+<li><h3>Repolarização e comparação</h3><p>Localize o ponto J e avalie ST e T em derivações contíguas. Meça QT do início do QRS ao fim de T e anote o método de correção para a frequência quando aplicar QTc. Compare com ECG prévio e integre os achados ao contexto.</p></li>
+    </ol>
+    <h3>Do repouso ao exercício</h3>
+    <ol class="guide-list">
+<li><h3>Repouso e linha de base</h3><p>Registre o ECG basal, a posição do corpo e a configuração usada. Se o protocolo muda os eletrodos dos membros para o tronco, documente a montagem e obtenha o traçado de referência na configuração do teste.</p></li>
+<li><h3>Durante o esforço</h3><p>No teste supervisionado, acompanhe a frequência, o ritmo, o ST, os sintomas, a carga e a pressão arterial conforme o protocolo. Fixe cabos e eletrodos para reduzir artefatos de movimento.</p></li>
+<li><h3>Recuperação</h3><p>Continue o registro conforme o protocolo e observe a evolução da frequência, do ritmo, dos sintomas e de alterações de ST. Compare trechos com montagem e calibração compatíveis.</p></li>
+    </ol>
+  </section>
+
+  <section class="map" id="estados" aria-labelledby="estados-t">
+    <h2 id="estados-t">O que produz cada padrão?</h2>
+    <p>Abra um dos 16 estados rápidos e observe o detalhe indicado. A <a href="assets/leituras/ECG_Da_Pele_ao_Tracado_Guia_Visual.pdf">apostila</a> reúne os traçados ilustrativos correspondentes.</p>
+    <div class="states-grid">
+      <details id="estado-normal">
+        <summary>Ritmo de referência</summary>
+        <p>Ritmo sinusal regular, usado como comparação no simulador.</p>
+        <p><strong>Por que aparece assim.</strong> O nó sinusal inicia a ativação atrial. A onda P precede cada QRS, com PR estável. A condução habitual pelo sistema His–Purkinje coordena os ventrículos e produz QRS estreito.</p>
+        <p><strong>Onde olhar · DII.</strong> Observe uma P antes de cada QRS e a distância semelhante entre os picos R.</p>
+      </details>
+      <details id="estado-tachy">
+        <summary>Taquicardia sinusal</summary>
+        <p>Ritmo de origem sinusal com frequência acima de 100 bpm no adulto.</p>
+        <p><strong>Por que aparece assim.</strong> O nó sinusal dispara mais vezes por minuto. O trajeto da ativação permanece sinusal, por isso a relação entre P e QRS se conserva. O intervalo RR encurta.</p>
+        <p><strong>Onde olhar · DII.</strong> Compare a distância entre os picos R mantendo a velocidade do registro. O esforço é um dos contextos em que a frequência pode aumentar.</p>
+      </details>
+      <details id="estado-brady">
+        <summary>Bradicardia sinusal</summary>
+        <p>Ritmo de origem sinusal com frequência abaixo de 60 bpm no adulto.</p>
+        <p><strong>Por que aparece assim.</strong> O nó sinusal dispara com menor frequência. A ativação atrial e a condução aos ventrículos seguem a sequência habitual. O RR aumenta e a relação P–QRS permanece.</p>
+        <p><strong>Onde olhar · DII.</strong> Compare o espaçamento com o ritmo de referência. Sono, treinamento e medicamentos podem modificar a frequência.</p>
+      </details>
+      <details id="estado-pac">
+        <summary>Extrassístole supraventricular (atrial)</summary>
+        <p>Batimento precoce que começa em um foco atrial fora do nó sinusal.</p>
+        <p><strong>Por que aparece assim.</strong> A ativação atrial segue outra direção e pode mudar a forma da P, às vezes sobreposta à T anterior. Quando o impulso usa a via habitual até os ventrículos, o QRS tende a ser estreito. O ciclo sinusal pode ser reiniciado.</p>
+        <p><strong>Onde olhar · DII.</strong> Procure a P que chega cedo. Também existem extrassístoles atriais bloqueadas ou conduzidas com aberrância.</p>
+      </details>
+      <details id="estado-pvc">
+        <summary>Extrassístole ventricular</summary>
+        <p>Batimento precoce que começa no ventrículo.</p>
+        <p><strong>Por que aparece assim.</strong> Parte da ativação se propaga pelo miocárdio em outra sequência, produzindo um QRS geralmente largo e sem P condutora correspondente. A repolarização também pode mudar. A pausa compensatória é frequente.</p>
+        <p><strong>Onde olhar · V1.</strong> Compare a largura e a forma do batimento precoce com os complexos vizinhos. A pausa varia entre casos.</p>
+      </details>
+      <details id="estado-af">
+        <summary>Fibrilação atrial</summary>
+        <p>Ativação atrial desorganizada com resposta ventricular em geral irregular.</p>
+        <p><strong>Por que aparece assim.</strong> Os átrios perdem uma frente de ativação organizada e, por isso, faltam ondas P discretas. Os impulsos chegam ao nó AV em momentos variáveis e apenas parte deles é conduzida, criando RR irregularmente irregular.</p>
+        <p><strong>Onde olhar · DII.</strong> Observe vários intervalos RR. As oscilações da linha de base podem ser discretas.</p>
+      </details>
+      <details id="estado-flutter">
+        <summary>Flutter atrial</summary>
+        <p>Taquicardia atrial organizada, geralmente sustentada por macrorreentrada.</p>
+        <p><strong>Por que aparece assim.</strong> A ativação atrial percorre repetidamente um circuito e produz ondas F regulares. No flutter típico, o aspecto em serrilha costuma aparecer nas derivações inferiores. No exemplo 4:1, um em cada quatro ciclos atriais é conduzido aos ventrículos.</p>
+        <p><strong>Onde olhar · DII.</strong> Compare a regularidade das ondas F com a irregularidade ventricular do exemplo de fibrilação atrial.</p>
+      </details>
+      <details id="estado-av1">
+        <summary>Bloqueio atrioventricular de 1º grau</summary>
+        <p>Atraso da condução atrioventricular com PR acima de 200 ms no adulto.</p>
+        <p><strong>Por que aparece assim.</strong> A ativação ventricular começa mais tarde após cada onda P. Todos os impulsos atriais são conduzidos neste padrão, então há um QRS para cada P e o intervalo PR permanece prolongado.</p>
+        <p><strong>Onde olhar · DII.</strong> Meça do início da P ao início do QRS. A relação 1:1 diferencia este padrão de um bloqueio com ondas P não conduzidas.</p>
+      </details>
+      <details id="estado-rbbb">
+        <summary>Bloqueio de ramo direito (BRD)</summary>
+        <p>A ativação do ventrículo direito termina mais tarde.</p>
+        <p><strong>Por que aparece assim.</strong> O ventrículo esquerdo é ativado primeiro pela via preservada. As forças terminais dirigem-se para a direita e anteriormente, gerando R′ terminal em V1 e S terminal larga em I e V6. No BRD completo, o QRS dura pelo menos 120 ms.</p>
+        <p><strong>Onde olhar · V1.</strong> Compare a parte terminal do QRS em V1 com a de V6.</p>
+      </details>
+      <details id="estado-lbbb">
+        <summary>Bloqueio de ramo esquerdo (BRE)</summary>
+        <p>A ativação do ventrículo esquerdo ocorre por uma sequência alterada e mais lenta.</p>
+        <p><strong>Por que aparece assim.</strong> A ativação inicial parte do lado direito e se propaga para a esquerda. Isso alarga o QRS, favorece força negativa em V1 e R ampla, por vezes entalhada, nas derivações laterais. ST e T podem ser secundariamente discordantes.</p>
+        <p><strong>Onde olhar · V6.</strong> Compare V1 com I ou V6. A morfologia em conjunto é mais informativa que um entalhe isolado.</p>
+      </details>
+      <details id="estado-lafb">
+        <summary>Bloqueio divisional anterossuperior esquerdo (BDAS)</summary>
+        <p>A via fascicular anterossuperior esquerda conduz com atraso ou deixa de conduzir.</p>
+        <p><strong>Por que aparece assim.</strong> A ativação inicial segue pelo fascículo posteroinferior. As forças predominantes dirigem-se depois para cima e à esquerda, favorecendo qR em aVL e rS nas inferiores. Apenas um fascículo está envolvido, e o QRS pode continuar estreito.</p>
+        <p><strong>Onde olhar · aVL.</strong> Compare aVL com II, III e aVF. Desvio do eixo para a esquerda deve ser interpretado junto da morfologia.</p>
+      </details>
+      <details id="estado-lvh">
+        <summary>Sobrecarga ventricular esquerda (SVE)</summary>
+        <p>Padrão eletrocardiográfico que pode sugerir aumento de massa ventricular esquerda.</p>
+        <p><strong>Por que aparece assim.</strong> Forças de despolarização mais intensas em direção ao ventrículo esquerdo podem produzir R alta em V5/V6 e S profunda em V1. Alterações secundárias de ST–T podem coexistir.</p>
+        <p><strong>Onde olhar · V5.</strong> Compare V1 com V5/V6. Voltagem depende de fatores como biotipo e idade e, isoladamente, não demonstra hipertrofia anatômica.</p>
+      </details>
+      <details id="estado-nonspecific">
+        <summary>Alterações inespecíficas de ST e T</summary>
+        <p>Descrição de achados de repolarização, como T achatada ou invertida e pequeno desvio de ST.</p>
+        <p><strong>Por que aparece assim.</strong> A recuperação elétrica dos ventrículos e a relação entre suas regiões podem mudar por diferentes motivos. A projeção resultante altera o segmento ST e/ou a onda T sem fornecer, por si só, a causa.</p>
+        <p><strong>Onde olhar · V5.</strong> Confira colocação, ruído e ECG prévio. Considere o contexto clínico e a distribuição das alterações.</p>
+      </details>
+      <details id="estado-stdown">
+        <summary>Infradesnivelamento do segmento ST</summary>
+        <p>Segmento ST abaixo da linha de referência.</p>
+        <p><strong>Por que aparece assim.</strong> Diferenças de potencial entre regiões do miocárdio durante o período do ST deslocam a inscrição em relação à linha de base. Na isquemia, correntes de lesão podem produzir essa projeção. Sobrecarga, condução alterada e outros fatores também podem contribuir.</p>
+        <p><strong>Onde olhar · V5.</strong> Localize o ponto J e descreva amplitude, forma e derivações envolvidas. Compare com o traçado de repouso quando estiver avaliando esforço.</p>
+      </details>
+      <details id="estado-stup">
+        <summary>Supradesnivelamento do segmento ST</summary>
+        <p>Segmento ST acima da linha de referência.</p>
+        <p><strong>Por que aparece assim.</strong> Uma diferença de potencial entre regiões ventriculares pode deslocar o ST na direção positiva da derivação. Isquemia aguda é uma das causas. Repolarização precoce, pericardite e outros padrões podem produzir elevação por mecanismos distintos.</p>
+        <p><strong>Onde olhar · V3.</strong> Observe derivações contíguas, alterações recíprocas, evolução e sintomas. Em suspeita de síndrome coronariana aguda, siga o protocolo assistencial de urgência.</p>
+      </details>
+      <details id="estado-qwave">
+        <summary>Zona eletricamente inativa (onda Q patológica)</summary>
+        <p>Deflexão inicial negativa que, em determinados padrões, pode refletir perda de forças elétricas locais.</p>
+        <p><strong>Por que aparece assim.</strong> Se uma região contribui menos para as forças iniciais, como pode ocorrer após infarto, os vetores de áreas preservadas passam a predominar e podem se afastar do polo positivo. Isso produz uma Q inicial mais larga ou profunda nas derivações correspondentes.</p>
+        <p><strong>Onde olhar · DIII.</strong> Aplique critérios por derivação e em conjunto. Uma Q isolada em DIII pode ser variante.</p>
+      </details>
+    </div>
+    <aside class="callout">
+      <h3>Compare no simulador</h3>
+      <p>Mantenha o ritmo de referência e troque DII por aVR. O que mudou na polaridade do QRS? Em seguida, mantenha DII e mude só a frequência. O que aconteceu com o intervalo RR?</p>
+      <p><a href="eletrocardiografia.html?v=graus-20261119">Abrir simulador de ECG</a></p>
+    </aside>
+  </section>
+
   <footer class="references">
     <h2>Referências técnicas</h2>
     <ul>
-      <li><a href="https://www.scielo.br/j/abc/a/6v97HMjszjSvFvhGbV3x7vJ/?format=html">SBC · Diretriz Brasileira de Ergometria em População Adulta (2024)</a></li>
-      <li><a href="https://doi.org/10.1161/CIRCULATIONAHA.106.180200">AHA/ACCF/HRS · Padronização do ECG de 12 derivações</a></li>
-      <li><a href="https://www.bmj.com/sites/default/files/response_attachments/2016/09/CAC_SCST_Recording_a_12-lead_ECG_final_version_2014_CS2v2.0.pdf">SCST · Técnica de registro do ECG de 12 derivações</a></li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9563889/">Sociedade Brasileira de Cardiologia. Diretriz sobre a Análise e Emissão de Laudos Eletrocardiográficos (2022).</a></li>
+      <li><a href="https://doi.org/10.1161/CIRCULATIONAHA.106.180200">Kligfield P et al. AHA/ACCF/HRS Recommendations for Standardization and Interpretation of the ECG, Part I (2007).</a></li>
+      <li><a href="https://www.bmj.com/sites/default/files/response_attachments/2016/09/CAC_SCST_Recording_a_12-lead_ECG_final_version_2014_CS2v2.0.pdf">Society for Cardiological Science and Technology. Recording a standard 12-lead electrocardiogram (2014).</a></li>
+      <li><a href="https://doi.org/10.36660/abc.20240110">Sociedade Brasileira de Cardiologia. Diretriz Brasileira de Ergometria em População Adulta (2024).</a></li>
+      <li><a href="https://doi.org/10.1161/CIR.0000000000001309">Rao SV et al. ACC/AHA Guideline for the Management of Patients With Acute Coronary Syndromes (2025).</a></li>
     </ul>
+    <p>Material de formação e consulta. A aplicação clínica exige traçado real calibrado, avaliação profissional e protocolo do serviço.</p>
     <p>Fisiologia Interativa · Prof. Mário César Nascimento</p>
   </footer>
 </main>
