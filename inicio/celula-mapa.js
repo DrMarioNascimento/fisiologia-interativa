@@ -341,9 +341,9 @@ const dlg=document.getElementById('mapdlg'); let mapIdx=0;
 let mapUnit=null;
 const ecgPrefix = course === 'fi' ? '../' : '';
 const ecgMaps = [
-  {src:ecgPrefix+'assets/maps/ecg-mapa-mental.png', t:'ECG — mapa mental'},
-  {src:ecgPrefix+'assets/maps/ecg-posicionamento.png', t:'Posicionamento dos eletrodos precordiais'},
-  {src:ecgPrefix+'assets/maps/ecg-membros-derivacoes.png', t:'Membros e derivações frontais'}
+  {src:ecgPrefix+'assets/maps/ecg-mapa-mental.png?v=20261119b', t:'ECG — mapa mental'},
+  {src:ecgPrefix+'assets/maps/ecg-posicionamento.png?v=20261119b', t:'Posicionamento dos eletrodos precordiais'},
+  {src:ecgPrefix+'assets/maps/ecg-membros-derivacoes.png?v=20261119b', t:'Membros e derivações frontais'}
 ];
 function openMap(i,k){
   k=k||mapUnit||sel;

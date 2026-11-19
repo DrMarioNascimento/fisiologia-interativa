@@ -39,7 +39,11 @@
   function card(u, s, k) {
     const deep = !!s.deep;
     const leitura = s.leitura ? `<a href="${esc(s.leitura)}" target="_blank" rel="noopener">Leitura complementar ↗</a>` : '';
-    const mapa = s.mapa ? `<a href="${esc(s.mapa)}" target="_blank" rel="noopener" data-map="optativo" data-i="0" aria-label="Abrir mapas de ECG e posicionamento dos eletrodos">${mapIcon}Mapa mental</a>` : '';
+    const mapa = s.mapa ? [
+      ['ecg-mapa-mental.png','Mapa 1 · ECG'],
+      ['ecg-posicionamento.png','Mapa 2 · Eletrodos'],
+      ['ecg-membros-derivacoes.png','Mapa 3 · Derivações']
+    ].map(([file,label],i) => `<a href="${esc(s.mapa.replace('ecg-mapa-mental.png',file))}?v=20261119b" target="_blank" rel="noopener" data-map="optativo" data-i="${i}" aria-label="Abrir ${esc(label)}">${mapIcon}${esc(label)}</a>`).join('') : '';
     return `<article class="card rv${deep ? ' deep' : ''}" style="--c:${cor(u.id)};--i:${(k % 3) + 1}">
       ${deep ? `<span class="badge">${esc(s.deep)}</span>` : `<span class="cat">${esc(s.cat || u.curto)}</span>`}
       <h4>${esc(s.t)}</h4><p>${esc(s.obj)}</p>
