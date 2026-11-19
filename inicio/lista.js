@@ -39,26 +39,22 @@
   function card(u, s, k) {
     const deep = !!s.deep;
     const leitura = s.leitura ? `<a href="${esc(s.leitura)}" target="_blank" rel="noopener">Leitura complementar ↗</a>` : '';
-    const aprofundamento = s.guia
-      ? `<a href="${esc(s.guia)}">${mapIcon}Aprofundamento · Da pele ao traçado</a>`
+    const apostila = s.apostila
+      ? `<a href="${esc(s.apostila)}" target="_blank" rel="noopener">${mapIcon}Abrir apostila de ECG (PDF) ↗</a>`
       : '';
-    const mapas = s.mapas ? s.mapas.map(([id, label]) =>
-      `<a href="${esc(s.guia)}#${id}">${mapIcon}${esc(label)}</a>`
-    ).join('') : '';
     return `<article class="card rv${deep ? ' deep' : ''}" style="--c:${cor(u.id)};--i:${(k % 3) + 1}">
       ${deep ? `<span class="badge">${esc(s.deep)}</span>` : `<span class="cat">${esc(s.cat || u.curto)}</span>`}
       <h4>${esc(s.t)}</h4><p>${esc(s.obj)}</p>
-      <div class="go"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}${aprofundamento}${mapas}</div>
+      <div class="go"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}${apostila}</div>
     </article>`;
   }
   const optativo = {id:'optativo', curto:'Conteúdo optativo', nome:'Conteúdo Optativo', desc:'Explore conteúdos complementares de fisiologia.'};
   const prefixo = D.curso === 'fi' ? '../' : '';
   const ecg = {
     t:'ECG', cat:'Conteúdo optativo',
-    obj:'Estude a aquisição do ECG, consulte os mapas de eletrodos e derivações e compare os padrões no simulador.',
+    obj:'Aprenda a posicionar os eletrodos e a interpretar o traçado. Compare o porquê de cada padrão na apostila e no simulador.',
     href:prefixo + 'eletrocardiografia.html?v=graus-20261119',
-    guia:prefixo + 'mapas-ecg.html' + (D.curso === 'fi' ? '?curso=fi' : ''),
-    mapas:[['eletrodos','Posição dos eletrodos'], ['derivacoes','Derivações e graus']]
+    apostila:prefixo + 'assets/leituras/ECG_Da_Pele_ao_Tracado_Guia_Visual.pdf?v=setas-20261119'
   };
   function render() {
     const q = norm(search.value.trim());
