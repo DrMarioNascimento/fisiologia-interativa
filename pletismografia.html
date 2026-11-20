@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f8fd"><title>Pletismografia em tempo real | Fisiologia interativa</title><link rel="icon" href="brand/orientador.webp"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{font-family:Inter,Segoe UI,system-ui,sans-serif;color:#17324d;background:#f4f8fd;color-scheme:light;font-size:16px;scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;color:#17324d;background:linear-gradient(180deg,#f8fbff 0%,#eef4fb 100%)}
+header{max-width:1500px;margin:auto;padding:23px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d7e1ec}
+.brand small,.brand strong{display:block}.brand small,.kicker,.eyebrow,.small-label{font-size:.72rem;letter-spacing:.14em;font-weight:800;color:#236ebf}.brand strong{font-size:1.06rem;margin-top:3px;color:#17324d}
+.head-note{font-size:.68rem;letter-spacing:.17em;color:#647b91;font-weight:700}
+main{max-width:1500px;margin:auto;padding:0 5% 70px}
+.intro{display:grid;grid-template-columns:1fr 285px;gap:40px;align-items:end;padding:46px 0 34px}
+.intro h1{font-size:clamp(2.6rem,5.4vw,4.8rem);line-height:1.03;letter-spacing:-.05em;margin:14px 0 18px;color:#17324d}.intro h1 em{font-style:normal;color:#287fdb}
+.intro p{color:#526d83;line-height:1.65;max-width:660px;margin:0}
+.intro-side{border-left:1px solid #bdcfdf;padding-left:22px}.intro-side span{color:#236ebf;font-size:.7rem;font-weight:800;letter-spacing:.16em}.intro-side p{margin:10px 0 18px;font-size:.92rem}.intro-side a{color:#17599b;font-weight:800;text-decoration:none;border-bottom:2px solid #2f80ed;padding-bottom:4px}
+.notice{background:#e9f3ff;border:1px solid #bad5f0;color:#36536d;padding:13px 18px;border-radius:12px;font-size:.86rem;margin-bottom:20px}
+.error-notice{background:#fde8e1;border:1px solid #f0a58b;color:#6b2a14;padding:14px 18px;border-radius:12px;line-height:1.5;margin-bottom:20px}.error-notice[hidden]{display:none}
+.workspace{display:grid;grid-template-columns:minmax(300px,.62fr) minmax(0,1.38fr);gap:18px;align-items:start}
+.panel{color:#17324d;background:linear-gradient(160deg,#fff 0%,#f6faff 100%);border:1px solid #d7e1ec;border-radius:20px;padding:22px;box-shadow:0 10px 24px rgba(18,42,66,.10),inset 0 1px 0 #fff}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.panel h2,.section-title h2{font-size:1.32rem;letter-spacing:-.025em;color:#17324d;margin:8px 0 0}
+.badge{background:#e2efff;color:#2264aa;font-size:.72rem;font-weight:700;padding:8px 11px;border-radius:30px;white-space:nowrap}
+.muted,.section-title p{color:#5c7086;line-height:1.5;font-size:.9rem}
+button{font:inherit;color:#fff;background:linear-gradient(145deg,#587894,#36536d);border:1px solid #69869f;border-radius:11px;padding:10px 16px;font-weight:750;box-shadow:0 4px 0 #263e53,inset 0 1px 0 #ffffff38,0 7px 14px #20395018;cursor:pointer;min-height:44px}
+button:hover{filter:brightness(1.06)}button:active{transform:translateY(3px);box-shadow:0 1px 0 #263e53}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none;filter:none}
+button:focus-visible,input:focus-visible,summary:focus-visible,select:focus-visible{outline:3px solid #f6a623;outline-offset:3px}
+.primary{background:linear-gradient(145deg,#57a7ff,#2f80ed);border-color:#81bfff;box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff70}
+.danger{background:linear-gradient(145deg,#ee6767,#d54646);border-color:#f28e8e;box-shadow:0 4px 0 #a62e35,inset 0 1px 0 #ffffff55}
+.green{background:linear-gradient(145deg,#2ecc84,#17a960);border-color:#6edaa4;box-shadow:0 4px 0 #087641,inset 0 1px 0 #ffffff55}
+.seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{padding:8px 14px;font-size:.88rem}
+.seg button.on{background:linear-gradient(145deg,#57a7ff,#2f80ed);border-color:#90c5ff;box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff65}
+.range-label{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:700;font-size:.9rem;margin-top:16px}.range-label output{color:#1c70c8;font-size:1rem}
+input[type=range]{width:100%;accent-color:#2f80ed;cursor:pointer;margin:10px 0 2px}
+.range-ends{display:flex;justify-content:space-between;color:#647b91;font-size:.74rem}
+.hint{font-size:.8rem;color:#647b91;line-height:1.45;margin:6px 0 0}
+.quick-states{margin-top:16px;border:1px solid #cbddec;border-radius:15px;background:linear-gradient(160deg,#f8fbff,#edf5fd);box-shadow:inset 0 1px #fff,0 4px 12px #244c7010}
+.quick-states summary{padding:13px 15px;cursor:pointer;color:#17324d;display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:800;list-style:none}
+.quick-states summary::after{content:'▾';color:#2f80ed;font-size:1.1rem}.quick-states[open] summary::after{content:'▴'}.quick-states summary strong{margin-left:auto;color:#2868a8;font-size:.8rem;text-align:right}
+.profile-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 12px 14px}
+.profile-buttons button{text-align:left;font-size:.8rem;line-height:1.25;padding:9px 11px}
+.profile-buttons button.on{background:linear-gradient(145deg,#57a7ff,#2f80ed);border-color:#90c5ff;box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff65}
+.profile-info{margin-top:10px;padding:10px 13px;border-left:4px solid #2f80ed;border-radius:0 10px 10px 0;background:#eaf3fc;color:#36536d;line-height:1.45;font-size:.83rem}
+.fieldset{margin-top:18px;padding-top:6px;border-top:1px dashed #cbddec}
+/* teste */
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 10px}
+.stage{background:#eef4fb;border:2px solid transparent;border-radius:12px;padding:8px 10px;font-size:.78rem;font-weight:700;color:#5c7086;line-height:1.25;box-shadow:inset 0 2px 4px #214d7512}
+.stage b{display:block;font-size:.68rem;letter-spacing:.12em;color:#236ebf;margin-bottom:2px}
+.stage.on{background:#fff;border-color:#2f80ed;color:#17324d;box-shadow:0 0 0 2px #cde5ff,0 4px 0 #1c5fb1}
+.stage.done{background:#e6f6ee;color:#1f6b4a}.stage.done b{color:#1f8a5c}
+.coach{border-left:3px solid #2f80ed;background:#eaf3fc;color:#36536d;padding:11px 14px;border-radius:0 10px 10px 0;line-height:1.5;font-size:.88rem;min-height:3.6em}
+.transport{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0 0}
+.transport .grow{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.check{font-size:.85rem;color:#435e74;display:flex;align-items:center;gap:6px}.check input{accent-color:#2f80ed;width:18px;height:18px;margin:0}
+canvas.cv{display:block;width:100%;background:#fff;border:1px solid #d7e1ec;border-radius:12px}
+.strip{height:126px}.vt{height:250px}.fv{height:300px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.chart-title{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:12px 0 6px}.chart-title b{font-size:.86rem;color:#17324d}.chart-title span{font-size:.72rem;color:#647b91}
+.capture{margin-top:14px;border:1px solid #cbddec;border-radius:14px;overflow:hidden;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:.86rem;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid #e3ecf5}th:first-child,td:first-child{text-align:left}
+th{background:#eef4fb;color:#36536d;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+td.pending{color:#9bb0c3}td.low{color:#b3261e;font-weight:800}td.ok{color:#1f6b4a;font-weight:700}
+.qline{padding:10px 12px;font-size:.82rem;color:#435e74;background:#f6faff;border-top:1px solid #e3ecf5;line-height:1.5}
+.qline b.ok{color:#1f6b4a}.qline b.no{color:#b3261e}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.74rem;color:#526d83;margin-top:8px}.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px}
+
+/* estabilidade: nada sobe/desce ao trocar texto ou valores */
+.metric strong{white-space:nowrap}.s-fase strong{white-space:normal;font-size:19px;line-height:1.15}
+.badge{display:inline-block;min-width:11.5em;text-align:center}
+#btnStart{min-width:200px}#btnBD{min-width:16.5em}
+.coach,.qline,.hint,.profile-info,.metric em,.s-fase strong{box-sizing:border-box}
+/* resultados */
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:46px 0 16px}.section-title p{margin-bottom:0}
+.trials{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:14px}
+.trial{background:#fff;border:1px solid #d7e1ec;border-left:5px solid #9bb7d4;border-radius:12px;padding:10px 12px;font-size:.82rem;line-height:1.45;box-shadow:0 3px 0 #b9cddd}
+.trial.ok{border-left-color:#17a960}.trial.no{border-left-color:#d54646}.trial b{font-size:.9rem}
+.verdict{margin-top:14px;padding:14px 16px;border-radius:14px;background:#eaf3fc;border:1px solid #bad5f0;color:#2c4a63;line-height:1.55;font-size:.92rem}
+.verdict h3{margin:0 0 6px;font-size:1.05rem;color:#17324d}.verdict.alert{background:#fff2e5;border-color:#f3c18b}
+.learn{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px}.learn p,.learn li{font-size:.9rem;line-height:1.6;color:#526d83}.learn ul{padding-left:18px;margin:8px 0 0}
+.references{color:#526d83;margin-top:20px;padding:20px;border:1px solid #cad9e7;border-radius:14px;font-size:.86rem;line-height:1.6;background:#ffffffaa}.references summary{cursor:pointer;font-weight:700;color:#17324d}.references a{color:#1768b6}
+footer{max-width:1500px;margin:auto;padding:20px 5% 40px;color:#627b90;font-size:14px;line-height:1.6;font-weight:600;text-align:center}
+@media(max-width:1100px){.charts{grid-template-columns:1fr}}
+@media(max-width:900px){.workspace,.learn{grid-template-columns:1fr}.stages{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.test-panel>.panel-head{flex-wrap:wrap}.section-title{flex-wrap:wrap;align-items:flex-start}#focus{margin-left:auto}header{padding:18px 5%}.head-note,.intro-side{display:none}.intro{display:block}.panel{padding:16px}.profile-buttons{grid-template-columns:1fr}.transport .grow{margin-left:0}.fv{height:270px}.vt{height:220px}}
+
+/* === Padrão visual dos simuladores: uma cor por variável, cards, bolas 3D === */
+:root{--c-tgv:#1F78B4;--c-rv:#E31A1C;--c-tlc:#6A3D9A;--c-erv:#FF7F00;--c-ic:#33A02C;--c-vc:#8D6E63;--c-raw:#E7298A;--c-dv:#3F51B5;--c-flow:#FFB300;--c-time:#00ACC1;--c-pm:#607D8B;--c-age:#009688;--c-height:#BA68C8;--c-obs:#B15928;--c-trap:#FF8A65;--c-res:#AFB42B;--c-obe:#00C27A;--c-pant:#E040FB}
+.c-tgv{color:var(--c-tgv)}.c-rv{color:var(--c-rv)}.c-tlc{color:var(--c-tlc)}.c-erv{color:var(--c-erv)}.c-ic{color:var(--c-ic)}.c-vc{color:var(--c-vc)}.c-raw{color:var(--c-raw)}.c-dv{color:var(--c-dv)}.c-flow{color:var(--c-flow)}.c-time{color:var(--c-time)}.c-pm{color:var(--c-pm)}.c-obs{color:var(--c-obs)}.c-trap{color:var(--c-trap)}.c-res{color:var(--c-res)}.c-obe{color:var(--c-obe)}.c-pant{color:var(--c-pant)}
+.c-tgv,.c-rv,.c-tlc,.c-erv,.c-ic,.c-vc,.c-raw,.c-dv,.c-pm,.c-flow{font-weight:800}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:7px;vertical-align:middle;box-shadow:inset 0 -2px 2px rgba(0,0,0,.28),inset 0 1px 1px rgba(255,255,255,.75),0 2px 3px rgba(0,0,0,.28)}
+.slider-card{--vc:#2f80ed;margin-top:12px;border:1px solid #d7e1ec;border-left:5px solid var(--vc);border-radius:16px;padding:12px 14px 10px;background:linear-gradient(145deg,#fff,#f4f8fd);box-shadow:0 6px 14px rgba(18,42,66,.08),inset 0 1px 0 #fff}
+.slider-card .range-label{margin-top:0}
+.slider-card .range-label output{color:var(--vc);background:#fff;border:1px solid #d7e1ec;border-radius:8px;padding:3px 9px;font-weight:800;font-size:.9rem;box-shadow:inset 0 2px 3px rgba(18,42,66,.10)}
+.slider-card .range-label label{display:flex;align-items:center}
+input[type=range]{--vc:#2f80ed;--p:50%;appearance:none;-webkit-appearance:none;height:11px;border-radius:9px;border:1px solid #b9cddd;background:linear-gradient(90deg,var(--vc) var(--p),#e3ecf5 var(--p));box-shadow:inset 0 3px 5px rgba(18,42,66,.22),0 1px 0 #fff;cursor:pointer;margin:12px 0 6px}
+.slider-card input[type=range]{--vc:inherit}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border:2px solid #fff;border-radius:50%;background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.95),rgba(255,255,255,0) 40%),radial-gradient(circle at 50% 60%,var(--vc) 55%,rgba(0,0,0,.42) 130%);box-shadow:inset 0 -3px 4px rgba(0,0,0,.25),0 4px 0 rgba(18,42,66,.35),0 8px 10px rgba(18,42,66,.28)}
+input[type=range]::-moz-range-thumb{width:25px;height:25px;border:2px solid #fff;border-radius:50%;background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.95),rgba(255,255,255,0) 40%),radial-gradient(circle at 50% 60%,var(--vc) 55%,rgba(0,0,0,.42) 130%);box-shadow:0 4px 0 rgba(18,42,66,.35),0 8px 10px rgba(18,42,66,.28)}
+input[type=range]::-moz-range-track{background:transparent}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.metric{--metric-color:rgba(31,120,180,.24);--metric-strong:#17324d;position:relative;overflow:hidden;isolation:isolate;border:1px solid #d7e1ec;border-left:5px solid var(--metric-strong);border-radius:16px;padding:12px;background:linear-gradient(145deg,#fff,#f4f8fd);box-shadow:0 8px 18px rgba(18,42,66,.09),inset 0 1px 0 #fff;transition:box-shadow .2s}
+.metric>*{position:relative;z-index:1}
+.metric::after{content:"";position:absolute;right:-54px;bottom:-54px;width:128px;height:128px;border-radius:50%;background:radial-gradient(circle at center,var(--metric-color) 0%,rgba(255,255,255,0) 68%);box-shadow:0 0 0 1.25px var(--metric-color),0 0 11px 2px var(--metric-color);opacity:.55;pointer-events:none;z-index:0}
+.metric small{display:block;color:#5c7086;font-weight:900;text-transform:uppercase;letter-spacing:.65px;font-size:11px;margin-bottom:7px}
+.metric strong{display:block;font-size:26px;line-height:1.05;color:var(--metric-strong);font-variant-numeric:tabular-nums}
+.metric strong i{font-style:normal;font-size:12px;font-weight:800;color:#5c7086;margin-left:5px}
+.metric em{display:block;color:#5c7086;font-weight:800;font-style:normal;font-size:11.5px;margin-top:6px;line-height:1.3}
+.metric.flag{box-shadow:0 0 0 2px rgba(179,38,30,.38),0 8px 18px rgba(18,42,66,.09)}.metric.flag em b{color:#b3261e}
+.metric.s-fase strong{font-size:16px;line-height:1.25;margin-top:2px}
+.metric-grid.sens{grid-template-columns:repeat(4,minmax(0,1fr));margin:14px 0}
+.relationship{display:grid;gap:10px;margin-top:12px}
+.formula-card{border:1px solid #d7e1ec;border-radius:16px;background:#fbfdff;padding:12px 14px;box-shadow:0 1px 5px rgba(18,42,66,.05)}
+.formula-card h3{margin:0 0 7px;font-size:12.5px;color:#5c7086;font-weight:900;text-transform:uppercase;letter-spacing:.55px}
+.formula-card code{font-size:17px;font-weight:900;color:#17324d;display:block;white-space:normal;font-family:inherit}
+.formula-card .live{display:block;margin-top:7px;color:#435e74;font-size:.84rem;line-height:1.45}
+.note{padding:14px 16px;line-height:1.6;color:#17324d;background:#fbfdff;border:1px solid #d7e1ec;border-radius:16px;font-size:.9rem;box-shadow:inset 0 1px 0 #fff}
+.age-info{margin:6px 0 0}
+.profile-groups{max-height:400px;overflow:auto;padding:0 12px 14px}
+.pg h4{margin:14px 0 7px;font-size:.72rem;letter-spacing:.14em;color:#236ebf;font-weight:800}
+.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pgrid button{text-align:left;font-size:.8rem;line-height:1.25;padding:9px 11px}
+.pgrid button.on{background:linear-gradient(145deg,#57a7ff,#2f80ed);border-color:#90c5ff;box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff65}
+.qcard{border:1px solid #d7e1ec;border-radius:14px;margin-top:2px}
+#results{grid-template-columns:repeat(5,minmax(0,1fr))}#results .metric strong{font-size:22px}#ageSeg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}#ageSeg button{padding:8px 1px;font-size:.72rem;white-space:nowrap;letter-spacing:-.01em}
+@media(max-width:1250px){#results{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){#results{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.metric-grid.sens{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.pgrid{grid-template-columns:1fr}.metric strong{font-size:23px}}
+/* === Padrão mobile: cabeçalho sticky + abas (mesmo padrão dos demais simuladores) === */
+.mobile-topbar{display:none}.mobile-tabnav{display:none}
+@media (max-width:760px){
+  .intro,body>header{display:none}
+  .mobile-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:50;padding:12px 14px;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);border-bottom:1px solid #d7e1ec;box-shadow:0 6px 16px rgba(18,42,66,.10)}
+  .mobile-topbar h2{margin:0;font-size:16px;line-height:1.2;color:#17324d}
+  .mobile-playtoggle{border:none;border-radius:12px;padding:10px 16px;font-size:14px;font-weight:800;color:#fff;background:linear-gradient(135deg,#2f80ed,#57a7ff);box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff70;min-height:44px;min-width:44px;cursor:pointer}
+  .mobile-tabnav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;position:sticky;top:64px;z-index:49;padding:8px 10px;background:#eef4fb;border-bottom:1px solid #d7e1ec}
+  .mobile-tabnav button{border:none;border-radius:10px;padding:10px 6px;font-size:13px;font-weight:700;color:#36536d;background:#fff;box-shadow:0 3px 0 #b9cddd;min-height:44px;cursor:pointer}
+  .mobile-tabnav button.active{color:#fff;background:linear-gradient(135deg,#2f80ed,#57a7ff);box-shadow:0 3px 0 #1c5fb1}
+  [data-tab]{display:none!important}
+  [data-tab].tab-active{display:block!important}
+  .workspace{margin-top:12px}
+  main>.notice[data-tab].tab-active{margin-top:12px}
+  .focus-mode>.mobile-topbar,.focus-mode>.mobile-tabnav{display:none!important}
+  .focus-mode .workspace>[data-tab]{display:block!important}
+}
+.focus-mode .fi-ef-brand-row{display:none!important}
+/* Tela cheia (telão) */
+.focus-mode{position:fixed;inset:0;overflow:auto;overscroll-behavior:contain;background:#f4f8fd;z-index:9999;min-height:100vh}
+.focus-mode>header,.focus-mode>footer{display:none}
+.focus-mode main>:not(.workspace){display:none!important}
+.focus-mode main{max-width:none;margin:0;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+.focus-mode .workspace{grid-template-columns:minmax(250px,.5fr) minmax(0,1.5fr);gap:12px}
+.focus-mode .panel{padding:14px}
+.focus-mode .hide-focus{display:none!important}
+.focus-mode .vt{height:clamp(170px,28vh,320px)}.focus-mode .fv{height:clamp(200px,36vh,420px)}.focus-mode .strip{height:clamp(70px,11vh,110px)}
+.focus-mode .metric-grid{margin:10px 0}.focus-mode .stages{margin:8px 0}
+@media(max-width:900px){.focus-mode .workspace{grid-template-columns:1fr}}
+
+/* pletismografia */
+.metric-grid.sens{grid-template-columns:repeat(5,minmax(0,1fr))}
+@media(max-width:1100px){.metric-grid.sens{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){.metric-grid.sens{grid-template-columns:repeat(2,minmax(0,1fr))}}
+#results{grid-template-columns:repeat(6,minmax(0,1fr))}#results .metric strong{font-size:21px}
+@media(max-width:1250px){#results{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){#results{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.bars{height:260px}.fv{height:300px}.focus-mode .bars{height:clamp(150px,24vh,260px)}
+.dot{display:inline-block}
+.strip{height:190px}.slider-card .range-ends{margin-top:10px}
+</style><link rel="stylesheet" href="mobile-smartphone.css?v=20260815"><script defer src="ef-simuladores.js?v=20261020-curvas4"></script></head>
+<body><div class="mobile-topbar"><h2>Pletismografia em tempo real</h2><button class="mobile-playtoggle" id="mobilePlayToggle" type="button">▶ Medir</button></div><div class="mobile-tabnav" role="tablist" aria-label="Seções do simulador"><button type="button" data-tabnav="teste" class="active">Cabine</button><button type="button" data-tabnav="paciente">Paciente</button><button type="button" data-tabnav="resultados">Resultados</button></div>
+<header><div class="brand"><small>FISIOLOGIA INTERATIVA</small><strong>Pletismografia em tempo real</strong></div><div class="head-note">UM LABORATÓRIO PARA APRENDER</div></header>
+<main><section class="intro"><div><span class="eyebrow">VOLUMES · BOYLE · RESISTÊNCIA</span><h1>Feche o shutter.<br><em>Ofegue.</em></h1><p>Acompanhe a medição na cabine pletismográfica: veja a lei de Boyle revelar o volume de gás que a espirometria não alcança, e descubra o que a CPT, o VR e a resistência das vias aéreas dizem sobre o pulmão.</p></div><div class="intro-side"><span>EXPERIMENTE</span><p>Escolha um paciente, ajuste a fisiopatologia e realize a medição.</p><a href="#laboratorio">Começar a medição</a></div></section>
+<div class="notice" data-tab="teste"><b>Modelo didático</b> · Sinais gerados por um modelo físico simplificado (lei de Boyle e resistência das vias aéreas), sem finalidade diagnóstica. Valores de referência para adultos brasileiros: Neder et al., 1999.</div><noscript><div class="error-notice" role="alert">O JavaScript está desativado neste navegador. Ative-o para realizar a medição.</div></noscript><div id="plError" class="error-notice" role="alert" hidden></div>
+<section id="laboratorio" class="workspace">
+<div class="panel patient-panel" data-tab="paciente"><div class="panel-head"><div><span class="kicker">PACIENTE SIMULADO</span><h2>Quem vai ofegar?</h2></div><span class="badge" id="phaseBadge">Adulto</span></div>
+<details id="profileGroup" class="quick-states"><summary><span>Estados rápidos</span><strong id="profileSummary">Homem adulto saudável</strong></summary><div id="profileButtons" class="profile-groups" role="group" aria-label="Estados rápidos"></div></details>
+<div id="profileInfo" class="profile-info" aria-live="polite"></div>
+<div class="fieldset"><div><span class="small-label">SEXO</span><div class="seg" id="sexSeg" role="group" aria-label="Sexo" style="margin-top:8px"><button type="button" data-sex="M" class="on" aria-pressed="true">Masculino</button><button type="button" data-sex="F" aria-pressed="false">Feminino</button></div></div>
+<div class="slider-card" style="--vc:var(--c-age)"><div class="range-label"><label for="age"><span class="dot" style="background:var(--c-age)"></span>Idade</label><output id="ageV">40 anos</output></div><input id="age" type="range" min="20" max="100" step="1" value="40" style="--vc:var(--c-age)"><div class="range-ends"><span>20</span><span>100</span></div></div>
+<div class="slider-card" style="--vc:var(--c-height)"><div class="range-label"><label for="height"><span class="dot" style="background:var(--c-height)"></span>Altura</label><output id="heightV">175 cm</output></div><input id="height" type="range" min="145" max="200" step="1" value="175" style="--vc:var(--c-height)"><div class="range-ends"><span>145 cm</span><span>200 cm</span></div><p id="rangeHint" class="hint hide-focus"></p></div></div>
+<div class="fieldset"><span class="small-label">FISIOPATOLOGIA</span>
+<div class="slider-card" style="--vc:var(--c-obs)"><div class="range-label"><label for="obs"><span class="dot" style="background:var(--c-obs)"></span>Obstrução das vias aéreas</label><output id="obsV">0%</output></div><input id="obs" type="range" min="0" max="100" step="5" value="0" style="--vc:var(--c-obs)"><div class="range-ends"><span>vias normais</span><span>obstrução máxima</span></div><p class="hint">Aumenta a resistência (Raw) e retarda o esvaziamento do pulmão (asma, DPOC).</p></div>
+<div class="slider-card" style="--vc:var(--c-trap)"><div class="range-label"><label for="trap"><span class="dot" style="background:var(--c-trap)"></span>Aprisionamento de ar</label><output id="trapV">0%</output></div><input id="trap" type="range" min="0" max="100" step="5" value="0" style="--vc:var(--c-trap)"><div class="range-ends"><span>nenhum</span><span>hiperinsuflação máxima</span></div><p class="hint">O ar fica preso: o VR e a CRF sobem, a CPT pode subir (enfisema).</p></div>
+<div class="slider-card" style="--vc:var(--c-res)"><div class="range-label"><label for="res"><span class="dot" style="background:var(--c-res)"></span>Restrição pulmonar</label><output id="resV">0%</output></div><input id="res" type="range" min="0" max="100" step="5" value="0" style="--vc:var(--c-res)"><div class="range-ends"><span>pulmão normal</span><span>restrição máxima</span></div><p class="hint">Pulmão ou parede torácica menos distensíveis: CPT, CRF e VR diminuem (fibrose, cifoescoliose).</p></div>
+<div class="slider-card" style="--vc:var(--c-obe)"><div class="range-label"><label for="obe"><span class="dot" style="background:var(--c-obe)"></span>Obesidade (carga sobre a parede)</label><output id="obeV">0%</output></div><input id="obe" type="range" min="0" max="100" step="5" value="0" style="--vc:var(--c-obe)"><div class="range-ends"><span>nenhuma</span><span>obesidade grave</span></div><p class="hint">Reduz a CRF e o VRE, com pouco efeito sobre o VR.</p></div></div>
+<div class="fieldset"><span class="small-label">TÉCNICA DO OFEGO</span>
+<div class="slider-card" style="--vc:var(--c-pant)"><div class="range-label"><label for="pant"><span class="dot" style="background:var(--c-pant)"></span>Frequência do ofego</label><output id="pantV">1,0 Hz</output></div><input id="pant" type="range" min="5" max="30" step="1" value="10" style="--vc:var(--c-pant)"><div class="range-ends"><span>0,5 Hz</span><span>3,0 Hz</span></div><p class="hint">Recomendado: cerca de 0,5 a 1 Hz. Ofegar rápido demais abre o laço.</p></div>
+<label class="check" style="margin-top:12px"><input type="checkbox" id="cheeks"> Bochechas sem apoio (erro de técnica)</label></div></div>
+<div class="panel test-panel" data-tab="teste"><div class="panel-head"><div><span class="kicker">CABINE PLETISMOGRÁFICA</span><h2>Realize a medição</h2></div><button id="focus" class="focus-button" type="button" aria-pressed="false">⛶ Tela cheia</button></div>
+<div class="stages" id="stages"><div class="stage" data-st="1"><b>1</b>Respiração tranquila</div><div class="stage" data-st="2"><b>2</b>Shutter fechado: ofego</div><div class="stage" data-st="3"><b>3</b>Expiração lenta até o VR</div><div class="stage" data-st="4"><b>4</b>Inspiração lenta até a CPT</div></div>
+<div id="coach" class="coach" aria-live="polite"></div>
+<div class="transport"><button id="btnStart" class="primary" type="button">▶ Realizar medição</button><button id="btnPause" type="button">Pausar</button><button id="btnAuto" type="button">Fazer 3 medições</button><div class="seg" id="speedSeg" role="group" aria-label="Velocidade da simulação"><button type="button" data-speed="1" aria-pressed="false">1×</button><button type="button" data-speed="2" class="on" aria-pressed="true">2×</button><button type="button" data-speed="4" aria-pressed="false">4×</button></div><div class="grow"><button id="btnReset" class="danger" type="button">Reiniciar exame</button></div></div>
+<div class="metric-grid sens" aria-label="Leituras da cabine"><div class="metric s-fase" style="--metric-strong:#17324d;--metric-color:rgba(23,50,77,.18)"><small>Fase</small><strong id="sPhase">Aguardando</strong></div><div class="metric" style="--metric-strong:#17324d;--metric-color:rgba(23,50,77,.18)"><small>Shutter</small><strong id="sShut">Aberto</strong></div><div class="metric" style="--metric-strong:var(--c-time);--metric-color:color-mix(in srgb,var(--c-time) 26%,transparent)"><small>Tempo</small><strong id="sTime">0,00<i>s</i></strong></div><div class="metric" style="--metric-strong:var(--c-flow);--metric-color:color-mix(in srgb,var(--c-flow) 30%,transparent)"><small>Fluxo</small><strong id="sFlow">0,00<i>L/s</i></strong></div><div class="metric" style="--metric-strong:var(--c-pm);--metric-color:color-mix(in srgb,var(--c-pm) 26%,transparent)"><small>Pressão na boca</small><strong id="sPm">0,0<i>cmH₂O</i></strong></div></div>
+<div class="chart-title"><b>Volume pulmonar durante a medição</b><span>variação em relação à CRF inicial (L) × tempo (s)</span></div><canvas id="cvStrip" class="cv strip" role="img" aria-label="Volume pulmonar durante a medição"></canvas>
+<div class="charts"><div><div class="chart-title"><b>Laço do shutter fechado</b><span>ΔV torácico (mL) × pressão na boca</span></div><canvas id="cvTgv" class="cv fv" role="img" aria-label="Laço ΔV torácico versus pressão na boca"></canvas></div><div><div class="chart-title"><b>Laço da resistência</b><span>ΔV torácico (mL) × fluxo (L/s)</span></div><canvas id="cvRaw" class="cv fv" role="img" aria-label="Laço ΔV torácico versus fluxo"></canvas></div></div>
+<div class="legend"><span><i style="border-color:#17324d;border-top-width:4px"></i>Respiração e ofego</span><span><i style="border-color:#1F78B4"></i>Inclinação (CRF)</span><span><i style="border-color:#E7298A"></i>Inclinação (Raw)</span></div>
+<div class="chart-title" style="margin-top:16px"><b>Volumes pulmonares</b><span>previsto × medido (L)</span></div><canvas id="cvBars" class="cv bars" role="img" aria-label="Volumes pulmonares previstos e medidos"></canvas>
+<div class="legend" id="barLegend"><span><span class="dot" style="background:var(--c-rv)"></span>VR</span><span><span class="dot" style="background:var(--c-erv)"></span>VRE</span><span><span class="dot" style="background:var(--c-ic)"></span>CI</span><span><span class="dot" style="background:var(--c-tlc)"></span>CPT (topo da coluna)</span></div>
+<div class="chart-title" style="margin-top:16px"><b>Valores capturados</b><span>medido × previsto para este paciente</span></div><div class="metric-grid" id="results"></div><div class="qline qcard" id="capQuality"></div></div>
+</section>
+<div data-tab="resultados"><section class="section-title"><div><span class="kicker">RESULTADOS DO EXAME</span><h2>Volumes, capacidades e resistência</h2><p>Como no exame real: pelo menos três medições aceitáveis da CRF, com diferença de até 5% em relação à média.</p></div><span class="badge" id="trialCount">0 medições</span></section>
+<div class="panel"><span class="kicker">MEDIÇÕES REALIZADAS</span><div id="trials" class="trials"></div><p id="repro" class="hint"></p>
+<div style="overflow-x:auto;margin-top:16px"><table id="summary"></table></div><div id="verdict"></div></div>
+<section class="panel" style="margin-top:18px"><span class="kicker">COMO AS MEDIDAS SE RELACIONAM</span><div class="relationship">
+<div class="formula-card"><h3>Lei de Boyle com o shutter fechado</h3><code><span class="c-tgv">CRF</span> = (Patm − 47) × <span class="c-dv">ΔV</span> ÷ <span class="c-pm">ΔP boca</span></code><small class="live" id="fBoyle"></small></div>
+<div class="formula-card"><h3>Resistência das vias aéreas</h3><code><span class="c-raw">Raw</span> = <span class="c-pm">ΔP alveolar</span> ÷ <span class="c-flow">fluxo</span></code><small class="live" id="fRaw"></small></div>
+<div class="formula-card"><h3>Capacidade pulmonar total</h3><code><span class="c-tlc">CPT</span> = <span class="c-tgv">CRF</span> + <span class="c-ic">CI</span></code><small class="live" id="fTlc"></small></div>
+<div class="formula-card"><h3>Volume residual</h3><code><span class="c-rv">VR</span> = <span class="c-tgv">CRF</span> − <span class="c-erv">VRE</span></code><small class="live" id="fRv"></small></div>
+<div class="formula-card"><h3>Aprisionamento de ar</h3><code><span class="c-rv">VR</span> ÷ <span class="c-tlc">CPT</span> × 100</code><small class="live" id="fRatio"></small></div></div></section>
+<section class="learn"><div class="panel"><span class="kicker">COMO INTERPRETAR</span><h2>O que a espirometria não mostra</h2><div class="note"><p><b>Por que fechar o shutter?</b> Sem fluxo, a pressão na boca é igual à pressão alveolar. Ao ofegar, o gás do tórax é comprimido e expandido, e a cabine registra esse <span class="c-dv">ΔV</span>. A inclinação do laço dá a <span class="c-tgv">CRF</span>.</p><p><span class="c-tlc">CPT</span> baixa indica restrição. <span class="c-tlc">CPT</span> alta indica hiperinsuflação. Uma CVF baixa na espirometria pode ser as duas coisas, por isso a espirometria sozinha não confirma restrição.</p><p><span class="c-rv">VR</span>/<span class="c-tlc">CPT</span> alta indica aprisionamento de ar: o pulmão não consegue esvaziar. Na fraqueza muscular o VR sobe com a CPT baixa.</p><p><span class="c-raw">Raw</span> alta mostra obstrução ao fluxo. Na obesidade a <span class="c-tgv">CRF</span> e o <span class="c-erv">VRE</span> caem, com <span class="c-tlc">CPT</span> normal ou pouco reduzida.</p></div></div></section></div>
+<details class="references"><summary>Saiba mais sobre o modelo e as referências</summary><p>A cabine é modelada pela lei de Boyle: com o shutter fechado, o produto pressão × volume do gás torácico é constante, de modo que ΔV = CRF × ΔP ÷ (Patm − 47 mmHg). A pressão de vapor de água a 37 °C é 47 mmHg (cerca de 969 cmH₂O para Patm − 47 ao nível do mar). Com o shutter aberto, a pressão alveolar é a resistência vezes o fluxo; a resistência tem componente dependente do fluxo e, na obstrução, é maior na expiração. A pressão alveolar é obtida do ΔV torácico dividido pela CRF, por isso um erro na CRF se transmite à Raw. A resistência específica (sRaw = Raw × CRF) não depende da CRF.</p><p>Valores de referência de adultos: Neder JA et al. Reference values for lung function tests. I. Static volumes. Braz J Med Biol Res 1999;32:703-717 (20 a 80 anos; alturas de 155 a 185 cm nos homens e 145 a 175 cm nas mulheres). Limites inferior e superior da normalidade aproximados por previsto ± 1,645 × erro padrão residual (o artigo sugere 1,96 × erro padrão, que ele próprio considera otimista). Para mulheres, o peso foi estimado com IMC de 24 kg/m² nas equações que o usam. Fora dessas faixas de idade e altura os previstos são extrapolados. O previsto de crianças não é simulado aqui. Os efeitos de cada doença sobre os volumes são representações didáticas, não equações de estudos clínicos. O limite superior da resistência (2,5 cmH₂O por L/s) é um valor usual de referência.</p><p>Critérios de qualidade: ofego com frequência de cerca de 0,5 a 1 Hz, laços fechados e pelo menos três medições de CRF com diferença de até 5% em relação à média (ATS/ERS 2005). A inclinação dos laços e a CRF são calculadas por regressão. A CPT é a CRF mais a capacidade inspiratória; o VR é a CRF menos o volume de reserva expiratório.</p></details>
+</main>
+<footer>Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</footer>
+<script>window.addEventListener('error',function(e){var b=document.getElementById('plError');if(b){b.hidden=false;b.textContent='O simulador encontrou um erro e pode parar de responder: '+(e.message||'erro desconhecido')+'. Informe esta mensagem para que possamos corrigir.';}});</script>
+<script>(() => {
+'use strict';
+const $=id=>document.getElementById(id);
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const DT=.01,PB=969.4,RAW_ULN=2.5;
+const fmt=(n,d=2)=>Number.isFinite(n)?n.toFixed(d).replace('.',','):'—';
+function rngOf(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)>>>0;let t=Math.imul(a^a>>>15,1|a);t^=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+/* ===== Referência: Neder et al. 1999 (adultos 20–80 anos) ===== */
+function adultPred(sex,age,h){
+  const hm=h/100,M=sex==='M';
+  const tlc=M?11.8*hm-13.23:-.0094*age+6.29*hm-4.48;
+  const frc=M?.0092*age+2.78*hm-1.83:.0091*age+1.30*hm+.21;
+  const rv=Math.max(.5,M?.0141*age+1.97*hm-2.08:.0091*age+2.59*hm-3.15);
+  const sd=M?{tlc:.66,frc:.34,rv:.37,ratio:5}:{tlc:.39,frc:.16,rv:.21,ratio:4};
+  const ratio=100*rv/tlc,z=1.645;
+  return {tlc,frc,rv,erv:frc-rv,ic:tlc-frc,vc:tlc-rv,ratio,
+    lln:{tlc:tlc-z*sd.tlc,frc:frc-z*sd.frc,rv:rv-z*sd.rv,ratio:ratio-z*sd.ratio},
+    uln:{tlc:tlc+z*sd.tlc,frc:frc+z*sd.frc,rv:rv+z*sd.rv,ratio:ratio+z*sd.ratio}};}
+/* ===== Paciente: efeitos didáticos sobre os volumes ===== */
+function truth(P,S){
+  const o=S.obs,a=S.trap,r=S.res,w=S.obe;
+  let tlc=P.tlc*(1-.45*r)*(1+.35*a)*(1+.05*o)*(1-.12*w);
+  let rv=P.rv*(1-.30*r)*(1+1.3*a)*(1+.4*o);
+  let frc=P.frc*(1-.5*r)*(1+.8*a)*(1+.2*o)*(1-.45*w);
+  rv=Math.max(.3,rv);frc=Math.max(frc,rv+.12);tlc=Math.max(tlc,frc+.4);
+  const raw0=S.sex==='M'?1.5:1.4,raw=raw0*(1+7*o)*Math.pow(P.frc/frc,.6);
+  return {tlc,rv,frc,erv:frc-rv,ic:tlc-frc,vc:tlc-rv,raw};}
+const rawEff=(T,Q,o)=>{const q=Math.abs(Q);return T.raw*(1+.12*q)*(Q<0?1+1.2*o:1);};
+const S={sex:'M',age:40,h:175,obs:0,trap:0,res:0,obe:0,pant:1.0,cheeks:false,profile:'m-normal',speed:2,running:false,cur:null,tCur:0,trials:[],auto:0,showPred:true,seed:12345};
+const P0=()=>adultPred(S.sex,S.age,S.h);
+/* ===== Simulação de uma medição ===== */
+function buildTrial(){
+  const P=P0(),T=truth(P,S),rnd=rngOf(S.seed++),o=S.obs;
+  const fb=.25,vt=clamp(.12*T.vc,.35,.8),pf=S.pant;
+  const T1=12,T2=Math.max(4,6/pf),T3=clamp(T.erv/.4,2.5,8)*(1+1.5*o),T4=clamp(T.vc/.7,3,10)*(1+o),H=.8;
+  const b1=T1,b2=b1+T2,b3=b2+T3,b4=b3+T4,total=b4+H,N=Math.ceil(total/DT)+1;
+  const V=new Float32Array(N),Q=new Float32Array(N),Pm=new Float32Array(N),dV=new Float32Array(N),shut=new Uint8Array(N);
+  const tau=.02*(1+3*o),phi=Math.atan(2*Math.PI*pf*tau),A=7+2*rnd(),cheekG=S.cheeks?.7:1,gain=1+.015*(2*rnd()-1);
+  const sm=x=>.5*(1-Math.cos(Math.PI*clamp(x,0,1)));
+  let vPrev=0;
+  for(let i=0;i<N;i++){const t=i*DT;let v,q=0,pm=0,d=0,sh=0;
+    if(t<b1){v=vt/2*(1-Math.cos(2*Math.PI*fb*t));q=vt/2*2*Math.PI*fb*Math.sin(2*Math.PI*fb*t);}
+    else if(t<b2){v=0;sh=1;const w=2*Math.PI*pf*(t-b1),palv=A*Math.sin(w);
+      pm=cheekG*A*Math.cos(phi)*Math.sin(w-phi);d=-1000*T.frc*palv/PB*gain;pm+=(rnd()-.5)*.25;d+=(rnd()-.5)*.1;}
+    else if(t<b3){v=-T.erv*sm((t-b2)/T3);}
+    else if(t<b4){v=-T.erv+T.vc*sm((t-b3)/T4);}
+    else v=T.ic;
+    if(t>=b2&&!(t<b2)){} 
+    if(!sh){if(t>=b2){q=(v-vPrev)/DT;}}
+    V[i]=v;vPrev=v;Q[i]=q;
+    if(!sh){d=1000*T.frc*rawEff(T,q,o)*q/PB*gain;d+=(rnd()-.5)*.05;pm=(rnd()-.5)*.1;}
+    Pm[i]=pm;dV[i]=d;shut[i]=sh;}
+  /* regressões */
+  let sxy=0,sxx=0;for(let i=Math.floor(b1/DT);i<Math.floor(b2/DT);i++){sxy+=Pm[i]*dV[i];sxx+=Pm[i]*Pm[i];}
+  const slopeT=sxy/sxx,tgv=-slopeT*PB/1000;
+  sxy=0;sxx=0;for(let i=0;i<Math.floor(b1/DT);i++){sxy+=Q[i]*dV[i];sxx+=Q[i]*Q[i];}
+  const slopeR=sxy/sxx,raw=slopeR/1000*PB/tgv;
+  const erv=T.erv*(1+.01*(2*rnd()-1)),ic=T.ic*(1+.01*(2*rnd()-1)),frc=tgv,rv=frc-erv,tlc=frc+ic,vc=erv+ic;
+  const phiDeg=phi*180/Math.PI,loopOk=phiDeg<=15,pantOk=pf<=1.5;
+  const m={frc,erv,ic,rv,tlc,vc,ratio:100*rv/tlc,raw,sraw:raw*frc,slopeT,slopeR};
+  return {T,V,Q,Pm,dV,shut,N,b1,b2,b3,b4,total,m,phiDeg,loopOk,pantOk,cheeks:S.cheeks,pf,accept:loopOk&&pantOk};}
+/* ===== Desenho ===== */
+const C={cur:'#17324d',pred:'#B0BEC5',grid:'#e3ecf5',axis:'#8aa1b5',text:'#526d83'};
+const VC=()=>{const g=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();return{tgv:g('--c-tgv'),rv:g('--c-rv'),tlc:g('--c-tlc'),erv:g('--c-erv'),ic:g('--c-ic'),vc:g('--c-vc'),raw:g('--c-raw'),dv:g('--c-dv'),flow:g('--c-flow'),pm:g('--c-pm')};};
+let V={};
+function setup(cv){const r=cv.getBoundingClientRect(),w=Math.max(60,r.width),h=Math.max(60,r.height),dpr=Math.min(window.devicePixelRatio||1,1.5);
+  if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
+  const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,w,h);g._clip=null;return {g,w,h};}
+const NICE=[1,1.5,2,3,4,5,7.5,10];
+function niceMax(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v))),f=v/p;for(const n of NICE)if(f<=n+1e-9)return n*p;return 10*p;}
+function niceStep(range,target){const raw=range/target,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;return (f<1.5?1:f<3?2:f<7?5:10)*p;}
+function axes(g,w,h,xr,yr,o){const l=o.l??42,r=8,t=o.t??8,b=o.b??26,X=v=>l+(v-xr[0])/(xr[1]-xr[0])*(w-l-r),Y=v=>h-b-(v-yr[0])/(yr[1]-yr[0])*(h-t-b);
+  g.font='600 10.5px Inter,Segoe UI,sans-serif';g.lineWidth=1;g.fillStyle=C.text;
+  const xs=o.xstep||niceStep(xr[1]-xr[0],7),ys=o.ystep||niceStep(yr[1]-yr[0],5);
+  for(let v=Math.ceil(xr[0]/xs-1e-9)*xs;!o.nox&&v<=xr[1]+1e-9;v+=xs){g.strokeStyle=Math.abs(v)<1e-9&&xr[0]<0?C.axis:C.grid;g.beginPath();g.moveTo(X(v),t);g.lineTo(X(v),h-b);g.stroke();g.textAlign='center';g.fillText(String(+v.toFixed(2)).replace('.',','),X(v),h-b+13);}
+  for(let v=Math.ceil(yr[0]/ys-1e-9)*ys;v<=yr[1]+1e-9;v+=ys){g.strokeStyle=Math.abs(v)<1e-9&&yr[0]<0?C.axis:C.grid;g.beginPath();g.moveTo(l,Y(v));g.lineTo(w-r,Y(v));g.stroke();g.textAlign='right';g.fillText(String(+v.toFixed(2)).replace('.',','),l-5,Y(v)+3.5);}
+  g.strokeStyle=C.axis;g.strokeRect(l,t,w-l-r,h-t-b);g._clip=[l,t,w-l-r,h-t-b];
+  if(o.xl){g.textAlign='right';g.fillText(o.xl,w-r-2,h-b-4);}
+  if(o.yl){g.save();g.translate(11,t+(h-t-b)/2);g.rotate(-Math.PI/2);g.textAlign='center';g.fillText(o.yl,0,0);g.restore();}
+  return {X,Y,l,r,t,b};}
+function poly(g,X,Y,xs,ys,n,col,wd,dash){if(n<2)return;g.save();if(g._clip){g.beginPath();g.rect(...g._clip);g.clip();}g.strokeStyle=col;g.lineWidth=wd;g.setLineDash(dash||[]);g.lineJoin='round';g.beginPath();for(let i=0;i<n;i++){const x=X(xs[i]),y=Y(ys[i]);if(i)g.lineTo(x,y);else g.moveTo(x,y);}g.stroke();g.setLineDash([]);g.restore();}
+function label(g,txt,x,y,col,al){g.font='700 10.5px Inter,Segoe UI,sans-serif';g.textAlign=al||'left';g.lineJoin='round';g.lineWidth=4;g.strokeStyle='#fff';g.strokeText(txt,x,y);g.fillStyle=col;g.fillText(txt,x,y);}
+const PH=['Aguardando','Respiração tranquila','Shutter fechado · ofego','Expiração lenta','Inspiração lenta','Medição concluída'];
+function phaseNow(){const c=S.cur;if(!c)return 0;const t=S.tCur;if(t>=c.total-1e-6)return 5;if(t<c.b1)return 1;if(t<c.b2)return 2;if(t<c.b3)return 3;return 4;}
+function revealed(c){const t=S.tCur;return {frc:t>=c.b2,raw:t>=c.b2,erv:t>=c.b3,ic:t>=c.b4,vc:t>=c.b4,tlc:t>=c.b4,rv:t>=c.b3,ratio:t>=c.b4};}
+function bounds(){const P=P0(),T=truth(P,S),o=S.obs,qpk=Math.PI*.25*clamp(.12*T.vc,.35,.8)*1.05;
+  const yAmp=niceMax(1.25*1000*T.frc*9.5/PB),qx=niceMax(qpk*1.3),ry=niceMax(1.3*1000*T.frc*rawEff(T,-qpk,o)*qpk/PB);
+  return {P,T,vmin:-Math.ceil(Math.max(T.erv,P.erv)+.2),vmax:Math.ceil(Math.max(T.ic,P.ic)+.2),yAmp,qx,ry,tlcMax:Math.ceil(Math.max(P.tlc,T.tlc,T.tlc+.45*T.frc)+.4)};}
+function drawStrip(){const cv=$('cvStrip'),{g,w,h}=setup(cv),c=S.cur,B=bounds(),total=c?c.total:40;
+  const yr=[B.vmin,B.vmax],o={l:42,b:20,t:20,xl:'s',ystep:niceStep(B.vmax-B.vmin,4)};
+  let A=axes(g,w,h,[0,total],yr,o);
+  if(c){const names=['Respiração tranquila','Shutter fechado · ofego','Expiração lenta','Inspiração lenta'],bd=[0,c.b1,c.b2,c.b3,c.b4];
+    for(let k=0;k<4;k++){g.fillStyle=k===1?'#e7ecf6':(k%2?'#edf4fc':'#f8fbff');g.fillRect(A.X(bd[k]),A.t,A.X(bd[k+1])-A.X(bd[k]),h-A.t-A.b);g.font='700 9.5px Inter,sans-serif';g.fillStyle='#7a93a8';g.textAlign='center';if(A.X(bd[k+1])-A.X(bd[k])>60)g.fillText(names[k],(A.X(bd[k])+A.X(bd[k+1]))/2,A.t-6);}
+    A=axes(g,w,h,[0,total],yr,o);
+    const n=Math.min(c.N,Math.floor(S.tCur/DT)+1),step=Math.max(1,Math.round(n/900)),xs=[],ys=[];for(let i=0;i<n;i+=step){xs.push(i*DT);ys.push(c.V[i]);}
+    poly(g,A.X,A.Y,xs,ys,xs.length,C.cur,1.8);
+    const R=revealed(c),m=c.m;
+    if(R.frc){g.strokeStyle=V.tgv;g.setLineDash([5,3]);g.lineWidth=1.1;g.beginPath();g.moveTo(A.l,A.Y(0));g.lineTo(w-A.r,A.Y(0));g.stroke();g.setLineDash([]);label(g,'CRF '+fmt(m.frc)+' L',w-A.r-4,A.Y(0)-5,V.tgv,'right');}
+    if(R.erv){g.strokeStyle=V.rv;g.setLineDash([5,3]);g.beginPath();g.moveTo(A.l,A.Y(-c.T.erv));g.lineTo(w-A.r,A.Y(-c.T.erv));g.stroke();g.setLineDash([]);label(g,'VR '+fmt(m.rv)+' L',w-A.r-4,A.Y(-c.T.erv)-5,V.rv,'right');}
+    if(R.ic){g.strokeStyle=V.tlc;g.setLineDash([5,3]);g.beginPath();g.moveTo(A.l,A.Y(c.T.ic));g.lineTo(w-A.r,A.Y(c.T.ic));g.stroke();g.setLineDash([]);label(g,'CPT '+fmt(m.tlc)+' L',A.l+6,A.Y(c.T.ic)+13,V.tlc,'left');}}}
+function drawTgv(){const cv=$('cvTgv'),{g,w,h}=setup(cv),c=S.cur,B=bounds(),P=B.P;
+  const A=axes(g,w,h,[-12,12],[-B.yAmp,B.yAmp],{l:44,xl:'cmH₂O',yl:'mL',xstep:4,ystep:niceStep(2*B.yAmp,5)});
+  if(S.showPred){const s=-1000*P.frc/PB;poly(g,A.X,A.Y,[-12,12],[s*-12,s*12],2,C.pred,1.6,[5,4]);}
+  if(!c||S.tCur<c.b1)return;
+  const i0=Math.floor(c.b1/DT),i1=Math.min(Math.floor(c.b2/DT),Math.floor(S.tCur/DT)),xs=[],ys=[];
+  for(let i=i0;i<=i1;i+=2){xs.push(c.Pm[i]);ys.push(c.dV[i]);}
+  poly(g,A.X,A.Y,xs,ys,xs.length,C.cur,1.7);
+  if(S.tCur>=c.b2){const s=c.m.slopeT;poly(g,A.X,A.Y,[-12,12],[s*-12,s*12],2,V.tgv,2.2);label(g,'CRF '+fmt(c.m.frc)+' L',A.l+8,A.t+14,V.tgv,'left');if(!c.loopOk)label(g,'laço aberto',A.l+8,A.t+28,'#b3261e','left');}}
+function drawRaw(){const cv=$('cvRaw'),{g,w,h}=setup(cv),c=S.cur,B=bounds(),P=B.P;
+  const A=axes(g,w,h,[-B.qx,B.qx],[-B.ry,B.ry],{l:44,xl:'L/s',yl:'mL',ystep:niceStep(2*B.ry,5)});
+  if(S.showPred){const s=(S.sex==='M'?1.5:1.4)*1000*P.frc/PB;poly(g,A.X,A.Y,[-B.qx,B.qx],[-s*B.qx,s*B.qx],2,C.pred,1.6,[5,4]);}
+  if(!c)return;
+  const i1=Math.min(Math.floor(c.b1/DT),Math.floor(S.tCur/DT)),xs=[],ys=[];
+  for(let i=0;i<=i1;i+=2){xs.push(c.Q[i]);ys.push(c.dV[i]);}
+  poly(g,A.X,A.Y,xs,ys,xs.length,C.cur,1.7);
+  if(S.tCur>=c.b2){const s=c.m.slopeR;poly(g,A.X,A.Y,[-B.qx,B.qx],[-s*B.qx,s*B.qx],2,V.raw,2.2);label(g,'Raw '+fmt(c.m.raw)+' cmH₂O/(L/s)',A.l+8,A.t+14,V.raw,'left');}}
+function drawBars(){const cv=$('cvBars'),{g,w,h}=setup(cv),c=S.cur,B=bounds(),P=B.P;
+  const A=axes(g,w,h,[0,2],[0,B.tlcMax],{l:44,t:12,b:26,xstep:1,ystep:1,yl:'L',nox:1});
+  g.fillStyle=C.grid;g.fillRect(A.l+1,h-A.b+1,w-A.l-A.r-2,0);
+  const bw=Math.min(110,(w-A.l-A.r)/4),cx=[A.X(.5),A.X(1.5)];
+  g.fillStyle='#fff';g.fillRect(A.l+1,A.t+1,w-A.l-A.r-2,h-A.t-A.b-2);
+  axes(g,w,h,[0,2],[0,B.tlcMax],{l:44,t:12,b:26,xstep:1,ystep:1,yl:'L',nox:1});
+  g.font='700 11px Inter,sans-serif';g.fillStyle=C.text;g.textAlign='center';g.fillText('Previsto',cx[0],h-A.b+16);g.fillText('Medido',cx[1],h-A.b+16);
+  /* faixa de normalidade da CPT */
+  g.save();g.setLineDash([4,3]);g.strokeStyle=V.tlc;g.lineWidth=1.2;[P.lln.tlc,P.uln.tlc].forEach((v,k)=>{g.beginPath();g.moveTo(A.l,A.Y(v));g.lineTo(w-A.r,A.Y(v));g.stroke();});g.restore();
+  label(g,'LIN da CPT '+fmt(P.lln.tlc),A.l+6,A.Y(P.lln.tlc)+13,V.tlc,'left');label(g,'LSN da CPT '+fmt(P.uln.tlc),A.l+6,A.Y(P.uln.tlc)-4,V.tlc,'left');
+  const seg=(x,from,to,col,txt,alpha)=>{if(!(to>from))return;g.globalAlpha=alpha;g.fillStyle=col;g.fillRect(x-bw/2,A.Y(to),bw,A.Y(from)-A.Y(to));g.globalAlpha=1;g.strokeStyle='#fff';g.lineWidth=1.5;g.strokeRect(x-bw/2,A.Y(to),bw,A.Y(from)-A.Y(to));
+    if(A.Y(from)-A.Y(to)>16){g.fillStyle='#fff';g.font='800 11px Inter,sans-serif';g.textAlign='center';g.fillText(txt,x,(A.Y(from)+A.Y(to))/2+4);}};
+  seg(cx[0],0,P.rv,V.rv,'VR '+fmt(P.rv),.45);seg(cx[0],P.rv,P.frc,V.erv,'VRE '+fmt(P.erv),.45);seg(cx[0],P.frc,P.tlc,V.ic,'CI '+fmt(P.ic),.45);
+  const m=S.trials.length&&!c?aggregate():null;let mm=null,R=null;
+  if(c){mm=c.m;R=revealed(c);}else if(m){mm=m;R={rv:true,erv:true,ic:true};}
+  if(mm&&R){if(R.rv)seg(cx[1],0,mm.rv,V.rv,'VR '+fmt(mm.rv),1);if(R.erv)seg(cx[1],mm.rv,mm.frc,V.erv,'VRE '+fmt(mm.erv),1);if(R.ic)seg(cx[1],mm.frc,mm.tlc,V.ic,'CI '+fmt(mm.ic),1);
+    if(R.ic){label(g,'CPT '+fmt(mm.tlc),cx[1],A.Y(mm.tlc)-6,V.tlc,'center');}}
+  label(g,'CPT '+fmt(P.tlc),cx[0],A.Y(P.tlc)-6,V.tlc,'center');}
+/* ===== Resultados ===== */
+function aggregate(){const ok=S.trials.filter(t=>t.accept),use=ok.length?ok:S.trials;if(!use.length)return null;
+  const mean=k=>use.reduce((a,t)=>a+t.m[k],0)/use.length,m={frc:mean('frc'),erv:mean('erv'),ic:mean('ic'),raw:mean('raw')};
+  m.rv=m.frc-m.erv;m.tlc=m.frc+m.ic;m.vc=m.erv+m.ic;m.ratio=100*m.rv/m.tlc;m.sraw=m.raw*m.frc;
+  const spread=Math.max(...use.map(t=>Math.abs(t.m.frc-m.frc)/m.frc))*100;
+  return Object.assign(m,{n:use.length,nOk:ok.length,spread,repro:ok.length>=3&&spread<=5});}
+const rows=[['tlc','CPT (L)',2],['rv','VR (L)',2],['frc','CRF (L)',2],['ratio','VR/CPT (%)',0],['vc','CV (L)',2],['raw','Raw (cmH₂O/L/s)',2]];
+const LAB={tlc:'CPT',rv:'VR',frc:'CRF',ratio:'VR/CPT',vc:'CV',raw:'Raw'},UN={tlc:'L',rv:'L',frc:'L',ratio:'%',vc:'L',raw:'cmH₂O/L/s'};
+const CK={tlc:'tlc',rv:'rv',frc:'tgv',ratio:'rv',vc:'vc',raw:'raw'},CCSS={tlc:'--c-tlc',rv:'--c-rv',frc:'--c-tgv',ratio:'--c-rv',vc:'--c-vc',raw:'--c-raw'};
+function buildResultCards(){const css={tlc:'#6A3D9A',rv:'#E31A1C',frc:'#1F78B4',ratio:'#E31A1C',vc:'#8D6E63',raw:'#E7298A'};
+  $('results').innerHTML=rows.map(([k])=>`<div class="metric" id="m_${k}" style="--metric-strong:var(${CCSS[k]});--metric-color:color-mix(in srgb,var(${CCSS[k]}) 26%,transparent)"><small>${LAB[k]}</small><strong id="mv_${k}">…</strong><em id="ms_${k}"></em></div>`).join('');}
+function prevOf(P,k){return k==='raw'?(S.sex==='M'?1.5:1.4):P[k];}
+function flagOf(P,k,v){if(k==='raw')return v>RAW_ULN?'acima do LSN':'';if(P.uln[k]===undefined)return '';return v>P.uln[k]?'acima do LSN':v<P.lln[k]?'abaixo do LIN':'';}
+function updateCapture(){const c=S.cur,P=P0(),R=c?revealed(c):{};
+  rows.forEach(([k,lb,d])=>{const has=c&&R[k],v=has?c.m[k]:NaN,pv=prevOf(P,k),fl=has?flagOf(P,k,v):'';
+    $('m_'+k).classList.toggle('flag',!!fl);
+    $('mv_'+k).innerHTML=has?fmt(v,d)+'<i>'+UN[k]+'</i>':'…';
+    $('ms_'+k).innerHTML=has?(k==='raw'?'faixa usual até '+fmt(RAW_ULN,1):fmt(100*v/pv,0)+'% do previsto ('+fmt(pv,d)+')')+(fl?' · <b>'+fl+'</b>':''):'previsto '+fmt(pv,d)+(P.lln[k]!==undefined&&k!=='ratio'?' · LIN '+fmt(P.lln[k],d):k==='ratio'?' · LSN '+fmt(P.uln.ratio,0):k==='raw'?' · LSN 2,5':'');});
+  let q='Realize uma medição para capturar os valores.';
+  if(c&&S.tCur>=c.total-1e-6){q=`<b class="${c.accept?'ok':'no'}">${c.accept?'Medição aceitável':'Medição não aceitável'}</b> · laço do shutter ${c.loopOk?'fechado ✓':'aberto ✗ (defasagem de '+fmt(c.phiDeg,0)+'°)'} · ofego a ${fmt(c.pf,1)} Hz ${c.pantOk?'✓':'✗ (rápido demais)'}${c.cheeks?' · bochechas sem apoio ✗ (a pressão na boca subestima a alveolar)':''}${c.accept?'':'. Repita com ofego mais lento.'}`;}
+  else if(c)q='Medindo…';
+  $('capQuality').innerHTML=q;
+  updateFormulas();}
+function updateFormulas(){const c=S.cur,done=c&&S.tCur>=c.b2;
+  if(!c||!done){['fBoyle','fRaw','fTlc','fRv','fRatio'].forEach(i=>$(i).textContent='Faça uma medição para ver os valores.');return;}
+  const m=c.m;
+  $('fBoyle').innerHTML=`969 × ${fmt(Math.abs(m.slopeT),2)} mL/cmH₂O ÷ 1000 = <b>${fmt(m.frc)} L</b>.`;
+  $('fRaw').innerHTML=`${fmt(Math.abs(m.slopeR)/1000*PB/m.frc*m.frc,1)} mL por L/s ÷ CRF → <b>${fmt(m.raw)} cmH₂O/(L/s)</b> (sRaw ${fmt(m.sraw,1)} cmH₂O·s).`;
+  $('fTlc').innerHTML=S.tCur>=c.b4?`${fmt(m.frc)} + ${fmt(m.ic)} = <b>${fmt(m.tlc)} L</b>.`:'Disponível ao fim da inspiração lenta.';
+  $('fRv').innerHTML=S.tCur>=c.b3?`${fmt(m.frc)} − ${fmt(m.erv)} = <b>${fmt(m.rv)} L</b>.`:'Disponível ao fim da expiração lenta.';
+  $('fRatio').innerHTML=S.tCur>=c.b4?`${fmt(m.rv)} ÷ ${fmt(m.tlc)} × 100 = <b>${fmt(m.ratio,0)}%</b>.`:'Disponível ao fim da medição.';}
+function updateSensors(){const c=S.cur,ph=phaseNow();$('sPhase').textContent=PH[ph];
+  if(!c){$('sShut').textContent='Aberto';$('sTime').innerHTML='0,00<i>s</i>';$('sFlow').innerHTML='0,00<i>L/s</i>';$('sPm').innerHTML='0,0<i>cmH₂O</i>';return;}
+  const i=Math.min(c.N-1,Math.floor(S.tCur/DT));
+  $('sShut').textContent=c.shut[i]?'Fechado':'Aberto';$('sTime').innerHTML=fmt(S.tCur)+'<i>s</i>';$('sFlow').innerHTML=fmt(c.Q[i])+'<i>L/s</i>';$('sPm').innerHTML=fmt(c.Pm[i],1)+'<i>cmH₂O</i>';}
+function updateStages(){const ph=phaseNow();document.querySelectorAll('.stage').forEach(el=>{const k=+el.dataset.st;el.classList.toggle('on',ph===k);el.classList.toggle('done',ph>k||ph===5);});
+  $('coach').innerHTML=COACH[ph];}
+const COACH=['Pressione <b>Realizar medição</b>. O paciente senta na cabine, respira normalmente pelo bocal e, no fim de uma expiração, o shutter se fecha.',
+ 'Respiração tranquila com o shutter aberto. O fluxo e a variação de volume da cabine desenham o laço da resistência: a inclinação dele é a Raw.',
+ 'O shutter se fechou na CRF. O paciente ofega contra o bocal fechado: o gás do tórax é comprimido e expandido (lei de Boyle). A inclinação do laço dá a CRF.',
+ 'O shutter abriu. Expiração lenta até esvaziar: o volume que sai a partir da CRF é o volume de reserva expiratório (VRE). O que resta no pulmão é o VR.',
+ 'Inspiração lenta até a CPT. A capacidade inspiratória (CI) somada à CRF dá a capacidade pulmonar total.',
+ 'Medição concluída. Compare CPT, VR e Raw com os valores previstos e repita para ter pelo menos três medições de CRF.'];
+function renderResults(){const a=aggregate(),P=P0();
+  $('trialCount').textContent=S.trials.length+(S.trials.length===1?' medição':' medições');
+  $('trials').innerHTML=S.trials.map((t,i)=>`<div class="trial ${t.accept?'ok':'no'}"><b>Medição ${i+1}</b> · ${t.accept?'aceitável':'não aceitável'}<br>CRF ${fmt(t.m.frc)} L · VR ${fmt(t.m.rv)} L · CPT ${fmt(t.m.tlc)} L<br>Raw ${fmt(t.m.raw)} · ofego ${fmt(t.pf,1)} Hz</div>`).join('')||'<p class="hint">Nenhuma medição ainda.</p>';
+  $('repro').innerHTML=a?(a.repro?`<b>Reprodutibilidade adequada:</b> ${a.nOk} medições aceitáveis, com diferença máxima de ${fmt(a.spread,1)}% em relação à média da CRF.`:`Ainda sem os critérios completos: são necessárias 3 medições aceitáveis de CRF com diferença de até 5% (aceitáveis: ${a.nOk}).`):'';
+  if(!a){$('summary').innerHTML='';$('verdict').innerHTML='';return;}
+  const lines=[['tlc','CPT (L)',2],['frc','CRF (L)',2],['rv','VR (L)',2],['ratio','VR/CPT (%)',0],['erv','VRE (L)',2],['ic','CI (L)',2],['vc','CV (L)',2],['raw','Raw (cmH₂O/L/s)',2],['sraw','sRaw (cmH₂O·s)',1]];
+  $('summary').innerHTML='<tr><th>Variável</th><th>Medido</th><th>Previsto</th><th>LIN</th><th>LSN</th><th>% prev.</th></tr>'+lines.map(([k,lb,d])=>{
+    const v=a[k],pv=k==='raw'?prevOf(P,k):k==='sraw'?(prevOf(P,'raw')*P.frc):P[k],lln=P.lln[k],uln=k==='raw'?RAW_ULN:P.uln[k];
+    const cls=(uln!==undefined&&v>uln)||(lln!==undefined&&v<lln)?'low':'ok';
+    return `<tr><td>${lb}</td><td class="${cls}">${fmt(v,d)}</td><td>${pv!==undefined?fmt(pv,d):'—'}</td><td>${lln!==undefined?fmt(lln,d):'—'}</td><td>${uln!==undefined?fmt(uln,d):'—'}</td><td>${pv?fmt(100*v/pv,0)+'%':'—'}</td></tr>`;}).join('');
+  const tlcLow=a.tlc<P.lln.tlc,tlcHigh=a.tlc>P.uln.tlc,ratioHigh=a.ratio>P.uln.ratio,frcLow=a.frc<P.lln.frc,rawHigh=a.raw>RAW_ULN,ervLow=a.erv<.7*P.erv;
+  let t=[];
+  if(tlcLow)t.push('CPT abaixo do limite inferior da normalidade: <b>confirma restrição</b>.'+(ratioHigh?' Com VR/CPT elevada, pense em fraqueza dos músculos respiratórios ou doença da parede torácica.':''));
+  else if(tlcHigh)t.push('CPT acima do limite superior: <b>hiperinsuflação</b> pulmonar.');
+  else t.push('CPT dentro dos limites da normalidade: sem restrição nem hiperinsuflação.');
+  if(!tlcLow&&ratioHigh)t.push('VR/CPT elevada: <b>aprisionamento de ar</b>.');
+  if(!tlcLow&&frcLow&&ervLow)t.push('CRF e VRE reduzidos com CPT preservada: padrão compatível com <b>obesidade</b> ou outra sobrecarga da parede torácica.');
+  if(rawHigh)t.push('Resistência das vias aéreas aumentada: <b>obstrução ao fluxo</b>. Confirme pela relação VEF₁/CVF na espirometria.'+(tlcLow?' A redução da CPT com Raw alta sugere distúrbio misto.':''));
+  const alert=tlcLow||tlcHigh||ratioHigh||rawHigh||(frcLow&&ervLow);
+  $('verdict').innerHTML=`<div class="verdict${alert?' alert':''}"><h3>Interpretação (modelo didático)</h3>${t.join('<br><br>')}<br><br><span style="color:#647b91;font-size:.84rem">${a.repro?'Exame com qualidade adequada (3 medições aceitáveis e reprodutíveis).':'Exame ainda sem os critérios completos de qualidade: a interpretação é provisória.'} A interpretação real depende do quadro clínico e de outros exames.</span></div>`;}
+/* ===== Pacientes ===== */
+const GRP={normal:'Saudáveis',obstrutivo:'Distúrbios obstrutivos',restritivo:'Distúrbios restritivos',misto:'Combinados e outros'};
+const profiles=[
+ {g:'normal',id:'m-normal',t:'Homem adulto saudável',sex:'M',age:40,h:175,obs:0,trap:0,res:0,obe:0,info:'Sem doença: CPT, CRF e VR próximos do previsto e resistência normal.'},
+ {g:'normal',id:'f-normal',t:'Mulher adulta saudável',sex:'F',age:40,h:165,obs:0,trap:0,res:0,obe:0,info:'Sem doença: volumes menores que os do homem, com a mesma lógica das medidas.'},
+ {g:'normal',id:'m-idoso',t:'Idoso saudável',sex:'M',age:75,h:168,obs:0,trap:0,res:0,obe:0,info:'Com o envelhecimento a retração elástica diminui: o VR e a CRF sobem e a capacidade vital cai, enquanto a CPT muda pouco.'},
+ {g:'normal',id:'f-idosa',t:'Idosa saudável',sex:'F',age:78,h:155,obs:0,trap:0,res:0,obe:0,info:'Padrão do envelhecimento em mulher: VR e CRF um pouco maiores, volumes absolutos menores.'},
+ {g:'obstrutivo',id:'asma',t:'Asma leve',sex:'F',age:28,h:164,obs:25,trap:5,res:0,obe:0,info:'Resistência aumentada, com volumes quase normais.'},
+ {g:'obstrutivo',id:'asma-g',t:'Asma grave com aprisionamento',sex:'M',age:35,h:178,obs:60,trap:45,res:0,obe:0,info:'Obstrução importante com ar aprisionado: VR e VR/CPT elevados e Raw alta.'},
+ {g:'obstrutivo',id:'dpoc',t:'DPOC / enfisema',sex:'M',age:68,h:168,obs:80,trap:90,res:0,obe:0,info:'Hiperinsuflação: CPT, CRF e VR muito aumentados. A espirometria sozinha subestima o aprisionamento.'},
+ {g:'obstrutivo',id:'bronq',t:'Bronquiectasia / fibrose cística',sex:'F',age:24,h:160,obs:50,trap:35,res:0,obe:0,info:'Obstrução com aprisionamento moderado e resistência elevada.'},
+ {g:'obstrutivo',id:'fumante',t:'Tabagista, aprisionamento inicial',sex:'M',age:52,h:172,obs:10,trap:35,res:0,obe:0,info:'Resistência quase normal, mas VR/CPT já elevada: aprisionamento precoce.'},
+ {g:'restritivo',id:'fibrose',t:'Fibrose pulmonar',sex:'M',age:62,h:170,obs:0,trap:0,res:70,obe:0,info:'Pulmão rígido: CPT, CRF e VR reduzidos, com Raw normal.'},
+ {g:'restritivo',id:'resseccao',t:'Pós-ressecção pulmonar',sex:'M',age:55,h:172,obs:0,trap:0,res:45,obe:0,info:'Menos tecido pulmonar: volumes proporcionalmente menores.'},
+ {g:'restritivo',id:'cifo',t:'Cifoescoliose',sex:'F',age:50,h:155,obs:0,trap:0,res:55,obe:0,info:'Parede torácica rígida: CPT reduzida com pulmão normal.'},
+ {g:'restritivo',id:'obeso',t:'Obesidade',sex:'F',age:45,h:158,obs:0,trap:0,res:0,obe:80,info:'O peso sobre o tórax reduz a CRF e o VRE; a CPT fica normal ou pouco reduzida.'},
+ {g:'misto',id:'neuro',t:'Doença neuromuscular',sex:'M',age:45,h:176,obs:0,trap:30,res:50,obe:0,info:'Músculos fracos: CPT reduzida e VR elevado, com VR/CPT alta.'},
+ {g:'misto',id:'combinado',t:'Enfisema + fibrose',sex:'M',age:66,h:172,obs:50,trap:40,res:60,obe:0,info:'Efeitos opostos sobre os volumes: a CPT pode parecer quase normal e a Raw fica alta.'}];
+function updatePatientUI(){
+  document.querySelectorAll('[data-sex]').forEach(b=>{const on=b.dataset.sex===S.sex;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+  $('age').value=S.age;$('height').value=S.h;$('obs').value=Math.round(S.obs*100);$('trap').value=Math.round(S.trap*100);$('res').value=Math.round(S.res*100);$('obe').value=Math.round(S.obe*100);$('pant').value=Math.round(S.pant*10);$('cheeks').checked=S.cheeks;
+  document.querySelectorAll('input[type=range]').forEach(setFill);
+  $('ageV').textContent=S.age+' anos';$('heightV').textContent=S.h+' cm';$('obsV').textContent=Math.round(S.obs*100)+'%';$('trapV').textContent=Math.round(S.trap*100)+'%';$('resV').textContent=Math.round(S.res*100)+'%';$('obeV').textContent=Math.round(S.obe*100)+'%';$('pantV').textContent=fmt(S.pant,1)+' Hz';
+  const lim=S.sex==='M'?[155,185]:[145,175];let hint=S.age>=60?'Idoso · 60 anos ou mais.':'Adulto · 20 a 59 anos.';
+  if(S.h<lim[0]||S.h>lim[1])hint+=` Altura fora da faixa do estudo de referência (${lim[0]}–${lim[1]} cm): os valores previstos são extrapolados.`;
+  if(S.age>80)hint+=' Idade acima de 80 anos, limite do estudo de referência: os valores previstos são extrapolados.';
+  $('rangeHint').textContent=hint;
+  const pr=profiles.find(p=>p.id===S.profile);$('profileSummary').textContent=pr?pr.t:'Personalizado';$('profileInfo').textContent=pr?pr.info:'Paciente personalizado: combine obstrução, aprisionamento, restrição e obesidade para ver o efeito de cada um nos volumes.';
+  document.querySelectorAll('#profileButtons button').forEach(b=>{const on=b.dataset.p===S.profile;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+  $('phaseBadge').textContent=S.age>=60?'Idoso':'Adulto';}
+function setFill(el){el.style.setProperty('--p',((el.value-el.min)/(el.max-el.min)*100)+'%');}
+function updateButtons(){const finished=S.cur&&S.tCur>=S.cur.total-1e-6,mid=S.cur&&!finished&&!S.running;
+  $('btnStart').textContent=S.running?'Em andamento…':mid?'▶ Continuar':S.cur?'▶ Nova medição':'▶ Realizar medição';
+  $('btnStart').disabled=S.running||(S.trials.length>=8&&!mid);$('btnPause').disabled=!S.running;$('btnAuto').disabled=S.running||S.trials.length>5;
+  $('mobilePlayToggle').textContent=S.running?'⏸ Pausar':mid?'▶ Continuar':'▶ Medir';
+  document.querySelectorAll('[data-speed]').forEach(b=>{const on=Number(b.dataset.speed)===S.speed;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});}
+/* ===== reserva de espaço ===== */
+function reserve(el,list){if(!el)return;const w=el.getBoundingClientRect().width;if(w<10)return;const cl=el.cloneNode(false);cl.removeAttribute('id');cl.style.cssText+=';position:absolute;visibility:hidden;pointer-events:none;left:0;top:0;min-height:0;width:'+w+'px';el.parentNode.appendChild(cl);let mh=0;for(const h of list){cl.innerHTML=h;mh=Math.max(mh,cl.getBoundingClientRect().height);}cl.remove();el.style.minHeight=Math.ceil(mh)+'px';}
+const KEEP=['coach','capQuality','profileInfo','rangeHint','sPhase','ms_tlc','ms_rv','ms_frc','ms_ratio','ms_vc','ms_raw','fBoyle','fRaw','fTlc','fRv','fRatio'];
+function keep(){KEEP.forEach(i=>{const el=$(i);if(!el)return;const h=el.offsetHeight;if(h>(parseFloat(el.style.minHeight)||0)+1)el.style.minHeight=h+'px';});}
+function reserveAll(){const P=P0();
+  reserve($('coach'),COACH);
+  reserve($('capQuality'),['Realize uma medição para capturar os valores.','<b class="no">Medição não aceitável</b> · laço do shutter aberto ✗ (defasagem de 27°) · ofego a 3,0 Hz ✗ (rápido demais) · bochechas sem apoio ✗ (a pressão na boca subestima a alveolar). Repita com ofego mais lento.<br>&nbsp;']);
+  rows.forEach(([k,lb,d])=>reserve($('ms_'+k),['previsto 99,99 · LIN 99,99','999% do previsto (99,99) · <b>abaixo do LIN</b>']));
+  reserve($('sPhase'),PH);
+  reserve($('profileInfo'),profiles.map(p=>p.info).concat(['Paciente personalizado: combine obstrução, aprisionamento, restrição e obesidade para ver o efeito de cada um nos volumes.']));
+  reserve($('rangeHint'),['Idoso · 60 anos ou mais. Altura fora da faixa do estudo de referência (155–185 cm): os valores previstos são extrapolados. Idade acima de 80 anos, limite do estudo de referência: os valores previstos são extrapolados.']);
+  ['fBoyle','fRaw','fTlc','fRv','fRatio'].forEach(i=>reserve($(i),['969 × 99,99 mL/cmH₂O ÷ 1000 = <b>9,99 L</b>. 9,9 mL por L/s ÷ CRF → <b>9,99 cmH₂O/(L/s)</b> (sRaw 99,9 cmH₂O·s).']));}
+function drawAll(){drawStrip();drawTgv();drawRaw();drawBars();keep();}
+function refresh(){updatePatientUI();updateButtons();updateStages();updateSensors();updateCapture();renderResults();drawAll();}
+/* ===== Ações ===== */
+function sigKey(){return `${S.sex}|${S.age}|${S.h}|${S.obs}|${S.trap}|${S.res}|${S.obe}`;}
+let lastSig=sigKey();
+function patientChanged(){const k=sigKey();if(k===lastSig)return;lastSig=k;S.auto=0;S.trials=[];S.cur=null;S.running=false;S.tCur=0;}
+function startTrial(){if(S.running)return;const mid=S.cur&&S.tCur<S.cur.total-1e-6;
+  if(mid){S.running=true;}else{if(S.trials.length>=8)return;S.cur=buildTrial();S.tCur=0;S.running=true;}
+  updateButtons();}
+function finishTrial(){const c=S.cur;if(!c||S.trials.includes(c))return;S.trials.push(c);renderResults();updateButtons();}
+$('btnStart').addEventListener('click',startTrial);
+$('btnAuto').addEventListener('click',()=>{if(S.running)return;S.auto=3;startTrial();});
+$('btnPause').addEventListener('click',()=>{S.auto=0;S.running=false;updateButtons();});
+$('mobilePlayToggle').addEventListener('click',()=>{if(S.running){S.running=false;updateButtons();}else startTrial();});
+$('btnReset').addEventListener('click',()=>{S.auto=0;S.trials=[];S.cur=null;S.running=false;S.tCur=0;refresh();});
+document.querySelectorAll('[data-speed]').forEach(b=>b.addEventListener('click',()=>{S.speed=Number(b.dataset.speed);updateButtons();}));
+document.querySelectorAll('[data-sex]').forEach(b=>b.addEventListener('click',()=>{S.sex=b.dataset.sex;S.profile='custom';patientChanged();refresh();}));
+let pend=false;function later(){if(pend)return;pend=true;requestAnimationFrame(()=>{pend=false;refresh();});}
+[['age',v=>{S.age=v;}],['height',v=>{S.h=v;}],['obs',v=>{S.obs=v/100;}],['trap',v=>{S.trap=v/100;}],['res',v=>{S.res=v/100;}],['obe',v=>{S.obe=v/100;}]].forEach(([id,fn])=>$(id).addEventListener('input',e=>{fn(Number(e.target.value));S.profile='custom';patientChanged();later();}));
+$('pant').addEventListener('input',e=>{S.pant=Number(e.target.value)/10;later();});
+$('cheeks').addEventListener('change',e=>{S.cheeks=e.target.checked;later();});
+Object.keys(GRP).forEach(g=>{const box=document.createElement('div');box.className='pg';box.innerHTML=`<h4>${GRP[g].toUpperCase()}</h4><div class="pgrid"></div>`;
+  profiles.filter(p=>p.g===g).forEach(p=>{const b=document.createElement('button');b.type='button';b.dataset.p=p.id;b.textContent=p.t;b.addEventListener('click',()=>{Object.assign(S,{sex:p.sex,age:p.age,h:p.h,obs:p.obs/100,trap:p.trap/100,res:p.res/100,obe:p.obe/100,profile:p.id});lastSig='';patientChanged();$('profileGroup').open=false;refresh();});box.querySelector('.pgrid').appendChild(b);});
+  $('profileButtons').appendChild(box);});
+buildResultCards();
+const tabButtons=[...document.querySelectorAll('.mobile-tabnav button')],tabSections=[...document.querySelectorAll('[data-tab]')];
+function setTab(name){tabButtons.forEach(b=>{const on=b.dataset.tabnav===name;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on));});tabSections.forEach(el=>el.classList.toggle('tab-active',el.dataset.tab===name));requestAnimationFrame(()=>{reserveAll();drawAll();});}
+tabButtons.forEach(b=>b.addEventListener('click',()=>{setTab(b.dataset.tabnav);window.scrollTo({top:0});}));
+let hadFS=false;
+function setFocus(on){document.body.classList.toggle('focus-mode',on);$('focus').textContent=on?'Sair da tela cheia':'⛶ Tela cheia';$('focus').setAttribute('aria-pressed',String(on));requestAnimationFrame(()=>{reserveAll();drawAll();});}
+$('focus').addEventListener('click',()=>{const on=!document.body.classList.contains('focus-mode');setFocus(on);if(on&&document.documentElement.requestFullscreen){try{const p=document.documentElement.requestFullscreen();if(p&&p.then)p.then(()=>{if(!document.body.classList.contains('focus-mode')&&document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});}).catch(()=>{});}catch(_){}}else if(!on&&document.fullscreenElement&&document.exitFullscreen){const p=document.exitFullscreen();if(p&&p.catch)p.catch(()=>{});}});
+document.addEventListener('fullscreenchange',()=>{if(document.fullscreenElement)hadFS=true;else if(hadFS){hadFS=false;setFocus(false);}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.fullscreenElement&&document.body.classList.contains('focus-mode'))setFocus(false);});
+window.addEventListener('resize',()=>{reserveAll();drawAll();});
+let last=performance.now(),lastPh=-1;
+function frame(now){const dt=Math.min((now-last)/1000,.1);last=now;
+  if(S.running&&S.cur){S.tCur+=dt*S.speed;if(S.tCur>=S.cur.total){S.tCur=S.cur.total;S.running=false;finishTrial();refresh();if(S.auto>0){S.auto--;if(S.auto>0)setTimeout(()=>{if(!S.running&&S.auto>0)startTrial();},800);}}
+    else{const ph=phaseNow();if(ph!==lastPh){lastPh=ph;updateStages();}updateSensors();updateCapture();drawAll();}}
+  requestAnimationFrame(frame);}
+V=VC();
+setTab('teste');refresh();reserveAll();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{V=VC();reserveAll();drawAll();});requestAnimationFrame(frame);
+})();
+</script></body></html>

@@ -148,5 +148,10 @@
     "unit": "inicio",
     "number": "",
     "title": "Espirometria em tempo real"
+  },
+  "pletismografia.html": {
+    "unit": "inicio",
+    "number": "",
+    "title": "Pletismografia em tempo real"
   }
 }
