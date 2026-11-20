@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f8fd"><title>Espirometria em tempo real | Fisiologia interativa</title><link rel="icon" href="brand/orientador.webp"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{font-family:Inter,Segoe UI,system-ui,sans-serif;color:#17324d;background:#f4f8fd;color-scheme:light;font-size:16px;scroll-behavior:smooth}
+*{box-sizing:border-box}
+body{margin:0;color:#17324d;background:linear-gradient(180deg,#f8fbff 0%,#eef4fb 100%)}
+header{max-width:1500px;margin:auto;padding:23px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #d7e1ec}
+.brand small,.brand strong{display:block}.brand small,.kicker,.eyebrow,.small-label{font-size:.72rem;letter-spacing:.14em;font-weight:800;color:#236ebf}.brand strong{font-size:1.06rem;margin-top:3px;color:#17324d}
+.head-note{font-size:.68rem;letter-spacing:.17em;color:#647b91;font-weight:700}
+main{max-width:1500px;margin:auto;padding:0 5% 70px}
+.intro{display:grid;grid-template-columns:1fr 285px;gap:40px;align-items:end;padding:46px 0 34px}
+.intro h1{font-size:clamp(2.6rem,5.4vw,4.8rem);line-height:1.03;letter-spacing:-.05em;margin:14px 0 18px;color:#17324d}.intro h1 em{font-style:normal;color:#287fdb}
+.intro p{color:#526d83;line-height:1.65;max-width:660px;margin:0}
+.intro-side{border-left:1px solid #bdcfdf;padding-left:22px}.intro-side span{color:#236ebf;font-size:.7rem;font-weight:800;letter-spacing:.16em}.intro-side p{margin:10px 0 18px;font-size:.92rem}.intro-side a{color:#17599b;font-weight:800;text-decoration:none;border-bottom:2px solid #2f80ed;padding-bottom:4px}
+.notice{background:#e9f3ff;border:1px solid #bad5f0;color:#36536d;padding:13px 18px;border-radius:12px;font-size:.86rem;margin-bottom:20px}
+.error-notice{background:#fde8e1;border:1px solid #f0a58b;color:#6b2a14;padding:14px 18px;border-radius:12px;line-height:1.5;margin-bottom:20px}.error-notice[hidden]{display:none}
+.workspace{display:grid;grid-template-columns:minmax(300px,.62fr) minmax(0,1.38fr);gap:18px;align-items:start}
+.panel{color:#17324d;background:linear-gradient(160deg,#fff 0%,#f6faff 100%);border:1px solid #d7e1ec;border-radius:20px;padding:22px;box-shadow:0 10px 24px rgba(18,42,66,.10),inset 0 1px 0 #fff}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.panel h2,.section-title h2{font-size:1.32rem;letter-spacing:-.025em;color:#17324d;margin:8px 0 0}
+.badge{background:#e2efff;color:#2264aa;font-size:.72rem;font-weight:700;padding:8px 11px;border-radius:30px;white-space:nowrap}
+.muted,.section-title p{color:#5c7086;line-height:1.5;font-size:.9rem}
+button{font:inherit;color:#fff;background:linear-gradient(145deg,#587894,#36536d);border:1px solid #69869f;border-radius:11px;padding:10px 16px;font-weight:750;box-shadow:0 4px 0 #263e53,inset 0 1px 0 #ffffff38,0 7px 14px #20395018;cursor:pointer;min-height:44px}
+button:hover{filter:brightness(1.06)}button:active{transform:translateY(3px);box-shadow:0 1px 0 #263e53}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none;filter:none}
+button:focus-visible,input:focus-visible,summary:focus-visible,select:focus-visible{outline:3px solid #f6a623;outline-offset:3px}
+.primary{background:linear-gradient(145deg,#57a7ff,#2f80ed);border-color:#81bfff;box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff70}
+.danger{background:linear-gradient(145deg,#ee6767,#d54646);border-color:#f28e8e;box-shadow:0 4px 0 #a62e35,inset 0 1px 0 #ffffff55}
+.green{background:linear-gradient(145deg,#2ecc84,#17a960);border-color:#6edaa4;box-shadow:0 4px 0 #087641,inset 0 1px 0 #ffffff55}
+.seg{display:flex;gap:8px;flex-wrap:wrap}.seg button{padding:8px 14px;font-size:.88rem}
+.seg button.on{background:linear-gradient(145deg,#57a7ff,#2f80ed);border-color:#90c5ff;box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff65}
+.range-label{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:700;font-size:.9rem;margin-top:16px}.range-label output{color:#1c70c8;font-size:1rem}
+input[type=range]{width:100%;accent-color:#2f80ed;cursor:pointer;margin:10px 0 2px}
+.range-ends{display:flex;justify-content:space-between;color:#647b91;font-size:.74rem}
+.hint{font-size:.8rem;color:#647b91;line-height:1.45;margin:6px 0 0}
+.quick-states{margin-top:16px;border:1px solid #cbddec;border-radius:15px;background:linear-gradient(160deg,#f8fbff,#edf5fd);box-shadow:inset 0 1px #fff,0 4px 12px #244c7010}
+.quick-states summary{padding:13px 15px;cursor:pointer;color:#17324d;display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:800;list-style:none}
+.quick-states summary::after{content:'▾';color:#2f80ed;font-size:1.1rem}.quick-states[open] summary::after{content:'▴'}.quick-states summary strong{margin-left:auto;color:#2868a8;font-size:.8rem;text-align:right}
+.profile-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:0 12px 14px}
+.profile-buttons button{text-align:left;font-size:.8rem;line-height:1.25;padding:9px 11px}
+.profile-buttons button.on{background:linear-gradient(145deg,#57a7ff,#2f80ed);border-color:#90c5ff;box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff65}
+.profile-info{margin-top:10px;padding:10px 13px;border-left:4px solid #2f80ed;border-radius:0 10px 10px 0;background:#eaf3fc;color:#36536d;line-height:1.45;font-size:.83rem}
+.fieldset{margin-top:18px;padding-top:6px;border-top:1px dashed #cbddec}
+/* teste */
+.stages{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 10px}
+.stage{background:#eef4fb;border:2px solid transparent;border-radius:12px;padding:8px 10px;font-size:.78rem;font-weight:700;color:#5c7086;line-height:1.25;box-shadow:inset 0 2px 4px #214d7512}
+.stage b{display:block;font-size:.68rem;letter-spacing:.12em;color:#236ebf;margin-bottom:2px}
+.stage.on{background:#fff;border-color:#2f80ed;color:#17324d;box-shadow:0 0 0 2px #cde5ff,0 4px 0 #1c5fb1}
+.stage.done{background:#e6f6ee;color:#1f6b4a}.stage.done b{color:#1f8a5c}
+.coach{border-left:3px solid #2f80ed;background:#eaf3fc;color:#36536d;padding:11px 14px;border-radius:0 10px 10px 0;line-height:1.5;font-size:.88rem;min-height:3.6em}
+.transport{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0 0}
+.transport .grow{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.check{font-size:.85rem;color:#435e74;display:flex;align-items:center;gap:6px}.check input{accent-color:#2f80ed;width:18px;height:18px;margin:0}
+canvas.cv{display:block;width:100%;background:#fff;border:1px solid #d7e1ec;border-radius:12px}
+.strip{height:126px}.vt{height:250px}.fv{height:300px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.chart-title{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin:12px 0 6px}.chart-title b{font-size:.86rem;color:#17324d}.chart-title span{font-size:.72rem;color:#647b91}
+.capture{margin-top:14px;border:1px solid #cbddec;border-radius:14px;overflow:hidden;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:.86rem;font-variant-numeric:tabular-nums}
+th,td{padding:8px 10px;text-align:right;border-bottom:1px solid #e3ecf5}th:first-child,td:first-child{text-align:left}
+th{background:#eef4fb;color:#36536d;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+td.pending{color:#9bb0c3}td.low{color:#b3261e;font-weight:800}td.ok{color:#1f6b4a;font-weight:700}
+.qline{padding:10px 12px;font-size:.82rem;color:#435e74;background:#f6faff;border-top:1px solid #e3ecf5;line-height:1.5}
+.qline b.ok{color:#1f6b4a}.qline b.no{color:#b3261e}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.74rem;color:#526d83;margin-top:8px}.legend i{display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:6px}
+/* resultados */
+.section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;margin:46px 0 16px}.section-title p{margin-bottom:0}
+.trials{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin-top:14px}
+.trial{background:#fff;border:1px solid #d7e1ec;border-left:5px solid #9bb7d4;border-radius:12px;padding:10px 12px;font-size:.82rem;line-height:1.45;box-shadow:0 3px 0 #b9cddd}
+.trial.ok{border-left-color:#17a960}.trial.no{border-left-color:#d54646}.trial b{font-size:.9rem}
+.verdict{margin-top:14px;padding:14px 16px;border-radius:14px;background:#eaf3fc;border:1px solid #bad5f0;color:#2c4a63;line-height:1.55;font-size:.92rem}
+.verdict h3{margin:0 0 6px;font-size:1.05rem;color:#17324d}.verdict.alert{background:#fff2e5;border-color:#f3c18b}
+.learn{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:40px}.learn p,.learn li{font-size:.9rem;line-height:1.6;color:#526d83}.learn ul{padding-left:18px;margin:8px 0 0}
+.references{color:#526d83;margin-top:20px;padding:20px;border:1px solid #cad9e7;border-radius:14px;font-size:.86rem;line-height:1.6;background:#ffffffaa}.references summary{cursor:pointer;font-weight:700;color:#17324d}.references a{color:#1768b6}
+footer{max-width:1500px;margin:auto;padding:20px 5% 40px;color:#627b90;font-size:14px;line-height:1.6;font-weight:600;text-align:center}
+@media(max-width:1100px){.charts{grid-template-columns:1fr}}
+@media(max-width:900px){.workspace,.learn{grid-template-columns:1fr}.stages{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.test-panel>.panel-head{flex-wrap:wrap}.section-title{flex-wrap:wrap;align-items:flex-start}#focus{margin-left:auto}header{padding:18px 5%}.head-note,.intro-side{display:none}.intro{display:block}.panel{padding:16px}.profile-buttons{grid-template-columns:1fr}.transport .grow{margin-left:0}.fv{height:270px}.vt{height:220px}}
+
+/* === Padrão visual dos simuladores: uma cor por variável, cards, bolas 3D === */
+:root{--c-fvc:#1F78B4;--c-fev1:#E31A1C;--c-ratio:#6A3D9A;--c-pef:#FF7F00;--c-fef:#33A02C;--c-time:#00ACC1;--c-vol:#3F51B5;--c-flow:#FFB300;--c-age:#009688;--c-height:#BA68C8;--c-obs:#B15928;--c-res:#AFB42B;--c-eff:#00C27A;--c-bd:#E7298A}
+.c-fvc{color:var(--c-fvc)}.c-fev1{color:var(--c-fev1)}.c-ratio{color:var(--c-ratio)}.c-pef{color:var(--c-pef)}.c-fef{color:var(--c-fef)}.c-time{color:var(--c-time)}.c-vol{color:var(--c-vol)}.c-flow{color:var(--c-flow)}.c-obs{color:var(--c-obs)}.c-res{color:var(--c-res)}.c-eff{color:var(--c-eff)}.c-bd{color:var(--c-bd)}
+.c-fvc,.c-fev1,.c-ratio,.c-pef,.c-fef,.c-obs,.c-res,.c-bd{font-weight:800}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:7px;vertical-align:middle;box-shadow:inset 0 -2px 2px rgba(0,0,0,.28),inset 0 1px 1px rgba(255,255,255,.75),0 2px 3px rgba(0,0,0,.28)}
+.slider-card{--vc:#2f80ed;margin-top:12px;border:1px solid #d7e1ec;border-left:5px solid var(--vc);border-radius:16px;padding:12px 14px 10px;background:linear-gradient(145deg,#fff,#f4f8fd);box-shadow:0 6px 14px rgba(18,42,66,.08),inset 0 1px 0 #fff}
+.slider-card .range-label{margin-top:0}
+.slider-card .range-label output{color:var(--vc);background:#fff;border:1px solid #d7e1ec;border-radius:8px;padding:3px 9px;font-weight:800;font-size:.9rem;box-shadow:inset 0 2px 3px rgba(18,42,66,.10)}
+.slider-card .range-label label{display:flex;align-items:center}
+input[type=range]{--vc:#2f80ed;--p:50%;appearance:none;-webkit-appearance:none;height:11px;border-radius:9px;border:1px solid #b9cddd;background:linear-gradient(90deg,var(--vc) var(--p),#e3ecf5 var(--p));box-shadow:inset 0 3px 5px rgba(18,42,66,.22),0 1px 0 #fff;cursor:pointer;margin:12px 0 6px}
+.slider-card input[type=range]{--vc:inherit}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;border:2px solid #fff;border-radius:50%;background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.95),rgba(255,255,255,0) 40%),radial-gradient(circle at 50% 60%,var(--vc) 55%,rgba(0,0,0,.42) 130%);box-shadow:inset 0 -3px 4px rgba(0,0,0,.25),0 4px 0 rgba(18,42,66,.35),0 8px 10px rgba(18,42,66,.28)}
+input[type=range]::-moz-range-thumb{width:25px;height:25px;border:2px solid #fff;border-radius:50%;background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.95),rgba(255,255,255,0) 40%),radial-gradient(circle at 50% 60%,var(--vc) 55%,rgba(0,0,0,.42) 130%);box-shadow:0 4px 0 rgba(18,42,66,.35),0 8px 10px rgba(18,42,66,.28)}
+input[type=range]::-moz-range-track{background:transparent}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0}
+.metric{--metric-color:rgba(31,120,180,.24);--metric-strong:#17324d;position:relative;overflow:hidden;isolation:isolate;border:1px solid #d7e1ec;border-left:5px solid var(--metric-strong);border-radius:16px;padding:12px;background:linear-gradient(145deg,#fff,#f4f8fd);box-shadow:0 8px 18px rgba(18,42,66,.09),inset 0 1px 0 #fff;transition:box-shadow .2s}
+.metric>*{position:relative;z-index:1}
+.metric::after{content:"";position:absolute;right:-54px;bottom:-54px;width:128px;height:128px;border-radius:50%;background:radial-gradient(circle at center,var(--metric-color) 0%,rgba(255,255,255,0) 68%);box-shadow:0 0 0 1.25px var(--metric-color),0 0 11px 2px var(--metric-color);opacity:.55;pointer-events:none;z-index:0}
+.metric small{display:block;color:#5c7086;font-weight:900;text-transform:uppercase;letter-spacing:.65px;font-size:11px;margin-bottom:7px}
+.metric strong{display:block;font-size:26px;line-height:1.05;color:var(--metric-strong);font-variant-numeric:tabular-nums}
+.metric strong i{font-style:normal;font-size:12px;font-weight:800;color:#5c7086;margin-left:5px}
+.metric em{display:block;color:#5c7086;font-weight:800;font-style:normal;font-size:11.5px;margin-top:6px;line-height:1.3}
+.metric.flag{box-shadow:0 0 0 2px rgba(179,38,30,.38),0 8px 18px rgba(18,42,66,.09)}.metric.flag em b{color:#b3261e}
+.metric.s-fase strong{font-size:16px;line-height:1.25;margin-top:2px}
+.metric-grid.sens{grid-template-columns:repeat(4,minmax(0,1fr));margin:14px 0}
+.relationship{display:grid;gap:10px;margin-top:12px}
+.formula-card{border:1px solid #d7e1ec;border-radius:16px;background:#fbfdff;padding:12px 14px;box-shadow:0 1px 5px rgba(18,42,66,.05)}
+.formula-card h3{margin:0 0 7px;font-size:12.5px;color:#5c7086;font-weight:900;text-transform:uppercase;letter-spacing:.55px}
+.formula-card code{font-size:17px;font-weight:900;color:#17324d;display:block;white-space:normal;font-family:inherit}
+.formula-card .live{display:block;margin-top:7px;color:#435e74;font-size:.84rem;line-height:1.45}
+.note{padding:14px 16px;line-height:1.6;color:#17324d;background:#fbfdff;border:1px solid #d7e1ec;border-radius:16px;font-size:.9rem;box-shadow:inset 0 1px 0 #fff}
+.age-info{margin:6px 0 0}
+.profile-groups{max-height:400px;overflow:auto;padding:0 12px 14px}
+.pg h4{margin:14px 0 7px;font-size:.72rem;letter-spacing:.14em;color:#236ebf;font-weight:800}
+.pgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pgrid button{text-align:left;font-size:.8rem;line-height:1.25;padding:9px 11px}
+.pgrid button.on{background:linear-gradient(145deg,#57a7ff,#2f80ed);border-color:#90c5ff;box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff65}
+.qcard{border:1px solid #d7e1ec;border-radius:14px;margin-top:2px}
+#results{grid-template-columns:repeat(5,minmax(0,1fr))}#results .metric strong{font-size:22px}#ageSeg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}#ageSeg button{padding:8px 1px;font-size:.72rem;white-space:nowrap;letter-spacing:-.01em}
+@media(max-width:1250px){#results{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(max-width:600px){#results{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.metric-grid.sens{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.pgrid{grid-template-columns:1fr}.metric strong{font-size:23px}}
+/* === Padrão mobile: cabeçalho sticky + abas (mesmo padrão dos demais simuladores) === */
+.mobile-topbar{display:none}.mobile-tabnav{display:none}
+@media (max-width:760px){
+  .intro,body>header{display:none}
+  .mobile-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:50;padding:12px 14px;background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);border-bottom:1px solid #d7e1ec;box-shadow:0 6px 16px rgba(18,42,66,.10)}
+  .mobile-topbar h2{margin:0;font-size:16px;line-height:1.2;color:#17324d}
+  .mobile-playtoggle{border:none;border-radius:12px;padding:10px 16px;font-size:14px;font-weight:800;color:#fff;background:linear-gradient(135deg,#2f80ed,#57a7ff);box-shadow:0 4px 0 #1c5fb1,inset 0 1px 0 #ffffff70;min-height:44px;min-width:44px;cursor:pointer}
+  .mobile-tabnav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;position:sticky;top:64px;z-index:49;padding:8px 10px;background:#eef4fb;border-bottom:1px solid #d7e1ec}
+  .mobile-tabnav button{border:none;border-radius:10px;padding:10px 6px;font-size:13px;font-weight:700;color:#36536d;background:#fff;box-shadow:0 3px 0 #b9cddd;min-height:44px;cursor:pointer}
+  .mobile-tabnav button.active{color:#fff;background:linear-gradient(135deg,#2f80ed,#57a7ff);box-shadow:0 3px 0 #1c5fb1}
+  [data-tab]{display:none!important}
+  [data-tab].tab-active{display:block!important}
+  .workspace{margin-top:12px}
+  main>.notice[data-tab].tab-active{margin-top:12px}
+  .focus-mode>.mobile-topbar,.focus-mode>.mobile-tabnav{display:none!important}
+  .focus-mode .workspace>[data-tab]{display:block!important}
+}
+.focus-mode .fi-ef-brand-row{display:none!important}
+/* Tela cheia (telão) */
+.focus-mode{position:fixed;inset:0;overflow:auto;overscroll-behavior:contain;background:#f4f8fd;z-index:9999;min-height:100vh}
+.focus-mode>header,.focus-mode>footer{display:none}
+.focus-mode main>:not(.workspace){display:none!important}
+.focus-mode main{max-width:none;margin:0;padding:max(10px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left))}
+.focus-mode .workspace{grid-template-columns:minmax(250px,.5fr) minmax(0,1.5fr);gap:12px}
+.focus-mode .panel{padding:14px}
+.focus-mode .hide-focus{display:none!important}
+.focus-mode .vt{height:clamp(170px,28vh,320px)}.focus-mode .fv{height:clamp(200px,36vh,420px)}.focus-mode .strip{height:clamp(70px,11vh,110px)}
+.focus-mode .metric-grid{margin:10px 0}.focus-mode .stages{margin:8px 0}
+@media(max-width:900px){.focus-mode .workspace{grid-template-columns:1fr}}
+</style><link rel="stylesheet" href="mobile-smartphone.css?v=20260815"><script defer src="ef-simuladores.js?v=20261020-curvas4"></script></head>
+<body><div class="mobile-topbar"><h2>Espirometria em tempo real</h2><button class="mobile-playtoggle" id="mobilePlayToggle" type="button">▶ Manobra</button></div><div class="mobile-tabnav" role="tablist" aria-label="Seções do simulador"><button type="button" data-tabnav="teste" class="active">Teste</button><button type="button" data-tabnav="paciente">Paciente</button><button type="button" data-tabnav="resultados">Resultados</button></div>
+<header><div class="brand"><small>FISIOLOGIA INTERATIVA</small><strong>Espirometria em tempo real</strong></div><div class="head-note">UM LABORATÓRIO PARA APRENDER</div></header>
+<main><section class="intro"><div><span class="eyebrow">PULMÃO · FLUXO · VOLUME</span><h1>Respire fundo.<br><em>Sopre forte.</em></h1><p>Acompanhe um teste de espirometria do começo ao fim: veja as curvas sendo construídas, os valores sendo capturados e descubra o que a mecânica do pulmão revela sobre a saúde das vias aéreas.</p></div><div class="intro-side"><span>EXPERIMENTE</span><p>Escolha um paciente, ajuste a fisiopatologia e realize a manobra.</p><a href="#laboratorio">Começar o teste</a></div></section>
+<div class="notice" data-tab="teste"><b>Modelo didático</b> · Curvas geradas por um modelo mecânico simplificado, sem finalidade diagnóstica. Valores de referência brasileiros: crianças (Jones et al., 2020) e adultos (Pereira et al., 2007).</div><noscript><div class="error-notice" role="alert">O JavaScript está desativado neste navegador. Ative-o para realizar o teste.</div></noscript><div id="espError" class="error-notice" role="alert" hidden></div>
+<section id="laboratorio" class="workspace">
+<div class="panel patient-panel" data-tab="paciente"><div class="panel-head"><div><span class="kicker">PACIENTE SIMULADO</span><h2>Quem vai soprar?</h2></div><span class="badge" id="phaseBadge">Pré-broncodilatador</span></div>
+<details id="profileGroup" class="quick-states"><summary><span>Estados rápidos</span><strong id="profileSummary">Adulto saudável</strong></summary><div id="profileButtons" class="profile-groups" role="group" aria-label="Estados rápidos por faixa etária e doença"></div></details>
+<div id="profileInfo" class="profile-info" aria-live="polite"></div>
+<div class="fieldset"><span class="small-label">FAIXA ETÁRIA</span><div class="seg" id="ageSeg" role="group" aria-label="Faixa etária" style="margin-top:8px"><button type="button" data-grp="crianca" aria-pressed="false">Criança</button><button type="button" data-grp="adolescente" aria-pressed="false">Adolescente</button><button type="button" data-grp="adulto" class="on" aria-pressed="true">Adulto</button><button type="button" data-grp="idoso" aria-pressed="false">Idoso</button></div>
+<div style="margin-top:14px"><span class="small-label">SEXO</span><div class="seg" id="sexSeg" role="group" aria-label="Sexo" style="margin-top:8px"><button type="button" data-sex="M" class="on" aria-pressed="true">Masculino</button><button type="button" data-sex="F" aria-pressed="false">Feminino</button></div></div>
+<div class="slider-card" style="--vc:var(--c-age)"><div class="range-label"><label for="age"><span class="dot" style="background:var(--c-age)"></span>Idade</label><output id="ageV">40 anos</output></div><input id="age" type="range" min="3" max="85" step="1" value="40" style="--vc:var(--c-age)"><div class="range-ends"><span>3</span><span>85</span></div></div>
+<div class="slider-card" style="--vc:var(--c-height)"><div class="range-label"><label for="height"><span class="dot" style="background:var(--c-height)"></span>Altura</label><output id="heightV">175 cm</output></div><input id="height" type="range" min="85" max="195" step="1" value="175" style="--vc:var(--c-height)"><div class="range-ends"><span>85 cm</span><span>195 cm</span></div><p id="rangeHint" class="hint hide-focus"></p></div></div>
+<div class="fieldset"><span class="small-label">FISIOPATOLOGIA</span>
+<div class="slider-card" style="--vc:var(--c-obs)"><div class="range-label"><label for="obs"><span class="dot" style="background:var(--c-obs)"></span>Obstrução ao fluxo</label><output id="obsV">0%</output></div><input id="obs" type="range" min="0" max="100" step="5" value="0" style="--vc:var(--c-obs)"><div class="range-ends"><span>vias normais</span><span>obstrução máxima</span></div><p class="hint hide-focus">Aumenta a resistência e o colapso das vias aéreas durante a expiração forçada (asma, DPOC, bronquiectasia, fibrose cística).</p></div>
+<div class="slider-card" style="--vc:var(--c-res)"><div class="range-label"><label for="res"><span class="dot" style="background:var(--c-res)"></span>Restrição</label><output id="resV">0%</output></div><input id="res" type="range" min="0" max="100" step="5" value="0" style="--vc:var(--c-res)"><div class="range-ends"><span>pulmão normal</span><span>restrição máxima</span></div><p class="hint hide-focus">Reduz o volume pulmonar e enrijece o pulmão ou limita a expansão (fibrose, obesidade, escoliose, doenças neuromusculares).</p></div>
+<div class="slider-card" style="--vc:var(--c-eff)"><div class="range-label"><label for="eff"><span class="dot" style="background:var(--c-eff)"></span>Esforço e colaboração</label><output id="effV">100%</output></div><input id="eff" type="range" min="30" max="100" step="5" value="100" style="--vc:var(--c-eff)"><div class="range-ends"><span>insuficiente</span><span>máximo</span></div><p class="hint hide-focus">Esforço baixo reduz o pico de fluxo, atrasa o início e pode interromper a expiração antes do platô.</p></div>
+<div class="slider-card" style="--vc:var(--c-bd)"><div class="range-label"><label for="bd"><span class="dot" style="background:var(--c-bd)"></span>Resposta ao broncodilatador</label><output id="bdV">60%</output></div><input id="bd" type="range" min="0" max="100" step="5" value="60" style="--vc:var(--c-bd)"><div class="range-ends"><span>irreversível</span><span>muito reversível</span></div><p class="hint hide-focus">Só tem efeito depois que o broncodilatador é administrado.</p></div></div></div>
+
+<div class="panel test-panel" data-tab="teste"><div class="panel-head"><div><span class="kicker">LABORATÓRIO DE FUNÇÃO PULMONAR</span><h2>Realize a manobra</h2></div><button id="focus" class="primary" type="button" aria-pressed="false" style="min-height:42px;padding:9px 12px;font-size:.85rem;white-space:nowrap">⛶ Tela cheia</button></div>
+<div class="stages" id="stages"><div class="stage" data-st="1"><b>1</b>Respiração tranquila</div><div class="stage" data-st="2"><b>2</b>Inspiração máxima</div><div class="stage" data-st="3"><b>3</b>Expiração forçada</div><div class="stage" data-st="4"><b>4</b>Inspiração forçada</div></div>
+<div id="coach" class="coach" aria-live="polite"></div>
+<div class="transport"><button id="btnStart" class="primary" type="button">▶ Realizar manobra</button><button id="btnPause" type="button">Pausar</button><button id="btnAuto" type="button">Fazer 3 manobras</button><div class="seg" id="speedSeg" role="group" aria-label="Velocidade da simulação"><button type="button" data-speed="1" aria-pressed="false">1×</button><button type="button" data-speed="2" class="on" aria-pressed="true">2×</button><button type="button" data-speed="4" aria-pressed="false">4×</button></div><div class="grow"><button id="btnBD" class="green" type="button">Administrar broncodilatador</button><button id="btnReset" class="danger" type="button">Reiniciar teste</button></div></div>
+<div class="metric-grid sens" aria-label="Leituras do sensor"><div class="metric s-fase" style="--metric-strong:#17324d;--metric-color:rgba(23,50,77,.18)"><small>Fase</small><strong id="sPhase">Aguardando</strong></div><div class="metric s-time" style="--metric-strong:var(--c-time);--metric-color:color-mix(in srgb,var(--c-time) 26%,transparent)"><small>Tempo</small><strong id="sTime">0,00<i>s</i></strong></div><div class="metric s-vol" style="--metric-strong:var(--c-vol);--metric-color:color-mix(in srgb,var(--c-vol) 26%,transparent)"><small>Volume</small><strong id="sVol">0,00<i>L</i></strong></div><div class="metric s-flow" style="--metric-strong:var(--c-flow);--metric-color:color-mix(in srgb,var(--c-flow) 26%,transparent)"><small>Fluxo</small><strong id="sFlow">0,00<i>L/s</i></strong></div></div>
+<div class="chart-title"><b>Registro contínuo do teste</b><span>volume (L) × tempo · expirar sobe, inspirar desce</span></div><canvas id="cvStrip" class="cv strip" role="img" aria-label="Registro contínuo do volume durante o teste"></canvas>
+<div class="charts"><div><div class="chart-title"><b>Curva volume–tempo</b><span>volume exalado (L) × tempo (s)</span></div><canvas id="cvVT" class="cv vt" role="img" aria-label="Curva volume-tempo da expiração forçada"></canvas></div><div><div class="chart-title"><b>Alça fluxo–volume</b><span>fluxo (L/s) × volume exalado (L)</span></div><canvas id="cvFV" class="cv fv" role="img" aria-label="Alça fluxo-volume"></canvas></div></div>
+<div class="legend"><span><i style="border-color:#17324d;border-top-width:4px"></i>Manobra atual</span><span><i style="border-color:#455A64"></i>Pré-BD (tentativas)</span><span><i style="border-color:#E7298A"></i>Pós-BD (tentativas)</span><label class="check"><input type="checkbox" id="showPred" checked> <span><i style="border-top:3px dashed #B0BEC5;width:22px;display:inline-block;vertical-align:middle;margin-right:6px"></i>Curva prevista</span></label></div>
+<div class="chart-title" style="margin-top:16px"><b>Valores capturados</b><span>medido × previsto para este paciente</span></div><div class="metric-grid" id="results"></div><div class="qline qcard" id="capQuality"></div></div>
+</section>
+
+<div data-tab="resultados"><section class="section-title"><div><span class="kicker">RESULTADOS DO EXAME</span><h2>Melhores valores e interpretação</h2><p>Como no exame real: pelo menos três manobras aceitáveis, duas reprodutíveis; vale o maior VEF₁ e a maior CVF.</p></div><span class="badge" id="trialCount">0 manobras</span></section>
+<div class="panel"><span class="kicker">MANOBRAS REALIZADAS</span><div id="trials" class="trials"></div><p id="repro" class="hint"></p>
+<div style="overflow-x:auto;margin-top:16px"><table id="summary"></table></div><div id="verdict"></div></div>
+<section class="panel" style="margin-top:18px"><span class="kicker">COMO AS MEDIDAS SE RELACIONAM</span><div class="relationship"><div class="formula-card"><h3>Relação VEF₁/CVF</h3><code><span class="c-ratio">VEF₁/CVF</span> = <span class="c-fev1">VEF₁</span> ÷ <span class="c-fvc">CVF</span> × 100</code><small class="live" id="fRatio"></small></div><div class="formula-card"><h3>Fluxo médio da parte média</h3><code><span class="c-fef">FEF₂₅₋₇₅%</span> ≈ 0,5 × <span class="c-fvc">CVF</span> ÷ (<span class="c-time">t₇₅</span> − <span class="c-time">t₂₅</span>)</code><small class="live" id="fFef"></small></div><div class="formula-card"><h3>Pico de fluxo</h3><code><span class="c-pef">PFE</span> = maior fluxo da alça, logo no início da expiração</code><small class="live" id="fPef"></small></div><div class="formula-card"><h3>Prova broncodilatadora</h3><code>Δ<span class="c-fev1">VEF₁</span> = <span class="c-bd">pós-BD</span> − pré-BD</code><small class="live" id="fBd"></small></div></div></section>
+<section class="learn"><div class="panel"><span class="kicker">COMO INTERPRETAR</span><h2>Duas formas de ver o mesmo sopro</h2><div class="note"><p><b>Volume–tempo:</b> mostra quanto ar saiu e quando. O <span class="c-fev1">VEF₁</span> é o volume do primeiro segundo; a <span class="c-fvc">CVF</span> é o total, quando a curva faz um platô.</p><p><b>Fluxo–volume:</b> mostra a velocidade do ar a cada volume. O <span class="c-pef">PFE</span> aparece logo no início e depois o fluxo cai à medida que o pulmão esvazia; o <span class="c-fef">FEF₂₅₋₇₅%</span> resume a parte média.</p><p><span class="c-obs">Obstrução:</span> a curva fica “escavada” (côncava) e o pulmão demora a esvaziar: <span class="c-ratio">VEF₁/CVF</span> baixa.</p><p><span class="c-res">Restrição:</span> a alça fica pequena, mas com formato preservado: volumes reduzidos e relação normal ou alta.</p><p><b>Idade:</b> em crianças a relação VEF₁/CVF é mais alta e o platô vem mais cedo; no idoso a retração elástica diminui e a relação cai, mesmo sem doença.</p></div></div>
+<div class="panel"><span class="kicker">IDEIA CENTRAL</span><h2>O esforço só manda no começo.</h2><p>No início da expiração, quanto mais força o paciente faz, maior o pico de fluxo. Depois, as vias aéreas comprimem e o fluxo passa a depender da mecânica pulmonar — da retração elástica e da resistência das vias — e não mais do esforço. Por isso a espirometria exige colaboração, mas a parte final da curva revela o pulmão.</p></div></section>
+<details class="references"><summary>Saiba mais sobre o modelo e as referências</summary><p>O pulmão é representado por um compartimento que se esvazia com fluxo limitado pela mecânica (constante de tempo e resistência dependentes do volume). A obstrução aumenta a constante de tempo e a concavidade da curva; a restrição reduz os volumes e a constante de tempo; o esforço modula o pico e o início da manobra. O modelo é didático: não reproduz toda a variabilidade biológica, não inclui tosse, vazamento nem artefatos, e os padrões não estabelecem diagnóstico.</p><p>Valores previstos e limites inferiores da normalidade (LLN): adultos de 20 a 85 anos, equações para brasileiros brancos de Pereira CAC, Sato T, Rodrigues SC (J Bras Pneumol 2007;33(4):397-406). Crianças de 3 a 12 anos: equações do percentil 50 de Jones MH et al. (J Bras Pneumol 2020;46(3):e20190138), para crianças brancas; nelas, o LLN foi aproximado (80% do previsto para a CVF, 78% para o VEF₁ e 60% para o FEF₂₅₋₇₅%; a relação VEF₁/CVF usa a equação do percentil 5 do estudo) e o PFE foi estimado em 2,75 × VEF₁, pois o estudo não traz equação própria. Entre 13 e 19 anos não há equação brasileira contínua: o previsto é uma interpolação linear entre os valores de 12 e de 20 anos. No idoso a queda da relação VEF₁/CVF já está embutida nas equações de adultos. Os fluxos (PFE e FEF₂₅₋₇₅%) usam as equações logarítmicas do mesmo estudo. Fora da faixa de altura do estudo (homens 152–192 cm; mulheres 137–182 cm) os previstos são extrapolados. Equações específicas para adultos negros brasileiros (Prata et al., J Bras Pneumol 2018) e as equações globais do GLI não estão incluídas.</p><p>Critérios de qualidade e interpretação: início satisfatório (volume extrapolado ≤ 5% da CVF ou 0,15 L), expiração com platô ou duração mínima de 6 s (3 s em menores de 10 anos), reprodutibilidade (diferença ≤ 0,15 L entre as duas maiores CVF e entre os dois maiores VEF₁), gravidade pelo VEF₁ % do previsto e resposta ao broncodilatador (aumento ≥ 12% e ≥ 200 mL no VEF₁ ou na CVF), conforme ATS/ERS 2005. As diretrizes ATS/ERS de 2022 recomendam classificar a gravidade por escore z e definem resposta significativa como aumento &gt; 10% do valor previsto.</p><p>Referências: <a href="https://jornaldepneumologia.com.br/details/370/en-US" target="_blank" rel="noopener">Pereira et al., 2007 — valores de referência brasileiros</a> · Miller MR et al. Standardisation of spirometry. Eur Respir J 2005;26:319-38 · Pellegrino R et al. Interpretative strategies for lung function tests. Eur Respir J 2005;26:948-68 · Graham BL et al. Standardization of spirometry 2019 update. Am J Respir Crit Care Med 2019;200:e70-e88 · Stanojevic S et al. ERS/ATS technical standard on interpretive strategies for routine lung function tests. Eur Respir J 2022;60:2101499.</p></details></div></main>
+<footer>Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</footer>
+<script>window.addEventListener('error',function(e){var b=document.getElementById('espError');if(b){b.hidden=false;b.textContent='O simulador encontrou um erro e pode parar de responder: '+(e.message||'erro desconhecido')+'. Informe esta mensagem para que possamos corrigir.';}});</script>
+<script>(() => {
+'use strict';
+const $=id=>document.getElementById(id);
+/* ===== Motor: modelo mecânico de um compartimento com limitação ao fluxo ===== */
+const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+const DT=0.0025,TMAX_EXP=15,A_OBS=.8,C_OBS=12,BETA=2.0,BW=.25;
+function adultPred(sex,age,h){
+  const M=sex==='M',ln=Math.log;
+  const fvc=M?.0517*h-.0207*age-3.18:.0441*h-.0189*age-2.848;
+  const fev1=M?.0338*h-.0252*age-.789:.0314*h-.0203*age-1.353;
+  const ratio=M?-.175*h-.197*age+120.3:-.140*h-.158*age+111.5;
+  const pef=Math.exp(M?.830*ln(h)-.114*ln(age)-1.43:1.442*ln(h)-.125*ln(age)-4.863);
+  const fef=Math.exp(M?3.93-.687*ln(age):.998*ln(h)-.588*ln(age)-1.852);
+  return {fvc,fev1,ratio,pef,fef,lln:{fvc:fvc-(M?.90:.64),fev1:fev1-(M?.76:.61),ratio:ratio-(M?7.6:8.5),pef:pef*(M?.76:.75),fef:fef*(M?.59:.57)}};
+}
+/* Crianças de 3 a 12 anos: equações de Jones et al. 2020 (percentil 50, crianças brancas); LLN e PFE aproximados */
+function kidPred(sex,age,h){
+  const M=sex==='M',a=clamp(age,3,12.9),lh=Math.log(clamp(h,85,176)),la=Math.log(a);
+  const c=M?{fvc:[-11.358191,2.419817,.115477],fev1:[-10.434226,2.207609,.114001],fef:[-6.957857,1.527303,.138649],rl:[1.942780,-.231255]}
+           :{fvc:[-10.741935,2.261976,.156836],fev1:[-9.967740,2.088950,.150386],fef:[-7.385469,1.594033,.203576],rl:[1.313149,-.100805]};
+  const ev=k=>Math.exp(c[k][0]+c[k][1]*lh+c[k][2]*la),fvc=ev('fvc'),fev1=ev('fev1'),fef=ev('fef'),pef=2.75*fev1;
+  return {fvc,fev1,ratio:100*fev1/fvc,pef,fef,lln:{fvc:.8*fvc,fev1:.78*fev1,ratio:100*(c.rl[0]+c.rl[1]*lh),pef:.75*pef,fef:.6*fef}};
+}
+function predicted(sex,age,h){
+  if(age>=20)return adultPred(sex,age,h);
+  if(age<=12)return kidPred(sex,age,h);
+  const w=(age-12)/8,A=adultPred(sex,20,h),K=kidPred(sex,12,h),mx=(k,b)=>b*w+k*(1-w),o={lln:{}};
+  ['fvc','fev1','ratio','pef','fef'].forEach(k=>{o[k]=mx(K[k],A[k]);o.lln[k]=mx(K.lln[k],A.lln[k]);});return o;
+}
+function forcedExp(p){
+  const {x0,tau0,obs,res,eff}=p,emax=.45+.55*eff,te=.035+(1-eff)*.22;
+  const tauOf=x=>{const u=1-x/x0;return tau0*(1+A_OBS*obs)*(1+C_OBS*obs*u*u)*(1-.35*res);};
+  const out={t:[0],v:[0],f:[0]};let x=x0,t=0,lowT=0;
+  while(t<TMAX_EXP){
+    const u=1-x/x0,ramp=1-Math.exp(-t/te),edep=ramp*(1-(1-emax)*Math.pow(x/x0,2))*(1+BETA*(1-.5*obs)*Math.exp(-u/BW));
+    const f=Math.max(0,edep*x/tauOf(x));
+    x-=f*DT;if(x<0)x=0;t+=DT;out.t.push(t);out.v.push(x0-x);out.f.push(f);
+    if(f<.025){lowT+=DT;if(lowT>=1&&t>1.5)break;}else lowT=0;
+  }
+  return out;
+}
+function metrics(c){
+  const n=c.t.length,w=Math.round(.08/DT);let best=-1,bi=0;
+  for(let i=0;i+w<n;i++){const s=(c.v[i+w]-c.v[i])/(w*DT);if(s>best){best=s;bi=i;}}
+  const t0=Math.max(0,c.t[bi]-c.v[bi]/best);
+  const vAt=tt=>{const k=tt/DT,i=Math.floor(k);if(i>=n-1)return c.v[n-1];return c.v[i]+(k-i)*(c.v[i+1]-c.v[i]);};
+  const ev=vAt(t0),tend=c.t[n-1],fvc=c.v[n-1]-ev,fev1=(t0+1<=tend)?vAt(t0+1)-ev:fvc;
+  let pef=0,ip=0;for(let i=0;i<n;i++)if(c.f[i]>pef){pef=c.f[i];ip=i;}
+  const tAtV=vv=>{for(let i=0;i<n;i++)if(c.v[i]-ev>=vv)return c.t[i];return tend;};
+  const fAtV=fr=>{const vv=fr*fvc+ev;for(let i=0;i<n;i++)if(c.v[i]>=vv)return c.f[i];return 0;};
+  const t25=tAtV(.25*fvc),t50=tAtV(.5*fvc),t75=tAtV(.75*fvc);
+  const lastSec=vAt(tend)-vAt(Math.max(0,tend-1));
+  return {t0,ev,fvc,fev1,ratio:100*fev1/fvc,pef,tpef:c.t[ip],fef2575:.5*fvc/Math.max(.001,t75-t25),fef25:fAtV(.25),fef50:fAtV(.5),fef75:fAtV(.75),texp:tend-t0,tend,plateau:lastSec<.025,t25,t50,t75,evPct:100*ev/fvc,slope:best,tslope:c.t[bi],vslope:c.v[bi]};
+}
+function calibrateTau0(sex,age,h){
+  const P=predicted(sex,age,h),target=P.fev1/P.fvc;let lo=.1,hi=3;
+  for(let k=0;k<36;k++){const mid=(lo+hi)/2,m=metrics(forcedExp({x0:P.fvc,tau0:mid,obs:0,res:0,eff:1}));if(m.fev1/m.fvc>target)lo=mid;else hi=mid;}
+  return (lo+hi)/2;
+}
+/* ===== Estado ===== */
+const profiles=[
+ {g:'crianca',id:'c-normal',t:'Criança saudável',sex:'M',age:8,h:130,obs:0,res:0,eff:100,bd:0,info:'Sem doença: na infância a relação VEF₁/CVF é alta (cerca de 90%) e os volumes crescem com a altura.'},
+ {g:'crianca',id:'c-asma',t:'Asma na infância (reversível)',sex:'F',age:7,h:122,obs:20,res:0,eff:100,bd:90,info:'Obstrução leve a moderada, típica da asma, com boa resposta ao broncodilatador.'},
+ {g:'crianca',id:'c-fc',t:'Fibrose cística',sex:'M',age:10,h:135,obs:45,res:10,eff:100,bd:30,info:'Muco espesso e inflamação crônica: obstrução progressiva, com resposta variável ao broncodilatador.'},
+ {g:'crianca',id:'c-bo',t:'Bronquiolite obliterativa pós-infecciosa',sex:'F',age:9,h:128,obs:60,res:0,eff:100,bd:10,info:'Lesão das pequenas vias após infecção grave: obstrução importante e pouco reversível.'},
+ {g:'crianca',id:'c-neuro',t:'Doença neuromuscular (fraqueza)',sex:'M',age:11,h:142,obs:0,res:40,eff:75,bd:0,info:'Músculos respiratórios fracos: volumes reduzidos e esforço limitado, com vias aéreas normais.'},
+ {g:'crianca',id:'c-pre',t:'Pré-escolar com pouca colaboração',sex:'F',age:5,h:110,obs:0,res:0,eff:45,bd:0,info:'Pulmão normal, mas a criança pequena tem dificuldade em manter a manobra: mostra a importância da qualidade.'},
+ {g:'adolescente',id:'a-normal',t:'Adolescente saudável',sex:'M',age:15,h:170,obs:0,res:0,eff:100,bd:0,info:'Volumes em crescimento: valores previstos entre os da infância e os do adulto jovem.'},
+ {g:'adolescente',id:'a-asma',t:'Asma moderada',sex:'F',age:16,h:163,obs:30,res:0,eff:100,bd:85,info:'Obstrução moderada, bem reversível após o broncodilatador.'},
+ {g:'adolescente',id:'a-obes',t:'Obesidade (restrição leve)',sex:'M',age:17,h:175,obs:0,res:25,eff:100,bd:0,info:'O excesso de peso limita a expansão da caixa torácica e reduz os volumes.'},
+ {g:'adolescente',id:'a-escol',t:'Escoliose grave',sex:'F',age:14,h:160,obs:0,res:45,eff:100,bd:0,info:'Deformidade da coluna que restringe a parede torácica: volumes reduzidos e relação preservada.'},
+ {g:'adulto',id:'normal',t:'Adulto saudável',sex:'M',age:40,h:175,obs:0,res:0,eff:100,bd:60,info:'Sem doença: a relação VEF₁/CVF e os volumes ficam próximos do previsto.'},
+ {g:'adulto',id:'asma',t:'Asma leve (reversível)',sex:'F',age:28,h:164,obs:15,res:0,eff:100,bd:90,info:'Obstrução leve que melhora bastante após o broncodilatador.'},
+ {g:'adulto',id:'asma-g',t:'Asma grave não controlada',sex:'F',age:35,h:165,obs:50,res:0,eff:100,bd:70,info:'Obstrução importante, ainda com resposta ao broncodilatador.'},
+ {g:'adulto',id:'tabag',t:'Tabagista (DPOC inicial)',sex:'M',age:45,h:175,obs:12,res:0,eff:100,bd:10,info:'Obstrução leve com pouca reversibilidade: a relação VEF₁/CVF já está reduzida.'},
+ {g:'adulto',id:'bronq',t:'Bronquiectasia',sex:'F',age:50,h:160,obs:35,res:10,eff:100,bd:20,info:'Vias aéreas dilatadas e com secreção: obstrução com leve redução de volumes.'},
+ {g:'adulto',id:'rest1',t:'Obesidade (restrição leve)',sex:'F',age:45,h:160,obs:0,res:25,eff:100,bd:0,info:'Volumes um pouco reduzidos com relação VEF₁/CVF preservada.'},
+ {g:'adulto',id:'sarc',t:'Sarcoidose / fibrose (restrição)',sex:'M',age:42,h:178,obs:0,res:40,eff:100,bd:0,info:'Pulmão menos complacente: alça pequena com formato preservado.'},
+ {g:'adulto',id:'cifo',t:'Cifoescoliose',sex:'F',age:48,h:155,obs:0,res:50,eff:100,bd:0,info:'Restrição por deformidade da caixa torácica, com pulmão intrinsecamente normal.'},
+ {g:'adulto',id:'ela',t:'Doença neuromuscular (ex.: ELA)',sex:'M',age:55,h:174,obs:0,res:45,eff:70,bd:0,info:'Fraqueza dos músculos respiratórios: CVF reduzida e esforço limitado.'},
+ {g:'adulto',id:'esforco',t:'Saudável com esforço insuficiente',sex:'F',age:35,h:165,obs:0,res:0,eff:40,bd:0,info:'Pulmão normal, mas a manobra é mal executada: mostra por que a qualidade importa.'},
+ {g:'idoso',id:'i-normal',t:'Idoso saudável',sex:'F',age:74,h:158,obs:0,res:0,eff:100,bd:0,info:'Envelhecimento normal: a retração elástica diminui e a relação VEF₁/CVF cai, sem doença.'},
+ {g:'idoso',id:'dpoc2',t:'DPOC moderada',sex:'M',age:66,h:170,obs:40,res:0,eff:100,bd:15,info:'Obstrução moderada com pouca reversibilidade e curva côncava.'},
+ {g:'idoso',id:'dpoc3',t:'DPOC grave / enfisema',sex:'M',age:70,h:168,obs:90,res:0,eff:100,bd:20,info:'Obstrução importante: expiração longa, sem platô antes de vários segundos.'},
+ {g:'idoso',id:'i-asma',t:'Asma de início tardio',sex:'F',age:65,h:160,obs:25,res:0,eff:100,bd:60,info:'Obstrução com resposta parcial ao broncodilatador.'},
+ {g:'idoso',id:'rest2',t:'Fibrose pulmonar idiopática',sex:'M',age:68,h:172,obs:0,res:60,eff:100,bd:0,info:'Pulmão pequeno e rígido: alça reduzida, com relação VEF₁/CVF normal ou alta.'},
+ {g:'idoso',id:'misto',t:'Padrão misto',sex:'M',age:66,h:170,obs:35,res:35,eff:100,bd:20,info:'Obstrução associada a redução de volumes.'},
+ {g:'idoso',id:'icc',t:'Insuficiência cardíaca (congestão)',sex:'M',age:72,h:168,obs:10,res:25,eff:100,bd:10,info:'A congestão pulmonar reduz volumes e estreita pequenas vias, com padrão misto leve.'},
+ {g:'idoso',id:'sarcop',t:'Fraqueza muscular respiratória',sex:'F',age:78,h:155,obs:0,res:20,eff:70,bd:0,info:'Menor força muscular: volumes reduzidos e dificuldade de sustentar a expiração.'}
+];
+const GRP={crianca:'Criança · 3 a 12 anos',adolescente:'Adolescente · 13 a 19 anos',adulto:'Adulto · 20 a 59 anos',idoso:'Idoso · 60 anos ou mais'};
+const grpOf=a=>a<=12?'crianca':a<20?'adolescente':a<60?'adulto':'idoso';
+const GRP_DEF={crianca:{age:8,M:130,F:128},adolescente:{age:15,M:170,F:162},adulto:{age:40,M:175,F:163},idoso:{age:72,M:168,F:155}};
+const S={auto:0,sex:'M',age:40,h:175,obs:0,res:0,eff:1,bd:.6,phase:'pre',speed:2,showPred:true,profile:'normal',trials:[],cur:null,running:false,tCur:0,counter:0};
+const tauCache=new Map(),predCache=new Map();
+const fmt=(x,d=2)=>Number.isFinite(x)?x.toFixed(d).replace('.',','):'—';
+const P0=()=>predicted(S.sex,S.age,S.h);
+function tau0For(){const k=`${S.sex}|${S.age}|${S.h}`;if(!tauCache.has(k))tauCache.set(k,calibrateTau0(S.sex,S.age,S.h));return tauCache.get(k);}
+function mulberry32(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gauss(r){let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());}
+function insp(x0,Lstart,peak){ // inspiração forçada: perfil em sino; pico de fluxo inspiratório alvo
+  const Ti=clamp((Math.PI/2)*(x0-Lstart)/peak,.9,3.2),n=Math.round(Ti/DT),L=[];
+  for(let i=1;i<=n;i++){const s=i/n;L.push(Lstart+(x0-Lstart)*(1-Math.cos(Math.PI*s))/2);}
+  return L;
+}
+function buildTimeline(x0,c,obsEff,frcShare,Tb){
+  const frc=x0*frcShare,vt=Math.max(.2,.11*x0);Tb=Tb||3.2;const L=[];
+  const n1=Math.round(2*Tb/DT);for(let i=0;i<=n1;i++)L.push(frc+(vt/2)*Math.sin(2*Math.PI*i*DT/Tb));
+  const i1=L.length;const Ti2=2.4,n2=Math.round(Ti2/DT);for(let i=1;i<=n2;i++)L.push(frc+(x0-frc)*(1-Math.cos(Math.PI*i/n2))/2);
+  const hold=Math.round(.5/DT);for(let i=0;i<hold;i++)L.push(x0);
+  const iF=L.length-1;for(let i=1;i<c.t.length;i++)L.push(x0-c.v[i]);
+  const iE=L.length-1,Lend=L[iE];const pefc=Math.max(...c.f),Li=insp(x0,Lend,Math.max(.68*pefc,.75*x0));for(const v of Li)L.push(v);
+  const Q=new Float32Array(L.length);for(let i=0;i<L.length-1;i++)Q[i]=-(L[i+1]-L[i])/DT;Q[L.length-1]=0;
+  let qmin=0;for(let i=0;i<Q.length;i++)if(Q[i]<qmin)qmin=Q[i];
+  return {qmin,L:Float32Array.from(L),Q,frc,i1,iF,iE,total:(L.length-1)*DT,tF:iF*DT,tE:iE*DT,t2:i1*DT+Ti2};
+}
+const tbOf=a=>a<6?2.4:a<13?2.9:a<60?3.4:3.6;
+function buildTrial(){
+  const P=P0(),sig=S.counter*7919+S.age*31+S.h*17+(S.sex==='M'?1:2)+Math.round(S.obs*100)*13+Math.round(S.res*100)*7+(S.phase==='post'?911:0),rng=mulberry32(sig);
+  const obsEff=S.phase==='post'?S.obs*(1-.6*S.bd):S.obs;
+  const varV=(.007+(S.age<13?.01:0)+(1-S.eff)*.09)*gauss(rng),effT=clamp(Math.min(S.eff,.97)+(.05+(1-S.eff)*.3)*gauss(rng),.2,1);
+  const x0=P.fvc*(1-.55*S.res)*(1-.30*obsEff)*(1+varV);
+  let c=forcedExp({x0,tau0:tau0For(),obs:obsEff,res:S.res,eff:effT});
+  if(S.eff<.85){const tq=2.2+6*S.eff*(.6+.8*rng());const k=c.t.findIndex(t=>t>tq);if(k>0){c={t:c.t.slice(0,k),v:c.v.slice(0,k),f:c.f.slice(0,k)};}}
+  const m=metrics(c),frcShare=.26+.2*obsEff,tl=buildTimeline(x0,c,obsEff,frcShare,tbOf(S.age));
+  const startOk=m.ev<=Math.max(.05*m.fvc,.15),minT=S.age<10?3:6,expOk=m.plateau||m.texp>=minT,reasons=[];
+  if(!startOk)reasons.push('início hesitante (volume extrapolado '+fmt(m.ev*1000,0)+' mL)');
+  if(!expOk)reasons.push('expiração interrompida antes do platô ou de '+minT+' s');
+  return {id:++S.counter,phase:S.phase,P,x0,c,m,tl,startOk,expOk,accept:startOk&&expOk,reasons,dec:null};
+}
+function decimate(tr){const {tl,x0}=tr,xs=[],ys=[],ts=[],vs=[];
+  for(let i=tl.iF;i<tl.L.length;i+=6){xs.push(x0-tl.L[i]);ys.push(tl.Q[i]);}
+  for(let j=0;j<tr.c.t.length;j+=6){ts.push(tr.c.t[j]);vs.push(tr.c.v[j]);}
+  tr.dec={xs,ys,ts,vs};}
+function predLoop(){const k=`${S.sex}|${S.age}|${S.h}`;if(predCache.has(k))return predCache.get(k);
+  const P=P0(),c=forcedExp({x0:P.fvc,tau0:tau0For(),obs:0,res:0,eff:1}),tl=buildTimeline(P.fvc,c,0,.26,tbOf(S.age));
+  const xs=[],ys=[],ts=[],vs=[];for(let i=tl.iF;i<tl.L.length;i+=6){xs.push(P.fvc-tl.L[i]);ys.push(tl.Q[i]);}for(let j=0;j<c.t.length;j+=6){ts.push(c.t[j]);vs.push(c.v[j]);}
+  const r={xs,ys,ts,vs,qmin:tl.qmin};predCache.set(k,r);return r;}
+/* ===== Desenho ===== */
+const V={fvc:'#1F78B4',fev1:'#E31A1C',ratio:'#6A3D9A',pef:'#FF7F00',fef:'#33A02C',t:'#00ACC1',vol:'#3F51B5',flow:'#FFB300'};
+const COL={cur:'#17324d',pre:'#455A64',post:'#E7298A',pred:'#B0BEC5',mark:'#d54646',grid:'#e3ecf5',axis:'#8aa1b5',text:'#526d83'};
+function setup(cv){const r=cv.getBoundingClientRect(),w=Math.max(60,r.width),h=Math.max(60,r.height),dpr=Math.min(window.devicePixelRatio||1,1.5);
+  if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
+  const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,w,h);return {g,w,h};}
+function niceStep(range,target){const raw=range/target,p=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/p;return (f<1.5?1:f<3?2:f<7?5:10)*p;}
+function axes(g,w,h,xr,yr,o){const l=o.l??42,r=8,t=o.t??8,b=o.b??26,X=v=>l+(v-xr[0])/(xr[1]-xr[0])*(w-l-r),Y=v=>h-b-(v-yr[0])/(yr[1]-yr[0])*(h-t-b);
+  g.font='600 10.5px Inter,Segoe UI,sans-serif';g.lineWidth=1;g.fillStyle=COL.text;
+  const xs=o.xstep||niceStep(xr[1]-xr[0],7),ys=o.ystep||niceStep(yr[1]-yr[0],5);
+  for(let v=Math.ceil(xr[0]/xs)*xs;v<=xr[1]+1e-9;v+=xs){g.strokeStyle=COL.grid;g.beginPath();g.moveTo(X(v),t);g.lineTo(X(v),h-b);g.stroke();g.textAlign='center';g.fillText(String(+v.toFixed(2)).replace('.',','),X(v),h-b+13);}
+  for(let v=Math.ceil(yr[0]/ys)*ys;v<=yr[1]+1e-9;v+=ys){g.strokeStyle=v===0&&yr[0]<0?COL.axis:COL.grid;g.beginPath();g.moveTo(l,Y(v));g.lineTo(w-r,Y(v));g.stroke();g.textAlign='right';g.fillText(String(+v.toFixed(2)).replace('.',','),l-5,Y(v)+3.5);}
+  g.strokeStyle=COL.axis;g.strokeRect(l,t,w-l-r,h-t-b);
+  if(o.xl){g.textAlign='right';g.fillText(o.xl,w-r-2,h-b-4);}
+  if(o.yl){g.save();g.translate(11,t+ (h-t-b)/2);g.rotate(-Math.PI/2);g.textAlign='center';g.fillText(o.yl,0,0);g.restore();}
+  return {X,Y,l,r,t,b};}
+function poly(g,X,Y,xs,ys,n,col,wd,dash){if(n<2)return;g.strokeStyle=col;g.lineWidth=wd;g.setLineDash(dash||[]);g.lineJoin='round';g.beginPath();for(let i=0;i<n;i++){const x=X(xs[i]),y=Y(ys[i]);if(i)g.lineTo(x,y);else g.moveTo(x,y);}g.stroke();g.setLineDash([]);}
+function dot(g,x,y,col,label,dx,dy){g.fillStyle=col;g.beginPath();g.arc(x,y,4,0,6.3);g.fill();g.strokeStyle='#fff';g.lineWidth=1.5;g.stroke();if(label){g.font='700 10.5px Inter,Segoe UI,sans-serif';g.textAlign=dx<0?'right':'left';g.lineJoin='round';g.lineWidth=4;g.strokeStyle='#fff';g.strokeText(label,x+dx,y+dy);g.fillStyle=col;g.fillText(label,x+dx,y+dy);}}
+const PH=['Aguardando','Respiração tranquila','Inspiração máxima','Expiração forçada','Inspiração forçada','Teste concluído'];
+function phaseNow(){const c=S.cur;if(!c)return 0;const t=S.tCur,tl=c.tl;if(t>=tl.total-1e-6)return 5;if(t<tl.i1*DT)return 1;if(t<tl.tF)return 2;if(t<=tl.tE)return 3;return 4;}
+function drawStrip(){const cv=$('cvStrip'),{g,w,h}=setup(cv),c=S.cur,P=P0();
+  const tl=c?c.tl:null,total=tl?tl.total:20,frc=tl?tl.frc:1.2,x0=c?c.x0:P.fvc;
+  const yr=[frc-x0-.5,frc+.5],A=axes(g,w,h,[0,total],yr,{l:42,b:20,t:20,xl:'s',ystep:niceStep(yr[1]-yr[0],3)});
+  if(!c){g.fillStyle=COL.text;g.textAlign='center';g.font='600 12px Inter,sans-serif';g.fillText('Pressione “Realizar manobra” para iniciar o registro',w/2,h/2);return;}
+  const bounds=[0,tl.i1*DT,tl.tF,tl.tE,tl.total],names=['Tranquila','Inspiração máx.','Expiração forçada','Insp. forçada'];
+  g.font='700 9.5px Inter,sans-serif';
+  for(let k=0;k<4;k++){g.fillStyle=k%2?'#edf4fc':'#f8fbff';g.fillRect(A.X(bounds[k]),A.t,A.X(bounds[k+1])-A.X(bounds[k]),h-A.t-A.b);g.fillStyle='#7a93a8';g.textAlign='center';const cx=(A.X(bounds[k])+A.X(bounds[k+1]))/2;if(A.X(bounds[k+1])-A.X(bounds[k])>46)g.fillText(names[k],cx,A.t-6);}
+  axes(g,w,h,[0,total],yr,{l:42,b:20,t:20,xl:'s',ystep:niceStep(yr[1]-yr[0],3)});
+  const n=Math.min(tl.L.length,Math.floor(S.tCur/DT)+1),step=Math.max(1,Math.round(n/900)),xs=[],ys=[];for(let i=0;i<n;i+=step){xs.push(i*DT);ys.push(tl.frc-tl.L[i]);}
+  poly(g,A.X,A.Y,xs,ys,xs.length,COL.cur,1.8);}
+function drawVT(){const cv=$('cvVT'),{g,w,h}=setup(cv),c=S.cur,P=P0(),pl=predLoop();
+  const Tview=c?clamp(Math.ceil(c.m.tend+.5),7,16):7,ymax=Math.ceil(P.fvc+.6),A=axes(g,w,h,[0,Tview],[0,ymax],{l:40,xl:'s',yl:'L',xstep:Tview>10?2:1,ystep:1});
+  if(S.showPred)poly(g,A.X,A.Y,pl.ts,pl.vs,pl.ts.length,COL.pred,1.6,[5,4]);
+  for(const tr of S.trials){if(tr!==c&&tr.dec)poly(g,A.X,A.Y,tr.dec.ts,tr.dec.vs,tr.dec.ts.length,tr.phase==='post'?COL.post:COL.pre,1.4);}
+  g.fillStyle=COL.text;g.font='600 9.5px Inter,sans-serif';g.strokeStyle='#c7d6e4';g.setLineDash([2,4]);g.beginPath();g.moveTo(A.X(6),A.t);g.lineTo(A.X(6),h-A.b);g.stroke();g.setLineDash([]);g.textAlign='left';g.fillText('6 s',A.X(6)+3,A.t+10);
+  if(!c)return;const tl=c.tl,m=c.m,el=S.tCur-tl.tF;if(el<=0)return;
+  const n=Math.min(c.c.t.length,Math.floor(el/DT)+1),step=Math.max(1,Math.round(n/700)),xs=[],ys=[];for(let i=0;i<n;i+=step){xs.push(c.c.t[i]);ys.push(c.c.v[i]);}
+  poly(g,A.X,A.Y,xs,ys,xs.length,COL.cur,2.6);
+  if(el>=m.tslope+.12){g.strokeStyle=V.t;g.lineWidth=1.4;g.setLineDash([4,3]);g.beginPath();g.moveTo(A.X(m.t0),A.Y(0));g.lineTo(A.X(m.t0+Math.min(.45,.5)),A.Y(m.slope*.45));g.stroke();g.setLineDash([]);dot(g,A.X(m.t0),A.Y(0),V.t,'t₀',4,-6);}
+  if(el>=m.t0+1){const vv=m.fev1+m.ev;g.strokeStyle=V.fev1;g.setLineDash([3,3]);g.lineWidth=1;g.beginPath();g.moveTo(A.X(m.t0+1),h-A.b);g.lineTo(A.X(m.t0+1),A.Y(vv));g.lineTo(A.l,A.Y(vv));g.stroke();g.setLineDash([]);dot(g,A.X(m.t0+1),A.Y(vv),V.fev1,'VEF₁ '+fmt(m.fev1)+' L',6,14);}
+  if(S.tCur>=tl.tE-1e-6){const vv=m.fvc+m.ev;g.strokeStyle=V.fvc;g.setLineDash([6,3]);g.lineWidth=1.2;g.beginPath();g.moveTo(A.l,A.Y(vv));g.lineTo(w-A.r,A.Y(vv));g.stroke();g.setLineDash([]);g.fillStyle=V.fvc;g.font='700 10.5px Inter,sans-serif';g.textAlign='right';g.fillText('CVF '+fmt(m.fvc)+' L'+(m.plateau?' · platô':''),w-A.r-4,A.Y(vv)-5);}
+}
+function drawFV(){const cv=$('cvFV'),{g,w,h}=setup(cv),c=S.cur,P=P0(),pl=predLoop();
+  const xmax=Math.ceil(P.fvc+.4),ymax=Math.ceil(P.pef+.6),qm=Math.max(-pl.qmin,c?-c.tl.qmin:0,...S.trials.map(t=>-t.tl.qmin)),ymin=-Math.ceil(qm+.4),A=axes(g,w,h,[0,xmax],[ymin,ymax],{l:40,xl:'L',yl:'L/s',xstep:1,ystep:niceStep(ymax-ymin,6)});
+  if(S.showPred)poly(g,A.X,A.Y,pl.xs,pl.ys,pl.xs.length,COL.pred,1.6,[5,4]);
+  for(const tr of S.trials){if(tr!==c&&tr.dec)poly(g,A.X,A.Y,tr.dec.xs,tr.dec.ys,tr.dec.xs.length,tr.phase==='post'?COL.post:COL.pre,1.4);}
+  if(c&&S.tCur>0){const tl0=c.tl,iN=Math.min(tl0.i1,Math.floor(S.tCur/DT)),tx=[],ty=[];for(let i=0;i<=iN;i+=4){tx.push(c.x0-tl0.L[i]);ty.push(tl0.Q[i]);}poly(g,A.X,A.Y,tx,ty,tx.length,COL.cur,1.4);}
+  if(!c||S.tCur<c.tl.tF)return;const tl=c.tl,m=c.m,iNow=Math.min(tl.L.length-1,Math.floor(S.tCur/DT)),n=iNow-tl.iF+1,step=Math.max(1,Math.round(n/800)),xs=[],ys=[];
+  for(let i=tl.iF;i<=iNow;i+=step){xs.push(c.x0-tl.L[i]);ys.push(tl.Q[i]);}
+  poly(g,A.X,A.Y,xs,ys,xs.length,COL.cur,2.6);
+  const el=S.tCur-tl.tF,xAt=tt=>c.c.v[Math.min(c.c.v.length-1,Math.round(tt/DT))],fAt=tt=>c.c.f[Math.min(c.c.f.length-1,Math.round(tt/DT))];
+  if(el>=m.tpef)dot(g,A.X(xAt(m.tpef)),A.Y(m.pef),V.pef,'PFE '+fmt(m.pef,1),12,-14);
+  [['t25','25%',m.fef25],['t50','50%',m.fef50],['t75','75%',m.fef75]].forEach(([k,lb,f])=>{if(el>=m[k]&&el<=c.c.t[c.c.t.length-1])dot(g,A.X(xAt(m[k])),A.Y(fAt(m[k])),V.fef,lb,10,-12);});
+}
+/* ===== Painéis ===== */
+const LAB={fvc:'CVF',fev1:'VEF₁',ratio:'VEF₁/CVF',pef:'PFE',fef:'FEF₂₅₋₇₅%'},UN={fvc:'L',fev1:'L',ratio:'%',pef:'L/s',fef:'L/s'};
+const rows=[['fvc','CVF (L)',2,'fvc'],['fev1','VEF₁ (L)',2,'fev1'],['ratio','VEF₁/CVF (%)',1,'ratio'],['pef','PFE (L/s)',1,'pef'],['fef','FEF₂₅₋₇₅% (L/s)',2,'fef']];
+function revealed(c){const el=S.tCur-c.tl.tF,m=c.m,fin=S.tCur>=c.tl.tE-1e-6;
+  return {fvc:fin,fev1:el>=m.t0+1||fin,ratio:fin,pef:el>=m.tpef,fef:fin};}
+function valOf(m,k){return k==='fef'?m.fef2575:m[k];}
+function buildResultCards(){$('results').innerHTML=rows.map(([k])=>`<div class="metric" id="m_${k}" style="--metric-strong:${V[k]};--metric-color:${V[k]}3d"><small>${LAB[k]}</small><strong id="mv_${k}">…</strong><em id="ms_${k}"></em></div>`).join('');}
+function updateCapture(){const c=S.cur,P=P0(),R=c?revealed(c):{};
+  rows.forEach(([k,lb,d])=>{const has=c&&R[k],v=has?valOf(c.m,k):NaN,low=has&&v<P.lln[k];
+    $('m_'+k).classList.toggle('flag',!!low);
+    $('mv_'+k).innerHTML=has?fmt(v,d)+'<i>'+UN[k]+'</i>':'…';
+    $('ms_'+k).innerHTML=has?fmt(100*v/P[k],0)+'% do previsto ('+fmt(P[k],d)+')'+(low?' · <b>abaixo do LLN</b>':''):'previsto '+fmt(P[k],d)+' · LLN '+fmt(P.lln[k],d);});
+  let q='Realize uma manobra para capturar os valores.';
+  if(c&&S.tCur>=c.tl.tE-1e-6){q=`<b class="${c.accept?'ok':'no'}">${c.accept?'Manobra aceitável':'Manobra não aceitável'}</b> · início: volume extrapolado ${fmt(c.m.ev*1000,0)} mL (${fmt(c.m.evPct,1)}% da CVF) ${c.startOk?'✓':'✗'} · expiração: ${fmt(c.m.texp,1)} s, platô ${c.m.plateau?'sim':'não'} ${c.expOk?'✓':'✗'}${c.reasons.length?' · '+c.reasons.join('; '):''}`;}
+  else if(c)q='Capturando valores durante a manobra…';
+  $('capQuality').innerHTML=q;}
+function updateSensors(){const c=S.cur,ph=phaseNow();$('sPhase').textContent=PH[ph];
+  if(!c){$('sTime').innerHTML='0,00<i>s</i>';$('sVol').innerHTML='0,00<i>L</i>';$('sFlow').innerHTML='0,00<i>L/s</i>';return;}
+  const i=Math.min(c.tl.L.length-1,Math.floor(S.tCur/DT));
+  $('sTime').innerHTML=fmt(ph>=3?Math.max(0,S.tCur-c.tl.tF):S.tCur)+'<i>s</i>';
+  $('sVol').innerHTML=fmt(c.tl.frc-c.tl.L[i])+'<i>L</i>';$('sFlow').innerHTML=fmt(c.tl.Q[i])+'<i>L/s</i>';}
+const COACH=['Pressione <b>Realizar manobra</b>. O paciente respira normalmente, enche o pulmão ao máximo e depois sopra o mais forte e rápido possível, até esvaziar.',
+ 'O volume corrente oscila ao redor da capacidade residual funcional (CRF). O sensor registra volume e fluxo a cada instante.',
+ 'Inspiração máxima até a capacidade pulmonar total (CPT). Com o pulmão cheio, a expiração forçada pode começar — a pausa deve ser curta (menos de 1 s).',
+ '“SOPRE FORTE E RÁPIDO!” O fluxo sobe até o pico (PFE) em cerca de 0,1 s e depois cai à medida que o pulmão esvazia: essa queda é limitada pela mecânica das vias aéreas, não pelo esforço.',
+ 'Inspiração forçada: fecha a alça fluxo–volume e mostra a parte inspiratória, que depende mais do esforço.',
+ 'Manobra concluída. Os valores foram capturados; veja a qualidade abaixo e os resultados do exame.'];
+function updateStages(){const ph=phaseNow();document.querySelectorAll('.stage').forEach(el=>{const k=+el.dataset.st;el.classList.toggle('on',ph===k);el.classList.toggle('done',ph>k||ph===5);});$('coach').innerHTML=COACH[ph];}
+function accOf(phase){return S.trials.filter(t=>t.phase===phase&&t.accept);}
+function best(phase){const a=accOf(phase);if(!a.length)return null;
+  const fvc=Math.max(...a.map(t=>t.m.fvc)),fev1=Math.max(...a.map(t=>t.m.fev1)),pef=Math.max(...a.map(t=>t.m.pef)),bt=a.reduce((p,t)=>t.m.fvc+t.m.fev1>p.m.fvc+p.m.fev1?t:p);
+  return {fvc,fev1,ratio:100*fev1/fvc,pef,fef:bt.m.fef2575,n:a.length};}
+function repro(phase){const a=accOf(phase);if(a.length<2)return null;const top=k=>a.map(t=>t.m[k]).sort((x,y)=>y-x),f=top('fvc'),e=top('fev1'),lim=f[0]<=1?.1:.15;
+  const df=f[0]-f[1],de=e[0]-e[1];return {df,de,ok:df<=lim&&de<=lim,lim};}
+function updateRelations(){const L=S.trials.filter(t=>t.phase===S.phase),t=L[L.length-1],P=P0();
+  if(!t){['fRatio','fFef','fPef','fBd'].forEach(id=>$(id).textContent='Realize uma manobra para ver os valores.');}
+  else{const m=t.m;
+    $('fRatio').innerHTML=`${fmt(m.fev1)} ÷ ${fmt(m.fvc)} × 100 = <b>${fmt(m.ratio,1)}%</b> (limite inferior ${fmt(P.lln.ratio,1)}%) → ${m.ratio<P.lln.ratio?'abaixo do limite: padrão obstrutivo':'dentro do esperado'}.`;
+    $('fFef').innerHTML=`0,5 × ${fmt(m.fvc)} ÷ (${fmt(m.t75-m.t0)} − ${fmt(m.t25-m.t0)}) = <b>${fmt(m.fef2575)} L/s</b> (previsto ${fmt(P.fef)}).`;
+    $('fPef').innerHTML=`Pico de <b>${fmt(m.pef,1)} L/s</b> aos ${fmt((m.tpef-m.t0)*1000,0)} ms (previsto ${fmt(P.pef,1)}).`;}
+  const B=best('pre'),Q=best('post');
+  if(B&&Q){const dF=Q.fev1-B.fev1,pF=100*dF/B.fev1;$('fBd').innerHTML=`${fmt(Q.fev1)} − ${fmt(B.fev1)} = <b>${dF>=0?'+':''}${fmt(dF*1000,0)} mL (${pF>=0?'+':''}${fmt(pF,0)}%)</b> → resposta ${dF>=.2&&pF>=12?'significativa (≥ 12% e ≥ 200 mL)':'não significativa'}.`;}
+  else $('fBd').textContent=B?'Administre o broncodilatador e repita as manobras para calcular a variação.':'Faça as manobras pré-broncodilatador primeiro.';}
+function renderResults(){updateRelations();
+  const tr=S.trials;$('trialCount').textContent=tr.length+(tr.length===1?' manobra':' manobras');
+  $('trials').innerHTML=tr.length?tr.map((t,i)=>`<div class="trial ${t.accept?'ok':'no'}"><b>Manobra ${i+1}</b> · ${t.phase==='post'?'pós-BD':'pré-BD'}<br>CVF ${fmt(t.m.fvc)} L · VEF₁ ${fmt(t.m.fev1)} L<br>${t.accept?'<span style="color:#1f6b4a;font-weight:700">Aceitável</span>':'<span style="color:#b3261e;font-weight:700">Não aceitável</span>: '+t.reasons.join('; ')}</div>`).join(''):'<p class="muted">Nenhuma manobra realizada ainda.</p>';
+  const ph=S.phase==='post'?'post':'pre',r=repro(ph),a=accOf(ph);
+  $('repro').textContent=!tr.length?'':a.length<2?`São necessárias ao menos 3 manobras aceitáveis, duas reprodutíveis (${a.length} aceitável${a.length===1?'':'is'} nesta fase).`:`Reprodutibilidade: diferença de ${fmt(r.df*1000,0)} mL na CVF e ${fmt(r.de*1000,0)} mL no VEF₁ entre as duas maiores — ${r.ok?'reprodutível ✓':'acima de '+fmt(r.lim*1000,0)+' mL ✗'}.${a.length<3?' Faltam manobras aceitáveis para completar o exame (mínimo 3).':''}`;
+  const P=P0(),B=best('pre'),Q=best('post');
+  if(!B){$('summary').innerHTML='';$('verdict').innerHTML='';return;}
+  const head=`<thead><tr><th>Parâmetro</th><th>Previsto</th><th>Limite inf.</th><th>Pré-BD</th><th>% prev.</th>${Q?'<th>Pós-BD</th><th>% prev.</th><th>Variação</th>':''}</tr></thead>`;
+  const body=rows.map(([k,lb,d])=>{const v=B[k],low=v<P.lln[k];let post='';
+    if(Q){const q=Q[k],dl=q-v,dp=100*dl/v;post=`<td class="${q<P.lln[k]?'low':'ok'}">${fmt(q,d)}</td><td>${fmt(100*q/P[k],0)}%</td><td>${dl>=0?'+':''}${fmt(k==='ratio'?dl:dl*(k==='fvc'||k==='fev1'?1000:1),k==='ratio'?1:(k==='fvc'||k==='fev1'?0:d))}${k==='fvc'||k==='fev1'?' mL':''}${k==='ratio'?' pp':''} (${dp>=0?'+':''}${fmt(dp,0)}%)</td>`;}
+    return `<tr><td><span class="dot" style="background:${V[k]}"></span>${lb}</td><td>${fmt(P[k],d)}</td><td>${fmt(P.lln[k],d)}</td><td class="${low?'low':'ok'}">${fmt(v,d)}</td><td>${fmt(100*v/P[k],0)}%</td>${post}</tr>`;}).join('');
+  $('summary').innerHTML=head+'<tbody>'+body+'</tbody>';
+  // interpretação (valores pré-BD)
+  const ratioLow=B.ratio<P.lln.ratio,fvcLow=B.fvc<P.lln.fvc,pf=100*B.fev1/P.fev1;let pattern,sev='';
+  if(!ratioLow&&!fvcLow)pattern=B.fev1<P.lln.fev1?'VEF₁ abaixo do limite inferior com relação VEF₁/CVF e CVF normais: achado isolado, a correlacionar com o quadro clínico.':'Espirometria dentro dos limites da normalidade.';
+  else if(!ratioLow&&fvcLow)pattern='Padrão sugestivo de restrição: CVF reduzida com relação VEF₁/CVF preservada. Para confirmar, é preciso medir a capacidade pulmonar total (pletismografia ou diluição de gases). Uma CVF baixa também pode resultar de esforço ou expiração insuficientes.';
+  else if(ratioLow&&!fvcLow)pattern='Distúrbio ventilatório obstrutivo: relação VEF₁/CVF abaixo do limite inferior da normalidade.';
+  else pattern='Obstrução com CVF reduzida: pode representar aprisionamento de ar ou distúrbio misto. Confirmar com a capacidade pulmonar total.';
+  if(ratioLow||fvcLow)sev=` Gravidade pelo VEF₁ (${fmt(pf,0)}% do previsto): ${pf>=70?'leve':pf>=60?'moderada':pf>=50?'moderadamente grave':pf>=35?'grave':'muito grave'} (critério ATS/ERS 2005).`;
+  let bdTxt='';
+  if(Q){const dF=Q.fev1-B.fev1,dC=Q.fvc-B.fvc,pF=100*dF/B.fev1,pC=100*dC/B.fvc,sig=(dF>=.2&&pF>=12)||(dC>=.2&&pC>=12);
+    bdTxt=`<br><br><b>Prova broncodilatadora:</b> VEF₁ ${dF>=0?'+':''}${fmt(dF*1000,0)} mL (${pF>=0?'+':''}${fmt(pF,0)}%) e CVF ${dC>=0?'+':''}${fmt(dC*1000,0)} mL (${pC>=0?'+':''}${fmt(pC,0)}%). ${sig?'Resposta significativa (aumento ≥ 12% e ≥ 200 mL).':'Sem resposta significativa pelo critério de aumento ≥ 12% e ≥ 200 mL.'}`;}
+  const ok=a.length>=3&&(r&&r.ok);
+  $('verdict').innerHTML=`<div class="verdict${ratioLow||fvcLow?' alert':''}"><h3>Interpretação (modelo didático)</h3>${pattern}${sev}${bdTxt}<br><br><span style="color:#647b91;font-size:.84rem">${ok?'Exame com qualidade adequada (3 manobras aceitáveis e reprodutíveis).':'Exame ainda sem os critérios completos de qualidade: a interpretação é provisória.'} A interpretação real depende do quadro clínico e de outros exames.</span></div>`;
+}
+function setFill(el){el.style.setProperty('--p',((el.value-el.min)/(el.max-el.min)*100)+'%');}
+function updatePatientUI(){
+  document.querySelectorAll('[data-sex]').forEach(b=>{const on=b.dataset.sex===S.sex;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+  const gr=grpOf(S.age);document.querySelectorAll('[data-grp]').forEach(b=>{const on=b.dataset.grp===gr;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+  $('age').value=S.age;$('height').value=S.h;$('obs').value=Math.round(S.obs*100);$('res').value=Math.round(S.res*100);$('eff').value=Math.round(S.eff*100);$('bd').value=Math.round(S.bd*100);
+  document.querySelectorAll('input[type=range]').forEach(setFill);
+  $('ageV').textContent=S.age+' anos';$('heightV').textContent=S.h+' cm';$('obsV').textContent=Math.round(S.obs*100)+'%';$('resV').textContent=Math.round(S.res*100)+'%';$('effV').textContent=Math.round(S.eff*100)+'%';$('bdV').textContent=Math.round(S.bd*100)+'%';
+  let hint=GRP[gr]+'.';
+  if(S.age<=12){if(S.h<85||S.h>176)hint+=` Altura fora da faixa do estudo infantil (85–176 cm): o previsto usa o limite da faixa.`;}
+  else if(S.age<20)hint+=' Entre 13 e 19 anos o previsto é uma transição entre as equações infantil e adulta.';
+  else{const lim=S.sex==='M'?[152,192]:[137,182];if(S.h<lim[0]||S.h>lim[1])hint+=` Altura fora da faixa do estudo de referência (${lim[0]}–${lim[1]} cm): os valores previstos são extrapolados.`;}
+  $('rangeHint').textContent=hint;
+  const pr=profiles.find(p=>p.id===S.profile);$('profileSummary').textContent=pr?pr.t:'Personalizado';$('profileInfo').textContent=pr?pr.info:'Paciente personalizado: combine idade, obstrução, restrição e esforço para investigar o efeito de cada um nas curvas.';
+  document.querySelectorAll('#profileButtons button').forEach(b=>{const on=b.dataset.p===S.profile;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+  $('phaseBadge').textContent=S.phase==='post'?'Pós-broncodilatador':'Pré-broncodilatador';
+}
+function updateButtons(){
+  const finished=S.cur&&S.tCur>=S.cur.tl.total-1e-6,mid=S.cur&&!finished&&!S.running;
+  $('btnStart').textContent=S.running?'Em andamento…':mid?'▶ Continuar':S.cur?'▶ Nova manobra':'▶ Realizar manobra';
+  $('btnStart').disabled=S.running||(S.trials.length>=8&&!mid);$('btnPause').disabled=!S.running;$('btnAuto').disabled=S.running||S.trials.length>5;
+  $('btnBD').disabled=S.phase==='post'||S.running||!S.trials.length;$('btnBD').textContent=S.phase==='post'?'Broncodilatador administrado':'Administrar broncodilatador';
+  $('mobilePlayToggle').textContent=S.running?'⏸ Pausar':mid?'▶ Continuar':'▶ Manobra';
+  document.querySelectorAll('[data-speed]').forEach(b=>{const on=Number(b.dataset.speed)===S.speed;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+}
+function drawAll(){drawStrip();drawVT();drawFV();}
+function refresh(){updatePatientUI();updateButtons();updateStages();updateSensors();updateCapture();renderResults();drawAll();}
+/* ===== Ações ===== */
+function sigKey(){return `${S.sex}|${S.age}|${S.h}|${S.obs}|${S.res}`;}
+let lastSig=sigKey();
+function patientChanged(){const k=sigKey();if(k===lastSig)return;lastSig=k;S.auto=0;S.trials=[];S.cur=null;S.running=false;S.tCur=0;S.phase='pre';}
+function startTrial(){if(S.running)return;const mid=S.cur&&S.tCur<S.cur.tl.total-1e-6;
+  if(mid){S.running=true;}else{if(S.trials.length>=8)return;S.cur=buildTrial();S.tCur=0;S.running=true;}
+  updateButtons();}
+function finishTrial(){const c=S.cur;if(!c||S.trials.includes(c))return;decimate(c);S.trials.push(c);renderResults();updateButtons();}
+$('btnStart').addEventListener('click',startTrial);
+$('btnAuto').addEventListener('click',()=>{if(S.running)return;S.auto=3;startTrial();});
+$('btnPause').addEventListener('click',()=>{S.auto=0;S.running=false;updateButtons();});
+$('mobilePlayToggle').addEventListener('click',()=>{if(S.running){S.running=false;updateButtons();}else startTrial();});
+$('btnReset').addEventListener('click',()=>{S.auto=0;S.trials=[];S.cur=null;S.running=false;S.tCur=0;S.phase='pre';refresh();});
+$('btnBD').addEventListener('click',()=>{if(!S.trials.length)return;S.auto=0;S.phase='post';S.cur=null;S.tCur=0;S.running=false;refresh();});
+document.querySelectorAll('[data-speed]').forEach(b=>b.addEventListener('click',()=>{S.speed=Number(b.dataset.speed);updateButtons();}));
+$('showPred').addEventListener('change',e=>{S.showPred=e.target.checked;drawAll();});
+document.querySelectorAll('[data-sex]').forEach(b=>b.addEventListener('click',()=>{S.sex=b.dataset.sex;S.profile='custom';patientChanged();refresh();}));
+let pend=false;function later(){if(pend)return;pend=true;requestAnimationFrame(()=>{pend=false;refresh();});}
+[['age',v=>{S.age=v;}],['height',v=>{S.h=v;}],['obs',v=>{S.obs=v/100;}],['res',v=>{S.res=v/100;}],['eff',v=>{S.eff=v/100;}],['bd',v=>{S.bd=v/100;}]].forEach(([id,fn])=>$(id).addEventListener('input',e=>{fn(Number(e.target.value));S.profile='custom';patientChanged();later();}));
+Object.keys(GRP).forEach(g=>{const box=document.createElement('div');box.className='pg';box.innerHTML=`<h4>${GRP[g].toUpperCase()}</h4><div class="pgrid"></div>`;
+  profiles.filter(p=>p.g===g).forEach(p=>{const b=document.createElement('button');b.type='button';b.dataset.p=p.id;b.textContent=p.t;b.addEventListener('click',()=>{Object.assign(S,{sex:p.sex,age:p.age,h:p.h,obs:p.obs/100,res:p.res/100,eff:p.eff/100,bd:p.bd/100,profile:p.id,phase:'pre'});lastSig='';patientChanged();$('profileGroup').open=false;refresh();});box.querySelector('.pgrid').appendChild(b);});
+  $('profileButtons').appendChild(box);});
+document.querySelectorAll('[data-grp]').forEach(b=>b.addEventListener('click',()=>{const d=GRP_DEF[b.dataset.grp];S.age=d.age;S.h=d[S.sex];S.profile='custom';patientChanged();refresh();}));
+buildResultCards();
+/* abas e tela cheia */
+const tabButtons=[...document.querySelectorAll('.mobile-tabnav button')],tabSections=[...document.querySelectorAll('[data-tab]')];
+function setTab(name){tabButtons.forEach(b=>{const on=b.dataset.tabnav===name;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on));});tabSections.forEach(el=>el.classList.toggle('tab-active',el.dataset.tab===name));requestAnimationFrame(drawAll);}
+tabButtons.forEach(b=>b.addEventListener('click',()=>{setTab(b.dataset.tabnav);window.scrollTo({top:0});}));
+let hadFS=false;
+function setFocus(on){document.body.classList.toggle('focus-mode',on);$('focus').textContent=on?'Sair da tela cheia':'⛶ Tela cheia';$('focus').setAttribute('aria-pressed',String(on));requestAnimationFrame(drawAll);}
+$('focus').addEventListener('click',()=>{const on=!document.body.classList.contains('focus-mode');setFocus(on);if(on&&document.documentElement.requestFullscreen){try{const p=document.documentElement.requestFullscreen();if(p&&p.then)p.then(()=>{if(!document.body.classList.contains('focus-mode')&&document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});}).catch(()=>{});}catch(_){}}else if(!on&&document.fullscreenElement&&document.exitFullscreen){const p=document.exitFullscreen();if(p&&p.catch)p.catch(()=>{});}});
+document.addEventListener('fullscreenchange',()=>{if(document.fullscreenElement)hadFS=true;else if(hadFS){hadFS=false;setFocus(false);}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.fullscreenElement&&document.body.classList.contains('focus-mode'))setFocus(false);});
+window.addEventListener('resize',drawAll);
+/* laço de animação */
+let last=performance.now(),lastPh=-1;
+function frame(now){const dt=Math.min((now-last)/1000,.1);last=now;
+  if(S.running&&S.cur){S.tCur+=dt*S.speed;if(S.tCur>=S.cur.tl.total){S.tCur=S.cur.tl.total;S.running=false;finishTrial();refresh();if(S.auto>0){S.auto--;if(S.auto>0)setTimeout(()=>{if(!S.running&&S.auto>0)startTrial();},800);}}
+    else{const ph=phaseNow();if(ph!==lastPh){lastPh=ph;updateStages();}updateSensors();updateCapture();drawAll();}}
+  requestAnimationFrame(frame);}
+setTab('teste');refresh();requestAnimationFrame(frame);
+})();
+</script></body></html>

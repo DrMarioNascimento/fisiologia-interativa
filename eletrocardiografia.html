@@ -189,7 +189,7 @@ input[type=range]::-moz-range-track{background:transparent}
     $('fFc').innerHTML=`60 ÷ ${ft(rr)} s = <b>${state.hr} bpm</b>.`;
     $('fProj').innerHTML=front?`cos(${formatAngle(state.angle)} − ${formatAngle(l.angle)}) = <b>${proj>=0?'+':'−'}${ft(Math.abs(proj))}</b> → ${Math.abs(proj)<.15?'amplitude próxima de zero':proj>0?'deflexão positiva':'deflexão negativa'} em ${l.id}.`:`${l.id} é precordial: o plano horizontal não é calculado a partir do eixo frontal neste modelo.`;
     $('fPaper').innerHTML=`60 × ${state.speed} ÷ ${Math.round(mm)} mm = <b>${Math.round(60*state.speed/Math.round(mm))} bpm</b> (RR medido em milímetros, ${state.speed} mm/s).`;
-    $('waveLegend').hidden=!state.waves;
+    $('waveLegend').hidden=!state.waves;keep();
     document.querySelectorAll('input[type=range]').forEach(setFill);
   }
   function updateUI(){
@@ -359,13 +359,31 @@ input[type=range]::-moz-range-track{background:transparent}
   $('loop').addEventListener('click',()=>{state.loop=!state.loop;state.cycleProgress=0;state.cycleDone=false;updateUI()});
   $('reset').addEventListener('click',()=>{Object.assign(state,{lead:'II',angle:60,hr:70,speed:25,scenario:'normal',running:true,time:0,artifact:false,loop:true,cycleProgress:0,cycleDone:false,waves:true});$('waves').checked=true;$('angle').value=60;$('hr').value=70;$('artifact').checked=false;updateUI()});$('artifact').addEventListener('change',e=>{state.artifact=e.target.checked;drawAll()});$('waves').addEventListener('change',e=>{state.waves=e.target.checked;updateUI()});window.addEventListener('resize',drawAll);
   let hadNativeFullscreen=false;
-  function setFocusMode(on){document.body.classList.toggle('focus-mode',on);$('focus').textContent=on?'Sair da tela cheia':'⛶ Tela cheia';$('focus').setAttribute('aria-pressed',String(on));requestAnimationFrame(drawAll);}
+  function setFocusMode(on){document.body.classList.toggle('focus-mode',on);$('focus').textContent=on?'Sair da tela cheia':'⛶ Tela cheia';$('focus').setAttribute('aria-pressed',String(on));requestAnimationFrame(()=>{reserveAll();drawAll();});}
   $('focus').addEventListener('click',()=>{const on=!document.body.classList.contains('focus-mode');setFocusMode(on);if(on&&typeof document.documentElement.requestFullscreen==='function'){try{const p=document.documentElement.requestFullscreen();if(p&&typeof p.then==='function')p.then(()=>{if(!document.body.classList.contains('focus-mode')&&document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen().catch(()=>{});}).catch(()=>{});}catch(_){/* A visualização ampliada permanece disponível. */}}else if(!on&&document.fullscreenElement&&document.exitFullscreen){const p=document.exitFullscreen();if(p&&typeof p.catch==='function')p.catch(()=>{});}});
   document.addEventListener('fullscreenchange',()=>{if(document.fullscreenElement)hadNativeFullscreen=true;else if(hadNativeFullscreen){hadNativeFullscreen=false;setFocusMode(false)}});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!document.fullscreenElement&&document.body.classList.contains('focus-mode'))setFocusMode(false)});
   const tabButtons=[...document.querySelectorAll('.mobile-tabnav button')],tabSections=[...document.querySelectorAll('[data-tab]')];
-  function setTab(name){tabButtons.forEach(b=>{const on=b.dataset.tabnav===name;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on));});tabSections.forEach(el=>el.classList.toggle('tab-active',el.dataset.tab===name));requestAnimationFrame(drawAll);}
-  tabButtons.forEach(b=>b.addEventListener('click',()=>{setTab(b.dataset.tabnav);window.scrollTo({top:0})}));setTab('monitor');
+
+  /* reserva de espaço: cada caixa já nasce do tamanho do maior texto */
+  function reserve(el,list){if(!el)return;const w=el.getBoundingClientRect().width;if(w<10)return;const cl=el.cloneNode(false);cl.removeAttribute('id');cl.style.cssText+=';position:absolute;visibility:hidden;pointer-events:none;left:0;top:0;min-height:0;width:'+w+'px';el.parentNode.appendChild(cl);let mh=0;for(const h of list){cl.innerHTML=h;mh=Math.max(mh,cl.getBoundingClientRect().height);}cl.remove();el.style.minHeight=Math.ceil(mh)+'px';}
+  const KEEP=['leadDescription','axisExplanation','scenarioInfo','mFcS','mRrS','mAxS','mLeadS','mProjS','fFc','fProj','fPaper'];
+  function keep(){KEEP.forEach(i=>{const el=$(i);if(!el)return;const h=el.offsetHeight;if(h>(parseFloat(el.style.minHeight)||0)+1)el.style.minHeight=h+'px';});}
+  function reserveAll(){
+    reserve($('leadDescription'),leads.map(l=>`<b>Derivação ${l.id}.</b> ${l.desc}`));
+    reserve($('axisExplanation'),['Em aVF, a projeção média do QRS é próxima de zero neste modelo. Mova o controle para observar a mudança.','As derivações V1–V6 observam o plano horizontal; o vetor frontal acima não determina seus traçados neste modelo.']);
+    reserve($('scenarioInfo'),scenarios.map(x=>`<strong>${x.title}.</strong> ${x.info} A frequência foi alterada e a atividade atrial neste modelo de condução 4:1 está fora da faixa típica. <span>Traçado esquemático para ensino; não estabelece diagnóstico.</span>`));
+    reserve($('mFcS'),['abaixo de 60: bradicardia','acima de 100: taquicardia','entre 60 e 100 bpm']);
+    reserve($('mRrS'),['= 999 mm a 25 mm/s']);
+    reserve($('mAxS'),['eixo normal (−30° a +90°)','desvio para a esquerda','desvio para a direita','eixo indeterminado']);
+    reserve($('mLeadS'),['plano frontal · polo positivo em +120°','plano horizontal (precordial)']);
+    reserve($('mProjS'),['QRS predominantemente negativo','não depende do eixo frontal neste modelo']);
+    reserve($('fFc'),['60 ÷ 0,86 s = <b>70 bpm</b>.']);
+    reserve($('fProj'),['cos(+60° − +120°) = <b>+0,50</b> → amplitude próxima de zero em aVF.','aVF é precordial: o plano horizontal não é calculado a partir do eixo frontal neste modelo.']);
+    reserve($('fPaper'),['60 × 25 ÷ 21 mm = <b>71 bpm</b> (RR medido em milímetros, 25 mm/s).']);}
+  window.addEventListener('resize',reserveAll);
+  function setTab(name){tabButtons.forEach(b=>{const on=b.dataset.tabnav===name;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on));});tabSections.forEach(el=>el.classList.toggle('tab-active',el.dataset.tab===name));requestAnimationFrame(()=>{reserveAll();drawAll();});}
+  tabButtons.forEach(b=>b.addEventListener('click',()=>{setTab(b.dataset.tabnav);window.scrollTo({top:0})}));setTab('monitor');if(document.fonts&&document.fonts.ready)document.fonts.ready.then(reserveAll);
   $('mobilePlayToggle').addEventListener('click',()=>{$(state.running?'pause':'play').click()});
   let last=performance.now(),mainDrawn=0;function frame(now){const dt=Math.min((now-last)/1000,.1);last=now;if(state.running){let elapsed=dt;if(!state.loop){const remaining=(1-state.cycleProgress)*60/state.hr;elapsed=Math.min(dt,remaining);state.cycleProgress+=elapsed*state.hr/60;if(state.cycleProgress>=1-1e-9){state.running=false;state.cycleDone=true;}}state.time+=elapsed;if(state.cycleDone){updateUI();mainDrawn=now}else{drawMain()}}requestAnimationFrame(frame)}updateUI();requestAnimationFrame(frame);
 })();
