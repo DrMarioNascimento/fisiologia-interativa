@@ -1,0 +1,167 @@
+/* Fisiologia Interativa — lista das unidades, filtros, busca (Ctrl K), navegação e janela de entrada.
+   Lê os mesmos dados da Célula-Mapa (inicio/dados-<curso>.js). Prof. Mário César Nascimento, PhD © */
+(function () {
+  'use strict';
+  const D = window.FI_DADOS;
+  const esc = s => String(s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  const colorVar = {celular:'--u1', muscular:'--u2', osteoarticular:'--u3', cardiovascular:'--u4', respiratorio:'--u5', integracao:'--u6', endocrino:'--u7'};
+  const cores = { linfatico: '#75D8AD', urinario: '#F2A989', digestorio: '#EFC66E', reprodutor: '#D9A6E9', snp: '#8FD3ED', snc: '#C0B7F2', tegumentar: '#E8B7A2', termorregulacao: '#F4A16E', optativo: '#91C9F5' };
+  const cor = id => cores[id] || 'var(' + colorVar[id] + ')';
+  const mapIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5.5 9 3l6 2.5 6-2.5v14L15 20l-6-2.5-6 2.5z"/><path d="M9 3v14.5M15 5.5V20"/></svg>';
+  const lockIcon = '<img src="assets/icons/locks/closed-blue.png" alt="" aria-hidden="true" style="display:inline-block;width:2em;height:2em;max-width:none;object-fit:contain;vertical-align:middle;flex-shrink:0">';
+
+  /* pontos coloridos da barra */
+  const dots = document.getElementById('dots');
+  D.unidades.forEach(u => {
+    const a = document.createElement('a');
+    a.href = '#u-' + u.id; a.style.setProperty('--c', cor(u.id));
+    a.title = (u.num ? u.num + ' · ' : '') + u.nome; a.setAttribute('aria-label', 'Ir para ' + (u.num ? u.num + ' · ' : '') + u.nome);
+    dots.appendChild(a);
+  });
+
+  /* filtros */
+  const filters = document.getElementById('filters');
+  const fdata = [{id:'todos', t:'Todas'}].concat(D.unidades.map(u => ({id:u.id, t:u.curto})), [{id:'optativo', t:'Aprofundamento'}]);
+  let filtro = 'todos';
+  fdata.forEach(f => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'filter'; b.dataset.f = f.id; b.setAttribute('aria-pressed', f.id === 'todos');
+    if (f.id !== 'todos') b.style.setProperty('--c', cor(f.id));
+    b.innerHTML = (f.id !== 'todos' ? '<i></i>' : '') + esc(f.t);
+    b.onclick = () => { filtro = f.id; filters.querySelectorAll('.filter').forEach(x => x.setAttribute('aria-pressed', x === b)); render(); };
+    filters.appendChild(b);
+  });
+
+  /* lista */
+  const list = document.getElementById('units');
+  const search = document.getElementById('search');
+  function card(u, s, k) {
+    const deep = !!s.deep;
+    const leitura = s.leitura ? `<a href="${esc(s.leitura)}" target="_blank" rel="noopener">Leitura complementar ↗</a>` : '';
+    const apostila = s.apostila
+      ? `<a class="ecg-apostila" href="${esc(s.apostila)}" target="_blank" rel="noopener"><img src="${esc(s.tracado)}" width="192" height="64" alt=""><span>Abrir apostila de ECG (PDF) ↗</span></a>`
+      : '';
+    return `<article class="card rv${deep ? ' deep' : ''}" style="--c:${cor(u.id)};--i:${(k % 3) + 1}">
+      ${deep ? `<span class="badge">${esc(s.deep)}</span>` : `<span class="cat">${esc(s.cat || u.curto)}</span>`}
+      <h4>${esc(s.t)}</h4><p>${esc(s.obj)}</p>
+      <div class="go${s.apostila ? ' ecg-acoes' : ''}"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}${apostila}</div>
+    </article>`;
+  }
+  const optativo = {id:'optativo', curto:'Conteúdo de Aprofundamento', nome:'Conteúdo de Aprofundamento', desc:'Explore conteúdos complementares de fisiologia.'};
+  const prefixo = D.curso === 'fi' ? '../' : '';
+  const ecg = {
+    t:'ECG', cat:'Conteúdo de Aprofundamento',
+    obj:'Aprenda a posicionar os eletrodos e a interpretar o traçado. Compare o porquê de cada padrão na apostila e no simulador.',
+    href:prefixo + 'eletrocardiografia.html?v=padrao-20261119' + (D.curso === 'fi' ? '&percurso=fisioterapia' : ''),
+    tracado:prefixo + 'assets/icons/ecg-tracado.webp',
+    apostila:prefixo + 'assets/leituras/ECG_Da_Pele_ao_Tracado_Guia_Visual.pdf?v=eixo-20261119'
+  };
+  const espiro = {
+    t:'Espirometria', cat:'Conteúdo de Aprofundamento',
+    obj:'Realize o teste passo a passo: veja as curvas volume–tempo e fluxo–volume sendo construídas, os valores capturados e compare padrões normal, obstrutivo e restritivo, com prova broncodilatadora.',
+    href:prefixo + 'espirometria.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : '')
+  };
+  const plet = {
+    t:'Pletismografia', cat:'Conteúdo de Aprofundamento',
+    obj:'Feche o shutter e ofegue: veja a lei de Boyle revelar a CRF, e descubra a CPT, o VR e a resistência das vias aéreas que a espirometria não alcança, em crianças, adultos e idosos, normais, obstrutivos e restritivos, com referência GLI 2021.',
+    href:prefixo + 'pletismografia.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : '')
+  };
+  function render() {
+    const q = norm(search.value.trim());
+    let total = 0;
+    const showOptional = (filtro === 'todos' || filtro === 'optativo') && (!q || norm([ecg.t, ecg.obj, espiro.t, espiro.obj, plet.t, plet.obj, optativo.nome, 'eletrocardiograma espirometria pletismografia volumes residual curvas pulmonar aprofundamento'].join(' ')).includes(q));
+    list.innerHTML = D.unidades.filter(u => filtro === 'todos' || filtro === u.id).map(u => {
+      const sims = u.sims.filter(s => !q || norm([s.t, s.obj, s.cat, u.nome].join(' ')).includes(q));
+      const pratica = u.pratica && (!q || norm([u.nome, u.desc].join(' ')).includes(q));
+      if (q && !sims.length && !pratica) return '';
+      total += sims.length + (pratica ? 1 : 0);
+      const maps = u.mapas.map((m, i) => `<a href="${esc(m.src)}" target="_blank" rel="noopener" data-map="${u.id}" data-i="${i}" aria-label="Abrir mapa mental: ${esc(m.t)}">${mapIcon}${u.mapas.length > 1 ? 'Mapa ' + String(i + 1).padStart(2, '0') : 'Mapa mental'}</a>`).join('');
+      return `<section class="unit" id="u-${u.id}" style="--c:${cor(u.id)}" aria-labelledby="h-${u.id}">
+        <div class="unit-side rv">
+          <span class="unit-num" aria-hidden="true">${u.num}</span>
+          <h3 id="h-${u.id}">${esc(u.nome)}</h3>
+          <p>${esc(u.desc)}</p>
+          <div class="chips">${maps}${u.sala ? `<a class="lock" href="${esc(u.sala.href)}">${lockIcon}${esc(u.sala.nome)}</a>` : '<span>Explore os eixos no simulador</span>'}</div>
+        </div>
+        <div class="cards">${sims.map((s, k) => card(u, s, k)).join('')}${pratica ? `<article class="card rv">
+          <h4>Prática da Unidade ${esc(u.num)}</h4><p>Responda às questões comentadas e revise o que errou.</p>
+          <div class="go"><a href="${esc(u.pratica)}">Praticar no Tutor →</a></div>
+        </article>` : ''}</div>
+      </section>`;
+    }).join('') + (showOptional ? `<section class="unit" id="u-optativo" style="--c:${cor('optativo')}" aria-labelledby="h-optativo">
+        <div class="unit-side rv"><h3 id="h-optativo">${esc(optativo.nome)}</h3><p>${esc(optativo.desc)}</p></div>
+        <div class="cards">${card(optativo, ecg, 0)}${card(optativo, espiro, 1)}${card(optativo, plet, 2)}</div>
+      </section>` : '');
+    if (showOptional) total += 3;
+    document.getElementById('empty').hidden = total > 0;
+  }
+  list.addEventListener('click', e => {
+    const b = e.target.closest('[data-map]'); if (!b) return;
+    if (window.FI_openMap) {
+      try { window.FI_openMap(+b.dataset.i, b.dataset.map); e.preventDefault(); }
+      catch (err) { /* O link direto mantém o mapa acessível se a janela falhar. */ }
+    }
+  });
+  search.addEventListener('input', render);
+  render();
+
+  /* Ctrl K / ⌘K abre a busca */
+  const goSearch = () => { document.getElementById('simuladores').scrollIntoView(); setTimeout(() => search.focus({preventScroll:true}), 250); };
+  document.getElementById('btnSearch').addEventListener('click', goSearch);
+  addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); goSearch(); } });
+
+  /* ponto aceso = unidade visível na lista */
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(en => {
+      const a = dots.querySelector(`a[href="#${en.target.id}"]`); if (a) a.classList.toggle('on', en.isIntersecting);
+    }), {rootMargin: '-40% 0px -50% 0px'});
+    const watch = () => list.querySelectorAll('.unit').forEach(s => io.observe(s));
+    watch(); new MutationObserver(watch).observe(list, {childList: true});
+  }
+
+  /* surgimento ao rolar: a abertura aparece ao entrar; do "Mapa das unidades" para baixo,
+     nada aparece antes de o aluno começar a rolar a página */
+  if (document.documentElement.classList.contains('js-rv')) {
+    let rolou = scrollY > 40 || !!location.hash;
+    const rvIO = new IntersectionObserver(es => es.forEach(en => {
+      if (!en.isIntersecting) return;
+      if (!rolou && !en.target.closest('#inicio')) return;
+      en.target.classList.add('in'); rvIO.unobserve(en.target);
+    }), {rootMargin: '0px 0px -12% 0px', threshold: .12});
+    const armar = () => document.querySelectorAll('.rv:not(.in)').forEach(el => { rvIO.unobserve(el); rvIO.observe(el); });
+    const acordar = () => { if (rolou) return; rolou = true; armar(); };
+    /* rede de segurança: no fim da página (ou com zoom alto), mostra tudo o que já está na tela */
+    const varrer = () => {
+      if (!rolou) return;
+      const fim = innerHeight + scrollY >= document.documentElement.scrollHeight - 80;
+      document.querySelectorAll('.rv:not(.in)').forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < innerHeight * (fim ? 1 : .9) && r.bottom > 0) { el.classList.add('in'); rvIO.unobserve(el); }
+      });
+    };
+    let tv = 0;
+    addEventListener('scroll', () => { if (scrollY > 40) acordar(); clearTimeout(tv); tv = setTimeout(varrer, 120); }, {passive: true});
+    addEventListener('resize', varrer);
+    addEventListener('hashchange', acordar);
+    armar(); new MutationObserver(armar).observe(list, {childList: true});
+  }
+
+  /* simuladores, tutor, salas, leituras: tudo abre em nova aba (a página inicial fica aberta) */
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href]'); if (!a) return;
+    const h = a.getAttribute('href') || '';
+    if (h.startsWith('#') && !a.classList.contains('enter')) return;
+    a.target = '_blank'; a.rel = 'noopener';
+  }, true);
+
+  /* janela de entrada: uma vez por sessão, como no site anterior */
+  const w = document.getElementById('welcome');
+  let visto = false;
+  try { visto = sessionStorage.getItem('fisiologia-didactic-orientation') === 'acknowledged'; } catch (err) {}
+  if (!visto && w.showModal) w.showModal();
+  document.getElementById('welcomeAccept').addEventListener('click', () => {
+    try { sessionStorage.setItem('fisiologia-didactic-orientation', 'acknowledged'); } catch (err) {}
+    w.close();
+  });
+})();

@@ -40,7 +40,7 @@
     const deep = !!s.deep;
     const leitura = s.leitura ? `<a href="${esc(s.leitura)}" target="_blank" rel="noopener">Leitura complementar ↗</a>` : '';
     const apostila = s.apostila
-      ? `<a class="ecg-apostila" href="${esc(s.apostila)}" target="_blank" rel="noopener"><img src="${esc(s.tracado)}" width="192" height="64" alt=""><span>Abrir apostila de ECG (PDF) ↗</span></a>`
+      ? `<a class="ecg-apostila" href="${esc(s.apostila)}" target="_blank" rel="noopener"><img src="${esc(s.tracado)}" width="192" height="64" alt=""><span>${esc(s.apostilaTxt || 'Abrir apostila de ECG (PDF) ↗')}</span></a>`
       : '';
     return `<article class="card rv${deep ? ' deep' : ''}" style="--c:${cor(u.id)};--i:${(k % 3) + 1}">
       ${deep ? `<span class="badge">${esc(s.deep)}</span>` : `<span class="cat">${esc(s.cat || u.curto)}</span>`}
@@ -60,12 +60,18 @@
   const espiro = {
     t:'Espirometria', cat:'Conteúdo de Aprofundamento',
     obj:'Realize o teste passo a passo: veja as curvas volume–tempo e fluxo–volume sendo construídas, os valores capturados e compare padrões normal, obstrutivo e restritivo, com prova broncodilatadora.',
-    href:prefixo + 'espirometria.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : '')
+    href:prefixo + 'espirometria.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : ''),
+    tracado:prefixo + 'assets/icons/respiratorio-tracado.webp',
+    apostilaTxt:'Abrir apostila respiratória (PDF) ↗',
+    apostila:prefixo + 'assets/leituras/Espirometria_Pletismografia_Guia_Visual_Prof_Mario_Nascimento.pdf?v=respiratorio-20261120'
   };
   const plet = {
     t:'Pletismografia', cat:'Conteúdo de Aprofundamento',
     obj:'Feche o shutter e ofegue: veja a lei de Boyle revelar a CRF, e descubra a CPT, o VR e a resistência das vias aéreas que a espirometria não alcança, em crianças, adultos e idosos, normais, obstrutivos e restritivos, com referência GLI 2021.',
-    href:prefixo + 'pletismografia.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : '')
+    href:prefixo + 'pletismografia.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : ''),
+    tracado:prefixo + 'assets/icons/respiratorio-tracado.webp',
+    apostilaTxt:'Abrir apostila respiratória (PDF) ↗',
+    apostila:prefixo + 'assets/leituras/Espirometria_Pletismografia_Guia_Visual_Prof_Mario_Nascimento.pdf?v=respiratorio-20261120'
   };
   function render() {
     const q = norm(search.value.trim());
