@@ -64,7 +64,7 @@
   };
   const plet = {
     t:'Pletismografia', cat:'Conteúdo de Aprofundamento',
-    obj:'Feche o shutter e ofegue: veja a lei de Boyle revelar a CRF, e descubra a CPT, o VR e a resistência das vias aéreas que a espirometria não alcança, em pacientes normais, obstrutivos e restritivos.',
+    obj:'Feche o shutter e ofegue: veja a lei de Boyle revelar a CRF, e descubra a CPT, o VR e a resistência das vias aéreas que a espirometria não alcança, em crianças, adultos e idosos, normais, obstrutivos e restritivos, com referência GLI 2021.',
     href:prefixo + 'pletismografia.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : '')
   };
   function render() {
