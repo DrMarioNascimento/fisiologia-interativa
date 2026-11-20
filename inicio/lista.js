@@ -53,7 +53,7 @@
   const ecg = {
     t:'ECG', cat:'Conteúdo optativo',
     obj:'Aprenda a posicionar os eletrodos e a interpretar o traçado. Compare o porquê de cada padrão na apostila e no simulador.',
-    href:prefixo + 'eletrocardiografia.html?v=graus-20261119',
+    href:prefixo + 'eletrocardiografia.html?v=padrao-20261119' + (D.curso === 'fi' ? '&percurso=fisioterapia' : ''),
     tracado:prefixo + 'assets/icons/ecg-tracado.webp',
     apostila:prefixo + 'assets/leituras/ECG_Da_Pele_ao_Tracado_Guia_Visual.pdf?v=eixo-20261119'
   };
