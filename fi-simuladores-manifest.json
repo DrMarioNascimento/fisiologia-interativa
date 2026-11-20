@@ -143,5 +143,10 @@
     "unit": "inicio",
     "number": "",
     "title": "Eletrocardiografia (ECG)"
+  },
+  "espirometria.html": {
+    "unit": "inicio",
+    "number": "",
+    "title": "Espirometria em tempo real"
   }
 }

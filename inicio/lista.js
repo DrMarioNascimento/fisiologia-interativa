@@ -22,7 +22,7 @@
 
   /* filtros */
   const filters = document.getElementById('filters');
-  const fdata = [{id:'todos', t:'Todas'}].concat(D.unidades.map(u => ({id:u.id, t:u.curto})), [{id:'optativo', t:'Optativo'}]);
+  const fdata = [{id:'todos', t:'Todas'}].concat(D.unidades.map(u => ({id:u.id, t:u.curto})), [{id:'optativo', t:'Aprofundamento'}]);
   let filtro = 'todos';
   fdata.forEach(f => {
     const b = document.createElement('button');
@@ -48,19 +48,24 @@
       <div class="go${s.apostila ? ' ecg-acoes' : ''}"><a href="${esc(s.href)}">${deep && /desafio/.test(s.deep) ? 'Abrir o desafio' : 'Abrir simulador'} →</a>${leitura}${apostila}</div>
     </article>`;
   }
-  const optativo = {id:'optativo', curto:'Conteúdo optativo', nome:'Conteúdo Optativo', desc:'Explore conteúdos complementares de fisiologia.'};
+  const optativo = {id:'optativo', curto:'Conteúdo de Aprofundamento', nome:'Conteúdo de Aprofundamento', desc:'Explore conteúdos complementares de fisiologia.'};
   const prefixo = D.curso === 'fi' ? '../' : '';
   const ecg = {
-    t:'ECG', cat:'Conteúdo optativo',
+    t:'ECG', cat:'Conteúdo de Aprofundamento',
     obj:'Aprenda a posicionar os eletrodos e a interpretar o traçado. Compare o porquê de cada padrão na apostila e no simulador.',
     href:prefixo + 'eletrocardiografia.html?v=padrao-20261119' + (D.curso === 'fi' ? '&percurso=fisioterapia' : ''),
     tracado:prefixo + 'assets/icons/ecg-tracado.webp',
     apostila:prefixo + 'assets/leituras/ECG_Da_Pele_ao_Tracado_Guia_Visual.pdf?v=eixo-20261119'
   };
+  const espiro = {
+    t:'Espirometria', cat:'Conteúdo de Aprofundamento',
+    obj:'Realize o teste passo a passo: veja as curvas volume–tempo e fluxo–volume sendo construídas, os valores capturados e compare padrões normal, obstrutivo e restritivo, com prova broncodilatadora.',
+    href:prefixo + 'espirometria.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : '')
+  };
   function render() {
     const q = norm(search.value.trim());
     let total = 0;
-    const showOptional = (filtro === 'todos' || filtro === 'optativo') && (!q || norm([ecg.t, ecg.obj, ecg.cat, optativo.nome, 'eletrocardiograma'].join(' ')).includes(q));
+    const showOptional = (filtro === 'todos' || filtro === 'optativo') && (!q || norm([ecg.t, ecg.obj, espiro.t, espiro.obj, optativo.nome, 'eletrocardiograma espirometria curvas pulmonar aprofundamento'].join(' ')).includes(q));
     list.innerHTML = D.unidades.filter(u => filtro === 'todos' || filtro === u.id).map(u => {
       const sims = u.sims.filter(s => !q || norm([s.t, s.obj, s.cat, u.nome].join(' ')).includes(q));
       const pratica = u.pratica && (!q || norm([u.nome, u.desc].join(' ')).includes(q));
@@ -81,9 +86,9 @@
       </section>`;
     }).join('') + (showOptional ? `<section class="unit" id="u-optativo" style="--c:${cor('optativo')}" aria-labelledby="h-optativo">
         <div class="unit-side rv"><h3 id="h-optativo">${esc(optativo.nome)}</h3><p>${esc(optativo.desc)}</p></div>
-        <div class="cards">${card(optativo, ecg, 0)}</div>
+        <div class="cards">${card(optativo, ecg, 0)}${card(optativo, espiro, 1)}</div>
       </section>` : '');
-    if (showOptional) total += 1;
+    if (showOptional) total += 2;
     document.getElementById('empty').hidden = total > 0;
   }
   list.addEventListener('click', e => {
