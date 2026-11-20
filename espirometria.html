@@ -131,11 +131,11 @@ footer{max-width:1500px;margin:auto;padding:20px 5% 40px;color:#627b90;font-size
 <div class="panel test-panel" data-tab="teste"><div class="panel-head"><div><span class="kicker">LABORATÓRIO DE FUNÇÃO PULMONAR</span><h2>Realize a manobra</h2></div><button id="focus" class="primary" type="button" aria-pressed="false" style="min-height:42px;padding:9px 12px;font-size:.85rem;white-space:nowrap">⛶ Tela cheia</button></div>
 <div class="stages" id="stages"><div class="stage" data-st="1"><b>1</b>Respiração tranquila</div><div class="stage" data-st="2"><b>2</b>Inspiração máxima</div><div class="stage" data-st="3"><b>3</b>Expiração forçada</div><div class="stage" data-st="4"><b>4</b>Inspiração forçada</div></div>
 <div id="coach" class="coach" aria-live="polite"></div>
-<div class="transport"><button id="btnStart" class="primary" type="button">▶ Realizar manobra</button><button id="btnPause" type="button">Pausar</button><div class="seg" id="speedSeg" role="group" aria-label="Velocidade da simulação"><button type="button" data-speed="1" aria-pressed="false">1×</button><button type="button" data-speed="2" class="on" aria-pressed="true">2×</button><button type="button" data-speed="4" aria-pressed="false">4×</button></div><div class="grow"><button id="btnBD" class="green" type="button">Administrar broncodilatador</button><button id="btnReset" class="danger" type="button">Reiniciar teste</button></div></div>
+<div class="transport"><button id="btnStart" class="primary" type="button">▶ Realizar manobra</button><button id="btnPause" type="button">Pausar</button><button id="btnAuto" type="button">Fazer 3 manobras</button><div class="seg" id="speedSeg" role="group" aria-label="Velocidade da simulação"><button type="button" data-speed="1" aria-pressed="false">1×</button><button type="button" data-speed="2" class="on" aria-pressed="true">2×</button><button type="button" data-speed="4" aria-pressed="false">4×</button></div><div class="grow"><button id="btnBD" class="green" type="button">Administrar broncodilatador</button><button id="btnReset" class="danger" type="button">Reiniciar teste</button></div></div>
 <div class="sensors" aria-label="Leituras do sensor"><div class="sensor phase"><span>FASE</span><strong id="sPhase">Aguardando</strong></div><div class="sensor"><span>TEMPO</span><strong id="sTime">0,00<small>s</small></strong></div><div class="sensor"><span>VOLUME</span><strong id="sVol">0,00<small>L</small></strong></div><div class="sensor"><span>FLUXO</span><strong id="sFlow">0,00<small>L/s</small></strong></div></div>
 <div class="chart-title"><b>Registro contínuo do teste</b><span>volume (L) × tempo · expirar sobe, inspirar desce</span></div><canvas id="cvStrip" class="cv strip" role="img" aria-label="Registro contínuo do volume durante o teste"></canvas>
 <div class="charts"><div><div class="chart-title"><b>Curva volume–tempo</b><span>volume exalado (L) × tempo (s)</span></div><canvas id="cvVT" class="cv vt" role="img" aria-label="Curva volume-tempo da expiração forçada"></canvas></div><div><div class="chart-title"><b>Alça fluxo–volume</b><span>fluxo (L/s) × volume exalado (L)</span></div><canvas id="cvFV" class="cv fv" role="img" aria-label="Alça fluxo-volume"></canvas></div></div>
-<div class="legend"><span><i style="border-color:#1c5fb1"></i>Manobra atual</span><span><i style="border-color:#a9bdd1"></i>Manobras anteriores</span><label class="check"><input type="checkbox" id="showPred" checked> <span><i style="border-top:3px dashed #e07b00;width:22px;display:inline-block;vertical-align:middle;margin-right:6px"></i>Curva prevista para este paciente</span></label></div>
+<div class="legend"><span><i style="border-color:#1c5fb1;border-top-width:4px"></i>Manobra atual</span><span><i style="border-color:#3d5266"></i>Pré-BD (tentativas)</span><span><i style="border-color:#e8821a"></i>Pós-BD (tentativas)</span><label class="check"><input type="checkbox" id="showPred" checked> <span><i style="border-top:3px dashed #17a960;width:22px;display:inline-block;vertical-align:middle;margin-right:6px"></i>Curva prevista</span></label></div>
 <div class="capture"><table><thead><tr><th>Valores capturados</th><th>Medido</th><th>Previsto</th><th>% prev.</th><th>Limite inf.</th></tr></thead><tbody id="capBody"></tbody></table><div class="qline" id="capQuality"></div></div></div>
 </section>
 
@@ -202,7 +202,7 @@ const profiles=[
  {id:'misto',t:'Padrão misto',sex:'M',age:66,h:170,obs:45,res:35,eff:100,bd:20,info:'Obstrução associada a redução de volumes.'},
  {id:'esforco',t:'Saudável com esforço insuficiente',sex:'F',age:35,h:165,obs:0,res:0,eff:40,bd:0,info:'Pulmão normal, mas a manobra é mal executada: mostra por que a qualidade importa.'}
 ];
-const S={sex:'M',age:40,h:175,obs:0,res:0,eff:1,bd:.6,phase:'pre',speed:2,showPred:true,profile:'normal',trials:[],cur:null,running:false,tCur:0,counter:0};
+const S={auto:0,sex:'M',age:40,h:175,obs:0,res:0,eff:1,bd:.6,phase:'pre',speed:2,showPred:true,profile:'normal',trials:[],cur:null,running:false,tCur:0,counter:0};
 const tauCache=new Map(),predCache=new Map();
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 const fmt=(x,d=2)=>Number.isFinite(x)?x.toFixed(d).replace('.',','):'—';
@@ -210,8 +210,8 @@ const P0=()=>predicted(S.sex,S.age,S.h);
 function tau0For(){const k=`${S.sex}|${S.age}|${S.h}`;if(!tauCache.has(k))tauCache.set(k,calibrateTau0(S.sex,S.age,S.h));return tauCache.get(k);}
 function mulberry32(a){return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
 function gauss(r){let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r());}
-function insp(x0,Lstart,obs){ // inspiração forçada: perfil em sino (pico no meio do volume)
-  const Ti=1.25+.25*obs,n=Math.round(Ti/DT),L=[];
+function insp(x0,Lstart,peak){ // inspiração forçada: perfil em sino; pico de fluxo inspiratório alvo
+  const Ti=clamp((Math.PI/2)*(x0-Lstart)/peak,.9,3.2),n=Math.round(Ti/DT),L=[];
   for(let i=1;i<=n;i++){const s=i/n;L.push(Lstart+(x0-Lstart)*(1-Math.cos(Math.PI*s))/2);}
   return L;
 }
@@ -221,14 +221,15 @@ function buildTimeline(x0,c,obsEff,frcShare){
   const i1=L.length;const Ti2=2.4,n2=Math.round(Ti2/DT);for(let i=1;i<=n2;i++)L.push(frc+(x0-frc)*(1-Math.cos(Math.PI*i/n2))/2);
   const hold=Math.round(.5/DT);for(let i=0;i<hold;i++)L.push(x0);
   const iF=L.length-1;for(let i=1;i<c.t.length;i++)L.push(x0-c.v[i]);
-  const iE=L.length-1,Lend=L[iE];const Li=insp(x0,Lend,obsEff);for(const v of Li)L.push(v);
+  const iE=L.length-1,Lend=L[iE];const pefc=Math.max(...c.f),Li=insp(x0,Lend,Math.max(.68*pefc,.75*x0));for(const v of Li)L.push(v);
   const Q=new Float32Array(L.length);for(let i=0;i<L.length-1;i++)Q[i]=-(L[i+1]-L[i])/DT;Q[L.length-1]=0;
-  return {L:Float32Array.from(L),Q,frc,i1,iF,iE,total:(L.length-1)*DT,tF:iF*DT,tE:iE*DT,t2:i1*DT+Ti2};
+  let qmin=0;for(let i=0;i<Q.length;i++)if(Q[i]<qmin)qmin=Q[i];
+  return {qmin,L:Float32Array.from(L),Q,frc,i1,iF,iE,total:(L.length-1)*DT,tF:iF*DT,tE:iE*DT,t2:i1*DT+Ti2};
 }
 function buildTrial(){
   const P=P0(),sig=S.counter*7919+S.age*31+S.h*17+(S.sex==='M'?1:2)+Math.round(S.obs*100)*13+Math.round(S.res*100)*7+(S.phase==='post'?911:0),rng=mulberry32(sig);
   const obsEff=S.phase==='post'?S.obs*(1-.6*S.bd):S.obs;
-  const varV=(.007+(1-S.eff)*.09)*gauss(rng),effT=clamp(S.eff+(1-S.eff)*.3*gauss(rng),.2,1);
+  const varV=(.007+(1-S.eff)*.09)*gauss(rng),effT=clamp(Math.min(S.eff,.97)+(.05+(1-S.eff)*.3)*gauss(rng),.2,1);
   const x0=P.fvc*(1-.55*S.res)*(1-.30*obsEff)*(1+varV);
   let c=forcedExp({x0,tau0:tau0For(),obs:obsEff,res:S.res,eff:effT});
   if(S.eff<.85){const tq=2.2+6*S.eff*(.6+.8*rng());const k=c.t.findIndex(t=>t>tq);if(k>0){c={t:c.t.slice(0,k),v:c.v.slice(0,k),f:c.f.slice(0,k)};}}
@@ -245,9 +246,9 @@ function decimate(tr){const {tl,x0}=tr,xs=[],ys=[],ts=[],vs=[];
 function predLoop(){const k=`${S.sex}|${S.age}|${S.h}`;if(predCache.has(k))return predCache.get(k);
   const P=P0(),c=forcedExp({x0:P.fvc,tau0:tau0For(),obs:0,res:0,eff:1}),tl=buildTimeline(P.fvc,c,0,.26);
   const xs=[],ys=[],ts=[],vs=[];for(let i=tl.iF;i<tl.L.length;i+=6){xs.push(P.fvc-tl.L[i]);ys.push(tl.Q[i]);}for(let j=0;j<c.t.length;j+=6){ts.push(c.t[j]);vs.push(c.v[j]);}
-  const r={xs,ys,ts,vs};predCache.set(k,r);return r;}
+  const r={xs,ys,ts,vs,qmin:tl.qmin};predCache.set(k,r);return r;}
 /* ===== Desenho ===== */
-const COL={cur:'#1c5fb1',old:'#a9bdd1',pred:'#e07b00',mark:'#d54646',grid:'#e3ecf5',axis:'#8aa1b5',text:'#526d83'};
+const COL={cur:'#1c5fb1',pre:'#3d5266',post:'#e8821a',pred:'#17a960',mark:'#d54646',grid:'#e3ecf5',axis:'#8aa1b5',text:'#526d83'};
 function setup(cv){const r=cv.getBoundingClientRect(),w=Math.max(60,r.width),h=Math.max(60,r.height),dpr=Math.min(window.devicePixelRatio||1,1.5);
   if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){cv.width=Math.round(w*dpr);cv.height=Math.round(h*dpr);}
   const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,w,h);return {g,w,h};}
@@ -278,7 +279,7 @@ function drawStrip(){const cv=$('cvStrip'),{g,w,h}=setup(cv),c=S.cur,P=P0();
 function drawVT(){const cv=$('cvVT'),{g,w,h}=setup(cv),c=S.cur,P=P0(),pl=predLoop();
   const Tview=c?clamp(Math.ceil(c.m.tend+.5),7,16):7,ymax=Math.ceil(P.fvc+.6),A=axes(g,w,h,[0,Tview],[0,ymax],{l:40,xl:'s',yl:'L',xstep:Tview>10?2:1,ystep:1});
   if(S.showPred)poly(g,A.X,A.Y,pl.ts,pl.vs,pl.ts.length,COL.pred,1.6,[5,4]);
-  for(const tr of S.trials){if(tr!==c&&tr.dec)poly(g,A.X,A.Y,tr.dec.ts,tr.dec.vs,tr.dec.ts.length,COL.old,1.3);}
+  for(const tr of S.trials){if(tr!==c&&tr.dec)poly(g,A.X,A.Y,tr.dec.ts,tr.dec.vs,tr.dec.ts.length,tr.phase==='post'?COL.post:COL.pre,1.4);}
   g.fillStyle=COL.text;g.font='600 9.5px Inter,sans-serif';g.strokeStyle='#c7d6e4';g.setLineDash([2,4]);g.beginPath();g.moveTo(A.X(6),A.t);g.lineTo(A.X(6),h-A.b);g.stroke();g.setLineDash([]);g.textAlign='left';g.fillText('6 s',A.X(6)+3,A.t+10);
   if(!c)return;const tl=c.tl,m=c.m,el=S.tCur-tl.tF;if(el<=0)return;
   const n=Math.min(c.c.t.length,Math.floor(el/DT)+1),step=Math.max(1,Math.round(n/700)),xs=[],ys=[];for(let i=0;i<n;i+=step){xs.push(c.c.t[i]);ys.push(c.c.v[i]);}
@@ -288,9 +289,10 @@ function drawVT(){const cv=$('cvVT'),{g,w,h}=setup(cv),c=S.cur,P=P0(),pl=predLoo
   if(S.tCur>=tl.tE-1e-6){const vv=m.fvc+m.ev;g.strokeStyle='#17a960';g.setLineDash([6,3]);g.lineWidth=1.2;g.beginPath();g.moveTo(A.l,A.Y(vv));g.lineTo(w-A.r,A.Y(vv));g.stroke();g.setLineDash([]);g.fillStyle='#17a960';g.font='700 10.5px Inter,sans-serif';g.textAlign='right';g.fillText('CVF '+fmt(m.fvc)+' L'+(m.plateau?' · platô':''),w-A.r-4,A.Y(vv)-5);}
 }
 function drawFV(){const cv=$('cvFV'),{g,w,h}=setup(cv),c=S.cur,P=P0(),pl=predLoop();
-  const xmax=Math.ceil(P.fvc+.4),ymax=Math.ceil(P.pef+.6),ymin=-Math.ceil(P.fvc*.95),A=axes(g,w,h,[0,xmax],[ymin,ymax],{l:40,xl:'L',yl:'L/s',xstep:1,ystep:niceStep(ymax-ymin,6)});
+  const xmax=Math.ceil(P.fvc+.4),ymax=Math.ceil(P.pef+.6),qm=Math.max(-pl.qmin,c?-c.tl.qmin:0,...S.trials.map(t=>-t.tl.qmin)),ymin=-Math.ceil(qm+.4),A=axes(g,w,h,[0,xmax],[ymin,ymax],{l:40,xl:'L',yl:'L/s',xstep:1,ystep:niceStep(ymax-ymin,6)});
   if(S.showPred)poly(g,A.X,A.Y,pl.xs,pl.ys,pl.xs.length,COL.pred,1.6,[5,4]);
-  for(const tr of S.trials){if(tr!==c&&tr.dec)poly(g,A.X,A.Y,tr.dec.xs,tr.dec.ys,tr.dec.xs.length,COL.old,1.3);}
+  for(const tr of S.trials){if(tr!==c&&tr.dec)poly(g,A.X,A.Y,tr.dec.xs,tr.dec.ys,tr.dec.xs.length,tr.phase==='post'?COL.post:COL.pre,1.4);}
+  if(c&&S.tCur>0){const tl0=c.tl,iN=Math.min(tl0.i1,Math.floor(S.tCur/DT)),tx=[],ty=[];for(let i=0;i<=iN;i+=4){tx.push(c.x0-tl0.L[i]);ty.push(tl0.Q[i]);}poly(g,A.X,A.Y,tx,ty,tx.length,COL.cur,1.4);}
   if(!c||S.tCur<c.tl.tF)return;const tl=c.tl,m=c.m,iNow=Math.min(tl.L.length-1,Math.floor(S.tCur/DT)),n=iNow-tl.iF+1,step=Math.max(1,Math.round(n/800)),xs=[],ys=[];
   for(let i=tl.iF;i<=iNow;i+=step){xs.push(c.x0-tl.L[i]);ys.push(tl.Q[i]);}
   poly(g,A.X,A.Y,xs,ys,xs.length,COL.cur,2.2);
@@ -365,7 +367,7 @@ function updatePatientUI(){
 function updateButtons(){
   const finished=S.cur&&S.tCur>=S.cur.tl.total-1e-6,mid=S.cur&&!finished&&!S.running;
   $('btnStart').textContent=S.running?'Em andamento…':mid?'▶ Continuar':S.cur?'▶ Nova manobra':'▶ Realizar manobra';
-  $('btnStart').disabled=S.running||(S.trials.length>=8&&!mid);$('btnPause').disabled=!S.running;
+  $('btnStart').disabled=S.running||(S.trials.length>=8&&!mid);$('btnPause').disabled=!S.running;$('btnAuto').disabled=S.running||S.trials.length>5;
   $('btnBD').disabled=S.phase==='post'||S.running||!S.trials.length;$('btnBD').textContent=S.phase==='post'?'Broncodilatador administrado':'Administrar broncodilatador';
   $('mobilePlayToggle').textContent=S.running?'⏸ Pausar':mid?'▶ Continuar':'▶ Manobra';
   document.querySelectorAll('[data-speed]').forEach(b=>{const on=Number(b.dataset.speed)===S.speed;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
@@ -375,16 +377,17 @@ function refresh(){updatePatientUI();updateButtons();updateStages();updateSensor
 /* ===== Ações ===== */
 function sigKey(){return `${S.sex}|${S.age}|${S.h}|${S.obs}|${S.res}`;}
 let lastSig=sigKey();
-function patientChanged(){const k=sigKey();if(k===lastSig)return;lastSig=k;S.trials=[];S.cur=null;S.running=false;S.tCur=0;S.phase='pre';}
+function patientChanged(){const k=sigKey();if(k===lastSig)return;lastSig=k;S.auto=0;S.trials=[];S.cur=null;S.running=false;S.tCur=0;S.phase='pre';}
 function startTrial(){if(S.running)return;const mid=S.cur&&S.tCur<S.cur.tl.total-1e-6;
   if(mid){S.running=true;}else{if(S.trials.length>=8)return;S.cur=buildTrial();S.tCur=0;S.running=true;}
   updateButtons();}
 function finishTrial(){const c=S.cur;if(!c||S.trials.includes(c))return;decimate(c);S.trials.push(c);renderResults();updateButtons();}
 $('btnStart').addEventListener('click',startTrial);
-$('btnPause').addEventListener('click',()=>{S.running=false;updateButtons();});
+$('btnAuto').addEventListener('click',()=>{if(S.running)return;S.auto=3;startTrial();});
+$('btnPause').addEventListener('click',()=>{S.auto=0;S.running=false;updateButtons();});
 $('mobilePlayToggle').addEventListener('click',()=>{if(S.running){S.running=false;updateButtons();}else startTrial();});
-$('btnReset').addEventListener('click',()=>{S.trials=[];S.cur=null;S.running=false;S.tCur=0;S.phase='pre';refresh();});
-$('btnBD').addEventListener('click',()=>{if(!S.trials.length)return;S.phase='post';S.cur=null;S.tCur=0;S.running=false;refresh();});
+$('btnReset').addEventListener('click',()=>{S.auto=0;S.trials=[];S.cur=null;S.running=false;S.tCur=0;S.phase='pre';refresh();});
+$('btnBD').addEventListener('click',()=>{if(!S.trials.length)return;S.auto=0;S.phase='post';S.cur=null;S.tCur=0;S.running=false;refresh();});
 document.querySelectorAll('[data-speed]').forEach(b=>b.addEventListener('click',()=>{S.speed=Number(b.dataset.speed);updateButtons();}));
 $('showPred').addEventListener('change',e=>{S.showPred=e.target.checked;drawAll();});
 document.querySelectorAll('[data-sex]').forEach(b=>b.addEventListener('click',()=>{S.sex=b.dataset.sex;S.profile='custom';patientChanged();refresh();}));
@@ -404,7 +407,7 @@ window.addEventListener('resize',drawAll);
 /* laço de animação */
 let last=performance.now(),lastPh=-1;
 function frame(now){const dt=Math.min((now-last)/1000,.1);last=now;
-  if(S.running&&S.cur){S.tCur+=dt*S.speed;if(S.tCur>=S.cur.tl.total){S.tCur=S.cur.tl.total;S.running=false;finishTrial();refresh();}
+  if(S.running&&S.cur){S.tCur+=dt*S.speed;if(S.tCur>=S.cur.tl.total){S.tCur=S.cur.tl.total;S.running=false;finishTrial();refresh();if(S.auto>0){S.auto--;if(S.auto>0)setTimeout(()=>{if(!S.running&&S.auto>0)startTrial();},800);}}
     else{const ph=phaseNow();if(ph!==lastPh){lastPh=ph;updateStages();}updateSensors();updateCapture();drawAll();}}
   requestAnimationFrame(frame);}
 setTab('teste');refresh();requestAnimationFrame(frame);
