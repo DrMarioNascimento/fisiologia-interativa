@@ -73,10 +73,15 @@
     apostilaTxt:'Abrir apostila respiratória (PDF) ↗',
     apostila:prefixo + 'assets/leituras/Espirometria_Pletismografia_Guia_Visual_Prof_Mario_Nascimento.pdf?v=respiratorio-20261120'
   };
+  const variab = {
+    t:'Variabilidade cardiovascular', cat:'Conteúdo de Aprofundamento',
+    obj:'Gere registros de IP e PAS, mude a respiração, o tônus vagal e a sensibilidade barorreflexa e veja BF, AF, coerência, ganho e BEI se formarem no espectro e nas sequências, em repouso, ortostatismo, exercício e estresse.',
+    href:prefixo + 'variabilidade-cardiovascular.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : '')
+  };
   function render() {
     const q = norm(search.value.trim());
     let total = 0;
-    const showOptional = (filtro === 'todos' || filtro === 'optativo') && (!q || norm([ecg.t, ecg.obj, espiro.t, espiro.obj, plet.t, plet.obj, optativo.nome, 'eletrocardiograma espirometria pletismografia volumes residual curvas pulmonar aprofundamento'].join(' ')).includes(q));
+    const showOptional = (filtro === 'todos' || filtro === 'optativo') && (!q || norm([ecg.t, ecg.obj, espiro.t, espiro.obj, plet.t, plet.obj, variab.t, variab.obj, optativo.nome, 'eletrocardiograma espirometria pletismografia variabilidade frequencia cardiaca barorreflexo hrv volumes residual curvas pulmonar aprofundamento'].join(' ')).includes(q));
     list.innerHTML = D.unidades.filter(u => filtro === 'todos' || filtro === u.id).map(u => {
       const sims = u.sims.filter(s => !q || norm([s.t, s.obj, s.cat, u.nome].join(' ')).includes(q));
       const pratica = u.pratica && (!q || norm([u.nome, u.desc].join(' ')).includes(q));
@@ -97,9 +102,9 @@
       </section>`;
     }).join('') + (showOptional ? `<section class="unit" id="u-optativo" style="--c:${cor('optativo')}" aria-labelledby="h-optativo">
         <div class="unit-side rv"><h3 id="h-optativo">${esc(optativo.nome)}</h3><p>${esc(optativo.desc)}</p></div>
-        <div class="cards">${card(optativo, ecg, 0)}${card(optativo, espiro, 1)}${card(optativo, plet, 2)}</div>
+        <div class="cards">${card(optativo, ecg, 0)}${card(optativo, espiro, 1)}${card(optativo, plet, 2)}${card(optativo, variab, 3)}</div>
       </section>` : '');
-    if (showOptional) total += 3;
+    if (showOptional) total += 4;
     document.getElementById('empty').hidden = total > 0;
   }
   list.addEventListener('click', e => {
