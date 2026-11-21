@@ -151,7 +151,7 @@ select,input[type=number]{width:100%;min-height:44px;padding:10px;border-radius:
 /* ===== Resultados ===== */
 .group-title{margin:14px 16px 8px;font-size:11px;letter-spacing:1.3px;text-transform:uppercase;color:#85cabd;font-weight:700}
 .group-title:first-child{margin-top:16px}
-.metric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;padding:0 16px}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,168px),1fr));gap:10px;padding:0 16px}
 .metric{--metric-strong:var(--c-fc);--metric-glow:var(--metric-strong);position:relative;overflow:hidden;isolation:isolate;border-radius:16px;padding:12px;min-width:0;min-height:96px;
 background:linear-gradient(140deg,#0a1824,#1a3040);border:1px solid #9dbddb24;border-top:2px solid var(--metric-strong);border-left:5px solid var(--metric-strong);
 box-shadow:0 8px 20px #0003,inset 0 3px 7px #0005,inset 0 1px 0 #ffffff0a;transition:transform .2s,border-color .2s}
@@ -191,6 +191,17 @@ details.references p{margin-top:8px}
 .credit{text-align:center;font-size:14px;line-height:1.6;font-weight:600;color:var(--muted);padding:6px 6px 18px}
 
 .mobile-topbar,.mobile-tabnav{display:none}
+
+/* Resultados compactos na coluna de gráficos em telas largas. */
+@media(min-width:1181px){
+  #resultados .metric-grid{grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px}
+  #resultados .metric{min-height:0;padding:8px 9px}
+  #resultados .metric small{min-height:0;margin-bottom:5px;letter-spacing:.45px}
+  #resultados .metric strong{min-width:0;font-size:20px;overflow-wrap:anywhere}
+  #resultados .metric em{margin-top:3px}
+  #resultados .group-title{margin-top:10px;margin-bottom:5px}
+  #resultados .statusline{min-height:0;margin-top:10px}
+}
 
 /* ===== Responsivo ===== */
 @media(max-width:1180px){
@@ -385,14 +396,15 @@ details.references p{margin-top:8px}
       </div>
       <div class="meta-card" style="margin:0 16px 16px"><h3>Como o registro é processado</h3><div class="meta" style="line-height:1.7;font-size:12px">Reamostragem por spline cúbico a 4 Hz, remoção de tendência linear, janela de Hann de 256 pontos (64 s) com 50 % de sobreposição (método de Welch). BF e AF são integradas sobre o trecho selecionado. A resolução é 0,0156 Hz, então a banda abaixo de 0,04 Hz não é avaliável de forma robusta. A leitura espectral pressupõe estacionariedade.</div></div>
     </section>
+
+    <section class="panel" data-tab="resultados" id="resultados">
+      <div class="panel-header"><h2>Resultados processados</h2><span class="sub" id="segmentLabel">Janela de análise</span></div>
+      <div id="stats"></div>
+      <p class="statusline" id="qualityText" role="status"></p>
+    </section>
   </div>
 </div>
 
-<section class="panel" data-tab="resultados" id="resultados">
-    <div class="panel-header"><h2>Resultados processados</h2><span class="sub" id="segmentLabel">Janela de análise</span></div>
-    <div id="stats"></div>
-    <p class="statusline" id="qualityText" role="status"></p>
-  </section>
 
 </div>
 
