@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08121c">
+<title>Variabilidade Cardiovascular | Fisiologia interativa</title>
+<link rel="icon" href="brand/orientador.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===== Paleta: uma cor por variável, válida na página inteira ===== */
+:root{color-scheme:dark;font-family:Inter,Segoe UI,Arial,sans-serif;
+--bg:#08121c;--panel:#142432;--ink:#e0edf5;--muted:#94acbd;--line:#30495b;
+--c-ip:#87d29e;--c-fc:#9ce4ed;--c-pas:#84abff;--c-pad:#f892c1;--c-fr:#b1d4f4;
+--c-bf:#ff9a3c;--c-af:#c4a2f6;--c-mbf:#8fa3b3;
+--c-gain:#f2d77c;--c-bei:#ecb48e;--c-alfa:#ff8990;--c-coh:#4dd9c0;
+--shadow:inset 0 1px 0 #ffffff12,0 12px 26px #0005;--radius:22px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:radial-gradient(ellipse at 10% 0,#183849,transparent 60%),#08121c;min-height:100vh}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(#9ab6d003 1px,transparent 1px),linear-gradient(90deg,#9ab6d003 1px,transparent 1px);background-size:46px 46px}
+.app{position:relative;max-width:1560px;margin:0 auto;padding:24px;display:grid;gap:20px}
+h1,h2,h3,p{margin:0}
+.c-ip{color:var(--c-ip)}.c-fc{color:var(--c-fc)}.c-pas{color:var(--c-pas)}.c-pad{color:var(--c-pad)}.c-fr{color:var(--c-fr)}
+.c-bf{color:var(--c-bf)}.c-af{color:var(--c-af)}.c-mbf{color:var(--c-mbf)}.c-gain{color:var(--c-gain)}.c-bei{color:var(--c-bei)}.c-alfa{color:var(--c-alfa)}.c-coh{color:var(--c-coh)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 10px;margin-right:7px;transform:translateY(1px);box-shadow:0 0 8px currentColor}
+.eyebrow{display:block;color:#85cabd;text-transform:uppercase;letter-spacing:1.8px;font-size:10px;margin-bottom:7px;font-weight:700}
+
+/* ===== Cabeçalho ===== */
+.topbar{border:1px solid #9dbddb22;border-radius:var(--radius);background:linear-gradient(140deg,#243b4c,#10202d);box-shadow:0 18px 40px #0004,inset 0 1px 0 #ffffff14;padding:23px;display:grid;gap:18px}
+.topbar h1{font-size:clamp(24px,3vw,34px);font-weight:600;letter-spacing:-.04em;line-height:1.15}
+.topbar p{color:var(--muted);line-height:1.6;max-width:880px;font-size:14px;margin-top:8px}
+.top-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+
+/* ===== Botões 3D ===== */
+button,.upload{font:inherit;color:#fff;min-height:44px;padding:11px 17px;border-radius:12px;border:1px solid #577184;cursor:pointer;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center;
+background:linear-gradient(155deg,#476076,#263d50 55%,#172b3c);
+box-shadow:inset 0 2px 1px #ffffff38,inset 0 -2px 1px #0006,0 5px 0 #050e17,0 8px 10px #0006;
+transition:transform .15s,filter .15s,box-shadow .15s}
+button:hover,.upload:hover{filter:brightness(1.12);transform:translateY(-1px)}
+button:active,.upload:active{transform:translateY(4px);box-shadow:inset 0 2px 6px #0006,0 1px 0 #050e17}
+button:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible,.upload:focus-within{outline:3px solid #92dded;outline-offset:4px}
+.upload input{display:none}
+.btn-primary{background:linear-gradient(#99e6d6,#62bcae);color:#0b302d;border-color:#c1fff144;box-shadow:inset 0 2px 1px #ffffff55,inset 0 -2px 1px #0003,0 5px 0 #326e67,0 8px 12px #0005}
+.btn-primary:active{box-shadow:inset 0 2px 6px #0004,0 1px 0 #326e67}
+.btn-blue{background:linear-gradient(#568bac,#284c69)}
+.btn-red{background:linear-gradient(#995e69,#532c3d)}
+.btn-dark{background:linear-gradient(#516779,#273b4d)}
+
+/* ===== Painéis ===== */
+.main-grid{display:grid;grid-template-columns:minmax(360px,.72fr) minmax(0,1.28fr);gap:20px;align-items:start}
+.left-stack,.right-stack{display:grid;gap:20px;align-content:start;min-width:0}
+.panel{border:1px solid #9dbddb25;border-radius:var(--radius);background:linear-gradient(145deg,#1b2f3f,#101e2b);box-shadow:0 18px 40px #0004,inset 0 1px 0 #ffffff0c;overflow:hidden;min-width:0}
+.panel-header{padding:16px;border-bottom:1px solid var(--line);background:linear-gradient(#233949,#192b3a);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.panel-header h2{font-size:16px;font-weight:600;letter-spacing:-.2px}
+.panel-header span.sub{color:var(--muted);font-size:11px}
+.panel-body{padding:16px}
+.notice{padding:12px 15px;border:1px solid #745b34;border-left:4px solid #e6b96f;background:#302818;border-radius:13px;color:#ffe2a8;font-size:13px;line-height:1.55}
+.explain-box{margin:0;padding:12px 14px;border:1px solid var(--line);border-left:4px solid #9ce4ed;border-radius:14px;background:#0b1925;font-size:13px;line-height:1.55;min-height:96px}
+.explain-box strong{color:#9ce4ed}
+.fine{font-size:12px;color:var(--muted);line-height:1.5}
+
+/* ===== Sliders com bola 3D na cor da variável ===== */
+.slider-grid{display:grid;gap:10px;padding:14px}
+.slider-card{border:1px solid var(--line);border-radius:16px;padding:14px;background:linear-gradient(145deg,#1c3243,#102331);box-shadow:inset 0 1px 0 #ffffff14,0 3px 7px #0005;border-left:5px solid var(--vc)}
+.slider-card label{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:600;font-size:14px;margin-bottom:6px}
+.slider-card label>span.name{display:flex;align-items:center}
+.slider-card output{flex:0 0 auto;color:var(--vc);background:#081724;border:1px solid #355064;border-radius:7px;padding:4px 8px;box-shadow:inset 0 2px 4px #0007;font:600 13px Consolas,ui-monospace,monospace;font-variant-numeric:tabular-nums;min-width:96px;text-align:right;white-space:nowrap}
+.slider-card .hint{display:block;color:var(--muted);font-size:12px;line-height:1.45;margin-top:2px;min-height:35px}
+input[type=range]{--p:50%;appearance:none;-webkit-appearance:none;width:100%;height:12px;border-radius:9px;border:1px solid #466175;margin:12px 0 6px;cursor:pointer;
+background:linear-gradient(90deg,var(--vc,#70bcff) var(--p),#07131e var(--p));box-shadow:inset 0 3px 5px #000b,0 1px 0 #ffffff22;touch-action:pan-y}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:30px;height:30px;border-radius:50%;border:2px solid #fff;cursor:grab;
+background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.95),rgba(255,255,255,0) 40%),radial-gradient(circle at 50% 60%,var(--vc,#70bcff) 55%,rgba(0,0,0,.5) 130%);
+box-shadow:inset 0 -3px 4px #0004,0 4px 0 #06101a,0 8px 10px #0009}
+input[type=range]::-moz-range-thumb{width:27px;height:27px;border-radius:50%;border:2px solid #fff;cursor:grab;
+background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.95),rgba(255,255,255,0) 40%),radial-gradient(circle at 50% 60%,var(--vc,#70bcff) 55%,rgba(0,0,0,.5) 130%);
+box-shadow:0 4px 0 #06101a,0 8px 10px #0009}
+input[type=range]:active::-webkit-slider-thumb{cursor:grabbing;transform:translateY(2px);box-shadow:inset 0 -3px 4px #0004,0 2px 0 #06101a,0 4px 6px #0009}
+input[type=range]:disabled{opacity:.4;cursor:not-allowed}
+.range-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+
+/* ===== Selects e campos ===== */
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:14px}
+.field label{display:block;font-size:12px;color:#bdd0dc;margin-bottom:6px}
+select,input[type=number]{width:100%;min-height:44px;padding:10px;border-radius:9px;font:inherit;color:#dceaf5;background:#0c1a2a;border:1px solid #52697b;box-shadow:inset 0 2px 5px #0004}
+.field.wide{grid-column:1/-1}
+
+/* ===== Situações rápidas ===== */
+.states{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:14px}
+.state-btn{min-height:46px;font-size:13px}
+.state-btn.wide{grid-column:1/-1}
+.state-btn.selected{border-color:#9ce4ed;box-shadow:inset 0 2px 1px #ffffff38,0 0 0 2px #9ce4ed66,0 5px 0 #050e17}
+.states+.explain-box{margin:0 14px 14px}
+
+/* ===== Monitor ===== */
+.monitor-layout{display:grid;grid-template-columns:minmax(0,1fr) 224px;gap:14px;padding:16px}
+.monitor-bank{background:radial-gradient(ellipse at 30% 0,#183b4a55,transparent 65%),#07121c;border:1px solid #2c485a;border-radius:15px;padding:11px;min-width:0;box-shadow:inset 0 4px 14px #0008}
+.signal-box{padding:8px 8px 5px;border-bottom:1px solid #253d4b}.signal-box:last-child{border-bottom:0}
+.signal-label{font:11px Consolas,monospace;letter-spacing:.6px;color:#a9c4d4;display:flex;justify-content:space-between;gap:10px;margin-bottom:3px}
+.signal-label b{font-weight:600}
+.signal-box canvas{display:block;width:100%;height:104px;border-radius:7px;background:#081824}
+.signal-box.resp canvas{height:76px}
+.meter-stack{display:grid;grid-template-columns:1fr;gap:10px;align-content:stretch}
+.meter{border:1px solid #365262;border-left:5px solid var(--mc);background:linear-gradient(145deg,#182f3f,#0a1b29);border-radius:12px;padding:11px 13px;min-width:0;box-shadow:inset 0 2px 8px #0005}
+.meter .ml{font-size:10px;letter-spacing:1px;color:var(--mc);font-weight:700;text-transform:uppercase}
+.meter strong{display:block;font:600 27px Consolas,ui-monospace,monospace;color:var(--mc);margin:4px 0 0;min-width:7ch;font-variant-numeric:tabular-nums;line-height:1.1}
+.meter small{display:block;font-size:11px;color:var(--muted);margin-top:2px;min-height:15px}
+.live-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:0 16px}
+.live-controls button{min-width:92px}
+.monitor-speed{display:flex;align-items:center;gap:9px;padding:6px 10px;border:1px solid #385567;border-radius:10px;background:#0b1a27;font-size:12px}
+.monitor-speed select{width:auto;min-height:36px;padding:6px}
+.monitor-timer{font:600 20px Consolas,monospace;color:#b5efdd;letter-spacing:1px;min-width:12ch;font-variant-numeric:tabular-nums}
+.monitor-progress{height:7px;margin:12px 16px 0;border-radius:7px;border:1px solid #284657;background:#07111b;overflow:hidden}
+.monitor-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#438a89,#9ce4ed)}
+.monitor-info{margin:11px 16px 0;font-size:12px;color:#acc2d0;line-height:1.6;min-height:58px}
+.monitor-info b{color:#9ce4ed}
+.monitor-note{margin:0 16px 16px}
+.pill{border:1px solid #89cfbf48;background:#89cfbf0b;color:#9fe6d2;font:11px Consolas,monospace;letter-spacing:1px;padding:8px 12px;border-radius:12px;min-width:120px;text-align:center}
+
+/* ===== Gráficos ===== */
+.graph-controls{display:flex;gap:12px;align-items:end;flex-wrap:wrap;margin:14px 16px 12px;padding:13px;background:#0a1927;border:1px solid #31495b;border-radius:13px}
+.graph-controls label{display:grid;gap:6px;font-size:11px;color:#abc3d1}
+.graph-controls select{min-width:190px;min-height:38px;padding:7px}
+.graph-controls .check{display:flex;align-items:center;gap:9px;min-height:38px;font-size:12px}
+.graph-controls .check input{accent-color:#7ee0b5;width:20px;height:20px}
+.graph-controls button{min-height:38px;padding:8px 12px;font-size:12px}
+.legend{display:flex;gap:6px 16px;flex-wrap:wrap;align-items:center;font-size:12px;color:#bacfdd;margin:0 16px 8px}
+.legend span{display:inline-flex;align-items:center}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}
+.legend i.sq{border-radius:3px}
+.readout{font:11px Consolas,monospace;color:#8ee4ce;margin:0 16px 12px;min-height:16px}
+.charts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:0 16px 16px}
+.chart{padding:14px;border-radius:17px;background:linear-gradient(140deg,#101e2d,#091522);border:1px solid #355165;min-width:0;box-shadow:inset 0 2px 10px #0006}
+.chart-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.chart-head h3{font-size:14px;font-weight:600}
+.chart-head span{font:11px Consolas,monospace;color:#a2c5d9;min-width:20ch;text-align:right}
+.chart canvas{display:block;width:100%;height:250px;border:1px solid #294456;border-radius:9px;background:#07121d;cursor:crosshair;touch-action:pan-y}
+.chart small{display:block;margin-top:8px;font-size:11px;color:var(--muted);line-height:1.5;min-height:33px}
+
+/* ===== Resultados ===== */
+.group-title{margin:14px 16px 8px;font-size:11px;letter-spacing:1.3px;text-transform:uppercase;color:#85cabd;font-weight:700}
+.group-title:first-child{margin-top:16px}
+.metric-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;padding:0 16px}
+.metric{--metric-strong:var(--c-fc);--metric-glow:var(--metric-strong);position:relative;overflow:hidden;isolation:isolate;border-radius:16px;padding:12px;min-width:0;min-height:96px;
+background:linear-gradient(140deg,#0a1824,#1a3040);border:1px solid #9dbddb24;border-top:2px solid var(--metric-strong);border-left:5px solid var(--metric-strong);
+box-shadow:0 8px 20px #0003,inset 0 3px 7px #0005,inset 0 1px 0 #ffffff0a;transition:transform .2s,border-color .2s}
+.metric:hover{transform:translateY(-3px)}
+.metric::after{content:"";position:absolute;right:-48px;bottom:-48px;width:128px;height:128px;border-radius:50%;pointer-events:none;z-index:0;opacity:.42;
+background:radial-gradient(circle,color-mix(in srgb,var(--metric-glow) 30%,transparent),transparent 68%);box-shadow:0 0 0 1.2px color-mix(in srgb,var(--metric-glow) 30%,transparent),0 0 11px 2px color-mix(in srgb,var(--metric-glow) 26%,transparent)}
+.metric>*{position:relative;z-index:1}
+.metric small{display:flex;align-items:center;gap:5px;font-size:10px;letter-spacing:.9px;text-transform:uppercase;font-weight:700;color:var(--metric-strong);margin-bottom:8px;min-height:13px}
+.metric small i{display:inline-block;width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+.metric strong{display:block;font:600 22px Consolas,ui-monospace,monospace;color:var(--metric-strong);font-variant-numeric:tabular-nums;letter-spacing:-.5px;min-width:8ch;line-height:1.1;text-shadow:0 0 20px #ffffff13}
+.metric em{display:block;font-style:normal;color:var(--muted);font-weight:700;font-size:11px;margin-top:6px}
+.statusline{margin:14px 16px 16px;font-size:13px;color:#9ce4ed;line-height:1.6;min-height:62px}
+.relationship{display:grid;gap:10px;padding:14px}
+.formula-card{border:1px solid var(--line);border-radius:16px;padding:12px 14px;background:linear-gradient(140deg,#0d1d2a,#172b3b);box-shadow:inset 0 1px 0 #ffffff0c,0 3px 8px #0004}
+.formula-card h3{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px}
+.formula-card code{display:block;font:600 16px/1.55 Consolas,ui-monospace,monospace;color:var(--ink);white-space:normal}
+.formula-card .live{display:block;margin-top:6px;color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums;min-height:34px;line-height:1.45}
+
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{padding:10px;border-bottom:1px solid #30405a;text-align:left}
+th{font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted)}
+td:nth-child(2){font:600 14px Consolas,monospace;font-variant-numeric:tabular-nums;min-width:9ch}
+.baro-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:16px;padding:16px;align-items:start}
+.meta{line-height:1.9;font-size:13px;color:#bacfdd}
+.meta-card{border:1px solid var(--line);border-radius:16px;padding:16px;background:linear-gradient(140deg,#0d1d2a,#172b3b)}
+.meta-card h3{font-size:14px;margin-bottom:8px}
+
+/* ===== Como interpretar ===== */
+.learn{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.learn .panel-body{display:grid;gap:12px}
+.step{display:grid;grid-template-columns:26px 1fr;gap:10px;align-items:start;font-size:13px;line-height:1.6}
+.step .stepdot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#0a1824;border:1px solid #355064;margin-top:2px}
+.step .stepdot i{width:10px;height:10px;border-radius:50%;display:block}
+details.references{border:1px solid var(--line);border-radius:16px;background:#0b1925;padding:14px 16px;font-size:12px;line-height:1.7;color:#acc2d0}
+details.references summary{cursor:pointer;font-weight:700;color:#cfe5f0;font-size:13px;min-height:32px;display:flex;align-items:center}
+details.references p{margin-top:8px}
+.credit{text-align:center;font-size:14px;line-height:1.6;font-weight:600;color:var(--muted);padding:6px 6px 18px}
+
+.mobile-topbar,.mobile-tabnav{display:none}
+
+/* ===== Responsivo ===== */
+@media(max-width:1180px){
+  .main-grid{grid-template-columns:1fr}
+  .learn,.baro-grid{grid-template-columns:1fr}
+}
+@media(max-width:900px){.charts{grid-template-columns:1fr}.monitor-layout{grid-template-columns:1fr}.meter-stack{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* Padrão mobile: cabeçalho fixo + abas (mesmo padrão dos demais simuladores) */
+@media(max-width:760px){
+  .app{padding:12px;gap:14px}
+  .topbar{padding:14px;gap:0}
+  .top-title{display:none}
+  .top-actions .btn-primary,.top-actions .upload,.top-actions button{flex:1 1 150px}
+  .right-stack,.left-stack{display:contents}
+  .mobile-topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:50;padding:10px 14px;background:linear-gradient(180deg,#1c3041,#0e1c2b);border-bottom:1px solid #9dbddb33;box-shadow:0 6px 16px #0007;min-height:64px}
+  .mobile-topbar h2{font-size:15px;line-height:1.2;font-weight:600}
+  .mobile-tabnav{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:sticky;top:64px;z-index:49;padding:8px 10px;background:#0c1a28;border-bottom:1px solid #9dbddb22}
+  .mobile-tabnav button{min-height:46px;padding:8px 4px;font-size:12.5px;border-radius:10px;box-shadow:inset 0 1px 1px #ffffff30,0 3px 0 #050e17}
+  .mobile-tabnav button.active{background:linear-gradient(#99e6d6,#62bcae);color:#0b302d;box-shadow:inset 0 1px 1px #ffffff55,0 3px 0 #326e67}
+  [data-tab]{display:none!important}
+  [data-tab].tab-active{display:block!important}
+  .learn.tab-active{display:grid!important}
+  .fields,.states{grid-template-columns:1fr 1fr}
+  .metric-grid{grid-template-columns:repeat(2,minmax(0,1fr));padding:0 12px}
+  .meter-stack{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .monitor-layout{padding:10px}
+  .live-controls{padding:0 12px}
+  .charts{padding:0 10px 12px;gap:12px}
+  .chart canvas{height:230px}
+  .signal-box canvas{height:92px}.signal-box.resp canvas{height:66px}
+  .graph-controls{margin:12px 10px}.graph-controls label{flex:1 1 160px}.graph-controls select{min-width:0;width:100%}
+  .legend,.readout,.monitor-info,.monitor-progress,.monitor-note{margin-left:12px;margin-right:12px}
+  .group-title{margin-left:12px}
+  .slider-card output{min-width:0;font-size:12px;padding:4px 6px}
+  input[type=range]{height:14px}
+  input[type=range]::-webkit-slider-thumb{width:34px;height:34px}
+  input[type=range]::-moz-range-thumb{width:31px;height:31px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<script defer src="ef-simuladores.js?v=20261020-curvas4"></script>
+</head>
+<body>
+<div class="mobile-topbar"><h2>Variabilidade cardiovascular</h2><button class="btn-primary" id="mobilePlayToggle" type="button">▶ Iniciar</button></div>
+<div class="mobile-tabnav" role="tablist" aria-label="Seções do simulador">
+  <button type="button" role="tab" data-tabnav="monitor" class="active">Monitor</button>
+  <button type="button" role="tab" data-tabnav="controles">Controles</button>
+  <button type="button" role="tab" data-tabnav="graficos">Gráficos</button>
+  <button type="button" role="tab" data-tabnav="resultados">Resultados</button>
+</div>
+
+<div class="app">
+<header class="topbar" data-tab="controles">
+  <div class="top-title">
+    <span class="eyebrow">Fisiologia interativa · Sistema cardiovascular</span>
+    <h1>Laboratório de Variabilidade Cardiovascular</h1>
+    <p>Intervalo de pulso (IP) e pressão arterial sistólica (PAS) batimento a batimento: análise no tempo e na frequência, coerência entre os dois sinais e barorreflexo espontâneo. Mude a condição, a respiração e os determinantes autonômicos e veja o que acontece com cada indicador.</p>
+  </div>
+  <div class="top-actions">
+    <button class="btn-primary" id="generate" type="button">Novo registro (20 min)</button>
+    <label class="upload btn-blue">Importar CSV / TXT<input type="file" id="file" accept=".csv,.txt,.tsv"></label>
+    <button class="btn-dark" id="download" type="button">Exportar série CSV</button>
+    <button class="btn-dark" id="report" type="button">Exportar resultados CSV</button>
+  </div>
+</header>
+
+<div class="notice" id="source" role="status" data-tab="controles" style="min-height:66px">Dados sintéticos gerados por um modelo didático. Não use para diagnóstico.</div>
+
+<div class="main-grid">
+  <div class="left-stack">
+    <section class="panel" data-tab="controles">
+      <div class="panel-header"><h2>Determinantes da variabilidade</h2><span class="sub">cada controle mexe em um mecanismo</span></div>
+      <div class="slider-grid">
+        <div class="slider-card" style="--vc:var(--c-fc)"><label for="sFc"><span class="name"><i class="dot" style="background:var(--c-fc);color:var(--c-fc)"></i>Frequência cardíaca de repouso</span><output id="oFc">72 bpm</output></label><input id="sFc" type="range" min="50" max="100" step="1" value="72"><div class="range-ends"><span>50 bpm</span><span>100 bpm</span></div><small class="hint">Define o IP médio (IP = 60 000 ÷ FC). Quanto mais rápido o coração, menor a variabilidade possível.</small></div>
+        <div class="slider-card" style="--vc:var(--c-af)"><label for="sVagal"><span class="name"><i class="dot" style="background:var(--c-af);color:var(--c-af)"></i>Tônus vagal (arritmia sinusal)</span><output id="oVagal">100 %</output></label><input id="sVagal" type="range" min="0" max="200" step="5" value="100"><div class="range-ends"><span>0 %</span><span>200 %</span></div><small class="hint">Amplitude da oscilação do IP na frequência da respiração. Alimenta a AF e o RMSSD.</small></div>
+        <div class="slider-card" style="--vc:var(--c-bf)"><label for="sSym"><span class="name"><i class="dot" style="background:var(--c-bf);color:var(--c-bf)"></i>Oscilação simpática vasomotora</span><output id="oSym">100 %</output></label><input id="sSym" type="range" min="0" max="250" step="5" value="100"><div class="range-ends"><span>0 %</span><span>250 %</span></div><small class="hint">Onda de Mayer da PAS, perto de 0,1 Hz. Alimenta a BF da PAS e, pelo barorreflexo, a BF do IP.</small></div>
+        <div class="slider-card" style="--vc:var(--c-gain)"><label for="sBaro"><span class="name"><i class="dot" style="background:var(--c-gain);color:var(--c-gain)"></i>Sensibilidade barorreflexa</span><output id="oBaro">9,0 ms/mmHg</output></label><input id="sBaro" type="range" min="3" max="25" step="0.5" value="9"><div class="range-ends"><span>3</span><span>25 ms/mmHg</span></div><small class="hint">Quanto o IP aumenta para cada mmHg de aumento da PAS (com atraso de cerca de 1 s).</small></div>
+        <div class="slider-card" style="--vc:var(--c-fr)"><label for="sFr"><span class="name"><i class="dot" style="background:var(--c-fr);color:var(--c-fr)"></i>Frequência respiratória espontânea</span><output id="oFr">15 ciclos/min</output></label><input id="sFr" type="range" min="8" max="24" step="1" value="15"><div class="range-ends"><span>8</span><span>24 ciclos/min</span></div><small class="hint">Onde aparece o pico respiratório no espectro: 15 ciclos/min = 0,25 Hz.</small></div>
+      </div>
+    </section>
+
+    <section class="panel" data-tab="controles">
+      <div class="panel-header"><h2>Situações rápidas</h2><span class="sub">cada uma muda a fisiologia ao longo do registro</span></div>
+      <div class="states">
+        <button class="state-btn wide" type="button" data-state="repouso">Repouso sentado</button>
+        <button class="state-btn" type="button" data-state="ortostatismo">Ortostatismo</button>
+        <button class="state-btn" type="button" data-state="respiracao">Respiração controlada</button>
+        <button class="state-btn" type="button" data-state="exercicio">Exercício e recuperação</button>
+        <button class="state-btn" type="button" data-state="estresse">Estresse mental</button>
+        <button class="state-btn wide" type="button" data-state="recuperacao">Recuperação (pós-exercício)</button>
+      </div>
+      <div class="explain-box" id="presetExplain" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" data-tab="controles">
+      <div class="panel-header"><h2>Análise</h2><span class="sub">escolha o trecho e os critérios</span></div>
+      <div class="fields">
+        <div class="field wide"><label for="windowMode">Trecho para análise</label><select id="windowMode"><option value="baseline">0–5 min · basal</option><option value="stable">5–10 min</option><option value="late">10–15 min</option><option value="last">15–20 min</option><option value="full">0–20 min · registro completo</option></select></div>
+        <div class="field"><label for="condition">Condição</label><select id="condition"><option value="repouso">Repouso sentado</option><option value="ortostatismo">Ortostatismo</option><option value="respiracao">Respiração controlada</option><option value="exercicio">Exercício e recuperação</option><option value="estresse">Estresse mental</option><option value="recuperacao">Recuperação</option></select></div>
+        <div class="field"><label for="respRate">Respiração guiada</label><select id="respRate"><option value="6">6 ciclos/min</option><option value="10">10 ciclos/min</option><option value="12">12 ciclos/min</option><option value="15">15 ciclos/min</option></select></div>
+        <div class="field"><label for="profile">Limite inferior da BF</label><select id="profile"><option value="0.02">0,02 Hz (BF 0,02–0,15)</option><option value="0.04">0,04 Hz (BF 0,04–0,15)</option></select></div>
+        <div class="field"><label for="seed">Semente reprodutível</label><input id="seed" type="number" value="2017" min="1" max="999999"></div>
+        <div class="field"><label for="minDelay">Atraso PAS→IP (batimentos)</label><select id="minDelay"><option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div>
+        <div class="field"><label for="corr">Correlação mínima (r)</label><select id="corr"><option value="0.80">0,80</option><option value="0.85">0,85</option><option value="0.90">0,90</option><option value="0.95">0,95</option></select></div>
+        <div class="field"><label for="minPas">ΔPAS mínima por batimento</label><select id="minPas"><option value="0">sem limiar</option><option value="1">1 mmHg</option></select></div>
+        <div class="field"><label for="minIpd">ΔIP mínima por batimento</label><select id="minIpd"><option value="0">sem limiar</option><option value="5">5 ms</option></select></div>
+        <div class="field wide"><label for="ipConv">IP importado: a linha do batimento traz o intervalo que…</label><select id="ipConv"><option value="segue">começa neste batimento (segue o pulso)</option><option value="precede">termina neste batimento (precede o pulso)</option></select></div>
+      </div>
+      <p class="fine" style="padding:0 16px 16px">As condições transitórias exigem escolher um trecho estável. A série completa de 20 min fica disponível para exportação. Importação CSV: colunas <code>time_s,ip_ms,pas_mmhg</code> (uma linha por batimento) ou só <code>ip_ms,pas_mmhg</code>. Nada sai do seu navegador.</p>
+    </section>
+
+  <section class="panel" data-tab="resultados">
+    <div class="panel-header"><h2>Fórmulas ativas</h2><span class="sub">com os valores atuais</span></div>
+    <div class="relationship">
+      <div class="formula-card"><h3>Frequência cardíaca</h3><code><span class="c-fc">FC</span> = 60 000 ÷ <span class="c-ip">IP</span></code><small class="live" id="fFc"></small></div>
+      <div class="formula-card"><h3>Banda de baixa frequência, normalizada</h3><code><span class="c-bf">BF</span><sub>nu</sub> = <span class="c-bf">BF</span> ÷ (<span class="c-bf">BF</span> + <span class="c-af">AF</span>) × 100</code><small class="live" id="fNu"></small></div>
+      <div class="formula-card"><h3>Variabilidade batimento a batimento</h3><code>RMSSD = √[ Σ(<span class="c-ip">IP</span><sub>i+1</sub> − <span class="c-ip">IP</span><sub>i</sub>)² ÷ (n−1) ]</code><small class="live" id="fRmssd"></small></div>
+      <div class="formula-card"><h3>Onde cai a respiração</h3><code><span class="c-fr">f</span><sub>resp</sub> = <span class="c-fr">FR</span> ÷ 60 &nbsp;→&nbsp; <span class="c-af">AF</span> se 0,15 ≤ f ≤ 0,40 Hz</code><small class="live" id="fResp"></small></div>
+      <div class="formula-card"><h3>Índice alfa (razão espectral)</h3><code><span class="c-alfa">α</span> = √( <span class="c-bf">BF</span><sub><span class="c-ip">IP</span></sub> ÷ <span class="c-bf">BF</span><sub><span class="c-pas">PAS</span></sub> )</code><small class="live" id="fAlfa"></small></div>
+      <div class="formula-card"><h3>Sequências: ganho e eficiência</h3><code><span class="c-gain">Ganho</span> = ΔIP ÷ ΔPAS &nbsp; · &nbsp; <span class="c-bei">BEI</span> = aceitas ÷ rampas de PAS</code><small class="live" id="fGain"></small></div>
+    </div>
+  </section>
+  </div>
+
+  <div class="right-stack">
+    <section class="panel" data-tab="monitor" id="monitor" aria-label="Monitor fisiológico">
+      <div class="panel-header"><div><span class="eyebrow" style="margin:0 0 4px">Monitor multiparamétrico · aquisição sintética</span><h2>Captação cardiovascular</h2></div><span class="pill" id="monitorStatus">● AGUARDANDO</span></div>
+      <div class="monitor-layout">
+        <div class="monitor-bank">
+          <div class="signal-box"><div class="signal-label"><span style="color:var(--c-ip)"><b>● ECG · DERIVAÇÃO II (VIRTUAL)</b></span><span>QRS → pulso</span></div><canvas id="liveECG" aria-label="Curva de ECG animada"></canvas></div>
+          <div class="signal-box"><div class="signal-label"><span style="color:var(--c-pas)"><b>● PRESSÃO ARTERIAL DIGITAL</b></span><span>mmHg · pulso ~190 ms após o QRS</span></div><canvas id="livePA" aria-label="Onda de pressão arterial animada"></canvas></div>
+          <div class="signal-box resp"><div class="signal-label"><span style="color:var(--c-fr)"><b>● RESPIRAÇÃO</b></span><span id="respNote">inspiração para cima</span></div><canvas id="liveRESP" aria-label="Curva respiratória animada"></canvas></div>
+        </div>
+        <div class="meter-stack">
+          <div class="meter" style="--mc:var(--c-ip)"><div class="ml">Intervalo de pulso</div><strong id="liveIP">—</strong><small>ms · intervalo do batimento</small></div>
+          <div class="meter" style="--mc:var(--c-fc)"><div class="ml">Frequência cardíaca</div><strong id="liveFC">—</strong><small>bpm · 60 000 ÷ IP</small></div>
+          <div class="meter" style="--mc:var(--c-pas)"><div class="ml">PAS</div><strong id="liveBP">—</strong><small id="livePAD" style="color:var(--c-pad)">&nbsp;</small></div>
+          <div class="meter" style="--mc:var(--c-fr)"><div class="ml">Frequência respiratória</div><strong id="liveFR">—</strong><small>ciclos/min</small></div>
+        </div>
+      </div>
+      <div class="live-controls">
+        <button class="btn-primary" id="monitorStart" type="button">▶ Iniciar</button>
+        <button class="btn-dark" id="monitorPause" type="button">Ⅱ Pausar</button>
+        <button class="btn-red" id="monitorReset" type="button">↺ Reiniciar</button>
+        <label class="monitor-speed">Velocidade <select id="monitorSpeed"><option value="1">1×</option><option value="5" selected>5×</option><option value="20">20×</option><option value="60">60×</option></select></label>
+        <span id="monitorClock" class="monitor-timer">00:00 / 20:00</span>
+      </div>
+      <div class="monitor-progress"><span id="monitorProgress"></span></div>
+      <div id="monitorEvent" class="monitor-info"></div>
+      <div class="notice monitor-note">O ECG é uma representação didática desenhada a partir dos instantes dos pulsos; não é um ECG adquirido. Em séries importadas só existem IP e PAS, então a respiração não é desenhada.</div>
+    </section>
+
+    <section class="panel" data-tab="graficos" id="graficos">
+      <div class="panel-header"><div><span class="eyebrow" style="margin:0 0 4px">Análise de sinais</span><h2>Séries temporais e espectros</h2></div><span class="pill" id="graphStatus">Janela: 0–5 min</span></div>
+      <div class="graph-controls">
+        <label>Visualização das séries<select id="seriesView"><option value="full">Registro completo (20 min)</option><option value="analysis">Apenas a janela analisada</option><option value="live">Acompanhar a captação (60 s)</option></select></label>
+        <label>Escala dos espectros<select id="spectralScale"><option value="linear">Linear</option><option value="log">Logarítmica (só visual)</option></select></label>
+        <label class="check"><input id="showBands" type="checkbox" checked> Destacar BF / AF</label>
+        <button id="graphReset" type="button" class="btn-dark">↺ Restaurar gráficos</button>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--c-ip)"></i>IP (ms)</span><span><i style="background:var(--c-pas)"></i>PAS (mmHg)</span>
+        <span><i class="sq" style="background:var(--c-bf)"></i>BF</span><span><i class="sq" style="background:var(--c-af)"></i>AF</span><span><i class="sq" style="background:var(--c-mbf)"></i>abaixo da BF</span>
+        <span><i style="background:var(--c-fr)"></i>frequência respiratória</span><span><i style="background:var(--c-coh)"></i>coerência</span><span><i style="background:var(--c-gain)"></i>sequência barorreflexa</span>
+      </div>
+      <div class="readout" id="graphTooltip" aria-live="polite">Passe o cursor (ou o dedo) sobre os gráficos para ler os valores.</div>
+      <div class="charts">
+        <div class="chart"><div class="chart-head"><h3 class="c-ip">Intervalo de pulso</h3><span id="ipChartSummary">—</span></div><canvas id="ip" aria-label="Série de intervalos de pulso"></canvas><small>Tempo (min). A faixa clara é a janela usada nos cálculos.</small></div>
+        <div class="chart"><div class="chart-head"><h3 class="c-pas">Pressão arterial sistólica</h3><span id="pasChartSummary">—</span></div><canvas id="pas" aria-label="Série de pressão arterial sistólica"></canvas><small>Tempo (min). Um ponto por batimento.</small></div>
+        <div class="chart"><div class="chart-head"><h3 class="c-ip">Espectro do IP</h3><span id="ipSpecSummary">—</span></div><canvas id="specip" aria-label="Densidade espectral do intervalo de pulso"></canvas><small>Frequência (Hz) · PSD em ms²/Hz. A linha tracejada marca a frequência respiratória.</small></div>
+        <div class="chart"><div class="chart-head"><h3 class="c-pas">Espectro da PAS</h3><span id="pasSpecSummary">—</span></div><canvas id="specpas" aria-label="Densidade espectral da pressão arterial sistólica"></canvas><small>Frequência (Hz) · PSD em mmHg²/Hz.</small></div>
+        <div class="chart"><div class="chart-head"><h3 class="c-coh">Coerência PAS → IP</h3><span id="cohSummary">—</span></div><canvas id="coh" aria-label="Coerência entre PAS e IP"></canvas><small>γ² de 0 a 1. Acima de 0,5 (tracejado) o α BF é considerado válido.</small></div>
+        <div class="chart"><div class="chart-head"><h3 class="c-gain">Sequências barorreflexas</h3><span id="seqSummary">—</span></div><canvas id="seq" aria-label="Sequências barorreflexas aceitas"></canvas><small>PAS (mmHg) no eixo horizontal e IP (ms) no vertical. A inclinação de cada reta é o ganho; ▲ PAS subindo, ▼ PAS descendo.</small></div>
+      </div>
+      <div class="meta-card" style="margin:0 16px 16px"><h3>Como o registro é processado</h3><div class="meta" style="line-height:1.7;font-size:12px">Reamostragem por spline cúbico a 4 Hz, remoção de tendência linear, janela de Hann de 256 pontos (64 s) com 50 % de sobreposição (método de Welch). BF e AF são integradas sobre o trecho selecionado. A resolução é 0,0156 Hz, então a banda abaixo de 0,04 Hz não é avaliável de forma robusta. A leitura espectral pressupõe estacionariedade.</div></div>
+    </section>
+  </div>
+</div>
+
+<section class="panel" data-tab="resultados" id="resultados">
+    <div class="panel-header"><h2>Resultados processados</h2><span class="sub" id="segmentLabel">Janela de análise</span></div>
+    <div id="stats"></div>
+    <p class="statusline" id="qualityText" role="status"></p>
+  </section>
+
+</div>
+
+<section class="panel" data-tab="resultados" id="baroreflexo">
+  <div class="panel-header"><h2>Análise barorreflexa · método das sequências</h2><span class="sub">PAS e IP subindo ou descendo juntos</span></div>
+  <div class="baro-grid">
+    <div><table><thead><tr><th>Medida</th><th>Valor</th><th>Unidade</th></tr></thead><tbody id="barotable"></tbody></table></div>
+    <div class="meta-card"><h3>Parâmetros do método</h3><div class="meta">Sequência mínima: 3 batimentos<br>Atraso PAS→IP: <b id="delayLabel">0</b> batimento(s)<br>Correlação |r| ≥ <b id="corrLabel">0,80</b><br>ΔPAS mínima: <b id="pasLabel">sem limiar</b> · ΔIP mínima: <b id="ipdLabel">sem limiar</b><br><span class="c-gain">Ganho</span>: inclinação da regressão IP × PAS (ms/mmHg)<br><span class="c-bei">BEI</span>: proporção de rampas de PAS com resposta compatível do IP</div></div>
+  </div>
+</section>
+
+<section class="learn" data-tab="resultados">
+  <div class="panel"><div class="panel-header"><h2>Como interpretar</h2></div><div class="panel-body">
+    <div class="step"><span class="stepdot"><i style="background:var(--c-ip)"></i></span><p><b class="c-ip">IP, SDNN e RMSSD</b> descrevem a variabilidade do ritmo. O RMSSD pega só as mudanças rápidas, de um batimento para o próximo, e reflete sobretudo a modulação vagal.</p></div>
+    <div class="step"><span class="stepdot"><i style="background:var(--c-af)"></i></span><p><b class="c-af">AF (0,15–0,40 Hz)</b> acompanha a respiração. Se a respiração sai dessa faixa, como a 6 ciclos/min, a oscilação respiratória cai na <b class="c-bf">BF</b> e a AF despenca mesmo com a modulação vagal alta.</p></div>
+    <div class="step"><span class="stepdot"><i style="background:var(--c-bf)"></i></span><p><b class="c-bf">BF (até 0,15 Hz)</b> mistura simpático, vago e barorreflexo. Por isso a razão BF/AF não mede “equilíbrio simpatovagal”: use com cautela.</p></div>
+    <div class="step"><span class="stepdot"><i style="background:var(--c-coh)"></i></span><p><b class="c-coh">Coerência</b> mostra o quanto a PAS explica o IP em cada frequência. Só com coerência acima de 0,5 o <b class="c-alfa">α</b> vale como estimativa do ganho barorreflexo.</p></div>
+    <div class="step"><span class="stepdot"><i style="background:var(--c-gain)"></i></span><p><b class="c-gain">Ganho</b> e <b class="c-bei">BEI</b> vêm das sequências: quanto o IP muda por mmHg e em que fração das rampas de PAS o reflexo aparece. Mude o atraso e veja o BEI mudar.</p></div>
+  </div></div>
+  <div class="panel"><div class="panel-header"><h2>Ideia central</h2></div><div class="panel-body">
+    <p style="line-height:1.7;font-size:14px">A pressão sobe, os barorreceptores disparam mais e o coração <b>desacelera</b>, cerca de 1 segundo depois. A pressão cai, o coração <b>acelera</b>. Esse laço, repetido sem parar, cria as oscilações lentas do <b class="c-ip">IP</b> e da <b class="c-pas">PAS</b> que você vê na BF. A respiração entra por fora do laço e cria a oscilação rápida da AF.</p>
+    <p style="line-height:1.7;font-size:14px">Transições como levantar-se ou se exercitar mudam a média, a variabilidade e o ganho ao mesmo tempo. Por isso se analisa um trecho estável de cada vez.</p>
+    <details class="references"><summary>Saiba mais sobre o modelo e as referências</summary>
+      <p>Os registros são sintéticos. Cada batimento nasce de componentes com significado fisiológico: onda de Mayer da PAS, oscilação respiratória da PAS (efeito mecânico), arritmia sinusal respiratória no IP, oscilações lentas independentes e ruído. O barorreflexo transfere as oscilações da PAS para o IP com ganho e atraso de cerca de 1 s. As condições alteram frequência cardíaca, tônus vagal, oscilação simpática, ganho barorreflexo e respiração ao longo do tempo. Não substitui um registro real nem serve para diagnóstico.</p>
+      <p>Referências: Task Force of the ESC and NASPE, Heart rate variability: standards of measurement, physiological interpretation, and clinical use, Circulation 1996;93:1043-1065. Parati G, Di Rienzo M, Mancia G, How to measure baroreflex sensitivity: from the cardiovascular laboratory to daily life, J Hypertens 2000;18:7-19. Bertinieri G et al., A new approach to analysis of the arterial baroreflex, J Hypertens 1985;3(Suppl 3):S79-S81. Welch PD, The use of fast Fourier transform for the estimation of power spectra, IEEE Trans Audio Electroacoust 1967;15:70-73.</p>
+    </details>
+  </div></div>
+</section>
+
+<footer class="credit">Simuladores interativos utilizados nas disciplinas de Fisiologia Humana do Prof. Dr. Mário César Nascimento ©</footer>
+</div>
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const TAU=2*Math.PI;
+const cssRoot=getComputedStyle(document.documentElement);
+const C=k=>cssRoot.getPropertyValue('--c-'+k).trim();
+let rows=[],results={},seqs=[],spectra=null,meta={source:'gerado',frMean:NaN},rawImport=null;
+const plotState={hover:null,settings:{},lastPaint:0};
+const fmt=(v,n=2)=>Number.isFinite(v)?v.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n}):'—';
+
+/* ================= Estatística básica ================= */
+const mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:NaN;
+const variance=a=>{if(a.length<2)return NaN;const m=mean(a);return a.reduce((s,x)=>s+(x-m)**2,0)/(a.length-1)};
+const sd=a=>Math.sqrt(variance(a));
+const rmssd=a=>a.length<2?NaN:Math.sqrt(a.slice(1).reduce((s,x,i)=>s+(x-a[i])**2,0)/(a.length-1));
+const meanOrNaN=a=>a.length?mean(a):NaN;
+function linreg(x,y){const mx=mean(x),my=mean(y);let sxy=0,sxx=0,syy=0;for(let i=0;i<x.length;i++){sxy+=(x[i]-mx)*(y[i]-my);sxx+=(x[i]-mx)**2;syy+=(y[i]-my)**2}return{slope:sxx>0?sxy/sxx:NaN,r:sxx>0&&syy>0?sxy/Math.sqrt(sxx*syy):NaN}}
+
+/* ================= Gerador sintético =================
+   Cada batimento nasce de componentes com significado fisiológico.
+   A PAS comanda o IP (barorreflexo, atraso ~1 s); a respiração entra por fora do laço. */
+function mulberry(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)|0;let t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296}}
+function gauss(r){let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(TAU*r())}
+const stepF=(u,T)=>u>0?1-Math.exp(-u/T):0;
+const bumpF=(u,T)=>u>0?(u/T)*Math.exp(1-u/T):0;
+function exerciseRecovery(o,v){
+  o.dHR=52*(.6*Math.exp(-v/30)+.4*Math.exp(-v/240));
+  o.dPAS=28*Math.exp(-v/20)-7*stepF(v,40)*Math.exp(-v/450);
+  o.dPP=14*Math.exp(-v/40);
+  o.vag=1-.88*Math.exp(-v/180);
+  o.sym=.7+.3*stepF(v,100);
+  o.baro=1-.65*Math.exp(-v/200);
+  o.dFR=11*Math.exp(-v/60);
+}
+function profile(cond,t){
+  const o={dHR:0,dPAS:0,dPP:0,vag:1,sym:1,baro:1,dFR:0,frw:0};
+  if(cond==='ortostatismo'){const u=t-300;if(u>0){o.dHR=15*stepF(u,8)+10*bumpF(u,9);o.dPAS=3*stepF(u,15)-14*bumpF(u,6);o.dPP=-4*stepF(u,15);o.vag=1-.65*stepF(u,15);o.sym=1+.9*stepF(u,30);o.baro=1-.5*stepF(u,20);o.dFR=stepF(u,15)}}
+  else if(cond==='respiracao'){o.frw=stepF(t-300,15)}
+  else if(cond==='exercicio'){
+    if(t>300&&t<=480){const u=t-300;o.dHR=52*stepF(u,25);o.dPAS=28*stepF(u,25);o.dPP=14*stepF(u,25);o.vag=1-.88*stepF(u,15);o.sym=1-.3*stepF(u,30);o.baro=1-.65*stepF(u,20);o.dFR=11*stepF(u,30)}
+    else if(t>480)exerciseRecovery(o,t-480);
+  }
+  else if(cond==='estresse'){
+    if(t>300&&t<=600){const u=t-300;o.dHR=14*stepF(u,12);o.dPAS=14*stepF(u,12);o.dPP=3*stepF(u,12);o.vag=1-.4*stepF(u,12);o.sym=1+.3*stepF(u,20);o.baro=1-.35*stepF(u,15);o.dFR=3*stepF(u,12)}
+    else if(t>600){const v=t-600,e=Math.exp(-v/50);o.dHR=14*e;o.dPAS=14*e;o.dPP=3*e;o.vag=1-.4*e;o.sym=1+.3*e;o.baro=1-.35*e;o.dFR=3*e}
+  }
+  else if(cond==='recuperacao')exerciseRecovery(o,t+30);
+  return o;
+}
+const rsaGain=f=>Math.sqrt(1+(.25/.2)**2)/Math.sqrt(1+(f/.2)**2)*(1+.5*Math.exp(-(((f-.1)/.03)**2)));
+const Hbaro=f=>1/Math.sqrt(1+(f/.3)**2);
+function readSliders(){return{fc:+$('sFc').value,vagal:+$('sVagal').value/100,sym:+$('sSym').value/100,baro:+$('sBaro').value,fr:+$('sFr').value}}
+const MODEL={A_M:4.4,A_V:7,A_U:3.5,A_R:25,A_L:36,A_VI:40,A_UI:42,H_V:.35,B_RESP:3,D_RESP:.4,TAU_BARO:.5,SD_IP:3.5,SD_PAS:.9,PAS0:120,PP0:42};
+function gen(keepMonitor){
+  const rand=mulberry(+$('seed').value||2017),g=()=>gauss(rand);
+  const cond=$('condition').value,S=readSliders(),guided=+$('respRate').value;
+  const ph={m:rand()*TAU,v:rand()*TAU,l:rand()*TAU,r:rand()*TAU,a1:rand()*TAU,f1:rand()*TAU,f2:rand()*TAU,v1:rand()*TAU,l1:rand()*TAU,u:rand()*TAU,u1:rand()*TAU,w:rand()*TAU,w1:rand()*TAU};
+  const phM=t=>TAU*.095*t+1.3*Math.sin(TAU*.013*t+ph.f1)+.8*Math.sin(TAU*.029*t+ph.f2)+ph.m;
+  const ampM=t=>1+.35*Math.sin(TAU*.009*t+ph.a1);
+  const phV=t=>TAU*.015*t+1.5*Math.sin(TAU*.006*t+ph.v1)+ph.v;
+  const phU=t=>TAU*.005*t+1.2*Math.sin(TAU*.003*t+ph.u1)+ph.u;
+  const phW=t=>TAU*.017*t+.9*Math.sin(TAU*.004*t+ph.w1)+ph.w;
+  const phL=t=>TAU*.088*t+1.1*Math.sin(TAU*.011*t+ph.l1)+ph.l;
+  const M=MODEL,tb=M.TAU_BARO;
+  const out=[];let t=0,phi=ph.r,ipPrev=60000/S.fc,frSum=0;
+  while(t<1200){
+    const P=profile(cond,t);
+    const fr0=S.fr+P.dFR,fr=fr0*(1-P.frw)+guided*P.frw,f=fr/60;
+    const ipBase=60000/(S.fc+P.dHR);
+    const sym=P.sym*S.sym,vag=P.vag*S.vagal,G=S.baro*P.baro;
+    const tv=Math.min(1.5,Math.max(.7,Math.pow(.25/f,.4)))*(fr>20?1.3:1);
+    const B=M.B_RESP*tv;
+    const mayerAt=x=>M.A_M*sym*ampM(x)*Math.sin(phM(x));
+    const vlfAt=x=>M.A_V*Math.sin(phV(x))+M.A_U*Math.sin(phU(x));
+    const respAt=x=>-B*Math.sin(phi-TAU*f*(t-x)-TAU*f*M.D_RESP);
+    const baroIP=G*(Hbaro(.095)*mayerAt(t-tb)+M.H_V*vlfAt(t-tb)+Hbaro(f)*respAt(t-tb));
+    const rsa=-M.A_R*vag*rsaGain(f)*Math.sin(phi-TAU*f*.25);
+    const iLF=M.A_L*Math.sqrt(sym)*Math.sin(phL(t))+M.A_VI*Math.sin(phW(t))+M.A_UI*Math.sin(phU(t+97));
+    let ip=ipBase+baroIP+rsa+iLF+M.SD_IP*g();
+    ip=Math.min(1600,Math.max(330,ip));
+    const pas=M.PAS0+P.dPAS+mayerAt(t)+vlfAt(t)+respAt(t)+.012*(ipPrev-ipBase)+M.SD_PAS*g();
+    const pp=M.PP0+P.dPP+.03*(ipPrev-ipBase);
+    out.push({time:t,ip,pas,pad:pas-pp,fr,ph:phi});
+    frSum+=fr;
+    t+=ip/1000;phi+=TAU*f*(ip/1000);ipPrev=ip;
+  }
+  rows=out;meta={source:'gerado',frMean:frSum/out.length};rawImport=null;
+  setImportedUI(false);
+  $('source').textContent=`Série sintética gerada: ${rows.length} batimentos, cerca de 20 minutos. Condição: ${$('condition').selectedOptions[0].text}. As transições são didáticas; escolha períodos estáveis para a leitura espectral. Dados fictícios, não use para diagnóstico.`;
+  analyze();monitorReload(keepMonitor);
+}
+
+/* ================= Espectro (Welch) e coerência ================= */
+function resample(times,vals,fs){
+  const n=times.length,t0=times[0],m=Math.floor((times[n-1]-t0)*fs)+1,out=new Float64Array(m);
+  const h=new Float64Array(n-1);for(let i=0;i<n-1;i++)h[i]=times[i+1]-times[i];
+  const a=new Float64Array(n),b=new Float64Array(n),c=new Float64Array(n),d=new Float64Array(n),Mm=new Float64Array(n);
+  b[0]=1;b[n-1]=1;
+  for(let i=1;i<n-1;i++){a[i]=h[i-1];b[i]=2*(h[i-1]+h[i]);c[i]=h[i];d[i]=6*((vals[i+1]-vals[i])/h[i]-(vals[i]-vals[i-1])/h[i-1])}
+  for(let i=1;i<n;i++){const w=a[i]/b[i-1];b[i]-=w*c[i-1];d[i]-=w*d[i-1]}
+  Mm[n-1]=d[n-1]/b[n-1];for(let i=n-2;i>=0;i--)Mm[i]=(d[i]-c[i]*Mm[i+1])/b[i];
+  let j=0;
+  for(let k=0;k<m;k++){
+    const t=t0+k/fs;while(j<n-2&&times[j+1]<t)j++;
+    const hh=h[j],u=times[j+1]-t,v=t-times[j];
+    out[k]=Mm[j]*u*u*u/(6*hh)+Mm[j+1]*v*v*v/(6*hh)+(vals[j]/hh-Mm[j]*hh/6)*u+(vals[j+1]/hh-Mm[j+1]*hh/6)*v;
+  }
+  return out;
+}
+function fft(re,im){
+  const n=re.length;
+  for(let i=1,j=0;i<n;i++){let bit=n>>1;for(;j&bit;bit>>=1)j^=bit;j^=bit;if(i<j){let t=re[i];re[i]=re[j];re[j]=t;t=im[i];im[i]=im[j];im[j]=t}}
+  for(let len=2;len<=n;len<<=1){
+    const ang=-TAU/len,wr=Math.cos(ang),wi=Math.sin(ang);
+    for(let i=0;i<n;i+=len){let cr=1,ci=0;for(let k=0;k<len/2;k++){
+      const ur=re[i+k],ui=im[i+k],xr=re[i+k+len/2],xi=im[i+k+len/2],vr=xr*cr-xi*ci,vi=xr*ci+xi*cr;
+      re[i+k]=ur+vr;im[i+k]=ui+vi;re[i+k+len/2]=ur-vr;im[i+k+len/2]=ui-vi;
+      const nr=cr*wr-ci*wi;ci=cr*wi+ci*wr;cr=nr}}
+  }
+}
+function detrendInto(src,start,N,dst){
+  let sx=0,sy=0,sxx=0,sxy=0;
+  for(let i=0;i<N;i++){const y=src[start+i];sx+=i;sy+=y;sxx+=i*i;sxy+=i*y}
+  const den=N*sxx-sx*sx,sl=(N*sxy-sx*sy)/den,ic=(sy-sl*sx)/N;
+  for(let i=0;i<N;i++)dst[i]=src[start+i]-(ic+sl*i);
+}
+/* x = PAS (entrada), y = IP (saída). Devolve PSD de cada um, coerência e fase de y em relação a x. */
+function welch(times,pas,ip){
+  const fs=4,N=256,step=128;
+  if(times.length<10||times[times.length-1]-times[0]<N/fs)return null;
+  const xs=resample(times,pas,fs),ys=resample(times,ip,fs);
+  const w=Float64Array.from({length:N},(_,i)=>.5-.5*Math.cos(TAU*i/(N-1)));
+  let sw=0;for(const v of w)sw+=v*v;
+  const H=N/2+1,pxx=new Float64Array(H),pyy=new Float64Array(H),cre=new Float64Array(H),cim=new Float64Array(H);
+  let K=0;
+  const xr=new Float64Array(N),xi=new Float64Array(N),yr=new Float64Array(N),yi=new Float64Array(N);
+  for(let s=0;s+N<=xs.length;s+=step){
+    detrendInto(xs,s,N,xr);detrendInto(ys,s,N,yr);xi.fill(0);yi.fill(0);
+    for(let j=0;j<N;j++){xr[j]*=w[j];yr[j]*=w[j]}
+    fft(xr,xi);fft(yr,yi);
+    for(let k=0;k<H;k++){
+      pxx[k]+=xr[k]*xr[k]+xi[k]*xi[k];pyy[k]+=yr[k]*yr[k]+yi[k]*yi[k];
+      cre[k]+=yr[k]*xr[k]+yi[k]*xi[k];cim[k]+=yi[k]*xr[k]-yr[k]*xi[k];
+    }
+    K++;
+  }
+  if(!K)return null;
+  const freq=new Float64Array(H),ppas=new Float64Array(H),pip=new Float64Array(H),coh=new Float64Array(H),phase=new Float64Array(H);
+  for(let k=0;k<H;k++){
+    const sc=(k>0&&k<N/2?2:1)/(fs*sw*K);
+    freq[k]=k*fs/N;ppas[k]=pxx[k]*sc;pip[k]=pyy[k]*sc;
+    const den=pxx[k]*pyy[k];coh[k]=den>0?(cre[k]*cre[k]+cim[k]*cim[k])/den:0;phase[k]=Math.atan2(cim[k],cre[k]);
+  }
+  return{freq,ppas,pip,coh,phase,K,df:fs/N};
+}
+function bandPower(psd,lo,hi,df){let p=0;for(let k=0;k<psd.length;k++){const a=Math.max(lo,(k-.5)*df),b=Math.min(hi,(k+.5)*df);if(b>a)p+=psd[k]*(b-a)}return p}
+
+/* ================= Barorreflexo: método das sequências ================= */
+function baro(series,opt){
+  const n=series.length,d=opt.delay,th=opt.th,mp=opt.minPas,mi=opt.minIp;
+  const tot={up:0,dn:0},acc={up:[],dn:[]},list=[];
+  let i=0;
+  while(i<n-1){
+    const d0=series[i+1].pas-series[i].pas,dir=Math.sign(d0);
+    if(!dir||Math.abs(d0)<mp){i++;continue}
+    let end=i+1;
+    while(end<n-1){const dd=series[end+1].pas-series[end].pas;if(Math.sign(dd)===dir&&Math.abs(dd)>=mp&&Math.abs(dd)>0)end++;else break}
+    const len=end-i+1;
+    if(len>=3&&end+d<=n-1){
+      const key=dir>0?'up':'dn';tot[key]++;
+      const x=series.slice(i,end+1).map(r=>r.pas),y=series.slice(i+d,end+d+1).map(r=>r.ip);
+      let mono=true;for(let k=1;k<y.length;k++){const dy=y[k]-y[k-1];if(Math.sign(dy)!==dir||Math.abs(dy)<mi){mono=false;break}}
+      if(mono){const reg=linreg(x,y);if(Number.isFinite(reg.slope)&&reg.slope>0&&reg.r>=th){acc[key].push(reg.slope);list.push({dir,x,y,slope:reg.slope})}}
+    }
+    i=Math.max(i+1,end);
+  }
+  const all=acc.up.concat(acc.dn);
+  const pct=(a,b)=>b>0?100*a/b:NaN;
+  return{up:meanOrNaN(acc.up),dn:meanOrNaN(acc.dn),all:meanOrNaN(all),beiUp:pct(acc.up.length,tot.up),beiDn:pct(acc.dn.length,tot.dn),beiAll:pct(all.length,tot.up+tot.dn),nUp:acc.up.length,nDn:acc.dn.length,nTotal:tot.up+tot.dn,list};
+}
+
+/* ================= Janelas e análise ================= */
+function windowBounds(){const mode=$('windowMode').value,d=rows.length?rows[rows.length-1].time-rows[0].time:1200;return mode==='full'?[0,d]:({baseline:[0,300],stable:[300,600],late:[600,900],last:[900,Math.min(1200,d)]})[mode]}
+function selectedRows(){const [a,b]=windowBounds(),o=rows[0].time,full=$('windowMode').value==='full'||$('windowMode').value==='last';return rows.filter(r=>r.time-o>=a&&(full||r.time-o<b))}
+
+const GROUPS=[
+ ['Intervalo de pulso · tempo',[['meanIP','IP médio','ms','ip',0],['fc','FC média','bpm','fc',1],['sdnn','SDNN','ms','ip',1],['rmssd','RMSSD','ms','ip',1],['varIP','Variância do IP','ms²','ip',0]]],
+ ['Intervalo de pulso · frequência',[['bfIP','BF','ms²','bf',0,'ip'],['afIP','AF','ms²','af',0,'ip'],['bfNu','BF normalizada','nu','bf',1,'ip'],['afNu','AF normalizada','nu','af',1,'ip'],['ratio','BF / AF','razão','bf',2,'ip','af']]],
+ ['Pressão arterial sistólica',[['meanPAS','PAS média','mmHg','pas',1],['sdPAS','Desvio-padrão','mmHg','pas',1],['varPAS','Variância da PAS','mmHg²','pas',1],['bfPAS','BF','mmHg²','bf',1,'pas']]],
+ ['Barorreflexo · espectral',[['alfaRatio','Alfa BF (razão)','ms/mmHg','alfa',1],['alfaCoh','Alfa BF (coer. ≥ 0,5)','ms/mmHg','alfa',1],['cohBF','Coerência em BF','γ²','coh',2],['lagBF','Atraso PAS→IP','s','coh',1]]],
+ ['Barorreflexo · sequências',[['gUp','Ganho ▲','ms/mmHg','gain',1],['gDn','Ganho ▼','ms/mmHg','gain',1],['gAll','Ganho total','ms/mmHg','gain',1],['beiUp','BEI ▲','%','bei',1],['beiDn','BEI ▼','%','bei',1],['beiAll','BEI total','%','bei',1]]]
+];
+function buildCards(){
+  $('stats').innerHTML=GROUPS.map(([title,items])=>`<div class="group-title">${title}</div><div class="metric-grid">${items.map(([k,label,unit,col,,chip,glow])=>`<div class="metric" style="--metric-strong:var(--c-${col});--metric-glow:var(--c-${glow||col})"><small>${label}${chip?`<i style="background:var(--c-${chip})"></i>`:''}</small><strong id="m-${k}">—</strong><em>${unit}</em></div>`).join('')}</div>`).join('');
+}
+function showStats(){
+  for(const [,items] of GROUPS)for(const [k,,,,dec] of items){const el=$('m-'+k);if(el)el.textContent=fmt(results[k],dec)}
+  const x=results,b=x.baro;
+  $('barotable').innerHTML=[['Sequências ascendentes aceitas',b.nUp,'n',0],['Sequências descendentes aceitas',b.nDn,'n',0],['Total de rampas de PAS elegíveis',b.nTotal,'n',0],['Ganho ▲',b.up,'ms/mmHg',2],['Ganho ▼',b.dn,'ms/mmHg',2],['Ganho total',b.all,'ms/mmHg',2],['BEI ▲',b.beiUp,'%',1],['BEI ▼',b.beiDn,'%',1],['BEI total',b.beiAll,'%',1]].map(a=>`<tr><td>${a[0]}</td><td>${fmt(a[1],a[3])}</td><td>${a[2]}</td></tr>`).join('');
+  $('delayLabel').textContent=$('minDelay').value;
+  $('corrLabel').textContent=Number($('corr').value).toFixed(2).replace('.',',');
+  $('pasLabel').textContent=$('minPas').value==='0'?'sem limiar':$('minPas').value+' mmHg';
+  $('ipdLabel').textContent=$('minIpd').value==='0'?'sem limiar':$('minIpd').value+' ms';
+  // fórmulas ao vivo
+  $('fFc').textContent=`60 000 ÷ ${fmt(x.meanIP,0)} ms = ${fmt(x.fc,1)} bpm`;
+  $('fNu').textContent=Number.isFinite(x.bfNu)?`${fmt(x.bfIP,0)} ÷ (${fmt(x.bfIP,0)} + ${fmt(x.afIP,0)}) × 100 = ${fmt(x.bfNu,1)} nu`:'Janela curta demais para o espectro.';
+  $('fRmssd').textContent=`RMSSD = ${fmt(x.rmssd,1)} ms · SDNN = ${fmt(x.sdnn,1)} ms`;
+  const fr=meta.source==='gerado'?(windowMeanFr()):NaN;
+  $('fResp').textContent=Number.isFinite(fr)?`${fmt(fr,1)} ÷ 60 = ${fmt(fr/60,3)} Hz → ${fr/60>=.15&&fr/60<=.4?'dentro da AF':fr/60<.15?'dentro da BF':'acima da AF'}`:'Série importada: sem canal respiratório.';
+  $('fAlfa').textContent=Number.isFinite(x.alfaRatio)?`√(${fmt(x.bfIP,0)} ÷ ${fmt(x.bfPAS,1)}) = ${fmt(x.alfaRatio,1)} ms/mmHg`:'Janela curta demais para o espectro.';
+  $('fGain').textContent=`Ganho total ${fmt(b.all,1)} ms/mmHg · BEI ${fmt(b.beiAll,1)} % (${b.nUp+b.nDn} de ${b.nTotal} rampas)`;
+}
+function windowMeanFr(){const s=selectedRows().filter(r=>Number.isFinite(r.fr));return s.length?mean(s.map(r=>r.fr)):NaN}
+
+function analyze(){
+  if(rows.length<10)return;
+  const sel=selectedRows();
+  if(sel.length<50){$('qualityText').textContent='Janela sem dados suficientes para análise.';return}
+  const times=sel.map(r=>r.time),ip=sel.map(r=>r.ip),pas=sel.map(r=>r.pas);
+  const lfLo=+$('profile').value;
+  const sp=welch(times,pas,ip);
+  const b=baro(sel,{delay:+$('minDelay').value,th:+$('corr').value,minPas:+$('minPas').value,minIp:+$('minIpd').value});
+  const R={meanIP:mean(ip),sdnn:sd(ip),rmssd:rmssd(ip),varIP:variance(ip),meanPAS:mean(pas),sdPAS:sd(pas),varPAS:variance(pas),baro:b};
+  R.fc=60000/R.meanIP;
+  R.gUp=b.up;R.gDn=b.dn;R.gAll=b.all;R.beiUp=b.beiUp;R.beiDn=b.beiDn;R.beiAll=b.beiAll;
+  let K=0,cohSig=NaN;
+  if(sp){
+    K=sp.K;const df=sp.df;
+    R.bfIP=bandPower(sp.pip,lfLo,.15,df);R.afIP=bandPower(sp.pip,.15,.40000001,df);R.bfPAS=bandPower(sp.ppas,lfLo,.15,df);
+    const den=R.bfIP+R.afIP;R.bfNu=den>0?R.bfIP/den*100:NaN;R.afNu=den>0?R.afIP/den*100:NaN;R.ratio=R.afIP>0?R.bfIP/R.afIP:NaN;
+    R.alfaRatio=R.bfPAS>0?Math.sqrt(R.bfIP/R.bfPAS):NaN;
+    const ks=[];for(let k=0;k<sp.freq.length;k++)if(sp.freq[k]>=lfLo&&sp.freq[k]<.15)ks.push(k);
+    R.cohBF=mean(ks.map(k=>sp.coh[k]));
+    const good=ks.filter(k=>sp.coh[k]>=.5&&sp.ppas[k]>0);
+    R.alfaCoh=good.length?mean(good.map(k=>Math.sqrt(sp.pip[k]/sp.ppas[k]))):NaN;
+    const gl=good.filter(k=>sp.freq[k]>=.04);let sw=0,st=0;for(const k of gl){const wt=sp.coh[k]*sp.ppas[k];sw+=wt;st+=wt*(-sp.phase[k]/(TAU*sp.freq[k]))}R.lagBF=sw>0?st/sw:NaN;
+    cohSig=K>1?1-Math.pow(.05,1/(K-1)):NaN;
+  }else{for(const k of['bfIP','afIP','bfPAS','bfNu','afNu','ratio','alfaRatio','cohBF','alfaCoh','lagBF'])R[k]=NaN}
+  results=R;spectra=sp;seqs=b.list;
+  const duration=times[times.length-1]-times[0],cv=sd(ip)/mean(ip);
+  $('segmentLabel').textContent=`${$('windowMode').selectedOptions[0].text} · ${sel.length} batimentos`;
+  $('qualityText').innerHTML=`${K} janelas de Welch · ${fmt(duration/60,1)} min selecionados · coeficiente de variação do IP ${fmt(cv*100,1)} %.`+(K>1?` Coerência significativa (95 %) acima de ${fmt(cohSig,2)}; o α BF usa o critério 0,5.`:'')+(duration<240?' ⚠ Janela curta para interpretar o espectro.':'')+($('condition').value!=='repouso'&&meta.source==='gerado'?' ⚠ Confira a estacionariedade antes de interpretar.':'');
+  showStats();
+  $('ipChartSummary').textContent=`média ${fmt(mean(ip),1)} · DP ${fmt(sd(ip),1)} ms`;
+  $('pasChartSummary').textContent=`média ${fmt(mean(pas),1)} · DP ${fmt(sd(pas),1)} mmHg`;
+  $('ipSpecSummary').textContent=sp?`BF ${fmt(R.bfIP,0)} · AF ${fmt(R.afIP,0)} ms²`:'janela curta';
+  $('pasSpecSummary').textContent=sp?`BF ${fmt(R.bfPAS,1)} mmHg²`:'janela curta';
+  $('cohSummary').textContent=sp?`média em BF ${fmt(R.cohBF,2)}`:'janela curta';
+  $('seqSummary').textContent=`${b.nUp+b.nDn} aceitas · ganho ${fmt(b.all,1)}`;
+  drawGraphs();
+}
+
+/* ================= Gráficos ================= */
+function niceTicks(lo,hi,n){const span=hi-lo;if(!(span>0))return[lo];const raw=span/n,mag=Math.pow(10,Math.floor(Math.log10(raw))),f=raw/mag,st=(f<1.5?1:f<3?2:f<7?5:10)*mag,out=[];for(let v=Math.ceil(lo/st-1e-9)*st;v<=hi+st*1e-9;v+=st)out.push(+v.toFixed(12));return out}
+const fmtTick=v=>{const a=Math.abs(v);if(a>=10000)return fmt(v/1000,0)+'k';if(a>=1000)return fmt(v/1000,1)+'k';if(a>=100||Number.isInteger(v))return fmt(v,0);return fmt(v,a>=10?1:a>=1?2:3)};
+function plot(id,cfg){
+  const c=$(id);if(!c)return;
+  const w=Math.max(220,c.clientWidth),h=Math.max(170,c.clientHeight),dpr=Math.min(2,window.devicePixelRatio||1);
+  if(c.width!==Math.round(w*dpr)||c.height!==Math.round(h*dpr)){c.width=Math.round(w*dpr);c.height=Math.round(h*dpr)}
+  const g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.fillStyle='#071421';g.fillRect(0,0,w,h);
+  const p={l:60,r:14,t:14,b:34},pw=w-p.l-p.r,ph=h-p.t-p.b,L=!!cfg.log;
+  const ty=v=>L?Math.log10(Math.max(v,1e-6)):v;
+  let x0,x1;
+  const eachPt=fn=>{for(const s of cfg.series||[])for(let i=0;i<s.x.length;i++)fn(s.x[i],s.y[i]);for(const q of cfg.polys||[])for(const t of q.pts)fn(t[0],t[1]);for(const d of cfg.dots||[])fn(d.x,d.y)};
+  if(cfg.x){[x0,x1]=cfg.x}else{let a=Infinity,b=-Infinity;eachPt((x)=>{if(Number.isFinite(x)){if(x<a)a=x;if(x>b)b=x}});if(!(b>a)){g.fillStyle='#9ab1c0';g.font='12px Inter,Segoe UI,Arial';g.fillText('Dados insuficientes',16,h/2);plotState.settings[id]=null;return}const m=.05*(b-a);x0=a-m;x1=b+m}
+  if(x1<=x0)x1=x0+1;
+  let lo=Infinity,hi=-Infinity;
+  eachPt((x,y)=>{if(x<x0||x>x1||!Number.isFinite(y))return;const v=ty(y);if(v<lo)lo=v;if(v>hi)hi=v});
+  if(cfg.y){lo=ty(cfg.y[0]);hi=ty(cfg.y[1])}
+  else{
+    if(!(hi>lo)){g.fillStyle='#9ab1c0';g.font='12px Inter,Segoe UI,Arial';g.fillText('Dados insuficientes',16,h/2);plotState.settings[id]=null;return}
+    if(L){lo=Math.floor(lo);hi=Math.ceil(hi);if(hi<=lo)hi=lo+1}
+    else{const r=hi-lo;lo-=.08*r;hi+=.1*r;if(cfg.nonneg)lo=0}
+  }
+  const X=x=>p.l+(x-x0)/(x1-x0)*pw,Y=y=>p.t+ph*(1-(ty(y)-lo)/(hi-lo));
+  for(const b of cfg.bands||[]){const a=Math.max(x0,b.a),e=Math.min(x1,b.b);if(e>a){g.fillStyle=b.color;g.fillRect(X(a),p.t,X(e)-X(a),ph)}}
+  g.font='11px Inter,Segoe UI,Arial';g.lineWidth=.8;g.strokeStyle='#233b4d';g.fillStyle='#a6bdce';
+  const yt=L?(()=>{const a=[];for(let k=Math.ceil(lo);k<=Math.floor(hi);k++)a.push(k);return a})():niceTicks(lo,hi,5);
+  g.textAlign='right';
+  for(const v of yt){const yy=L?p.t+ph*(1-(v-lo)/(hi-lo)):Y(v);g.beginPath();g.moveTo(p.l,yy);g.lineTo(p.l+pw,yy);g.stroke();g.fillText(L?fmtTick(Math.pow(10,v)):(cfg.yfmt?cfg.yfmt(v):fmtTick(v)),p.l-6,yy+4)}
+  g.textAlign='center';
+  for(const v of niceTicks(x0,x1,6)){const xx=X(v);g.beginPath();g.moveTo(xx,p.t);g.lineTo(xx,p.t+ph);g.strokeStyle='#1b3040';g.stroke();g.fillText(cfg.xfmt?cfg.xfmt(v):fmtTick(v),xx,h-14)}
+  g.textAlign='left';
+  g.strokeStyle='#4c7184';g.lineWidth=1;g.beginPath();g.moveTo(p.l,p.t);g.lineTo(p.l,p.t+ph);g.lineTo(p.l+pw,p.t+ph);g.stroke();
+  g.save();g.beginPath();g.rect(p.l,p.t,pw,ph);g.clip();
+  for(const s of cfg.series||[]){
+    g.strokeStyle=s.color;g.lineWidth=s.width||1.6;g.setLineDash(s.dash||[]);g.beginPath();
+    let first=true;const cols=new Map();let n=0;
+    for(let i=0;i<s.x.length;i++){if(s.x[i]>=x0&&s.x[i]<=x1&&Number.isFinite(s.y[i]))n++}
+    if(n>pw*2.2){
+      for(let i=0;i<s.x.length;i++){const x=s.x[i],y=s.y[i];if(x<x0||x>x1||!Number.isFinite(y))continue;const cx=Math.floor(X(x));let e=cols.get(cx);if(!e){e={mn:y,mx:y,f:y,l:y};cols.set(cx,e)}else{if(y<e.mn)e.mn=y;if(y>e.mx)e.mx=y;e.l=y}}
+      for(const [cx,e] of [...cols.entries()].sort((a,b)=>a[0]-b[0])){for(const y of[e.f,e.mn,e.mx,e.l]){if(first){g.moveTo(cx,Y(y));first=false}else g.lineTo(cx,Y(y))}}
+    }else{
+      for(let i=0;i<s.x.length;i++){const x=s.x[i],y=s.y[i];if(x<x0||x>x1||!Number.isFinite(y))continue;if(first){g.moveTo(X(x),Y(y));first=false}else g.lineTo(X(x),Y(y))}
+    }
+    g.stroke();g.setLineDash([]);
+  }
+  for(const q of cfg.polys||[]){g.strokeStyle=q.color;g.lineWidth=q.width||2;g.setLineDash(q.dash||[]);g.beginPath();q.pts.forEach((t,i)=>{if(i)g.lineTo(X(t[0]),Y(t[1]));else g.moveTo(X(t[0]),Y(t[1]))});g.stroke();g.setLineDash([])}
+  for(const d of cfg.dots||[]){g.fillStyle=d.color;g.beginPath();g.arc(X(d.x),Y(d.y),d.r||2,0,TAU);g.fill()}
+  for(const v of cfg.vlines||[]){if(v.x>=x0&&v.x<=x1){g.strokeStyle=v.color;g.lineWidth=v.w||1.4;g.setLineDash(v.dash||[]);g.beginPath();g.moveTo(X(v.x),p.t);g.lineTo(X(v.x),p.t+ph);g.stroke();g.setLineDash([])}}
+  for(const v of cfg.hlines||[]){g.strokeStyle=v.color;g.lineWidth=v.w||1.2;g.setLineDash(v.dash||[]);g.beginPath();g.moveTo(p.l,Y(v.y));g.lineTo(p.l+pw,Y(v.y));g.stroke();g.setLineDash([])}
+  if(cfg.hover&&Number.isFinite(plotState.hover)){const hv=plotState.hover;if(hv>=x0&&hv<=x1){const s=cfg.series[0];let bi=0,bd=Infinity;for(let i=0;i<s.x.length;i++){const dd=Math.abs(s.x[i]-hv);if(dd<bd){bd=dd;bi=i}}g.strokeStyle='#daebfb66';g.lineWidth=1;g.beginPath();g.moveTo(X(s.x[bi]),p.t);g.lineTo(X(s.x[bi]),p.t+ph);g.stroke();g.fillStyle='#fff';g.beginPath();g.arc(X(s.x[bi]),Y(s.y[bi]),4.5,0,TAU);g.fill()}}
+  g.restore();
+  plotState.settings[id]={x0,x1,p,w,h};
+}
+function drawGraphs(){
+  if(rows.length<2)return;
+  const o=rows[0].time,dur=rows[rows.length-1].time-o,[wa,wb]=windowBounds();
+  const mode=$('seriesView').value;let a=0,b=dur;
+  if(mode==='analysis'){a=wa;b=wb}else if(mode==='live'){const e=Math.max(60,Math.min(dur,mon.clock));a=Math.max(0,e-60);b=a+60}
+  const T=rows.map(r=>r.time-o),min=v=>fmt(v/60,v<60&&mode==='live'?2:1);
+  const wband=[{a:wa,b:wb,color:'#ffffff14'}];
+  plot('ip',{x:[a,b],series:[{x:T,y:rows.map(r=>r.ip),color:C('ip')}],bands:wband,vlines:[{x:mon.clock,color:'#fff',dash:[4,4]}],hover:true,xfmt:v=>fmt(v/60,1),yfmt:v=>fmt(v,0)});
+  plot('pas',{x:[a,b],series:[{x:T,y:rows.map(r=>r.pas),color:C('pas')}],bands:wband,vlines:[{x:mon.clock,color:'#fff',dash:[4,4]}],hover:true,xfmt:v=>fmt(v/60,1),yfmt:v=>fmt(v,0)});
+  const L=$('spectralScale').value==='log',sp=spectra,lfLo=+$('profile').value,bands=$('showBands').checked?[{a:0,b:lfLo,color:C('mbf')+'22'},{a:lfLo,b:.15,color:C('bf')+'2e'},{a:.15,b:.4,color:C('af')+'30'}]:[];
+  const fr=meta.source==='gerado'?windowMeanFr():NaN,vl=Number.isFinite(fr)?[{x:fr/60,color:C('fr'),dash:[5,4],w:1.5}]:[];
+  if(sp){
+    plot('specip',{x:[0,.5],series:[{x:Array.from(sp.freq),y:Array.from(sp.pip),color:C('ip'),width:2}],bands,vlines:vl,log:L,nonneg:true,xfmt:v=>fmt(v,2)});
+    plot('specpas',{x:[0,.5],series:[{x:Array.from(sp.freq),y:Array.from(sp.ppas),color:C('pas'),width:2}],bands,vlines:vl,log:L,nonneg:true,xfmt:v=>fmt(v,2)});
+    plot('coh',{x:[0,.5],y:[0,1],series:[{x:Array.from(sp.freq),y:Array.from(sp.coh),color:C('coh'),width:2}],bands,hlines:[{y:.5,color:'#ffffff99',dash:[5,4]}],xfmt:v=>fmt(v,2),yfmt:v=>fmt(v,1)});
+  }else for(const id of['specip','specpas','coh'])plot(id,{x:[0,.5],series:[],nonneg:true});
+  const sel=selectedRows(),dots=sel.map(r=>({x:r.pas,y:r.ip,color:'#8fa3b366',r:1.6}));
+  const polys=seqs.map(s=>({pts:s.x.map((x,i)=>[x,s.y[i]]),color:C('gain'),width:s.dir>0?2.2:1.6,dash:s.dir>0?[]:[5,3]}));
+  plot('seq',{series:[],dots,polys,xfmt:v=>fmt(v,0),yfmt:v=>fmt(v,0)});
+  $('graphStatus').textContent=`Janela ${fmt(wa/60,1)}–${fmt(wb/60,1)} min · BF ${fmt(lfLo,2)}–0,15 Hz`;
+}
+function bindPlots(){
+  for(const id of['ip','pas','specip','specpas','coh']){
+    const c=$(id);
+    c.addEventListener('pointermove',e=>{
+      const s=plotState.settings[id];if(!s)return;const rect=c.getBoundingClientRect(),x=e.clientX-rect.left;
+      if(x<s.p.l||x>s.w-s.p.r)return;
+      const val=s.x0+(x-s.p.l)/(s.w-s.p.l-s.p.r)*(s.x1-s.x0);
+      if(id==='ip'||id==='pas'){
+        plotState.hover=val;const o=rows[0].time;let best=rows[0];for(const r of rows)if(Math.abs(r.time-o-val)<Math.abs(best.time-o-val))best=r;
+        $('graphTooltip').textContent=`t ${fmt((best.time-o)/60,2)} min · IP ${fmt(best.ip,1)} ms · PAS ${fmt(best.pas,1)} mmHg`;
+      }else if(spectra){
+        let j=Math.round(val/spectra.df);j=Math.max(0,Math.min(j,spectra.freq.length-1));
+        $('graphTooltip').textContent=`${fmt(spectra.freq[j],3)} Hz · PSD do IP ${fmt(spectra.pip[j],1)} ms²/Hz · PSD da PAS ${fmt(spectra.ppas[j],2)} mmHg²/Hz · coerência ${fmt(spectra.coh[j],2)}`;
+      }
+      drawGraphs();
+    });
+    c.addEventListener('pointerleave',()=>{plotState.hover=null;$('graphTooltip').textContent='Passe o cursor (ou o dedo) sobre os gráficos para ler os valores.';drawGraphs()});
+  }
+}
+
+/* ================= Importação e exportação ================= */
+function applyConvention(list){
+  if($('ipConv').value==='segue'||list.length<2)return list.map(r=>({time:r.time,ip:r.ip,pas:r.pas}));
+  // o IP da linha k termina no batimento k: o intervalo que começa no batimento k está na linha k+1
+  const out=[];for(let i=0;i<list.length-1;i++)out.push({time:list[i].time,ip:list[i+1].ip,pas:list[i].pas});return out;
+}
+function csvParse(text){
+  const lines=text.trim().split(/\r?\n/).filter(Boolean);
+  const delim=lines[0].includes(';')?';':lines[0].includes('\t')?'\t':',';
+  const headers=lines[0].toLowerCase().split(delim).map(x=>x.trim().replace(/["']/g,''));
+  const ipCol=headers.findIndex(x=>/^(ip_ms|ip|rr_ms|intervalo)$/.test(x)),pasCol=headers.findIndex(x=>/^(pas_mmhg|pas|sbp)$/.test(x)),timeCol=headers.findIndex(x=>/^(time_s|time|tempo_s|seconds)$/.test(x));
+  if(ipCol<0||pasCol<0)throw Error('Cabeçalhos obrigatórios: ip_ms,pas_mmhg (opcional: time_s).');
+  const out=[];let t=0;
+  for(const line of lines.slice(1)){
+    const arr=line.split(delim),v=k=>Number((arr[k]||'').trim().replace(',','.'));
+    const ip=v(ipCol),pas=v(pasCol);
+    if(!Number.isFinite(ip)||!Number.isFinite(pas)||ip<250||ip>2500||pas<50||pas>300)continue;
+    let time=timeCol>=0?v(timeCol):t;if(!Number.isFinite(time))continue;
+    if(out.length&&time<=out[out.length-1].time)continue;
+    out.push({time,ip,pas});t=time+ip/1000;
+  }
+  if(timeCol>=0&&out.length>3){const d=out.slice(1).map((r,i)=>r.time-out[i].time).sort((a,b)=>a-b),med=d[d.length>>1];if(med>100)for(const r of out)r.time/=1000}
+  if(out.length<256)throw Error('São necessários ao menos 256 batimentos válidos.');
+  return out;
+}
+function loadImported(){
+  if(!rawImport)return;
+  const list=applyConvention(rawImport);
+  rows=list;meta={source:'importado',frMean:NaN};setImportedUI(true);
+  $('source').textContent=`Arquivo local carregado: ${rows.length} batimentos válidos. Confira se a linha do batimento traz o intervalo que segue ou que precede o pulso (campo "IP importado", em Análise). Os controles de geração ficam desativados enquanto houver uma série importada.`;
+  analyze();monitorReload();
+}
+function setImportedUI(on){for(const id of['sFc','sVagal','sSym','sBaro','sFr'])$(id).disabled=on;document.querySelectorAll('.state-btn').forEach(b=>b.disabled=on);$('condition').disabled=on;$('respRate').disabled=on;$('seed').disabled=on;$('ipConv').disabled=!on}
+function download(name,text){const a=document.createElement('a'),b=new Blob([text],{type:'text/csv;charset=utf-8'});a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),500)}
+function exportSeries(){
+  const gen=meta.source==='gerado';
+  download('serie_ip_pas.csv',(gen?'time_s,ip_ms,pas_mmhg,pad_mmhg,fr_cpm\n':'time_s,ip_ms,pas_mmhg\n')+rows.map(z=>(gen?[z.time.toFixed(4),z.ip.toFixed(4),z.pas.toFixed(4),z.pad.toFixed(4),z.fr.toFixed(3)]:[z.time.toFixed(4),z.ip.toFixed(4),z.pas.toFixed(4)]).join(',')).join('\n'));
+}
+function exportResults(){
+  let s='indicador,valor,unidade\n';
+  for(const [title,items] of GROUPS)for(const [k,label,unit] of items)s+=`"${title} · ${label}",${Number.isFinite(results[k])?results[k]:''},${unit}\n`;
+  s+=`"Barorreflexo · sequências ascendentes aceitas",${results.baro.nUp},n\n"Barorreflexo · sequências descendentes aceitas",${results.baro.nDn},n\n"Barorreflexo · total de rampas elegíveis",${results.baro.nTotal},n\n`;
+  s+=`"Trecho analisado",${$('windowMode').selectedOptions[0].text},\n`;
+  download('resultados_variabilidade.csv',s);
+}
+
+/* ================= Monitor ================= */
+const mon={clock:0,playing:false,last:0,span:9};
+const monDuration=()=>rows.length?Math.max(0,rows[rows.length-1].time-rows[0].time):1200;
+function monIndex(abs){let a=0,b=rows.length-1;while(a<b){const m=(a+b+1)>>1;if(rows[m].time<=abs)a=m;else b=m-1}return a}
+const monTime=l=>(rows[0]?rows[0].time:0)+l;
+const gaussF=(v,c,w)=>Math.exp(-.5*((v-c)/w)**2);
+function ecgBeat(dt,ip){
+  if(dt<-.45||dt>1.1)return 0;
+  const k=Math.sqrt(ip/830),tc=.26*k;
+  return .12*gaussF(dt,-.17,.035)-.15*gaussF(dt,-.026,.010)+1.08*gaussF(dt,0,.010)-.24*gaussF(dt,.026,.011)+.27*gaussF(dt,tc,.075*k);
+}
+function pulseShape(d,ip){
+  const T=ip/1000,tr=Math.min(.12,.16*T),te=Math.min(.30,.42*T);
+  if(d<0)return 0;
+  if(d<tr)return(1-Math.cos(Math.PI*d/tr))/2;
+  if(d<te){const u=(d-tr)/(te-tr);return 1-.28*(1-Math.cos(Math.PI*u))/2}
+  const e=Math.exp(-(T-te)/.22),dd=.72*(Math.exp(-(d-te)/.22)-e)/(1-e);
+  return Math.max(0,dd-.06*gaussF(d,te+.012,.012)+.05*gaussF(d,te+.08,.04));
+}
+function monWave(type,local){
+  if(local<0||!rows.length)return null;
+  const abs=monTime(local);
+  if(type===0){
+    const i=monIndex(abs);let v=0;
+    for(let k=Math.max(0,i-1);k<=Math.min(rows.length-1,i+1);k++)v+=ecgBeat(abs-rows[k].time,rows[k].ip);
+    return v;
+  }
+  if(type===1){
+    const lag=.19,i=monIndex(abs-lag),b=rows[i],n=rows[Math.min(rows.length-1,i+1)],dt=abs-lag-b.time;
+    const pad=Number.isFinite(b.pad)?b.pad:b.pas-MODEL.PP0,padN=Number.isFinite(n.pad)?n.pad:n.pas-MODEL.PP0;
+    return pad+(padN-pad)*Math.min(1,dt/(b.ip/1000))+(b.pas-pad)*pulseShape(dt,b.ip);
+  }
+  const i=monIndex(abs),b=rows[i];
+  if(!Number.isFinite(b.fr))return 0;
+  return Math.sin(b.ph+TAU*b.fr/60*(abs-b.time));
+}
+const MON_CFG=[{c:()=>C('ip'),lo:-.5,hi:1.4,ticks:[]},{c:()=>C('pas'),lo:40,hi:180,ticks:[60,100,140]},{c:()=>C('fr'),lo:-1.3,hi:1.3,ticks:[]}];
+function monDrawCanvas(id,type,local){
+  const c=$(id);if(!c)return;
+  const rect=c.getBoundingClientRect(),w=Math.max(200,rect.width),h=Math.max(55,rect.height),dpr=Math.min(2,window.devicePixelRatio||1);
+  if(c.width!==Math.round(w*dpr)||c.height!==Math.round(h*dpr)){c.width=Math.round(w*dpr);c.height=Math.round(h*dpr)}
+  const g=c.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);g.fillStyle='#081824';g.fillRect(0,0,w,h);
+  g.strokeStyle='#1e3442';g.lineWidth=.55;for(let x=0;x<w;x+=18){g.beginPath();g.moveTo(x,0);g.lineTo(x,h);g.stroke()}for(let y=0;y<h;y+=18){g.beginPath();g.moveTo(0,y);g.lineTo(w,y);g.stroke()}
+  const cf=MON_CFG[type],Y=v=>h*(1-(v-cf.lo)/(cf.hi-cf.lo));
+  g.fillStyle='#7f99ab';g.font='10px Consolas, monospace';
+  for(const t of cf.ticks){g.strokeStyle='#2a4658';g.beginPath();g.moveTo(26,Y(t));g.lineTo(w,Y(t));g.stroke();g.fillText(String(t),3,Y(t)+3)}
+  if(type===2&&rows.length&&!Number.isFinite(rows[0].fr)){g.fillStyle='#a5bacb';g.font='11px Inter,Segoe UI,Arial';g.fillText('Respiração não disponível nesta série',12,h/2+4);return}
+  const col=cf.c();g.beginPath();let started=false;
+  for(let x=0;x<w;x+=1.5){const t=Math.max(local,mon.span)-mon.span+mon.span*x/w,v=monWave(type,t);if(v===null){started=false;continue}const y=Y(v);if(!started){g.moveTo(x,y);started=true}else g.lineTo(x,y)}
+  g.strokeStyle=col;g.lineWidth=2;g.shadowColor=col;g.shadowBlur=3;g.stroke();g.shadowBlur=0;
+  g.fillStyle='#a5bacb';g.font='10px Consolas, monospace';g.fillText('−'+mon.span+' s',type===1?30:8,12);g.fillText('agora',w-39,12);
+}
+function monEvent(local){
+  if(meta.source!=='gerado')return 'Série importada';
+  const c=$('condition').value;
+  if(c==='ortostatismo'&&local>=300&&local<340)return 'Transição postural: ortostatismo ativo';
+  if(c==='ortostatismo'&&local>=340)return 'Em pé, regime estável';
+  if(c==='respiracao'&&local>=300)return 'Respiração controlada: '+fmt(rows[monIndex(monTime(local))].fr,0)+' ciclos/min';
+  if(c==='exercicio'&&local>=300&&local<480)return 'Exercício: estímulo ativo';
+  if(c==='exercicio'&&local>=480)return 'Recuperação após o exercício';
+  if(c==='estresse'&&local>=300&&local<600)return 'Tarefa de estresse mental';
+  if(c==='estresse'&&local>=600)return 'Recuperação após o estresse';
+  if(c==='recuperacao')return 'Recuperação cardiovascular';
+  return 'Repouso sentado';
+}
+const clockF=t=>{const v=Math.floor(t);return String(Math.floor(v/60)).padStart(2,'0')+':'+String(v%60).padStart(2,'0')};
+function monPaint(){
+  if(!rows.length)return;
+  const el=mon.clock;
+  monDrawCanvas('liveECG',0,el);monDrawCanvas('livePA',1,el);monDrawCanvas('liveRESP',2,el);
+  const i=monIndex(monTime(el)),r=rows[i];
+  $('liveIP').textContent=Math.round(r.ip);$('liveFC').textContent=Math.round(60000/r.ip);$('liveBP').textContent=Math.round(r.pas);
+  $('livePAD').innerHTML=Number.isFinite(r.pad)?`PAD estimada ${Math.round(r.pad)} mmHg`:'&nbsp;';
+  $('liveFR').textContent=Number.isFinite(r.fr)?Math.round(r.fr):'—';
+  const dur=monDuration();
+  $('monitorClock').textContent=clockF(el)+' / '+clockF(dur);
+  $('monitorProgress').style.width=(100*Math.min(1,el/Math.max(1,dur))).toFixed(2)+'%';
+  $('monitorStatus').textContent=mon.playing?'● CAPTANDO':'● PAUSADO';
+  $('mobilePlayToggle').textContent=mon.playing?'Ⅱ Pausar':'▶ Iniciar';
+  if($('seriesView').value==='live'||performance.now()-plotState.lastPaint>175){plotState.lastPaint=performance.now();drawGraphs()}
+  $('monitorEvent').innerHTML='<b>'+monEvent(el)+'</b> · batimento '+(i+1)+' · IP '+r.ip.toFixed(0)+' ms · PAS '+r.pas.toFixed(0)+' mmHg.<br>O QRS virtual marca o início de cada intervalo; o pulso arterial chega cerca de 190 ms depois.';
+}
+function monFrame(now){
+  if(mon.playing){
+    if(mon.last){mon.clock+=Math.min(.15,(now-mon.last)/1000)*Number($('monitorSpeed').value);if(mon.clock>=monDuration()){mon.clock=monDuration();mon.playing=false}}
+    mon.last=now;monPaint();
+  }else mon.last=0;
+  requestAnimationFrame(monFrame);
+}
+function monitorReload(keep){
+  if(!keep){mon.playing=false;mon.clock=0}
+  mon.clock=Math.min(mon.clock,monDuration());mon.last=0;monPaint();
+}
+
+/* ================= Interface ================= */
+const PRESET_TEXT={
+ repouso:'<strong>Repouso sentado.</strong> Nada muda ao longo do registro, então qualquer trecho de 5 min serve. A respiração cai na AF e a onda de Mayer, na BF.',
+ ortostatismo:'<strong>Ortostatismo (aos 5 min).</strong> A FC sobe, a PAS cai por instantes e volta, o tônus vagal diminui (AF e RMSSD caem), a oscilação simpática da PAS aumenta e o ganho barorreflexo diminui. Analise o trecho 5–10 min.',
+ respiracao:'<strong>Respiração controlada (a partir de 5 min).</strong> A respiração segue o ritmo guiado. A 6 ciclos/min ela cai em 0,1 Hz: a oscilação do IP cresce muito e vai para a BF, enquanto a AF some. Troque a respiração guiada e compare.',
+ exercicio:'<strong>Exercício (5–8 min) e recuperação.</strong> No esforço a FC sobe, o tônus vagal e o ganho caem e a respiração acelera. Na recuperação a FC cai rápido no início (reativação vagal) e depois devagar. Nenhum trecho é bem estacionário.',
+ estresse:'<strong>Estresse mental (5–10 min).</strong> FC e PAS sobem, o tônus vagal e o ganho barorreflexo diminuem e a BF aumenta. Compare o trecho 5–10 min com o basal.',
+ recuperacao:'<strong>Recuperação logo após o exercício.</strong> O registro começa com a FC alta e ela desce até o repouso, enquanto tônus vagal e ganho voltam aos poucos. É a situação menos estacionária; olhe a tendência.'
+};
+const PRESET_WINDOW={repouso:'baseline',ortostatismo:'stable',respiracao:'stable',exercicio:'last',estresse:'stable',recuperacao:'baseline'};
+function setPreset(name,regen=true){
+  $('condition').value=name;$('windowMode').value=PRESET_WINDOW[name];
+  document.querySelectorAll('.state-btn').forEach(b=>b.classList.toggle('selected',b.dataset.state===name));
+  $('presetExplain').innerHTML=PRESET_TEXT[name];
+  if(regen)gen();
+}
+const SLIDERS=[['sFc','oFc',v=>v+' bpm'],['sVagal','oVagal',v=>v+' %'],['sSym','oSym',v=>v+' %'],['sBaro','oBaro',v=>fmt(+v,1)+' ms/mmHg'],['sFr','oFr',v=>v+' ciclos/min']];
+function updateSlider(id,out,f){const s=$(id);s.style.setProperty('--p',((s.value-s.min)/(s.max-s.min)*100)+'%');$(out).textContent=f(s.value)}
+let regenTimer=null;
+function wireSliders(){
+  for(const [id,out,f] of SLIDERS){
+    updateSlider(id,out,f);
+    $(id).addEventListener('input',()=>{updateSlider(id,out,f);clearTimeout(regenTimer);regenTimer=setTimeout(()=>gen(true),120)});
+  }
+}
+function setTab(name){
+  document.querySelectorAll('.mobile-tabnav button').forEach(b=>{const on=b.dataset.tabnav===name;b.classList.toggle('active',on);b.setAttribute('aria-selected',String(on))});
+  document.querySelectorAll('[data-tab]').forEach(el=>el.classList.toggle('tab-active',el.dataset.tab===name));
+  requestAnimationFrame(()=>{drawGraphs();monPaint()});
+}
+function wire(){
+  buildCards();wireSliders();bindPlots();
+  $('generate').onclick=()=>{$('seed').value=Math.floor(Math.random()*99999)+1;if(meta.source==='importado'){setImportedUI(false)}gen()};
+  $('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{rawImport=csvParse(await f.text());loadImported()}catch(err){alert(err.message)}e.target.value=''};
+  $('download').onclick=exportSeries;$('report').onclick=exportResults;
+  ['condition','seed','respRate'].forEach(id=>$(id).addEventListener('change',()=>{if(id==='condition')setPreset($('condition').value,false);gen()}));
+  ['windowMode','profile','minDelay','corr','minPas','minIpd'].forEach(id=>$(id).addEventListener('change',analyze));
+  $('ipConv').addEventListener('change',loadImported);
+  ['seriesView','spectralScale','showBands'].forEach(id=>$(id).addEventListener('change',drawGraphs));
+  $('graphReset').addEventListener('click',()=>{$('seriesView').value='full';$('spectralScale').value='linear';$('showBands').checked=true;plotState.hover=null;drawGraphs()});
+  document.querySelectorAll('.state-btn').forEach(b=>b.addEventListener('click',()=>setPreset(b.dataset.state)));
+  $('monitorStart').addEventListener('click',()=>{if(!rows.length)return;if(mon.clock>=monDuration())mon.clock=0;mon.playing=true;mon.last=0;monPaint()});
+  $('monitorPause').addEventListener('click',()=>{mon.playing=false;monPaint()});
+  $('monitorReset').addEventListener('click',()=>monitorReload());
+  $('mobilePlayToggle').addEventListener('click',()=>{if(mon.playing)$('monitorPause').click();else $('monitorStart').click()});
+  document.querySelectorAll('.mobile-tabnav button').forEach(b=>b.addEventListener('click',()=>{setTab(b.dataset.tabnav);window.scrollTo({top:0})}));
+  window.addEventListener('resize',()=>{if(rows.length){drawGraphs();monPaint()}});
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{if(rows.length){drawGraphs();monPaint()}});
+  setTab('monitor');
+  setPreset('repouso',false);
+  setImportedUI(false);
+  requestAnimationFrame(monFrame);
+  gen();
+}
+wire();
+</script>
+</body>
+</html>
