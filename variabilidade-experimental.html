@@ -93,6 +93,26 @@ footer{font-size:.84rem;color:var(--muted);margin-top:15px}
 @media(max-width:760px){.layout,.readout{grid-template-columns:1fr}.layout>.setup{grid-template-columns:1fr 1fr}.setup h2,.setup .setup-info,.setup fieldset{grid-column:1/-1}.setup fieldset{display:grid;grid-template-columns:1fr 1fr;gap:5px}.setup fieldset legend{grid-column:1/-1}}
 @media(max-width:410px){.setup fieldset{grid-template-columns:1fr}.channel{grid-template-columns:minmax(0,1fr) 64px}.screen{padding:7px 8px}.bar button:last-child{margin-left:0}}
 @media(prefers-reduced-motion:reduce){button:not(:disabled):active{transform:none}}
+.lab-jump{display:inline-block;margin-top:12px;color:var(--cyan);text-underline-offset:4px}
+.animal-lab{scroll-margin-top:16px}
+.animal-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rat-screen{margin-top:2px}
+.rat-screen .legend{margin-bottom:8px}
+.rat-plot{margin-bottom:11px}
+.rat-plot h3{font-size:.88rem;color:var(--muted);padding:0 3px}
+.rat-plot svg{display:block;width:100%;height:auto}
+.rat-axis{font:15px system-ui,sans-serif;fill:#c0d4df}
+.rat-interpretation{margin-top:12px}
+.animal-lab table th:first-child{overflow-wrap:anywhere}
+.animal-lab details{margin-top:0}
+.animal-lab a{color:var(--cyan)}
+@media(max-width:600px){
+  .animal-controls{grid-template-columns:1fr}
+  .rat-axis{font-size:22px}
+  .animal-lab table{font-size:.78rem}
+  .animal-lab th,.animal-lab td{padding:6px 3px}
+  .animal-lab .screen{border-width:7px;padding:7px}
+}
 </style>
 </head>
 <body>
@@ -101,6 +121,7 @@ footer{font-size:.84rem;color:var(--muted);margin-top:15px}
   <p class="eyebrow">Fisiologia experimental</p>
   <h1>Variabilidade Experimental</h1>
   <p class="muted">Compare linhagens de camundongos e investigue como o modelo influencia a resposta cardiovascular.</p>
+<a class="lab-jump" href="#modelos-animais">Abrir práticas com ratos</a>
 </header>
 <div class="layout">
   <aside class="panel setup" aria-labelledby="setup-title">
@@ -173,6 +194,44 @@ footer{font-size:.84rem;color:var(--muted);margin-top:15px}
     <p>Uma hipótese possível é que a atividade eleve a frequência cardíaca e que parte dessa elevação persista durante a recuperação. Em humanos, seria preciso medir diretamente a resposta sob condições definidas de atividade e recuperação.</p>
     <p class="muted">A comparação ilustra a direção da resposta e o retorno à linha de base. A intensidade do esforço e os tempos entre espécies precisariam ser definidos e justificados em um estudo real.</p>
   </details>
+</section>
+<section id="modelos-animais" class="panel results animal-lab" aria-labelledby="animal-lab-title">
+  <div>
+    <p class="eyebrow">Práticas experimentais com ratos</p>
+    <h2 id="animal-lab-title">Variabilidade cardiovascular batimento a batimento</h2>
+  </div>
+  <p class="muted">Compare grupos de <i>Rattus norvegicus</i> em registros sintéticos. As médias aparecem primeiro. Faça uma previsão e abra os registros para testá-la.</p>
+  <div class="animal-controls">
+    <div><label class="control" for="rat-case">Cenário</label><select id="rat-case"><option value="hypertension">Hipertensão</option><option value="obesity">Obesidade</option></select></div>
+    <div><label class="control" for="rat-condition">Condição</label><select id="rat-condition"><option value="rest">Repouso</option><option value="activity">Atividade leve</option></select></div>
+    <div><label class="control" for="rat-animal">Animal em cada grupo</label><select id="rat-animal"></select></div>
+  </div>
+  <p class="muted" id="rat-background"></p>
+  <div class="block summary">
+    <h3>Médias do trecho de 120 s</h3>
+    <div id="rat-means"></div>
+  </div>
+  <div class="block summary">
+    <h3>Faça uma previsão</h3>
+    <p id="rat-question"></p>
+    <div><button class="primary" id="rat-reveal" aria-controls="rat-series" aria-expanded="false">Abrir séries e indicadores</button></div>
+  </div>
+  <div id="rat-series" hidden>
+    <div class="screen rat-screen">
+      <div class="legend" id="rat-legend"></div>
+      <div id="rat-plots"></div>
+      <small>Primeiros 20 s de cada registro. As curvas compartilham a escala de tempo, com cada animal alinhado ao início do próprio registro.</small>
+    </div>
+    <div class="block summary rat-interpretation">
+      <h3>Indicadores do trecho de 120 s</h3>
+      <div id="rat-indicators"></div>
+      <small>RMSSD resume mudanças entre intervalos RR sucessivos. DP da PAS é o desvio-padrão da pressão arterial sistólica. A associação PAS → RR estima quantos ms variam no intervalo seguinte por mmHg de PAS na série simulada.</small>
+      <p id="rat-observation"></p>
+      <small>A associação temporal ilustra o acoplamento entre as séries. A sensibilidade barorreflexa requer uma avaliação apropriada ao desenho do estudo.</small>
+    </div>
+  </div>
+  <details class="block"><summary>Como levar a pergunta a um estudo com pessoas?</summary><p id="rat-translation"></p></details>
+  <small id="rat-sources"></small>
 </section>
 <footer>Dados inteiramente sintéticos para ensino. As linhagens A e B são fictícias. Os valores ilustram o raciocínio experimental.</footer>
 </main>
@@ -442,6 +501,139 @@ $('bpm-H').textContent = human[0];
 $('human-phase').addEventListener('change',() => { $('bpm-H').textContent = human[Number($('human-phase').value)]; });
 populateSetup();
 requestAnimationFrame(frame);
+(() => {
+  const scenarios = {
+    hypertension: {
+      groups: [
+        {label:'SHR/NCrl', pas:172, rr:157, pressureSwing:6.4, coupling:.32, rrSwing:3.8},
+        {label:'WKY/NCrl', pas:128, rr:162, pressureSwing:6.4, coupling:.62, rrSwing:3.8}
+      ],
+      background:'SHR é um modelo de hipertensão espontânea. WKY é seu comparador histórico. Compare a altura da pressão e a dispersão dos valores separadamente.',
+      question:'Se o SHR tiver pressão média mais alta, você espera que a pressão também oscile mais a cada batimento?',
+      observation:'Neste cenário, o SHR mantém PAS média mais alta e o DP da PAS fica próximo ao do WKY. A associação entre PAS e o RR seguinte é menor no SHR nesta simulação. Compare o nível, a dispersão e o acoplamento como resultados distintos.',
+      translation:'Como você compararia a pressão média e a variabilidade batimento a batimento em pessoas com e sem hipertensão? Defina a postura, a duração do registro, as condições de medida e como considerar medicação e idade.',
+      sources:[['Ricksten et al. · PA e FC em SHR e WKY','https://pubmed.ncbi.nlm.nih.gov/6485830/'],['Controle autonômico em SHR e WKY','https://pubmed.ncbi.nlm.nih.gov/38956283/']]
+    },
+    obesity: {
+      groups: [
+        {label:'Zucker fatty (fa/fa)', pas:142, rr:167, pressureSwing:6.1, coupling:.30, rrSwing:4.4},
+        {label:'Zucker lean', pas:127, rr:158, pressureSwing:6.1, coupling:.31, rrSwing:4.4}
+      ],
+      background:'Zucker fatty é um modelo de obesidade genética. Use Zucker lean como referência e compare repouso com repouso, depois atividade leve com atividade leve.',
+      question:'Ao passar do repouso para a atividade leve, o que você espera mudar: a frequência cardíaca média, a VFC ou ambas?',
+      observation:'Nesta simulação, os dois grupos têm RMSSD próximo sob a mesma condição. A atividade leve eleva a FC média e reduz a amplitude das oscilações de RR nos dois grupos. Compare o que acontece se você confrontar registros obtidos em condições diferentes.',
+      translation:'Como você compararia VFC em pessoas com perfis de adiposidade distintos? Defina condições equivalentes de postura e atividade e registre respiração e frequência cardíaca para interpretar o resultado.',
+      sources:[['Towa et al. · VFC em Zucker fatty e lean','https://pubmed.ncbi.nlm.nih.gov/15153676/'],['Schreihofer et al. · Barorreflexo em Zucker','https://pubmed.ncbi.nlm.nih.gov/17704284/']]
+    }
+  };
+
+  const fields = {
+    scenario: document.getElementById('rat-case'),
+    condition: document.getElementById('rat-condition'),
+    animal: document.getElementById('rat-animal'),
+    reveal: document.getElementById('rat-reveal'),
+    series: document.getElementById('rat-series')
+  };
+  const palette = ['#76eddc','#ffc482'];
+  const totalSeconds = 120;
+  const displaySeconds = 20;
+  const average = values => values.reduce((sum,value) => sum+value,0)/values.length;
+  const number = new Intl.NumberFormat('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+  const traceOffset = i => (i-3.5) * 1.73;
+  const osc = (time,hz,phase) => Math.sin(2*Math.PI*hz*time+phase);
+  for (let i=1;i<=6;i++) fields.animal.add(new Option(String(i).padStart(2,'0'),i));
+
+  function generate(group,animal,active,groupIndex) {
+    const phase = .83*animal+.16*groupIndex;
+    const pressureCenter = group.pas+traceOffset(animal)+(active?10:0);
+    const intervalCenter = group.rr+traceOffset(animal)-(active?21:0);
+    let time=0, previousPressure=pressureCenter;
+    const beats=[];
+    while (time<totalSeconds) {
+      const pressure = pressureCenter+group.pressureSwing*osc(time,.42,phase)
+        +2.3*osc(time,.18,phase*.6)+1.7*osc(time,1.34,phase);
+      const rr = intervalCenter+group.coupling*(previousPressure-pressureCenter)
+        +group.rrSwing*(active?.62:1)*osc(time,1.48,phase)+1.2*osc(time,.73,phase*1.25);
+      beats.push({time,pressure,rr});
+      previousPressure = pressure;
+      time += rr/1000;
+    }
+    return beats;
+  }
+
+  function summarize(beats) {
+    const rr=beats.map(b=>b.rr);
+    const pressures=beats.map(b=>b.pressure);
+    const averagePressure=average(pressures);
+    const differences=rr.slice(1).map((value,i)=>(value-rr[i])**2);
+    const lagPressureMean=average(pressures.slice(0,-1));
+    const nextIntervalMean=average(rr.slice(1));
+    const covariance=beats.slice(0,-1).reduce((sum,b,i)=>sum+(b.pressure-lagPressureMean)*(rr[i+1]-nextIntervalMean),0);
+    const variance=pressures.slice(0,-1).reduce((sum,value)=>sum+(value-lagPressureMean)**2,0);
+    return {
+      hr:60000/average(rr),
+      pas:averagePressure,
+      rmssd:Math.sqrt(average(differences)),
+      sd:Math.sqrt(pressures.reduce((sum,value)=>sum+(value-averagePressure)**2,0)/(pressures.length-1)),
+      slope:covariance/variance
+    };
+  }
+
+  function chart(groups, field, title, unit) {
+    const subset=groups.map(g=>g.beats.filter(b=>b.time<=displaySeconds));
+    const values=subset.flatMap(series=>series.map(b=>b[field]));
+    const increment=field==='pressure'?10:5;
+    const min=Math.floor((Math.min(...values)-2)/increment)*increment;
+    const max=Math.ceil((Math.max(...values)+2)/increment)*increment;
+    const x=t=>68+614*t/displaySeconds;
+    const y=value=>140-105*(value-min)/(max-min);
+    const grid=[min,(min+max)/2,max].map(value=>
+      '<path d="M68 '+y(value)+'H682" stroke="#365766"/><text class="rat-axis" x="61" y="'+(y(value)+4)+'" text-anchor="end">'+value.toLocaleString("pt-BR")+'</text>').join('');
+    const axis=[0,5,10,15,20].map(value=>
+      '<path d="M'+x(value)+' 35V140" stroke="#2a424f"/><text class="rat-axis" x="'+x(value)+'" y="160" text-anchor="middle">'+value+' s</text>').join('');
+    const lines=subset.map((series,i)=>{
+      const points=series.map(b=>x(b.time).toFixed(2)+','+y(b[field]).toFixed(2)).join(' ');
+      return '<polyline points="'+points+'" fill="none" stroke="'+palette[i]+'" stroke-width="1.7" vector-effect="non-scaling-stroke" '+(i?'stroke-dasharray="5 3"':'')+'/>';
+    }).join('');
+    return '<div class="rat-plot"><h3>'+title+' ('+unit+')</h3><svg viewBox="0 15 714 150" role="img" aria-label="'+title+' nos primeiros 20 segundos; linha contínua para o primeiro grupo e tracejada para o segundo">'+axis+grid+lines+'</svg></div>';
+  }
+
+  function toggle(revealed) {
+    fields.series.hidden=!revealed;
+    fields.reveal.setAttribute('aria-expanded',String(revealed));
+    fields.reveal.textContent=revealed?'Ocultar séries e indicadores':'Abrir séries e indicadores';
+  }
+
+  const put=(id,text)=>{ document.getElementById(id).textContent=text; };
+  function render() {
+    const scenario=scenarios[fields.scenario.value];
+    const animal=Number(fields.animal.value);
+    const active=fields.condition.value==='activity';
+    const groups=scenario.groups.map((group,i)=>{
+      const beats=generate(group,animal,active,i);
+      return {label:group.label+' · Animal '+String(animal).padStart(2,'0'),beats,stats:summarize(beats)};
+    });
+    put('rat-background',scenario.background);
+    put('rat-question',scenario.question);
+    put('rat-observation',scenario.observation);
+    put('rat-translation',scenario.translation);
+    document.getElementById('rat-means').innerHTML=table('Animal',['FC (bpm)','PAS (mmHg)'],
+      groups.map(g=>[g.label,number.format(g.stats.hr),number.format(g.stats.pas)]));
+    document.getElementById('rat-indicators').innerHTML=table('Animal',['RMSSD (ms)','DP da PAS (mmHg)','Associação (ms/mmHg)'],
+      groups.map(g=>[g.label,...['rmssd','sd','slope'].map(key=>number.format(g.stats[key]))]));
+    document.getElementById('rat-legend').innerHTML=groups.map((g,i)=>
+      '<span><b style="color:'+palette[i]+'">'+(i?'┄':'━')+'</b> '+g.label+'</span>').join('');
+    document.getElementById('rat-plots').innerHTML=chart(groups,'rr','Intervalos RR','ms')+chart(groups,'pressure','Pressão sistólica','mmHg');
+    document.getElementById('rat-sources').innerHTML='Leituras do cenário · '+scenario.sources.map(([name,url])=>
+      '<a href="'+url+'" target="_blank" rel="noopener">'+name+'</a>').join(' · ');
+  }
+
+  fields.reveal.addEventListener('click',()=>toggle(fields.series.hidden));
+  fields.scenario.addEventListener('change',()=>{ toggle(false); render(); });
+  fields.condition.addEventListener('change',render);
+  fields.animal.addEventListener('change',render);
+  render();
+})();
 </script>
 </body>
 </html>
