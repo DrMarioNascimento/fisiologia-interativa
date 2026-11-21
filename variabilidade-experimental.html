@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Simulador didático de respostas cardiovasculares em linhagens de camundongos e fisiologia translacional.">
+<title>Laboratório de Variabilidade Experimental</title>
+<style>
+:root{color-scheme:dark;--bg:#0a1420;--panel:#152638;--text:#edf8fd;--muted:#a9c0ce;--cyan:#76eddc;--amber:#ffc482;--human:#b9acff;--line:#345064;--screen:#050e17;--radius:20px;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;color:var(--text);background:radial-gradient(ellipse at 18% 0%,#20394c,transparent 48rem),var(--bg);line-height:1.5}
+main{max-width:1320px;margin:auto;padding:clamp(16px,4vw,52px)}
+header{margin:0 0 22px}
+.eyebrow{color:var(--cyan);font-size:.82rem;font-weight:750;letter-spacing:.15em;text-transform:uppercase}
+h1,h2,h3,p{margin:0}
+h1{font-size:clamp(2rem,4.7vw,4.2rem);font-weight:740;letter-spacing:-.055em;line-height:1.02;margin:.25em 0}
+h2{font-size:clamp(1.1rem,2.5vw,1.48rem);line-height:1.25;letter-spacing:-.02em}
+h3{font-size:1.05rem}
+p+ p{margin-top:.55rem}
+.muted,small{color:var(--muted)}
+small{font-size:.84rem}
+.layout{display:grid;grid-template-columns:minmax(224px,260px) minmax(0,1fr);gap:15px}
+.layout>*,.readout>*{min-width:0}
+.panel{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(145deg,#192e41,#102030 75%);box-shadow:0 14px 35px #050b1266,inset 0 1px #ceeaff18;padding:clamp(14px,2vw,23px)}
+.setup,.monitor,.results{display:grid;gap:15px;align-content:start}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend,label.control{display:block;margin-bottom:7px;font-weight:650}
+.check{display:flex;align-items:center;gap:9px;min-height:44px;padding:5px 7px;background:#08172366;border:1px solid #365266;border-radius:9px;margin:5px 0}
+input[type=checkbox],input[type=radio]{accent-color:var(--cyan);width:1.05rem;height:1.05rem;flex:none}
+.a{color:var(--cyan)}.b{color:var(--amber)}.human{color:var(--human)}
+button,select{font:inherit;font-weight:670;color:var(--text);border:1px solid #4e7188;border-radius:10px;background:linear-gradient(#2b465c,#182d40);min-height:44px;padding:8px 12px}
+button{cursor:pointer;box-shadow:0 3px 0 #08131e,inset 0 1px #ffffff26}
+button:not(:disabled):active{transform:translateY(2px);box-shadow:0 1px 0 #08131e}
+button:not(:disabled):hover,select:not(:disabled):hover{filter:brightness(1.15)}
+button:disabled,select:disabled{opacity:.55;cursor:default}
+button.primary{background:linear-gradient(#b0ffec,#60dac7);border-color:#bcffee;color:#092921;box-shadow:0 3px 0 #287b70,inset 0 1px #ffffff80}
+button[aria-pressed=true]{background:#173d42;border-color:var(--cyan);color:var(--cyan)}
+:focus-visible{outline:2px solid #fff4b5;outline-offset:3px}
+select{width:100%}
+.monitor-head,.bar,.legend,.metric-buttons,.question-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.monitor-head{justify-content:space-between}
+.status{font-weight:700;color:var(--cyan);font-size:.87rem}
+/* Rebaixo contínuo ao redor do vidro do monitor. */
+.screen{
+  --bezel:clamp(8px,1.3vw,16px);
+  border:var(--bezel) solid transparent;
+  border-radius:17px;
+  padding:10px clamp(8px,1.5vw,17px);
+  background:
+    radial-gradient(ellipse at 35% 36%,#102731,var(--screen) 76%) padding-box,
+    linear-gradient(160deg,#02070d 0%,#09131d 39%,#1b2f3d 82%,#2d4758 100%) border-box;
+  box-shadow:
+    inset 0 8px 16px -5px #000,
+    inset 7px 0 12px -8px #000,
+    inset -7px 0 12px -8px #000,
+    inset 0 -1px 0 #496d7755,
+    0 -1px 0 #070c13,
+    0 1px 0 #829dab44,
+    0 0 0 1px #0a131e;
+}
+.channel{display:grid;grid-template-columns:minmax(0,1fr) 95px;align-items:center;gap:9px}
+.channel+.channel{border-top:1px solid #2e51594f}
+.signal-title{font:700 .85rem ui-monospace,monospace;margin:9px 0 1px}
+canvas{display:block;width:100%;height:74px}
+.reading{font:700 clamp(1.1rem,3vw,1.7rem) ui-monospace,monospace;text-align:right}
+.reading small{display:block;font:600 .72rem ui-monospace,monospace}
+.phases{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.phase{position:relative;isolation:isolate;overflow:hidden;text-align:center;border:1px solid #385467;border-radius:8px;padding:7px 3px;font-size:.84rem;color:var(--muted)}
+.phase i{position:absolute;z-index:-1;inset:0 auto 0 0;background:#31796f55}
+.phase.active,.phase.done{color:var(--text)}
+.phase.active{border-color:#74d6cb}
+.bar button:last-child{margin-left:auto}
+.results{margin-top:15px}
+.readout{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:15px;align-items:start}
+.block{border:1px solid #385467;background:#09192580;border-radius:13px;padding:clamp(12px,2vw,18px)}
+.chart-head{display:grid;gap:8px}
+.plot{margin:10px 0 4px;background:#091823;border-radius:8px}
+.plot svg{display:block;width:100%;height:auto;font-family:system-ui,sans-serif}
+.legend{gap:12px;color:var(--muted);font-size:.84rem}
+.legend b{font:800 1rem ui-monospace,monospace}
+.summary{display:grid;gap:10px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:.9rem}
+th,td{text-align:right;padding:7px 4px;border-bottom:1px solid #345064}
+th:first-child,td:first-child{text-align:left}
+details{margin-top:9px}
+summary{cursor:pointer;font-weight:650;min-height:36px}
+.trans{margin-top:15px;display:grid;gap:12px}
+.review-select select{width:auto;margin-left:6px}
+.quiz label{display:flex;align-items:flex-start;gap:9px;padding:.4rem 0;min-height:42px}
+.feedback{margin-top:10px;color:#c4f6e8}
+footer{font-size:.84rem;color:var(--muted);margin-top:15px}
+[hidden]{display:none!important}
+@media(max-width:760px){.layout,.readout{grid-template-columns:1fr}.layout>.setup{grid-template-columns:1fr 1fr}.setup h2,.setup .setup-info,.setup fieldset{grid-column:1/-1}.setup fieldset{display:grid;grid-template-columns:1fr 1fr;gap:5px}.setup fieldset legend{grid-column:1/-1}}
+@media(max-width:410px){.setup fieldset{grid-template-columns:1fr}.channel{grid-template-columns:minmax(0,1fr) 64px}.screen{padding:7px 8px}.bar button:last-child{margin-left:0}}
+@media(prefers-reduced-motion:reduce){button:not(:disabled):active{transform:none}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <p class="eyebrow">Fisiologia experimental</p>
+  <h1>Variabilidade Experimental</h1>
+  <p class="muted">Compare linhagens de camundongos e investigue como o modelo influencia a resposta cardiovascular.</p>
+</header>
+<div class="layout">
+  <aside class="panel setup" aria-labelledby="setup-title">
+    <h2 id="setup-title">Desenho do experimento</h2>
+    <fieldset id="groups">
+      <legend>Linhagens simuladas</legend>
+      <label class="check a"><input type="checkbox" value="A" checked> Linhagem A</label>
+      <label class="check b"><input type="checkbox" value="B" checked> Linhagem B</label>
+    </fieldset>
+    <div><label class="control" for="sample">Animais por linhagem</label>
+      <select id="sample"><option>4</option><option selected>6</option><option>8</option></select>
+    </div>
+    <div><label class="control" for="animal">Animal no monitor</label><select id="animal"></select></div>
+    <p class="setup-info muted"><small>Protocolo didático com atividade locomotora simulada. Cada animal é acompanhado nas três fases.</small></p>
+  </aside>
+  <section class="panel monitor" aria-labelledby="monitor-title">
+    <div class="monitor-head"><h2 id="monitor-title">Aquisição de dados</h2><span class="status" id="status" role="status">Pronto para iniciar</span></div>
+    <div class="screen" id="screen"></div>
+    <div class="phases" aria-label="Fases da coleta" id="phases"></div>
+    <div class="bar">
+      <button class="primary" id="run">Iniciar coleta</button>
+      <button id="finish">Coletar sem animação</button>
+      <button id="reset" disabled>Reiniciar</button>
+    </div>
+    <label class="review-select muted" id="review" hidden>Rever fase <select id="review-phase"></select></label>
+    <small>Traçado eletrocardiográfico esquemático · Janela de 1,5 s · Coleta animada com tempo acelerado</small>
+  </section>
+</div>
+<section class="panel results" aria-labelledby="results-title">
+  <h2 id="results-title" tabindex="-1">Comparação entre linhagens</h2>
+  <p class="muted" id="empty">Complete a coleta para comparar os animais e a resposta média de cada linhagem.</p>
+  <div id="results" hidden>
+    <div class="readout">
+      <div class="block">
+        <div class="chart-head">
+          <h3 id="plot-title">Frequência cardíaca por fase</h3>
+          <div class="metric-buttons" aria-label="Medida no gráfico">
+            <button id="absolute" aria-pressed="true">Frequência cardíaca</button>
+            <button id="delta" aria-pressed="false">Variação desde o repouso</button>
+          </div>
+        </div>
+        <div id="plot" class="plot"></div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div class="block summary">
+        <h3>Médias por linhagem</h3>
+        <div id="summary"></div>
+        <small>FC em bpm. Δ estímulo = FC no estímulo menos a FC em repouso de cada animal.</small>
+        <details><summary>Valores individuais</summary><div id="individual"></div></details>
+      </div>
+    </div>
+    <fieldset class="block quiz" style="margin-top:15px" id="quiz">
+      <legend>Interprete o experimento</legend>
+      <p id="quiz-prompt">Qual linhagem teve o maior aumento médio de frequência cardíaca do repouso ao estímulo?</p>
+      <div id="answers"></div>
+      <button id="answer" disabled>Conferir interpretação</button>
+      <p role="status" class="feedback" id="feedback" hidden></p>
+    </fieldset>
+  </div>
+</section>
+<section class="panel trans" id="translation" hidden aria-labelledby="translation-title">
+  <h2 id="translation-title">Da linhagem ao humano</h2>
+  <p class="muted">Compare a mudança desde o repouso e observe quanto da elevação ainda aparece na recuperação.</p>
+  <div class="block">
+    <div class="monitor-head"><h3 class="human">Registro humano simulado</h3><label class="muted">Fase <select id="human-phase" style="width:auto;margin-left:5px"></select></label></div>
+    <div class="screen" id="human-screen" style="margin-top:10px"></div>
+  </div>
+  <div id="translation-table"></div>
+  <details class="block"><summary>Que hipótese você levaria para um estudo em humanos?</summary>
+    <p>Uma hipótese possível é que a atividade eleve a frequência cardíaca e que parte dessa elevação persista durante a recuperação. Em humanos, seria preciso medir diretamente a resposta sob condições definidas de atividade e recuperação.</p>
+    <p class="muted">A comparação ilustra a direção da resposta e o retorno à linha de base. A intensidade do esforço e os tempos entre espécies precisariam ser definidos e justificados em um estudo real.</p>
+  </details>
+</section>
+<footer>Dados inteiramente sintéticos para ensino. As linhagens A e B são fictícias. Os valores ilustram o raciocínio experimental.</footer>
+</main>
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const phases = ['Repouso', 'Estímulo', 'Recuperação'];
+const colors = {A:'#76eddc', B:'#ffc482', H:'#b9acff'};
+const number = new Intl.NumberFormat('pt-BR', {maximumFractionDigits:1});
+const phaseDuration = 4500;
+const motionReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+const models = {
+  A: [[-30,16,-12,38,0,-19,22,-25], [13,-13,2,-16,6,18,-10,6], [4,-3,6,-6,2,1,-4,0], 545, 50, 13],
+  B: [[-18,16,-8,27,4,-23,19,-17], [-22,26,-10,33,-26,4,-15,15], [-5,10,-4,16,-6,-2,3,-6], 468, 99, 24]
+};
+const human = [72,112,82];
+const state = {elapsed:0, mode:'idle', metric:'absolute', startedAt:0};
+const fmt = value => number.format(value);
+const signed = value => (value > 0 ? '+' : '') + fmt(value);
+const mean = values => values.reduce((sum, value) => sum + value,0) / values.length;
+const activeGroups = () => Array.from(document.querySelectorAll('#groups input:checked'), input => input.value);
+const sampleSize = () => Number($('sample').value);
+const phaseIndex = () => state.mode === 'done' ? Number($('review-phase').value) : Math.min(2,Math.floor(state.elapsed / phaseDuration));
+const label = group => 'Linhagem ' + group;
+const change = (rates, phase) => rates[phase] - rates[0];
+
+function record(group, index) {
+  const [restOffset, responseOffset, recoveryOffset, rest, response, recovery] = models[group];
+  const baseline = rest + restOffset[index];
+  return [baseline, baseline + response + responseOffset[index], baseline + recovery + recoveryOffset[index]];
+}
+
+function cohort(group) {
+  return Array.from({length:sampleSize()}, (_,index) => record(group,index));
+}
+
+function averages(group) {
+  const animals = cohort(group);
+  return phases.map((_,phase) => mean(animals.map(rates => rates[phase])));
+}
+
+function channel(group, name) {
+  return '<div class="channel '+ ({A:'a',B:'b',H:'human'}[group]) +'"><div><p class="signal-title">'+ name +'</p><canvas id="trace-'+ group +'" aria-hidden="true"></canvas></div><div class="reading"><span id="bpm-'+ group +'">—</span><small>bpm</small></div></div>';
+}
+
+function populateSetup() {
+  const previouslySelected = Number($('animal').value || 0);
+  $('animal').innerHTML = Array.from({length:sampleSize()}, (_,i) => '<option value="'+i+'">Animal '+String(i+1).padStart(2,'0')+'</option>').join('');
+  $('animal').value = Math.min(previouslySelected,sampleSize()-1);
+  $('screen').innerHTML = activeGroups().map(group => channel(group,label(group))).join('');
+  $('screen').hidden = activeGroups().length === 0;
+  $('phases').innerHTML = phases.map(phase => '<div class="phase"><i></i>'+phase+'</div>').join('');
+  updateMonitor();
+}
+
+function updateMonitor() {
+  const hasGroups = activeGroups().length > 0;
+  const idle = state.mode === 'idle';
+  const done = state.mode === 'done';
+  const running = state.mode === 'running';
+  $('status').textContent = !hasGroups ? 'Selecione uma linhagem' : idle ? 'Pronto para iniciar' : done ? 'Coleta concluída' : running ? phases[phaseIndex()] : 'Coleta pausada';
+  $('run').textContent = running ? 'Pausar' : state.mode === 'paused' ? 'Continuar' : 'Iniciar coleta';
+  $('run').disabled = !hasGroups || done;
+  $('finish').disabled = !hasGroups || done;
+  $('finish').textContent = idle ? 'Coletar sem animação' : 'Concluir coleta';
+  $('reset').disabled = idle;
+  $('review').hidden = !done;
+  $('sample').disabled = !idle;
+  $('animal').disabled = !hasGroups;
+  for (const input of document.querySelectorAll('#groups input')) input.disabled = !idle;
+  for (const [index,step] of Array.from($('phases').children).entries()) {
+    const progress = Math.max(0,Math.min(1,state.elapsed / phaseDuration - index));
+    step.firstElementChild.style.width = progress * 100 + '%';
+    step.classList.toggle('active',!idle && phaseIndex() === index);
+    step.classList.toggle('done',progress === 1);
+  }
+  for (const group of activeGroups()) {
+    const rate = record(group,Number($('animal').value))[phaseIndex()];
+    $('bpm-'+group).textContent = idle ? '—' : fmt(rate);
+  }
+}
+
+function drawTrace(group, bpm, seconds) {
+  const canvas = $('trace-'+group);
+  if (!canvas || !canvas.clientWidth) return;
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight;
+  const scale = Math.min(window.devicePixelRatio || 1,2);
+  const pixelWidth = Math.round(w * scale);
+  const pixelHeight = Math.round(h * scale);
+  if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
+    canvas.width = pixelWidth;
+    canvas.height = pixelHeight;
+  }
+  const key = [pixelWidth,pixelHeight,bpm,seconds].join('/');
+  if (canvas.dataset.frame === key) return;
+  canvas.dataset.frame = key;
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(scale,0,0,scale,0,0);
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle = '#365a5d65';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for (let x=0;x<w;x+=18) { ctx.moveTo(x+.5,0); ctx.lineTo(x+.5,h); }
+  for (let y=0;y<h;y+=14) { ctx.moveTo(0,y+.5); ctx.lineTo(w,y+.5); }
+  ctx.stroke();
+  const wave = (position, center, width) => Math.exp(-((position-center)**2)/(2*width**2));
+  ctx.beginPath();
+  for (let x=0;x<=w;x++) {
+    const time = seconds + x/w*1.5;
+    const cycle = time*bpm/60;
+    const p = cycle - Math.floor(cycle);
+    const voltage = bpm ? .12*wave(p,.16,.04)-.15*wave(p,.33,.015)+.88*wave(p,.37,.022)-.27*wave(p,.42,.022)+.24*wave(p,.65,.075) : 0;
+    const y = h*.62 - voltage*h*.53;
+    if (x === 0) ctx.moveTo(x,y);
+    else ctx.lineTo(x,y);
+  }
+  ctx.strokeStyle = bpm ? colors[group] : '#60818a';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+}
+
+function frame(now) {
+  if (state.mode === 'running') {
+    state.elapsed = Math.max(0,now-state.startedAt);
+    if (state.elapsed >= 3*phaseDuration) complete();
+    if (state.mode === 'running') updateMonitor();
+  }
+  const seconds = motionReduced.matches ? phaseIndex()*.1 : state.elapsed/1100;
+  for (const group of activeGroups()) {
+    const rate = state.mode === 'idle' ? 0 : record(group,Number($('animal').value))[phaseIndex()];
+    drawTrace(group,rate,seconds);
+  }
+  const humanRate = human[Number($('human-phase').value)];
+  drawTrace('H',humanRate,motionReduced.matches ? 0 : now/1300);
+  requestAnimationFrame(frame);
+}
+
+function graph(groups, isDelta) {
+  const x = [106,250,394];
+  const ticks = isDelta ? [-40,0,40,80,120,160] : [400,450,500,550,600,650];
+  const bottom = ticks[0], top = ticks.at(-1);
+  const y = value => 163 - (value-bottom)/(top-bottom)*136;
+  const score = (rates,phase) => isDelta ? change(rates,phase) : rates[phase];
+  let svg = '<svg viewBox="0 0 480 201" role="img" aria-labelledby="svg-title svg-desc"><title id="svg-title">'+ (isDelta ? 'Mudança desde o repouso' : 'Frequência cardíaca') +'</title><desc id="svg-desc">Cada ponto representa um animal. Os segmentos unem as médias de cada linhagem. Os valores estão disponíveis na tabela de valores individuais.</desc>';
+  svg += '<text x="8" y="16" fill="#a9c0ce" font-size="12">'+(isDelta ? 'Δ bpm' : 'bpm')+'</text>';
+  for (const tick of ticks) {
+    svg += '<path d="M49 '+y(tick)+'H460" stroke="'+(tick===0 ? '#77939f' : '#304651')+'"/><text x="42" y="'+(y(tick)+4)+'" text-anchor="end" fill="#bdd2dd" font-size="12">'+tick+'</text>';
+  }
+  phases.forEach((phase,i) => { svg += '<text x="'+x[i]+'" y="186" text-anchor="middle" fill="#bdd2dd" font-size="13">'+phase+'</text>'; });
+  for (const group of groups) {
+    const offset = groups.length === 1 ? 0 : group === 'A' ? -19 : 19;
+    const animals = cohort(group);
+    const average = averages(group);
+    const coords = phases.map((_,phase) => (x[phase]+offset)+','+y(score(average,phase))).join(' ');
+    svg += '<polyline points="'+coords+'" stroke="'+colors[group]+'" stroke-width="2.2" '+(group==='B'?'stroke-dasharray="5 4"':'')+' fill="none" opacity=".85"/>';
+    for (const [phase] of phases.entries()) {
+      animals.forEach((rates,index) => {
+        const cx = x[phase]+offset+(index-(animals.length-1)/2)*3.7;
+        const cy = y(score(rates,phase));
+        const description = label(group)+' · Animal '+(index+1)+' · '+phases[phase]+' · '+fmt(score(rates,phase))+' bpm';
+        svg += group === 'A'
+          ? '<circle cx="'+cx+'" cy="'+cy+'" r="3.35" fill="'+colors[group]+'" stroke="#091823"><title>'+description+'</title></circle>'
+          : '<rect x="'+(cx-2.8)+'" y="'+(cy-2.8)+'" width="5.6" height="5.6" fill="'+colors[group]+'" stroke="#091823"><title>'+description+'</title></rect>';
+      });
+    }
+  }
+  return svg+'</svg>';
+}
+
+function table(first, headings, rows) {
+  return '<table><thead><tr><th scope="col">'+first+'</th>'+headings.map(text => '<th scope="col">'+text+'</th>').join('')+'</tr></thead><tbody>'+
+    rows.map(([name,...values]) => '<tr><th scope="row">'+name+'</th>'+values.map(value => '<td>'+value+'</td>').join('')+'</tr>').join('')+
+    '</tbody></table>';
+}
+
+function updateGraph() {
+  const isDelta = state.metric === 'delta';
+  $('absolute').setAttribute('aria-pressed',!isDelta);
+  $('delta').setAttribute('aria-pressed',isDelta);
+  $('plot-title').textContent = isDelta ? 'Variação em relação ao repouso' : 'Frequência cardíaca por fase';
+  $('plot').innerHTML = graph(activeGroups(),isDelta);
+}
+
+function renderResults() {
+  const groups = activeGroups();
+  $('results').hidden = false;
+  $('empty').hidden = true;
+  $('translation').hidden = false;
+  updateGraph();
+  $('legend').innerHTML = groups.map(group => '<span><b class="'+group.toLowerCase()+'">'+(group==='A'?'●':'■')+'</b> '+label(group)+'</span>').join('')+
+    '<span>Um ponto por animal · Linhas unem as médias</span>';
+  $('summary').innerHTML = table('Grupo',['Rep.','Est.','Rec.','Δ Est.'],groups.map(group => {
+    const values = averages(group);
+    return [group,...values.map(fmt),signed(change(values,1))];
+  }));
+  $('individual').innerHTML = table('Animal',['Rep.','Est.','Rec.','Δ Est.'],groups.flatMap(group => cohort(group).map((values,index) => [group+'-'+String(index+1).padStart(2,'0'),...values.map(fmt),signed(change(values,1))])));
+  $('quiz-prompt').textContent = groups.length === 2
+    ? 'Qual linhagem teve o maior aumento médio de frequência cardíaca do repouso ao estímulo?'
+    : 'Que conclusão a coleta permite sobre a linhagem selecionada?';
+  const options = groups.length === 2 ? [['A','Linhagem A'],['B','Linhagem B'],['same','O aumento foi igual nas duas']] :
+    [['within','Podemos descrever a mudança em relação ao repouso nesta linhagem'],['between','Podemos dizer que ela respondeu mais do que a outra linhagem']];
+  $('answers').innerHTML = options.map(([value,text]) => '<label><input type="radio" name="interpretation" value="'+value+'"> '+text+'</label>').join('');
+  $('feedback').hidden = true;
+  $('answer').disabled = true;
+  $('translation-table').innerHTML = table('Registro',['Δ estímulo','Δ recuperação'],[
+    ...groups.map(group => [label(group),signed(change(averages(group),1))+' bpm',signed(change(averages(group),2))+' bpm']),
+    ['Humano simulado',signed(change(human,1))+' bpm',signed(change(human,2))+' bpm']
+  ]);
+}
+
+function complete() {
+  state.elapsed = 3*phaseDuration;
+  state.mode = 'done';
+  $('review-phase').value = '2';
+  updateMonitor();
+  renderResults();
+}
+
+$('run').addEventListener('click',() => {
+  const now = performance.now();
+  if (state.mode === 'running') {
+    state.elapsed = now-state.startedAt;
+    if (state.elapsed >= 3*phaseDuration) { complete(); return; }
+    state.mode = 'paused';
+  } else {
+    state.mode = 'running';
+    state.startedAt = now-state.elapsed;
+  }
+  updateMonitor();
+});
+$('finish').addEventListener('click',() => { complete(); $('results-title').focus(); });
+$('review-phase').addEventListener('change',updateMonitor);
+$('reset').addEventListener('click',() => {
+  Object.assign(state,{elapsed:0,mode:'idle',metric:'absolute',startedAt:0});
+  $('results').hidden = true;
+  $('empty').hidden = false;
+  $('translation').hidden = true;
+  $('human-phase').value = '0';
+  $('bpm-H').textContent = human[0];
+  updateMonitor();
+  $('run').focus();
+});
+$('groups').addEventListener('change',populateSetup);
+$('sample').addEventListener('change',populateSetup);
+$('animal').addEventListener('change',updateMonitor);
+for (const metric of ['absolute','delta']) {
+  $(metric).addEventListener('click',() => { state.metric = metric; updateGraph(); });
+}
+$('answers').addEventListener('change',() => { $('answer').disabled = false; $('feedback').hidden = true; });
+$('answer').addEventListener('click',() => {
+  const choice = document.querySelector('input[name=interpretation]:checked')?.value;
+  if (!choice) return;
+  const compare = activeGroups().length === 2;
+  const correct = choice === (compare ? 'B' : 'within');
+  const a = averages('A'), b = averages('B');
+  $('feedback').textContent = (correct ? 'Isso mesmo. ' : 'Reveja a comparação. ') + (compare
+    ? 'A linhagem A terminou o estímulo com a FC média mais alta ('+fmt(a[1])+' bpm). A linhagem B apresentou o maior aumento desde o repouso ('+signed(change(b,1))+' contra '+signed(change(a,1))+' bpm). Observe também a dispersão dos valores individuais.'
+    : 'Você tem valores de repouso, estímulo e recuperação da linhagem escolhida. Inclua a outra linhagem em uma nova coleta para comparar as respostas.');
+  $('feedback').hidden = false;
+});
+const phaseOptions = phases.map((phase,index) => '<option value="'+index+'">'+phase+'</option>').join('');
+$('human-phase').innerHTML = phaseOptions;
+$('review-phase').innerHTML = phaseOptions;
+$('human-screen').innerHTML = channel('H','ECG esquemático');
+$('bpm-H').textContent = human[0];
+$('human-phase').addEventListener('change',() => { $('bpm-H').textContent = human[Number($('human-phase').value)]; });
+populateSetup();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

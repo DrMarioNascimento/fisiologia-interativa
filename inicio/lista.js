@@ -81,10 +81,15 @@
     apostilaTxt:'Abrir apostila de variabilidade cardiovascular (PDF) ↗',
     apostila:prefixo + 'assets/leituras/Variabilidade_Cardiovascular_Guia_Visual.pdf?v=20261121'
   };
+  const experimental = {
+    t:'Variabilidade Experimental', cat:'Conteúdo de Aprofundamento',
+    obj:'Compare a resposta cardiovascular em linhagens simuladas de camundongos e explore como os achados podem orientar uma investigação em humanos.',
+    href:prefixo + 'variabilidade-experimental.html' + (D.curso === 'fi' ? '?percurso=fisioterapia' : '')
+  };
   function render() {
     const q = norm(search.value.trim());
     let total = 0;
-    const showOptional = (filtro === 'todos' || filtro === 'optativo') && (!q || norm([ecg.t, ecg.obj, espiro.t, espiro.obj, plet.t, plet.obj, variab.t, variab.obj, optativo.nome, 'eletrocardiograma espirometria pletismografia variabilidade frequencia cardiaca barorreflexo hrv volumes residual curvas pulmonar aprofundamento'].join(' ')).includes(q));
+    const showOptional = (filtro === 'todos' || filtro === 'optativo') && (!q || norm([ecg.t, ecg.obj, espiro.t, espiro.obj, plet.t, plet.obj, variab.t, variab.obj, experimental.t, experimental.obj, optativo.nome, 'eletrocardiograma espirometria pletismografia variabilidade frequencia cardiaca barorreflexo hrv volumes residual curvas pulmonar aprofundamento'].join(' ')).includes(q));
     list.innerHTML = D.unidades.filter(u => filtro === 'todos' || filtro === u.id).map(u => {
       const sims = u.sims.filter(s => !q || norm([s.t, s.obj, s.cat, u.nome].join(' ')).includes(q));
       const pratica = u.pratica && (!q || norm([u.nome, u.desc].join(' ')).includes(q));
@@ -105,9 +110,9 @@
       </section>`;
     }).join('') + (showOptional ? `<section class="unit" id="u-optativo" style="--c:${cor('optativo')}" aria-labelledby="h-optativo">
         <div class="unit-side rv"><h3 id="h-optativo">${esc(optativo.nome)}</h3><p>${esc(optativo.desc)}</p></div>
-        <div class="cards">${card(optativo, ecg, 0)}${card(optativo, espiro, 1)}${card(optativo, plet, 2)}${card(optativo, variab, 3)}</div>
+        <div class="cards">${card(optativo, ecg, 0)}${card(optativo, espiro, 1)}${card(optativo, plet, 2)}${card(optativo, variab, 3)}${card(optativo, experimental, 4)}</div>
       </section>` : '');
-    if (showOptional) total += 4;
+    if (showOptional) total += 5;
     document.getElementById('empty').hidden = total > 0;
   }
   list.addEventListener('click', e => {
