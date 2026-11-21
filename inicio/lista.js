@@ -76,7 +76,10 @@
   const variab = {
     t:'Variabilidade cardiovascular', cat:'Conteúdo de Aprofundamento',
     obj:'Gere registros de IP e PAS, mude a respiração, o tônus vagal e a sensibilidade barorreflexa e veja BF, AF, coerência, ganho e BEI se formarem no espectro e nas sequências, em repouso, ortostatismo, exercício e estresse.',
-    href:prefixo + 'variabilidade-cardiovascular.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : '')
+    href:prefixo + 'variabilidade-cardiovascular.html?v=20261120' + (D.curso === 'fi' ? '&percurso=fisioterapia' : ''),
+    tracado:prefixo + 'assets/icons/variabilidade-tracado.webp',
+    apostilaTxt:'Abrir apostila de variabilidade cardiovascular (PDF) ↗',
+    apostila:prefixo + 'assets/leituras/Variabilidade_Cardiovascular_Guia_Visual.pdf?v=20261121'
   };
   function render() {
     const q = norm(search.value.trim());
