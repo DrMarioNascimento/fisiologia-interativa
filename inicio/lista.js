@@ -84,7 +84,10 @@
   const experimental = {
     t:'Variabilidade Experimental', cat:'Conteúdo de Aprofundamento',
     obj:'Compare a resposta cardiovascular em linhagens simuladas de camundongos e explore como os achados podem orientar uma investigação em humanos.',
-    href:prefixo + 'variabilidade-experimental.html' + (D.curso === 'fi' ? '?percurso=fisioterapia' : '')
+    href:prefixo + 'variabilidade-experimental.html' + (D.curso === 'fi' ? '?percurso=fisioterapia' : ''),
+    tracado:prefixo + 'assets/icons/variabilidade-tracado.webp',
+    apostilaTxt:'Abrir apostila de variabilidade experimental (PDF) ↗',
+    apostila:prefixo + 'assets/leituras/Variabilidade_Experimental_Guia_Visual.pdf?v=20261121'
   };
   function render() {
     const q = norm(search.value.trim());
